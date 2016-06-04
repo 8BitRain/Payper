@@ -12,7 +12,7 @@
     "react-native-button": "github:ide/react-native-button",
     "react-native-drawer": "^2.2.2",
     "react-native-modalbox": "^1.3.3",
-    "react-native-router-flux": "./libs/react-native-router-flux"
+    "react-native-router-flux": "./libs/react-native-router-flux-master"
   },
   "devDependencies": {
     "sane": "^1.3.4"
