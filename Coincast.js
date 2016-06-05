@@ -1,6 +1,8 @@
 import React from 'react';
 import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native'
 import Launch from './components/Launch'
+import LandingView from './components/LandingView'
+import OnBoarding_Email from './components/OnBoarding_CreateAccount/OnBoarding_Email'
 import Register from './components/Register'
 import Login from './components/Login'
 import Login2 from './components/Login2'
@@ -101,10 +103,13 @@ export default class Coincast extends React.Component {
                         <Scene key="text1" text="text1" component={(props) => <SwitcherPage {...props} text={currentSwitchPage} />} />
                         <Scene key="text2" text="text2" component={(props) => <SwitcherPage {...props} text={currentSwitchPage} />} />
                     </Scene>
+                    <Scene key="landingView" component={LandingView} title="LandingView" initial={true}>
+                      <Scene key="OnBoarding_Email" component={OnBoarding_Email} title="OnBoarding_Email" />
+                    </Scene>
                     <Scene key="register" component={Register} title="Register"/>
                     <Scene key="register2" component={Register} title="Register2" duration={1}/>
                     <Scene key="home" component={Home} title="Replace" type="replace"/>
-                    <Scene key="launch" component={Launch} title="Launch" initial={true} />
+                    <Scene key="launch" component={Launch} title="Launch"  />
                     <Scene key="login" direction="vertical"  >
                         <Scene key="loginModal" component={Login} title="Login"/>
                         <Scene key="loginModal2" hideNavBar={true} component={Login2} title="Login2" panHandlers={null} duration={1}/>
