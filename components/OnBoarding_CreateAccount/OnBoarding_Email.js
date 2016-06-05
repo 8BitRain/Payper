@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from "react-native";
+import {View, Text,TextInput, StyleSheet} from "react-native";
 import Button from "react-native-button";
 import {Actions} from "react-native-router-flux";
 
@@ -8,27 +8,37 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "transparent",
+    backgroundColor: '#E83151',
     borderWidth: 2,
     borderColor: 'red',
+    color: 'white',
+    /*#E83151 pinkish red */
+    /*#61C9A8 turqouise-cyan*/
+    /*#DB5461 Possible lighter on eyes Pink*/
+    /*#67597A Plum*/
+
+    //#DB5461
+
+  },
+
+  font_styling:{
+    color: "white",
   }
+
 });
 
-class Launch extends React.Component {
+class OnBoarding_Email extends React.Component {
   render(){
+    console.log("Run the jewels-OnBoardinEmail");
     return (
       <View {...this.props}  style={styles.container}>
-        <Text>Launch page</Text>
-        <Button onPress={()=>Actions.login({data:"Custom data", title:"Custom title" })}>Go to Login page</Button>
-        <Button onPress={Actions.register}>Go to Register page</Button>
-        <Button onPress={Actions.register2}>Go to Register page without animation</Button>
-        <Button onPress={()=>Actions.error("Error message")}>Popup error</Button>
-        <Button onPress={Actions.tabbar}>Go to TabBar page</Button>
-        <Button onPress={Actions.switcher}>Go to switcher page</Button>
+        <Text style={styles.font_styling}>Hey, what&#39;s your email? </Text>
+        <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1, color: "white"}} defaultValue={"example@gmail.com"}/>
+        <Button onPress={Actions.OnBoarding_Password}>Next</Button>
         <Button onPress={Actions.pop}>back</Button>
       </View>
     );
   }
 }
 
-module.exports = Launch;
+module.exports = OnBoarding_Email;

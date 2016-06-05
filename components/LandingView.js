@@ -19,7 +19,7 @@ class LandingView extends React.Component {
     return (
       <View {...this.props}  style={styles.container}>
         <Text>Launch page</Text>
-        <Button>Continue With Faccebook</Button>
+        <Button>Continue With Facebook</Button>
         <Button onPress={Actions.OnBoarding_Email}>Create Account with Email</Button>
         <Button>Sign In</Button>
       </View>

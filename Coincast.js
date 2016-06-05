@@ -3,6 +3,10 @@ import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native'
 import Launch from './components/Launch'
 import LandingView from './components/LandingView'
 import OnBoarding_Email from './components/OnBoarding_CreateAccount/OnBoarding_Email'
+import OnBoarding_Password from './components/OnBoarding_CreateAccount/OnBoarding_Password'
+import OnBoarding_FirstName from './components/OnBoarding_CreateAccount/OnBoarding_FirstName'
+import OnBoarding_LastName from './components/OnBoarding_CreateAccount/OnBoarding_LastName'
+import OnBoarding_PhoneNumber from './components/OnBoarding_CreateAccount/OnBoarding_PhoneNumber'
 import Register from './components/Register'
 import Login from './components/Login'
 import Login2 from './components/Login2'
@@ -104,8 +108,13 @@ export default class Coincast extends React.Component {
                         <Scene key="text2" text="text2" component={(props) => <SwitcherPage {...props} text={currentSwitchPage} />} />
                     </Scene>
                     <Scene key="landingView" component={LandingView} title="LandingView" initial={true}>
-                      <Scene key="OnBoarding_Email" component={OnBoarding_Email} title="OnBoarding_Email" />
+
                     </Scene>
+                    <Scene key="OnBoarding_Email" component={OnBoarding_Email} title="OnBoarding_Email" />
+                    <Scene key="OnBoarding_Password" component={OnBoarding_Password} title="OnBoarding_Password" />
+                    <Scene key="OnBoarding_FirstName" component={OnBoarding_FirstName} title="OnBoarding_FirstName" />
+                    <Scene key="OnBoarding_LastName" component={OnBoarding_LastName} title="OnBoarding_LastName" />
+                    <Scene key="OnBoarding_PhoneNumber" component={OnBoarding_PhoneNumber} title="OnBoarding_PhoneNumber" />
                     <Scene key="register" component={Register} title="Register"/>
                     <Scene key="register2" component={Register} title="Register2" duration={1}/>
                     <Scene key="home" component={Home} title="Replace" type="replace"/>
