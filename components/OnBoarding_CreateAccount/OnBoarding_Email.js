@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
 
 class OnBoarding_Email extends React.Component {
   render(){
-    console.log("Run the jewels-OnBoardinEmail");
+    //console.log("Run the jewels-OnBoardinEmail");
     return (
       <View {...this.props}  style={styles.container}>
         <Text style={{fontFamily: "Roboto", fontWeight:"100"}}>Hey, what&#39;s your email? </Text>

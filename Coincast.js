@@ -9,6 +9,10 @@ import OnBoarding_LastName from './components/OnBoarding_CreateAccount/OnBoardin
 import OnBoarding_PhoneNumber from './components/OnBoarding_CreateAccount/OnBoarding_PhoneNumber'
 import OnBoarding_Summary from './components/OnBoarding_CreateAccount/OnBoarding_Summary'
 
+import OnBoarding_CreateAccount from './modules/OnBoarding_CreateAccount/CreateAccountView'
+import CreateAccountViewContainer from './modules/OnBoarding_CreateAccount/CreateAccountViewContainer'
+
+
 import Register from './components/Register'
 import Login from './components/Login'
 import Login2 from './components/Login2'
@@ -109,9 +113,10 @@ export default class Coincast extends React.Component {
                         <Scene key="text1" text="text1" component={(props) => <SwitcherPage {...props} text={currentSwitchPage} />} />
                         <Scene key="text2" text="text2" component={(props) => <SwitcherPage {...props} text={currentSwitchPage} />} />
                     </Scene>
-                    <Scene key="landingView" component={LandingView} title="LandingView" initial={true}>
+                    <Scene key="landingView" component={LandingView} title="LandingView">
 
                     </Scene>
+                    <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" initial={true} />
                     <Scene key="OnBoarding_Email" component={OnBoarding_Email} title="OnBoarding_Email" />
                     <Scene key="OnBoarding_Password" component={OnBoarding_Password} title="OnBoarding_Password" />
                     <Scene key="OnBoarding_FirstName" component={OnBoarding_FirstName} title="OnBoarding_FirstName" />
