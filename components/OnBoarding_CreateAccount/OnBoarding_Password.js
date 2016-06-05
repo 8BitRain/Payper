@@ -18,10 +18,10 @@ class OnBoarding_Password extends React.Component {
   render(){
     return (
       <View {...this.props}  style={styles.container}>
-      <Text>And what&#39;s your password </Text>
-      <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1}} defaultValue={""}/>
-      <Button onPress={Actions.OnBoarding_FirstName}>Next</Button>
-      <Button onPress={Actions.pop}>back</Button>
+      <Text style={{fontFamily: "Roboto", fontWeight:"100"}}>And what&#39;s your password </Text>
+      <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1, fontFamily:"Roboto", fontWeight:"100"}} defaultValue={""}/>
+      <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.OnBoarding_FirstName}>Next</Button>
+      <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.pop}>back</Button>
       </View>
     );
   }

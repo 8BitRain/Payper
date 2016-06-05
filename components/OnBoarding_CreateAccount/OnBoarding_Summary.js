@@ -14,17 +14,19 @@ const styles = StyleSheet.create({
   }
 });
 
-class OnBoarding_PhoneNumber extends React.Component {
+class OnBoarding_Summary extends React.Component {
   render(){
     return (
       <View {...this.props}  style={styles.container}>
-      <Text style={{fontFamily: "Roboto", fontWeight:"100"}}>And what&#39;s your phone number? </Text>
-      <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1, fontFamily:"Roboto", fontWeight:"100"}} placeholder={"123-241-5678"}/>
-      <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.OnBoarding_Summary}>Next</Button>
+      <Text style={{fontFamily: "Roboto", fontWeight:"100"}}>Username </Text>
+      <Text style={{fontFamily: "Roboto", fontWeight:"100"}}>Password</Text>
+      <Text style={{fontFamily: "Roboto", fontWeight:"100"}}>First Name</Text>
+      <Text style={{fontFamily: "Roboto", fontWeight:"100"}}>Last Name </Text>
+      <Text style={{fontFamily: "Roboto", fontWeight:"100"}}>Phone Number</Text>
       <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.pop}>back</Button>
       </View>
     );
   }
 }
 
-module.exports = OnBoarding_PhoneNumber;
+module.exports = OnBoarding_Summary;

@@ -11,6 +11,10 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderWidth: 2,
     borderColor: 'red',
+  },
+
+  textStyling: {
+    fontFamily: "Roboto"
   }
 });
 
@@ -18,10 +22,10 @@ class LandingView extends React.Component {
   render(){
     return (
       <View {...this.props}  style={styles.container}>
-        <Text>Launch page</Text>
-        <Button>Continue With Facebook</Button>
-        <Button onPress={Actions.OnBoarding_Email}>Create Account with Email</Button>
-        <Button>Sign In</Button>
+        <Text style={{fontFamily: "Roboto", fontWeight:"100"}}>Launch page</Text>
+        <Button style={{fontFamily: "Roboto", fontWeight:"100"}}>Continue With Facebook</Button>
+        <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.OnBoarding_Email}>Create Account with Email</Button>
+        <Button style={{fontFamily: "Roboto", fontWeight:"100"}}>Sign In</Button>
       </View>
     );
   }

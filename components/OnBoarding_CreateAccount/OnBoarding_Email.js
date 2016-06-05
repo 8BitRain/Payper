@@ -10,8 +10,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: '#E83151',
     borderWidth: 2,
-    borderColor: 'red',
-    color: 'white',
+    borderColor: 'red'
     /*#E83151 pinkish red */
     /*#61C9A8 turqouise-cyan*/
     /*#DB5461 Possible lighter on eyes Pink*/
@@ -32,10 +31,10 @@ class OnBoarding_Email extends React.Component {
     console.log("Run the jewels-OnBoardinEmail");
     return (
       <View {...this.props}  style={styles.container}>
-        <Text style={styles.font_styling}>Hey, what&#39;s your email? </Text>
-        <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1, color: "white"}} defaultValue={"example@gmail.com"}/>
-        <Button onPress={Actions.OnBoarding_Password}>Next</Button>
-        <Button onPress={Actions.pop}>back</Button>
+        <Text style={{fontFamily: "Roboto", fontWeight:"100"}}>Hey, what&#39;s your email? </Text>
+        <TextInput style={{height: 40, borderColor: 'gray', borderWidth: 1, color: "white"}} placeholderFontFamily="Roboto"  placeholder={"example@gmail.com"}/>
+        <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.OnBoarding_Password}>Next</Button>
+        <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.pop}>back</Button>
       </View>
     );
   }
