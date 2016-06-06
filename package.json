@@ -20,7 +20,6 @@
     "redux-loop": "^2.1.0",
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.0.1"
-
   },
   "devDependencies": {
     "sane": "^1.3.4"

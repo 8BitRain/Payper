@@ -116,13 +116,12 @@ export default class Coincast extends React.Component {
                     <Scene key="landingView" component={LandingView} title="LandingView">
 
                     </Scene>
+
+
                     <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" initial={true} />
-                    <Scene key="OnBoarding_Email" component={OnBoarding_Email} title="OnBoarding_Email" />
-                    <Scene key="OnBoarding_Password" component={OnBoarding_Password} title="OnBoarding_Password" />
-                    <Scene key="OnBoarding_FirstName" component={OnBoarding_FirstName} title="OnBoarding_FirstName" />
-                    <Scene key="OnBoarding_LastName" component={OnBoarding_LastName} title="OnBoarding_LastName" />
-                    <Scene key="OnBoarding_PhoneNumber" component={OnBoarding_PhoneNumber} title="OnBoarding_PhoneNumber" />
-                    <Scene key="OnBoarding_Summary" component={OnBoarding_Summary} title="OnBoarding_Summary" />
+
+
+
                     <Scene key="register" component={Register} title="Register"/>
                     <Scene key="register2" component={Register} title="Register2" duration={1}/>
                     <Scene key="home" component={Home} title="Replace" type="replace"/>

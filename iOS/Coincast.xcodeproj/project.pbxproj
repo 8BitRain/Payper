@@ -13,10 +13,6 @@
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		00E356F31AD99517003FC87E /* CoincastTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CoincastTests.m */; };
-		078FF1081D03BC3A00BC9916 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 078FF1041D03BC3A00BC9916 /* Roboto-Bold.ttf */; };
-		078FF1091D03BC3A00BC9916 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 078FF1051D03BC3A00BC9916 /* Roboto-Light.ttf */; };
-		078FF10A1D03BC3A00BC9916 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 078FF1061D03BC3A00BC9916 /* Roboto-Medium.ttf */; };
-		078FF10B1D03BC3A00BC9916 /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 078FF1071D03BC3A00BC9916 /* Roboto-Thin.ttf */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
@@ -25,6 +21,10 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		232A65D01D03D74E0084EA8E /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 232A65CC1D03D74E0084EA8E /* Roboto-Bold.ttf */; };
+		232A65D11D03D74E0084EA8E /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 232A65CD1D03D74E0084EA8E /* Roboto-Light.ttf */; };
+		232A65D21D03D74E0084EA8E /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 232A65CE1D03D74E0084EA8E /* Roboto-Medium.ttf */; };
+		232A65D31D03D74E0084EA8E /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 232A65CF1D03D74E0084EA8E /* Roboto-Thin.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 /* End PBXBuildFile section */
 
@@ -118,10 +118,6 @@
 		00E356EE1AD99517003FC87E /* CoincastTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoincastTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* CoincastTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoincastTests.m; sourceTree = "<group>"; };
-		078FF1041D03BC3A00BC9916 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = SOURCE_ROOT; };
-		078FF1051D03BC3A00BC9916 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = SOURCE_ROOT; };
-		078FF1061D03BC3A00BC9916 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = SOURCE_ROOT; };
-		078FF1071D03BC3A00BC9916 /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = SOURCE_ROOT; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Coincast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coincast.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,6 +128,10 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Coincast/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Coincast/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+		232A65CC1D03D74E0084EA8E /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		232A65CD1D03D74E0084EA8E /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
+		232A65CE1D03D74E0084EA8E /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		232A65CF1D03D74E0084EA8E /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -295,10 +295,10 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				078FF1041D03BC3A00BC9916 /* Roboto-Bold.ttf */,
-				078FF1051D03BC3A00BC9916 /* Roboto-Light.ttf */,
-				078FF1061D03BC3A00BC9916 /* Roboto-Medium.ttf */,
-				078FF1071D03BC3A00BC9916 /* Roboto-Thin.ttf */,
+				232A65CC1D03D74E0084EA8E /* Roboto-Bold.ttf */,
+				232A65CD1D03D74E0084EA8E /* Roboto-Light.ttf */,
+				232A65CE1D03D74E0084EA8E /* Roboto-Medium.ttf */,
+				232A65CF1D03D74E0084EA8E /* Roboto-Thin.ttf */,
 				13B07FAE1A68108700A75B9A /* Coincast */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* CoincastTests */,
@@ -370,7 +370,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 943498UXPL;
+						DevelopmentTeam = NDENUB8WCF;
 					};
 				};
 			};
@@ -520,12 +520,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				078FF10A1D03BC3A00BC9916 /* Roboto-Medium.ttf in Resources */,
+				232A65D21D03D74E0084EA8E /* Roboto-Medium.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				078FF10B1D03BC3A00BC9916 /* Roboto-Thin.ttf in Resources */,
+				232A65D31D03D74E0084EA8E /* Roboto-Thin.ttf in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				078FF1091D03BC3A00BC9916 /* Roboto-Light.ttf in Resources */,
-				078FF1081D03BC3A00BC9916 /* Roboto-Bold.ttf in Resources */,
+				232A65D11D03D74E0084EA8E /* Roboto-Light.ttf in Resources */,
+				232A65D01D03D74E0084EA8E /* Roboto-Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -633,13 +633,13 @@
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 				);
 				INFOPLIST_FILE = Coincast/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Coincast322;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Coincast12;
 				PRODUCT_NAME = Coincast;
 				PROVISIONING_PROFILE = "";
 			};
@@ -657,13 +657,13 @@
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 				);
 				INFOPLIST_FILE = Coincast/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Coincast322;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Coincast12;
 				PRODUCT_NAME = Coincast;
 				PROVISIONING_PROFILE = "";
 			};
