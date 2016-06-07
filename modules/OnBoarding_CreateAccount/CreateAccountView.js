@@ -18,6 +18,7 @@ const typo = StyleSheet.create({
   // Varying font sizes (ex. "What's your email?")
   fontSizeTitle: { fontSize: 25 },
   fontSizeNote: { fontSize: 20 },
+  fontSizeError: { fontSize: 15},
 
   textInput: {
     height: 40,
@@ -42,6 +43,13 @@ const typo = StyleSheet.create({
   padRight: { paddingBottom: 20 }
 });
 
+const validation = StyleSheet.create({
+  contentContainer : {
+      flex: .5,
+      backgroundColor: "#61C9A8",
+  }
+
+});
 // Houses all non-typography styles for the OnBoarding_CreateAccount module
 const styles = StyleSheet.create({
   // Flex positioning
@@ -49,8 +57,9 @@ const styles = StyleSheet.create({
     flex: 1
   },
   contentContainer: {
-    flex: 1,
-    justifyContent: "center"
+    flex: .5,
+    justifyContent: "center",
+    /*marginBottom: 150*/
   },
   // END Flex positioning
 
@@ -116,25 +125,40 @@ class OnBoarding_Email extends React.Component {
      this.animationProps = {
        fadeAnim: new Animated.Value(0), // init opacity 0
      };
+     this.state = {
+       email: ''
+     }
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
    }
+
+   submitFormT() {
+     console.log("Submit this form");
+   }
+
    render() {
      return (
        <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
          <View {...this.props} style={[styles.contentContainer, styles.email]}>
            <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Hey, what&#39;s your email?</Text>
-           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCapitalize="none" placeholderFontFamily="Roboto" placeholder={"johndoe@example.com"} keyboardType="email-address" />
+           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholder={"johndoe@example.com"} keyboardType="email-address"
+           value={this.state.email} onChangeText={email => this.setState({email})}/>
          </View>
          <View style={[toolbar.toolbar]}>
            <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(4)}>Prev</Button>
            <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-           <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(1)}>Next</Button>
+           <Button style={toolbar.toolbarButton} onPress={() => submitFormT}>Next</Button>
+         </View>
+         <View style={validation.contentContainer}>
+            <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Validation</Text>
+            <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Email already exists</Text>
+            <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Not a valid email</Text>
          </View>
        </Animated.View>
      );
    }
+
  }
 
 class OnBoarding_Password extends React.Component {
@@ -152,7 +176,7 @@ class OnBoarding_Password extends React.Component {
        <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
          <View {...this.props} style={[styles.contentContainer, styles.password]}>
            <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Enter a secure password</Text>
-           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCapitalize="none" placeholderFontFamily="Roboto" placeholder={"not \"password\" :)"} />
+           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholder={"not \"password\" :)"} />
          </View>
          <View style={[toolbar.toolbar]}>
            <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(0)}>Prev</Button>
@@ -179,7 +203,7 @@ class OnBoarding_Password extends React.Component {
       <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
         <View {...this.props} style={[styles.contentContainer, styles.firstName]}>
           <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>What&#39;s your first name?</Text>
-          <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} placeholderFontFamily="Roboto" placeholder={"John"} />
+          <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"John"} />
         </View>
         <View style={[toolbar.toolbar]}>
           <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(1)}>Prev</Button>
@@ -206,7 +230,7 @@ class OnBoarding_LastName extends React.Component {
      <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
        <View {...this.props} style={[styles.contentContainer, styles.lastName]}>
          <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>How &#39;bout your last name?</Text>
-         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} placeholderFontFamily="Roboto" placeholder={"Doe"} />
+         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"Doe"} />
        </View>
        <View style={[toolbar.toolbar]}>
          <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(2)}>Prev</Button>
@@ -233,7 +257,7 @@ class OnBoarding_PhoneNumber extends React.Component {
      <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
        <View {...this.props} style={[styles.contentContainer, styles.phoneNumber]}>
          <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Can I have your number?</Text>
-         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} keyboardType="phone-pad" />
+         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} keyboardType="phone-pad" />
        </View>
        <View style={[toolbar.toolbar]}>
          <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(3)}>Prev</Button>
