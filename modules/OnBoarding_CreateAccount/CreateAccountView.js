@@ -128,14 +128,13 @@ class OnBoarding_Email extends React.Component {
      this.state = {
        email: ''
      }
+     console.log(this.state);
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
    }
 
-   submitFormT() {
-     console.log("Submit this form");
-   }
+
 
    render() {
      return (
@@ -146,9 +145,10 @@ class OnBoarding_Email extends React.Component {
            value={this.state.email} onChangeText={email => this.setState({email})}/>
          </View>
          <View style={[toolbar.toolbar]}>
-           <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(4)}>Prev</Button>
+           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(4)}>Prev</Button>
            <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-           <Button style={toolbar.toolbarButton} onPress={() => submitFormT}>Next</Button>
+
+           <Button style={toolbar.toolbarButton} onPress={this._submitForm}>Next</Button>
          </View>
          <View style={validation.contentContainer}>
             <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Validation</Text>
@@ -158,6 +158,13 @@ class OnBoarding_Email extends React.Component {
        </Animated.View>
      );
    }
+
+   //Precompiled thought: This is a runtime function.
+   _submitForm = () => {
+     console.log(this.state);
+  };
+
+
 
  }
 
@@ -179,9 +186,9 @@ class OnBoarding_Password extends React.Component {
            <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholder={"not \"password\" :)"} />
          </View>
          <View style={[toolbar.toolbar]}>
-           <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(0)}>Prev</Button>
+           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(0)}>Prev</Button>
            <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-           <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(2)}>Next</Button>
+           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(2)}>Next</Button>
          </View>
        </Animated.View>
      );
@@ -206,9 +213,9 @@ class OnBoarding_Password extends React.Component {
           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"John"} />
         </View>
         <View style={[toolbar.toolbar]}>
-          <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(1)}>Prev</Button>
+          <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(1)}>Prev</Button>
           <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-          <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(3)}>Next</Button>
+          <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(3)}>Next</Button>
         </View>
       </Animated.View>
     );
@@ -233,9 +240,9 @@ class OnBoarding_LastName extends React.Component {
          <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"Doe"} />
        </View>
        <View style={[toolbar.toolbar]}>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(2)}>Prev</Button>
+         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(2)}>Prev</Button>
          <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(4)}>Next</Button>
+         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(4)}>Next</Button>
        </View>
      </Animated.View>
    );
@@ -260,9 +267,9 @@ class OnBoarding_PhoneNumber extends React.Component {
          <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} keyboardType="phone-pad" />
        </View>
        <View style={[toolbar.toolbar]}>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(3)}>Prev</Button>
+         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(3)}>Prev</Button>
          <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(5)}>Next</Button>
+         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(5)}>Next</Button>
        </View>
     </Animated.View>
    );
@@ -294,9 +301,9 @@ class OnBoarding_Summary extends React.Component {
          <Button style={[typo.general, typo.fontSizeNote]} onPress={Actions.CreateAccount}>Yup!</Button>
        </View>
        <View style={[toolbar.toolbar]}>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(4)}><Image source={require('./assets/chevron-left.svg')} /></Button>
+         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(4)}><Image source={require('./assets/chevron-left.svg')} /></Button>
          <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.setPage(0)}>Done</Button>
+         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(0)}>Done</Button>
        </View>
      </Animated.View>
    );
@@ -319,32 +326,32 @@ const CreateAccountView = React.createClass({
     switch (this.props.currentPage) {
       case 0:
         return(
-          <OnBoarding_Email setPage={this.props.setPage} />
+          <OnBoarding_Email dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 1:
         return(
-          <OnBoarding_Password setPage={this.props.setPage} />
+          <OnBoarding_Password dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 2:
         return(
-          <OnBoarding_FirstName setPage={this.props.setPage} />
+          <OnBoarding_FirstName dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 3:
         return(
-          <OnBoarding_LastName setPage={this.props.setPage} />
+          <OnBoarding_LastName dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 4:
         return(
-          <OnBoarding_PhoneNumber setPage={this.props.setPage} />
+          <OnBoarding_PhoneNumber dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 5:
         return(
-          <OnBoarding_Summary setPage={this.props.setPage} />
+          <OnBoarding_Summary dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
     }

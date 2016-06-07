@@ -15,7 +15,7 @@ export default connect(
     currentPage: state.getIn(['createAccount', 'currentPage'])
   }),
   dispatch => ({
-    setPage(index) {
+    dispatchSetPage(index) {
       dispatch(setPage(index));
     }
   })
