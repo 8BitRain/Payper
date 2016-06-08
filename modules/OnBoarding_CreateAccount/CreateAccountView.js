@@ -264,7 +264,7 @@ class OnBoarding_PhoneNumber extends React.Component {
      <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
        <View {...this.props} style={[styles.contentContainer, styles.phoneNumber]}>
          <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Can I have your number?</Text>
-         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} keyboardType="phone-pad" />
+         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} maxLength=10 keyboardType="phone-pad" />
        </View>
        <View style={[toolbar.toolbar]}>
          <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(3)}>Prev</Button>
