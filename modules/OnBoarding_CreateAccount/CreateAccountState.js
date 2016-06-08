@@ -10,31 +10,34 @@ var currentUser = {
   phoneNumber:""
 }
 
+var passwordValidations = {
+  length: false,
+  upper: false,
+  lower: false,
+  num: false,
+  sym: false
+}
+
 // Initialize state
 const initialState = Map({
   currentUser,
-  currentPage: 0
+  currentPage: 0,
+  passwordValidations
 });
 
 // Action types
-const NEXT_PAGE = 'NEXT_PAGE';
-const PREVIOUS_PAGE= 'PREVIOUS_PAGE';
 const SET_PAGE = 'SET_PAGE';
+const SET_PASSWORD_VALIDATIONS = 'SET_PASSWORD_VALIDATIONS';
 
 // Action creators
-export function switchPage(index) {
-  console.log("switchPage() with index: " + index);
-  return { type: SWITCH_PAGE, index: index };
-}
-
-export function prevPage() {
-  return { type: PREVIOUS_PAGE };
-}
-
 export function setPage(index) {
   console.log("it works!");
   return { type: SET_PAGE, index: index };
-}
+};
+
+export function setPasswordValidations(input) {
+  return { type: SET_PASSWORD_VALIDATIONS, input: input };
+};
 
 /**
   *   Reducer
@@ -45,10 +48,14 @@ export function setPage(index) {
   *   TODO: implement partial state tree manipulation
 **/
 export default function CreateAccountReducer(state = initialState, action = {}) {
-
   switch (action.type) {
     case SET_PAGE:
       var newState = state.set('currentPage', action.index);
+      return newState;
+      break;
+    case SET_PASSWORD_VALIDATIONS:
+      var newState = state.set('passwordValidations', action.input);
+      console.log("New state: " + newState);
       return newState;
       break;
   }

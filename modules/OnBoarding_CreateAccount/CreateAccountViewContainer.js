@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {switchPage, setPage} from './CreateAccountState'
+import {switchPage, setPage, setPasswordValidations} from './CreateAccountState'
 import CreateAccountView from './CreateAccountView';
 
 /**
@@ -12,11 +12,15 @@ export default connect(
     email: state.getIn(['createAccount', 'currentUser', 'email']),
     password: state.getIn(['createAccount', 'currentUser', 'password']),
     phoneNumber: state.getIn(['createAccount', 'currentUser', 'phoneNumber']),
-    currentPage: state.getIn(['createAccount', 'currentPage'])
+    currentPage: state.getIn(['createAccount', 'currentPage']),
+    passwordValidations: state.getIn(['createAccount', 'passwordValidations'])
   }),
   dispatch => ({
     dispatchSetPage(index) {
       dispatch(setPage(index));
+    },
+    dispatchSetPasswordValidations(input) {
+      dispatch(setPasswordValidations(input));
     }
   })
 )(CreateAccountView);

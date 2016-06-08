@@ -11,18 +11,31 @@ export function validateEmail(input) {
 // Checks that the password is at least 6 characters, and that two of the
 // following are true: at least 1 uppercase letter, at least 1 lowercase letter,
 // at least 1 number or special character
-export function validatePassword(input) {
+export function validatePassword(input) {  
   // Check length
-  var regexLength = /()/;
-  if (!regexLength.test(input)) return false;
+  var regexLength = /^.{6,}$/.test(input);
 
-  // 2 of 3 of the following must be true
-  var regexUpper = /[A-Z]/;
-  var regexLower = /[a-z]/;
-  var regexNumOrSymb = /([0-9]|[!”#$%&’()*+`-./:;<=>?@[\]^\\_’{|}~])/;
-  return regexUpper.test(input) ? (regexLower.test(input) || regexNumOrSym.test(input))
-    : (regexLower.test(input) && regexNumOrSym.test(input));
+  // 3 of 4 of the following must be true
+  var regexUpper = /[A-Z]/.test(input);
+  var regexLower = /[a-z]/.test(input);
+  var regexSym = /[!”#$%&’()*+`\-./:;<=>?@\]\[\\^_’{|}~]/.test(input);
+  var regexNum = /[0-9]/.test(input);
+
+  return {
+    length: regexLength,
+    upper: regexUpper,
+    lower: regexLower,
+    num: regexNum,
+    sym: regexSym
+  };
 };
+
+// Individual password validations for real time feedback on validity of
+// password
+export function validateUpperCase(input) { return /[A-Z]/.test(input) };
+export function validateLowerCase(input) { return /[a-z]/.test(input) };
+export function validateNumber(input) { return /[0-9]/.test(input) };
+export function validateSymbol(input) { return /[!”#$%&’()*+`\-./:;<=>?@\]\[\\^_’{|}~]/.test(input) };
 
 // Checks that the first character is capitalized
 export function validateName(input) {

@@ -2,7 +2,8 @@ import React from 'react';
 import {View, Text, TextInput, StyleSheet, Image, Animated} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
-import * as Animations from "../../helpers/animations.js";
+import * as Animations from "../../helpers/animations";
+import * as Validators from "../../helpers/validators";
 require('./assets/chevron-left.svg');
 
 // Houses all typography styles for the Onboarding_CreateAccount module
@@ -46,10 +47,9 @@ const typo = StyleSheet.create({
 const validation = StyleSheet.create({
   contentContainer : {
       flex: .5,
-      backgroundColor: "#61C9A8",
   }
-
 });
+
 // Houses all non-typography styles for the OnBoarding_CreateAccount module
 const styles = StyleSheet.create({
   // Flex positioning
@@ -134,8 +134,6 @@ class OnBoarding_Email extends React.Component {
      Animations.fadeIn(this.animationProps);
    }
 
-
-
    render() {
      return (
        <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
@@ -147,10 +145,9 @@ class OnBoarding_Email extends React.Component {
          <View style={[toolbar.toolbar]}>
            <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(4)}>Prev</Button>
            <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-
-           <Button style={toolbar.toolbarButton} onPress={this._submitForm}>Next</Button>
+           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(1)}>Next</Button>
          </View>
-         <View style={validation.contentContainer}>
+         <View style={[validation.contentContainer, styles.email]}>
             <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Validation</Text>
             <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Email already exists</Text>
             <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Not a valid email</Text>
@@ -183,7 +180,19 @@ class OnBoarding_Password extends React.Component {
        <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
          <View {...this.props} style={[styles.contentContainer, styles.password]}>
            <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Enter a secure password</Text>
-           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholder={"not \"password\" :)"} />
+           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onChangeText={(text) => this.props.dispatchSetPasswordValidations(text)} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" secureTextEntry={true} placeholder={"not \"password\" :)"} />
+         </View>
+         <View style={[validation.contentContainer, styles.password]}>
+            { this.props.passwordValidations.length ? null
+              : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Minimum of 6 chars</Text> }
+            { this.props.passwordValidations.lower ? null
+              : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Lowercase</Text> }
+            { this.props.passwordValidations.upper ? null
+              : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Uppercase</Text> }
+            { this.props.passwordValidations.num ? null
+              : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Number</Text> }
+            { this.props.passwordValidations.sym ? null
+              : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Symbol</Text> }
          </View>
          <View style={[toolbar.toolbar]}>
            <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(0)}>Prev</Button>
@@ -264,7 +273,7 @@ class OnBoarding_PhoneNumber extends React.Component {
      <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
        <View {...this.props} style={[styles.contentContainer, styles.phoneNumber]}>
          <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Can I have your number?</Text>
-         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} maxLength=10 keyboardType="phone-pad" />
+         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} maxLength={10} keyboardType="phone-pad" />
        </View>
        <View style={[toolbar.toolbar]}>
          <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(3)}>Prev</Button>
@@ -331,7 +340,7 @@ const CreateAccountView = React.createClass({
         break;
       case 1:
         return(
-          <OnBoarding_Password dispatchSetPage={this.props.dispatchSetPage} />
+          <OnBoarding_Password passwordValidations={this.props.passwordValidations} dispatchSetPasswordValidations={(text) => this.props.dispatchSetPasswordValidations(Validators.validatePassword(text))} dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 2:
