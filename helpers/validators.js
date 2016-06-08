@@ -4,14 +4,18 @@
 
 // u kno
 export function validateEmail(input) {
-  var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return regex.test(input);
+  var regexFormat = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(input);
+  return {
+    // TODO Check for dupes in Firebase
+    duplicate: false,
+    format: regexFormat
+  };
 };
 
 // Checks that the password is at least 6 characters, and that two of the
 // following are true: at least 1 uppercase letter, at least 1 lowercase letter,
 // at least 1 number or special character
-export function validatePassword(input) {  
+export function validatePassword(input) {
   // Check length
   var regexLength = /^.{6,}$/.test(input);
 
@@ -39,6 +43,10 @@ export function validateSymbol(input) { return /[!”#$%&’()*+`\-./:;<=>?@\]\[
 
 // Checks that the first character is capitalized
 export function validateName(input) {
-  var regex = /^[A-Z]/;
-  return regex.test(input);
+  var regexCapitalized = /^[A-Z]/.test(input);
+  var regexFormat = /[!”#$%&’()*+`\./:;<=>?@\]\[\\^_’{|}~]+/.test(input);
+  return {
+    capitalized: regexCapitalized,
+    format: regexFormat
+  };
 };
