@@ -223,8 +223,8 @@ class OnBoarding_Password extends React.Component {
         <View style={[validation.contentContainer, styles.firstName]}>
           { this.props.firstNameValidations.capitalized ? null
             : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Not capitalized</Text> }
-          { this.props.firstNameValidations.format ? <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Invalid character (. and - are allowed)</Text>
-            : null }
+          { this.props.firstNameValidations.format ? null: <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Invalid character (. and - are allowed)</Text>
+             }
         </View>
         <View style={[toolbar.toolbar]}>
           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(1, null, null, null)}>Prev</Button>
@@ -257,8 +257,8 @@ class OnBoarding_LastName extends React.Component {
        <View style={[validation.contentContainer, styles.lastName]}>
          { this.props.lastNameValidations.capitalized ? null
            : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Not capitalized</Text> }
-         { this.props.lastNameValidations.format ? <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Invalid character (. and - are allowed)</Text>
-           : null }
+         { this.props.lastNameValidations.format ? null
+           : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Invalid character (. and - are allowed)</Text> }
        </View>
        <View style={[toolbar.toolbar]}>
          <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(2, null, null, null)}>Prev</Button>

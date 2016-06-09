@@ -46,7 +46,6 @@ export default connect(
               break;
             // First name
             case 2:
-            console.log("!!!!!!!!!!!!!! ");
               dispatch(dispatchFunctions.setFirstName(input));
               break;
             // Last name

@@ -52,7 +52,7 @@ export function validateSymbol(input) { return /[!”#$%&’()*+`\-./:;<=>?@\]\[
 // Checks that the first character is capitalized
 export function validateName(input) {
   var regexCapitalized = /^[A-Z]/.test(input);
-  var regexFormat = /[\^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=,]/.test(input);
+  var regexFormat = !/[\^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=,]/.test(input);
 
   var validations =  {
     capitalized: regexCapitalized,
