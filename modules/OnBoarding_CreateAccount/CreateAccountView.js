@@ -125,9 +125,8 @@ class OnBoarding_Email extends React.Component {
      this.animationProps = {
        fadeAnim: new Animated.Value(0) // init opacity 0
      };
-     this.emailInput = "";
+     this.emailInput = this.props.email;
    }
-
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
    }
@@ -160,7 +159,7 @@ class OnBoarding_Password extends React.Component {
      this.animationProps = {
        fadeAnim: new Animated.Value(0), // init opacity 0
      };
-     this.passwordInput = "";
+     this.passwordInput = this.props.password;
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
@@ -170,7 +169,7 @@ class OnBoarding_Password extends React.Component {
        <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
          <View {...this.props} style={[styles.contentContainer, styles.password]}>
            <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Enter a secure password</Text>
-           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onChangeText={(text) => {this.passwordInput = text; this.props.dispatchSetPasswordValidations(this.passwordInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" secureTextEntry={true} placeholder={"not \"password\" :)"} />
+           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.password} onChangeText={(text) => {this.passwordInput = text; this.props.dispatchSetPasswordValidations(this.passwordInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" secureTextEntry={true} placeholder={"not \"password\" :)"} />
          </View>
          <View style={[validation.contentContainer, styles.password]}>
             { this.props.passwordValidations.length ? null
@@ -208,7 +207,7 @@ class OnBoarding_Password extends React.Component {
     this.animationProps = {
       fadeAnim: new Animated.Value(0), // init opacity 0
     };
-    this.firstNameInput = "";
+    this.firstNameInput = this.props.firstName;
   }
   componentDidMount() {
     Animations.fadeIn(this.animationProps);
@@ -218,7 +217,7 @@ class OnBoarding_Password extends React.Component {
       <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
         <View {...this.props} style={[styles.contentContainer, styles.firstName]}>
           <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>What&#39;s your first name?</Text>
-          <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onChangeText={(text) => {this.firstNameInput = text; this.props.dispatchSetFirstNameValidations(this.firstNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"John"} />
+          <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.firstName} onChangeText={(text) => {this.firstNameInput = text; this.props.dispatchSetFirstNameValidations(this.firstNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"John"} />
         </View>
         <View style={[validation.contentContainer, styles.firstName]}>
           { this.props.firstNameValidations.capitalized ? null
@@ -242,7 +241,7 @@ class OnBoarding_LastName extends React.Component {
    this.animationProps = {
      fadeAnim: new Animated.Value(0), // init opacity 0
    };
-   this.lastNameInput = "";
+   this.lastNameInput = this.props.lastName;
  }
  componentDidMount() {
    Animations.fadeIn(this.animationProps);
@@ -252,7 +251,7 @@ class OnBoarding_LastName extends React.Component {
      <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
        <View {...this.props} style={[styles.contentContainer, styles.lastName]}>
          <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>How &#39;bout your last name?</Text>
-         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onChangeText={(text) => {this.lastNameInput = text; this.props.dispatchSetLastNameValidations(this.lastNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"Doe"} />
+         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.lastName} onChangeText={(text) => {this.lastNameInput = text; this.props.dispatchSetLastNameValidations(this.lastNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"Doe"} />
        </View>
        <View style={[validation.contentContainer, styles.lastName]}>
          { this.props.lastNameValidations.capitalized ? null
@@ -276,7 +275,7 @@ class OnBoarding_PhoneNumber extends React.Component {
    this.animationProps = {
      fadeAnim: new Animated.Value(0), // init opacity 0
    };
-   this.phoneNumberInput = "";
+   this.phoneNumberInput = this.props.phoneNumber;
  }
  componentDidMount() {
    Animations.fadeIn(this.animationProps);
@@ -286,12 +285,12 @@ class OnBoarding_PhoneNumber extends React.Component {
      <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
        <View {...this.props} style={[styles.contentContainer, styles.phoneNumber]}>
          <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Can I have your number?</Text>
-         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} maxLength={10} keyboardType="phone-pad" />
+         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.phoneNumber} onChangeText={(text) => {this.phoneNumberInput = text}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} maxLength={10} keyboardType="phone-pad" />
        </View>
        <View style={[toolbar.toolbar]}>
          <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(3, null, null, null)}>Prev</Button>
          <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(5, "forward", true, this.phoneNumberInput)}>Next</Button>
+         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput)}>Next</Button>
        </View>
     </Animated.View>
    );
@@ -314,11 +313,11 @@ class OnBoarding_Summary extends React.Component {
        <View {...this.props} style={[styles.contentContainer, styles.summary]}>
          <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Does this look right?</Text>
 
-         <Text style={[typo.general, typo.fontSizeNote, typo.marginSides, typo.marginBottom]}>brady.sherid@gmail.com</Text>
-         <Text style={[typo.general, typo.fontSizeNote, typo.marginSides, typo.marginBottom]}>Brady</Text>
-         <Text style={[typo.general, typo.fontSizeNote, typo.marginSides, typo.marginBottom]}>Sheridan</Text>
-         <Text style={[typo.general, typo.fontSizeNote, typo.marginSides, typo.marginBottom]}>1997June2!</Text>
-         <Text style={[typo.general, typo.fontSizeNote, typo.marginSides, typo.marginBottom]}>262-305-8038</Text>
+         <Text style={[typo.general, typo.fontSizeNote, typo.marginSides, typo.marginBottom]}>{this.props.currentUser.email}</Text>
+         <Text style={[typo.general, typo.fontSizeNote, typo.marginSides, typo.marginBottom]}>{this.props.currentUser.password}</Text>
+         <Text style={[typo.general, typo.fontSizeNote, typo.marginSides, typo.marginBottom]}>{this.props.currentUser.firstName}</Text>
+         <Text style={[typo.general, typo.fontSizeNote, typo.marginSides, typo.marginBottom]}>{this.props.currentUser.lastName}</Text>
+         <Text style={[typo.general, typo.fontSizeNote, typo.marginSides, typo.marginBottom]}>{this.props.currentUser.phoneNumber}</Text>
 
          <Button style={[typo.general, typo.fontSizeNote]} onPress={Actions.CreateAccount}>Yup!</Button>
        </View>
@@ -341,9 +340,6 @@ class OnBoarding_Summary extends React.Component {
 **/
 const CreateAccountView = React.createClass({
   render() {
-    // TEST
-    console.log("PROPS: " + this.props);
-
     switch (this.props.currentPage) {
       case 0:
         return(
@@ -352,22 +348,22 @@ const CreateAccountView = React.createClass({
         break;
       case 1:
         return(
-          <OnBoarding_Password passwordValidations={this.props.passwordValidations} dispatchSetPasswordValidations={(text) => this.props.dispatchSetPasswordValidations(Validators.validatePassword(text))} dispatchSetPage={this.props.dispatchSetPage} />
+          <OnBoarding_Password password={this.props.password} passwordValidations={this.props.passwordValidations} dispatchSetPasswordValidations={(text) => this.props.dispatchSetPasswordValidations(Validators.validatePassword(text))} dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 2:
         return(
-          <OnBoarding_FirstName firstNameValidations={this.props.firstNameValidations} dispatchSetFirstNameValidations={(text) => this.props.dispatchSetFirstNameValidations(Validators.validateName(text))} dispatchSetPage={this.props.dispatchSetPage} />
+          <OnBoarding_FirstName firstName={this.props.firstName} firstNameValidations={this.props.firstNameValidations} dispatchSetFirstNameValidations={(text) => this.props.dispatchSetFirstNameValidations(Validators.validateName(text))} dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 3:
         return(
-          <OnBoarding_LastName lastNameValidations={this.props.lastNameValidations} dispatchSetLastNameValidations={(text) => this.props.dispatchSetLastNameValidations(Validators.validateName(text))} dispatchSetPage={this.props.dispatchSetPage} />
+          <OnBoarding_LastName lastName={this.props.lastName} lastNameValidations={this.props.lastNameValidations} dispatchSetLastNameValidations={(text) => this.props.dispatchSetLastNameValidations(Validators.validateName(text))} dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 4:
         return(
-          <OnBoarding_PhoneNumber phoneNumberValidations={this.props.phoneNumberValidations} dispatchSetPhoneNumberValidations={(text) => this.props.dispatchSetPhoneNumberValidations(text)} dispatchSetPage={this.props.dispatchSetPage} />
+          <OnBoarding_PhoneNumber phoneNumber={this.props.phoneNumber} phoneNumberValidations={this.props.phoneNumberValidations} dispatchSetPhoneNumberValidations={(text) => this.props.dispatchSetPhoneNumberValidations(text)} dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 5:

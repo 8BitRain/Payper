@@ -14,6 +14,7 @@ export default connect(
     email: state.getIn(['createAccount', 'currentUser']).email,
     password: state.getIn(['createAccount', 'currentUser']).password,
     phoneNumber: state.getIn(['createAccount', 'currentUser']).phoneNumber,
+    currentUser: state.getIn(['createAccount', 'currentUser']),
 
     // Tracks pagination
     currentPage: state.getIn(['createAccount', 'currentPage']),
