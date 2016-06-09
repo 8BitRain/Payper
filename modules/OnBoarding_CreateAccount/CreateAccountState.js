@@ -3,33 +3,38 @@ import {loop, Effects} from 'redux-loop';
 
 // Initialize currentUser vars
 var currentUser = {
-    firstName: "",
-    lastName: "",
     email: "",
     password: "",
-    phoneNumber:""
+    firstName: "",
+    lastName: "",
+    phoneNumber: ""
   },
   passwordValidations = {
     length: false,
     upper: false,
     lower: false,
     num: false,
-    sym: false
+    sym: false,
+    valid: false
   },
   emailValidations = {
-    duplicate: false,
-    format: false
+    unique: true,
+    format: false,
+    valid: false
   },
   firstNameValidations = {
     capitalized: false,
-    format: false
+    format: false,
+    valid: false
   },
   lastNameValidations = {
     capitalized: false,
-    format: false
+    format: false,
+    valid: false
   },
   phoneNumberValidations = {
-    length: false
+    length: false,
+    valid: false
   };
 
 // Initialize state
@@ -49,7 +54,12 @@ const SET_PAGE = 'SET_PAGE',
       SET_PASSWORD_VALIDATIONS = 'SET_PASSWORD_VALIDATIONS',
       SET_FIRST_NAME_VALIDATIONS = 'SET_FIRST_NAME_VALIDATIONS',
       SET_LAST_NAME_VALIDATIONS = 'SET_LAST_NAME_VALIDATIONS',
-      SET_PHONE_NUMBER_VALIDATIONS = 'SET_PHONE_NUMBER_VALIDATIONS';
+      SET_PHONE_NUMBER_VALIDATIONS = 'SET_PHONE_NUMBER_VALIDATIONS',
+      SET_EMAIL = 'SET_EMAIL',
+      SET_PASSWORD = 'SET_PASSWORD',
+      SET_FIRST_NAME = 'SET_FIRST_NAME',
+      SET_LAST_NAME = 'SET_LAST_NAME',
+      SET_PHONE_NUMBER = 'SET_PHONE_NUMBER';
 
 // Action creators
 export function setPage(index) {
@@ -76,13 +86,32 @@ export function setPhoneNumberValidations(input) {
   return { type: SET_PHONE_NUMBER_VALIDATIONS, input: input };
 };
 
+export function setEmail(input) {
+  return { type: SET_EMAIL, input: input };
+};
+
+export function setPassword(input) {
+  return { type: SET_PASSWORD, input: input };
+};
+
+export function setFirstName(input) {
+  return { type: SET_FIRST_NAME, input: input };
+};
+
+export function setLastName(input) {
+  return { type: SET_LAST_NAME, input: input };
+};
+
+export function setPhoneNumber(input) {
+  return { type: SET_PHONE_NUMBER, input: input };
+};
+
 /**
   *   Reducer
   *
   *   Passed a state and an action. Updates the appropriate section of the state
   *   tree based on that action and returns full state tree.
   *
-  *   TODO: implement partial state tree manipulation
 **/
 export default function CreateAccountReducer(state = initialState, action = {}) {
   switch (action.type) {
@@ -107,7 +136,37 @@ export default function CreateAccountReducer(state = initialState, action = {}) 
       return newState;
       break;
     case SET_PHONE_NUMBER_VALIDATIONS:
-      var newState = state.set('setPhoneNumberValidations', action.input);
+      var newState = state.set('phoneNumberValidations', action.input);
+      return newState;
+      break;
+    case SET_EMAIL:
+      var currUser = state.get('currentUser');
+      currUser.email = action.input;
+      var newState = state.set('currentUser', currUser);
+      return newState;
+      break;
+    case SET_PASSWORD:
+      var currUser = state.get('currentUser');
+      currUser.password = action.input;
+      var newState = state.set('currentUser', currUser);
+      return newState;
+      break;
+    case SET_FIRST_NAME:
+      var currUser = state.get('currentUser');
+      currUser.firstName = action.input;
+      var newState = state.set('currentUser', currUser);
+      return newState;
+      break;
+    case SET_LAST_NAME:
+      var currUser = state.get('currentUser');
+      currUser.lastName = action.input;
+      var newState = state.set('currentUser', currUser);
+      return newState;
+      break;
+    case SET_PHONE_NUMBER:
+      var currUser = state.get('currentUser');
+      currUser.phoneNumber = action.input;
+      var newState = state.set('currentUser', currUser);
       return newState;
       break;
   }

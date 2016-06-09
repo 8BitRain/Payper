@@ -5,11 +5,15 @@
 // u kno
 export function validateEmail(input) {
   var regexFormat = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(input);
-  return {
+  var validations = {
     // TODO Check for dupes in Firebase
-    duplicate: false,
-    format: regexFormat
+    unique: true,
+    format: regexFormat,
+    valid: false
   };
+  validations.valid = getValidated(validations);
+
+  return validations;
 };
 
 // Checks that the password is at least 6 characters, and that two of the
@@ -25,13 +29,17 @@ export function validatePassword(input) {
   var regexSym = /[!”#$%&’()*+`\-./:;<=>?@\]\[\\^_’{|}~]/.test(input);
   var regexNum = /[0-9]/.test(input);
 
-  return {
+  var validations = {
     length: regexLength,
     upper: regexUpper,
     lower: regexLower,
     num: regexNum,
-    sym: regexSym
+    sym: regexSym,
+    valid: false
   };
+  validations.valid = getValidated(validations);
+
+  return validations;
 };
 
 // Individual password validations for real time feedback on validity of
@@ -44,9 +52,25 @@ export function validateSymbol(input) { return /[!”#$%&’()*+`\-./:;<=>?@\]\[
 // Checks that the first character is capitalized
 export function validateName(input) {
   var regexCapitalized = /^[A-Z]/.test(input);
-  var regexFormat = /[!”#$%&’()*+`\./:;<=>?@\]\[\\^_’{|}~]+/.test(input);
-  return {
+  var regexFormat = /[\^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=,]/.test(input);
+
+  var validations =  {
     capitalized: regexCapitalized,
-    format: regexFormat
+    format: regexFormat,
+    valid: false
   };
+  validations.valid = getValidated(validations);
+
+  return validations;
+};
+
+// Checks if any of the values in the provided hash are false
+export function getValidated(input) {
+  console.log("getValidated test. input: " + input);
+  for (var index in input) {
+    if (index == "valid") continue;
+    if (!input[index]) return false;
+  }
+
+  return true;
 };

@@ -125,6 +125,7 @@ class OnBoarding_Email extends React.Component {
      this.animationProps = {
        fadeAnim: new Animated.Value(0) // init opacity 0
      };
+     this.emailInput = "";
    }
 
    componentDidMount() {
@@ -136,12 +137,11 @@ class OnBoarding_Email extends React.Component {
        <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
          <View {...this.props} style={[styles.contentContainer, styles.email]}>
            <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Hey, what&#39;s your email?</Text>
-           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onChangeText={(text) => this.props.dispatchSetEmailValidations(text)} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholder={"johndoe@example.com"} keyboardType="email-address" />
+           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmailValidations(this.emailInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholder={"johndoe@example.com"} keyboardType="email-address" />
          </View>
          <View style={[toolbar.toolbar]}>
-           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(4)}>Prev</Button>
            <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(1)}>Next</Button>
+           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(1, "forward", this.props.emailValidations, this.emailInput)}>Next</Button>
          </View>
          <View style={[validation.contentContainer, styles.email]}>
             { this.props.emailValidations.format ? null
@@ -160,6 +160,7 @@ class OnBoarding_Password extends React.Component {
      this.animationProps = {
        fadeAnim: new Animated.Value(0), // init opacity 0
      };
+     this.passwordInput = "";
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
@@ -169,11 +170,19 @@ class OnBoarding_Password extends React.Component {
        <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
          <View {...this.props} style={[styles.contentContainer, styles.password]}>
            <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Enter a secure password</Text>
-           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onChangeText={(text) => this.props.dispatchSetPasswordValidations(text)} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" secureTextEntry={true} placeholder={"not \"password\" :)"} />
+           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onChangeText={(text) => {this.passwordInput = text; this.props.dispatchSetPasswordValidations(this.passwordInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" secureTextEntry={true} placeholder={"not \"password\" :)"} />
          </View>
          <View style={[validation.contentContainer, styles.password]}>
             { this.props.passwordValidations.length ? null
-              : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Minimum of 6 chars</Text> }
+              : function() {
+                  if (!this.props.passwordValidations.valid) {
+                    console.log("Animate the error message");
+                  } else {
+                    <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Minimum of 6 chars</Text>
+                  }
+                }
+            }
+
             { this.props.passwordValidations.lower ? null
               : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Lowercase</Text> }
             { this.props.passwordValidations.upper ? null
@@ -184,9 +193,9 @@ class OnBoarding_Password extends React.Component {
               : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Symbol</Text> }
          </View>
          <View style={[toolbar.toolbar]}>
-           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(0)}>Prev</Button>
+           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(0, null, null, null)}>Prev</Button>
            <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(2)}>Next</Button>
+           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(2, "forward", this.props.passwordValidations, this.passwordInput)}>Next</Button>
          </View>
        </Animated.View>
      );
@@ -199,6 +208,7 @@ class OnBoarding_Password extends React.Component {
     this.animationProps = {
       fadeAnim: new Animated.Value(0), // init opacity 0
     };
+    this.firstNameInput = "";
   }
   componentDidMount() {
     Animations.fadeIn(this.animationProps);
@@ -208,18 +218,18 @@ class OnBoarding_Password extends React.Component {
       <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
         <View {...this.props} style={[styles.contentContainer, styles.firstName]}>
           <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>What&#39;s your first name?</Text>
-          <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onChangeText={(text) => this.props.dispatchSetFirstNameValidations(text)} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"John"} />
+          <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onChangeText={(text) => {this.firstNameInput = text; this.props.dispatchSetFirstNameValidations(this.firstNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"John"} />
         </View>
         <View style={[validation.contentContainer, styles.firstName]}>
           { this.props.firstNameValidations.capitalized ? null
             : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Not capitalized</Text> }
-          { this.props.firstNameValidations.format ? <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Contains symbols</Text>
+          { this.props.firstNameValidations.format ? <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Invalid character (. and - are allowed)</Text>
             : null }
         </View>
         <View style={[toolbar.toolbar]}>
-          <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(1)}>Prev</Button>
+          <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(1, null, null, null)}>Prev</Button>
           <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-          <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(3)}>Next</Button>
+          <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(3, "forward", this.props.firstNameValidations, this.firstNameInput)}>Next</Button>
         </View>
       </Animated.View>
     );
@@ -232,6 +242,7 @@ class OnBoarding_LastName extends React.Component {
    this.animationProps = {
      fadeAnim: new Animated.Value(0), // init opacity 0
    };
+   this.lastNameInput = "";
  }
  componentDidMount() {
    Animations.fadeIn(this.animationProps);
@@ -241,18 +252,18 @@ class OnBoarding_LastName extends React.Component {
      <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
        <View {...this.props} style={[styles.contentContainer, styles.lastName]}>
          <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>How &#39;bout your last name?</Text>
-         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onChangeText={(text) => this.props.dispatchSetLastNameValidations(text)} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"Doe"} />
+         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onChangeText={(text) => {this.lastNameInput = text; this.props.dispatchSetLastNameValidations(this.lastNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"Doe"} />
        </View>
        <View style={[validation.contentContainer, styles.lastName]}>
          { this.props.lastNameValidations.capitalized ? null
            : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Not capitalized</Text> }
-         { this.props.lastNameValidations.format ? <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Contains symbols</Text>
+         { this.props.lastNameValidations.format ? <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Invalid character (. and - are allowed)</Text>
            : null }
        </View>
        <View style={[toolbar.toolbar]}>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(2)}>Prev</Button>
+         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(2, null, null, null)}>Prev</Button>
          <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(4)}>Next</Button>
+         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(4, "forward", this.props.lastNameValidations, this.lastNameInput)}>Next</Button>
        </View>
      </Animated.View>
    );
@@ -265,6 +276,7 @@ class OnBoarding_PhoneNumber extends React.Component {
    this.animationProps = {
      fadeAnim: new Animated.Value(0), // init opacity 0
    };
+   this.phoneNumberInput = "";
  }
  componentDidMount() {
    Animations.fadeIn(this.animationProps);
@@ -277,9 +289,9 @@ class OnBoarding_PhoneNumber extends React.Component {
          <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} maxLength={10} keyboardType="phone-pad" />
        </View>
        <View style={[toolbar.toolbar]}>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(3)}>Prev</Button>
+         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(3, null, null, null)}>Prev</Button>
          <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(5)}>Next</Button>
+         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(5, "forward", true, this.phoneNumberInput)}>Next</Button>
        </View>
     </Animated.View>
    );
@@ -311,9 +323,9 @@ class OnBoarding_Summary extends React.Component {
          <Button style={[typo.general, typo.fontSizeNote]} onPress={Actions.CreateAccount}>Yup!</Button>
        </View>
        <View style={[toolbar.toolbar]}>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(4)}><Image source={require('./assets/chevron-left.svg')} /></Button>
+         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(4, null, null, null)}><Image source={require('./assets/chevron-left.svg')} /></Button>
          <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(0)}>Done</Button>
+         <Button style={toolbar.toolbarButton}>Done</Button>
        </View>
      </Animated.View>
    );
@@ -335,7 +347,7 @@ const CreateAccountView = React.createClass({
     switch (this.props.currentPage) {
       case 0:
         return(
-          <OnBoarding_Email emailValidations={this.props.emailValidations} dispatchSetEmailValidations={(text) => this.props.dispatchSetEmailValidations(Validators.validateEmail(text))} dispatchSetPage={this.props.dispatchSetPage} />
+          <OnBoarding_Email email={this.props.email} emailValidations={this.props.emailValidations} dispatchSetEmailValidations={(text) => this.props.dispatchSetEmailValidations(Validators.validateEmail(text))} dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 1:
