@@ -4,6 +4,7 @@ import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
+import * as Firebase from "../../services/Firebase";
 
 // Houses all typography styles for the Onboarding_CreateAccount module
 const typo = StyleSheet.create({
@@ -335,7 +336,7 @@ class OnBoarding_PhoneNumber extends React.Component {
      <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
        <View {...this.props} style={[styles.contentContainer, styles.phoneNumber]}>
          <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Can I have your number?</Text>
-         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.phoneNumber} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput)}} onChangeText={(text) => {this.phoneNumberInput = text}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} maxLength={10} keyboardType="phone-pad" />
+         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput)}} defaultValue={this.props.phoneNumber} onChangeText={(text) => {this.phoneNumberInput = text}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} maxLength={10} keyboardType="phone-pad" />
        </View>
        <View style={[toolbar.toolbar]}>
          <View style={toolbar.buttonWrap}>
@@ -380,7 +381,7 @@ class OnBoarding_Summary extends React.Component {
          <Text style={[typo.general, typo.fontSizeNote, typo.marginSides, typo.marginBottom]}>{this.props.currentUser.lastName}</Text>
          <Text style={[typo.general, typo.fontSizeNote, typo.marginSides, typo.marginBottom]}>{this.props.currentUser.phoneNumber}</Text>
 
-         <Button style={[typo.general, typo.fontSizeNote]} onPress={Actions.CreateAccount}>Yup!</Button>
+         <Button style={[typo.general, typo.fontSizeNote]} onPress={() => this.props.createAccount(this.props.currentUser)}>Yup!</Button>
        </View>
        <View style={[toolbar.toolbar]}>
          <View style={toolbar.buttonWrap}>
@@ -438,7 +439,7 @@ const CreateAccountView = React.createClass({
         break;
       case 5:
         return(
-          <OnBoarding_Summary currentUser={this.props.currentUser} dispatchSetPage={this.props.dispatchSetPage} />
+          <OnBoarding_Summary createAccount={Firebase.createAccount} currentUser={this.props.currentUser} dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
     }

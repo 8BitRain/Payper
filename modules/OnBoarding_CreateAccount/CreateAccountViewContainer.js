@@ -2,6 +2,7 @@ import {connect} from 'react-redux';
 import * as dispatchFunctions from  './CreateAccountState';
 import CreateAccountView from './CreateAccountView';
 import Validators from '../../helpers/validators';
+import * as Firebase from '../../services/Firebase';
 
 /**
   *   Connect function for CreateAccountView.js
