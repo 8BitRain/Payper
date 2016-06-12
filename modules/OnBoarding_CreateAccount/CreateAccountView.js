@@ -1,10 +1,9 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Image, Animated} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
-require('./assets/chevron-left.svg');
 
 // Houses all typography styles for the Onboarding_CreateAccount module
 const typo = StyleSheet.create({
@@ -46,7 +45,7 @@ const typo = StyleSheet.create({
 
 const validation = StyleSheet.create({
   contentContainer : {
-      flex: .5,
+    flex: 0.5
   }
 });
 
@@ -96,18 +95,28 @@ const toolbar = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 10,
     flexDirection: "row",
-  },
-  toolbarButton: {
-    width: 70,
-    color: "#fff",
-    textAlign: "center",
-    fontFamily: "Roboto",
-    fontWeight: "900"
-  },
-  toolbarTitle: {
-    color: "#fff",
-    textAlign: "center",
     flex: 1
+  },
+  buttonWrap: {
+    flex: 0.25,
+    alignItems: 'center'
+  },
+  button: {
+    width: 35,
+    height: 35
+  },
+  circleWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center'
+  },
+  circle: {
+    width: 10,
+    height: 10,
+    marginLeft: 2.5,
+    marginRight: 2.5
   }
 });
 
@@ -130,17 +139,26 @@ class OnBoarding_Email extends React.Component {
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
    }
-
    render() {
      return (
        <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
          <View {...this.props} style={[styles.contentContainer, styles.email]}>
            <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Hey, what&#39;s your email?</Text>
-           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmailValidations(this.emailInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholder={"johndoe@example.com"} keyboardType="email-address" />
+           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(1, "forward", this.props.emailValidations, this.emailInput)}} defaultValue={this.props.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmailValidations(this.emailInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholder={"johndoe@example.com"} keyboardType="email-address" />
          </View>
          <View style={[toolbar.toolbar]}>
-           <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(1, "forward", this.props.emailValidations, this.emailInput)}>Next</Button>
+           <View style={toolbar.buttonWrap}></View>
+           <View style={toolbar.circleWrap}>
+             <Image style={toolbar.circle} source={require('./assets/circle-full.png')} />
+             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           </View>
+           <View style={toolbar.buttonWrap}>
+             <Button style={toolbar.button} onPress={() => this.props.dispatchSetPage(1, "forward", this.props.emailValidations, this.emailInput)}>Next</Button>
+           </View>
          </View>
          <View style={[validation.contentContainer, styles.email]}>
             { this.props.emailValidations.format ? null
@@ -169,7 +187,7 @@ class OnBoarding_Password extends React.Component {
        <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
          <View {...this.props} style={[styles.contentContainer, styles.password]}>
            <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Enter a secure password</Text>
-           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.password} onChangeText={(text) => {this.passwordInput = text; this.props.dispatchSetPasswordValidations(this.passwordInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" secureTextEntry={true} placeholder={"not \"password\" :)"} />
+           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.password} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(2, "forward", this.props.passwordValidations, this.passwordInput)}} onChangeText={(text) => {this.passwordInput = text; this.props.dispatchSetPasswordValidations(this.passwordInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" secureTextEntry={true} placeholder={"not \"password\" :)"} />
          </View>
          <View style={[validation.contentContainer, styles.password]}>
             { this.props.passwordValidations.length ? null
@@ -181,7 +199,6 @@ class OnBoarding_Password extends React.Component {
                   }
                 }
             }
-
             { this.props.passwordValidations.lower ? null
               : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Lowercase</Text> }
             { this.props.passwordValidations.upper ? null
@@ -192,9 +209,20 @@ class OnBoarding_Password extends React.Component {
               : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Symbol</Text> }
          </View>
          <View style={[toolbar.toolbar]}>
-           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(0, null, null, null)}>Prev</Button>
-           <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-           <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(2, "forward", this.props.passwordValidations, this.passwordInput)}>Next</Button>
+           <View style={toolbar.buttonWrap}>
+             <Button onPress={() => this.props.dispatchSetPage(0, null, null, null)}><Image style={toolbar.button} source={require('./assets/chevron-left.png')} /></Button>
+           </View>
+           <View style={toolbar.circleWrap}>
+             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+             <Image style={toolbar.circle} source={require('./assets/circle-full.png')} />
+             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           </View>
+           <View style={toolbar.buttonWrap}>
+             <Button style={toolbar.button} onPress={() => this.props.dispatchSetPage(2, "forward", this.props.passwordValidations, this.passwordInput)}>Next</Button>
+           </View>
          </View>
        </Animated.View>
      );
@@ -217,7 +245,7 @@ class OnBoarding_Password extends React.Component {
       <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
         <View {...this.props} style={[styles.contentContainer, styles.firstName]}>
           <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>What&#39;s your first name?</Text>
-          <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.firstName} onChangeText={(text) => {this.firstNameInput = text; this.props.dispatchSetFirstNameValidations(this.firstNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"John"} />
+          <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.firstName} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(3, "forward", this.props.firstNameValidations, this.firstNameInput)}} onChangeText={(text) => {this.firstNameInput = text; this.props.dispatchSetFirstNameValidations(this.firstNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"John"} />
         </View>
         <View style={[validation.contentContainer, styles.firstName]}>
           { this.props.firstNameValidations.capitalized ? null
@@ -226,9 +254,20 @@ class OnBoarding_Password extends React.Component {
              }
         </View>
         <View style={[toolbar.toolbar]}>
-          <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(1, null, null, null)}>Prev</Button>
-          <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-          <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(3, "forward", this.props.firstNameValidations, this.firstNameInput)}>Next</Button>
+          <View style={toolbar.buttonWrap}>
+            <Button onPress={() => this.props.dispatchSetPage(1, null, null, null)}><Image style={toolbar.button} source={require('./assets/chevron-left.png')} /></Button>
+          </View>
+          <View style={toolbar.circleWrap}>
+            <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+            <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+            <Image style={toolbar.circle} source={require('./assets/circle-full.png')} />
+            <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+            <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+            <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+          </View>
+          <View style={toolbar.buttonWrap}>
+            <Button style={toolbar.button} onPress={() => this.props.dispatchSetPage(3, "forward", this.props.firstNameValidations, this.firstNameInput)}>Next</Button>
+          </View>
         </View>
       </Animated.View>
     );
@@ -251,7 +290,7 @@ class OnBoarding_LastName extends React.Component {
      <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
        <View {...this.props} style={[styles.contentContainer, styles.lastName]}>
          <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>How &#39;bout your last name?</Text>
-         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.lastName} onChangeText={(text) => {this.lastNameInput = text; this.props.dispatchSetLastNameValidations(this.lastNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"Doe"} />
+         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.lastName} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(4, "forward", this.props.lastNameValidations, this.lastNameInput)}} onChangeText={(text) => {this.lastNameInput = text; this.props.dispatchSetLastNameValidations(this.lastNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"Doe"} />
        </View>
        <View style={[validation.contentContainer, styles.lastName]}>
          { this.props.lastNameValidations.capitalized ? null
@@ -260,9 +299,20 @@ class OnBoarding_LastName extends React.Component {
            : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Invalid character (. and - are allowed)</Text> }
        </View>
        <View style={[toolbar.toolbar]}>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(2, null, null, null)}>Prev</Button>
-         <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(4, "forward", this.props.lastNameValidations, this.lastNameInput)}>Next</Button>
+         <View style={toolbar.buttonWrap}>
+           <Button onPress={() => this.props.dispatchSetPage(2, null, null, null)}><Image style={toolbar.button} source={require('./assets/chevron-left.png')} /></Button>
+         </View>
+         <View style={toolbar.circleWrap}>
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle-full.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+         </View>
+         <View style={toolbar.buttonWrap}>
+           <Button style={toolbar.button} onPress={() => this.props.dispatchSetPage(4, "forward", this.props.lastNameValidations, this.lastNameInput)}>Next</Button>
+         </View>
        </View>
      </Animated.View>
    );
@@ -285,12 +335,23 @@ class OnBoarding_PhoneNumber extends React.Component {
      <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
        <View {...this.props} style={[styles.contentContainer, styles.phoneNumber]}>
          <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Can I have your number?</Text>
-         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.phoneNumber} onChangeText={(text) => {this.phoneNumberInput = text}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} maxLength={10} keyboardType="phone-pad" />
+         <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.phoneNumber} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput)}} onChangeText={(text) => {this.phoneNumberInput = text}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} maxLength={10} keyboardType="phone-pad" />
        </View>
        <View style={[toolbar.toolbar]}>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(3, null, null, null)}>Prev</Button>
-         <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput)}>Next</Button>
+         <View style={toolbar.buttonWrap}>
+           <Button onPress={() => this.props.dispatchSetPage(3, null, null, null)}><Image style={toolbar.button} source={require('./assets/chevron-left.png')} /></Button>
+         </View>
+         <View style={toolbar.circleWrap}>
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle-full.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+         </View>
+         <View style={toolbar.buttonWrap}>
+           <Button style={toolbar.button} onPress={() => this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput)}>Next</Button>
+         </View>
        </View>
     </Animated.View>
    );
@@ -322,9 +383,18 @@ class OnBoarding_Summary extends React.Component {
          <Button style={[typo.general, typo.fontSizeNote]} onPress={Actions.CreateAccount}>Yup!</Button>
        </View>
        <View style={[toolbar.toolbar]}>
-         <Button style={toolbar.toolbarButton} onPress={() => this.props.dispatchSetPage(4, null, null, null)}><Image source={require('./assets/chevron-left.svg')} /></Button>
-         <Text style={toolbar.toolbarTitle}>. . . . .</Text>
-         <Button style={toolbar.toolbarButton}>Done</Button>
+         <View style={toolbar.buttonWrap}>
+           <Button onPress={() => this.props.dispatchSetPage(4, null, null, null)}><Image style={toolbar.button} source={require('./assets/chevron-left.png')} /></Button>
+         </View>
+         <View style={toolbar.circleWrap}>
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
+           <Image style={toolbar.circle} source={require('./assets/circle-full.png')} />
+         </View>
+         <View style={toolbar.buttonWrap}></View>
        </View>
      </Animated.View>
    );
