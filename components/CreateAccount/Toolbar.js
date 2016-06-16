@@ -3,11 +3,6 @@
   *   COMPONENT YET. CHECK CreateAccountView.js FOR FULL TOOLBAR IMPLEMENTATION.
 **/
 
-
-
-
-
-
 import React from 'react';
 import {View, Text, TextInput, StyleSheet} from "react-native";
 import Button from "react-native-button";

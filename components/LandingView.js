@@ -23,9 +23,8 @@ class LandingView extends React.Component {
     return (
       <View {...this.props}  style={styles.container}>
         <Text style={{fontFamily: "Roboto", fontWeight:"100"}}>Launch page</Text>
-        <Button style={{fontFamily: "Roboto", fontWeight:"100"}}>Continue With Facebook</Button>
-        <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.OnBoarding_Email}>Create Account with Email</Button>
-        <Button style={{fontFamily: "Roboto", fontWeight:"100"}}>Sign In</Button>
+        <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.Header}>Header</Button>
+        <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.CreateAccountViewContainer}>Create Account</Button>
       </View>
     );
   }

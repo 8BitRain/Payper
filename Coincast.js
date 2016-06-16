@@ -2,17 +2,6 @@ import React from 'react';
 import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native'
 import Launch from './components/Launch'
 import LandingView from './components/LandingView'
-import OnBoarding_Email from './components/OnBoarding_CreateAccount/OnBoarding_Email'
-import OnBoarding_Password from './components/OnBoarding_CreateAccount/OnBoarding_Password'
-import OnBoarding_FirstName from './components/OnBoarding_CreateAccount/OnBoarding_FirstName'
-import OnBoarding_LastName from './components/OnBoarding_CreateAccount/OnBoarding_LastName'
-import OnBoarding_PhoneNumber from './components/OnBoarding_CreateAccount/OnBoarding_PhoneNumber'
-import OnBoarding_Summary from './components/OnBoarding_CreateAccount/OnBoarding_Summary'
-
-import OnBoarding_CreateAccount from './modules/OnBoarding_CreateAccount/CreateAccountView'
-import CreateAccountViewContainer from './modules/OnBoarding_CreateAccount/CreateAccountViewContainer'
-
-
 import Register from './components/Register'
 import Login from './components/Login'
 import Login2 from './components/Login2'
@@ -23,6 +12,11 @@ import TabView from './components/TabView'
 import EchoView from './components/EchoView'
 import NavigationDrawer from './components/NavigationDrawer'
 import Button from "react-native-button";
+
+
+// Custom components
+import CreateAccountViewContainer from './modules/OnBoarding_CreateAccount/CreateAccountViewContainer'
+import Header from './components/Header/Header'
 
 class TabIcon extends React.Component {
     render(){
@@ -113,14 +107,13 @@ export default class Coincast extends React.Component {
                         <Scene key="text1" text="text1" component={(props) => <SwitcherPage {...props} text={currentSwitchPage} />} />
                         <Scene key="text2" text="text2" component={(props) => <SwitcherPage {...props} text={currentSwitchPage} />} />
                     </Scene>
-                    <Scene key="landingView" component={LandingView} title="LandingView">
+                    <Scene key="landingView" component={LandingView} title="LandingView"  initial={true} >
 
                     </Scene>
 
 
-                    <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" initial={true} />
-
-
+                    <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
+                    <Scene key="Header" component={Header} title="Header" />
 
                     <Scene key="register" component={Register} title="Register"/>
                     <Scene key="register2" component={Register} title="Register2" duration={1}/>
