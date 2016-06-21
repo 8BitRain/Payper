@@ -20,6 +20,7 @@ export function validateEmail(input) {
 // following are true: at least 1 uppercase letter, at least 1 lowercase letter,
 // at least 1 number or special character
 export function validatePassword(input) {
+  console.log("Password Input:" + input);
   // Check length
   var regexLength = /^.{6,}$/.test(input);
 

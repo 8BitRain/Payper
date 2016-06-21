@@ -20,6 +20,9 @@ export default connect(
     // Tracks pagination
     currentPage: state.getIn(['createAccount', 'currentPage']),
 
+    //Password Toggle
+    passwordToggle: state.getIn(['createAccount', 'passwordToggle']),
+
     // Input validation booleans
     emailValidations: state.getIn(['createAccount', 'emailValidations']),
     passwordValidations: state.getIn(['createAccount', 'passwordValidations']),
@@ -81,6 +84,9 @@ export default connect(
     },
     dispatchSetPhoneNumberValidations(input) {
       dispatch(dispatchFunctions.setPhoneNumberValidations(input));
+    },
+    dispatchPasswordToggle(input){
+      dispatch(dispatchFunctions.setPasswordToggle(input));
     }
   })
 )(CreateAccountView);

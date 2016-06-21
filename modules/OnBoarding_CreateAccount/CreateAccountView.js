@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
 import Button from "react-native-button";
+import PasswordInput from "../../components/PasswordInput";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
@@ -178,7 +179,7 @@ class OnBoarding_Password extends React.Component {
      this.animationProps = {
        fadeAnim: new Animated.Value(0), // init opacity 0
      };
-     this.passwordInput = this.props.password;
+     //this.passwordInput = this.props.password;
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
@@ -188,7 +189,15 @@ class OnBoarding_Password extends React.Component {
        <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
          <View {...this.props} style={[styles.contentContainer, styles.password]}>
            <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Enter a secure password</Text>
-           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.password} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(2, "forward", this.props.passwordValidations, this.passwordInput)}} onChangeText={(text) => {this.passwordInput = text; this.props.dispatchSetPasswordValidations(this.passwordInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" secureTextEntry={true} placeholder={"not \"password\" :)"} />
+
+           {<PasswordInput password={this.props.password}
+           passwordValidations={this.props.passwordValidations}
+           dispatchSetPasswordValidations={(text) => this.props.dispatchSetPasswordValidations(Validators.validatePassword(text))}
+           dispatchSetPage={this.props.dispatchSetPage}
+           dispatchPasswordToggle={this.props.dispatchPasswordToggle}
+           passwordToggle={this.props.passwordToggle}/>}
+           {/*<TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.password} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(2, "forward", this.props.passwordValidations, this.passwordInput)}} onChangeText={(text) => {this.passwordInput = text; this.props.dispatchSetPasswordValidations(this.passwordInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" secureTextEntry={true} placeholder={"not \"password\" :)"}/>*/}
+
          </View>
          <View style={[validation.contentContainer, styles.password]}>
             { this.props.passwordValidations.length ? null
@@ -419,7 +428,7 @@ const CreateAccountView = React.createClass({
         break;
       case 1:
         return(
-          <OnBoarding_Password password={this.props.password} passwordValidations={this.props.passwordValidations} dispatchSetPasswordValidations={(text) => this.props.dispatchSetPasswordValidations(Validators.validatePassword(text))} dispatchSetPage={this.props.dispatchSetPage} />
+          <OnBoarding_Password password={this.props.password} passwordValidations={this.props.passwordValidations} dispatchSetPasswordValidations={this.props.dispatchSetPasswordValidations} dispatchSetPage={this.props.dispatchSetPage} dispatchPasswordToggle={this.props.dispatchPasswordToggle} passwordToggle={this.props.passwordToggle} />
         )
         break;
       case 2:

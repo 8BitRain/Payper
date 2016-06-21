@@ -41,6 +41,7 @@ var currentUser = {
 const initialState = Map({
   currentUser,
   currentPage: 0,
+  passwordToggle: false,
   passwordValidations,
   emailValidations,
   firstNameValidations,
@@ -59,7 +60,8 @@ const SET_PAGE = 'SET_PAGE',
       SET_PASSWORD = 'SET_PASSWORD',
       SET_FIRST_NAME = 'SET_FIRST_NAME',
       SET_LAST_NAME = 'SET_LAST_NAME',
-      SET_PHONE_NUMBER = 'SET_PHONE_NUMBER';
+      SET_PHONE_NUMBER = 'SET_PHONE_NUMBER',
+      PASSWORD_TOGGLE = 'PASSWORD_TOGGLE';
 
 // Action creators
 export function setPage(index) {
@@ -105,6 +107,10 @@ export function setLastName(input) {
 export function setPhoneNumber(input) {
   return { type: SET_PHONE_NUMBER, input: input };
 };
+
+export function setPasswordToggle(input){
+  return { type: PASSWORD_TOGGLE, input: input};
+}
 
 /**
   *   Reducer
@@ -169,6 +175,10 @@ export default function CreateAccountReducer(state = initialState, action = {}) 
       var newState = state.set('currentUser', currUser);
       return newState;
       break;
+    case PASSWORD_TOGGLE:
+     var newState = state.set('passwordToggle', action.input);
+     return newState;
+     break;
   }
 
   return state;
