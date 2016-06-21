@@ -1,3 +1,17 @@
+/**
+  *     TODO DURING IMPLEMENTATION
+  *     --------------------------
+  *     In the header base view, there are class fields called 'types', 'index',
+  *     and 'numCircles'. These are there for testing and, in actuality, should
+  *     be defined in the state and passed in as props.
+  *
+  *     When the page changes, these props change in the state and the header
+  *     is re-rendered.
+**/
+
+
+
+
 // Dependencies
 import React from 'react';
 import {View, Text, TextInput, StyleSheet, Image} from "react-native";
@@ -12,8 +26,8 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: "#593F62",
-    // backgroundColor: "transparent",
+    // backgroundColor: "#593F62",
+    backgroundColor: "transparent",
     paddingTop: 30,
     paddingBottom: 10,
     flexDirection: "row"
@@ -22,7 +36,7 @@ const styles = StyleSheet.create({
   // Header chunk sizing
   chunkQuo: {
     flex: 0.25,
-    alignItems: "center",
+    // alignItems: "center",
     // For testing
     // borderColor: "red",
     // borderWidth: 1
@@ -52,10 +66,12 @@ const styles = StyleSheet.create({
 
   // Icon sizing
   iconClose: {
-    width: 40,
-    height: 40
+    marginLeft: 15,
+    width: 30,
+    height: 30
   },
   iconSettings: {
+    marginLeft: 15,
     width: 20,
     height: 20
   },
@@ -81,17 +97,41 @@ const styles = StyleSheet.create({
 // Return a close modal icon
 function getCloseIcon() {
   return(
-    <Image style={styles.iconClose} source={require('./assets/close.png')} />
+    <Button onPress={() => {console.log("-----  Closing modal  -----")}}>
+      <Image style={styles.iconClose} source={require('./assets/close.png')} />
+    </Button>
   );
 };
 
-// Return payment icons
+// Return a settings icon
+function getSettingsIcon() {
+  return(
+    <Button onPress={() => {console.log("-----  Opening settings  -----")}}>
+      <Image style={styles.iconSettings} source={require('./assets/settings.png')} />
+    </Button>
+  );
+};
+
+// Return payment pagination icons
 function getPaymentIcons(index) {
   return(
     <View style={styles.iconWrap}>
       <Image style={[styles.iconPayment, (index == 0) ? styles.iconActive : null]} source={require('./assets/user.png')} />
       <Image style={[styles.iconPayment, (index == 1) ? styles.iconActive : null]} source={require('./assets/memo.png')} />
       <Image style={[styles.iconPayment, (index == 2) ? styles.iconActive : null]} source={require('./assets/dollar.png')} />
+    </View>
+  );
+};
+
+// Return circle pagination icons
+function getCircleIcons(numCircles, index) {
+  var circles = [];
+  for (var i = 0; i < numCircles; i++) {
+    circles.push(<Image key={"circle#" + i} style={(styles.iconCircle)} source={(i == index) ? require('./assets/circle-active.png') : require('./assets/circle-inactive.png')} />);
+  };
+  return(
+    <View style={styles.iconWrap}>
+      { circles }
     </View>
   );
 };
@@ -106,28 +146,25 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
 
-    // For testing, will typically be passed as a prop
-    this.types = {
-      "paymentIcons": true,
-      "circleIcons": false,
-      "settingsIcon": false,
-      "closeIcon": true
-    };
-    this.index = 1;
-    this.numCircles = 0;
+    // For testing, these will typically be passed as props
+    this.headerProps = this.props.headerProps;
+    // END For testing, these will typically be passed as props
 
   }
   render() {
+    console.log("----- Rendered header ------");
     return(
       <View style={styles.headerWrap}>
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
-          { this.types.closeIcon ? getCloseIcon() : null }
+          { this.headerProps.types.closeIcon ? getCloseIcon() : null }
+          { this.headerProps.types.settingsIcon ? getSettingsIcon() : null }
         </View>
 
         { /* Contains 'CircleIcons' or 'PaymentIcons' if specified */ }
         <View style={styles.chunkHalf}>
-          { this.types.paymentIcons ? getPaymentIcons(this.index) : null }
+          { this.headerProps.types.paymentIcons ? getPaymentIcons(this.headerProps.index) : null }
+          { this.headerProps.types.circleIcons ? getCircleIcons(this.headerProps.numCircles, this.headerProps.index) : null }
         </View>
 
         { /* Filler */ }

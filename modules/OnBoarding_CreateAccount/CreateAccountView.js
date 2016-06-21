@@ -5,6 +5,7 @@ import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 're
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
 import * as Firebase from "../../services/Firebase";
+import Header from "../../components/Header/Header";
 
 // Houses all typography styles for the Onboarding_CreateAccount module
 const typo = StyleSheet.create({
@@ -132,10 +133,26 @@ const toolbar = StyleSheet.create({
 class OnBoarding_Email extends React.Component {
    constructor(props) {
      super(props);
+
+     // Props for animation
      this.animationProps = {
        fadeAnim: new Animated.Value(0) // init opacity 0
      };
+
+     // Props for temporary input storage
      this.emailInput = this.props.email;
+
+     // Props to be passed to the header
+     this.headerProps = {
+       types: {
+         "paymentIcons": false,
+         "circleIcons": true,
+         "settingsIcon": false,
+         "closeIcon": true
+       },
+       index: 0,
+       numCircles: 6
+     };
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
@@ -143,30 +160,22 @@ class OnBoarding_Email extends React.Component {
    render() {
      return (
        <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
+         { /* Prompt and input field */ }
          <View {...this.props} style={[styles.contentContainer, styles.email]}>
            <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Hey, what&#39;s your email?</Text>
            <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(1, "forward", this.props.emailValidations, this.emailInput)}} defaultValue={this.props.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmailValidations(this.emailInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholder={"johndoe@example.com"} keyboardType="email-address" />
          </View>
-         <View style={[toolbar.toolbar]}>
-           <View style={toolbar.buttonWrap}></View>
-           <View style={toolbar.circleWrap}>
-             <Image style={toolbar.circle} source={require('./assets/circle-full.png')} />
-             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           </View>
-           <View style={toolbar.buttonWrap}>
-             <Button style={toolbar.button} onPress={() => this.props.dispatchSetPage(1, "forward", this.props.emailValidations, this.emailInput)}>Next</Button>
-           </View>
-         </View>
+
+         { /* Error messages */ }
          <View style={[validation.contentContainer, styles.email]}>
             { this.props.emailValidations.format ? null
               : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Not a valid email</Text> }
             { this.props.emailValidations.duplicate ? <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Email already exists</Text>
               : null }
          </View>
+
+         { /* Header */ }
+         <Header headerProps={this.headerProps} />
        </Animated.View>
      );
    }
@@ -175,10 +184,26 @@ class OnBoarding_Email extends React.Component {
 class OnBoarding_Password extends React.Component {
    constructor(props) {
      super(props);
+
+     // Props for animation
      this.animationProps = {
-       fadeAnim: new Animated.Value(0), // init opacity 0
+       fadeAnim: new Animated.Value(0) // init opacity 0
      };
+
+     // Props for temporary input storage
      this.passwordInput = this.props.password;
+
+     // Props to be passed to the header
+     this.headerProps = {
+       types: {
+         "paymentIcons": false,
+         "circleIcons": true,
+         "settingsIcon": false,
+         "closeIcon": true
+       },
+       index: 1,
+       numCircles: 6
+     };
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
@@ -186,10 +211,13 @@ class OnBoarding_Password extends React.Component {
    render() {
      return (
        <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
+         { /* Prompt and input field */ }
          <View {...this.props} style={[styles.contentContainer, styles.password]}>
            <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Enter a secure password</Text>
            <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.password} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(2, "forward", this.props.passwordValidations, this.passwordInput)}} onChangeText={(text) => {this.passwordInput = text; this.props.dispatchSetPasswordValidations(this.passwordInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" secureTextEntry={true} placeholder={"not \"password\" :)"} />
          </View>
+
+         { /* Error messages */ }
          <View style={[validation.contentContainer, styles.password]}>
             { this.props.passwordValidations.length ? null
               : function() {
@@ -209,22 +237,9 @@ class OnBoarding_Password extends React.Component {
             { this.props.passwordValidations.sym ? null
               : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Symbol</Text> }
          </View>
-         <View style={[toolbar.toolbar]}>
-           <View style={toolbar.buttonWrap}>
-             <Button onPress={() => this.props.dispatchSetPage(0, null, null, null)}><Image style={toolbar.button} source={require('./assets/chevron-left.png')} /></Button>
-           </View>
-           <View style={toolbar.circleWrap}>
-             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-             <Image style={toolbar.circle} source={require('./assets/circle-full.png')} />
-             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-             <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           </View>
-           <View style={toolbar.buttonWrap}>
-             <Button style={toolbar.button} onPress={() => this.props.dispatchSetPage(2, "forward", this.props.passwordValidations, this.passwordInput)}>Next</Button>
-           </View>
-         </View>
+
+         { /* Header */ }
+         <Header headerProps={this.headerProps} />
        </Animated.View>
      );
    }
@@ -233,10 +248,26 @@ class OnBoarding_Password extends React.Component {
  class OnBoarding_FirstName extends React.Component {
   constructor(props) {
     super(props);
+
+    // Props for animation
     this.animationProps = {
-      fadeAnim: new Animated.Value(0), // init opacity 0
+      fadeAnim: new Animated.Value(0) // init opacity 0
     };
+
+    // Props for temporary input storage
     this.firstNameInput = this.props.firstName;
+
+    // Props to be passed to the header
+    this.headerProps = {
+      types: {
+        "paymentIcons": false,
+        "circleIcons": true,
+        "settingsIcon": false,
+        "closeIcon": true
+      },
+      index: 2,
+      numCircles: 6
+    };
   }
   componentDidMount() {
     Animations.fadeIn(this.animationProps);
@@ -244,32 +275,22 @@ class OnBoarding_Password extends React.Component {
   render() {
     return (
       <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
+        { /* Prompt and input field */ }
         <View {...this.props} style={[styles.contentContainer, styles.firstName]}>
           <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>What&#39;s your first name?</Text>
           <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.firstName} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(3, "forward", this.props.firstNameValidations, this.firstNameInput)}} onChangeText={(text) => {this.firstNameInput = text; this.props.dispatchSetFirstNameValidations(this.firstNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"John"} />
         </View>
+
+        { /* Error messages */ }
         <View style={[validation.contentContainer, styles.firstName]}>
           { this.props.firstNameValidations.capitalized ? null
             : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Not capitalized</Text> }
           { this.props.firstNameValidations.format ? null: <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Invalid character (. and - are allowed)</Text>
              }
         </View>
-        <View style={[toolbar.toolbar]}>
-          <View style={toolbar.buttonWrap}>
-            <Button onPress={() => this.props.dispatchSetPage(1, null, null, null)}><Image style={toolbar.button} source={require('./assets/chevron-left.png')} /></Button>
-          </View>
-          <View style={toolbar.circleWrap}>
-            <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-            <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-            <Image style={toolbar.circle} source={require('./assets/circle-full.png')} />
-            <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-            <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-            <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-          </View>
-          <View style={toolbar.buttonWrap}>
-            <Button style={toolbar.button} onPress={() => this.props.dispatchSetPage(3, "forward", this.props.firstNameValidations, this.firstNameInput)}>Next</Button>
-          </View>
-        </View>
+
+        { /* Header */ }
+        <Header headerProps={this.headerProps} />
       </Animated.View>
     );
   }
@@ -278,10 +299,26 @@ class OnBoarding_Password extends React.Component {
 class OnBoarding_LastName extends React.Component {
  constructor(props) {
    super(props);
+
+   // Props for animation
    this.animationProps = {
-     fadeAnim: new Animated.Value(0), // init opacity 0
+     fadeAnim: new Animated.Value(0) // init opacity 0
    };
+
+   // Props for temporary input storage
    this.lastNameInput = this.props.lastName;
+
+   // Props to be passed to the header
+   this.headerProps = {
+     types: {
+       "paymentIcons": false,
+       "circleIcons": true,
+       "settingsIcon": false,
+       "closeIcon": true
+     },
+     index: 3,
+     numCircles: 6
+   };
  }
  componentDidMount() {
    Animations.fadeIn(this.animationProps);
@@ -289,32 +326,22 @@ class OnBoarding_LastName extends React.Component {
  render() {
    return (
      <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
+       { /* Promp and input field */ }
        <View {...this.props} style={[styles.contentContainer, styles.lastName]}>
          <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>How &#39;bout your last name?</Text>
          <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} defaultValue={this.props.lastName} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(4, "forward", this.props.lastNameValidations, this.lastNameInput)}} onChangeText={(text) => {this.lastNameInput = text; this.props.dispatchSetLastNameValidations(this.lastNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"Doe"} />
        </View>
+
+       { /* Error messages */ }
        <View style={[validation.contentContainer, styles.lastName]}>
          { this.props.lastNameValidations.capitalized ? null
            : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Not capitalized</Text> }
          { this.props.lastNameValidations.format ? null
            : <Text style={[typo.general, typo.fontSizeError, typo.marginSides]}>Invalid character (. and - are allowed)</Text> }
        </View>
-       <View style={[toolbar.toolbar]}>
-         <View style={toolbar.buttonWrap}>
-           <Button onPress={() => this.props.dispatchSetPage(2, null, null, null)}><Image style={toolbar.button} source={require('./assets/chevron-left.png')} /></Button>
-         </View>
-         <View style={toolbar.circleWrap}>
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle-full.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-         </View>
-         <View style={toolbar.buttonWrap}>
-           <Button style={toolbar.button} onPress={() => this.props.dispatchSetPage(4, "forward", this.props.lastNameValidations, this.lastNameInput)}>Next</Button>
-         </View>
-       </View>
+
+       { /* Header */ }
+       <Header headerProps={this.headerProps} />
      </Animated.View>
    );
  }
@@ -323,10 +350,26 @@ class OnBoarding_LastName extends React.Component {
 class OnBoarding_PhoneNumber extends React.Component {
  constructor(props) {
    super(props);
+
+   // Props for animation
    this.animationProps = {
-     fadeAnim: new Animated.Value(0), // init opacity 0
+     fadeAnim: new Animated.Value(0) // init opacity 0
    };
+
+   // Props for temporary input storage
    this.phoneNumberInput = this.props.phoneNumber;
+
+   // Props to be passed to the header
+   this.headerProps = {
+     types: {
+       "paymentIcons": false,
+       "circleIcons": true,
+       "settingsIcon": false,
+       "closeIcon": true
+     },
+     index: 4,
+     numCircles: 6
+   };
  }
  componentDidMount() {
    Animations.fadeIn(this.animationProps);
@@ -334,26 +377,14 @@ class OnBoarding_PhoneNumber extends React.Component {
  render() {
    return (
      <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
+       { /* Prompt and input field */ }
        <View {...this.props} style={[styles.contentContainer, styles.phoneNumber]}>
          <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Can I have your number?</Text>
          <TextInput style={[typo.textInput, typo.marginSides, typo.marginBottom]} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput)}} defaultValue={this.props.phoneNumber} onChangeText={(text) => {this.phoneNumberInput = text}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} maxLength={10} keyboardType="phone-pad" />
        </View>
-       <View style={[toolbar.toolbar]}>
-         <View style={toolbar.buttonWrap}>
-           <Button onPress={() => this.props.dispatchSetPage(3, null, null, null)}><Image style={toolbar.button} source={require('./assets/chevron-left.png')} /></Button>
-         </View>
-         <View style={toolbar.circleWrap}>
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle-full.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-         </View>
-         <View style={toolbar.buttonWrap}>
-           <Button style={toolbar.button} onPress={() => this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput)}>Next</Button>
-         </View>
-       </View>
+
+       { /* Header */ }
+       <Header headerProps={this.headerProps} />
     </Animated.View>
    );
  }
@@ -362,9 +393,23 @@ class OnBoarding_PhoneNumber extends React.Component {
 class OnBoarding_Summary extends React.Component {
  constructor(props) {
    super(props);
+
+   // Props for animation
    this.animationProps = {
-     fadeAnim: new Animated.Value(0), // init opacity 0
+     fadeAnim: new Animated.Value(0) // init opacity 0
    };
+
+   // Props to be passed to the header
+   this.headerProps = {
+     types: {
+       "paymentIcons": false,
+       "circleIcons": true,
+       "settingsIcon": false,
+       "closeIcon": true
+     },
+     index: 5,
+     numCircles: 6
+   }
  }
  componentDidMount() {
    Animations.fadeIn(this.animationProps);
@@ -372,6 +417,7 @@ class OnBoarding_Summary extends React.Component {
  render() {
    return (
      <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
+       { /* Prompt and submit button */ }
        <View {...this.props} style={[styles.contentContainer, styles.summary]}>
          <Text style={[typo.general, typo.fontSizeTitle, typo.marginSides, typo.marginBottom]}>Does this look right?</Text>
 
@@ -383,20 +429,9 @@ class OnBoarding_Summary extends React.Component {
 
          <Button style={[typo.general, typo.fontSizeNote]} onPress={() => this.props.createAccount(this.props.currentUser)}>Yup!</Button>
        </View>
-       <View style={[toolbar.toolbar]}>
-         <View style={toolbar.buttonWrap}>
-           <Button onPress={() => this.props.dispatchSetPage(4, null, null, null)}><Image style={toolbar.button} source={require('./assets/chevron-left.png')} /></Button>
-         </View>
-         <View style={toolbar.circleWrap}>
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle.png')} />
-           <Image style={toolbar.circle} source={require('./assets/circle-full.png')} />
-         </View>
-         <View style={toolbar.buttonWrap}></View>
-       </View>
+
+       { /* Header */ }
+       <Header headerProps={this.headerProps} />
      </Animated.View>
    );
  }
