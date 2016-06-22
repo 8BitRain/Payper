@@ -7,11 +7,20 @@ import * as Validators from "../../helpers/validators";
 import * as Firebase from "../../services/Firebase";
 
 
-// Houses all typography styles for the Onboarding_CreateAccount module
+// Houses all typography styles for the Onboarding_CreateAccount module,
+
+const buttons = StyleSheet.create({
+  paymentButton: {
+    flexDirection: "column",
+    flex: .5,
+    alignItems: "center",
+    justifyContent: "center"
+  }
+})
 const images = StyleSheet.create({
   paymentButton : {
-    height: 36,
-    width: 36
+    width: 64,
+    height: 64
   }
 });
 const typo = StyleSheet.create({
@@ -148,9 +157,11 @@ class TrackingEmpty extends React.Component {
    }
    render() {
      return (
-       <Animated.View style={[styles.container, styles.contentContainer, {opacity: this.animationProps.fadeAnim}]}>
+       <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
+        <View style={styles.contentContainer}>
          <Text style={[typo.fontSizeTitle, typo.marginTop, typo.marginBottom, typo.marginSides]}>Tracking View Screen</Text>
-         <Image style={images.paymentButton} source={require('./assets/paymentButton.png')} />
+         <Button style={buttons.paymentButton}> <Image style={images.paymentButton} source={require('./assets/money-button64.png')} /></Button>
+        </View>
        </Animated.View>
      );
    }
