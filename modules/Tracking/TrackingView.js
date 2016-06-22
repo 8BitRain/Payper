@@ -159,7 +159,7 @@ class TrackingEmpty extends React.Component {
      return (
        <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
         <View style={styles.contentContainer}>
-         <Text style={[typo.fontSizeTitle, typo.marginTop, typo.marginBottom, typo.marginSides]}>Tracking View Screen</Text>
+         <Text style={[typo.fontSizeTitle, typo.marginTop, typo.marginBottom, typo.marginSides]}>Click here to start using Coincast Payments!</Text>
          <Button style={buttons.paymentButton}> <Image style={images.paymentButton} source={require('./assets/money-button64.png')} /></Button>
         </View>
        </Animated.View>
