@@ -6,7 +6,7 @@ import {Actions} from "react-native-router-flux";
 var styles = StyleSheet.create({
     container: {
         flex: .5,
-        justifyContent: "flex-end",
+        justifyContent: "flex-start",
         alignItems: "center",
         backgroundColor: "#F5FCFF",
     },
@@ -22,7 +22,8 @@ var styles = StyleSheet.create({
     },
 });
 
-class FacebookLogin extends React.Component {
+
+class GenericSignUp extends React.Component {
     constructor(props) {
       super(props);
       this.destination = this.props.destination;
@@ -30,10 +31,10 @@ class FacebookLogin extends React.Component {
     render(){
         return (
             <View style={styles.container}>
-                <Button onPress={this.destination}>Continue with Facebook</Button>
+                <Button onPress={this.destination}>Sign Up</Button>
             </View>
         );
     }
 }
 
-export default FacebookLogin;
+export default GenericSignUp;

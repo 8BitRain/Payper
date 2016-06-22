@@ -22,9 +22,9 @@ const initialState = Map({
   *   tree based on that action and returns full state tree.
   *
 **/
-export default function LandingScreenReducer(state = initialState, action = {}) {
+export default function TrackingReducer(state = initialState, action = {}) {
   switch (action.type) {
-    
+
   }
 
   return state;

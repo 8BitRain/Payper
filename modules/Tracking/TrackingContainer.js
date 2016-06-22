@@ -1,11 +1,11 @@
 import {connect} from 'react-redux';
-import * as dispatchFunctions from  './LandingScreenState';
-import LandingScreenView from './LandingScreenView';
+import * as dispatchFunctions from  './TrackingState';
+import TrackingView from './TrackingView';
 import Validators from '../../helpers/validators';
 import * as Firebase from '../../services/Firebase';
 
 /**
-  *   Connect function for LandingScreenView.js
+  *   Connect function for TrackingScreen.js
 **/
 export default connect(
   state => ({
@@ -15,5 +15,5 @@ export default connect(
     // Handles pagination
 
   })
-)(LandingScreenView);
-/* END Connect function for landingScreenView.js */
+)(TrackingView);
+/* END Connect function for TrackingScreen.js */

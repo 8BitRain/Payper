@@ -5,6 +5,8 @@ import AuthStateReducer from '../modules/auth/AuthState';
 import CounterStateReducer from '../modules/counter/CounterState';
 import SessionStateReducer, {RESET_STATE} from '../modules/session/SessionState';*/
 import CreateAccountReducer from '../modules/OnBoarding_CreateAccount/CreateAccountState';
+import LandingScreenReducer from '../modules/LandingScreen/LandingScreenState';
+import TrackingReducer from '../modules/Tracking/TrackingState';
 
 const reducers = {
   // Authentication/login state
@@ -19,7 +21,11 @@ const reducers = {
 
   session: SessionStateReducer*/
 
+  landingScreen: LandingScreenReducer,
   createAccount: CreateAccountReducer,
+  tracking: TrackingReducer,
+
+
 
 };
 

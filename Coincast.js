@@ -12,6 +12,7 @@ import OnBoarding_Summary from './components/OnBoarding_CreateAccount/OnBoarding
 import OnBoarding_CreateAccount from './modules/OnBoarding_CreateAccount/CreateAccountView'
 import CreateAccountViewContainer from './modules/OnBoarding_CreateAccount/CreateAccountViewContainer'
 import LandingScreenContainer from './modules/LandingScreen/LandingScreenContainer'
+import TrackingContainer from './modules/Tracking/TrackingContainer'
 
 
 
@@ -120,9 +121,9 @@ export default class Coincast extends React.Component {
                     </Scene>
 
 
-                    <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
-                    <Scene key="LandingScreenContainer" component={LandingScreenContainer} title="LandingScreenContainer" initial={true} />
-
+                    <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer"  />
+                    <Scene key="LandingScreenContainer" component={LandingScreenContainer} title="LandingScreenContainer"  initial={true}/>
+                    <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
 
 
                     <Scene key="register" component={Register} title="Register"/>

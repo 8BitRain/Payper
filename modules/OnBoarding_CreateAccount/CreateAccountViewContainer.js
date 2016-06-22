@@ -31,6 +31,7 @@ export default connect(
     // Handles pagination
     dispatchSetPage(index, direction, validations, input) {
       if (direction == "forward") {
+        console.log("Running shit");
         var currentPage = index - 1;
         // console.log("input: " + input);
         // console.log("index: " + index);
@@ -61,7 +62,7 @@ export default connect(
           }
           dispatch(dispatchFunctions.setPage(index));
         }
-      } else {
+      } else { //Why is this else statement here?
         dispatch(dispatchFunctions.setPage(index));
       }
     },

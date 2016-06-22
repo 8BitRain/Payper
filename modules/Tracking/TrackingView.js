@@ -5,10 +5,15 @@ import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 're
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
 import * as Firebase from "../../services/Firebase";
-import FacebookLogin from "../../components/FacebookLogin";
-import GenericSignUp from "../../components/GenericSignUp";
+
 
 // Houses all typography styles for the Onboarding_CreateAccount module
+const images = StyleSheet.create({
+  paymentButton : {
+    height: 36,
+    width: 36
+  }
+});
 const typo = StyleSheet.create({
   // General typography styles
   general: {
@@ -131,7 +136,7 @@ const toolbar = StyleSheet.create({
   *   Page 3: Last name
   *   Page 4: Phone number
 **/
-class LandingScreenDisplay extends React.Component {
+class TrackingEmpty extends React.Component {
    constructor(props) {
      super(props);
      this.animationProps = {
@@ -143,9 +148,9 @@ class LandingScreenDisplay extends React.Component {
    }
    render() {
      return (
-       <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
-         <FacebookLogin destination={Actions.TrackingContainer}/>
-         <GenericSignUp destination={Actions.CreateAccountViewContainer}/>
+       <Animated.View style={[styles.container, styles.contentContainer, {opacity: this.animationProps.fadeAnim}]}>
+         <Text style={[typo.fontSizeTitle, typo.marginTop, typo.marginBottom, typo.marginSides]}>Tracking View Screen</Text>
+         <Image style={images.paymentButton} source={require('./assets/paymentButton.png')} />
        </Animated.View>
      );
    }
@@ -159,12 +164,12 @@ class LandingScreenDisplay extends React.Component {
   *   Is passed the current state by CreateAccountViewContainer.js
   *   Renders Page #0 (email),
 **/
-const LandingScreenView= React.createClass({
+const TrackingView = React.createClass({
   render() {
         return(
-          <LandingScreenDisplay  />
+          <TrackingEmpty  />
         )
   }
 });
 
-export default LandingScreenView;
+export default TrackingView;
