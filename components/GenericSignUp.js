@@ -5,8 +5,8 @@ import {Actions} from "react-native-router-flux";
 
 var styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: "center",
+        flex: .5,
+        justifyContent: "flex-start",
         alignItems: "center",
         backgroundColor: "#F5FCFF",
     },
@@ -22,15 +22,19 @@ var styles = StyleSheet.create({
     },
 });
 
-class Home extends React.Component {
+
+class GenericSignUp extends React.Component {
+    constructor(props) {
+      super(props);
+      this.destination = this.props.destination;
+    }
     render(){
         return (
             <View style={styles.container}>
-                <Text>Replace screen</Text>
-                <Button onPress={Actions.pop}>Back</Button>
+                <Button onPress={this.destination}>Sign Up</Button>
             </View>
         );
     }
 }
 
-module.exports = Home;
+export default GenericSignUp;

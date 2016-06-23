@@ -56,6 +56,7 @@ export default connect(
               break;
             // Phone number
             case 4:
+              console.log("=====  REACHED DISPATCH FUNCTION  =====");
               dispatch(dispatchFunctions.setPhoneNumber(input));
               break;
           }

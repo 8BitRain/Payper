@@ -3,10 +3,10 @@ import {View, Text, StyleSheet} from "react-native";
 import Button from "react-native-button";
 import {Actions} from "react-native-router-flux";
 
-const styles = StyleSheet.create({
+var styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: "center",
+        flex: .5,
+        justifyContent: "flex-end",
         alignItems: "center",
         backgroundColor: "#F5FCFF",
     },
@@ -22,16 +22,18 @@ const styles = StyleSheet.create({
     },
 });
 
-
-export default class extends React.Component {
+class FacebookLogin extends React.Component {
+    constructor(props) {
+      super(props);
+      this.destination = this.props.destination;
+    }
     render(){
         return (
-            <View style={[styles.container, this.props.style]}>
-                <Text>Login page: {this.props.data}</Text>
-                <Button onPress={Actions.loginModal2}>Login 2</Button>
-                <Button onPress={() => Actions.refresh({title:"Changed title"})}>Change title</Button>
-                <Button onPress={Actions.pop}>Back</Button>
+            <View style={styles.container}>
+                <Button onPress={this.destination}>Continue with Facebook</Button>
             </View>
         );
     }
 }
+
+export default FacebookLogin;

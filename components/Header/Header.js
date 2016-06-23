@@ -95,9 +95,9 @@ const styles = StyleSheet.create({
 
 
 // Return a close modal icon
-function getCloseIcon() {
+function getCloseIcon(callback) {
   return(
-    <Button onPress={() => {console.log("-----  Closing modal  -----")}}>
+    <Button onPress={() => {callback()}}>
       <Image style={styles.iconClose} source={require('./assets/close.png')} />
     </Button>
   );
@@ -157,7 +157,7 @@ class Header extends React.Component {
       <View style={styles.headerWrap}>
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
-          { this.headerProps.types.closeIcon ? getCloseIcon() : null }
+          { this.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
           { this.headerProps.types.settingsIcon ? getSettingsIcon() : null }
         </View>
 
