@@ -155,7 +155,7 @@ class OnBoarding_Email extends React.Component {
      };
 
      // Callback functions to be passed to the header
-     this.callbackClose = function() { console.log("=-=-=  CLOSING SIGNUP MODAL  =-=-=") };
+     this.callbackClose = function() { this.props.callbackClose() };
 
      // Props to be passed to the arrow nav
      this.arrowNavProps = {
@@ -225,7 +225,7 @@ class OnBoarding_Password extends React.Component {
      };
 
      // Callback functions to be passed to the header
-     this.callbackClose = function() { console.log("=-=-=  CLOSING SIGNUP MODAL  =-=-=") };
+     this.callbackClose = function() { this.props.callbackClose() };
 
      // Props to be passed to the arrow nav
      this.arrowNavProps = {
@@ -314,7 +314,7 @@ class OnBoarding_Password extends React.Component {
     };
 
     // Callback functions to be passed to the header
-    this.callbackClose = function() { console.log("=-=-=  CLOSING SIGNUP MODAL  =-=-=") };
+    this.callbackClose = function() { this.props.callbackClose() };
 
     // Callback functions to be passed to the arrow nav
     this.onPressRight = function() { this.props.dispatchSetPage(3, "forward", this.props.firstNameValidations, this.firstNameInput) };
@@ -378,7 +378,7 @@ class OnBoarding_LastName extends React.Component {
    };
 
    // Callback functions to be passed to the header
-   this.callbackClose = function() { console.log("=-=-=  CLOSING SIGNUP MODAL  =-=-=") };
+   this.callbackClose = function() { this.props.callbackClose() };
 
    // Props to be passed to the arrow nav
    this.arrowNavProps = {
@@ -448,7 +448,7 @@ class OnBoarding_PhoneNumber extends React.Component {
    };
 
    // Callback functions to be passed to the header
-   this.callbackClose = function() { console.log("=-=-=  CLOSING SIGNUP MODAL  =-=-=") };
+   this.callbackClose = function() { this.props.callbackClose() };
 
    // Props to be passed to the arrow nav
    this.arrowNavProps = {
@@ -507,7 +507,7 @@ class OnBoarding_Summary extends React.Component {
    };
 
    // Callback functions to be passed to the header
-   this.callbackClose = function() { console.log("=-=-=  CLOSING SIGNUP MODAL  =-=-=") };
+   this.callbackClose = function() { this.props.callbackClose() };
 
    // Props to be passed to the arrow nav
    this.arrowNavProps = {
@@ -562,32 +562,32 @@ const CreateAccountView = React.createClass({
     switch (this.props.currentPage) {
       case 0:
         return(
-          <OnBoarding_Email email={this.props.email} emailValidations={this.props.emailValidations} dispatchSetEmailValidations={(text) => this.props.dispatchSetEmailValidations(Validators.validateEmail(text))} dispatchSetPage={this.props.dispatchSetPage} />
+          <OnBoarding_Email callbackClose={Actions.landingView} email={this.props.email} emailValidations={this.props.emailValidations} dispatchSetEmailValidations={(text) => this.props.dispatchSetEmailValidations(Validators.validateEmail(text))} dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 1:
         return(
-          <OnBoarding_Password password={this.props.password} passwordValidations={this.props.passwordValidations} dispatchSetPasswordValidations={(text) => this.props.dispatchSetPasswordValidations(Validators.validatePassword(text))} dispatchSetPage={this.props.dispatchSetPage} />
+          <OnBoarding_Password callbackClose={Actions.landingView} password={this.props.password} passwordValidations={this.props.passwordValidations} dispatchSetPasswordValidations={(text) => this.props.dispatchSetPasswordValidations(Validators.validatePassword(text))} dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 2:
         return(
-          <OnBoarding_FirstName firstName={this.props.firstName} firstNameValidations={this.props.firstNameValidations} dispatchSetFirstNameValidations={(text) => this.props.dispatchSetFirstNameValidations(Validators.validateName(text))} dispatchSetPage={this.props.dispatchSetPage} />
+          <OnBoarding_FirstName callbackClose={Actions.landingView} firstName={this.props.firstName} firstNameValidations={this.props.firstNameValidations} dispatchSetFirstNameValidations={(text) => this.props.dispatchSetFirstNameValidations(Validators.validateName(text))} dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 3:
         return(
-          <OnBoarding_LastName lastName={this.props.lastName} lastNameValidations={this.props.lastNameValidations} dispatchSetLastNameValidations={(text) => this.props.dispatchSetLastNameValidations(Validators.validateName(text))} dispatchSetPage={this.props.dispatchSetPage} />
+          <OnBoarding_LastName callbackClose={Actions.landingView} lastName={this.props.lastName} lastNameValidations={this.props.lastNameValidations} dispatchSetLastNameValidations={(text) => this.props.dispatchSetLastNameValidations(Validators.validateName(text))} dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 4:
         return(
-          <OnBoarding_PhoneNumber phoneNumber={this.props.phoneNumber} phoneNumberValidations={this.props.phoneNumberValidations} dispatchSetPhoneNumberValidations={(text) => this.props.dispatchSetPhoneNumberValidations(text)} dispatchSetPage={this.props.dispatchSetPage} />
+          <OnBoarding_PhoneNumber callbackClose={Actions.landingView} phoneNumber={this.props.phoneNumber} phoneNumberValidations={this.props.phoneNumberValidations} dispatchSetPhoneNumberValidations={(text) => this.props.dispatchSetPhoneNumberValidations(text)} dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
       case 5:
         return(
-          <OnBoarding_Summary createAccount={Firebase.createAccount} currentUser={this.props.currentUser} dispatchSetPage={this.props.dispatchSetPage} />
+          <OnBoarding_Summary callbackClose={Actions.landingView} createAccount={Actions.TrackingContainer} currentUser={this.props.currentUser} dispatchSetPage={this.props.dispatchSetPage} />
         )
         break;
     }

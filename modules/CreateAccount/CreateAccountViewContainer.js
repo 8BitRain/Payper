@@ -82,6 +82,11 @@ export default connect(
     },
     dispatchSetPhoneNumberValidations(input) {
       dispatch(dispatchFunctions.setPhoneNumberValidations(input));
+    },
+    dispatchCreateAccount(user) {
+      console.log("=-=-=  REACHED dispatchCreateAccount()  =-=-=")
+      // Create account
+      Firebase.createAccount(user);
     }
   })
 )(CreateAccountView);

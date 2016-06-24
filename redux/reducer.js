@@ -4,7 +4,7 @@ import {combineReducers} from 'redux-loop';
 import AuthStateReducer from '../modules/auth/AuthState';
 import CounterStateReducer from '../modules/counter/CounterState';
 import SessionStateReducer, {RESET_STATE} from '../modules/session/SessionState';*/
-import CreateAccountReducer from '../modules/OnBoarding_CreateAccount/CreateAccountState';
+import CreateAccountReducer from '../modules/CreateAccount/CreateAccountState';
 
 const reducers = {
   // Authentication/login state

@@ -8,7 +8,8 @@ import Button from "react-native-button";
 // Custom components
 import LandingView from './components/LandingView'
 import LandingScreenView from './modules/LandingScreen/LandingScreenView'
-import CreateAccountViewContainer from './modules/OnBoarding_CreateAccount/CreateAccountViewContainer'
+import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer'
+import TrackingContainer from './modules/Tracking/TrackingContainer'
 import Header from './components/Header/Header'
 import ArrowNavDouble from './components/Navigation/Arrows/ArrowDouble'
 
@@ -44,8 +45,12 @@ export default class Coincast extends React.Component {
         <Scene key="modal" component={Modal} >
           <Scene key="root" hideNavBar hideTabBar>
 
+            { /* Main app flow */ }
             <Scene key="landingView" component={LandingView} title="LandingView"  initial={true} ></Scene>
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
+            <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
+
+            { /* Individual component test views */ }
             <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />
             <Scene key="Header" component={Header} title="Header" />
             <Scene key="ArrowNavDouble" component={ArrowNavDouble} title="ArrowNavDouble" />
