@@ -6,7 +6,7 @@ const typography = StyleSheet.create({
     fontFamily: "sans-serif",
     fontFamily: "Roboto",
     fontWeight: "normal",
-    color: "#fff"
+    color: "#F4F4F9"
   },
 
   // Varying font sizes (ex. "What's your email?")
@@ -19,7 +19,7 @@ const typography = StyleSheet.create({
     backgroundColor: "transparent",
     padding: 10,
     paddingLeft: 0,
-    color: "#fff"
+    color: "#99ECFB"
   },
 
   // Helper styles

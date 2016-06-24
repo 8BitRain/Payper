@@ -15,7 +15,6 @@ import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
-import validation from "../styles/validation";
 
 class Password extends React.Component {
    constructor(props) {
@@ -64,16 +63,16 @@ class Password extends React.Component {
          <View style={[backgrounds.background, backgrounds.password]}></View>
 
          { /* Prompt and input field */ }
-         <View {...this.props} style={[containers.contentContainer, backgrounds.password]}>
+         <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.password]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Enter a secure password</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} defaultValue={this.props.password} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(2, "forward", this.props.passwordValidations, this.passwordInput)}} onChangeText={(text) => {this.passwordInput = text; this.props.dispatchSetPasswordValidations(this.passwordInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" secureTextEntry={true} placeholder={"not \"password\" :)"} />
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} defaultValue={this.props.password} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(2, "forward", this.props.passwordValidations, this.passwordInput)}} onChangeText={(text) => {this.passwordInput = text; this.props.dispatchSetPasswordValidations(this.passwordInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" secureTextEntry={true} placeholder={"not \"password\" :)"} />
          </View>
 
          { /* Arrow nav buttons */ }
          <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackRight={() => {this.onPressRight()}} />
 
          { /* Error messages */ }
-         <View style={[validation.contentContainer, backgrounds.password]}>
+         <View style={[containers.sixTenths, backgrounds.password]}>
             { this.props.passwordValidations.length ? null
               : function() {
                   if (!this.props.passwordValidations.valid) {

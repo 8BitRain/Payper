@@ -15,7 +15,6 @@ import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
-import validation from "../styles/validation";
 
 class PhoneNumber extends React.Component {
  constructor(props) {
@@ -64,14 +63,16 @@ class PhoneNumber extends React.Component {
        <View style={[backgrounds.background, backgrounds.phoneNumber]}></View>
 
        { /* Prompt and input field */ }
-       <View {...this.props} style={[containers.contentContainer, backgrounds.phoneNumber]}>
+       <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.phoneNumber]}>
          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Can I have your number?</Text>
-         <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput)}} defaultValue={this.props.phoneNumber} onChangeText={(text) => {this.phoneNumberInput = text}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"262-305-8038"} maxLength={10} keyboardType="phone-pad" />
+         <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput)}} defaultValue={this.props.phoneNumber} onChangeText={(text) => {this.phoneNumberInput = text}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"262-305-8038"} maxLength={10} keyboardType="phone-pad" />
        </View>
 
        { /* Arrow nav buttons */ }
        <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackRight={() => {this.onPressRight()}} />
 
+       { /* Filler */ }
+       <View style={[containers.sixTenths, backgrounds.email]}></View>
        { /* Header */ }
        <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
     </Animated.View>

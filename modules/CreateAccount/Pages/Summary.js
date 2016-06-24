@@ -15,7 +15,6 @@ import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
-import validation from "../styles/validation";
 
 class Summary extends React.Component {
  constructor(props) {
@@ -62,7 +61,7 @@ class Summary extends React.Component {
        <View style={[backgrounds.background, backgrounds.summary]}></View>
 
        { /* Prompt and submit button */ }
-       <View {...this.props} style={[containers.contentContainer, backgrounds.summary]}>
+       <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.summary]}>
          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Does this look right?</Text>
 
          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.email}</Text>

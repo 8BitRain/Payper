@@ -8,12 +8,12 @@ const backgrounds = StyleSheet.create({
     right: 0,
     bottom: 0
   },
-  email: { backgroundColor: "#61C9A8" },
-  password: { backgroundColor: "#E83151" },
-  firstName: { backgroundColor: "#67597A" },
-  lastName: { backgroundColor: "#DB5461" },
-  phoneNumber: { backgroundColor: "#576acf" },
-  summary: { backgroundColor: "#67597A" }
+  email: { backgroundColor: "#292B2E" },
+  password: { backgroundColor: "#292B2E" },
+  firstName: { backgroundColor: "#292B2E" },
+  lastName: { backgroundColor: "#292B2E" },
+  phoneNumber: { backgroundColor: "#292B2E" },
+  summary: { backgroundColor: "#292B2E" }
 });
 
 export default backgrounds;

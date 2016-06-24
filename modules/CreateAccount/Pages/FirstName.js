@@ -15,7 +15,6 @@ import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
-import validation from "../styles/validation";
 
 class FirstName extends React.Component {
   constructor(props) {
@@ -64,16 +63,16 @@ class FirstName extends React.Component {
         <View style={[backgrounds.background, backgrounds.firstName]}></View>
 
         { /* Prompt and input field */ }
-        <View {...this.props} style={[containers.contentContainer, backgrounds.firstName]}>
+        <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.firstName]}>
           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>What&#39;s your first name?</Text>
-          <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} defaultValue={this.props.firstName} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(3, "forward", this.props.firstNameValidations, this.firstNameInput)}} onChangeText={(text) => {this.firstNameInput = text; this.props.dispatchSetFirstNameValidations(this.firstNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholder={"John"} />
+          <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} defaultValue={this.props.firstName} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(3, "forward", this.props.firstNameValidations, this.firstNameInput)}} onChangeText={(text) => {this.firstNameInput = text; this.props.dispatchSetFirstNameValidations(this.firstNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"John"} />
         </View>
 
         { /* Arrow nav buttons */ }
         <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackRight={() => {this.onPressRight()}} />
 
         { /* Error messages */ }
-        <View style={[validation.contentContainer, backgrounds.firstName]}>
+        <View style={[containers.sixTenths, backgrounds.firstName]}>
           { this.props.firstNameValidations.capitalized ? null
             : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Not capitalized</Text> }
           { this.props.firstNameValidations.format ? null: <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Invalid character (. and - are allowed)</Text>

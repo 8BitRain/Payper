@@ -15,7 +15,6 @@ import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
-import validation from "../styles/validation";
 
 /**
   *   Create account onboarding dumb components
@@ -72,16 +71,16 @@ class Email extends React.Component {
          <View style={[backgrounds.background, backgrounds.email]}></View>
 
          { /* Prompt and input field */ }
-         <View {...this.props} style={[containers.contentContainer, containers.email, backgrounds.email]}>
+         <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Hey, what&#39;s your email?</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(1, "forward", this.props.emailValidations, this.emailInput)}} defaultValue={this.props.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmailValidations(this.emailInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholder={"johndoe@example.com"} keyboardType="email-address" />
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(1, "forward", this.props.emailValidations, this.emailInput)}} defaultValue={this.props.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmailValidations(this.emailInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />
          </View>
 
          { /* Arrow nav buttons */ }
          <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} />
 
          { /* Error messages */ }
-         <View style={[validation.contentContainer, backgrounds.email]}>
+         <View style={[containers.sixTenths, backgrounds.email]}>
             { this.props.emailValidations.format ? null
               : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Not a valid email</Text> }
             { this.props.emailValidations.duplicate ? <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Email already exists</Text>
