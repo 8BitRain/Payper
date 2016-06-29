@@ -13,6 +13,15 @@ import TrackingContainer from './modules/Tracking/TrackingContainer'
 import Header from './components/Header/Header'
 import ArrowNavDouble from './components/Navigation/Arrows/ArrowDouble'
 
+// Individual create account pages
+// import Email from "./modules/CreateAccount/Pages"
+// import FirstName from "./modules/CreateAccount/Pages"
+// import LastName from "./modules/CreateAccount/Pages"
+// import Password from "./modules/CreateAccount/Pages"
+// import PhoneNumber from "./modules/CreateAccount/Pages"
+// import Summary from "./modules/CreateAccount/Pages"
+// import {Email, FirstName, LastName, Password, PhoneNumber, Summary} as Pages from "./modules/CreateAccount/Pages"
+
 const reducerCreate = params=>{
     const defaultReducer = Reducer(params);
     return (state, action)=>{
@@ -46,9 +55,12 @@ export default class Coincast extends React.Component {
           <Scene key="root" hideNavBar hideTabBar>
 
             { /* Main app flow */ }
-            <Scene key="landingView" component={LandingView} title="LandingView"  initial={true} ></Scene>
-            <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
+            <Scene key="landingView" component={LandingView} title="LandingView"  initial={true} />
             <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
+            <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
+
+            { /* Testing new routing architecture */ }
+
 
             { /* Individual component test views */ }
             <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />

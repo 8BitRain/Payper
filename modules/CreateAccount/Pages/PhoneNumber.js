@@ -13,8 +13,8 @@ import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 
 // Stylesheets
 import backgrounds from "../styles/backgrounds";
-import containers from "../styles/containers";
-import typography from "../styles/typography";
+import containers from "../../../styles/containers";
+import typography from "../../../styles/typography";
 
 class PhoneNumber extends React.Component {
  constructor(props) {

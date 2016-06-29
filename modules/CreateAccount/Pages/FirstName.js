@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, Dimensions} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 
@@ -13,8 +13,11 @@ import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 
 // Stylesheets
 import backgrounds from "../styles/backgrounds";
-import containers from "../styles/containers";
-import typography from "../styles/typography";
+import containers from "../../../styles/containers";
+import typography from "../../../styles/typography";
+
+// Get screen size
+const dimensions = Dimensions.get('window');
 
 class FirstName extends React.Component {
   constructor(props) {
@@ -22,7 +25,9 @@ class FirstName extends React.Component {
 
     // Props for animation
     this.animationProps = {
-      fadeAnim: new Animated.Value(0) // init opacity 0
+      // left: Dimensions.get('window').width,
+      start: new Animated.Value(dimensions.width),
+      // fadeAnim: new Animated.Value(0) // init opacity 0
     };
 
     // Props for temporary input storage
@@ -54,11 +59,14 @@ class FirstName extends React.Component {
     this.onPressLeft = function() { this.props.dispatchSetPage(1, null, null, null) };
   }
   componentDidMount() {
-    Animations.fadeIn(this.animationProps);
+    Animations.slideIn(this.animationProps);
+  }
+  componentWillUnmount() {
+    Animations.slideOut(this.animationProps);
   }
   render() {
     return (
-      <Animated.View style={[containers.container, {opacity: this.animationProps.fadeAnim}]}>
+      <Animated.View style={[containers.container, {left: this.animationProps.start}]}>
         { /* Background */ }
         <View style={[backgrounds.background, backgrounds.firstName]}></View>
 

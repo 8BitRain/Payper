@@ -13,8 +13,8 @@ import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 
 // Stylesheets
 import backgrounds from "../styles/backgrounds";
-import containers from "../styles/containers";
-import typography from "../styles/typography";
+import containers from "../../../styles/containers";
+import typography from "../../../styles/typography";
 
 class Password extends React.Component {
    constructor(props) {
@@ -54,7 +54,7 @@ class Password extends React.Component {
      this.onPressLeft = function() { this.props.dispatchSetPage(0, null, null, null) };
    }
    componentDidMount() {
-     Animations.fadeIn(this.animationProps);
+    //  Animations.fadeIn(this.animationProps);
    }
    render() {
      return (

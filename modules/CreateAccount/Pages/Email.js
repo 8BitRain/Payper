@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, Dimensions} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 
@@ -13,8 +13,8 @@ import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 
 // Stylesheets
 import backgrounds from "../styles/backgrounds";
-import containers from "../styles/containers";
-import typography from "../styles/typography";
+import containers from "../../../styles/containers";
+import typography from "../../../styles/typography";
 
 /**
   *   Create account onboarding dumb components
@@ -29,8 +29,14 @@ class Email extends React.Component {
      super(props);
 
      // Props for animation
-     this.animationProps = {
+    //  this.animationProps = {
        fadeAnim: new Animated.Value(0) // init opacity 0
+    //  };
+
+     // Props for animation
+     this.animationProps = {
+       fadeAnim: new Animated.Value(0),
+       start: new Animated.Value(0)
      };
 
      // Props for temporary input storage
@@ -58,11 +64,15 @@ class Email extends React.Component {
      };
 
      // Callback functions to be passed to the arrow nav
-     this.onPressRight = function() { this.props.dispatchSetPage(1, "forward", this.props.emailValidations, this.emailInput) };
+     this.onPressRight = function() { Actions.Password };
      this.onPressLeft = function() { this.props.dispatchSetPage(null, null, null, null) };
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
+   }
+   componentDidUnmount() {
+     console.log("unmounting");
+     Animations.slideOut(this.animationProps);
    }
    render() {
      return (
