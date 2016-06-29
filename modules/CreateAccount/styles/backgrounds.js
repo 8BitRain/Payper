@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import colors from "../../../styles/colors";
 
 const backgrounds = StyleSheet.create({
   background: {
@@ -8,12 +9,12 @@ const backgrounds = StyleSheet.create({
     right: 0,
     bottom: 0
   },
-  email: { backgroundColor: "#292B2E" },
-  password: { backgroundColor: "#292B2E" },
-  firstName: { backgroundColor: "#292B2E" },
-  lastName: { backgroundColor: "#292B2E" },
-  phoneNumber: { backgroundColor: "#292B2E" },
-  summary: { backgroundColor: "#292B2E" }
+  email: { backgroundColor: colors.darkGrey },
+  password: { backgroundColor: colors.darkGrey },
+  firstName: { backgroundColor: colors.darkGrey },
+  lastName: { backgroundColor: colors.darkGrey },
+  phoneNumber: { backgroundColor: colors.darkGrey },
+  summary: { backgroundColor: colors.darkGrey }
 });
 
 export default backgrounds;
