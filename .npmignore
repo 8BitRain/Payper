@@ -25,3 +25,7 @@ DerivedData
 #
 node_modules/
 npm-debug.log
+
+# archives
+#
+ARCHIVE/

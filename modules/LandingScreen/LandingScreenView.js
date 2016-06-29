@@ -20,7 +20,7 @@ class ImageCarousel extends React.Component {
     var imgWidth = Dimensions.get('window').width - 50;
     var imgHeight = 165 / 350;
         imgHeight *= imgWidth;
-    return(
+    return (
       <Carousel hideIndicators={true} animate={true} delay={2750} width={375}>
         <View style={[carousel.container, container.image]}>
           <Image style={{width: imgWidth, height: imgHeight}} source={require('./assets/Eric.png')} />
