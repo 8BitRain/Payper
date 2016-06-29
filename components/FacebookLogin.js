@@ -3,12 +3,14 @@ import {View, Text, StyleSheet} from "react-native";
 import Button from "react-native-button";
 import {Actions} from "react-native-router-flux";
 
+// Stylesheets
+import colors from "../styles/colors";
+
 var styles = StyleSheet.create({
     container: {
         flex: .5,
         justifyContent: "flex-end",
         alignItems: "center",
-        backgroundColor: "#F5FCFF",
     },
     welcome: {
         fontSize: 20,
@@ -20,6 +22,15 @@ var styles = StyleSheet.create({
         color: "#333333",
         marginBottom: 5,
     },
+    button: {
+      backgroundColor: colors.facebookBlue,
+      width: 260,
+      height: 35,
+      borderRadius: 4,
+      color: colors.white,
+      paddingTop: 7,
+      marginTop: 20,
+    }
 });
 
 class FacebookLogin extends React.Component {
@@ -30,7 +41,7 @@ class FacebookLogin extends React.Component {
     render(){
         return (
             <View style={styles.container}>
-                <Button onPress={this.destination}>Continue with Facebook</Button>
+                <Button style={styles.button} onPress={this.destination}>Continue with Facebook</Button>
             </View>
         );
     }

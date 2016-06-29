@@ -136,19 +136,24 @@ function getCircleIcons(numCircles, index) {
 };
 
 /**
-  *   Toolbar for the create account onboarding process
-  *
-  *   TODO: implement pagination functionality by passing props and stuff
-  *         (for now, the third page is always filled in)
+      Toolbar for the create account onboarding process
+
+      Props to be passed to the header
+      =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+      this.headerProps = {
+        types: {
+         "paymentIcons": false,
+         "circleIcons": true,
+         "settingsIcon": false,
+         "closeIcon": true
+       },
+       index: 0,
+       numCircles: 6
 **/
 class Header extends React.Component {
   constructor(props) {
     super(props);
-
-    // For testing, these will typically be passed as props
     this.headerProps = this.props.headerProps;
-    // END For testing, these will typically be passed as props
-
   }
   render() {
     console.log("----- Rendered header ------");
