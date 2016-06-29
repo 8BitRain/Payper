@@ -16,6 +16,7 @@
 import React from 'react';
 import {View, Text, TextInput, StyleSheet, Image} from "react-native";
 import Button from "react-native-button";
+import Entypo from "react-native-vector-icons/Entypo"
 
 
 // Header styles
@@ -72,8 +73,6 @@ const styles = StyleSheet.create({
   },
   iconSettings: {
     marginLeft: 15,
-    width: 20,
-    height: 20
   },
   iconCircle: {
     width: 12,
@@ -107,7 +106,7 @@ function getCloseIcon(callback) {
 function getSettingsIcon() {
   return(
     <Button onPress={() => {console.log("-----  Opening settings  -----")}}>
-      <Image style={styles.iconSettings} source={require('./assets/settings.png')} />
+      <Entypo style={styles.iconSettings} name="cog" size={24} color="white"/>
     </Button>
   );
 };

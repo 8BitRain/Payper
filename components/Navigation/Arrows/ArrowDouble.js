@@ -10,6 +10,7 @@
 import React from 'react';
 import {View, Text, TextInput, StyleSheet, Image} from "react-native";
 import Button from "react-native-button";
+import Entypo from "react-native-vector-icons/Entypo";
 
 
 // Header styles
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
 function getRightArrow(callback) {
   return(
     <Button style={{borderColor: "red", borderWidth: 10}} onPress={() => {callback()}}>
-      <Image style={[styles.iconArrow]} source={require('./assets/arrow-right.png')} />
+      <Entypo style={styles.iconArrow} name="chevron-thin-right" size={36} color="white"/>
     </Button>
   );
 };
@@ -76,7 +77,7 @@ function getRightArrow(callback) {
 function getLeftArrow(callback) {
   return(
     <Button onPress={() => {callback()}}>
-      <Image style={styles.iconArrow} source={require('./assets/arrow-left.png')} />
+      <Entypo style={styles.iconArrow} name="chevron-thin-left" size={36} color="white"/>
     </Button>
   );
 };

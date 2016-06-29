@@ -5,71 +5,13 @@ import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 're
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
 import * as Firebase from "../../services/Firebase";
+import Entypo from 'react-native-vector-icons/Entypo';
+import Header from '../../components/Header/Header.js';
 
-
-const buttons = StyleSheet.create({
-  paymentButton: {
-    flexDirection: "column",
-    flex: .5,
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
-
-const images = StyleSheet.create({
-  paymentButton : {
-    width: 64,
-    height: 64
-  }
-});
-
-const typo = StyleSheet.create({
-  // General typography styles
-  general: {
-    fontFamily: "sans-serif",
-    fontFamily: "Roboto",
-    fontWeight: "normal",
-    color: "#fff"
-  },
-
-  // Varying font sizes (ex. "What's your email?")
-  fontSizeTitle: { fontSize: 25 },
-  fontSizeNote: { fontSize: 20 },
-  fontSizeError: { fontSize: 15},
-
-  textInput: {
-    height: 40,
-    backgroundColor: "transparent",
-    padding: 10,
-    paddingLeft: 0,
-    color: "#fff"
-  },
-
-  // Helper styles
-  marginLeft: { marginLeft: 20 },
-  marginBottom: { marginBottom: 20 },
-  marginTop: { marginBottom: 20 },
-  marginRight: { marginBottom: 20 },
-  marginSides: {
-    marginLeft: 20,
-    marginRight: 20
-  },
-  padLeft: { paddingLeft: 20 },
-  padBottom: { paddingBottom: 20 },
-  padTop: { paddingBottom: 20 },
-  padRight: { paddingBottom: 20 }
-});
-
-const styles = StyleSheet.create({
-  // Flex positioning
-  container: {
-    flex: 1
-  },
-  contentContainer: {
-    flex: .5,
-    justifyContent: "center",
-  }
-});
+//styles
+import backgrounds from "./styles/backgrounds";
+import containers from "./styles/containers";
+import typography from "./styles/typography";
 
 class TrackingEmpty extends React.Component {
    constructor(props) {
@@ -77,21 +19,93 @@ class TrackingEmpty extends React.Component {
      this.animationProps = {
        fadeAnim: new Animated.Value(0) // init opacity 0
      };
-   }
+     this.state = {
+     bounceValue: new Animated.Value(0),
+     animatedStartValue: new Animated.Value(0),
+   };
+
+   //Header props
+   this.headerProps = {
+      types: {
+        "paymentIcons": false,
+        "circleIcons": false,
+        "settingsIcon": true,
+        "closeIcon": false
+      },
+      index: 0,
+      numCircles: 6
+    };
+
+}
+
+ /*Animations */
+    bouncingArrow(){
+      Animated.sequence([
+        Animated.timing(this.state.animatedStartValue, {
+          toValue: 55,
+          duration: 550,
+          delay: 0
+        }),
+        Animated.timing(this.state.animatedStartValue, {
+          toValue: 0,
+          duration: 550
+        })
+      ]).start(() => {
+        this.bouncingArrow();
+      }
+    );
+    }
+
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
+     this.state.bounceValue.setValue(1.5);     // Start large
+     this.state.animatedStartValue.setValue(0);
+
+     Animated.spring(                          // Base: spring, decay, timing
+     this.state.bounceValue,                 // Animate `bounceValue`
+     {
+      toValue: 50,                         // Animate to smaller size
+      friction: 1,                          // Bouncier spring
+     }
+  ).start();
+    this.bouncingArrow();
    }
+
    render() {
      return (
-       <Animated.View style={[styles.container, {opacity: this.animationProps.fadeAnim}]}>
-        <View style={styles.contentContainer}>
-         <Text style={[typo.fontSizeTitle, typo.marginTop, typo.marginBottom, typo.marginSides]}>Click here to start using Coincast Payments!</Text>
-         <Button style={buttons.paymentButton}> <Image style={images.paymentButton} source={require('./assets/money-button64.png')} /></Button>
+
+       <Animated.View style={[containers.contentContainer, {opacity: this.animationProps.fadeAnim, backgroundColor: "#292B2E"}]}>
+
+       <Header headerProps={this.headerProps}>
+       </Header>
+         <View style = {containers.textArrowContainer}>
+              <Text style={[typography.fontSizeTitle, typography.marginTop, typography.marginBottom, typography.marginSides]}>Tap the payment button to start using Coincast!</Text>
+           <Animated.Text                       // Base: Image, Text, View
+          style={{
+            width: 64,
+            height: 64,
+            transform: [                        // `transform` is an ordered array
+              {translateY: this.state.animatedStartValue},  // Map `bounceValue` to `scale`
+            ]
+          }}>
+                <Entypo name="chevron-thin-down" size={48} color="white" />
+          </Animated.Text>
+
         </View>
+
+        <View style={containers.paymentContainer}>
+          <Button>
+             <View style={{borderRadius: 50, backgroundColor: "white", width: 64, height: 64, overflow: "hidden", alignItems: "center", justifyContent: "center", alignSelf: "center", right: 7.5}}>
+                 <Entypo name="credit" size={36} color="black"/>
+             </View>
+          </Button>
+        </View>
+
        </Animated.View>
      );
    }
  }
+
 
 const TrackingView = React.createClass({
   render() {
