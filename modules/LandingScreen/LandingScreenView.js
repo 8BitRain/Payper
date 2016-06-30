@@ -14,14 +14,15 @@ import carousel from "./styles/carousel";
 
 // Carousel component for image sliding
 import Carousel from 'react-native-carousel';
+var dimensions = Dimensions.get('window');
 
 class ImageCarousel extends React.Component {
   render() {
-    var imgWidth = Dimensions.get('window').width - 50;
+    var imgWidth = dimensions.width - 50;
     var imgHeight = 165 / 350;
         imgHeight *= imgWidth;
     return (
-      <Carousel hideIndicators={true} animate={true} delay={2750} width={375}>
+      <Carousel hideIndicators={true} animate={true} delay={2750} width={dimensions.width}>
         <View style={[carousel.container, container.image]}>
           <Image style={{width: imgWidth, height: imgHeight}} source={require('./assets/Eric.png')} />
         </View>

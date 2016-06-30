@@ -1,10 +1,11 @@
 import React from 'react';
-import {View, Text, StyleSheet} from "react-native";
+import {View, Text, StyleSheet, Dimensions} from "react-native";
 import Button from "react-native-button";
 import {Actions} from "react-native-router-flux";
 
 // Stylesheets
 import colors from "../styles/colors";
+var dimensions = Dimensions.get('window');
 
 var styles = StyleSheet.create({
     container: {
@@ -24,11 +25,11 @@ var styles = StyleSheet.create({
     },
     button: {
       backgroundColor: colors.icyBlue,
-      width: 260,
-      height: 35,
+      width: dimensions.width - 50,
+      height: 50,
+      paddingTop: 14.5,
       borderRadius: 4,
       color: colors.white,
-      paddingTop: 7,
       marginTop: 10,
     }
 });

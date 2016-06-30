@@ -11,7 +11,7 @@ const typography = StyleSheet.create({
   },
 
   // Varying font sizes (ex. "What's your email?")
-  fontSizeTitle: { fontSize: 70 },
+  fontSizeTitle: { fontSize: 50 },
   fontSizeNote: { fontSize: 20 },
   fontSizeError: { fontSize: 15},
 });
