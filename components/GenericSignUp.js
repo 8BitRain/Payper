@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, Dimensions} from "react-native";
 import Button from "react-native-button";
 import {Actions} from "react-native-router-flux";
+var Mixpanel = require('react-native-mixpanel');
 
 // Stylesheets
 import colors from "../styles/colors";
@@ -38,7 +39,9 @@ var styles = StyleSheet.create({
 class GenericSignUp extends React.Component {
     constructor(props) {
       super(props);
+
       this.destination = this.props.destination;
+
     }
     render(){
         return (

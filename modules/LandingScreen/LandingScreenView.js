@@ -11,6 +11,7 @@ import container from "./styles/container";
 import background from "./styles/background";
 import typography from "./styles/typography";
 import carousel from "./styles/carousel";
+var Mixpanel = require('react-native-mixpanel');
 
 // Carousel component for image sliding
 import Carousel from 'react-native-carousel';
@@ -46,6 +47,7 @@ class LandingScreenDisplay extends React.Component {
   }
   componentDidMount() {
     Animations.fadeIn(this.animationProps);
+    Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');
   }
   render() {
     var imgWidth = 250;
