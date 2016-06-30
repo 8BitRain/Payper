@@ -42,11 +42,13 @@ class FacebookLogin extends React.Component {
 
 
     }
+
+
     render(){
 
         return (
             <View style={styles.container}>
-                <Button style={styles.button} onPress={this.destination}>Continue with Facebook</Button>
+                <Button style={styles.button} onPress={this.destinatio} >Continue with Facebook</Button>
             </View>
         );
     }
