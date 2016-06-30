@@ -20,18 +20,24 @@ var dimensions = Dimensions.get('window');
 class ImageCarousel extends React.Component {
   render() {
     var imgWidth = dimensions.width - 50;
-    var imgHeight = 165 / 350;
+    var imgHeight = 160 / 350;
         imgHeight *= imgWidth;
     return (
       <Carousel hideIndicators={true} animate={true} delay={2750} width={dimensions.width}>
         <View style={[carousel.container, container.image]}>
-          <Image style={{width: imgWidth, height: imgHeight}} source={require('./assets/Eric.png')} />
-        </View>
-        <View style={[carousel.container, container.image]}>
-          <Image style={{width: imgWidth, height: imgHeight}} source={require('./assets/Mo.png')} />
-        </View>
-        <View style={[carousel.container, container.image]}>
           <Image style={{width: imgWidth, height: imgHeight}} source={require('./assets/Brady.png')} />
+        </View>
+        <View style={[carousel.container, container.image]}>
+          <Image style={{width: imgWidth, height: imgHeight}} source={require('./assets/Victory.png')} />
+        </View>
+        <View style={[carousel.container, container.image]}>
+          <Image style={{width: imgWidth, height: imgHeight}} source={require('./assets/EricSmith.png')} />
+        </View>
+        <View style={[carousel.container, container.image]}>
+          <Image style={{width: imgWidth, height: imgHeight}} source={require('./assets/Monica.png')} />
+        </View>
+        <View style={[carousel.container, container.image]}>
+          <Image style={{width: imgWidth, height: imgHeight}} source={require('./assets/Moh.png')} />
         </View>
       </Carousel>
     );
@@ -44,7 +50,10 @@ class LandingScreenDisplay extends React.Component {
     this.animationProps = {
       fadeAnim: new Animated.Value(0) // init opacity 0
     };
+
+
   }
+
   componentDidMount() {
     Animations.fadeIn(this.animationProps);
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');

@@ -39,7 +39,7 @@ class TrackingEmpty extends React.Component {
 }
 
  /*Animations */
-    bouncingArrow(){
+     bouncingArrow(){
       Animated.sequence([
         Animated.timing(this.state.animatedStartValue, {
           toValue: 55,
@@ -84,18 +84,19 @@ class TrackingEmpty extends React.Component {
           style={{
             width: 64,
             height: 64,
+            left: 7,
             transform: [                        // `transform` is an ordered array
               {translateY: this.state.animatedStartValue},  // Map `bounceValue` to `scale`
             ]
           }}>
-                <Entypo name="chevron-thin-down" size={48} color="white" />
+            <Entypo name="chevron-thin-down" size={48} color="white"/>
           </Animated.Text>
 
         </View>
 
         <View style={containers.paymentContainer}>
-          <Button>
-             <View style={{borderRadius: 50, backgroundColor: "white", width: 64, height: 64, overflow: "hidden", alignItems: "center", justifyContent: "center", alignSelf: "center", right: 7.5}}>
+          <Button onPress={Actions.ThankYouView}>
+             <View style={{borderRadius: 50, backgroundColor: "white", width: 64, height: 64, overflow: "hidden", alignItems: "center", justifyContent: "center", alignSelf: "center"}}>
                  <Entypo name="credit" size={36} color="black"/>
              </View>
           </Button>

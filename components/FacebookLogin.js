@@ -39,9 +39,9 @@ class FacebookLogin extends React.Component {
     constructor(props) {
       super(props);
       this.destination = this.props.destination;
-
-
     }
+
+
     render(){
 
         return (

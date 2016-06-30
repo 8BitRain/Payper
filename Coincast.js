@@ -7,6 +7,7 @@ import Button from "react-native-button";
 
 // Custom components
 import LandingView from './components/LandingView'
+import ThankYouView from './components/ThankYouView'
 import LandingScreenView from './modules/LandingScreen/LandingScreenView'
 import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer'
 import TrackingContainer from './modules/Tracking/TrackingContainer'
@@ -47,6 +48,7 @@ export default class Coincast extends React.Component {
 
             { /* Main app flow */ }
             <Scene key="landingView" component={LandingView} title="LandingView"  initial={true} ></Scene>
+            <Scene key="ThankYouView" component={ThankYouView} title="ThankYouView"></Scene>
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
 
