@@ -82,7 +82,28 @@ class LandingScreenDisplay extends React.Component {
   componentDidMount() {
     Animations.fadeIn(this.animationProps);
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');
+    Mixpanel.timeEvent("Landing Screen Duration");
   }
+
+  onFBPress(){
+
+    Mixpanel.track("FBLogin");
+    Mixpanel.timeEvent("Completed signup");
+    Mixpanel.track("Landing Screen Duration");
+    Actions.TrackingContainer();
+
+
+  }
+
+
+  onGenericPress(){
+
+    Mixpanel.track("GenericLogin");
+    Mixpanel.timeEvent("Completed signup");
+    Mixpanel.track("Landing Screen Duration");
+    Actions.CreateAccountViewContainer();
+  }
+
   render() {
     var imgWidth = dimensions.width - 50;
     var imgHeight = 160 / 350;
@@ -113,9 +134,14 @@ class LandingScreenDisplay extends React.Component {
         </View>
       </View>
 
+
         <View style={{marginBottom: 1.5}}>
           <FacebookLogin destination={Actions.TrackingContainer}/>
           <GenericSignUp destination={Actions.CreateAccountViewContainer}/>
+
+        <View style={[container.third]}>
+          <FacebookLogin destination={this.onFBPress.bind(this)}/>
+          <GenericSignUp destination={this.onGenericPress.bind(this)}/>
         </View>
 
       </Animated.View>

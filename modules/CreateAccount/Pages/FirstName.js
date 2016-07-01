@@ -8,6 +8,7 @@ var Mixpanel = require('react-native-mixpanel');
 // Custom helper functions
 import * as Animations from "../../../helpers/animations";
 import * as Validators from "../../../helpers/validators";
+var Mixpanel = require('react-native-mixpanel');
 
 // Custom components
 import Header from "../../../components/Header/Header";
@@ -60,6 +61,7 @@ class FirstName extends React.Component {
     Mixpanel.track("Password Page Finished");
     Mixpanel.timeEvent("FirstName page Finished");
   }
+
   render() {
     return (
       <View style={[containers.container, backgrounds.firstName]}>

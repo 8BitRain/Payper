@@ -8,6 +8,7 @@ var Mixpanel = require('react-native-mixpanel');
 // Custom helper functions
 import * as Animations from "../../../helpers/animations";
 import * as Validators from "../../../helpers/validators";
+var Mixpanel = require('react-native-mixpanel');
 
 // Custom components
 import Header from "../../../components/Header/Header";

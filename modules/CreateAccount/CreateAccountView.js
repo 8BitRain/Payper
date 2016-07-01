@@ -4,6 +4,7 @@ import {Actions} from 'react-native-router-flux';
 
 // Helper functions
 import * as Validators from "../../helpers/validators";
+var Mixpanel = require('react-native-mixpanel');
 
 // Page components
 import Email from "./Pages/Email";
@@ -14,6 +15,8 @@ import PhoneNumber from "./Pages/PhoneNumber";
 import Summary from "./Pages/Summary";
 
 const CreateAccountView = React.createClass({
+
+
   render() {
     switch (this.props.currentPage) {
       case 0:

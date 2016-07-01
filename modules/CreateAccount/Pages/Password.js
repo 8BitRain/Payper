@@ -12,6 +12,7 @@ import * as Validators from "../../../helpers/validators";
 // Custom components
 import Header from "../../../components/Header/Header";
 import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
+var Mixpanel = require('react-native-mixpanel');
 
 // Stylesheets
 import backgrounds from "../styles/backgrounds";

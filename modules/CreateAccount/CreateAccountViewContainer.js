@@ -3,6 +3,7 @@ import * as dispatchFunctions from  './CreateAccountState';
 import CreateAccountView from './CreateAccountView';
 import Validators from '../../helpers/validators';
 import * as Firebase from '../../services/Firebase';
+var Mixpanel = require('react-native-mixpanel');
 
 /**
   *   Connect function for CreateAccountView.js
@@ -61,8 +62,20 @@ export default connect(
               break;
           }
           dispatch(dispatchFunctions.setPage(index));
+        } else{
+
+            console.log("hit");
+            if(validations.valid==false){
+              for (var temp in validations) {
+            if(!validations[temp]&&temp!='valid'){
+            Mixpanel.track(temp);
+            }
+
+            }
+          }
         }
-      } else {
+
+      }else {
         dispatch(dispatchFunctions.setPage(index));
       }
     },

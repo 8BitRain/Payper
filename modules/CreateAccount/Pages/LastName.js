@@ -12,6 +12,7 @@ import * as Validators from "../../../helpers/validators";
 // Custom components
 import Header from "../../../components/Header/Header";
 import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
+var Mixpanel = require('react-native-mixpanel');
 
 // Stylesheets
 import backgrounds from "../styles/backgrounds";
@@ -59,6 +60,7 @@ class LastName extends React.Component {
    Animations.fadeIn(this.animationProps);
    Mixpanel.track("FirstName page Finished");
    Mixpanel.timeEvent("LastName page Finished");
+   Mixpanel.timeEvent("LastName page Finsihed");
  }
  render() {
    return (
