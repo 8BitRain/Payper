@@ -138,10 +138,6 @@ class LandingScreenDisplay extends React.Component {
         <View style={{marginBottom: 1.5}}>
           <FacebookLogin destination={Actions.TrackingContainer}/>
           <GenericSignUp destination={Actions.CreateAccountViewContainer}/>
-
-        <View style={[container.third]}>
-          <FacebookLogin destination={this.onFBPress.bind(this)}/>
-          <GenericSignUp destination={this.onGenericPress.bind(this)}/>
         </View>
 
       </Animated.View>
