@@ -16,6 +16,9 @@ import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
 
+//Icons
+import Entypo from "react-native-vector-icons/Entypo"
+
 class PhoneNumber extends React.Component {
  constructor(props) {
    super(props);

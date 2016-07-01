@@ -12,6 +12,7 @@ import Header from '../../components/Header/Header.js';
 import backgrounds from "./styles/backgrounds";
 import containers from "./styles/containers";
 import typography from "./styles/typography";
+import colors from '../../styles/colors';
 
 class TrackingEmpty extends React.Component {
    constructor(props) {
@@ -74,7 +75,7 @@ class TrackingEmpty extends React.Component {
    render() {
      return (
 
-       <Animated.View style={[containers.contentContainer, {opacity: this.animationProps.fadeAnim, backgroundColor: "#292B2E"}]}>
+       <Animated.View style={[containers.contentContainer, {opacity: this.animationProps.fadeAnim, backgroundColor: colors.darkGrey}]}>
 
        <Header headerProps={this.headerProps}>
        </Header>

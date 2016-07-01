@@ -9,6 +9,7 @@ const colors = {
   oldWhite: "#F4F4F9",
   oldGrey: "#292B2E",
   oldBlue: "#36E5FF",
+  mountainGrey: "#292B2E"
 }
 
 export default colors;

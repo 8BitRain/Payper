@@ -86,7 +86,7 @@ function getLeftArrow(callback) {
 function getCheck(callback) {
   return(
     <Button onPress={() => {callback()}}>
-      <Image style={styles.iconCheck} source={require('./assets/check.png')} />
+      <Entypo style={styles.iconCheck} name="check" size={36} color="white" />
     </Button>
   );
 };
