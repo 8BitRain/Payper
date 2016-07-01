@@ -21,6 +21,12 @@ import ArrowNavDouble from './components/Navigation/Arrows/ArrowDouble'
 // import PhoneNumber from "./modules/CreateAccount/Pages"
 // import Summary from "./modules/CreateAccount/Pages"
 // import {Email, FirstName, LastName, Password, PhoneNumber, Summary} as Pages from "./modules/CreateAccount/Pages"
+import LandingPage from './TestModules/LandingPage';
+import Main from './TestModules/Main';
+import POne from './TestModules/Pages/POne';
+import PTwo from './TestModules/Pages/PTwo';
+import PThree from './TestModules/Pages/PThree';
+
 
 const reducerCreate = params=>{
     const defaultReducer = Reducer(params);
@@ -50,27 +56,54 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
 export default class Coincast extends React.Component {
   render() {
     return (
-      <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
-        <Scene key="modal" component={Modal} >
-          <Scene key="root" hideNavBar hideTabBar>
+      <Router getSceneStyle={getSceneStyle}>
+        <Scene key="root">
 
-            { /* Main app flow */ }
-            <Scene key="landingView" component={LandingView} title="LandingView"  initial={true} />
-            <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
-            <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
+          <Scene key="CreateAccount" component={CreateAccountContainer} />
+          { /*   ...   */ }
 
-            { /* Testing new routing architecture */ }
-
-
-            { /* Individual component test views */ }
-            <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />
-            <Scene key="Header" component={Header} title="Header" />
-            <Scene key="ArrowNavDouble" component={ArrowNavDouble} title="ArrowNavDouble" />
-
-          </Scene>
-          <Scene key="error" component={Error}/>
         </Scene>
+      </Router>
+
+
+
+
+
+
+
+
+
+
+
+
+      <Router>
+        <Scene key="root">
+          <Scene key="LandingPage" component={LandingPage} title="Landing Page" initial={true} />
+        </Scene>
+
+        <Scene key="Main" component={Main} title="Page Wrapper" firstName="Brady" phoneNumber="262-305-8038" />
       </Router>
     );
   }
 }
+
+// <Scene key="modal" component={Modal} >
+//   <Scene key="root" hideNavBar hideTabBar>
+//
+//     { /* Main app flow */ }
+//     <Scene key="landingView" component={LandingView} title="LandingView"  initial={true} />
+//     <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
+//     <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
+//
+//     { /* Testing new routing architecture */ }
+//
+//
+//     { /* Individual component test views */ }
+//     <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />
+//     <Scene key="Header" component={Header} title="Header" />
+//     <Scene key="ArrowNavDouble" component={ArrowNavDouble} title="ArrowNavDouble" />
+//
+//   </Scene>
+//   <Scene key="error" component={Error}/>
+// </Scene>
+// </Router>

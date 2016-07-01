@@ -15,6 +15,13 @@ import Summary from "./Pages/Summary";
 
 const CreateAccountView = React.createClass({
   render() {
+    <Router> 
+
+
+
+
+
+
     switch (this.props.currentPage) {
       case 0:
         return(
