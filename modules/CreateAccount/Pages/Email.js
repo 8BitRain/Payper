@@ -6,6 +6,7 @@ import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 're
 // Custom helper functions
 import * as Animations from "../../../helpers/animations";
 import * as Validators from "../../../helpers/validators";
+var Mixpanel = require('react-native-mixpanel');
 
 // Custom components
 import Header from "../../../components/Header/Header";
@@ -63,6 +64,7 @@ class Email extends React.Component {
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
+     Mixpanel.timeEvent("Email page Finished");
    }
    render() {
      return (

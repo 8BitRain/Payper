@@ -12,6 +12,7 @@ import Header from '../../components/Header/Header.js';
 import backgrounds from "./styles/backgrounds";
 import containers from "./styles/containers";
 import typography from "./styles/typography";
+var Mixpanel = require('react-native-mixpanel');
 
 class TrackingEmpty extends React.Component {
    constructor(props) {
@@ -71,6 +72,12 @@ class TrackingEmpty extends React.Component {
     this.bouncingArrow();
    }
 
+   onThankYouPress() {
+
+     Mixpanel.track("Completed signup");
+     Actions.ThankYouView();
+   }
+
    render() {
      return (
 
@@ -95,7 +102,7 @@ class TrackingEmpty extends React.Component {
         </View>
 
         <View style={containers.paymentContainer}>
-          <Button onPress={Actions.ThankYouView}>
+          <Button onPress={this.onThankYouPress.bind(this)}>
              <View style={{borderRadius: 50, backgroundColor: "white", width: 64, height: 64, overflow: "hidden", alignItems: "center", justifyContent: "center", alignSelf: "center"}}>
                  <Entypo name="credit" size={36} color="black"/>
              </View>
