@@ -12,24 +12,23 @@ import Header from "../../../components/Header/Header";
 import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 
 // Stylesheets
-import backgrounds from "../styles/backgrounds";
 import containers from "../../../styles/containers";
 import typography from "../../../styles/typography";
+import backgrounds from "../../../styles/backgrounds";
 
 /**
-  *   Create account onboarding dumb components
-  *   Page 0: Email
-  *   Page 1: Password
-  *   Page 2: First name
-  *   Page 3: Last name
-  *   Page 4: Phone number
+  *   Email onboarding base component
 **/
 class Email extends React.Component {
    constructor(props) {
      super(props);
 
+     // Props from CreateAccountContainer connect function
+     console.log(JSON.stringify(props));
+     // TESTING
+
      // Props for temporary input storage
-     this.emailInput = this.props.email;
+     this.input = this.props.email;
 
      // Props to be passed to the header
      this.headerProps = {
@@ -44,7 +43,7 @@ class Email extends React.Component {
      };
 
      // Callback functions to be passed to the header
-     this.callbackClose = function() { this.props.callbackClose() };
+     this.closeModal = function() { Actions.LandingPage };
 
      // Props to be passed to the arrow nav
      this.arrowNavProps = {
@@ -53,32 +52,49 @@ class Email extends React.Component {
      };
 
      // Callback functions to be passed to the arrow nav
-     this.onPressRight = function() { Actions.Password };
-     this.onPressLeft = function() { this.props.dispatchSetPage(null, null, null, null) };
+     this.nextPage = function() {
+       console.log(this.props.validations);
+       if (true) {
+         Actions.Password();
+       } else {
+         alert('invalid');
+       }
+     };
+     this.lastPage = function() {};
    }
    render() {
      return (
-       <View style={[containers.container, backgrounds.background, backgrounds.email]}>
+       <View style={[containers.container, backgrounds.email]}>
 
          { /* Prompt and input field */ }
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Hey, what&#39;s your email?</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(1, "forward", this.props.emailValidations, this.emailInput)}} defaultValue={this.props.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmailValidations(this.emailInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />
+           <TextInput
+              style={[typography.textInput, typography.marginSides, typography.marginBottom]}
+              placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"}
+              keyboardType="email-address"
+              autoCorrect={false} autoFocus={true} autoCapitalize="none"
+              onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this.nextPage() }}
+              onChangeText={(text) => {this.input = text; this.props.validate("email", this.input)}}
+              defaultValue={this.props.email}
+            />
          </View>
 
          { /* Arrow nav buttons */ }
-         <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} />
+         <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.nextPage()}} />
 
          { /* Error messages */ }
          <View style={[containers.sixTenths, backgrounds.email]}>
-            { this.props.emailValidations.format ? null
+            { this.props.emailValidations.format
+              ? null
               : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Not a valid email</Text> }
-            { this.props.emailValidations.duplicate ? <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Email already exists</Text>
+            { this.props.emailValidations.duplicate
+              ? <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Email already exists</Text>
               : null }
          </View>
 
          { /* Header */ }
-         <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+         <Header callbackClose={() => {this.closeModal()}} headerProps={this.headerProps} />
        </View>
      );
    }

@@ -1,14 +1,15 @@
 // Dependencies
 import React from 'react';
 import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native'
-import {Scene, Reducer, Router, Modal, Actions} from 'react-native-router-flux'
+import {Scene, Reducer, Router, Modal, Actions, Route} from 'react-native-router-flux'
 import Error from './components/Error'
 import Button from "react-native-button";
 
 // Custom components
 import LandingView from './components/LandingView'
 import LandingScreenView from './modules/LandingScreen/LandingScreenView'
-import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer'
+import CreateAccountContainer from './modules/CreateAccountTwo/CreateAccountContainer'
+import CreateAccountView from './modules/CreateAccount/CreateAccountView'
 import TrackingContainer from './modules/Tracking/TrackingContainer'
 import Header from './components/Header/Header'
 import ArrowNavDouble from './components/Navigation/Arrows/ArrowDouble'
@@ -27,6 +28,8 @@ import POne from './TestModules/Pages/POne';
 import PTwo from './TestModules/Pages/PTwo';
 import PThree from './TestModules/Pages/PThree';
 
+import Email from './Modules/CreateAccountTwo/Pages/Email';
+import Password from './Modules/CreateAccountTwo/Pages/Password';
 
 const reducerCreate = params=>{
     const defaultReducer = Reducer(params);
@@ -57,31 +60,14 @@ export default class Coincast extends React.Component {
   render() {
     return (
       <Router getSceneStyle={getSceneStyle}>
-        <Scene key="root">
+        <Scene key="modal" component={Modal}>
+          <Scene key="root" hideNavBar hideTabBar>
 
-          <Scene key="CreateAccount" component={CreateAccountContainer} />
-          { /*   ...   */ }
+            <Scene key="Email" component={Email} initial={true} />
+            <Scene key="Password" component={Password} />
 
+          </Scene>
         </Scene>
-      </Router>
-
-
-
-
-
-
-
-
-
-
-
-
-      <Router>
-        <Scene key="root">
-          <Scene key="LandingPage" component={LandingPage} title="Landing Page" initial={true} />
-        </Scene>
-
-        <Scene key="Main" component={Main} title="Page Wrapper" firstName="Brady" phoneNumber="262-305-8038" />
       </Router>
     );
   }
@@ -96,7 +82,6 @@ export default class Coincast extends React.Component {
 //     <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
 //
 //     { /* Testing new routing architecture */ }
-//
 //
 //     { /* Individual component test views */ }
 //     <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />

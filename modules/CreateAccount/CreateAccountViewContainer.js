@@ -30,6 +30,7 @@ export default connect(
   dispatch => ({
     // Handles pagination
     dispatchSetPage(index, direction, validations, input) {
+      console.log("REACHED DISPATCH SET PAGE")
       if (direction == "forward") {
         var currentPage = index - 1;
         // console.log("input: " + input);
@@ -40,7 +41,9 @@ export default connect(
           switch (currentPage) {
             // Email
             case 0:
+              console.log('test');
               dispatch(dispatchFunctions.setEmail(input));
+              Actions.Password;
               break;
             // Password
             case 1:
