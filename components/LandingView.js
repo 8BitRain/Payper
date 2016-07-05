@@ -28,6 +28,8 @@ class LandingView extends React.Component {
         <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.ArrowNavDouble}>Arrow Nav Double</Button>
         <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.TrackingContainer}>TrackingContainer</Button>
         <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.LandingScreenView}>Landing Page</Button>
+        <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.BankOnboardingContainer}>Bank Onboarding</Button>
+
       </View>
     );
   }

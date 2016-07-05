@@ -11,6 +11,7 @@ import ThankYouView from './components/ThankYouView'
 import LandingScreenView from './modules/LandingScreen/LandingScreenView'
 import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer'
 import TrackingContainer from './modules/Tracking/TrackingContainer'
+import BankOnboardingContainer from './modules/BankOnboarding/BankOnboardingContainer'
 import Header from './components/Header/Header'
 import ArrowNavDouble from './components/Navigation/Arrows/ArrowDouble'
 
@@ -51,6 +52,7 @@ export default class Coincast extends React.Component {
             <Scene key="ThankYouView" component={ThankYouView} title="ThankYouView"></Scene>
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
+            <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" />
 
             { /* Individual component test views */ }
             <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />

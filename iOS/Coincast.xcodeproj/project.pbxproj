@@ -474,7 +474,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = NDENUB8WCF;
+						DevelopmentTeam = 943498UXPL;
 					};
 				};
 			};
@@ -829,7 +829,7 @@
 					"-lc++",
 					"-licucore",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Coincast62;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Coincast6999;
 				PRODUCT_NAME = Coincast;
 				PROVISIONING_PROFILE = "";
 			};
@@ -857,7 +857,7 @@
 					"-lc++",
 					"-licucore",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Coincast62;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Coincast6999;
 				PRODUCT_NAME = Coincast;
 				PROVISIONING_PROFILE = "";
 			};
