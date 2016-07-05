@@ -8,7 +8,7 @@ const colors = {
   facebookBlue: "#3B5998",
   oldWhite: "#F4F4F9",
   oldGrey: "#292B2E",
-  oldBlue: "#36E5FF",
+  oldBlue: "#36E5FF"
 }
 
 export default colors;

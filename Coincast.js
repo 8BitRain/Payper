@@ -9,9 +9,14 @@ import Button from "react-native-button";
 import LandingView from './components/LandingView'
 import LandingScreenView from './modules/LandingScreen/LandingScreenView'
 import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer'
+import CreatePaymentViewContainer from './modules/CreatePayment/CreatePaymentViewContainer'
 import TrackingContainer from './modules/Tracking/TrackingContainer'
 import Header from './components/Header/Header'
 import ArrowNavDouble from './components/Navigation/Arrows/ArrowDouble'
+
+// POST test components
+import POSTPayment from './_MOCKDB/TestComponents/POSTPayment';
+import POSTCustomer from './_MOCKDB/TestComponents/POSTCustomer';
 
 const reducerCreate = params=>{
     const defaultReducer = Reducer(params);
@@ -46,9 +51,14 @@ export default class Coincast extends React.Component {
           <Scene key="root" hideNavBar hideTabBar>
 
             { /* Main app flow */ }
-            <Scene key="landingView" component={LandingView} title="LandingView"  initial={true} ></Scene>
+            <Scene key="landingView" component={LandingView} title="LandingView" initial={true} />
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
+            <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" />
             <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
+
+            { /* Testing POST requests */ }
+            <Scene key="POSTPayment" component={POSTPayment} title="POSTPayment" initial={false} />
+            <Scene key="POSTCustomer" component={POSTCustomer} title="POSTCustomer" initial={false} />
 
             { /* Individual component test views */ }
             <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />

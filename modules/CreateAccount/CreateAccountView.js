@@ -75,7 +75,7 @@ const CreateAccountView = React.createClass({
         return(
           <Summary
             callbackClose={Actions.landingView}
-            createAccount={Actions.TrackingContainer}
+            createAccount={this.props.dispatchCreateAccount}
             currentUser={this.props.currentUser}
             dispatchSetPage={this.props.dispatchSetPage}
           />

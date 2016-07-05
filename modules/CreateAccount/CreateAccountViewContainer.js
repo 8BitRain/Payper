@@ -56,7 +56,6 @@ export default connect(
               break;
             // Phone number
             case 4:
-              console.log("=====  REACHED DISPATCH FUNCTION  =====");
               dispatch(dispatchFunctions.setPhoneNumber(input));
               break;
           }
@@ -84,9 +83,13 @@ export default connect(
       dispatch(dispatchFunctions.setPhoneNumberValidations(input));
     },
     dispatchCreateAccount(user) {
-      console.log("=-=-=  REACHED dispatchCreateAccount()  =-=-=")
       // Create account
-      Firebase.createAccount(user);
+      var fbResponse = Firebase.createAccount(user);
+
+      // Test Firebase response
+      console.log("Firebase response:");
+      console.log("=-=-=-=-=-=-=-=-=-=");
+      console.log(fbResponse);
     }
   })
 )(CreateAccountView);
