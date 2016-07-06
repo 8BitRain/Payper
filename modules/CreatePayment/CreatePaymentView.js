@@ -22,16 +22,16 @@ class CreatePaymentView extends React.Component {
     super(props);
 
     this.state = {
-      inputting: "name",
+      inputting: "frequency",
 
       // Payment props
-      to: "Brady",
+      to: "",
       from: "",
       memo: "",
       frequency: "month",
-      totalCost: "120",
-      eachCost: "10",
-      totalPayments: "12",
+      totalCost: "",
+      eachCost: "",
+      totalPayments: "",
       completedPayments: "0"
     }
 
@@ -74,18 +74,8 @@ class CreatePaymentView extends React.Component {
       case "name":
         return(
 
-          <View style={[containers.container]}>
-
-            { /* Summary
-            <View style={[{flex: 0.15}, containers.padHeader, {backgroundColor: colors.white}]}>
-              <Text
-                style={[typography.general, typography.fontSizeNote, typography.marginSides, {color: colors.darkGrey}]}>
-                ____ is getting paid ___ per ___ for ___.
-              </Text>
-            </View>
-            */ }
-
-            <View style={[{flex: 0.85, backgroundColor: colors.darkGrey}, containers.padHeader]}>
+          <View style={[containers.container, {backgroundColor: colors.darkGrey}]}>
+            <View style={containers.padHeader}>
               { /* Input */ }
               <View>
                 <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, {color: colors.white}]}>Who&#39;s getting paid?</Text>
@@ -98,12 +88,12 @@ class CreatePaymentView extends React.Component {
                   {this.state.to}
                 </Text>
 
-                  { /* Arrow nav buttons */ }
-                  <View style={containers.padHeader}>
-                    <ArrowNav
-                    arrowNavProps={this.arrowNavProps}
-                    callbackRight={() => { this.setState({inputting: "frequency"}); }} />
-                  </View>
+                { /* Arrow nav buttons */ }
+                <View style={containers.padHeader}>
+                  <ArrowNav
+                  arrowNavProps={this.arrowNavProps}
+                  callbackRight={() => { this.setState({inputting: "frequency"}); }} />
+                </View>
               </View>
             </View>
 
@@ -116,37 +106,45 @@ class CreatePaymentView extends React.Component {
       case "frequency":
         return(
 
-          <View style={[containers.container]}>
+          <View style={[containers.container, {backgroundColor: colors.darkGrey}]}>
+            <View style={containers.padHeader}>
 
-            { /* Summary
-            <View style={[{flex: 0.15}, containers.padHeader, {backgroundColor: colors.white}]}>
-              <Text
-                style={[typography.general, typography.fontSizeNote, typography.marginSides, {color: colors.darkGrey}]}>
-                ____ is getting paid ___ per ___ for ___.
-              </Text>
-            </View>
-            */ }
-
-            <View style={[{flex: 0.85, backgroundColor: colors.darkGrey}, containers.padHeader]}>
-              { /* Input */ }
-              <View>
-                <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, {color: colors.white}]}>Who&#39;s getting paid?</Text>
-                <TextInput
-                  style={[typography.textInput, typography.marginSides, typography.marginBottom, {color: colors.white}]}
-                  placeholder={"John Doe"}
-                  onChangeText={(text) => { this.setState({to: text}); }} />
-
-                <Text style={[typography.textInput, typography.marginSides, typography.marginBottom, {color: colors.white}]}>
-                  {this.state.to}
+              { /* Prompt */ }
+              <View style={[{flex: 0.2, flexDirection: "row", justifyContent: "center"}]}>
+                <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {color: colors.white}]}>
+                  {this.state.to} is getting paid
                 </Text>
-
-                  { /* Arrow nav buttons */ }
-                  <View style={containers.padHeader}>
-                    <ArrowNav
-                    arrowNavProps={this.arrowNavProps}
-                    callbackRight={() => { console.log(this.state) }} />
-                  </View>
               </View>
+
+              { /* Input */ }
+              <View style={[{flex: 1, alignItems: "center", paddingTop: 45}]}>
+
+                <View style={[{flexDirection: "row", justifyContent: "center"}]}>
+                  <TextInput
+                    style={[typography.costInput, {width: 100}]}
+                    placeholder={"$5.00"}
+                    onChangeText={(num) => { this.setState({eachCost: num}); }}
+                    keyboardType={"decimal-pad"}
+                    autoFocus={true} />
+                  <Text style={[typography.costInput, {padding: 0, height: 40}]}>
+                    per
+                  </Text>
+                </View>
+
+                <Picker
+                  style={typography.picker}
+                  itemStyle={typography.pickerItem}
+                  selectedValue={this.state.frequency}
+                  onValueChange={(freq) => this.setState({frequency: freq})}>
+                  <Picker.Item label="year" value="yearly" />
+                  <Picker.Item label="month" value="monthly" />
+                  <Picker.Item label="week" value="weekly" />
+                </Picker>
+              </View>
+
+
+              { /* Filler */ }
+              <View style={[{flex: 0.2}]} />
             </View>
 
             { /* Header */ }

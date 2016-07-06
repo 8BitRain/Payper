@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import colors from './colors';
 
 const typography = StyleSheet.create({
   // General typography styles
@@ -18,14 +19,27 @@ const typography = StyleSheet.create({
     height: 40,
     backgroundColor: "transparent",
     padding: 10,
-    paddingLeft: 0,
-    color: "#99ECFB"
+    color: "#99ECFB",
+  },
+
+  costInput: {
+    fontSize: 30,
+    color: colors.white,
+  },
+
+  picker: {
+    width: 100,
+  },
+
+  pickerItem: {
+    color: colors.white,
+    fontSize: 25,
   },
 
   // Helper styles
   marginLeft: { marginLeft: 20 },
   marginBottom: { marginBottom: 20 },
-  marginTop: { marginBottom: 20 },
+  marginTop: { marginTop: 20 },
   marginRight: { marginBottom: 20 },
   marginSides: {
     marginLeft: 20,
