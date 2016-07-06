@@ -6,7 +6,7 @@
 export function validateEmail(input) {
   var regexFormat = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(input);
   var validations = {
-    // TODO Check for dupes in Firebase
+    // TODO Check for dupes in database
     unique: true,
     format: regexFormat,
     valid: false

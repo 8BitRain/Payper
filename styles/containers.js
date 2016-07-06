@@ -11,7 +11,7 @@ const containers = StyleSheet.create({
     justifyContent: "center"
   },
   padHeader: {
-    paddingTop: 30
+    paddingTop: 80
   },
 
   //

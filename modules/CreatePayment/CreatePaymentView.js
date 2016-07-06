@@ -15,24 +15,24 @@ import ArrowNav from "../../components/Navigation/Arrows/ArrowDouble";
 import backgrounds from "../../styles/backgrounds";
 import containers from "../../styles/containers";
 import typography from "../../styles/typography";
+import colors from "../../styles/colors";
 
 class CreatePaymentView extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      to: "",
+      inputting: "name",
+
+      // Payment props
+      to: "Brady",
       from: "",
       memo: "",
-      frequency: "monthly",
-      totalCost: "",
-      eachCost: "",
-      totalPayments: "",
-      eachPayment: ""
-    }
-
-    this.paymentProps = {
-
+      frequency: "month",
+      totalCost: "120",
+      eachCost: "10",
+      totalPayments: "12",
+      completedPayments: "0"
     }
 
     // Props to be passed to the header
@@ -49,61 +49,115 @@ class CreatePaymentView extends React.Component {
 
    // Callback functions to be passed to the header
    this.callbackClose = function() { Actions.pop() };
+
+   // Props to be passed to the arrow nav
+   this.arrowNavProps = {
+     left: false,
+     right: true
+   };
+
+   // Callback functions to be passed to the arrow nav
+   this.onPressRight = function() { console.log("next page"); };
   }
 
-  // Picker functionality
-  onValueChange(key, value) {
+  componentWillReceiveProps(nextProps) {
     this.setState({
-      frequency: key,
+      inputting: nextProps.inputting,
+      to: nextProps.to,
     });
   }
 
   render() {
-    return(
-      <View style={[containers.container, backgrounds.white]}>
 
-        { /* Test */ }
-        <View style={[containers.container, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
+    //
+    switch (this.state.inputting) {
+      case "name":
+        return(
 
-          { /* Who? */ }
-          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides]}>Who&#39;s getting coin?</Text>
-          <TextInput
-            style={[typography.textInput, typography.marginSides, typography.marginBottom]}
-            autoCorrect={false}
-            autoFocus={true}
-            placeholderFontFamily="Roboto"
-            placeholderTextColor="#b6b6b6"
-            placeholder={"John Doe"}
-            onChangeText={(text) => {this.state.to = text; console.log(this.state)}} />
+          <View style={[containers.container]}>
 
-          { /* What for? */ }
-          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides]}>What for?</Text>
-          <TextInput
-            style={[typography.textInput, typography.marginSides, typography.marginBottom]}
-            autoCorrect={false}
-            placeholderFontFamily="Roboto"
-            placeholderTextColor="#b6b6b6"
-            placeholder={"Toilet paper"}
-            onChangeText={(text) => {this.state.memo = text; console.log(this.state)}} />
+            { /* Summary
+            <View style={[{flex: 0.15}, containers.padHeader, {backgroundColor: colors.white}]}>
+              <Text
+                style={[typography.general, typography.fontSizeNote, typography.marginSides, {color: colors.darkGrey}]}>
+                ____ is getting paid ___ per ___ for ___.
+              </Text>
+            </View>
+            */ }
 
-          { /* Frequency */ }
-          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides]}>How often</Text>
-          <Picker
-             selectedValue={this.state.frequency}
-             onValueChange={this.onValueChange.bind(this)}>
-             <Picker.Item label="Monthly" value="monthly" />
-             <Picker.Item label="Weekly" value="weekly" />
-             <Picker.Item label="Yearly" value="yearly" />
-           </Picker>
+            <View style={[{flex: 0.85, backgroundColor: colors.darkGrey}, containers.padHeader]}>
+              { /* Input */ }
+              <View>
+                <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, {color: colors.white}]}>Who&#39;s getting paid?</Text>
+                <TextInput
+                  style={[typography.textInput, typography.marginSides, typography.marginBottom, {color: colors.white}]}
+                  placeholder={"John Doe"}
+                  onChangeText={(text) => { this.setState({to: text}); }} />
 
-        </View>
+                <Text style={[typography.textInput, typography.marginSides, typography.marginBottom, {color: colors.white}]}>
+                  {this.state.to}
+                </Text>
 
+                  { /* Arrow nav buttons */ }
+                  <View style={containers.padHeader}>
+                    <ArrowNav
+                    arrowNavProps={this.arrowNavProps}
+                    callbackRight={() => { this.setState({inputting: "frequency"}); }} />
+                  </View>
+              </View>
+            </View>
 
+            { /* Header */ }
+            <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+          </View>
 
-        { /* Header */ }
-        <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
-      </View>
-    );
+        );
+      break;
+      case "frequency":
+        return(
+
+          <View style={[containers.container]}>
+
+            { /* Summary
+            <View style={[{flex: 0.15}, containers.padHeader, {backgroundColor: colors.white}]}>
+              <Text
+                style={[typography.general, typography.fontSizeNote, typography.marginSides, {color: colors.darkGrey}]}>
+                ____ is getting paid ___ per ___ for ___.
+              </Text>
+            </View>
+            */ }
+
+            <View style={[{flex: 0.85, backgroundColor: colors.darkGrey}, containers.padHeader]}>
+              { /* Input */ }
+              <View>
+                <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, {color: colors.white}]}>Who&#39;s getting paid?</Text>
+                <TextInput
+                  style={[typography.textInput, typography.marginSides, typography.marginBottom, {color: colors.white}]}
+                  placeholder={"John Doe"}
+                  onChangeText={(text) => { this.setState({to: text}); }} />
+
+                <Text style={[typography.textInput, typography.marginSides, typography.marginBottom, {color: colors.white}]}>
+                  {this.state.to}
+                </Text>
+
+                  { /* Arrow nav buttons */ }
+                  <View style={containers.padHeader}>
+                    <ArrowNav
+                    arrowNavProps={this.arrowNavProps}
+                    callbackRight={() => { console.log(this.state) }} />
+                  </View>
+              </View>
+            </View>
+
+            { /* Header */ }
+            <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+          </View>
+
+        );
+      break;
+    }
+
+    console.log("INPUTTING: " + this.state.inputting);
   }
 }
 
