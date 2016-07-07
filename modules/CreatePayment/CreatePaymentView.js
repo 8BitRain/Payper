@@ -6,6 +6,7 @@ import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 're
 // Custom helper functions
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
+import * as db from "../../helpers/db";
 
 // Custom components
 import Header from "../../components/Header/Header";
@@ -32,7 +33,9 @@ class CreatePaymentView extends React.Component {
       totalCost: "",
       eachCost: "",
       totalPayments: "",
-      completedPayments: "0"
+      completedPayments: "0",
+
+      filteredUsers: []
     }
 
     // Props to be passed to the header
@@ -47,42 +50,49 @@ class CreatePaymentView extends React.Component {
       numCircles: null
     };
 
-   // Callback functions to be passed to the header
-   this.callbackClose = function() { Actions.pop() };
+    this.brady = {};
 
-   // Props to be passed to the arrow nav
-   this.arrowNavProps = {
-     left: false,
-     right: true
-   };
+     // Callback functions to be passed to the header
+     this.callbackClose = function() { Actions.pop() };
 
-   // Callback functions to be passed to the arrow nav
-   this.onPressRight = function() { console.log("next page"); };
+     // Props to be passed to the arrow nav
+     this.arrowNavProps = {
+       left: false,
+       right: true
+     };
+
+     // Callback functions to be passed to the arrow nav
+     this.onPressRight = function() { console.log("next page"); };
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       inputting: nextProps.inputting,
       to: nextProps.to,
+      from: nextProps.from,
+      memo: nextProps.memo,
+      frequency: nextProps.frequency,
+      totalCost: nextProps.totalCost,
+      eachCost: nextProps.eachCost,
+      totalPayments: nextProps.totalPayments,
+      completedPayments: nextProps.completedPayments,
+      filteredUsers: nextProps.filteredUsers
     });
   }
 
-  async test() {
-    try {
-      const value = await AsyncStorage.getItem('@Store:users');
-      if (value !== null){
-        // We have data!!
-        console.log(JSON.parse(value));
-      }
-    } catch (error) {
-      // Error retrieving data
-      console.log("ASYNC ERROR: " + error);
-    }
+  // async filterUsers(filter) {
+  //   var re = new RegExp(filter + '.+$', 'i');
+  //   var users = this.allUsers.filter(function(e, i, a){
+  //     return e.search(re) != -1;
+  //   });
+  //   this.setState({filteredUsers: users});
+  // }
+
+  async filterUsers(text) {
+    console.log(db.getAllUsers());
   }
 
   render() {
-
-    this.test();
 
     //
     switch (this.state.inputting) {
@@ -97,10 +107,10 @@ class CreatePaymentView extends React.Component {
                 <TextInput
                   style={[typography.textInput, typography.marginSides, typography.marginBottom, {color: colors.white}]}
                   placeholder={"John Doe"}
-                  onChangeText={(text) => { this.setState({to: text}); }} />
+                  onChangeText={(text) => { this.filterUsers(text); }} />
 
                 <Text style={[typography.textInput, typography.marginSides, typography.marginBottom, {color: colors.white}]}>
-                  {this.state.to}
+                  {this.state.filteredUsers}
                 </Text>
 
                 { /* Arrow nav buttons */ }

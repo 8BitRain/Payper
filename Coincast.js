@@ -45,59 +45,80 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
 };
 
 
-const usersRef = new Firebase("https://coincast.firebaseio.com/usernames");
+var usersRef = new Firebase("https://coincast.firebaseio.com/usernames");
 
 /**
-  *   Each time a user is added to Firebase, persist it to async storage
-  *   (this doubles as initialization)
+  *   Initialize async storage
 **/
-usersRef.on("child_added", async function(childSnapshot, prevChildKey) {
-  console.log("Got: " + childSnapshot.val());
-  console.log("Key: " + childSnapshot.key());
+usersRef.once("value", async function(snapshot) {
+  var users = snapshot.val();
 
-  // Persist user data to async storage
+  console.log("Got");
+  console.log("=-=-=-=-=-=-=-=-=-=");
+  console.log(users);
+
   try {
-    console.log("ADDING: " + childSnapshot.key());
-    await AsyncStorage.setItem('@Users:' + childSnapshot.key(), JSON.stringify(childSnapshot.val()), async function() {
-      console.log("Updated @Users:");
-
-
-      try {
-        const value = await AsyncStorage.getItem('@Store:users');
-        if (value !== null){
-          // We have data!!
-          console.log(JSON.parse(value));
-        }
-      } catch (error) {
-        // Error retrieving data
-        console.log("ASYNC ERROR: " + error);
-      }
-
-
-    });
+    for (var user in users)
+      await AsyncStorage.setItem('@Users:' + user, JSON.stringify(users[user]));
   } catch (error) {
-    console.log("Error persisting data to async storage: " + error);
+    console.log("Error persisting Firebase to async storage: ");
+    console.log(error);
   }
-}, function (errorObject) {
-  console.log("The Firebase read failed: " + errorObject.code);
+}, function (error) {
+  console.log("The Firebase read failed: " + error.code);
 });
 
-/**
-  *   Each time a user is added to Firebase, persist it to async storage
-  *   (this doubles as initialization)
-**/
-usersRef.on("child_removed", async function(oldChildSnapshot) {
-  console.log("Removing user " + oldChildSnapshot.key());
-
-  // Remove user data from async storage
-  try {
-    await AsyncStorage.removeItem('@Users:' + oldChildSnapshot.key());
-  } catch (error) {
-    console.log("Error removing data from async storage: " + error);
-  }
-}, function (errorObject) {
-  console.log("The Firebase read failed: " + errorObject.code);
-});
+// /**
+//   *   Each time a user is added to Firebase, persist it to async storage
+//   *   (this doubles as initialization)
+// **/
+// usersRef.on("child_added", async function(childSnapshot, prevChildKey) {
+//   console.log("Got: " + childSnapshot.val());
+//   console.log("Key: " + childSnapshot.key());
+//
+//   // Persist user data to async storage
+//   try {
+//     console.log("ADDING: " + childSnapshot.key());
+//     await AsyncStorage.setItem('@Users:' + childSnapshot.key(), JSON.stringify(childSnapshot.val()), async function() {
+//       console.log("Updated @Users:");
+//
+//
+//       try {
+//         const value = await AsyncStorage.getItem('@Store:users');
+//         if (value !== null){
+//           // We have data!!
+//           console.log(JSON.parse(value));
+//         }
+//       } catch (error) {
+//         // Error retrieving data
+//         console.log("ASYNC ERROR: " + error);
+//       }
+//
+//
+//     });
+//   } catch (error) {
+//     console.log("Error persisting data to async storage: " + error);
+//   }
+// }, function (errorObject) {
+//   console.log("The Firebase read failed: " + errorObject.code);
+// });
+//
+// /**
+//   *   Each time a user is added to Firebase, persist it to async storage
+//   *   (this doubles as initialization)
+// **/
+// usersRef.on("child_removed", async function(oldChildSnapshot) {
+//   console.log("Removing user " + oldChildSnapshot.key());
+//
+//   // Remove user data from async storage
+//   try {
+//     await AsyncStorage.removeItem('@Users:' + oldChildSnapshot.key());
+//   } catch (error) {
+//     console.log("Error removing data from async storage: " + error);
+//   }
+// }, function (errorObject) {
+//   console.log("The Firebase read failed: " + errorObject.code);
+// });
 
 
 export default class Coincast extends React.Component {
