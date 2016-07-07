@@ -22,13 +22,13 @@ class CreatePaymentView extends React.Component {
     super(props);
 
     this.state = {
-      inputting: "frequency",
+      inputting: "name",
 
       // Payment props
       to: "",
       from: "",
       memo: "",
-      frequency: "month",
+      frequency: "weekly",
       totalCost: "",
       eachCost: "",
       totalPayments: "",
