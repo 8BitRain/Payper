@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, Picker} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, Picker, AsyncStorage} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 
@@ -67,7 +67,22 @@ class CreatePaymentView extends React.Component {
     });
   }
 
+  async test() {
+    try {
+      const value = await AsyncStorage.getItem('@Store:users');
+      if (value !== null){
+        // We have data!!
+        console.log(JSON.parse(value));
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.log("ASYNC ERROR: " + error);
+    }
+  }
+
   render() {
+
+    this.test();
 
     //
     switch (this.state.inputting) {

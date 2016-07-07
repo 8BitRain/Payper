@@ -1,9 +1,10 @@
 // Dependencies
 import React from 'react';
-import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native'
+import {AppRegistry, Navigator, StyleSheet, Text, View, AsyncStorage} from 'react-native'
 import {Scene, Reducer, Router, Modal, Actions} from 'react-native-router-flux'
 import Error from './components/Error'
 import Button from "react-native-button";
+import Firebase from 'firebase';
 
 // Custom components
 import LandingView from './components/LandingView'
@@ -43,8 +44,68 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
   return style;
 };
 
+
+const usersRef = new Firebase("https://coincast.firebaseio.com/usernames");
+
+/**
+  *   Each time a user is added to Firebase, persist it to async storage
+  *   (this doubles as initialization)
+**/
+usersRef.on("child_added", async function(childSnapshot, prevChildKey) {
+  console.log("Got: " + childSnapshot.val());
+  console.log("Key: " + childSnapshot.key());
+
+  // Persist user data to async storage
+  try {
+    console.log("ADDING: " + childSnapshot.key());
+    await AsyncStorage.setItem('@Users:' + childSnapshot.key(), JSON.stringify(childSnapshot.val()), async function() {
+      console.log("Updated @Users:");
+
+
+      try {
+        const value = await AsyncStorage.getItem('@Store:users');
+        if (value !== null){
+          // We have data!!
+          console.log(JSON.parse(value));
+        }
+      } catch (error) {
+        // Error retrieving data
+        console.log("ASYNC ERROR: " + error);
+      }
+
+
+    });
+  } catch (error) {
+    console.log("Error persisting data to async storage: " + error);
+  }
+}, function (errorObject) {
+  console.log("The Firebase read failed: " + errorObject.code);
+});
+
+/**
+  *   Each time a user is added to Firebase, persist it to async storage
+  *   (this doubles as initialization)
+**/
+usersRef.on("child_removed", async function(oldChildSnapshot) {
+  console.log("Removing user " + oldChildSnapshot.key());
+
+  // Remove user data from async storage
+  try {
+    await AsyncStorage.removeItem('@Users:' + oldChildSnapshot.key());
+  } catch (error) {
+    console.log("Error removing data from async storage: " + error);
+  }
+}, function (errorObject) {
+  console.log("The Firebase read failed: " + errorObject.code);
+});
+
+
 export default class Coincast extends React.Component {
+
   render() {
+
+    // this.test();
+
     return (
       <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
         <Scene key="modal" component={Modal} >
