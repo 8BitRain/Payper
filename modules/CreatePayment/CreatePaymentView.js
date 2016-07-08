@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, Picker, AsyncStorage} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, Picker, AsyncStorage, Dimensions, DeviceEventEmitter} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 
@@ -37,43 +37,44 @@ class CreatePaymentView extends React.Component {
       completedPayments: "0",
 
       // Storage for predictive user search
-      allUsers: [],
+      allUsers: {},
       filteredUsers: [],
       filtered: false,
 
       // Hack for resizing TextInput for cost to be the width of the text it contains
-      costInputWidth: 50,
-    }
+      costInputWidth: 120,
 
-    // Props to be passed to the header
-    this.headerProps = {
-      types: {
-        "paymentIcons": true,
-        "circleIcons": false,
-        "settingsIcon": false,
-        "closeIcon": true
+      // Props to be passed to the arrow nav
+      arrowNavProps: {
+        left: false,
+        right: true,
       },
-      index: 0,
-      numCircles: null
-    };
+
+      // Props to be passed to the header
+      headerProps: {
+        types: {
+          "paymentIcons": true,
+          "circleIcons": false,
+          "settingsIcon": false,
+          "closeIcon": true,
+        },
+        index: 0,
+        numCircles: null,
+      },
+
+      // Used to reposition view around keyboard
+      kbHeight: 0,
+      vpHeight: 0,
+    }
 
      // Callback functions to be passed to the header
      this.callbackClose = function() { Actions.pop() };
 
-     // Props to be passed to the arrow nav
-     this.arrowNavProps = {
-       left: false,
-       right: true
-     };
-
-     // Callback functions to be passed to the arrow nav
-     this.onPressRight = function() { console.log("next page"); };
-
      // TODO: Dynamically populate this with our user Firebase
      this.allUsers = ["@Brady-Sheridan", "@Mohsin-Khan", "@Vash-Marada"];
-     this.getAllUsers(function(users) {
-       this.test = users;
-     });
+    //  this.getAllUsers(function(users) {
+    //    this.test = users;
+    //  });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -91,7 +92,10 @@ class CreatePaymentView extends React.Component {
       allUsers: nextProps.allusers,
       filteredUsers: nextProps.filteredUsers,
       filtered: nextProps.filtered,
-      costInputWidth: nextProps.costInputWidth
+      costInputWidth: nextProps.costInputWidth,
+      arrowNavProps: nextProps.headerProps,
+      headerProps: nextProps.headerProps,
+      kbHeight: nextProps.kbHeight,
     });
   }
 
@@ -108,11 +112,11 @@ class CreatePaymentView extends React.Component {
     }
   }
 
-  async getAllUsers(callback) {
-    await db.returnAllUsers(function(users) {
-      console.log(users);
-    });
-  }
+  // async getAllUsers(callback) {
+  //   await db.returnAllUsers(function(users) {
+  //     console.log(users);
+  //   });
+  // }
 
   resizeTextInput() {
     console.log("testing");
@@ -122,7 +126,14 @@ class CreatePaymentView extends React.Component {
     });
   }
 
+  componentDidMount() {
+    _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => { this.setState({kbHeight: e.endCoordinates.height}); });
+    _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => { this.setState({kbHeight: e.endCoordinates.height}); });
+  }
+
   render() {
+
+    // console.log(Dimensions.get('keyboard').width);
 
     switch (this.state.inputting) {
       case "name":
@@ -134,25 +145,27 @@ class CreatePaymentView extends React.Component {
               <View>
                 <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, {color: colors.white}]}>Who&#39;s getting paid?</Text>
                 <TextInput
-                  style={[typography.textInput, typography.marginSides, typography.marginBottom, {color: colors.white}]}
+                  style={[typography.textInput, typography.marginSides, typography.marginBottom, {color: colors.white, paddingLeft: 0}]}
                   placeholder={"John Doe"}
+                  autoFocus={true}
+                  defaultValue={this.state.to}
                   onChangeText={(text) => { this.filterUsers(text); }} />
 
                 <Text style={[typography.textInput, typography.marginSides, typography.marginBottom, {color: colors.white}]}>
                   { (this.state.filtered) ? this.state.filteredUsers : null }
                 </Text>
-
-                { /* Arrow nav buttons */ }
-                <View style={containers.padHeader}>
-                  <ArrowNav
-                  arrowNavProps={this.arrowNavProps}
-                  callbackRight={() => { this.setState({inputting: "frequency"}); }} />
-                </View>
               </View>
             </View>
 
             { /* Header */ }
-            <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+            <Header callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
+
+            { /* Arrow nav buttons */ }
+            <View style={{position: 'absolute', bottom: this.state.kbHeight, left: 0, right: 0}}>
+              <ArrowNav
+              arrowNavProps={this.state.arrowNavProps}
+              callbackRight={() => { this.setState({inputting: "frequency", arrowNavProps: {left: true, right: true} }); }} />
+            </View>
           </View>
 
         );
@@ -187,14 +200,15 @@ class CreatePaymentView extends React.Component {
                   <TextInput
                     style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center'}]}
                     placeholder={"5.00"}
-                    onChangeText={(num) => { this.setState({eachCost: num}); this.resizeTextInput(); }}
+                    onChangeText={(num) => { this.setState({eachCost: num}); }}
                     keyboardType={"decimal-pad"}
                     autoFocus={true} />
                   <Text style={[typography.costInput, {padding: 0, height: 40}]}>
-                    per
+                    per month.
                   </Text>
                 </View>
 
+                { /*
                 <Picker
                   style={typography.picker}
                   itemStyle={typography.pickerItem}
@@ -204,6 +218,15 @@ class CreatePaymentView extends React.Component {
                   <Picker.Item label="month" value="monthly" />
                   <Picker.Item label="week" value="weekly" />
                 </Picker>
+                */ }
+              </View>
+
+              { /* Arrow nav buttons */ }
+              <View style={containers.padHeader}>
+                <ArrowNav
+                arrowNavProps={this.state.arrowNavProps}
+                callbackRight={() => { this.setState({inputting: "frequency", arrowNavProps: {left: true, right: true} }); }}
+                callbackLeft={() => { this.setState({inputting: "name", arrowNavProps: {left: false, right: true} }); }} />
               </View>
 
 
@@ -212,7 +235,7 @@ class CreatePaymentView extends React.Component {
             </View>
 
             { /* Header */ }
-            <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+            <Header callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
           </View>
 
         );

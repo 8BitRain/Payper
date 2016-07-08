@@ -10,6 +10,12 @@ export function fadeIn(animationProps) {
   ).start();                // Don't forget start!
 };
 
+export function slideUp(animationProps) {
+  Animated.timing(
+    
+  ).start();
+};
+
 // export function slideDown(animationProps) {
 //   Animated.timing(
 //     animationProps.height,

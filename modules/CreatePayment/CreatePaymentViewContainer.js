@@ -1,6 +1,7 @@
 import {connect} from 'react-redux';
 import * as dispatchFunctions from  './CreatePaymentState';
 import CreatePaymentView from './CreatePaymentView';
+import * as Firebase from '../../services/Firebase';
 
 /**
   *   Connect function for CreateAccountView.js
@@ -24,7 +25,13 @@ export default connect(
     // Creates data
     dispatchCreatePayment(data) {
       console.log("=-=-=  REACHED dispatchCreatePayment(data)  =-=-=")
+    },
+
+    // Fetches users from FB
+    getUsers() {
+      return Firebase.getUsers();
     }
+
 
   })
 )(CreatePaymentView);

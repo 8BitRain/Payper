@@ -15,3 +15,12 @@ export function createAccount(data) {
   .done();
 
 }
+
+export function getUsers() {
+  var usersRef = new Firebase("https://brady.firebaseio.com/users");
+  usersRef.once("value", async function(snapshot) {
+    return snapshot.val();
+  }, function (error) {
+    console.log("The Firebase read failed: " + error.code);
+  });
+}

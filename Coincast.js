@@ -45,28 +45,28 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
 };
 
 
-var usersRef = new Firebase("https://coincast.firebaseio.com/usernames");
-
-/**
-  *   Initialize async storage
-**/
-usersRef.once("value", async function(snapshot) {
-  var users = snapshot.val();
-
-  console.log("Got");
-  console.log("=-=-=-=-=-=-=-=-=-=");
-  console.log(users);
-
-  try {
-    for (var user in users)
-      await AsyncStorage.setItem('@Users:' + user, JSON.stringify(users[user]));
-  } catch (error) {
-    console.log("Error persisting Firebase to async storage: ");
-    console.log(error);
-  }
-}, function (error) {
-  console.log("The Firebase read failed: " + error.code);
-});
+// var usersRef = new Firebase("https://brady.firebaseio.com/users");
+//
+// /**
+//   *   Initialize async storage
+// **/
+// usersRef.once("value", async function(snapshot) {
+//   var users = snapshot.val();
+//
+//   console.log("Got");
+//   console.log("=-=-=-=-=-=-=-=-=-=");
+//   console.log(users);
+//
+//   try {
+//     for (var user in users)
+//       await AsyncStorage.setItem('@Users:' + user, JSON.stringify(users[user]));
+//   } catch (error) {
+//     console.log("Error persisting Firebase to async storage: ");
+//     console.log(error);
+//   }
+// }, function (error) {
+//   console.log("The Firebase read failed: " + error.code);
+// });
 
 // /**
 //   *   Each time a user is added to Firebase, persist it to async storage
