@@ -2,32 +2,48 @@
 import {AsyncStorage} from 'react-native';
 
 /**
-  *   Gets user list from AsyncStorage and assigns it to this.allUsers
+  *   Returns array populated by getAllUsers()
+**/
+export async function returnAllUsers(callback) {
+  try {
+    await getAllUsers(function(users) {
+      // Send users back to caller
+      console.log("users in returnAllUsers(): " + JSON.stringify(users));
+      callback(users);
+    });
+  } catch (error) {
+    console.log("Error in returnAllUsers():")
+    console.log(error);
+  }
+}
+
+/**
+  *   Gets all users from AsyncStorage and pushes their key value pairs to an array
   *   @return: JSON formatted user list
 **/
-export async function getAllUsers() {
+async function getAllUsers(callback) {
   try {
-    const users = await AsyncStorage.getAllKeys();
 
-    if (users !== null) {
-      // We'll store our user objects here
-      var usersArray = [];
+    // Fetch all keys from AsyncStorage
+    await AsyncStorage.getAllKeys().then(async function(keys) {
+      var users = {};
 
-      users = Promise.resolve(users);
-      users.then(function(val) {
-
-        for (var i in val) {
-          if (val[i].indexOf("@Users") > -1) {
-
-          }
+      // Populate users[]
+      for (var i in keys) {
+        if (keys[i].indexOf("@Users:@") > -1) {
+          var username = keys[i].split(":")[1];
+          await getUserByUsername(username, function(username, user) {
+            users[username] = JSON.parse(user);
+          });
         }
+      }
 
-      });
+      // Send users back to caller
+      callback(users);
+    });
 
-      return usersArray;
-    }
   } catch (error) {
-    console.log("Error reading from AsyncStorage:");
+    console.log("Error reading from AsyncStorage in getAllUsers():");
     console.log(error);
   }
 }
@@ -36,13 +52,13 @@ export async function getAllUsers() {
   *   Gets one user by username from AsyncStorage
   *   @return: JSON formatted user
 **/
-export async function getUserbyUsername(username) {
+export async function getUserByUsername(username, callback) {
   try {
-    const user = await AsyncStorage.getItem('@Users:' + username);
-    if (user !== null)
-      return user;
+    await AsyncStorage.getItem('@Users:' + username).then(function(val) {
+      callback(username, val);
+    });
   } catch (error) {
-    console.log("Error reading from AsyncStorage:");
+    console.log("Error reading from AsyncStorage in getUserByUsername():");
     console.log(error);
   }
 }

@@ -35,7 +35,9 @@ class CreatePaymentView extends React.Component {
       totalPayments: "",
       completedPayments: "0",
 
-      filteredUsers: []
+      allUsers: [],
+      filteredUsers: [],
+      filtered: false
     }
 
     // Props to be passed to the header
@@ -63,6 +65,12 @@ class CreatePaymentView extends React.Component {
 
      // Callback functions to be passed to the arrow nav
      this.onPressRight = function() { console.log("next page"); };
+
+     this.allUsers = ["@Brady-Sheridan", "@Mohsin-Khan", "@Vash-Marada"];
+
+     this.getAllUsers(function(users) {
+       this.test = users;
+     });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -80,21 +88,27 @@ class CreatePaymentView extends React.Component {
     });
   }
 
-  // async filterUsers(filter) {
-  //   var re = new RegExp(filter + '.+$', 'i');
-  //   var users = this.allUsers.filter(function(e, i, a){
-  //     return e.search(re) != -1;
-  //   });
-  //   this.setState({filteredUsers: users});
-  // }
+  filterUsers(filter) {
+    var re = new RegExp(filter + '.+$', 'i');
+    var users = this.allUsers.filter(function(e, i, a){
+      return e.search(re) != -1;
+    });
+    this.setState({filteredUsers: users});
+    if (users.length < this.allUsers.length) {
+      this.setState({filtered: true});
+    } else {
+      this.setState({filtered: false});
+    }
+  }
 
-  async filterUsers(text) {
-    console.log(db.getAllUsers());
+  async getAllUsers(callback) {
+    await db.returnAllUsers(function(users) {
+      console.log(users);
+    });
   }
 
   render() {
 
-    //
     switch (this.state.inputting) {
       case "name":
         return(
@@ -110,7 +124,7 @@ class CreatePaymentView extends React.Component {
                   onChangeText={(text) => { this.filterUsers(text); }} />
 
                 <Text style={[typography.textInput, typography.marginSides, typography.marginBottom, {color: colors.white}]}>
-                  {this.state.filteredUsers}
+                  { (this.state.filtered) ? this.state.filteredUsers : null }
                 </Text>
 
                 { /* Arrow nav buttons */ }
