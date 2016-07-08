@@ -25,6 +25,7 @@ const typography = StyleSheet.create({
   costInput: {
     fontSize: 30,
     color: colors.white,
+    padding: 0,
   },
 
   picker: {

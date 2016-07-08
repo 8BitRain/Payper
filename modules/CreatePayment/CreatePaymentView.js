@@ -23,6 +23,7 @@ class CreatePaymentView extends React.Component {
     super(props);
 
     this.state = {
+      // Keeps track of pagination
       inputting: "name",
 
       // Payment props
@@ -35,9 +36,13 @@ class CreatePaymentView extends React.Component {
       totalPayments: "",
       completedPayments: "0",
 
+      // Storage for predictive user search
       allUsers: [],
       filteredUsers: [],
-      filtered: false
+      filtered: false,
+
+      // Hack for resizing TextInput for cost to be the width of the text it contains
+      costInputWidth: 50,
     }
 
     // Props to be passed to the header
@@ -52,8 +57,6 @@ class CreatePaymentView extends React.Component {
       numCircles: null
     };
 
-    this.brady = {};
-
      // Callback functions to be passed to the header
      this.callbackClose = function() { Actions.pop() };
 
@@ -66,8 +69,8 @@ class CreatePaymentView extends React.Component {
      // Callback functions to be passed to the arrow nav
      this.onPressRight = function() { console.log("next page"); };
 
+     // TODO: Dynamically populate this with our user Firebase
      this.allUsers = ["@Brady-Sheridan", "@Mohsin-Khan", "@Vash-Marada"];
-
      this.getAllUsers(function(users) {
        this.test = users;
      });
@@ -84,7 +87,11 @@ class CreatePaymentView extends React.Component {
       eachCost: nextProps.eachCost,
       totalPayments: nextProps.totalPayments,
       completedPayments: nextProps.completedPayments,
-      filteredUsers: nextProps.filteredUsers
+      filteredUsers: nextProps.filteredUsers,
+      allUsers: nextProps.allusers,
+      filteredUsers: nextProps.filteredUsers,
+      filtered: nextProps.filtered,
+      costInputWidth: nextProps.costInputWidth
     });
   }
 
@@ -104,6 +111,14 @@ class CreatePaymentView extends React.Component {
   async getAllUsers(callback) {
     await db.returnAllUsers(function(users) {
       console.log(users);
+    });
+  }
+
+  resizeTextInput() {
+    console.log("testing");
+    this.refs.costInputClone.measure((ox, oy, width, height) => {
+      width += 25;
+      this.setState({costInputWidth: width});
     });
   }
 
@@ -148,6 +163,13 @@ class CreatePaymentView extends React.Component {
           <View style={[containers.container, {backgroundColor: colors.darkGrey}]}>
             <View style={containers.padHeader}>
 
+              { /* Hidden (off-screen) element that is measured and used to resize TextInput for cost input */ }
+              <Text
+                style={[typography.costInput, {position: 'absolute', top: -1000, left: -1000}]}
+                ref="costInputClone">
+                {this.state.eachCost}
+              </Text>
+
               { /* Prompt */ }
               <View style={[{flex: 0.2, flexDirection: "row", justifyContent: "center"}]}>
                 <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {color: colors.white}]}>
@@ -159,10 +181,13 @@ class CreatePaymentView extends React.Component {
               <View style={[{flex: 1, alignItems: "center", paddingTop: 45}]}>
 
                 <View style={[{flexDirection: "row", justifyContent: "center"}]}>
+                  <Text style={[typography.costInput, {padding: 0, height: 40}]}>
+                    $
+                  </Text>
                   <TextInput
-                    style={[typography.costInput, {width: 100}]}
-                    placeholder={"$5.00"}
-                    onChangeText={(num) => { this.setState({eachCost: num}); }}
+                    style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center'}]}
+                    placeholder={"5.00"}
+                    onChangeText={(num) => { this.setState({eachCost: num}); this.resizeTextInput(); }}
                     keyboardType={"decimal-pad"}
                     autoFocus={true} />
                   <Text style={[typography.costInput, {padding: 0, height: 40}]}>
