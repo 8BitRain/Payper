@@ -67,6 +67,8 @@ class CreatePaymentView extends React.Component {
       vpHeight: 0,
     }
 
+    this.kbOffset = new Animated.Value(0);
+
      // Callback functions to be passed to the header
      this.callbackClose = function() { Actions.pop() };
 
@@ -126,14 +128,38 @@ class CreatePaymentView extends React.Component {
     });
   }
 
-  componentDidMount() {
-    _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => { this.setState({kbHeight: e.endCoordinates.height}); });
-    _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => { this.setState({kbHeight: e.endCoordinates.height}); });
+  _keyboardWillShow(e) {
+    Animated.spring(this.kbOffset, {
+      toValue: e.endCoordinates.height,
+      friction: 6
+    }).start();
   }
 
-  render() {
+  _keyboardWillHide(e) {
+    Animated.spring(this.kbOffset, {
+      toValue: 0,
+      friction: 6
+    }).start();
+  }
 
-    // console.log(Dimensions.get('keyboard').width);
+  /**
+    *   Add keyboard measuring event listeners
+  **/
+  componentDidMount() {
+    _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
+    _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+  }
+
+  /**
+    *   Remove keyboard measuring event listeners
+  **/
+  componentWillUnmount() {
+    _keyboardWillShowSubscription.remove();
+    _keyboardWillHideSubscription.remove();
+  }
+
+
+  render() {
 
     switch (this.state.inputting) {
       case "name":
@@ -161,11 +187,11 @@ class CreatePaymentView extends React.Component {
             <Header callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
 
             { /* Arrow nav buttons */ }
-            <View style={{position: 'absolute', bottom: this.state.kbHeight, left: 0, right: 0}}>
+            <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
               <ArrowNav
               arrowNavProps={this.state.arrowNavProps}
               callbackRight={() => { this.setState({inputting: "frequency", arrowNavProps: {left: true, right: true} }); }} />
-            </View>
+            </Animated.View>
           </View>
 
         );
