@@ -77,7 +77,12 @@ class CreatePaymentView extends React.Component {
      this.callbackClose = function() { Actions.pop() };
 
      // TODO: Dynamically populate this with our user Firebase
-     this.allUsers = ["@Brady-Sheridan", "@Mohsin-Khan", "@Vash-Marada"];
+     this.allUsers = [
+       {"username": "@Brady-Sheridan", "first_name": "Brady", "last_name": "Sheridan", "pic": "https://scontent-ord1-1.xx.fbcdn.net/v/t1.0-9/13173817_1107390755948052_7502054529648141346_n.jpg?oh=7ca6a29cceb752f7ddb55d07e9a488b7&oe=57FCE45D"},
+       {"username": "@Mohsin-Khan", "first_name": "Mohsin", "last_name": "Khan", "pic": "https://pbs.twimg.com/profile_images/588854250391863296/EKUaM8dC.jpg"},
+       {"username": "@Vash-Marada", "first_name": "Vash", "last_name": "Marada", "pic": "https://scontent-ord1-1.xx.fbcdn.net/v/t1.0-9/13119085_492301314302263_191875338764929565_n.jpg?oh=18636edb3dd117b7368d95674ffd4c28&oe=582CD18E"},
+       {"username": "@Eric-Smith", "first_name": "Eric", "last_name": "Smith", "pic": "https://scontent-ord1-1.xx.fbcdn.net/v/t1.0-9/13173747_10208399416016147_5050055134276872233_n.jpg?oh=b067f7ac92d96aa953baa82ee3121d88&oe=5835188B"},
+     ];
     //  this.getAllUsers(function(users) {
     //    this.test = users;
     //  });
@@ -106,27 +111,29 @@ class CreatePaymentView extends React.Component {
   }
 
   filterUsers(filter) {
-    var re = new RegExp(filter + '.+$', 'i');
-    var users = this.allUsers.filter(function(e, i, a){
-      return e.search(re) != -1;
-    });
-    this.setState({filteredUsers: users});
-    if (users.length < this.allUsers.length) {
-      this.setState({filtered: true});
+    if (filter == "") {
+      this.setState({filteredUsers: []});
     } else {
-      this.setState({filtered: false});
+      // Generate regex with user's input
+      var re = new RegExp(filter + '.+$', 'i');
+
+      // Get users that match this filter
+      var users = this.allUsers.filter(function(e, i, a) {
+        return e.username.search(re) != -1;
+      });
+
+      // Update state resulting in re-render of user previews
+      this.setState({filteredUsers: users});
     }
   }
 
   // Return user preview components for each filtered user
   getUserPreviews() {
     var previews = [];
-    for (var user in this.state.filteredUsers) {
-      previews.push(<UserPreview user={user} width={dimensions.width * 0.9} />);
+    for (var i = 0; i < this.state.filteredUsers.length; i++) {
+      previews.push(<UserPreview key={this.state.filteredUsers[i].username} user={this.state.filteredUsers[i]} width={dimensions.width * 0.9} />);
     };
-    return(
-      { previews }
-    );
+    return previews;
   };
 
   // async getAllUsers(callback) {
