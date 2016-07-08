@@ -9,6 +9,7 @@
 
   <button type="button" onclick="generateCredentials()">Generate Credentials</button>
   <button type="button" onclick="generateToken()">Generate Token</button>
+  <button type="button" onclick="exchangeToken()">Exchange Token</button>
   <form>
     <div>
       <label>Routing number</label>
@@ -38,8 +39,17 @@
 
 </body>
 
+<script>
+var code = <%- JSON.stringify(code) %>
+</script>
+
 <script type="text/javascript">
 var userToken;
+//var code = <%= code %>
+
+console.log("Code: " + code);
+
+
 $('form').on('submit', function() {
   if(userToken == null){
     console.log("User token is null");
@@ -78,6 +88,27 @@ function generateToken(){
   oAuthUrl,
   '_blank' // <- This is what makes it open in a new window.
 );*/
+}
+
+function exchangeToken(){
+  if(code != null && code != "undefined"){
+    console.log("Beginning Token Exchange with Dwolla API - https://uat.dwolla.com/oauth/v2/token");
+    console.log("Code is : " + code);
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+      message = xhttp.responseText;
+      console.log(message)
+    } else{
+      console.log(xhttp.responseText);
+    }
+    };
+    xhttp.open("GET", "exchangeToken?code=" + code, true);
+    xhttp.send();
+  } else {
+    console.log("There is no code variable. Code is: " + code);
+  }
+
 }
 
 function generateCredentials(){
