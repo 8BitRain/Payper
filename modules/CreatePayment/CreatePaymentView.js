@@ -11,12 +11,16 @@ import * as db from "../../helpers/db";
 // Custom components
 import Header from "../../components/Header/Header";
 import ArrowNav from "../../components/Navigation/Arrows/ArrowDouble";
+import UserPreview from "../../components/Previews/User/User";
 
 // Stylesheets
 import backgrounds from "../../styles/backgrounds";
 import containers from "../../styles/containers";
 import typography from "../../styles/typography";
 import colors from "../../styles/colors";
+
+// Used to size user previews
+var dimensions = Dimensions.get('window');
 
 class CreatePaymentView extends React.Component {
   constructor(props) {
@@ -114,6 +118,17 @@ class CreatePaymentView extends React.Component {
     }
   }
 
+  // Return user preview components for each filtered user
+  getUserPreviews() {
+    var previews = [];
+    for (var user in this.state.filteredUsers) {
+      previews.push(<UserPreview user={user} width={dimensions.width * 0.9} />);
+    };
+    return(
+      { previews }
+    );
+  };
+
   // async getAllUsers(callback) {
   //   await db.returnAllUsers(function(users) {
   //     console.log(users);
@@ -171,15 +186,19 @@ class CreatePaymentView extends React.Component {
               <View>
                 <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, {color: colors.white}]}>Who&#39;s getting paid?</Text>
                 <TextInput
-                  style={[typography.textInput, typography.marginSides, typography.marginBottom, {color: colors.white, paddingLeft: 0}]}
+                  style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15, marginTop: 10}]}
                   placeholder={"John Doe"}
                   autoFocus={true}
                   defaultValue={this.state.to}
-                  onChangeText={(text) => { this.filterUsers(text); }} />
+                  onChangeText={(text) => { this.filterUsers(text); this.setState({to: text}); }} />
 
-                <Text style={[typography.textInput, typography.marginSides, typography.marginBottom, {color: colors.white}]}>
-                  { (this.state.filtered) ? this.state.filteredUsers : null }
-                </Text>
+                { /* Separator */ }
+                <View style={{height: 2.0, backgroundColor: 'transparent'}}></View>
+
+                { /* Dynamically populated user previews */ }
+                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                  { this.getUserPreviews() }
+                </View>
               </View>
             </View>
 
@@ -247,21 +266,20 @@ class CreatePaymentView extends React.Component {
                 */ }
               </View>
 
-              { /* Arrow nav buttons */ }
-              <View style={containers.padHeader}>
-                <ArrowNav
-                arrowNavProps={this.state.arrowNavProps}
-                callbackRight={() => { this.setState({inputting: "frequency", arrowNavProps: {left: true, right: true} }); }}
-                callbackLeft={() => { this.setState({inputting: "name", arrowNavProps: {left: false, right: true} }); }} />
-              </View>
-
-
               { /* Filler */ }
               <View style={[{flex: 0.2}]} />
             </View>
 
             { /* Header */ }
             <Header callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
+
+            { /* Arrow nav buttons */ }
+            <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
+              <ArrowNav
+              arrowNavProps={this.state.arrowNavProps}
+              callbackLeft={() => { this.setState({inputting: "name", arrowNavProps: {left: false, right: true} }); }}
+              callbackRight={() => { this.setState({inputting: "nmu", arrowNavProps: {left: true, right: true} }); }} />
+            </Animated.View>
           </View>
 
         );
