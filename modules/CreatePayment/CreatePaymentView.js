@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, Picker, AsyncStorage, Dimensions, DeviceEventEmitter} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, Picker, AsyncStorage, Dimensions, DeviceEventEmitter, TouchableHighlight} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 
@@ -32,7 +32,7 @@ class CreatePaymentView extends React.Component {
 
       // Payment props
       to: "",
-      from: "",
+      user: {},
       memo: "",
       frequency: "weekly",
       totalCost: "",
@@ -65,10 +65,6 @@ class CreatePaymentView extends React.Component {
         index: 0,
         numCircles: null,
       },
-
-      // Used to reposition view around keyboard
-      kbHeight: 0,
-      vpHeight: 0,
     }
 
     this.kbOffset = new Animated.Value(0);
@@ -92,7 +88,7 @@ class CreatePaymentView extends React.Component {
     this.setState({
       inputting: nextProps.inputting,
       to: nextProps.to,
-      from: nextProps.from,
+      user: nextProps.user,
       memo: nextProps.memo,
       frequency: nextProps.frequency,
       totalCost: nextProps.totalCost,
@@ -106,12 +102,11 @@ class CreatePaymentView extends React.Component {
       costInputWidth: nextProps.costInputWidth,
       arrowNavProps: nextProps.headerProps,
       headerProps: nextProps.headerProps,
-      kbHeight: nextProps.kbHeight,
     });
   }
 
   filterUsers(filter) {
-    if (filter == "") {
+    if (filter == "" || filter == "-" || filter == "@") {
       this.setState({filteredUsers: []});
     } else {
       // Generate regex with user's input
@@ -131,9 +126,27 @@ class CreatePaymentView extends React.Component {
   getUserPreviews() {
     var previews = [];
     for (var i = 0; i < this.state.filteredUsers.length; i++) {
-      previews.push(<UserPreview key={this.state.filteredUsers[i].username} user={this.state.filteredUsers[i]} width={dimensions.width * 0.9} />);
+      var currUser = this.state.filteredUsers[i];
+      previews.push(
+        <UserPreview
+          key={currUser.username}
+          user={currUser}
+          width={dimensions.width * 0.9}
+          callback={() => { this.setState({to: currUser.username, user: currUser}); }} />
+      );
     };
     return previews;
+  };
+
+  // Return user preview for the specified user
+  getUserPreview(user) {
+    return(
+      <UserPreview
+        key={user.username}
+        user={user}
+        width={dimensions.width}
+        callback={() => { this.setState({to: user.username}); }} />
+    );
   };
 
   // async getAllUsers(callback) {
@@ -142,13 +155,13 @@ class CreatePaymentView extends React.Component {
   //   });
   // }
 
-  resizeTextInput() {
-    console.log("testing");
-    this.refs.costInputClone.measure((ox, oy, width, height) => {
-      width += 25;
-      this.setState({costInputWidth: width});
-    });
-  }
+  // resizeTextInput() {
+  //   console.log("testing");
+  //   this.refs.costInputClone.measure((ox, oy, width, height) => {
+  //     width += 25;
+  //     this.setState({costInputWidth: width});
+  //   });
+  // }
 
   _keyboardWillShow(e) {
     Animated.spring(this.kbOffset, {
@@ -225,7 +238,7 @@ class CreatePaymentView extends React.Component {
       case "frequency":
         return(
 
-          <View style={[containers.container, {backgroundColor: colors.darkGrey}]}>
+          <View style={[containers.container, {backgroundColor: colors.white}]}>
             <View style={containers.padHeader}>
 
               { /* Hidden (off-screen) element that is measured and used to resize TextInput for cost input */ }
@@ -235,31 +248,40 @@ class CreatePaymentView extends React.Component {
                 {this.state.eachCost}
               </Text>
 
-              { /* Prompt */ }
-              <View style={[{flex: 0.2, flexDirection: "row", justifyContent: "center"}]}>
-                <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {color: colors.white}]}>
-                  {this.state.to} is getting paid
-                </Text>
-              </View>
+              { /* User preview for the user we are paying or requesting  */ }
+              { this.getUserPreview(this.state.user) }
 
               { /* Input */ }
               <View style={[{flex: 1, alignItems: "center", paddingTop: 45}]}>
-
                 <View style={[{flexDirection: "row", justifyContent: "center"}]}>
-                  <Text style={[typography.costInput, {padding: 0, height: 40}]}>
+                  <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.darkGrey}]}>
                     $
                   </Text>
                   <TextInput
-                    style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center'}]}
+                    style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center', color: colors.darkGrey}]}
                     placeholder={"5.00"}
+                    defaultValue={this.state.eachCost}
                     onChangeText={(num) => { this.setState({eachCost: num}); }}
                     keyboardType={"decimal-pad"}
                     autoFocus={true} />
-                  <Text style={[typography.costInput, {padding: 0, height: 40}]}>
-                    per month.
+                  <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.darkGrey}]}>
+                    / month
                   </Text>
                 </View>
-
+                <View style={[{flexDirection: "row", justifyContent: "center"}]}>
+                  <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.darkGrey}]}>
+                    for
+                  </Text>
+                  <TextInput
+                    style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center', color: colors.darkGrey}]}
+                    placeholder={"12"}
+                    defaultValue={this.state.totalPayments}
+                    onChangeText={(num) => { this.setState({totalPayments: num}); }}
+                    keyboardType={"number-pad"} />
+                  <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.darkGrey}]}>
+                    months.
+                  </Text>
+                </View>
                 { /*
                 <Picker
                   style={typography.picker}
@@ -278,11 +300,12 @@ class CreatePaymentView extends React.Component {
             </View>
 
             { /* Header */ }
-            <Header callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
+            <Header dark callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
 
             { /* Arrow nav buttons */ }
             <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
               <ArrowNav
+              dark
               arrowNavProps={this.state.arrowNavProps}
               callbackLeft={() => { this.setState({inputting: "name", arrowNavProps: {left: false, right: true} }); }}
               callbackRight={() => { this.setState({inputting: "nmu", arrowNavProps: {left: true, right: true} }); }} />
@@ -292,8 +315,6 @@ class CreatePaymentView extends React.Component {
         );
       break;
     }
-
-    console.log("INPUTTING: " + this.state.inputting);
   }
 }
 

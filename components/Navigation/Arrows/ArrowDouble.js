@@ -64,20 +64,19 @@ const styles = StyleSheet.create({
 
 
 // Return a right arrow button
-function getRightArrow(callback) {
+function getRightArrow(callback, dark) {
   return(
     <Button style={{borderColor: "red", borderWidth: 10}} onPress={() => {callback()}}>
-      <Entypo style={styles.iconArrow} name="chevron-thin-right" size={36} color="white"/>
+      <Entypo style={styles.iconArrow} name="chevron-thin-right" size={36} color={(dark) ? "black" : "white"} />
     </Button>
   );
 };
 
-
 // Return a left arrow button
-function getLeftArrow(callback) {
+function getLeftArrow(callback, dark) {
   return(
     <Button onPress={() => {callback()}}>
-      <Entypo style={styles.iconArrow} name="chevron-thin-left" size={36} color="white"/>
+      <Entypo style={styles.iconArrow} name="chevron-thin-left" size={36} color={(dark) ? "black" : "white"} />
     </Button>
   );
 };
@@ -115,12 +114,11 @@ class ArrowNav extends React.Component {
     // END For testing, these will typically be passed as props
   }
   render() {
-    console.log("----- Rendered arrow nav ------");
     return(
       <View style={styles.arrowWrap}>
-        { this.props.arrowNavProps.left ? getLeftArrow(this.props.callbackLeft) : null }
-        { this.props.arrowNavProps.right ? getRightArrow(this.props.callbackRight) : null }
-        { this.props.arrowNavProps.check ? getCheck(this.props.callbackCheck) : null }
+        { this.props.arrowNavProps.left ? getLeftArrow(this.props.callbackLeft, this.props.dark) : null }
+        { this.props.arrowNavProps.right ? getRightArrow(this.props.callbackRight, this.props.dark) : null }
+        { this.props.arrowNavProps.check ? getCheck(this.props.callbackCheck, this.props.dark) : null }
       </View>
     );
   }

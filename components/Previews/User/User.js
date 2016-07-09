@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions, TouchableHighlight} from 'react-native';
 import Button from 'react-native-button';
 
 // Custom styles
@@ -26,15 +26,17 @@ class UserPreview extends React.Component {
   render() {
     console.log("----- Rendered user preview for " + this.props.user.username + " ------");
     return(
-      <View style={[styles.userWrap, {width: this.props.width}]}>
-        <View style={styles.picWrap}>
-          { getUserPic(this.props.user.pic) }
+      <TouchableHighlight onPress={() => { this.props.callback(); }}>
+        <View style={[styles.userWrap, {width: this.props.width}]}>
+          <View style={styles.picWrap}>
+            { getUserPic(this.props.user.pic) }
+          </View>
+          <View ref={"textWrap"} style={styles.textWrap}>
+            <Text style={styles.fullnameText}>{ this.props.user.first_name + " " + this.props.user.last_name }</Text>
+            <Text style={styles.usernameText}>{ this.props.user.username }</Text>
+          </View>
         </View>
-        <View style={styles.textWrap}>
-          <Text style={styles.fullnameText}>{ this.props.user.first_name + " " + this.props.user.last_name }</Text>
-          <Text style={styles.usernameText}>{ this.props.user.username }</Text>
-        </View>
-      </View>
+      </TouchableHighlight>
     );
   }
 };

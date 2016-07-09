@@ -1,23 +1,10 @@
-/**
-  *     TODO DURING IMPLEMENTATION
-  *     --------------------------
-  *     In the header base view, there are class fields called 'types', 'index',
-  *     and 'numCircles'. These are there for testing and, in actuality, should
-  *     be defined in the state and passed in as props.
-  *
-  *     When the page changes, these props change in the state and the header
-  *     is re-rendered.
-**/
-
-
-
-
 // Dependencies
 import React from 'react';
 import {View, Text, TextInput, StyleSheet, Image} from "react-native";
 import Button from "react-native-button";
 import Entypo from "react-native-vector-icons/Entypo"
 
+import colors from '../../styles/colors';
 
 // Header styles
 const styles = StyleSheet.create({
@@ -105,7 +92,7 @@ function getCloseIcon(callback) {
 // Return a settings icon
 function getSettingsIcon() {
   return(
-    <Button onPress={() => {console.log("-----  Opening settings  -----")}}>
+    <Button>
       <Entypo style={styles.iconSettings} name="cog" size={24} color="white"/>
     </Button>
   );
@@ -116,8 +103,8 @@ function getPaymentIcons(index) {
   return(
     <View style={styles.iconWrap}>
       <Image style={[styles.iconPayment, (index == 0) ? styles.iconActive : null]} source={require('./assets/user.png')} />
-      <Image style={[styles.iconPayment, (index == 1) ? styles.iconActive : null]} source={require('./assets/memo.png')} />
-      <Image style={[styles.iconPayment, (index == 2) ? styles.iconActive : null]} source={require('./assets/dollar.png')} />
+      <Image style={[styles.iconPayment, (index == 1) ? styles.iconActive : null]} source={require('./assets/dollar.png')} />
+      <Image style={[styles.iconPayment, (index == 2) ? styles.iconActive : null]} source={require('./assets/memo.png')} />
     </View>
   );
 };
@@ -156,9 +143,8 @@ class Header extends React.Component {
     this.headerProps = this.props.headerProps;
   }
   render() {
-    console.log("----- Rendered header ------");
     return(
-      <View style={styles.headerWrap}>
+      <View style={[styles.headerWrap, (this.props.dark) ? {backgroundColor: colors.darkGrey} : null ]}>
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
           { this.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }

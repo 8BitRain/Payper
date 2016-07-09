@@ -11,9 +11,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 60,
     flexDirection: 'row',
-
-    // borderWidth: 1,
-    // borderColor: 'red',
   },
 
   // Wrap for the image portion of the preview
