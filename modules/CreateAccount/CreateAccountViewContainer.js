@@ -84,7 +84,7 @@ export default connect(
     },
     dispatchCreateAccount(user) {
       // Create account
-      Firebase.signIn(user);
+      Firebase.createAccount(user);
     }
   })
 )(CreateAccountView);

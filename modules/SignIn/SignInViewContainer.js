@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, Dimensions} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, Dimensions, AsyncStorage} from "react-native";
 import Button from "react-native-button";
 import {Reducer, Router, Actions} from 'react-native-router-flux';
 import * as Animations from "../../helpers/animations";
@@ -28,10 +28,32 @@ class SignInView extends React.Component {
       left: false,
       right: true,
     }
+
+    AsyncStorage.getItem('@Store:session_key').then((key) => {
+      console.log("session_key: " + key);
+      Actions.TrackingContainer;
+    }).done();
+
+    this.test = "ASAFS";
   }
 
-  signIn() {
-    Firebase.signIn({email: this.state.email, password: this.state.password});
+  signInWithEmail() {
+    Firebase.signInWithEmail({email: this.state.email, password: this.state.password});
+  }
+
+  componentWillMount() {
+    Firebase.signInWithKey(function(signedIn) {
+      if (signedIn) {
+        console.log(this.test);
+        this.test = 'value';
+        console.log(this.test);
+      } else {
+        console.log("signedIn: " + signedIn);
+      }
+    });
+  }
+
+  componentDidMount() {
   }
 
   render() {
@@ -68,7 +90,7 @@ class SignInView extends React.Component {
         <View style={{position: 'absolute', bottom: 220, left: 0, right: 0}}>
           <ArrowNav
           arrowNavProps={this.arrowNavProps}
-          callbackRight={() => { this.signIn() }} />
+          callbackRight={() => { this.signInWithEmail() }} />
         </View>
       </View>
     );

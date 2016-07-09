@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
 import Button from "react-native-button";
-import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
+import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions, AsyncStorage} from 'react-native-router-flux';
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
 import * as Firebase from "../../services/Firebase";
@@ -54,6 +54,14 @@ class TrackingEmpty extends React.Component {
         this.bouncingArrow();
       }
     );
+    }
+
+    // Check if the user was successfully stored to AsyncStorage
+    componentWillMount() {
+      AsyncStorage.getItem('@Store:user').then((val) => {
+        console.log("=-=-= Signed in user:");
+        console.log(val);
+      });
     }
 
    componentDidMount() {

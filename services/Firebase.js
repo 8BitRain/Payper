@@ -1,4 +1,4 @@
-import ReactNative from "react-native";
+import { ReactNative, AsyncStorage } from "react-native";
 import * as firebase from 'firebase';
 // Initialize Firebase
 const firebaseConfig = {
@@ -46,6 +46,7 @@ export function createAccount(data) {
         console.log("POST response");
         console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
         console.log(responseData);
+        AsyncStorage.setItem("@Store:session_key", token);
       })
       .done();
 
@@ -55,7 +56,7 @@ export function createAccount(data) {
   });
 };
 
-export function signIn(data) {
+export function signInWithEmail(data) {
   firebase.auth().signInWithEmailAndPassword(data.email, data.password).catch(function(error) {
     console.log("=-=-= FIREBASE ERROR =-=-=");
     console.log("errorCode: " +  error.code);
@@ -84,6 +85,8 @@ export function signIn(data) {
         console.log("POST response");
         console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
         console.log(responseData);
+
+
       })
       .done();
 
@@ -93,6 +96,45 @@ export function signIn(data) {
     });
 
   });
+};
+
+export function signInWithKey(callback) {
+
+  AsyncStorage.getItem('@Store:session_key').then((key) => {
+    try {
+      if (key != "") {
+
+        // Send the user object user creation Lambda endpoint
+        var url = "https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get";
+        var data = {
+          token: key,
+        };
+
+        console.log('Sending POST request to ' + url);
+        console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
+
+        fetch(url, {method: "POST", body: JSON.stringify(data)})
+        .then((response) => response.json())
+        .then((responseData) => {
+          var user = JSON.stringify(responseData);
+
+          AsyncStorage.setItem('@Store:user', user).then(() => {
+            console.log("=-=-= Succesfully logged user =-=-=");
+            callback(true);
+          }).done();
+
+          console.log("POST response");
+          console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
+          console.log("User: " + JSON.stringify(responseData));
+        })
+        .done();
+      }
+    } catch (error) {
+      console.log("=-=-= ERROR IN signInWithKey() =-=-=");
+      console.log(error);
+    }
+  });
+
 };
 
 export function getUsers() {
