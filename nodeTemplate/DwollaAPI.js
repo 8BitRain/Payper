@@ -1,10 +1,11 @@
 
 var dwolla = require('dwolla-v2');
   //see dwolla.com/applications for your client id and secret
-  var client = new dwolla.Client({id: 'a250b344-844d-41e1-80c0-211f196e50a7', secret: 'QgUYW8EYBwDWioWBOdGUi1kQvWh41PJd2yYCAyfkrWUvim5fqP', environment: 'sandbox',});
+  var client = new dwolla.Client({id: 'kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp', secret: 'QgUYW8EYBwDWioWBOdGUi1kQvWh41PJd2yYCAyfkrWUvim5fqP', environment: 'sandbox',});
   //var client = require('swagger-client');
   //generate a token on dwolla.com/applications
-  var accountToken = new client.Token({access_token: "8F8jOB7v5PVCfaRc0E8SUipF7z7XIPCkCljcSPDSxPhpgZ7MtH"});
+  var accountToken = new client.Token({access_token: "UDSyNb8pbj1vCk7t9CkllWRUEkgP5nlgDU9tsvsmAh2Lt02QpE"});
+  console.log(accountToken);
   //https://uat.dwolla.com/error/servererror?aspxerrorpath=/oauth/v2/{localhost:3000/dwollaView}
   //https://uat.dwolla.com/oauth/v2/authenticate?client_id={kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp}&response_type=code&redirect_uri={localhost:3000/dwollaView}&scope={Funding}
 
@@ -37,18 +38,18 @@ var unverifiedRequest = {
 };
 
 var verifiedRequest = {
-  firstName: 'Bastionz',
+  firstName: 'Bastionzz',
   lastName: 'Transistorz',
-  email: 'b@transistorzz.com',
+  email: 'b@transistorzzz.com',
   type: 'personal',
   address1: '122 N. Forest Hillsz',
   address2: 'Apt 2E',
   city: 'Madison',
   state: 'WI',
-  postalCode:'60620',
+  postalCode:'60628',
   dateOfBirth: "1992-03-25",
   ssn: "9993",
-  phone: "2123123122"
+  phone: "2123121122"
 };
 
 
@@ -82,8 +83,6 @@ accountToken
       callback(res.body.token);
     });
 //return customerUrl;
-
-console.log("dwollaTest is working");
 }
 
 module.exports = new DwollaAPI();

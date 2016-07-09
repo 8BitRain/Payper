@@ -2,6 +2,7 @@ var app = require('./server'),
     dwollaTest = require('./DwollaAPI'),
     bodyParser = require('body-parser');
     request = require('request');
+    querystring = require('querystring');
 
 
 
@@ -45,7 +46,7 @@ app.get('/simpleListen', function(req, res){
   var customerToken;
   dwollaTest.run(function(token){
       //callback goes here
-      console.log("Dwolla Test Token: " + token);
+
       var client = require('swagger-client');
       var dwolla = new client({
           url: 'https://api-uat.dwolla.com/swagger.json',
@@ -57,6 +58,7 @@ app.get('/simpleListen', function(req, res){
       customerToken = token;
 
       console.log("Beginning handshake with Dwolla");
+      console.log("Dwolla Test Token: " + token);
       /*request.post(
         'https://uat.dwolla.com/oauth/v2/' + customerToken
         ,
@@ -71,38 +73,85 @@ app.get('/simpleListen', function(req, res){
             }
         }
     );*/
-        par={
-          "client_id": "812-123-5128",
-          "client_secret": "R5SxRFo9jzD7RflrdlHc9KXH790v0Jkd8QIX3utuvcZRgOMkOa",
-          "code": "8HqdIM3aWGiM5fKW0iEUvnYeJlrP",
+    var formData = {
+          "client_id": "a250b344-844d-41e1-80c0-211f196e50a7",
+          "client_secret": "iT0wOcOC3Qj0921eYkJUxNfwBkB0ca5l2Ntv3rFekaoymQwEaa",
+          "code": code,
           "grant_type": "authorization_code",
-          "redirect_uri": "https://localhost:8000/polls/redirect"
-          }
-          url='https://uat.dwolla.com/oauth/v2/token'
-          headers={'Authorization': 'Bearer pLhLWet9AyuRgghBeU0cyHB3nfGEJFoGqyiddsIhYxF7eZ3hTT', 'Content-Type': 'application/vnd.dwolla.v1.hal+json', 'Accept': 'application/vnd.dwolla.v1.hal+json'}
+          "redirect_uri": "https://localhost:3000/dwollaView",
 
-          get_tokens=requests.post(url=url, params=par, headers=headers)
+    }
+          //url='https://uat.dwolla.com/oauth/v2/token'
+          //headers:{'Content-Type': 'application/x-www-form-urlencoded'}
+          //headers={'Content-Type': 'application/json header'}
+
+          /*request.post(url, options, function(error, response, body){
+            if(!error && response.statusCode == 200){
+              console.log("Response: " + JSON.stringify(response));
+              console.log("Error: " + JSON.stringify(error));
+              console.log()
+            }
+          });*/
+
+          request({
+            headers:{'Content-Type':'application/x-www-form-urlencoded'},
+            uri: url,
+            body: formData,
+            method: 'POST'
+          }, function (error, response, body) {
+              if(!error && response.statusCode == 200){
+                console.log("Response: " + JSON.stringify(response));
+                console.log("Error: " + JSON.stringify(error));
+                //console.log()
+              }
+          });
+          //console.log("Routes - get_tokens: " + JSON.stringify(get_tokens));
       res.json(customerToken);
   });
 });
 
 app.get('/exchangeToken', function(req, res){
   console.log("/exchangeToken recieved code value of: " + req.query.code);
-  var testVar = "Music";
-  request.post(
-    'https://uat.dwolla.com/oauth/v2/' + req.query.code,
-    { form: { key: 'value' } },
-    function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            console.log("Body Response:" + body)
-        } else {
-          console.log("ERROR: " + error);
-          console.log("RESPONSE: " + response);
-          console.log("BODY: " + body);
-        }
-    }
-);
-  res.json(testVar);
+  var code = req.query.code;
+  var form = {
+        "client_id": "kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp",
+        "client_secret": "QgUYW8EYBwDWioWBOdGUi1kQvWh41PJd2yYCAyfkrWUvim5fqP",
+        "code": code,
+        "grant_type": "authorization_code",
+        "redirect_uri": "https://localhost:3000/dwollaView",
+  }
+
+  console.log(typeof code);
+
+  var form2 = {
+    "client_id": "kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp",
+    "client_secret": "QgUYW8EYBwDWioWBOdGUi1kQvWh41PJd2yYCAyfkrWUvim5fqP",
+    "grant_type": "client_credentials"
+  }
+  //var formData = querystring.stringify(form);
+  //formData = form;
+  //var contentLength = formData.length;
+  // https://www.dwolla.com/oauth/v2/token with grant_type=authorization_code&code=auth_code_here&client_id=your_client_id&client_secret=your_client_secret
+  url='https://uat.dwolla.com/oauth/v2/token'
+        request({
+          //headers:{ 'Authorization': 'Bearer UDSyNb8pbj1vCk7t9CkllWRUEkgP5nlgDU9tsvsmAh2Lt02QpE', 'Content-Type': 'application/json'},
+          headers:{'Content-Type': 'application/json'},
+          uri: url,
+          json: true,
+          body: form,
+          method: 'POST'
+        }, function (error, response, body) {
+            if(!error && response.statusCode == 200){
+              console.log("Response: " + JSON.stringify(response));
+              console.log("Error: " + JSON.stringify(error));
+              console.log("Body: " + JSON.stringify(body));
+            } else {
+              console.log("Response: " + JSON.stringify(response));
+              console.log("Error: " + JSON.stringify(error));
+            }
+        });
+
+  res.json("Response from server: " + code);
 
 });
 

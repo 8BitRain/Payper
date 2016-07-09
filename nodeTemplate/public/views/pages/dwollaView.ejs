@@ -8,7 +8,6 @@
 <body>
 
   <button type="button" onclick="generateCredentials()">Generate Credentials</button>
-  <button type="button" onclick="generateToken()">Generate Token</button>
   <button type="button" onclick="exchangeToken()">Exchange Token</button>
   <form>
     <div>
@@ -113,12 +112,12 @@ function exchangeToken(){
 
 function generateCredentials(){
   var baseUrl = "https://uat.dwolla.com/oauth/v2/authenticate?client_id=",
-    dwollaID = 'kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp',
+    clientID = 'kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp',
     responseAndRedirect = "&response_type=code&redirect_uri=",
     uri = 'http://localhost:3000/dwollaView',
     authScope = "&scope=AccountInfoFull%7CSend%7CFunding%7CScheduled%7CTransactions";
 
-var oAuthUrl= baseUrl + encodeURI(dwollaID + responseAndRedirect + uri) + authScope;
+var oAuthUrl= baseUrl + encodeURI(clientID + responseAndRedirect + uri) + authScope;
 
 window.location.href = oAuthUrl;
 }
