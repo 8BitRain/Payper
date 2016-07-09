@@ -118,7 +118,7 @@ class ArrowNav extends React.Component {
       <View style={styles.arrowWrap}>
         { this.props.arrowNavProps.left ? getLeftArrow(this.props.callbackLeft, this.props.dark) : null }
         { this.props.arrowNavProps.right ? getRightArrow(this.props.callbackRight, this.props.dark) : null }
-        { this.props.arrowNavProps.check ? getCheck(this.props.callbackCheck, this.props.dark) : null }
+        { this.props.arrowNavProps.check ? getCheck(this.props.callbackCheck) : null }
       </View>
     );
   }

@@ -11,6 +11,7 @@ import * as db from "../../helpers/db";
 // Custom components
 import Header from "../../components/Header/Header";
 import ArrowNav from "../../components/Navigation/Arrows/ArrowDouble";
+import PayRequestNav from "../../components/Navigation/PayRequest/PayRequest";
 import UserPreview from "../../components/Previews/User/User";
 
 // Stylesheets
@@ -204,7 +205,7 @@ class CreatePaymentView extends React.Component {
             <View style={containers.padHeader}>
               { /* Input */ }
               <View>
-                <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, {color: colors.white}]}>Who&#39;s getting paid?</Text>
+                <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, {color: colors.white}]}>Who are you splitting with?</Text>
                 <TextInput
                   style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15, marginTop: 10}]}
                   placeholder={"John Doe"}
@@ -265,7 +266,7 @@ class CreatePaymentView extends React.Component {
                     keyboardType={"decimal-pad"}
                     autoFocus={true} />
                   <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.darkGrey}]}>
-                    / month
+                    per month
                   </Text>
                 </View>
                 <View style={[{flexDirection: "row", justifyContent: "center"}]}>
@@ -308,7 +309,50 @@ class CreatePaymentView extends React.Component {
               dark
               arrowNavProps={this.state.arrowNavProps}
               callbackLeft={() => { this.setState({inputting: "name", arrowNavProps: {left: false, right: true} }); }}
-              callbackRight={() => { this.setState({inputting: "nmu", arrowNavProps: {left: true, right: true} }); }} />
+              callbackRight={() => { this.setState({inputting: "memo", arrowNavProps: {left: true, right: false} }); }} />
+            </Animated.View>
+          </View>
+
+        );
+      break;
+      case "memo":
+        return(
+          <View style={[containers.container, {backgroundColor: colors.white}]}>
+            <View style={containers.padHeader}>
+
+              { /* User preview for the user we are paying or requesting  */ }
+              { this.getUserPreview(this.state.user) }
+              <Text style={[typography.textInput, {fontSize: 16.5, textAlign: 'center', padding: 15, color: colors.darkGrey}]}>
+                ${this.state.eachCost} per month for the next {this.state.totalPayments} months.
+              </Text>
+
+              { /* Input */ }
+              <View style={[{flex: 1, alignItems: "center", paddingTop: 0}]}>
+                <View style={[{flexDirection: "column", justifyContent: "center"}]}>
+                  <Text style={[typography.costInput, typography.marginLeft, {fontSize: 20, padding: 15, color: colors.darkGrey}]}>
+                    What for?
+                  </Text>
+                  <TextInput
+                    style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15}]}
+                    placeholder={"Toilet paper lol!"}
+                    autoFocus={true}
+                    defaultValue={this.state.memo}
+                    onChangeText={(text) => { this.setState({memo: text}); }} />
+                </View>
+              </View>
+
+              { /* Filler */ }
+              <View style={[{flex: 0.2}]} />
+            </View>
+
+            { /* Header */ }
+            <Header dark callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
+
+            { /* Arrow nav buttons */ }
+            <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
+              <PayRequestNav
+                requestCallback={() => console.log("REQUESTING")}
+                payCallback={() => console.log("PAYING")} />
             </Animated.View>
           </View>
 
