@@ -84,12 +84,7 @@ export default connect(
     },
     dispatchCreateAccount(user) {
       // Create account
-      var fbResponse = Firebase.createAccount(user);
-
-      // Test Firebase response
-      console.log("Firebase response:");
-      console.log("=-=-=-=-=-=-=-=-=-=");
-      console.log(fbResponse);
+      Firebase.signIn(user);
     }
   })
 )(CreateAccountView);

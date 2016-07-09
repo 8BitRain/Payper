@@ -126,9 +126,7 @@ class CreatePaymentView extends React.Component {
   // Return user preview components for each filtered user
   getUserPreviews() {
     var previews = [];
-    var numPreviews = (this.state.filteredUsers.length < 3) ? this.state.filteredUsers.length : 3;
-
-    for (var i = 0; i < numPreviews; i++) {
+    for (var i = 0; i < this.state.filteredUsers.length; i++) {
       var currUser = this.state.filteredUsers[i];
       previews.push(
         <UserPreview
@@ -336,7 +334,7 @@ class CreatePaymentView extends React.Component {
                   </Text>
                   <TextInput
                     style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15}]}
-                    placeholder={"Toilet paper"}
+                    placeholder={"Toilet paper lol!"}
                     autoFocus={true}
                     defaultValue={this.state.memo}
                     onChangeText={(text) => { this.setState({memo: text}); }} />
@@ -353,8 +351,8 @@ class CreatePaymentView extends React.Component {
             { /* Arrow nav buttons */ }
             <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
               <PayRequestNav
-                requestCallback={() => console.log("REQUESTING")}
-                payCallback={() => console.log("PAYING")} />
+                payCallback={() => console.log("=-=-= PAYING =-=-=")}
+                requestCallback={() => console.log("=-=-= REQUESTING =-=-=")} />
             </Animated.View>
           </View>
 

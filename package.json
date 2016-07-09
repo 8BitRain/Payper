@@ -7,7 +7,7 @@
     "sync-rnrf": "rm -rf ./node_modules/react-native-router-flux; sane '/usr/bin/rsync -v -a --exclude .git --exclude Example --exclude node_modules ../ ./node_modules/react-native-router-flux/' .. --glob='{**/*.json,**/*.js}'"
   },
   "dependencies": {
-    "firebase": "2.4.2",
+    "firebase": "^3.1.0",
     "firebase-token-generator": "^2.0.0",
     "react": "15.0.2",
     "react-native": "0.26.x",

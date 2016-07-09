@@ -4,13 +4,14 @@ import {AppRegistry, Navigator, StyleSheet, Text, View, AsyncStorage} from 'reac
 import {Scene, Reducer, Router, Modal, Actions} from 'react-native-router-flux'
 import Error from './components/Error'
 import Button from "react-native-button";
-import Firebase from 'firebase';
+import * as Firebase from './services/Firebase';
 
 // Custom components
 import LandingView from './components/LandingView'
 import LandingScreenView from './modules/LandingScreen/LandingScreenView'
 import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer'
 import CreatePaymentViewContainer from './modules/CreatePayment/CreatePaymentViewContainer'
+import SignInViewContainer from './modules/SignIn/SignInViewContainer'
 import TrackingContainer from './modules/Tracking/TrackingContainer'
 import Header from './components/Header/Header'
 import ArrowNavDouble from './components/Navigation/Arrows/ArrowDouble'
@@ -120,6 +121,7 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
 //   console.log("The Firebase read failed: " + errorObject.code);
 // });
 
+Firebase.test();
 
 export default class Coincast extends React.Component {
 
@@ -136,6 +138,7 @@ export default class Coincast extends React.Component {
             <Scene key="landingView" component={LandingView} title="LandingView" initial={true} />
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" />
+            <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
             <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
 
             { /* Testing POST requests */ }
