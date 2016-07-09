@@ -121,6 +121,9 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
 //   console.log("The Firebase read failed: " + errorObject.code);
 // });
 
+// AsyncStorage.clear();
+AsyncStorage.multiSet([["@Store:session_key", ""], ["@Store:user", ""]]);
+
 Firebase.test();
 
 export default class Coincast extends React.Component {

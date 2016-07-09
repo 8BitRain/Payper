@@ -57,44 +57,51 @@ export function createAccount(data) {
 };
 
 export function signInWithEmail(data) {
+
   firebase.auth().signInWithEmailAndPassword(data.email, data.password).catch(function(error) {
-    console.log("=-=-= FIREBASE ERROR =-=-=");
-    console.log("errorCode: " +  error.code);
-    console.log("errorMessage: " + error.message);
-  }).then(function() {
+    if (!error) {
+      console.log("=-=-= REQUESTING USER TOKEN =-=-=");
 
-    console.log("=-=-= SUCCESSFULLY SIGNED USER IN =-=-=");
-    console.log("=-=-= REQUESTING USER TOKEN =-=-=");
+      firebase.auth().currentUser.getToken(true).then(function(tkn) {
 
-    firebase.auth().currentUser.getToken(true).then(function(tkn) {
+        console.log("=-=-= GOT USER TOKEN: " + tkn + "=-=-=");
 
-      console.log("=-=-= GOT USER TOKEN: " + tkn + "=-=-=");
+        // Send the user object user creation Lambda endpoint
+        var url = "https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get";
+        var data = {
+          token: tkn,
+        };
 
-      // Send the user object user creation Lambda endpoint
-      var url = "https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get";
-      var data = {
-        token: tkn,
-      };
-
-      console.log('Sending POST request to ' + url);
-      console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
-
-      fetch(url, {method: "POST", body: JSON.stringify(data)})
-      .then((response) => response.json())
-      .then((responseData) => {
-        console.log("POST response");
+        console.log('Sending POST request to ' + url);
         console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
-        console.log(responseData);
+
+        fetch(url, {method: "POST", body: JSON.stringify(data)})
+        .then((response) => response.json())
+        .then((responseData) => {
+          console.log("POST response");
+          console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
+          console.log(responseData);
+
+          AsyncStorage.setItem('@Store:session_key', tkn).then(() => {
+            console.log("=-=-= SUCCESSFULLY SET KEY =-=-=");
+          });
+
+          AsyncStorage.setItem('@Store:user', user).then(() => {
+            console.log("=-=-= Succesfully logged user =-=-=");
+            callback(true);
+          });
+        })
+        .done();
 
 
-      })
-      .done();
-
-
-    }).catch(function(error) {
-      // Handle error
-    });
-
+      }).catch(function(error) {
+        // Handle error
+      });
+    } else {
+      console.log("=-=-= FIREBASE ERROR =-=-=");
+      console.log("errorCode: " +  error.code);
+      console.log("errorMessage: " + error.message);
+    }
   });
 };
 
@@ -102,7 +109,8 @@ export function signInWithKey(callback) {
 
   AsyncStorage.getItem('@Store:session_key').then((key) => {
     try {
-      if (key != "") {
+
+      if (key != null) {
 
         // Send the user object user creation Lambda endpoint
         var url = "https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get";
