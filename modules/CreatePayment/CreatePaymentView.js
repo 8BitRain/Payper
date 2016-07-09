@@ -126,7 +126,9 @@ class CreatePaymentView extends React.Component {
   // Return user preview components for each filtered user
   getUserPreviews() {
     var previews = [];
-    for (var i = 0; i < this.state.filteredUsers.length; i++) {
+    var numPreviews = (this.state.filteredUsers.length < 3) ? this.state.filteredUsers.length : 3;
+
+    for (var i = 0; i < numPreviews; i++) {
       var currUser = this.state.filteredUsers[i];
       previews.push(
         <UserPreview
@@ -334,7 +336,7 @@ class CreatePaymentView extends React.Component {
                   </Text>
                   <TextInput
                     style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15}]}
-                    placeholder={"Toilet paper lol!"}
+                    placeholder={"Toilet paper"}
                     autoFocus={true}
                     defaultValue={this.state.memo}
                     onChangeText={(text) => { this.setState({memo: text}); }} />
