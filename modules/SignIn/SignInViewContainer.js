@@ -44,9 +44,7 @@ class SignInView extends React.Component {
   componentWillMount() {
     Firebase.signInWithKey(function(signedIn) {
       if (signedIn) {
-        console.log(this.test);
-        this.test = 'value';
-        console.log(this.test);
+        Actions.TrackingView;
       } else {
         console.log("signedIn: " + signedIn);
       }
