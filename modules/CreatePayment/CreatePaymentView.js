@@ -197,6 +197,10 @@ class CreatePaymentView extends React.Component {
 
   render() {
 
+    AsyncStorage.getItem('@Store:user').then((value) => {
+      console.log("User: " + value);
+    });
+
     switch (this.state.inputting) {
       case "name":
         return(

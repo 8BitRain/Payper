@@ -116,16 +116,55 @@ export function signInWithKey(callback) {
         fetch(url, {method: "POST", body: JSON.stringify(data)})
         .then((response) => response.json())
         .then((responseData) => {
-          var user = JSON.stringify(responseData);
 
-          AsyncStorage.setItem('@Store:user', user).then(() => {
-            console.log("=-=-= Succesfully logged user =-=-=");
-            callback(true);
-          }).done();
+          if (responseData.errorMessage) {
+            console.log("=-=-= NEED A NEW TOKEN =-=-=");
 
-          console.log("POST response");
-          console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
-          console.log("User: " + JSON.stringify(responseData));
+            // If our token is expired, get a new token
+            firebase.auth().currentUser.getToken(true).then(function(tkn) {
+              console.log("=-=-= GOT ANOTHER USER TOKEN: " + tkn + "=-=-=");
+
+              // Send the user object user creation Lambda endpoint
+              var url = "https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get";
+              var data = {
+                token: tkn,
+              };
+
+              AsyncStorage.setItem('@Store:session_key', tkn).then(() => {
+                console.log("=-=-= SUCCESSFULLY SET KEY =-=-=");
+              });
+
+              console.log('Sending POST request to ' + url);
+              console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
+
+              fetch(url, {method: "POST", body: JSON.stringify(data)})
+              .then((response) => response.json())
+              .then((responseData) => {
+                console.log("POST response");
+                console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
+                console.log(responseData);
+
+                var user = JSON.stringify(responseData);
+
+                AsyncStorage.setItem('@Store:user', user).then(() => {
+                  console.log("=-=-= Succesfully logged user =-=-=");
+                  callback(true);
+                }).done();
+              })
+              .done();
+            });
+          } else {
+            var user = JSON.stringify(responseData);
+
+            AsyncStorage.setItem('@Store:user', user).then(() => {
+              console.log("=-=-= Succesfully logged user =-=-=");
+              callback(true);
+            }).done();
+
+            console.log("POST response");
+            console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
+            console.log("User: " + JSON.stringify(responseData));
+          }
         })
         .done();
       }

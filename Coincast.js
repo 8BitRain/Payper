@@ -138,7 +138,7 @@ export default class Coincast extends React.Component {
             <Scene key="landingView" component={LandingView} title="LandingView" initial={true} />
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" />
-            <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
+            <Scene key="SignInViewContainer" bybass={() => Actions.TrackingContainer} component={SignInViewContainer} title="SignInViewContainer" />
             <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
 
             { /* Testing POST requests */ }
