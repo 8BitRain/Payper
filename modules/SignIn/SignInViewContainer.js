@@ -22,7 +22,6 @@ class SignInView extends React.Component {
     this.state = {
       email: "",
       password: "",
-      signedIn: false,
     }
 
     this.arrowNavProps = {
@@ -36,7 +35,14 @@ class SignInView extends React.Component {
   }
 
   signInWithEmail() {
-    Firebase.signInWithEmail({email: this.state.email, password: this.state.password});
+    console.log("=-=-= checkpoint 1 =-=-=");
+    Firebase.signInWithEmail({email: this.state.email, password: this.state.password}, function(signedIn) {
+      if (signedIn) {
+        Actions.CreatePaymentViewContainer();
+      } else {
+        console.log("=-=-= signedIn: " + signedIn + " =-=-=");
+      }
+    });
   }
 
   componentWillMount() {
@@ -45,60 +51,49 @@ class SignInView extends React.Component {
         this.setState({signedIn: signedIn});
         Actions.CreatePaymentViewContainer();
       } else {
-        console.log("signedIn: " + signedIn);
+        console.log("=-=-= signedIn: " + signedIn + " =-=-=");
       }
     }.bind(this));
   }
 
   render() {
+    return (
+      <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', backgroundColor: colors.white}}>
 
-    switch (this.state.signedIn) {
-      case (true):
-        return(
-          <View>
-          </View>
-        );
-      break;
-      case (false):
-        return (
-          <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', backgroundColor: colors.white}}>
+        <View style={{flex: 0.2, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{fontFamily: 'Roboto', fontSize: 45, fontWeight: '300', color: colors.darkGrey, textAlign: 'center'}}>Coincast</Text>
+        </View>
 
-            <View style={{flex: 0.2, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{fontFamily: 'Roboto', fontSize: 45, fontWeight: '300', color: colors.darkGrey, textAlign: 'center'}}>Coincast</Text>
-            </View>
+        <View style={{flex: 0.4, flexDirection: 'column', justifyContent: 'center', backgroundColor: colors.darkGrey}}>
+          <Text style={{fontFamily: 'Roboto', fontSize: 30, fontWeight: '300', textAlign: 'center', color: colors.white}}>
+            Sign In
+          </Text>
+          <TextInput
+            style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15, marginTop: 10}]}
+            placeholder={"Email"}
+            autoFocus={true}
+            autocapitalize={false}
+            keyboardType={"email-address"}
+            onChangeText={(text) => this.setState({email: text}) } />
+          <TextInput
+            style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15, marginTop: 10}]}
+            placeholder={"Password"}
+            autoFocus={true}
+            secureTextEntry
+            onChangeText={(text) => this.setState({password: text}) } />
+        </View>
 
-            <View style={{flex: 0.4, flexDirection: 'column', justifyContent: 'center', backgroundColor: colors.darkGrey}}>
-              <Text style={{fontFamily: 'Roboto', fontSize: 30, fontWeight: '300', textAlign: 'center', color: colors.white}}>
-                Sign In
-              </Text>
-              <TextInput
-                style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15, marginTop: 10}]}
-                placeholder={"Email"}
-                autoFocus={true}
-                autocapitalize={false}
-                keyboardType={"email-address"}
-                onChangeText={(text) => this.setState({email: text}) } />
-              <TextInput
-                style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15, marginTop: 10}]}
-                placeholder={"Password"}
-                autoFocus={true}
-                secureTextEntry
-                onChangeText={(text) => this.setState({password: text}) } />
-            </View>
+        { /* Filler */ }
+        <View style={{flex:0.4, backgroundColor: colors.darkGrey}}></View>
 
-            { /* Filler */ }
-            <View style={{flex:0.4, backgroundColor: colors.darkGrey}}></View>
-
-            { /* Arrow nav buttons */ }
-            <View style={{position: 'absolute', bottom: 220, left: 0, right: 0}}>
-              <ArrowNav
-              arrowNavProps={this.arrowNavProps}
-              callbackRight={() => { this.signInWithEmail() }} />
-            </View>
-          </View>
-        );
-      break;
-    }
+        { /* Arrow nav buttons */ }
+        <View style={{position: 'absolute', bottom: 220, left: 0, right: 0}}>
+          <ArrowNav
+          arrowNavProps={this.arrowNavProps}
+          callbackRight={() => { this.signInWithEmail() }} />
+        </View>
+      </View>
+    );
   }
 }
 

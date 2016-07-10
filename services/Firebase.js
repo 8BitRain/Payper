@@ -56,16 +56,28 @@ export function createAccount(data) {
   });
 };
 
-export function signInWithEmail(data) {
+export function signInWithEmail(data, callback) {
+
+  console.log("=-=-= checkpoint 2 =-=-=");
 
   firebase.auth().signInWithEmailAndPassword(data.email, data.password).catch(function(error) {
-    if (!error) {
-      console.log("=-=-= REQUESTING USER TOKEN =-=-=");
+      console.log("=-=-= FIREBASE ERROR =-=-=");
+      console.log("errorCode: " +  error.code);
+      console.log("errorMessage: " + error.message);
+  }).then(function() {
 
+    // Get current user (null if not signed in)
+    var user = firebase.auth().currentUser;
+
+    // If the user successfully signed in`
+    if (user) {
+      console.log("=-=-= SUCCESSFULLY SIGNED IN =-=-=");
+      console.log(JSON.stringify(user));
+
+      console.log("=-=-= REQUESTING USER TOKEN =-=-=");
       firebase.auth().currentUser.getToken(true).then(function(tkn) {
 
         console.log("=-=-= GOT USER TOKEN: " + tkn + "=-=-=");
-
         // Send the user object user creation Lambda endpoint
         var url = "https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get";
         var data = {
@@ -74,7 +86,6 @@ export function signInWithEmail(data) {
 
         console.log('Sending POST request to ' + url);
         console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
-
         fetch(url, {method: "POST", body: JSON.stringify(data)})
         .then((response) => response.json())
         .then((responseData) => {
@@ -82,12 +93,14 @@ export function signInWithEmail(data) {
           console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
           console.log(responseData);
 
+          var user = JSON.stringify(responseData);
+
           AsyncStorage.setItem('@Store:session_key', tkn).then(() => {
-            console.log("=-=-= SUCCESSFULLY SET KEY =-=-=");
+            console.log("=-=-= SUCCESSFULLY SET KEY IN ASYNC STORAGE =-=-=");
           });
 
           AsyncStorage.setItem('@Store:user', user).then(() => {
-            console.log("=-=-= Succesfully logged user =-=-=");
+            console.log("=-=-= SUCCESSFULLY SET USER IN ASYNC STORAGE =-=-=");
             callback(true);
           });
         })
@@ -98,11 +111,10 @@ export function signInWithEmail(data) {
         // Handle error
       });
     } else {
-      console.log("=-=-= FIREBASE ERROR =-=-=");
-      console.log("errorCode: " +  error.code);
-      console.log("errorMessage: " + error.message);
+      console.log("SIGN IN FAILED");
     }
   });
+
 };
 
 export function signInWithKey(callback) {
