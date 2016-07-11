@@ -197,6 +197,8 @@ class CreatePaymentView extends React.Component {
 
   render() {
 
+    // Test that the correct user is stored in async storage
+    // TODO: get rid of this
     AsyncStorage.getItem('@Store:user').then((value) => {
       console.log("User: " + value);
     });

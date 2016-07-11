@@ -12,6 +12,7 @@ import LandingScreenView from './modules/LandingScreen/LandingScreenView'
 import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer'
 import CreatePaymentViewContainer from './modules/CreatePayment/CreatePaymentViewContainer'
 import SignInViewContainer from './modules/SignIn/SignInViewContainer'
+import MainViewContainer from './modules/Main/MainViewContainer'
 import TrackingContainer from './modules/Tracking/TrackingContainer'
 import Header from './components/Header/Header'
 import ArrowNavDouble from './components/Navigation/Arrows/ArrowDouble'
@@ -121,6 +122,8 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
 //   console.log("The Firebase read failed: " + errorObject.code);
 // });
 
+// Gets and logs Firebase users.
+// TODO: Actually implement this function
 Firebase.test();
 
 // UNCOMMENT AND RUN TO CLEAR USER SESSION FROM ASYNC STORAGE:
@@ -144,7 +147,8 @@ export default class Coincast extends React.Component {
             <Scene key="landingView" component={LandingView} title="LandingView" initial={true} />
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" />
-            <Scene key="SignInViewContainer" bybass={() => Actions.TrackingContainer} component={SignInViewContainer} title="SignInViewContainer" />
+            <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
+            <Scene key="MainViewContainer" component={MainViewContainer} title="MainViewContainer" />
             <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
 
             { /* Testing POST requests */ }
