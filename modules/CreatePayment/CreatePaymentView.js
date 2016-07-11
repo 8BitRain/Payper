@@ -186,7 +186,7 @@ class CreatePaymentView extends React.Component {
 
   createPayment(flow) {
 
-    //
+    // Pass down scope
     var _this = this;
 
     // Start loading animation
@@ -272,6 +272,8 @@ class CreatePaymentView extends React.Component {
   render() {
 
     switch (this.state.inputting) {
+
+      // User is inputting name of other party
       case "name":
         return(
 
@@ -310,6 +312,8 @@ class CreatePaymentView extends React.Component {
 
         );
       break;
+
+      // User is inputting cost and number of payments
       case "frequency":
         return(
 
@@ -357,17 +361,6 @@ class CreatePaymentView extends React.Component {
                     months.
                   </Text>
                 </View>
-                { /*
-                <Picker
-                  style={typography.picker}
-                  itemStyle={typography.pickerItem}
-                  selectedValue={this.state.frequency}
-                  onValueChange={(freq) => this.setState({frequency: freq})}>
-                  <Picker.Item label="year" value="yearly" />
-                  <Picker.Item label="month" value="monthly" />
-                  <Picker.Item label="week" value="weekly" />
-                </Picker>
-                */ }
               </View>
 
               { /* Filler */ }
@@ -389,6 +382,8 @@ class CreatePaymentView extends React.Component {
 
         );
       break;
+
+      // User is inputting payment's purpose
       case "memo":
 
         if (this.state.loading) {
@@ -396,7 +391,7 @@ class CreatePaymentView extends React.Component {
             <Loading
               complete={this.state.doneLoading}
               msgSuccess={"You are now splitting " + this.state.memo + " with " + this.state.user.first_name + "."}
-
+              msgLoading={"Asking our moms for permission"}
               destination={() => Actions.MainViewContainer()} />
           );
         } else {

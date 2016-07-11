@@ -10,10 +10,21 @@ import colors from '../../../styles/colors';
 var dimensions = Dimensions.get('window');
 
 // Return a profile picture with the given source image
-function getUserPic(pic) {
-  return(
-    <Image style={styles.pic} source={{uri: pic}} />
-  );
+function getUserPic(pic, name) {
+
+  // If no profile picture, create and return initials thumbnail
+  if (pic == "") {
+    name = name.split(" ");
+    var initials = name[0].substring(0, 1) + name[name.length - 1].substring(0, 1);
+    return(
+      <View style={[styles.pic, styles.initials, {backgroundColor: colors.darkGrey}]}>
+        <Text style={{fontFamily: 'Roboto', fontSize: 18, color: colors.icyBlue}}>{ initials }</Text>
+      </View>
+    );
+  };
+
+  // If profile picture is present, return it in circular form
+  return <Image style={styles.pic} source={{uri: pic}} />;
 };
 
 /**
@@ -22,23 +33,6 @@ function getUserPic(pic) {
 class TransactionPreview extends React.Component {
   constructor(props) {
     super(props);
-
-    // This is mock data rn
-    this.state = {
-      flow: 'in',
-      user: {
-        first_name: 'Vash',
-        last_name: 'Marada',
-        username: '@Vash-Marada',
-        pic: 'http://cdn.theatlantic.com/assets/media/img/photo/2015/11/images-from-the-2016-sony-world-pho/s01_130921474920553591/main_900.jpg?1448476701',
-      },
-      totalCost: '120',
-      eachCost: '10',
-      totalPayments: '12',
-      completedPayments: '4',
-      memo: 'Toilet paper',
-      next: 'August 2nd at 2:47am',
-    }
   }
 
   render() {
@@ -46,12 +40,12 @@ class TransactionPreview extends React.Component {
       <View style={styles.wrap}>
         <View style={styles.top}>
           <View style={styles.picWrap}>
-            { getUserPic(this.state.user.pic) }
+            { getUserPic(this.props.payment.recip_pic, this.props.payment.recip_name) }
           </View>
           <View style={styles.textWrap}>
-            <Text style={styles.name}>{ this.state.user.first_name + " " + this.state.user.last_name }</Text>
-            <Text style={styles.text}>${ this.state.eachCost } per month - { this.state.memo }</Text>
-            <Text style={styles.text}>Next payment: { this.state.next }</Text>
+            <Text style={styles.name}>{ this.props.payment.recip_name }</Text>
+            <Text style={styles.text}>${ this.props.payment.amount } per month - { this.props.payment.purpose }</Text>
+            <Text style={styles.text}>Next payment: unbeknownst to thee!</Text>
           </View>
           <TouchableHighlight
             activeOpacity={0.8}
@@ -62,9 +56,9 @@ class TransactionPreview extends React.Component {
         </View>
         <View style={styles.bottom}>
           <View style={styles.barWrap}>
-            <View style={[styles.bar, {flex: this.state.completedPayments / this.state.totalPayments}]}></View>
-            <View style={{flex: 1 - this.state.completedPayments / this.state.totalPayments}}></View>
-            <Text style={styles.progressText}>{ this.state.completedPayments } of { this.state.totalPayments } payments made</Text>
+            <View style={[styles.bar, {flex: this.props.payment.paymentsMade / this.props.payment.payments}]}></View>
+            <View style={{flex: 1 - this.props.payment.paymentsMade / this.props.payment.payments}}></View>
+            <Text style={styles.progressText}>{ this.props.payment.paymentsMade } of { this.props.payment.payments }</Text>
           </View>
         </View>
       </View>

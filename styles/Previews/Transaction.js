@@ -92,6 +92,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
 
+  initials: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   // Wrap for top right
   textWrap: {
     flex: 0.75,

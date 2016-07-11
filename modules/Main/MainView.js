@@ -63,7 +63,22 @@ class Main extends React.Component {
         return (
           <View style={{flex: 1, backgroundColor: colors.white}}>
 
-            <Transaction />
+            <Transaction
+              payment={
+                {
+                  amount: "33",
+                  payments: "8",
+                  paymentsMade: 0,
+                  purpose: "🏆🏆🏆",
+                  recip_id: "rBBxz9kHbwUbqwJW5N2748ZnHsq2",
+                  recip_name: "Money Banks",
+                  recip_pic: "",
+                  reminderSent: false,
+                  sender_id: "UzGIVH3yUXXZKWZN8ZW6JlvOgYZ2",
+                  sender_name: "Brady Sheridan",
+                  sender_pic: "",
+                }
+              } />
 
             <Header
               dark
