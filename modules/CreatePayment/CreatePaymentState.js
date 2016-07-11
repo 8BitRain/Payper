@@ -14,22 +14,9 @@ var payment = {
   completedPayments: -1,
 }
 
-var user;
-try {
-  AsyncStorage.getItem('@Store:user').then(function(val) {
-    user = val;
-    console.log(user);
-  });
-} catch (err) {
-  console.log("=-=-= ERROR FETCHING USER IN CreatePaymentState.js =-=-=");
-  console.log(err);
-}
-
-
 // Initialize state
 const initialState = Map({
   payment,
-  user,
 });
 
 // Action types

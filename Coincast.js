@@ -21,12 +21,12 @@ import ArrowNavDouble from './components/Navigation/Arrows/ArrowDouble'
 import POSTPayment from './_MOCKDB/TestComponents/POSTPayment';
 import POSTCustomer from './_MOCKDB/TestComponents/POSTCustomer';
 
-const reducerCreate = params=>{
-    const defaultReducer = Reducer(params);
-    return (state, action)=>{
-        console.log("ACTION:", action);
-        return defaultReducer(state, action);
-    }
+const reducerCreate = (params) => {
+  const defaultReducer = Reducer(params);
+  return (state, action) => {
+    console.log("ACTION:", action);
+    return defaultReducer(state, action);
+  }
 };
 
 // define this based on the styles/dimensions you use
@@ -47,90 +47,18 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
 };
 
 
-// var usersRef = new Firebase("https://brady.firebaseio.com/users");
-//
-// /**
-//   *   Initialize async storage
-// **/
-// usersRef.once("value", async function(snapshot) {
-//   var users = snapshot.val();
-//
-//   console.log("Got");
-//   console.log("=-=-=-=-=-=-=-=-=-=");
-//   console.log(users);
-//
-//   try {
-//     for (var user in users)
-//       await AsyncStorage.setItem('@Users:' + user, JSON.stringify(users[user]));
-//   } catch (error) {
-//     console.log("Error persisting Firebase to async storage: ");
-//     console.log(error);
-//   }
-// }, function (error) {
-//   console.log("The Firebase read failed: " + error.code);
-// });
-
-// /**
-//   *   Each time a user is added to Firebase, persist it to async storage
-//   *   (this doubles as initialization)
-// **/
-// usersRef.on("child_added", async function(childSnapshot, prevChildKey) {
-//   console.log("Got: " + childSnapshot.val());
-//   console.log("Key: " + childSnapshot.key());
-//
-//   // Persist user data to async storage
-//   try {
-//     console.log("ADDING: " + childSnapshot.key());
-//     await AsyncStorage.setItem('@Users:' + childSnapshot.key(), JSON.stringify(childSnapshot.val()), async function() {
-//       console.log("Updated @Users:");
-//
-//
-//       try {
-//         const value = await AsyncStorage.getItem('@Store:users');
-//         if (value !== null){
-//           // We have data!!
-//           console.log(JSON.parse(value));
-//         }
-//       } catch (error) {
-//         // Error retrieving data
-//         console.log("ASYNC ERROR: " + error);
-//       }
-//
-//
-//     });
-//   } catch (error) {
-//     console.log("Error persisting data to async storage: " + error);
-//   }
-// }, function (errorObject) {
-//   console.log("The Firebase read failed: " + errorObject.code);
-// });
-//
-// /**
-//   *   Each time a user is added to Firebase, persist it to async storage
-//   *   (this doubles as initialization)
-// **/
-// usersRef.on("child_removed", async function(oldChildSnapshot) {
-//   console.log("Removing user " + oldChildSnapshot.key());
-//
-//   // Remove user data from async storage
-//   try {
-//     await AsyncStorage.removeItem('@Users:' + oldChildSnapshot.key());
-//   } catch (error) {
-//     console.log("Error removing data from async storage: " + error);
-//   }
-// }, function (errorObject) {
-//   console.log("The Firebase read failed: " + errorObject.code);
-// });
-
-// Gets and logs Firebase users.
-// TODO: Actually implement this function
+/**
+  *   Get Firebase users and log them to AsyncStorage
+**/
 Firebase.getUsers();
+
 
 // UNCOMMENT AND RUN TO CLEAR USER SESSION FROM ASYNC STORAGE:
 // =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
 // AsyncStorage.multiSet([["@Store:session_key", ""], ["@Store:user", ""]]);
 require('firebase').auth().signOut();
 // =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
+
 
 export default class Coincast extends React.Component {
 

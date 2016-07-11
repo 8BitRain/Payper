@@ -63,7 +63,7 @@ class LandingScreenDisplay extends React.Component {
         </View>
 
         <View style={[container.third]}>
-          <FacebookLogin destination={Actions.TrackingContainer}/>
+          <FacebookLogin destination={Actions.SignInWithFacebook}/>
           <GenericSignUp destination={Actions.CreateAccountViewContainer}/>
         </View>
       </Animated.View>

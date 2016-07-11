@@ -56,14 +56,6 @@ class TrackingEmpty extends React.Component {
     );
     }
 
-    // Check if the user was successfully stored to AsyncStorage
-    componentWillMount() {
-      AsyncStorage.getItem('@Store:user').then((val) => {
-        console.log("=-=-= Signed in user:");
-        console.log(val);
-      });
-    }
-
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
      this.state.bounceValue.setValue(1.5);     // Start large

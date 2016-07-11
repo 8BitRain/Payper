@@ -19,14 +19,11 @@ export default connect(
     totalPayments: state.getIn(['payment', 'totalPayments']),
     completedPayments: state.getIn(['payment', 'completedPayments']),
 
-    // Signed in user
-    user: state.get('user'),
-
   }),
   dispatch => ({
 
     // Creates data
-    dispatchCreatePayment(data) {
+    dispatchCreatePayment(data, callback) {
       console.log("=-=-=  REACHED dispatchCreatePayment(data)  =-=-=")
 
       var url = "https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create";
@@ -36,6 +33,7 @@ export default connect(
         console.log("POST response");
         console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
         console.log(responseData);
+        callback();
       })
       .done();
 

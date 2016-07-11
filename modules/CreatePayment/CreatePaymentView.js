@@ -75,111 +75,102 @@ class CreatePaymentView extends React.Component {
      // Callback functions to be passed to the header
      this.callbackClose = function() { Actions.pop() };
 
-     // TODO: Dynamically populate this with our user Firebase
-     this.allUsers = [
-       {"username": "@Brady-Sheridan", "first_name": "Brady", "last_name": "Sheridan", "pic": "https://scontent-ord1-1.xx.fbcdn.net/v/t1.0-9/13173817_1107390755948052_7502054529648141346_n.jpg?oh=7ca6a29cceb752f7ddb55d07e9a488b7&oe=57FCE45D"},
-       {"username": "@Mohsin-Khan", "first_name": "Mohsin", "last_name": "Khan", "pic": "https://pbs.twimg.com/profile_images/588854250391863296/EKUaM8dC.jpg"},
-       {"username": "@Vash-Marada", "uid": "jf4j9f41390fjfj", "first_name": "Vash", "last_name": "Marada", "pic": "https://scontent-ord1-1.xx.fbcdn.net/v/t1.0-9/13119085_492301314302263_191875338764929565_n.jpg?oh=18636edb3dd117b7368d95674ffd4c28&oe=582CD18E"},
-       {"username": "@Eric-Smith", "first_name": "Eric", "last_name": "Smith", "pic": "https://scontent-ord1-1.xx.fbcdn.net/v/t1.0-9/13173747_10208399416016147_5050055134276872233_n.jpg?oh=b067f7ac92d96aa953baa82ee3121d88&oe=5835188B"},
-     ];
-    //  this.getAllUsers(function(users) {
-    //    this.test = users;
-    //  });
+     // Firebase => AynscStorage => this.allUsers[]
+     this.allUsers = [];
 
-    // Get current user and store it in our state
-    try {
-      AsyncStorage.getItem('@Store:user').then(function(val) {
-        this.setState({currentUser: val});
-        console.log("=-=-= SET CURRENT USER TO: ");
-        console.log(this.state.currentUser);
-      }.bind(this));
-    } catch (err) {
-      console.log("=-=-= ERROR GETTING USER FROM ASYNC STORAGE =-=-=");
-      console.log(err);
-    }
+     // Get current user and store it in our state
+     try {
+       AsyncStorage.getItem('@Store:user').then(function(val) {
+         this.setState({currentUser: val});
+         console.log("=-=-= SET CURRENT USER TO: ");
+         console.log(this.state.currentUser);
+       }.bind(this));
+     } catch (err) {
+       console.log("=-=-= ERROR GETTING USER FROM ASYNC STORAGE =-=-=");
+       console.log(err);
+     }
 
-    // Get session token and store it in our state
-    try {
-      AsyncStorage.getItem('@Store:session_key').then(function(val) {
-        this.setState({sessionToken: val});
-        console.log("=-=-= SET SESSION TOKEN IN STATE TO: ");
-        console.log(this.state.sessionToken.substring(this.state.sessionToken.length - 5, this.state.sessionToken.length));
-      }.bind(this));
-    } catch (err) {
-      console.log("=-=-= ERROR GETTING SESSION TOKEN FROM ASYNC STORAGE =-=-=");
-      console.log(err);
-    }
+     // Get session token and store it in our state
+     try {
+       AsyncStorage.getItem('@Store:session_key').then(function(val) {
+         this.setState({sessionToken: val});
+         console.log("=-=-= SET SESSION TOKEN IN STATE TO: ");
+         console.log(this.state.sessionToken.substring(this.state.sessionToken.length - 5, this.state.sessionToken.length));
+       }.bind(this));
+     } catch (err) {
+       console.log("=-=-= ERROR GETTING SESSION TOKEN FROM ASYNC STORAGE =-=-=");
+       console.log(err);
+     }
 
-    // Get user list and store it in our state
-    try {
-      AsyncStorage.getItem('@Store:users').then(function(users) {
-        users = JSON.parse(users);
-        for (var i in users) {
-          users[i].username = i;
-          this.allUsers.push(users[i]);
-        }
-        // this.allUsers = JSON.parse(val);
-      }.bind(this));
-    } catch (err) {
-      console.log("=-=-= ERROR GETTING USERS FROM ASYNC STORAGE =-=-=");
-      console.log(err);
-    }
-  }
+     // Get user list and store it in our state
+     try {
+       AsyncStorage.getItem('@Store:users').then(function(users) {
+         users = JSON.parse(users);
+         for (var i in users) {
+           users[i].username = i;
+           this.allUsers.push(users[i]);
+         }
+       }.bind(this));
+     } catch (err) {
+       console.log("=-=-= ERROR GETTING USERS FROM ASYNC STORAGE =-=-=");
+       console.log(err);
+     }
+   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      inputting: nextProps.inputting,
-      to: nextProps.to,
-      user: nextProps.user,
-      memo: nextProps.memo,
-      frequency: nextProps.frequency,
-      totalCost: nextProps.totalCost,
-      eachCost: nextProps.eachCost,
-      totalPayments: nextProps.totalPayments,
-      completedPayments: nextProps.completedPayments,
-      filteredUsers: nextProps.filteredUsers,
-      allUsers: nextProps.allusers,
-      filteredUsers: nextProps.filteredUsers,
-      filtered: nextProps.filtered,
-      costInputWidth: nextProps.costInputWidth,
-      arrowNavProps: nextProps.headerProps,
-      headerProps: nextProps.headerProps,
-      sessionToken: nextProps.sessionToken,
-    });
-  }
+   componentWillReceiveProps(nextProps) {
+     this.setState({
+       inputting: nextProps.inputting,
+       to: nextProps.to,
+       user: nextProps.user,
+       memo: nextProps.memo,
+       frequency: nextProps.frequency,
+       totalCost: nextProps.totalCost,
+       eachCost: nextProps.eachCost,
+       totalPayments: nextProps.totalPayments,
+       completedPayments: nextProps.completedPayments,
+       filteredUsers: nextProps.filteredUsers,
+       allUsers: nextProps.allusers,
+       filteredUsers: nextProps.filteredUsers,
+       filtered: nextProps.filtered,
+       costInputWidth: nextProps.costInputWidth,
+       arrowNavProps: nextProps.headerProps,
+       headerProps: nextProps.headerProps,
+       sessionToken: nextProps.sessionToken,
+     });
+   }
 
-  filterUsers(filter) {
-    if (filter == "" || filter == "-" || filter == "@") {
-      this.setState({filteredUsers: []});
-    } else {
-      // Generate regex with user's input
-      var re = new RegExp(filter + '.+$', 'i');
+   filterUsers(filter) {
+     if (filter == "" || filter == "-" || filter == "@") {
+       this.setState({filteredUsers: []});
+     } else {
+       // Generate regex with user's input
+       var re = new RegExp(filter + '.+$', 'i');
 
-      // Get users that match this filter
-      var users = this.allUsers.filter(function(e, i, a) {
-        return e.username.search(re) != -1;
-      });
+       // Get users that match this filter
+       var users = this.allUsers.filter(function(e, i, a) {
+         return e.username.search(re) != -1;
+       });
 
-      // Update state resulting in re-render of user previews
-      this.setState({filteredUsers: users});
-    }
-  }
+       // Update state resulting in re-render of user previews
+       this.setState({filteredUsers: users});
+     }
+   }
 
-  // Return user preview components for each filtered user
-  getUserPreviews() {
-    var previews = [];
-    for (var i = 0; i < this.state.filteredUsers.length; i++) {
-      var currUser = this.state.filteredUsers[i];
-      previews.push(
-        <UserPreview
-          key={currUser.username}
-          user={currUser}
-          width={dimensions.width * 0.9}
-          callback={() => { this.setState({to: currUser.username, user: currUser}); }} />
+   // Return user preview components for each filtered user
+   getUserPreviews() {
+     var previews = [];
+     for (var i = 0; i < this.state.filteredUsers.length; i++) {
+       var currUser = this.state.filteredUsers[i];
+       previews.push(
+         <UserPreview
+            key={currUser.username}
+            user={currUser}
+            width={dimensions.width * 0.9}
+            callback={() => { this.setState({to: currUser.username, user: currUser}); }} />
       );
     };
     return previews;
-  };
+   };
 
   // Return user preview for the specified user
   getUserPreview(user) {
@@ -193,44 +184,50 @@ class CreatePaymentView extends React.Component {
   };
 
   createPayment(flow) {
+
+    //
+    var _this = this;
+    
+    // Start loading animation
+    this.setState({loading: true});
+
+    var currUser = JSON.parse(this.state.currentUser);
     if (flow == 'in') {
-      var recipName = this.state.currentUser.first_name + " " + this.state.currentUser.last_name;
       this.props.dispatchCreatePayment({
         amount: this.state.eachCost,
-        payments: this.state.totalPayments,
         purpose: this.state.memo,
-        recip_id: this.state.currentUser.uid,
-        recip_name: recipName,
-        recip_pic: this.state.currentUser.pic,
+        payments: this.state.totalPayments,
+        recip_id: currUser.uid,
+        recip_name: currUser.first_name + " " + this.state.currentUser.last_name,
+        recip_pic: currUser.profile_pic,
         sender_id: this.state.user.uid,
         sender_name: this.state.user.first_name + " " + this.state.user.last_name,
         sender_pic: this.state.user.pic,
+        confirmed: false,
+        type: "request",
         token: this.state.sessionToken,
+      }, function() {
+        _this.setState({loading: false});
       });
     } else if (flow == 'out') {
-      var currUser = JSON.parse(this.state.currentUser);
-      var senderName = currUser.first_name + " " + currUser.last_name;
-
       this.props.dispatchCreatePayment({
         amount: this.state.eachCost,
-        payments: this.state.totalPayments,
         purpose: this.state.memo,
+        payments: this.state.totalPayments,
         recip_id: this.state.user.uid,
         recip_name: this.state.user.first_name + " " + this.state.user.last_name,
-        recip_pic: this.state.user.pic,
+        recip_pic: this.state.user.profile_pic,
         sender_id: currUser.uid,
-        sender_name: senderName,
+        sender_name: currUser.first_name + " " + currUser.last_name,
         sender_pic: currUser.profile_pic,
+        confirmed: true,
+        type: "pay",
         token: this.state.sessionToken,
+      }, function() {
+        _this.setState({loading: false});
       });
     }
   };
-
-  // async getAllUsers(callback) {
-  //   await db.returnAllUsers(function(users) {
-  //     console.log(users);
-  //   });
-  // }
 
   // resizeTextInput() {
   //   console.log("testing");
@@ -272,12 +269,6 @@ class CreatePaymentView extends React.Component {
 
 
   render() {
-
-    // Test that the correct user is stored in async storage
-    // TODO: get rid of this
-    AsyncStorage.getItem('@Store:user').then((value) => {
-      console.log("User: " + value);
-    });
 
     switch (this.state.inputting) {
       case "name":
@@ -398,47 +389,55 @@ class CreatePaymentView extends React.Component {
         );
       break;
       case "memo":
-        return(
-          <View style={[containers.container, {backgroundColor: colors.white}]}>
-            <View style={containers.padHeader}>
 
-              { /* User preview for the user we are paying or requesting  */ }
-              { this.getUserPreview(this.state.user) }
-              <Text style={[typography.textInput, {fontSize: 16.5, textAlign: 'center', padding: 15, color: colors.darkGrey}]}>
-                ${this.state.eachCost} per month for the next {this.state.totalPayments} months.
-              </Text>
+        if (this.state.loading) {
+          return(
+            <View style={[containers.container], {backgroundColor: 'green'}}>
 
-              { /* Input */ }
-              <View style={[{flex: 1, alignItems: "center", paddingTop: 0}]}>
-                <View style={[{flexDirection: "column", justifyContent: "center"}]}>
-                  <Text style={[typography.costInput, typography.marginLeft, {fontSize: 20, padding: 15, color: colors.darkGrey}]}>
-                    What for?
-                  </Text>
-                  <TextInput
-                    style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15}]}
-                    placeholder={"Toilet paper"}
-                    autoFocus={true}
-                    defaultValue={this.state.memo}
-                    onChangeText={(text) => { this.setState({memo: text}); }} />
+            </View>
+          );
+        } else {
+          return(
+            <View style={[containers.container, {backgroundColor: colors.white}]}>
+              <View style={containers.padHeader}>
+
+                { /* User preview for the user we are paying or requesting  */ }
+                { this.getUserPreview(this.state.user) }
+                <Text style={[typography.textInput, {fontSize: 16.5, textAlign: 'center', padding: 15, color: colors.darkGrey}]}>
+                  ${this.state.eachCost} per month for the next {this.state.totalPayments} months.
+                </Text>
+
+                { /* Input */ }
+                <View style={[{flex: 1, alignItems: "center", paddingTop: 0}]}>
+                  <View style={[{flexDirection: "column", justifyContent: "center"}]}>
+                    <Text style={[typography.costInput, typography.marginLeft, {fontSize: 20, padding: 15, color: colors.darkGrey}]}>
+                      What for?
+                    </Text>
+                    <TextInput
+                      style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15}]}
+                      placeholder={"Toilet paper"}
+                      autoFocus={true}
+                      defaultValue={this.state.memo}
+                      onChangeText={(text) => { this.setState({memo: text}); }} />
+                  </View>
                 </View>
+
+                { /* Filler */ }
+                <View style={[{flex: 0.2}]} />
               </View>
 
-              { /* Filler */ }
-              <View style={[{flex: 0.2}]} />
+              { /* Header */ }
+              <Header dark callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
+
+              { /* Arrow nav buttons */ }
+              <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
+                <PayRequestNav
+                  payCallback={() => { this.createPayment('out'); }}
+                  requestCallback={() => { this.createPayment('in'); }} />
+              </Animated.View>
             </View>
-
-            { /* Header */ }
-            <Header dark callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
-
-            { /* Arrow nav buttons */ }
-            <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
-              <PayRequestNav
-                payCallback={() => { this.createPayment('out'); }}
-                requestCallback={() => { this.createPayment('in'); }} />
-            </Animated.View>
-          </View>
-
-        );
+          );
+        }
       break;
     }
   }
