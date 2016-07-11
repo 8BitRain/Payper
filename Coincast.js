@@ -124,20 +124,17 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
 
 // Gets and logs Firebase users.
 // TODO: Actually implement this function
-Firebase.test();
+Firebase.getUsers();
 
 // UNCOMMENT AND RUN TO CLEAR USER SESSION FROM ASYNC STORAGE:
 // =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
-AsyncStorage.multiSet([["@Store:session_key", ""], ["@Store:user", ""]]);
+// AsyncStorage.multiSet([["@Store:session_key", ""], ["@Store:user", ""]]);
 require('firebase').auth().signOut();
 // =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
 
 export default class Coincast extends React.Component {
 
   render() {
-
-    // this.test();
-
     return (
       <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
         <Scene key="modal" component={Modal} >

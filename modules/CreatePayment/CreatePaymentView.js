@@ -33,6 +33,7 @@ class CreatePaymentView extends React.Component {
 
       // Payment props
       to: "",
+      currentUser: {},
       user: {},
       memo: "",
       frequency: "monthly",
@@ -40,6 +41,7 @@ class CreatePaymentView extends React.Component {
       eachCost: "",
       totalPayments: "",
       completedPayments: "0",
+      cashFlow: "",
 
       // Storage for predictive user search
       allUsers: {},
@@ -77,12 +79,51 @@ class CreatePaymentView extends React.Component {
      this.allUsers = [
        {"username": "@Brady-Sheridan", "first_name": "Brady", "last_name": "Sheridan", "pic": "https://scontent-ord1-1.xx.fbcdn.net/v/t1.0-9/13173817_1107390755948052_7502054529648141346_n.jpg?oh=7ca6a29cceb752f7ddb55d07e9a488b7&oe=57FCE45D"},
        {"username": "@Mohsin-Khan", "first_name": "Mohsin", "last_name": "Khan", "pic": "https://pbs.twimg.com/profile_images/588854250391863296/EKUaM8dC.jpg"},
-       {"username": "@Vash-Marada", "first_name": "Vash", "last_name": "Marada", "pic": "https://scontent-ord1-1.xx.fbcdn.net/v/t1.0-9/13119085_492301314302263_191875338764929565_n.jpg?oh=18636edb3dd117b7368d95674ffd4c28&oe=582CD18E"},
+       {"username": "@Vash-Marada", "uid": "jf4j9f41390fjfj", "first_name": "Vash", "last_name": "Marada", "pic": "https://scontent-ord1-1.xx.fbcdn.net/v/t1.0-9/13119085_492301314302263_191875338764929565_n.jpg?oh=18636edb3dd117b7368d95674ffd4c28&oe=582CD18E"},
        {"username": "@Eric-Smith", "first_name": "Eric", "last_name": "Smith", "pic": "https://scontent-ord1-1.xx.fbcdn.net/v/t1.0-9/13173747_10208399416016147_5050055134276872233_n.jpg?oh=b067f7ac92d96aa953baa82ee3121d88&oe=5835188B"},
      ];
     //  this.getAllUsers(function(users) {
     //    this.test = users;
     //  });
+
+    // Get current user and store it in our state
+    try {
+      AsyncStorage.getItem('@Store:user').then(function(val) {
+        this.setState({currentUser: val});
+        console.log("=-=-= SET CURRENT USER TO: ");
+        console.log(this.state.currentUser);
+      }.bind(this));
+    } catch (err) {
+      console.log("=-=-= ERROR GETTING USER FROM ASYNC STORAGE =-=-=");
+      console.log(err);
+    }
+
+    // Get session token and store it in our state
+    try {
+      AsyncStorage.getItem('@Store:session_key').then(function(val) {
+        this.setState({sessionToken: val});
+        console.log("=-=-= SET SESSION TOKEN IN STATE TO: ");
+        console.log(this.state.sessionToken.substring(this.state.sessionToken.length - 5, this.state.sessionToken.length));
+      }.bind(this));
+    } catch (err) {
+      console.log("=-=-= ERROR GETTING SESSION TOKEN FROM ASYNC STORAGE =-=-=");
+      console.log(err);
+    }
+
+    // Get user list and store it in our state
+    try {
+      AsyncStorage.getItem('@Store:users').then(function(users) {
+        users = JSON.parse(users);
+        for (var i in users) {
+          users[i].username = i;
+          this.allUsers.push(users[i]);
+        }
+        // this.allUsers = JSON.parse(val);
+      }.bind(this));
+    } catch (err) {
+      console.log("=-=-= ERROR GETTING USERS FROM ASYNC STORAGE =-=-=");
+      console.log(err);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -103,6 +144,7 @@ class CreatePaymentView extends React.Component {
       costInputWidth: nextProps.costInputWidth,
       arrowNavProps: nextProps.headerProps,
       headerProps: nextProps.headerProps,
+      sessionToken: nextProps.sessionToken,
     });
   }
 
@@ -148,6 +190,40 @@ class CreatePaymentView extends React.Component {
         width={dimensions.width}
         callback={() => { this.setState({to: user.username}); }} />
     );
+  };
+
+  createPayment(flow) {
+    if (flow == 'in') {
+      var recipName = this.state.currentUser.first_name + " " + this.state.currentUser.last_name;
+      this.props.dispatchCreatePayment({
+        amount: this.state.eachCost,
+        payments: this.state.totalPayments,
+        purpose: this.state.memo,
+        recip_id: this.state.currentUser.uid,
+        recip_name: recipName,
+        recip_pic: this.state.currentUser.pic,
+        sender_id: this.state.user.uid,
+        sender_name: this.state.user.first_name + " " + this.state.user.last_name,
+        sender_pic: this.state.user.pic,
+        token: this.state.sessionToken,
+      });
+    } else if (flow == 'out') {
+      var currUser = JSON.parse(this.state.currentUser);
+      var senderName = currUser.first_name + " " + currUser.last_name;
+
+      this.props.dispatchCreatePayment({
+        amount: this.state.eachCost,
+        payments: this.state.totalPayments,
+        purpose: this.state.memo,
+        recip_id: this.state.user.uid,
+        recip_name: this.state.user.first_name + " " + this.state.user.last_name,
+        recip_pic: this.state.user.pic,
+        sender_id: currUser.uid,
+        sender_name: senderName,
+        sender_pic: currUser.profile_pic,
+        token: this.state.sessionToken,
+      });
+    }
   };
 
   // async getAllUsers(callback) {
@@ -340,7 +416,7 @@ class CreatePaymentView extends React.Component {
                   </Text>
                   <TextInput
                     style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15}]}
-                    placeholder={"Toilet paper lol!"}
+                    placeholder={"Toilet paper"}
                     autoFocus={true}
                     defaultValue={this.state.memo}
                     onChangeText={(text) => { this.setState({memo: text}); }} />
@@ -357,8 +433,8 @@ class CreatePaymentView extends React.Component {
             { /* Arrow nav buttons */ }
             <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
               <PayRequestNav
-                payCallback={() => console.log("=-=-= PAYING =-=-=")}
-                requestCallback={() => console.log("=-=-= REQUESTING =-=-=")} />
+                payCallback={() => { this.createPayment('out'); }}
+                requestCallback={() => { this.createPayment('in'); }} />
             </Animated.View>
           </View>
 

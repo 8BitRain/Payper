@@ -1,5 +1,7 @@
 import { ReactNative, AsyncStorage } from "react-native";
 import * as firebase from 'firebase';
+
+
 // Initialize Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAwRj_BiJNEvKJC7GQSm9rv9dF_mjIhuzM",
@@ -9,12 +11,29 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-export function test() {
+
+/**
+  *   Fetches list of users and stores them in AsyncStorage for later use
+**/
+export function getUsers() {
   firebase.database().ref('/usernames').on('value', function(snapshot) {
+    console.log("=-=-= GOT USERS FROM FIREBASE =-=-=");
     console.log(snapshot.val());
+    console.log("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+    try {
+      AsyncStorage.setItem('@Store:users', JSON.stringify(snapshot.val()));
+    } catch (err) {
+      console.log("=-=-= ERROR STORING USERS IN ASYNC STORAGE =-=-=");
+      console.log(err);
+    }
   });
 };
 
+
+/**
+  *   Creates a new Firebase user with email/password. Stores session token
+  *   for that user in AsyncStorage
+**/
 export function createAccount(data) {
 
   // Create new Firebase user
@@ -56,10 +75,12 @@ export function createAccount(data) {
   });
 };
 
+
+/**
+  *   Signs user in with email/password authentication. Stores session key in
+  *   AsyncStorage upon success
+**/
 export function signInWithEmail(data, callback) {
-
-  console.log("=-=-= checkpoint 2 =-=-=");
-
   firebase.auth().signInWithEmailAndPassword(data.email, data.password).catch(function(error) {
       console.log("=-=-= FIREBASE ERROR =-=-=");
       console.log("errorCode: " +  error.code);
@@ -72,12 +93,12 @@ export function signInWithEmail(data, callback) {
     // If the user successfully signed in`
     if (user) {
       console.log("=-=-= SUCCESSFULLY SIGNED IN =-=-=");
-      console.log(JSON.stringify(user));
-
       console.log("=-=-= REQUESTING USER TOKEN =-=-=");
       firebase.auth().currentUser.getToken(true).then(function(tkn) {
 
-        console.log("=-=-= GOT USER TOKEN: " + tkn + "=-=-=");
+        // Trim so we're just looking at a unique section of the token
+        console.log("=-=-= GOT USER TOKEN: " + tkn.substring(tkn.length - 6, tkn.length) + "=-=-=");
+
         // Send the user object user creation Lambda endpoint
         var url = "https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get";
         var data = {
@@ -117,6 +138,12 @@ export function signInWithEmail(data, callback) {
 
 };
 
+
+/**
+  *   If there's a session key token in AsyncStorage, tries to sign user in
+  *   with it. If session token has expired, user must sign in with email
+  *   and password
+**/
 export function signInWithKey(callback) {
 
   AsyncStorage.getItem('@Store:session_key').then((key) => {
@@ -138,41 +165,17 @@ export function signInWithKey(callback) {
         .then((responseData) => {
 
           if (responseData.errorMessage) {
+
             console.log("=-=-= NEED A NEW TOKEN =-=-=");
 
-            // If our token is expired, get a new token
-            firebase.auth().currentUser.getToken(true).then(function(tkn) {
-              console.log("=-=-= GOT ANOTHER USER TOKEN: " + tkn + "=-=-=");
-
-              // Send the user object user creation Lambda endpoint
-              var url = "https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get";
-              var data = {
-                token: tkn,
-              };
-
-              AsyncStorage.setItem('@Store:session_key', tkn).then(() => {
-                console.log("=-=-= SUCCESSFULLY SET KEY =-=-=");
+            try {
+              AsyncStorage.setItem('@Store:session_key', "").then(function(val) {
+                console.log("=-=-= SUCCESSFULLY SET SESSION KEY TO NULL =-=-=");
               });
-
-              console.log('Sending POST request to ' + url);
-              console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
-
-              fetch(url, {method: "POST", body: JSON.stringify(data)})
-              .then((response) => response.json())
-              .then((responseData) => {
-                console.log("POST response");
-                console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
-                console.log(responseData);
-
-                var user = JSON.stringify(responseData);
-
-                AsyncStorage.setItem('@Store:user', user).then(() => {
-                  console.log("=-=-= Succesfully logged user =-=-=");
-                  callback(true);
-                }).done();
-              })
-              .done();
-            });
+            } catch (err) {
+              console.log("=-=-= ERROR SETTING SESSION KEY TO NULL =-=-=");
+              console.log(err);
+            }
           } else {
             var user = JSON.stringify(responseData);
 
@@ -195,12 +198,3 @@ export function signInWithKey(callback) {
   });
 
 };
-
-export function getUsers() {
-  var usersRef = new Firebase("https://brady.firebaseio.com/users");
-  usersRef.once("value", async function(snapshot) {
-    return snapshot.val();
-  }, function (error) {
-    console.log("The Firebase read failed: " + error.code);
-  });
-}
