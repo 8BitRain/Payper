@@ -35,7 +35,7 @@ class CreatePaymentView extends React.Component {
       to: "",
       user: {},
       memo: "",
-      frequency: "weekly",
+      frequency: "monthly",
       totalCost: "",
       eachCost: "",
       totalPayments: "",

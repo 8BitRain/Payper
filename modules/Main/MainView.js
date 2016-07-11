@@ -19,6 +19,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 // Partial components
 import Header from '../../components/Header/Header.js';
 import Footer from '../../components/Footer/Footer.js';
+import Transaction from '../../components/Previews/Transaction/Transaction.js';
 
 class Main extends React.Component {
   constructor(props) {
@@ -60,7 +61,9 @@ class Main extends React.Component {
     switch (this.state.tab) {
       case "tracking":
         return (
-          <View style={{flex: 1, backgroundColor: 'red'}}>
+          <View style={{flex: 1, backgroundColor: colors.white}}>
+
+            <Transaction />
 
             <Header
               dark
