@@ -13,6 +13,7 @@ import Header from "../../components/Header/Header";
 import ArrowNav from "../../components/Navigation/Arrows/ArrowDouble";
 import PayRequestNav from "../../components/Navigation/PayRequest/PayRequest";
 import UserPreview from "../../components/Previews/User/User";
+import Loading from "../../components/Loading/Loading";
 
 // Stylesheets
 import backgrounds from "../../styles/backgrounds";
@@ -187,7 +188,7 @@ class CreatePaymentView extends React.Component {
 
     //
     var _this = this;
-    
+
     // Start loading animation
     this.setState({loading: true});
 
@@ -207,7 +208,7 @@ class CreatePaymentView extends React.Component {
         type: "request",
         token: this.state.sessionToken,
       }, function() {
-        _this.setState({loading: false});
+        _this.setState({doneLoading: true});
       });
     } else if (flow == 'out') {
       this.props.dispatchCreatePayment({
@@ -224,7 +225,7 @@ class CreatePaymentView extends React.Component {
         type: "pay",
         token: this.state.sessionToken,
       }, function() {
-        _this.setState({loading: false});
+        _this.setState({doneLoading: true});
       });
     }
   };
@@ -392,9 +393,9 @@ class CreatePaymentView extends React.Component {
 
         if (this.state.loading) {
           return(
-            <View style={[containers.container], {backgroundColor: 'green'}}>
-
-            </View>
+            <Loading
+              complete={this.state.doneLoading}
+              destination={() => Actions.MainViewContainer()} />
           );
         } else {
           return(
