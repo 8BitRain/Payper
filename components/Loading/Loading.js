@@ -20,11 +20,11 @@ class Loading extends React.Component {
           this.props.destination();
         }, 1000);
       }
-      
+
       return(
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.icyBlue}}>
-          <Text style={{fontFamily: 'Roboto', fontSize: 40, fontWeight: '300', color: colors.white}}>
-            SUCCESS
+          <Text style={{fontFamily: 'Roboto', fontSize: 20, fontWeight: '300', color: colors.white}}>
+            {(this.props.msgSuccess) ? this.props.msgSuccess : "Success" }
           </Text>
         </View>
       );
@@ -34,8 +34,8 @@ class Loading extends React.Component {
     else {
       return(
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.icyBlue}}>
-          <Text style={{fontFamily: 'Roboto', fontSize: 40, fontWeight: '300', color: colors.white}}>
-            LOADING
+          <Text style={{fontFamily: 'Roboto', fontSize: 20, fontWeight: '300', color: colors.white}}>
+            {(this.props.msgLoading) ? this.props.msgLoading : "Loadings" }
           </Text>
         </View>
       );

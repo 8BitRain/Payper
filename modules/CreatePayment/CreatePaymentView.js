@@ -395,6 +395,8 @@ class CreatePaymentView extends React.Component {
           return(
             <Loading
               complete={this.state.doneLoading}
+              msgSuccess={"You are now splitting " + this.state.memo + " with " + this.state.user.first_name + "."}
+
               destination={() => Actions.MainViewContainer()} />
           );
         } else {
