@@ -1,6 +1,51 @@
+/**
+  *   🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿
+  *   🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿 FUNCTIONALITY OVERVIEW 🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿
+  *   🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿
+  *
+  *    🗿 When the splash page is reached, signInWithKey() is called.
+  *    => If a key is found, user will be authenticated with Firebase and logged
+  *       to AsyncStorage via with their:
+  *         a) corresponding user object  (@Store:user)
+  *         b) new session_token          (@Store:session_key)
+  *         c) payment flow               (@Store:payment_flow)
+  *         d) friend list                (@Store:friend_list)
+  *       and be redirected to MainView
+  *    => If a key is not found, user will be redirected to SignInView and, on
+  *       submit, signInWithEmail() is called. Upon success, all the above is
+  *       logged and the user is redirected to MainView.
+  *
+  *    🗿 Upon sign in success the app will subscribe to three listeners, each
+  *       of which are outlined below.
+  *
+  *       1) subscribeToUser() - listens for changes to the user object in
+  *          Firebase and updates @Store:user in AsyncStorage
+  *
+  *       2) subscribeToFriends() - listens for changes in the friendList object
+  *          in Firebase and updates @Store:friend_list in AsyncStorage
+  *
+  *       3) subscribeToPayments() - listens for changes in the paymentFlow
+  *          object in Firebase and updates @Store:payment_flow in AsyncStorage
+  *
+  *    🗿 Here I'll outline how each of these listeners trigger their respective
+  *       view components.
+  *
+  *       1) When a change is detected, we call AS.mergeItem('old', 'new');
+  *
+  *       2) Upon success, a callback is triggered in the corresponding State.js
+  *          script. (for example, when a payment is added, the callback from
+  *          MainViewContainer.js is triggered)
+  *
+  *       3) This callback fetches the new payment list from AsyncStorage and
+  *          updates the state, triggering a re-render in the view.
+  *
+  *     🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿
+  *     🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿 THE END 🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿
+  *     🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿🗿
+**/
+
 import { ReactNative, AsyncStorage } from "react-native";
 import * as firebase from 'firebase';
-
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -10,7 +55,6 @@ const firebaseConfig = {
   storageBucket: "firebase-coincast.appspot.com",
 };
 firebase.initializeApp(firebaseConfig);
-
 
 /**
   *   Fetches list of users and stores them in AsyncStorage for later use
@@ -109,8 +153,6 @@ export function signInWithEmail(data, callback) {
         .then((responseData) => {
 
           if (!responseData.errorMessage) {
-            // user.uid = Object.keys(user)[0];
-            // var user = JSON.stringify(responseData);
             logUser(responseData);
             callback(true);
           }
@@ -166,8 +208,6 @@ export function signInWithKey(callback) {
               console.log(err);
             }
           } else {
-            // user.uid = Object.keys(user)[0];
-            // var user = JSON.stringify(responseData);
             logUser(responseData);
             callback(true);
           }
@@ -209,6 +249,11 @@ function logUser(user) {
   }
 
   // Fetch and, upon success, log user payment flow
+  logPaymentFlow(user);
+}
+
+export function logPaymentFlow(user) {
+  // Fetch and, upon success, log user payment flow
   try {
     var url = "/paymentFlow/" + user.uid;
     firebase.database().ref(url).once('value', function(snapshot) {
@@ -227,6 +272,8 @@ function logUser(user) {
     console.log("=-=-= ERROR LOGGING USER =-=-=");
     console.log(err);
   }
+};
 
-
-}
+export function listen() {
+  firebase.database().ref(url).on('child_added')
+};

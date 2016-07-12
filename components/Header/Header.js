@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Image} from "react-native";
+import {View, Text, TextInput, StyleSheet, Image, TouchableHighlight} from "react-native";
 import Button from "react-native-button";
 import Entypo from "react-native-vector-icons/Entypo"
 
@@ -76,7 +76,62 @@ const styles = StyleSheet.create({
   },
 
   // Active icons are fully opaque
-  iconActive: { opacity: 1.0 }
+  iconActive: { opacity: 1.0 },
+
+  // Flow tab wrapper
+  flowTabWrap: {
+    height: 30,
+    width: 100,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  // Left (in) flow tab
+  flowTabIn: {
+    flex: 0.5,
+    borderColor: colors.white,
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderRightWidth: 1,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    padding: 2.5,
+  },
+
+  // Right (out) flow tab
+  flowTabOut: {
+    flex: 0.5,
+    borderColor: colors.white,
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderLeftWidth: 1,
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    padding: 2.5,
+  },
+
+  // Flow tab inner text
+  flowTabText: {
+    fontFamily: 'Roboto',
+    fontSize: 14,
+    color: colors.white,
+  },
+
+  // Active tab styles
+  activeTab: { backgroundColor: colors.white },
+  activeTabText: { color: colors.darkGrey },
+
 });
 
 
@@ -93,7 +148,7 @@ function getCloseIcon(callback) {
 function getSettingsIcon() {
   return(
     <Button>
-      <Entypo style={styles.iconSettings} name="cog" size={24} color="white"/>
+      <Entypo style={styles.iconSettings} name="cog" size={25} color="white"/>
     </Button>
   );
 };
@@ -122,24 +177,36 @@ function getCircleIcons(numCircles, index) {
   );
 };
 
-/**
-      Toolbar for the create account onboarding process
+// Return tabs for switching between tracking flows
+function getFlowTabs(activeTab, callbackIn, callbackOut) {
+  return(
+    <View style={styles.flowTabWrap}>
+      { /* 'In' tab */ }
+      <TouchableHighlight style={[styles.flowTabIn, (activeTab == 'in') ? styles.activeTab : null]} onPress={() => callbackIn()}>
+        <Text style={[styles.flowTabText, (activeTab == 'in') ? styles.activeTabText : null]}>
+          In
+        </Text>
+      </TouchableHighlight>
 
-      Props to be passed to the header
-      =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      this.headerProps = {
-        types: {
-         "paymentIcons": false,
-         "circleIcons": true,
-         "settingsIcon": false,
-         "closeIcon": true
-       },
-       index: 0,
-       numCircles: 6
-**/
+      { /* 'Out' tab */ }
+      <TouchableHighlight style={[styles.flowTabOut, (activeTab == 'out') ? styles.activeTab : null]} onPress={() => callbackOut()}>
+        <Text style={[styles.flowTabText, (activeTab == 'out') ? styles.activeTabText : null]}>
+          Out
+        </Text>
+      </TouchableHighlight>
+    </View>
+  );
+};
+
+
 class Header extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      active: 'out',
+    }
+
     this.headerProps = this.props.headerProps;
   }
   render() {
@@ -155,6 +222,9 @@ class Header extends React.Component {
         <View style={styles.chunkHalf}>
           { this.headerProps.types.paymentIcons ? getPaymentIcons(this.headerProps.index) : null }
           { this.headerProps.types.circleIcons ? getCircleIcons(this.headerProps.numCircles, this.headerProps.index) : null }
+          { this.headerProps.types.flowTabs
+            ? getFlowTabs(this.state.active, () => {this.setState({active: 'in'}); this.props.callbackIn()}, () => {this.setState({active: 'out'}); this.props.callbackOut()})
+            : null }
         </View>
 
         { /* Filler */ }

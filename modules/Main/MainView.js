@@ -38,6 +38,7 @@ class Main extends React.Component {
           "circleIcons": false,
           "settingsIcon": true,
           "closeIcon": false,
+          "flowTabs": true,
         },
         index: null,
         numCircles: null,
@@ -72,6 +73,7 @@ class Main extends React.Component {
         // Set state depending on which filter is enabled
         switch (whichFlow) {
           case "in":
+            console.log(inc);
             _this.setState({dataSourceIn: ds.cloneWithRows(inc)});
           break;
           case "out":
@@ -89,9 +91,8 @@ class Main extends React.Component {
     *   Return a list of ready to render rows
   **/
   _renderRow(payment) {
-    return(
-      <Transaction payment={payment} />
-    )
+    if (this.state.flowFilter == "out") return <Transaction out payment={payment} />;
+    else return <Transaction inc payment={payment} />;
   }
 
   componentWillMount() {
@@ -108,12 +109,15 @@ class Main extends React.Component {
             <ListView
               style={{paddingTop: 66.5, marginBottom: 65.5}}
               dataSource={(this.state.flowFilter == "out") ? this.state.dataSourceOut : this.state.dataSourceIn }
-              renderRow={this._renderRow}
-              renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />} />
+              renderRow={this._renderRow.bind(this)}
+              renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+              enableEmptySections />
 
             <Header
               dark
-              headerProps={this.state.headerProps} />
+              headerProps={this.state.headerProps}
+              callbackOut={() => {this._genRows('out'); this.setState({flowFilter: 'out'})}}
+              callbackIn={() => {this._genRows('in'); this.setState({flowFilter: 'in'})}} />
 
             <Footer
               callbackFeed={() => console.log("FEED")}

@@ -15,7 +15,10 @@ function getUserPic(pic, name) {
   // If no profile picture, create and return initials thumbnail
   if (pic == "") {
     name = name.split(" ");
-    var initials = name[0].substring(0, 1) + name[name.length - 1].substring(0, 1);
+    var initials;
+    (name.length > 1)
+    ? initials = name[0].substring(0, 1) + name[name.length - 1].substring(0, 1)
+    : initials = name[0].substring(0, 1);
     return(
       <View style={[styles.pic, styles.initials]}>
         <Text style={{fontFamily: 'Roboto', fontSize: 18, color: colors.icyBlue}}>{ initials }</Text>
@@ -43,12 +46,16 @@ class TransactionPreview extends React.Component {
 
           { /* Profile picture */ }
           <View style={styles.picWrap}>
-            { getUserPic(this.props.payment.recip_pic, this.props.payment.recip_name) }
+            {
+              (this.props.out)
+              ? getUserPic(this.props.payment.recip_pic, this.props.payment.recip_name)
+              : getUserPic(this.props.payment.sender_pic, this.props.payment.sender_name)
+            }
           </View>
 
           { /* Name and payment info */ }
           <View style={styles.textWrap}>
-            <Text style={styles.name}>{ this.props.payment.recip_name }</Text>
+            <Text style={styles.name}>{ (this.props.out) ? this.props.payment.recip_name : this.props.payment.sender_name }</Text>
             <Text style={styles.text}>${ this.props.payment.amount } per month - { this.props.payment.purpose }</Text>
             <Text style={styles.text}>Next payment: unbeknownst to thee!</Text>
           </View>
