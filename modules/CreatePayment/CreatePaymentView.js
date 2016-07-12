@@ -203,7 +203,7 @@ class CreatePaymentView extends React.Component {
         recip_pic: currUser.profile_pic,
         sender_id: this.state.user.uid,
         sender_name: this.state.user.first_name + " " + this.state.user.last_name,
-        sender_pic: this.state.user.pic,
+        sender_pic: this.state.user.profile_pic,
         confirmed: false,
         type: "request",
         token: this.state.sessionToken,

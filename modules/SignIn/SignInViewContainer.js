@@ -35,7 +35,6 @@ class SignInView extends React.Component {
   }
 
   signInWithEmail() {
-    console.log("=-=-= checkpoint 1 =-=-=");
     Firebase.signInWithEmail({email: this.state.email, password: this.state.password}, function(signedIn) {
       if (signedIn) {
         Actions.CreatePaymentViewContainer();
