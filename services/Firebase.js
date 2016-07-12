@@ -62,9 +62,6 @@ export function createAccount(data) {
       fetch(url, {method: "POST", body: JSON.stringify(data)})
       .then((response) => response.json())
       .then((responseData) => {
-        console.log("POST response");
-        console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
-        console.log(responseData);
         AsyncStorage.setItem("@Store:session_key", token);
       })
       .done();
@@ -110,20 +107,9 @@ export function signInWithEmail(data, callback) {
         fetch(url, {method: "POST", body: JSON.stringify(data)})
         .then((response) => response.json())
         .then((responseData) => {
-          console.log("POST response");
-          console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
-          console.log(responseData);
-
           var user = JSON.stringify(responseData);
-
-          AsyncStorage.setItem('@Store:session_key', tkn).then(() => {
-            console.log("=-=-= SUCCESSFULLY SET KEY IN ASYNC STORAGE =-=-=");
-          });
-
-          AsyncStorage.setItem('@Store:user', user).then(() => {
-            console.log("=-=-= SUCCESSFULLY SET USER IN ASYNC STORAGE =-=-=");
-            callback(true);
-          });
+          user.uid = Object.keys(user)[0];
+          logUser(user);
         })
         .done();
 
@@ -178,15 +164,8 @@ export function signInWithKey(callback) {
             }
           } else {
             var user = JSON.stringify(responseData);
-
-            AsyncStorage.setItem('@Store:user', user).then(() => {
-              console.log("=-=-= Succesfully logged user =-=-=");
-              callback(true);
-            }).done();
-
-            console.log("POST response");
-            console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
-            console.log("User: " + JSON.stringify(responseData));
+            user.uid = Object.keys(user)[0];
+            logUser(user);
           }
         })
         .done();
@@ -198,3 +177,52 @@ export function signInWithKey(callback) {
   });
 
 };
+
+/**
+  *   Helper function that logs all relevant aspects of the signed in user
+  *   to AsyncStorage
+**/
+function logUser(user) {
+
+  // Log session token
+  try {
+    AsyncStorage.setItem('@Store:session_key', user.token).then(() => {
+      console.log("=-=-= SUCCESSFULLY LOGGED SESSION TOKEN =-=-=");
+    });
+  } catch (err) {
+    console.log("=-=-= ERROR LOGGING SESSION TOKEN =-=-=");
+    console.log(err);
+  }
+
+  // Log user object
+  try {
+    AsyncStorage.setItem('@Store:user', user).then(() => {
+      console.log("=-=-= SUCCESSFULLY LOGGED USER =-=-=");
+      callback(true);
+    });
+  } catch (err) {
+    console.log("=-=-= ERROR LOGGING USER =-=-=");
+    console.log(err);
+  }
+
+  // Fetch and, upon success, log user payment flow
+  try {
+    var url = "/paymentFlow/" + user.uid;
+    firebase.database().ref(url).once('value', function(snapshot) {
+      console.log("=-=-= SUCCESSFULLY FETCHED USER PAYMENT FLOW =-=-=");
+      try {
+        AsyncStorage.setItem('@Store:payment_flow', JSON.stringify(snapshot.val())).then(() => {
+          console.log("=-=-= SUCCESSFULLY LOGGED USER PAYMENT FLOW =-=-=");
+        });
+      } catch (err) {
+        console.log("=-=-= ERROR LOGGING USER PAYMENT FLOW =-=-=");
+        console.log(err);
+      }
+    });
+  } catch (err) {
+    console.log("=-=-= ERROR LOGGING USER =-=-=");
+    console.log(err);
+  }
+
+
+}

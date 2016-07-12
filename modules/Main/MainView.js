@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, AsyncStorage} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, AsyncStorage, ListView} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 
@@ -24,9 +24,10 @@ import Transaction from '../../components/Previews/Transaction/Transaction.js';
 class Main extends React.Component {
   constructor(props) {
     super(props);
+    // var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
-      tab: 'tracking',
+      tab: 'test',
 
       // Props to be passed to the Header
       headerProps: {
@@ -39,6 +40,28 @@ class Main extends React.Component {
         index: null,
         numCircles: null,
       },
+
+      // dataSource: ds.cloneWithRows(this._genRows({})),
+    }
+
+    this._genRows();
+  }
+
+  /**
+    *   Populate rows with this user's transactions
+  **/
+  _genRows() {
+    var _this = this;
+
+    try {
+      AsyncStorage.getItem('@Store:paymentFlow').then(function(pf) {
+        _this.setState({paymentFlow: pf});
+        console.log("=-=-= SUCCESSFULLY RETRIEVED PAYMENT FLOW FROM ASYNC STORAGE =-=-=");
+        console.log("=-=-= paymentFlow: " + _this.state.paymentFlow);
+      });
+    } catch (err) {
+      console.log("=-=-= ERROR GETTING PAYMENT FLOW FROM ASYNC STORAGE =-=-=");
+      console.log(err);
     }
   }
 
@@ -95,6 +118,26 @@ class Main extends React.Component {
       break;
       case "empty":
 
+      break;
+      case "test":
+        return (
+          <ListView
+            dataSource={this.state.dataSource}
+            renderRow={(rowData) => <Transaction payment={{
+                                      amount: "33",
+                                      payments: "8",
+                                      paymentsMade: 0,
+                                      purpose: "🏆🏆🏆",
+                                      recip_id: "rBBxz9kHbwUbqwJW5N2748ZnHsq2",
+                                      recip_name: "Money Banks",
+                                      recip_pic: "",
+                                      reminderSent: false,
+                                      sender_id: "UzGIVH3yUXXZKWZN8ZW6JlvOgYZ2",
+                                      sender_name: "Brady Sheridan",
+                                      sender_pic: "",
+                                    }} /> }
+          />
+        );
       break;
     }
   }
