@@ -9,3 +9,16 @@ export function fadeIn(animationProps) {
     {toValue: 1}            // Configuration
   ).start();                // Don't forget start!
 };
+
+export function slideUp(animationProps) {
+  Animated.timing(
+    
+  ).start();
+};
+
+// export function slideDown(animationProps) {
+//   Animated.timing(
+//     animationProps.height,
+//     { toValue: 200 }
+//   )
+// };
