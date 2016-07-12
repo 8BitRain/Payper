@@ -66,7 +66,7 @@ class Main extends React.Component {
         }
 
         // Outgoing payments
-        var out [];
+        var out = [];
         for (var payment in pf.out) {
           inc.push({payment: pf.out[payment]});
         }
