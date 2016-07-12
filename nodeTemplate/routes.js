@@ -28,7 +28,7 @@ app.get('/xyz', function(req, res) {
 //Test Dwolla bank information
 app.get('/dwollaView', function(req, res) {
   var customerToken;
-  var code;
+  var code = "";
 
   console.log("Request Query: " + JSON.stringify(req.query));
   //Retrieve token code from Dwolla API. On redirect dwollaView will have a code query appended after ?
@@ -42,19 +42,20 @@ app.get('/dwollaView', function(req, res) {
   });
 });
 
+
 app.get('/simpleListen', function(req, res){
   var customerToken;
   dwollaTest.run(function(token){
       //callback goes here
 
-      var client = require('swagger-client');
+      /*var client = require('swagger-client');
       var dwolla = new client({
           url: 'https://api-uat.dwolla.com/swagger.json',
           authorizations: {
               dwollaHeaderAuth: new client.ApiKeyAuthorization('Authorization', token, 'header')
           },
           usePromise: true
-      });
+      });*/
       customerToken = token;
 
       console.log("Beginning handshake with Dwolla");
@@ -75,7 +76,7 @@ app.get('/simpleListen', function(req, res){
     );*/
     var formData = {
           "client_id": "a250b344-844d-41e1-80c0-211f196e50a7",
-          "client_secret": "iT0wOcOC3Qj0921eYkJUxNfwBkB0ca5l2Ntv3rFekaoymQwEaa",
+          "client_secret": "QgUYW8EYBwDWioWBOdGUi1kQvWh41PJd2yYCAyfkrWUvim5fqP",
           "code": code,
           "grant_type": "authorization_code",
           "redirect_uri": "https://localhost:3000/dwollaView",
@@ -106,7 +107,10 @@ app.get('/simpleListen', function(req, res){
               }
           });
           //console.log("Routes - get_tokens: " + JSON.stringify(get_tokens));
-      res.json(customerToken);
+      //res.json(customerToken);
+
+      res.customerToken;
+      //res.send(customerToken);
   });
 });
 
@@ -114,27 +118,18 @@ app.get('/exchangeToken', function(req, res){
   console.log("/exchangeToken recieved code value of: " + req.query.code);
   var code = req.query.code;
   var form = {
-        "client_id": "kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp",
-        "client_secret": "QgUYW8EYBwDWioWBOdGUi1kQvWh41PJd2yYCAyfkrWUvim5fqP",
+        "client_id": 'kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp',
+        "client_secret": 'QgUYW8EYBwDWioWBOdGUi1kQvWh41PJd2yYCAyfkrWUvim5fqP',
         "code": code,
-        "grant_type": "authorization_code",
-        "redirect_uri": "https://localhost:3000/dwollaView",
+        "grant_type": 'authorization_code',
+        "redirect_uri": 'http://localhost:3000/dwollaView'
   }
 
-  console.log(typeof code);
+  console.log("accountToken: " +  JSON.stringify(dwollaTest.accountToken));
 
-  var form2 = {
-    "client_id": "kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp",
-    "client_secret": "QgUYW8EYBwDWioWBOdGUi1kQvWh41PJd2yYCAyfkrWUvim5fqP",
-    "grant_type": "client_credentials"
-  }
-  //var formData = querystring.stringify(form);
-  //formData = form;
-  //var contentLength = formData.length;
-  // https://www.dwolla.com/oauth/v2/token with grant_type=authorization_code&code=auth_code_here&client_id=your_client_id&client_secret=your_client_secret
   url='https://uat.dwolla.com/oauth/v2/token'
         request({
-          //headers:{ 'Authorization': 'Bearer UDSyNb8pbj1vCk7t9CkllWRUEkgP5nlgDU9tsvsmAh2Lt02QpE', 'Content-Type': 'application/json'},
+          //headers:{ 'Authorization': 'Bearer 9scZQk4eAj2UmikysNYKm5zBJ7Qj5JidPnYlsO84gijNoOHh3F', 'Content-Type': 'application/json'},
           headers:{'Content-Type': 'application/json'},
           uri: url,
           json: true,
@@ -145,17 +140,66 @@ app.get('/exchangeToken', function(req, res){
               console.log("Response: " + JSON.stringify(response));
               console.log("Error: " + JSON.stringify(error));
               console.log("Body: " + JSON.stringify(body));
+              console.log(dwollaTest.accountToken);
+
+              var options = {access_token: body.access_token, refresh_token: body.refresh_token, expires_in: body.expires_in, scope: body.scope, account_id: body.account_id};
+              dwollaTest.swapAccounts(options);
+              res.json("Response from server: " + body.account_id);
             } else {
               console.log("Response: " + JSON.stringify(response));
               console.log("Error: " + JSON.stringify(error));
             }
+
         });
 
-  res.json("Response from server: " + code);
+
 
 });
 
 
+// Receive POST request here
+app.get('/dwollaTestView', function(req, res) {
+  var message2 = req.body.message;
+  //var token;
+  console.log()
+  dwollaTest.run(function(message2){
+      //callback goes here
+      console.log("RUNNING DWOLLA TEST");
+      res.json("Received message: " + message2);
+  });
+
+});
+
+// Receive POST request here
+app.get('/iavToken', function(req, res) {
+  /*customer_id='7785175e-9e20-40d1-b2ea-48c2ed60d38c'
+  url='https://api-uat.dwolla.com/customers/' + customer_id + '/iav-token';
+        request({
+          headers:{ 'Authorization': 'Bearer yfJhXS0lmizuG1ftV6zlooeTzIsggUz2gDyzsM29LEfGBSbmQD', 'Content-Type': 'application/json'},
+          //headers:{'Content-Type': 'application/json'},
+          uri: url,
+          json: true,
+          method: 'POST'
+        }, function (error, response, body) {
+            if(!error && response.statusCode == 200){
+              console.log("Response: " + JSON.stringify(response));
+              console.log("Error: " + JSON.stringify(error));
+              console.log("Body: " + JSON.stringify(body));
+              res.json("Response from server: ");
+            } else {
+              console.log("Response: " + JSON.stringify(response));
+              console.log("Error: " + JSON.stringify(error));
+            }
+
+        });*/
+  var iavToken;
+  dwollaTest.get_IAV(function(token){
+    iavToken = token;
+    console.log(iavToken);
+    res.json(token);
+  });
+
+});
 
 // Receive POST request here
 app.post('/post', function(req, res) {
@@ -163,8 +207,8 @@ app.post('/post', function(req, res) {
 
   dwollaTest.run(function(token){
       //callback goes here
-      console.log("Dwolla Test Log: " + token);
-      res.send("Received message: " + token);
+      //console.log("Dwolla Test Log: " + token);
+      //res.("Received message: " + token);
   });
 
 });

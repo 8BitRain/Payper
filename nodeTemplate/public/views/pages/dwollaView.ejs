@@ -4,12 +4,17 @@
 
   <% include ../partials/head %>
   <script src="https://cdn.dwolla.com/1/dwolla.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
 <body>
 
   <button type="button" onclick="generateCredentials()">Generate Credentials</button>
   <button type="button" onclick="exchangeToken()">Exchange Token</button>
-  <form>
+  <button type="button" onclick="generateIAVToken()">GenerateIAVToken</button>
+  <button type="button" onclick="testDwolla()">Test Dwolla API</button>
+    <button type="button" onclick="runIAV()">Run IAV</button>
+  <div id="iavContainer"></div>
+  <!-- <form>
     <div>
       <label>Routing number</label>
       <input type="text" id="routingNumber" placeholder="222222226" />
@@ -31,7 +36,7 @@
     <div>
       <input type="submit" value="Add Bank">
     </div>
-  </form>
+  </form> -->
 
   <div id="logs">
   </div>
@@ -44,32 +49,62 @@ var code = <%- JSON.stringify(code) %>
 
 <script type="text/javascript">
 var userToken;
+var access_token;
+var iav_token = '';
 //var code = <%= code %>
 
 console.log("Code: " + code);
 
 
 $('form').on('submit', function() {
-  if(userToken == null){
+  if(access_token == null){
     console.log("User token is null");
   } else {
     console.log("User token isn't null")
   }
-  dwolla.configure('uat');
+  //dwolla.configure('uat');
   console.log("DWOLLA, " + JSON.stringify(dwolla));
-  var token = userToken;
+  var token = access_token;
   var bankInfo = {
     accountNumber: $('#accountNumber').val(),
     routingNumber: $('#routingNumber').val(),
     type: $('#type').val(),
     name: $('#name').val()
   }
-  console.log(bankInfo);
-  dwolla.fundingSources.create(token, bankInfo, callback);
+  console.log(iav_token);
+  dwolla.configure('uat');
+  dwolla.iav.start('iavContainer', iav_token, function(err, res) {
+      //console.log('Error: ' + JSON.stringify(err) + ' -- Response: ' + JSON.stringify(res))
+    })  ;
+  //dwolla.fundingSources.create(token, bankInfo, callback);
+
   return false
 })
 
-
+function runIAV(){
+  console.log(iav_token);
+  //newTemp = iav_token.replace(/"/g, '\'');
+  dwolla.configure('sandbox');
+  //dwolla.config.dwollaUrl = 'https://uat.dwolla.com';
+  dwolla.iav.start(iav_token, {
+    container: 'iavContainer',
+    microDeposits: false,
+    fallbackToMicroDeposits: true
+  }, function(err, res) {
+    console.log('Error: ' + JSON.stringify(err) + ' -- Response: ' + JSON.stringify(res));
+  });
+}
+function generateIAVToken(){
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+    iav_token = xhttp.responseText;
+    console.log("IAV Token: " + iav_token);
+  }
+  };
+  xhttp.open("GET", "iavToken", true);
+  xhttp.send();
+}
 function generateToken(){
   console.log("Working");
   var xhttp = new XMLHttpRequest();
@@ -78,7 +113,7 @@ function generateToken(){
     userToken = xhttp.responseText;
     console.log(userToken)
   } else {
-    //console.log("The fuck happened?");
+
   }
   };
   xhttp.open("GET", "simpleListen", true);
@@ -89,6 +124,7 @@ function generateToken(){
 );*/
 }
 
+//Function for exchanging a session token
 function exchangeToken(){
   if(code != null && code != "undefined"){
     console.log("Beginning Token Exchange with Dwolla API - https://uat.dwolla.com/oauth/v2/token");
@@ -97,6 +133,7 @@ function exchangeToken(){
     xhttp.onreadystatechange = function() {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
       message = xhttp.responseText;
+      access_token = message;
       console.log(message)
     } else{
       console.log(xhttp.responseText);
@@ -110,16 +147,31 @@ function exchangeToken(){
 
 }
 
+//Function for generating Credentials
 function generateCredentials(){
   var baseUrl = "https://uat.dwolla.com/oauth/v2/authenticate?client_id=",
     clientID = 'kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp',
     responseAndRedirect = "&response_type=code&redirect_uri=",
+    scope = "send|transactions|funding|managecustomers",
     uri = 'http://localhost:3000/dwollaView',
-    authScope = "&scope=AccountInfoFull%7CSend%7CFunding%7CScheduled%7CTransactions";
-
+    authScope = "&scope=ManageCustomers%7CSend%7CFunding%7CScheduled%7CTransactions";
 var oAuthUrl= baseUrl + encodeURI(clientID + responseAndRedirect + uri) + authScope;
-
 window.location.href = oAuthUrl;
+}
+
+//Function for testing Dwolla
+function testDwolla(){
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+    stuff= xhttp.responseText;
+    console.log(stuff)
+  } else{
+    //console.log(xhttp.responseText);
+  }
+  };
+  xhttp.open("GET", "dwollaTestView", true);
+  xhttp.send();
 }
 
 function callback(err, res) {
