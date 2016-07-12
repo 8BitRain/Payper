@@ -107,9 +107,14 @@ export function signInWithEmail(data, callback) {
         fetch(url, {method: "POST", body: JSON.stringify(data)})
         .then((response) => response.json())
         .then((responseData) => {
-          var user = JSON.stringify(responseData);
-          user.uid = Object.keys(user)[0];
-          logUser(user);
+
+          if (!responseData.errorMessage) {
+            // user.uid = Object.keys(user)[0];
+            // var user = JSON.stringify(responseData);
+            logUser(responseData);
+            callback(true);
+          }
+
         })
         .done();
 
@@ -151,9 +156,7 @@ export function signInWithKey(callback) {
         .then((responseData) => {
 
           if (responseData.errorMessage) {
-
             console.log("=-=-= NEED A NEW TOKEN =-=-=");
-
             try {
               AsyncStorage.setItem('@Store:session_key', "").then(function(val) {
                 console.log("=-=-= SUCCESSFULLY SET SESSION KEY TO NULL =-=-=");
@@ -163,9 +166,10 @@ export function signInWithKey(callback) {
               console.log(err);
             }
           } else {
-            var user = JSON.stringify(responseData);
-            user.uid = Object.keys(user)[0];
-            logUser(user);
+            // user.uid = Object.keys(user)[0];
+            // var user = JSON.stringify(responseData);
+            logUser(responseData);
+            callback(true);
           }
         })
         .done();
@@ -196,9 +200,8 @@ function logUser(user) {
 
   // Log user object
   try {
-    AsyncStorage.setItem('@Store:user', user).then(() => {
+    AsyncStorage.setItem('@Store:user', JSON.stringify(user)).then(() => {
       console.log("=-=-= SUCCESSFULLY LOGGED USER =-=-=");
-      callback(true);
     });
   } catch (err) {
     console.log("=-=-= ERROR LOGGING USER =-=-=");
@@ -213,6 +216,7 @@ function logUser(user) {
       try {
         AsyncStorage.setItem('@Store:payment_flow', JSON.stringify(snapshot.val())).then(() => {
           console.log("=-=-= SUCCESSFULLY LOGGED USER PAYMENT FLOW =-=-=");
+          console.log(snapshot.val());
         });
       } catch (err) {
         console.log("=-=-= ERROR LOGGING USER PAYMENT FLOW =-=-=");

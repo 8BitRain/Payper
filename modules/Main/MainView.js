@@ -27,7 +27,7 @@ class Main extends React.Component {
     // var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
-      tab: 'test',
+      tab: 'tracking',
 
       // Props to be passed to the Header
       headerProps: {
@@ -54,10 +54,22 @@ class Main extends React.Component {
     var _this = this;
 
     try {
-      AsyncStorage.getItem('@Store:paymentFlow').then(function(pf) {
-        _this.setState({paymentFlow: pf});
+      AsyncStorage.getItem('@Store:payment_flow').then(function(pf) {
         console.log("=-=-= SUCCESSFULLY RETRIEVED PAYMENT FLOW FROM ASYNC STORAGE =-=-=");
-        console.log("=-=-= paymentFlow: " + _this.state.paymentFlow);
+        pf = JSON.parse(pf);
+        _this.setState({paymentFlow: pf});
+
+        // Incoming payments
+        var inc = [];
+        for (var payment in pf.in) {
+          inc.push({payment: pf.in[payment]});
+        }
+
+        // Outgoing payments
+        var out [];
+        for (var payment in pf.out) {
+          inc.push({payment: pf.out[payment]});
+        }
       });
     } catch (err) {
       console.log("=-=-= ERROR GETTING PAYMENT FLOW FROM ASYNC STORAGE =-=-=");

@@ -74,7 +74,7 @@ class CreatePaymentView extends React.Component {
     this.kbOffset = new Animated.Value(0);
 
      // Callback functions to be passed to the header
-     this.callbackClose = function() { Actions.pop() };
+     this.callbackClose = function() { Actions.MainViewContainer() };
 
      // Firebase => AynscStorage => this.allUsers[]
      this.allUsers = [];
