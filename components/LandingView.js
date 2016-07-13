@@ -32,8 +32,6 @@ class LandingView extends React.Component {
         <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.BankOnboardingContainer}>Bank Onboarding</Button>
         <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.SignInViewContainer}>Sign In</Button>
         <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.MainViewContainer}>Main</Button>
-        <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.SignInViewContainer}>Sign In</Button>
-        <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.MainViewContainer}>Main</Button>
       </View>
     );
   }

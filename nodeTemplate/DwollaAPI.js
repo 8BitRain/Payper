@@ -1,22 +1,7 @@
 //NOTE if the server is running into issues you might need to refresh your sandbox tokens at uat-dwolla.com
-var dwolla = require('dwolla-v2');
-  //see dwolla.com/applications for your client id and secret
-  var client = new dwolla.Client({id: "kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp", secret: "QgUYW8EYBwDWioWBOdGUi1kQvWh41PJd2yYCAyfkrWUvim5fqP", environment: 'sandbox',});
-  //var client = require('swagger-client');
-  //generate a token on dwolla.com/applications
-  var accountToken = new client.Token({access_token: "9scZQk4eAj2UmikysNYKm5zBJ7Qj5JidPnYlsO84gijNoOHh3F"});
-  //console.log(accountToken);
-  //https://uat.dwolla.com/error/servererror?aspxerrorpath=/oauth/v2/{localhost:3000/dwollaView}
-  //https://uat.dwolla.com/oauth/v2/authenticate?client_id={kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp}&response_type=code&redirect_uri={localhost:3000/dwollaView}&scope={Funding}
-
-
-  /*var dwolla = new client({
-      url: 'https://api-uat.dwolla.com/swagger.json',
-      authorizations: {
-          dwollaHeaderAuth: new client.ApiKeyAuthorization('Authorization', 'IIoz5DW50QO4JBJ2BG700gzow8VTeRhMrOagfibVQgf8CL3T10', 'header')
-      },
-      usePromise: true
-  });*/
+var dwolla = require('dwolla-v2'),
+    client = new dwolla.Client({id: "kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp", secret: "QgUYW8EYBwDWioWBOdGUi1kQvWh41PJd2yYCAyfkrWUvim5fqP", environment: 'sandbox',}),
+    accountToken = new client.Token({access_token: "9scZQk4eAj2UmikysNYKm5zBJ7Qj5JidPnYlsO84gijNoOHh3F"});
 
 var DwollaAPI = function () {};
 DwollaAPI.prototype.account = accountToken;
@@ -24,14 +9,61 @@ DwollaAPI.prototype.log = function () {
   console.log('buz!');
 };
 
-DwollaAPI.prototype.swapAccounts = function(options){
-  //console.log("Account ID From Dwolla: " + options.account_id);
-  accountToken = new client.Token({access_token: options.access_token, refresh_token: options.refresh_token, expires_in: options.expires_in, scope: options.scope, account_id: options.account_id});
-  console.log("Account Token after swap: " +  JSON.stringify(accountToken));
-
+//1. Generate Credentials
+function generateCredentials(){
+  var baseUrl = "https://uat.dwolla.com/oauth/v2/authenticate?client_id=",
+    clientID = 'kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp',
+    responseAndRedirect = "&response_type=code&redirect_uri=",
+    scope = "send|transactions|funding|managecustomers",
+    //Change this to redirect to server uri
+    redirect_uri = 'http://localhost:3000/dwollaView',
+    authScope = "&scope=ManageCustomers%7CSend%7CFunding%7CScheduled%7CTransactions";
+  var oAuthUrl= baseUrl + encodeURI(clientID + responseAndRedirect + redirect_uri) + authScope;
+  //Open up a browser from the server for feedback
+  //window.location.href = oAuthUrl;
 }
-DwollaAPI.prototype.run = function(callback){
-  runTest(callback);
+
+//2. Exchange the token recieved from generated credentials for new access & refresh token
+function exchangeToken(){
+  var code; //set this equal to the querystring code you recieve ?code=
+  var form = {
+        "client_id": 'kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp',
+        "client_secret": 'QgUYW8EYBwDWioWBOdGUi1kQvWh41PJd2yYCAyfkrWUvim5fqP',
+        "code": code,
+        "grant_type": 'authorization_code',
+        "redirect_uri": 'http://localhost:3000/dwollaView'
+  }
+
+  console.log("accountToken: " +  JSON.stringify(dwollaTest.accountToken));
+  url='https://uat.dwolla.com/oauth/v2/token'
+        request({
+          //headers:{ 'Authorization': 'Bearer 9scZQk4eAj2UmikysNYKm5zBJ7Qj5JidPnYlsO84gijNoOHh3F', 'Content-Type': 'application/json'},
+          headers:{'Content-Type': 'application/json'},
+          uri: url,
+          json: true,
+          body: form,
+          method: 'POST'
+        }, function (error, response, body) {
+            if(!error && response.statusCode == 200){
+              console.log("Response: " + JSON.stringify(response));
+              console.log("Error: " + JSON.stringify(error));
+              console.log("Body: " + JSON.stringify(body));
+              var options = {access_token: body.access_token, refresh_token: body.refresh_token, expires_in: body.expires_in, scope: body.scope, account_id: body.account_id};
+              swapAccounts(options);
+            } else {
+              console.log("Response: " + JSON.stringify(response));
+              console.log("Error: " + JSON.stringify(error));
+            }
+        });
+}
+
+//2.5 Swap access keys and refresh keys
+DwollaAPI.prototype.swapAccounts = function(options){
+  accountToken = new client.Token({access_token: options.access_token, refresh_token: options.refresh_token,
+  expires_in: options.expires_in, scope: options.scope , account_id: options.account_id});
+}
+DwollaAPI.prototype.createVerifiedCustomer = function(callback){
+  createVerifiedCustomer(callback);
 }
 
 DwollaAPI.prototype.get_IAV = function(callback){
@@ -39,7 +71,6 @@ DwollaAPI.prototype.get_IAV = function(callback){
 }
 
 function getIAV(callback){
-
   //Remy Transistozzy customer ID  = 6dbcad5e-c1f8-4667-aa55-6f3ad3148b3f
   var customerUrl = 'https://api-uat.dwolla.com/customers/' + '6dbcad5e-c1f8-4667-aa55-6f3ad3148b3f' + '/iav-token';
   console.log("customerUrl: " + customerUrl);
@@ -49,42 +80,14 @@ function getIAV(callback){
     .then(function(res) {
       res.body.token; // => 'Z9BvpNuSrsI7Ke1mcGmTT0EpwW34GSmDaYP09frCpeWdq46JUg'
       console.log("iavToken: " + res.body.token);
-      //console.log(res);
       callback(res.body.token);
     }).catch(err => console.log('ERROR', JSON.stringify(err)));
-
-
-    /* Enable this code to grab funding sources from a Traditional Dwolla Account
-    var accountUrl = 'https://api-uat.dwolla.com/accounts/' + accountToken.account_id;
-    console.log("accountUrl" + accountUrl);
-
-    accountToken
-      .get(`${accountUrl}/funding-sources`)
-      .then(function(res) {
-        res.body._embedded['funding-sources'][0].name;
-        console.log(res.body._embedded['funding-sources'][0].name);
-        console.log("Full Finding Source info: " + res.body_embedded['funding-sources'][0]);
-         // => 'US Bank Checking'
-      }).catch(err => console.error('We got it!', err));*/
-
-/*accountToken
-  .get(customerUrl)
-  .then(function(res) {
-    res.body.firstName; // => 'Jane'
-  }) .catch(err => console.error('We got it!', err));*/
-
 }
 
 
-function runTest(callback) {
-//alert("FISH");
-var unverifiedRequest = {
-  firstName: 'Jane3',
-  lastName: 'Merchant',
-  email: 'jmerchant3@nomail.net',
-  ipAddress: '92.99.99.99'
-};
+function createVerifiedCustomer(callback) {
 
+//Format for a verifiedRequest
 var verifiedRequest = {
   firstName: 'Remy',
   lastName: 'Transistozzy',
@@ -100,63 +103,13 @@ var verifiedRequest = {
   phone: "2123371442"
 };
 
-console.log("Running DWOLLA API");
-
-/*accountToken
-  .post('on-demand-authorizations')
-  .then(function(res) {
-    res.body.buttonText; // => "Agree & Continue"
-    callback(res.body.buttonText);
-  });*/
-
-  var requestBody = {
-   'routingNumber': '222222226',
-   'accountNumber': '123456789',
-   'type': 'checking',
-   'name': 'Vera Brittain’s Checking'
- };
-
-var customerUrl = 'https://api-uat.dwolla.com/customers/6dbcad5e-c1f8-4667-aa55-6f3ad3148b3f';
- accountToken
-   .post(`${customerUrl}/funding-sources`, requestBody)
-   .then(function(res) {
-     res.headers.get('location'); // => 'https://api-uat.dwolla.com/funding-sources/375c6781-2a17-476c-84f7-db7d2f6ffb31'
-     callback(res.headers.get('location'));
-   });
-
-/*accountToken
+//Create a customer
+accountToken
   .post('customers', verifiedRequest)
   .then(function(res) {
-    console.log("reached x 2");
     res.headers.get('location'); // => 'https://api-uat.dwolla.com/customers/FC451A7A-AE30-4404-AB95-E3553FCD733F'
     callback(res.headers.get('location'));
-  });*/
-
-  /*accountToken
-  .get('customers', { limit: 10 })
-  .then(function(res) {
-    res.body._embedded.customers[0].firstName; // => 'Jane'
-    console.log(res.body._embedded.customers[0].firstName);
-    console.log(res.body._embedded.customers[0].lastName);
-    console.log(res.body._embedded.customers[0].id);
-    callback(res.body.token);
-  });*/
-
-
-
-
-  /**/
-  // Using dwolla-v2 - https://github.com/Dwolla/dwolla-v2-node
-  var customerUrl = 'https://api-uat.dwolla.com/customers/7785175e-9e20-40d1-b2ea-48c2ed60d38c';
-
-
-  /*accountToken
-    .post(`${customerUrl}/funding-sources-token`)
-    .then(function(res) {
-      res.body.token; // => 'Z9BvpNuSrsI7Ke1mcGmTT0EpwW34GSmDaYP09frCpeWdq46JUg'
-      callback(res.body.token);
-    });*/
-//return customerUrl;
+  });
 }
 
 module.exports = new DwollaAPI();
