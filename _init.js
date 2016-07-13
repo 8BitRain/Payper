@@ -31,13 +31,13 @@ export function init(user) {
   try {
     Async.set('user', JSON.stringify(user));
     Async.set('session_token', user.token);
+    Firebase.getUsers((users) => {
+      Async.set('users', JSON.stringify(users));
+    });
     Firebase.getPaymentFlow(user, (flow) => {
       Async.set('payment_flow', JSON.stringify(flow), () => {
         Actions.MainViewContainer();
       });
-    });
-    Firebase.getUsers((users) => {
-      Async.set('users', JSON.stringify(users));
     });
   } catch (err) {
     console.log(err);
@@ -94,3 +94,39 @@ export function signInWithEmail(data, callback) {
     console.log("Invalid email and password input (both must be strings)");
   }
 };
+
+
+/**
+  *   1) Create Firebase user
+  *   2) Get a token for the user and attach it to the user's object
+  *   3) POST user's object to Lambda endpoint
+  *   4) Initialize the app
+**/
+export function createUser(input) {
+  Firebase.createUser(input, (success) => {
+    if (success) {
+      Firebase.getSessionToken((token) => {
+        input.token = token;
+        Lambda.createUser(input, (user) => {
+          if(user) init(user);
+        });
+      });
+    }
+  });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//

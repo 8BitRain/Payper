@@ -64,12 +64,13 @@ class Main extends React.Component {
 
     try {
       // Fetch payment flows from AsyncStorage
-      AsyncStorage.getItem('@Store:payment_flow').then(function(flows) {
-
+      Async.get('payment_flow', (flows) => {
         // Populate row arrays
         flows = JSON.parse(flows);
-        for (var payment in flows.in) inc.push( flows.in[payment] );
-        for (var payment in flows.out) out.push( flows.out[payment] );
+        if (flows) {
+          for (var payment in flows.in) inc.push( flows.in[payment] );
+          for (var payment in flows.out) out.push( flows.out[payment] );
+        }
 
         // Set state depending on which filter is enabled
         switch (whichFlow) {
@@ -98,6 +99,9 @@ class Main extends React.Component {
 
   componentWillMount() {
     this._genRows("out");
+    Async.get('user', (val) => {
+      console.log("USER: " + val);
+    });
   }
 
   render() {
