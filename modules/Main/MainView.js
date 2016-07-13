@@ -122,7 +122,8 @@ class Main extends React.Component {
               dark
               headerProps={this.state.headerProps}
               callbackOut={() => {this._genRows('out'); this.setState({flowFilter: 'out'})}}
-              callbackIn={() => {this._genRows('in'); this.setState({flowFilter: 'in'})}} />
+              callbackIn={() => {this._genRows('in'); this.setState({flowFilter: 'in'})}}
+              callbackSettings={() => Async.get('users', (users) => console.log(users))} />
 
             <Footer
               callbackFeed={() => console.log("FEED")}

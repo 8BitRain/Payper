@@ -27,21 +27,57 @@ import { Actions } from 'react-native-router-flux';
   *   Log user's object, session_token, payment_flow, and a global user list
   *   to AsyncStorage.
 **/
-export function init(user) {
+function initializeAppState(user) {
   try {
     Async.set('user', JSON.stringify(user));
     Async.set('session_token', user.token);
     Firebase.getUsers((users) => {
       Async.set('users', JSON.stringify(users));
+      console.log("=-=-= 1 =-=-=");
+      console.log(users);
     });
     Firebase.getPaymentFlow(user, (flow) => {
       Async.set('payment_flow', JSON.stringify(flow), () => {
         Actions.MainViewContainer();
       });
     });
+    initializeAppListeners();
   } catch (err) {
     console.log(err);
   }
+};
+
+
+/**
+  *   Enable Firebase listeners
+**/
+function initializeAppListeners(user) {
+  Firebase.listenToUsers((type, data) => {
+    switch (type) {
+      case 'child_added':
+        var child = {};
+        child[data.key] = data.val();
+        Async.merge('users', JSON.stringify(child));
+        Async.get('users', (users) => {
+          console.log(JSON.parse(users));
+        });
+      break;
+      case 'child_removed':
+        Async.get('users', (users) => {
+          users = JSON.parse(users);
+          delete users[data.key];
+          Async.set('users', JSON.stringify(users));
+        });
+      break;
+      case 'child_changed':
+        Async.get('users', (users) => {
+          users = JSON.parse(users);
+          users[data.key] = data.val();
+          Async.set('users', JSON.stringify(users));
+        });
+      break;
+    }
+  });
 };
 
 
@@ -53,8 +89,12 @@ export function signInWithToken(callback) {
     Async.get('session_token', (val) => {
       if (val) {
         Lambda.getUserWithToken(val, (user) => {
-          init(user);
-          if (typeof callback == 'function') callback(true);
+          if (user) {
+            initializeAppState(user);
+            if (typeof callback == 'function') callback(true);
+          } else {
+            Actions.SignInViewContainer();
+          }
         });
       } else {
         Actions.SignInViewContainer();
@@ -79,7 +119,7 @@ export function signInWithEmail(data, callback) {
           if (token) {
             Lambda.getUserWithToken(token, (userData) => {
               if (userData) {
-                init(userData);
+                initializeAppState(userData);
                 if (typeof callback == 'function') callback(true);
               }
             });
@@ -105,7 +145,7 @@ export function createUser(input) {
       Firebase.getSessionToken((token) => {
         input.token = token;
         Lambda.createUser(input, (user) => {
-          if(user) init(user);
+          if(user) initialzeAppState(user);
         });
       });
     }

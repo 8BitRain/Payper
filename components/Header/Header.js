@@ -145,9 +145,9 @@ function getCloseIcon(callback) {
 };
 
 // Return a settings icon
-function getSettingsIcon() {
+function getSettingsIcon(callback) {
   return(
-    <Button>
+    <Button onPress={() => {callback()}}>
       <Entypo style={styles.iconSettings} name="cog" size={25} color="white"/>
     </Button>
   );
@@ -215,7 +215,7 @@ class Header extends React.Component {
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
           { this.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
-          { this.headerProps.types.settingsIcon ? getSettingsIcon() : null }
+          { this.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings) : null }
         </View>
 
         { /* Contains 'CircleIcons' or 'PaymentIcons' if specified */ }

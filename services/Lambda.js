@@ -28,11 +28,9 @@ export function getUserWithToken(sessionToken, callback) {
     .then((responseData) => {
       if (!responseData.errorMessage) {
         if (typeof callback == 'function') callback(responseData);
-        else console.log("callback is not defined as a function");
       } else {
-        console.log("Error getting user with token", responseData.errorMessage);
+        console.log("Error getting user with token:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
-        else console.log("callback is not defined as a function");
       }
     })
     .done();

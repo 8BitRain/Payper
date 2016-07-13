@@ -26,7 +26,6 @@ export function set(name, data, callback) {
     try {
       AsyncStorage.setItem('@Store:' + name, data).then(() => {
         if (typeof callback == 'function') callback();
-        else console.log("callback is not defined as a function");
       }).done();
     } catch (err) {
       console.log(err);
@@ -45,7 +44,6 @@ export function get(name, callback) {
     try {
       AsyncStorage.getItem('@Store:' + name).then((val) => {
         if (typeof callback == 'function') callback(val);
-        else console.log("callback is not defined as a function");
       }).done();
     } catch (err) {
       console.log(err);
@@ -65,12 +63,29 @@ export function merge(name, data, callback) {
     try {
       AsyncStorage.mergeItem('@Store:' + name, data).then((val) => {
         if (typeof callback == 'function') callback(val);
-        else console.log("callback is not defined as a function");
       }).done();
     } catch (err) {
       console.log(err);
     }
   } else {
     console.log("Invalid log parameters. (If you're logging a JSON, be sure to stringify it first)");
+  }
+};
+
+
+/**
+  *   Gets @Store:name and returns it via callback function
+**/
+export function remove(name, callback) {
+  if (typeof name == 'string') {
+    try {
+      AsyncStorage.removeItem('@Store:' + name).then(() => {
+        if (typeof callback == 'function') callback(true);
+      }).done();
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    console.log("Invalid log parameters. (Name must be a string)");
   }
 };

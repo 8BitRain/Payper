@@ -29,6 +29,15 @@ firebase.initializeApp(firebaseConfig);
 var usernamesRef = firebase.database().ref('/usernames');
 
 
+
+
+
+
+//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
+//                                 Getters
+//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
+
+
 /**
   *   Fetches list of users and returns them via callback function
 **/
@@ -47,22 +56,6 @@ export function getUsers(callback) {
 export function getPaymentFlow(user, callback) {
   firebase.database().ref('/paymentFlow/' + user.uid).once('value', function(snapshot) {
     if (typeof callback == 'function') callback(snapshot.val());
-  });
-};
-
-
-/**
-  *   Authenticates user with specified email and password
-**/
-export function authWithEmail(data, callback) {
-  firebase.auth().signInWithEmailAndPassword(data.email, data.password)
-  .then(() => {
-    if (firebase.auth().currentUser) callback(true);
-    else if (typeof callback == 'function') callback(false);
-  })
-  .catch((err) => {
-    console.log("Error code", err.code, "\nError message", err.message);
-    if (typeof callback == 'function') callback(false);
   });
 };
 
@@ -89,6 +82,15 @@ export function getCurrentUser(callback) {
 };
 
 
+
+
+
+
+//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
+//                             User creation
+//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
+
+
 /**
   *   Create a user in Firebase, alert caller of success
 **/
@@ -99,5 +101,58 @@ export function createUser(data, callback) {
     console.log("errorCode: " +  error.code);
     console.log("errorMessage: " + error.message);
     if (typeof callback == 'function') callback(false);
+  });
+};
+
+
+
+
+
+
+//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
+//                                 Auth
+//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
+
+
+/**
+  *   Authenticates user with specified email and password
+**/
+export function authWithEmail(data, callback) {
+  firebase.auth().signInWithEmailAndPassword(data.email, data.password)
+  .then(() => {
+    if (firebase.auth().currentUser) callback(true);
+    else if (typeof callback == 'function') callback(false);
+  })
+  .catch((err) => {
+    console.log("Error code", err.code, "\nError message", err.message);
+    if (typeof callback == 'function') callback(false);
+  });
+};
+
+
+
+
+
+
+//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
+//                                 Listeners
+//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
+
+
+/**
+  *   Listen for changes in Firebase user list, returns event type and snapshot
+**/
+export function listenToUsers(callback) {
+  usernamesRef.on('child_added', (childSnapshot, prevChildKey) => {
+    console.log("Child added.");
+    callback('child_added', childSnapshot);
+  });
+  usernamesRef.on('child_removed', (oldChildSnapshot) => {
+    console.log("Child removed.");
+    callback('child_removed', oldChildSnapshot);
+  });
+  usernamesRef.on('child_changed', (childSnapshot, prevChildKey) => {
+    console.log("Child changed.");
+    callback('child_changed', childSnapshot);
   });
 };
