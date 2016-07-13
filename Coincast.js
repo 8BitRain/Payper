@@ -48,14 +48,13 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
 
 
 /**
-  *   Get Firebase users and log them to AsyncStorage
+  *   Get all users and log them to AsyncStorage
 **/
-Firebase.getUsers();
 
 
 // UNCOMMENT AND RUN TO CLEAR USER SESSION FROM ASYNC STORAGE:
 // =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
-// AsyncStorage.multiSet([["@Store:session_key", ""], ["@Store:user", ""]]);
+// AsyncStorage.multiSet([["@Store:session_token", ""], ["@Store:user", ""]]);
 require('firebase').auth().signOut();
 // =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
 

@@ -6,6 +6,7 @@ import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 're
 // Helper functions
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
+import * as Async from "../../helpers/Async";
 import * as Firebase from "../../services/Firebase";
 
 // Custom stylesheets
