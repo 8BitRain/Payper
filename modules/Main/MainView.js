@@ -126,7 +126,8 @@ class Main extends React.Component {
 
             <Footer
               callbackFeed={() => console.log("FEED")}
-              callbackTracking={() => console.log("TRACKING")} />
+              callbackTracking={() => console.log("TRACKING")}
+              callbackPay={() => Actions.CreatePaymentViewContainer()} />
 
           </View>
         );

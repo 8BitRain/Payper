@@ -55,12 +55,14 @@ export function getPaymentFlow(user, callback) {
   *   Authenticates user with specified email and password
 **/
 export function authWithEmail(data, callback) {
-  firebase.auth().signInWithEmailAndPassword(data.email, data.password).catch((err) => {
-    console.log("Error code", err.code, "\nError message", err.message);
-    if (typeof callback == 'function') callback(false);
-  }).then(() => {
+  firebase.auth().signInWithEmailAndPassword(data.email, data.password)
+  .then(() => {
     if (firebase.auth().currentUser) callback(true);
     else if (typeof callback == 'function') callback(false);
+  })
+  .catch((err) => {
+    console.log("Error code", err.code, "\nError message", err.message);
+    if (typeof callback == 'function') callback(false);
   });
 };
 

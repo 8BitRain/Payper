@@ -75,21 +75,18 @@ export function signInWithEmail(data, callback) {
       if (!success) {
         callback(false);
       } else {
-        Firebase.getCurrentUser((user) => {
-          Firebase.getSessionToken(user, (token) => {
-            if (token) {
-              Lambda.getUserWithToken(token, (userData) => {
-                if (userData) {
-                  init(userData);
-                  if (typeof callback == 'function') callback(true);
-                }
-              });
-            }
-          });
+        Firebase.getSessionToken((token) => {
+          if (token) {
+            Lambda.getUserWithToken(token, (userData) => {
+              if (userData) {
+                init(userData);
+                if (typeof callback == 'function') callback(true);
+              }
+            });
+          }
         });
       }
     });
-
   } else {
     console.log("Invalid email and password input (both must be strings)");
   }
