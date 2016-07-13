@@ -130,6 +130,13 @@ export function authWithEmail(data, callback) {
 };
 
 
+/**
+  *   Sign current user out
+**/
+export function signOut(callback) {
+  firebase.auth().signOut();
+  callback();
+};
 
 
 

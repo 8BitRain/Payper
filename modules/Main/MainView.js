@@ -8,6 +8,7 @@ import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
 import * as Async from "../../helpers/Async";
 import * as Firebase from "../../services/Firebase";
+import * as Init from "../../_init";
 
 // Custom stylesheets
 import containers from "../../styles/containers";
@@ -123,7 +124,7 @@ class Main extends React.Component {
               headerProps={this.state.headerProps}
               callbackOut={() => {this._genRows('out'); this.setState({flowFilter: 'out'})}}
               callbackIn={() => {this._genRows('in'); this.setState({flowFilter: 'in'})}}
-              callbackSettings={() => Async.get('users', (users) => console.log(users))} />
+              callbackSettings={() => Init.signOut()} />
 
             <Footer
               callbackFeed={() => console.log("FEED")}

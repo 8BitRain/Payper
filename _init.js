@@ -151,3 +151,18 @@ export function createUser(input) {
     }
   });
 };
+
+
+/**
+  *   1) Sign user out of Firebase
+  *   2) Redirect user to landing page
+**/
+export function signOut() {
+  Firebase.signOut(() => {
+    Async.set('user', '');
+    Async.set('payment_flow', '');
+    Async.set('session_token', '');
+    Async.set('users', '');
+    Actions.LandingScreenView();
+  });
+};
