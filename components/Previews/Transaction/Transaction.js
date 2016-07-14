@@ -4,6 +4,9 @@ import {View, Text, StyleSheet, Image, Dimensions, TouchableHighlight} from 'rea
 import Button from 'react-native-button';
 import Entypo from "react-native-vector-icons/Entypo"
 
+// Helper functions
+import * as Timestamp from "../../../helpers/Timestamp";
+
 // Custom styles
 import styles from '../../../styles/Previews/Transaction';
 import colors from '../../../styles/colors';
@@ -57,7 +60,7 @@ class TransactionPreview extends React.Component {
           <View style={styles.textWrap}>
             <Text style={styles.name}>{ (this.props.out) ? this.props.payment.recip_name : this.props.payment.sender_name }</Text>
             <Text style={styles.text}>${ this.props.payment.amount } per month - { this.props.payment.purpose }</Text>
-            <Text style={styles.text}>Next payment: unbeknownst to thee!</Text>
+            <Text style={styles.text}>Next payment: { (this.props.payment.nextPayment) ? Timestamp.calendarize(this.props.payment.nextPayment) : "Unbeknownst to thee!" }</Text>
           </View>
 
           { /* Payment settings button */ }

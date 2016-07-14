@@ -13,6 +13,7 @@
 
 // Dependencies
 import * as firebase from 'firebase';
+import * as Timestamp from '../helpers/Timestamp';
 
 
 // Initialize Firebase
@@ -147,19 +148,29 @@ export function signOut(callback) {
 
 
 /**
+  *   Attach listeners from MainView to Firebase payment flows
+**/
+export function listenToPaymentFlow(uid, callback) {
+  firebase.database().ref('/paymentFlow/' + uid + "/in").orderByChild('nextPayment').on('value', (snapshot) => {
+    callback("in", snapshot.val());
+  });
+  firebase.database().ref('/paymentFlow/' + uid + "/out").orderByChild('nextPayment').on('value', (snapshot) => {
+    callback("out", snapshot.val());
+  });
+};
+
+
+/**
   *   Listen for changes in Firebase user list, returns event type and snapshot
 **/
 export function listenToUsers(callback) {
   usernamesRef.on('child_added', (childSnapshot, prevChildKey) => {
-    console.log("Child added.");
     callback('child_added', childSnapshot);
   });
   usernamesRef.on('child_removed', (oldChildSnapshot) => {
-    console.log("Child removed.");
     callback('child_removed', oldChildSnapshot);
   });
   usernamesRef.on('child_changed', (childSnapshot, prevChildKey) => {
-    console.log("Child changed.");
     callback('child_changed', childSnapshot);
   });
 };

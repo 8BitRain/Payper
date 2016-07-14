@@ -50,6 +50,14 @@ class Main extends React.Component {
       dataSourceIn: ds.cloneWithRows([]),
       refreshing: false,
     }
+
+    Async.get('user', (user) => {
+      Firebase.listenToPaymentFlow(JSON.parse(user).uid, (type, payment) => {
+        console.log("Type:", type);
+        console.log("Payment:", payment);
+        this._addRow(type, payment);
+      });
+    });
   }
 
 
@@ -62,14 +70,13 @@ class Main extends React.Component {
         inc = [],
         out = [];
 
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
     try {
       // Fetch payment flows from AsyncStorage
       Async.get('payment_flow', (flows) => {
+        flows = JSON.parse(flows);
+
         // Populate row arrays
         if (flows) {
-          flows = JSON.parse(flows);
           for (var payment in flows.in) inc.push( flows.in[payment] );
           for (var payment in flows.out) out.push( flows.out[payment] );
         }
@@ -77,16 +84,40 @@ class Main extends React.Component {
         // Set state depending on which filter is enabled
         switch (whichFlow) {
           case "in":
-            console.log(inc);
-            _this.setState({dataSourceIn: ds.cloneWithRows(inc)});
+            _this.setState({dataSourceIn: this.state.dataSourceIn.cloneWithRows(inc)});
           break;
           case "out":
-            _this.setState({dataSourceOut: ds.cloneWithRows(out)});
+            _this.setState({dataSourceOut: this.state.dataSourceOut.cloneWithRows(out)});
           break;
         }
       });
     } catch (err) {
       console.log("Error getting payment flows from AsyncStorage", err);
+    }
+  }
+
+
+  /**
+    *   Add a new payment row
+  **/
+  _addRow(flow, snapshot) {
+    var arr = [];
+
+    switch(flow) {
+      case "in":
+        for (var payment in snapshot) arr.push(snapshot[payment]);
+        arr.sort(function(a, b) {
+          return parseFloat(a.nextPayment) - parseFloat(b.nextPayment);
+        });
+        this.setState({dataSourceIn: this.state.dataSourceIn.cloneWithRows(arr)});
+      break;
+      case "out":
+        for (var payment in snapshot) arr.push(snapshot[payment]);
+        arr.sort(function(a, b) {
+          return parseFloat(a.nextPayment) - parseFloat(b.nextPayment);
+        });
+        this.setState({dataSourceOut: this.state.dataSourceOut.cloneWithRows(arr)});
+      break;
     }
   }
 
@@ -115,7 +146,7 @@ class Main extends React.Component {
 
 
   componentWillMount() {
-    this._genRows("out");
+    // this._genRows("out");
     Async.get('user', (val) => {
       console.log("USER: " + val);
     });
@@ -132,8 +163,8 @@ class Main extends React.Component {
               <Header
                 dark
                 headerProps={this.state.headerProps}
-                callbackOut={() => {this._genRows('out'); this.setState({flowFilter: 'out'})}}
-                callbackIn={() => {this._genRows('in'); this.setState({flowFilter: 'in'})}}
+                callbackOut={ () => this.setState({flowFilter: 'out'}) }
+                callbackIn={ () => this.setState({flowFilter: 'in'}) }
                 callbackSettings={() => Init.signOut()} />
             </View>
 

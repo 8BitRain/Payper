@@ -46,13 +46,8 @@ const getSceneStyle = function (props, computedProps) {
   return style;
 };
 
-
 // UNCOMMENT AND RUN TO CLEAR USER SESSION FROM ASYNC STORAGE:
-// =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
-AsyncStorage.multiSet([["@Store:payment_flow", ""], ["@Store:user", ""]]);
 require('firebase').auth().signOut();
-// =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
-
 
 export default class Coincast extends React.Component {
 
