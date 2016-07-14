@@ -30,7 +30,7 @@ const reducerCreate = (params) => {
 };
 
 // define this based on the styles/dimensions you use
-const getSceneStyle = function (/* NavigationSceneRendererProps */ props, computedProps) {
+const getSceneStyle = function (props, computedProps) {
   const style = {
     flex: 1,
     backgroundColor: '#fff',
@@ -45,11 +45,6 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
   }
   return style;
 };
-
-
-/**
-  *   Get all users and log them to AsyncStorage
-**/
 
 
 // UNCOMMENT AND RUN TO CLEAR USER SESSION FROM ASYNC STORAGE:

@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
 
   // Wrap for whole transaction preview
   wrap: {
-    width: dimensions.width * 1.0,
+    width: dimensions.width,
     flexDirection: 'column',
     justifyContent: 'center',
     borderBottomWidth: 0.8,

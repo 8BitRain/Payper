@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, RefreshControl} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 
@@ -26,7 +26,7 @@ import Transaction from '../../components/Previews/Transaction/Transaction.js';
 class Main extends React.Component {
   constructor(props) {
     super(props);
-    // var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
@@ -48,6 +48,7 @@ class Main extends React.Component {
 
       dataSourceOut: ds.cloneWithRows([]),
       dataSourceIn: ds.cloneWithRows([]),
+      refreshing: false,
     }
   }
 
@@ -67,8 +68,8 @@ class Main extends React.Component {
       // Fetch payment flows from AsyncStorage
       Async.get('payment_flow', (flows) => {
         // Populate row arrays
-        flows = JSON.parse(flows);
         if (flows) {
+          flows = JSON.parse(flows);
           for (var payment in flows.in) inc.push( flows.in[payment] );
           for (var payment in flows.out) out.push( flows.out[payment] );
         }
@@ -98,6 +99,21 @@ class Main extends React.Component {
     else return <Transaction inc payment={payment} />;
   }
 
+
+  /**
+    *
+  **/
+  _onRefresh() {
+    this.setState({refreshing: true});
+    setTimeout(() => {
+      this.setState({refreshing: false});
+    }, 1000);
+    // this._genRows().then(() => {
+    //   this.setState({refreshing: false});
+    // });
+  }
+
+
   componentWillMount() {
     this._genRows("out");
     Async.get('user', (val) => {
@@ -112,24 +128,37 @@ class Main extends React.Component {
         return (
           <View style={{flex: 1, backgroundColor: colors.white}}>
 
-            <ListView
-              style={{paddingTop: 66.5, marginBottom: 65.5}}
-              dataSource={(this.state.flowFilter == "out") ? this.state.dataSourceOut : this.state.dataSourceIn }
-              renderRow={this._renderRow.bind(this)}
-              renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-              enableEmptySections />
+            <View style={{flex: 0.1}}>
+              <Header
+                dark
+                headerProps={this.state.headerProps}
+                callbackOut={() => {this._genRows('out'); this.setState({flowFilter: 'out'})}}
+                callbackIn={() => {this._genRows('in'); this.setState({flowFilter: 'in'})}}
+                callbackSettings={() => Init.signOut()} />
+            </View>
 
-            <Header
-              dark
-              headerProps={this.state.headerProps}
-              callbackOut={() => {this._genRows('out'); this.setState({flowFilter: 'out'})}}
-              callbackIn={() => {this._genRows('in'); this.setState({flowFilter: 'in'})}}
-              callbackSettings={() => Init.signOut()} />
+            <View style={{flex: 0.8}}>
+              <ListView
+                refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this._onRefresh.bind(this)}
+                    colors={[colors.darkGrey]}
+                    tintColor={colors.darkGrey}
+                  />
+                }
+                dataSource={(this.state.flowFilter == "out") ? this.state.dataSourceOut : this.state.dataSourceIn }
+                renderRow={this._renderRow.bind(this)}
+                renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+                enableEmptySections />
+            </View>
 
-            <Footer
-              callbackFeed={() => console.log("FEED")}
-              callbackTracking={() => console.log("TRACKING")}
-              callbackPay={() => Actions.CreatePaymentViewContainer()} />
+            <View style={{flex: 0.1}}>
+              <Footer
+                callbackFeed={() => console.log("FEED")}
+                callbackTracking={() => console.log("TRACKING")}
+                callbackPay={() => Actions.CreatePaymentViewContainer()} />
+            </View>
 
           </View>
         );
