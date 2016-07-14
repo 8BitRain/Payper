@@ -24,8 +24,6 @@ export default connect(
 
     // Creates data
     dispatchCreatePayment(data, callback) {
-      console.log("=-=-=  REACHED dispatchCreatePayment(data)  =-=-=")
-
       var url = "https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create";
       fetch(url, {method: "POST", body: JSON.stringify(data)})
       .then((response) => response.json())
@@ -36,7 +34,6 @@ export default connect(
         callback();
       })
       .done();
-
     },
 
     // Fetches users from FB

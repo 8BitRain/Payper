@@ -4,6 +4,7 @@ import Button from "react-native-button";
 import {Reducer, Router, Actions} from 'react-native-router-flux';
 import * as Animations from "../../helpers/animations";
 import * as Firebase from "../../services/Firebase";
+import * as Init from "../../_init";
 
 // Stylesheets
 import containers from "../../styles/containers";
@@ -28,32 +29,26 @@ class SignInView extends React.Component {
       left: false,
       right: true,
     }
-
-    AsyncStorage.getItem('@Store:session_key').then((key) => {
-      console.log("session_key: " + key);
-    }).done();
   }
 
   signInWithEmail() {
-    console.log("=-=-= checkpoint 1 =-=-=");
-    Firebase.signInWithEmail({email: this.state.email, password: this.state.password}, function(signedIn) {
-      if (signedIn) {
-        Actions.CreatePaymentViewContainer();
-      } else {
-        console.log("=-=-= signedIn: " + signedIn + " =-=-=");
-      }
+    console.log("test");
+    Init.signInWithEmail({email: this.state.email, password: this.state.password}, function(signedIn) {
+      console.log("Signed in: " + signedIn);
     });
+    // Firebase.signInWithEmail({email: this.state.email, password: this.state.password}, function(signedIn) {
+    //   if (signedIn) {
+    //     Actions.CreatePaymentViewContainer();
+    //   } else {
+    //     console.log("=-=-= signedIn: " + signedIn + " =-=-=");
+    //   }
+    // });
   }
 
   componentWillMount() {
-    Firebase.signInWithKey(function(signedIn) {
-      if (signedIn) {
-        this.setState({signedIn: signedIn});
-        Actions.CreatePaymentViewContainer();
-      } else {
-        console.log("=-=-= signedIn: " + signedIn + " =-=-=");
-      }
-    }.bind(this));
+    Init.signInWithToken(function(signedIn) {
+      console.log("Signed in: " + signedIn);
+    });
   }
 
   render() {

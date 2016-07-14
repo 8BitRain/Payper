@@ -1,12 +1,14 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, AsyncStorage, ListView} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, RefreshControl} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 
 // Helper functions
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
+import * as Async from "../../helpers/Async";
 import * as Firebase from "../../services/Firebase";
+import * as Init from "../../_init";
 
 // Custom stylesheets
 import containers from "../../styles/containers";
@@ -24,10 +26,12 @@ import Transaction from '../../components/Previews/Transaction/Transaction.js';
 class Main extends React.Component {
   constructor(props) {
     super(props);
-    // var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
       tab: 'tracking',
+      flowFilter: 'out',
 
       // Props to be passed to the Header
       headerProps: {
@@ -36,59 +40,85 @@ class Main extends React.Component {
           "circleIcons": false,
           "settingsIcon": true,
           "closeIcon": false,
+          "flowTabs": true,
         },
         index: null,
         numCircles: null,
       },
 
-      // dataSource: ds.cloneWithRows(this._genRows({})),
+      dataSourceOut: ds.cloneWithRows([]),
+      dataSourceIn: ds.cloneWithRows([]),
+      refreshing: false,
     }
-
-    this._genRows();
   }
+
 
   /**
-    *   Populate rows with this user's transactions
+    *   Populate dataSource with this user's transactions
   **/
-  _genRows() {
-    var _this = this;
+  _genRows(whichFlow) {
+
+    var _this = this,
+        inc = [],
+        out = [];
+
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     try {
-      AsyncStorage.getItem('@Store:payment_flow').then(function(pf) {
-        console.log("=-=-= SUCCESSFULLY RETRIEVED PAYMENT FLOW FROM ASYNC STORAGE =-=-=");
-        pf = JSON.parse(pf);
-        _this.setState({paymentFlow: pf});
-
-        // Incoming payments
-        var inc = [];
-        for (var payment in pf.in) {
-          inc.push({payment: pf.in[payment]});
+      // Fetch payment flows from AsyncStorage
+      Async.get('payment_flow', (flows) => {
+        // Populate row arrays
+        if (flows) {
+          flows = JSON.parse(flows);
+          for (var payment in flows.in) inc.push( flows.in[payment] );
+          for (var payment in flows.out) out.push( flows.out[payment] );
         }
 
-        // Outgoing payments
-        var out = [];
-        for (var payment in pf.out) {
-          inc.push({payment: pf.out[payment]});
+        // Set state depending on which filter is enabled
+        switch (whichFlow) {
+          case "in":
+            console.log(inc);
+            _this.setState({dataSourceIn: ds.cloneWithRows(inc)});
+          break;
+          case "out":
+            _this.setState({dataSourceOut: ds.cloneWithRows(out)});
+          break;
         }
       });
     } catch (err) {
-      console.log("=-=-= ERROR GETTING PAYMENT FLOW FROM ASYNC STORAGE =-=-=");
-      console.log(err);
+      console.log("Error getting payment flows from AsyncStorage", err);
     }
   }
 
+
+  /**
+    *   Return a list of ready to render rows
+  **/
+  _renderRow(payment) {
+    if (this.state.flowFilter == "out") return <Transaction out payment={payment} />;
+    else return <Transaction inc payment={payment} />;
+  }
+
+
+  /**
+    *
+  **/
+  _onRefresh() {
+    this.setState({refreshing: true});
+    setTimeout(() => {
+      this.setState({refreshing: false});
+    }, 1000);
+    // this._genRows().then(() => {
+    //   this.setState({refreshing: false});
+    // });
+  }
+
+
   componentWillMount() {
-    // Check if the user was successfully stored to AsyncStorage
-    try {
-      AsyncStorage.getItem('@Store:user').then((val) => {
-        console.log("=-=-= Signed in user:");
-        console.log(val);
-      });
-    } catch (err) {
-      console.log("=-=-= Error reading from AsyncStorage:");
-      console.log(err);
-      console.log("=-=-=");
-    }
+    this._genRows("out");
+    Async.get('user', (val) => {
+      console.log("USER: " + val);
+    });
   }
 
   render() {
@@ -98,30 +128,38 @@ class Main extends React.Component {
         return (
           <View style={{flex: 1, backgroundColor: colors.white}}>
 
-            <Transaction
-              payment={
-                {
-                  amount: "33",
-                  payments: "8",
-                  paymentsMade: 0,
-                  purpose: "🏆🏆🏆",
-                  recip_id: "rBBxz9kHbwUbqwJW5N2748ZnHsq2",
-                  recip_name: "Money Banks",
-                  recip_pic: "",
-                  reminderSent: false,
-                  sender_id: "UzGIVH3yUXXZKWZN8ZW6JlvOgYZ2",
-                  sender_name: "Brady Sheridan",
-                  sender_pic: "",
+            <View style={{flex: 0.1}}>
+              <Header
+                dark
+                headerProps={this.state.headerProps}
+                callbackOut={() => {this._genRows('out'); this.setState({flowFilter: 'out'})}}
+                callbackIn={() => {this._genRows('in'); this.setState({flowFilter: 'in'})}}
+                callbackSettings={() => Init.signOut()} />
+            </View>
+
+            <View style={{flex: 0.8}}>
+              <ListView
+                refreshControl={
+                  <RefreshControl
+                    refreshing={this.state.refreshing}
+                    onRefresh={this._onRefresh.bind(this)}
+                    colors={[colors.darkGrey]}
+                    tintColor={colors.darkGrey}
+                  />
                 }
-              } />
+                dataSource={(this.state.flowFilter == "out") ? this.state.dataSourceOut : this.state.dataSourceIn }
+                renderRow={this._renderRow.bind(this)}
+                renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+                enableEmptySections />
+            </View>
 
-            <Header
-              dark
-              headerProps={this.state.headerProps} />
+            <View style={{flex: 0.1}}>
+              <Footer
+                callbackFeed={() => console.log("FEED")}
+                callbackTracking={() => console.log("TRACKING")}
+                callbackPay={() => Actions.CreatePaymentViewContainer()} />
+            </View>
 
-            <Footer
-              callbackFeed={() => console.log("FEED")}
-              callbackTracking={() => console.log("TRACKING")} />
           </View>
         );
       break;
@@ -129,26 +167,10 @@ class Main extends React.Component {
 
       break;
       case "empty":
-
-      break;
-      case "test":
-        return (
-          <ListView
-            dataSource={this.state.dataSource}
-            renderRow={(rowData) => <Transaction payment={{
-                                      amount: "33",
-                                      payments: "8",
-                                      paymentsMade: 0,
-                                      purpose: "🏆🏆🏆",
-                                      recip_id: "rBBxz9kHbwUbqwJW5N2748ZnHsq2",
-                                      recip_name: "Money Banks",
-                                      recip_pic: "",
-                                      reminderSent: false,
-                                      sender_id: "UzGIVH3yUXXZKWZN8ZW6JlvOgYZ2",
-                                      sender_name: "Brady Sheridan",
-                                      sender_pic: "",
-                                    }} /> }
-          />
+        return(
+          <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
+            <Text style={{fontSize: 18, color: colors.darkGrey}}>Empty state baby!</Text>
+          </View>
         );
       break;
     }

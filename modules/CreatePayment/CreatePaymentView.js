@@ -6,6 +6,7 @@ import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 're
 // Custom helper functions
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
+import * as Async from "../../helpers/Async";
 import * as db from "../../helpers/db";
 
 // Custom components
@@ -80,42 +81,22 @@ class CreatePaymentView extends React.Component {
      this.allUsers = [];
 
      // Get current user and store it in our state
-     try {
-       AsyncStorage.getItem('@Store:user').then(function(val) {
-         this.setState({currentUser: val});
-         console.log("=-=-= SET CURRENT USER TO: ");
-         console.log(this.state.currentUser);
-       }.bind(this));
-     } catch (err) {
-       console.log("=-=-= ERROR GETTING USER FROM ASYNC STORAGE =-=-=");
-       console.log(err);
-     }
+     var _this = this;
+     Async.get('user', (user) => {
+       _this.setState({currentUser: user});
+     });
 
-     // Get session token and store it in our state
-     try {
-       AsyncStorage.getItem('@Store:session_key').then(function(val) {
-         this.setState({sessionToken: val});
-         console.log("=-=-= SET SESSION TOKEN IN STATE TO: ");
-         console.log(this.state.sessionToken.substring(this.state.sessionToken.length - 5, this.state.sessionToken.length));
-       }.bind(this));
-     } catch (err) {
-       console.log("=-=-= ERROR GETTING SESSION TOKEN FROM ASYNC STORAGE =-=-=");
-       console.log(err);
-     }
+     Async.get('session_token', (token) => {
+       _this.setState({sessionToken: token});
+     });
 
-     // Get user list and store it in our state
-     try {
-       AsyncStorage.getItem('@Store:users').then(function(users) {
-         users = JSON.parse(users);
-         for (var i in users) {
-           users[i].username = i;
-           this.allUsers.push(users[i]);
-         }
-       }.bind(this));
-     } catch (err) {
-       console.log("=-=-= ERROR GETTING USERS FROM ASYNC STORAGE =-=-=");
-       console.log(err);
-     }
+     Async.get('users', (users) => {
+       users = JSON.parse(users);
+       for (var i in users) {
+         users[i].username = i;
+         _this.allUsers.push(users[i]);
+       }
+     });
    }
 
    componentWillReceiveProps(nextProps) {
@@ -193,6 +174,7 @@ class CreatePaymentView extends React.Component {
     this.setState({loading: true});
 
     var currUser = JSON.parse(this.state.currentUser);
+
     if (flow == 'in') {
       this.props.dispatchCreatePayment({
         amount: this.state.eachCost,
@@ -203,7 +185,7 @@ class CreatePaymentView extends React.Component {
         recip_pic: currUser.profile_pic,
         sender_id: this.state.user.uid,
         sender_name: this.state.user.first_name + " " + this.state.user.last_name,
-        sender_pic: this.state.user.pic,
+        sender_pic: this.state.user.profile_pic,
         confirmed: false,
         type: "request",
         token: this.state.sessionToken,

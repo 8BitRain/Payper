@@ -32,7 +32,7 @@ const reducerCreate = (params) => {
 };
 
 // define this based on the styles/dimensions you use
-const getSceneStyle = function (/* NavigationSceneRendererProps */ props, computedProps) {
+const getSceneStyle = function (props, computedProps) {
   const style = {
     flex: 1,
     backgroundColor: '#fff',
@@ -49,15 +49,9 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
 };
 
 
-/**
-  *   Get Firebase users and log them to AsyncStorage
-**/
-Firebase.getUsers();
-
-
 // UNCOMMENT AND RUN TO CLEAR USER SESSION FROM ASYNC STORAGE:
 // =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
-// AsyncStorage.multiSet([["@Store:session_key", ""], ["@Store:user", ""]]);
+AsyncStorage.multiSet([["@Store:payment_flow", ""], ["@Store:user", ""]]);
 require('firebase').auth().signOut();
 // =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
 

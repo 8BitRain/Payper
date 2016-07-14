@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    flex: 0.5,
+    flex: 0.33,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -34,6 +34,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 16,
     color: colors.icyBlue,
+  },
+
+  payButton: {
+
   },
 });
 
@@ -59,12 +63,12 @@ function getTrackingButton(callback) {
   );
 };
 
-// Return a '$' button
-function get$Button(callback) {
+// Return a pay button
+function getPayButton(callback) {
   return(
-    <TouchableHighlight onPress={() => callback()}>
-      <View style={styles.$Button}>
-        <Text>TRACKING</Text>
+    <TouchableHighlight style={[styles.button, {borderLeftWidth: 0.5}]} onPress={() => callback()}>
+      <View style={styles.payButton}>
+        <Text>PAY</Text>
       </View>
     </TouchableHighlight>
   );
@@ -78,6 +82,7 @@ class Footer extends React.Component {
     return(
       <View style={[styles.footerWrap]}>
         { getFeedButton(this.props.callbackFeed) }
+        { getPayButton(this.props.callbackPay) }
         { getTrackingButton(this.props.callbackTracking) }
       </View>
     );

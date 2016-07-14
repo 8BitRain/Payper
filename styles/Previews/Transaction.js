@@ -7,39 +7,27 @@ const styles = StyleSheet.create({
 
   // Wrap for whole transaction preview
   wrap: {
-    marginTop: 100,
-    height: 150,
-    width: dimensions.width * 0.9,
-    marginLeft: dimensions.width * 0.05,
+    width: dimensions.width,
     flexDirection: 'column',
     justifyContent: 'center',
+    borderBottomWidth: 0.8,
+    borderColor: colors.lightGrey,
   },
 
   // Wrap for top half (user and payment info)
   top: {
+    marginTop: 15,
     flex: 0.65,
     backgroundColor: colors.white,
-
     flexDirection: 'row',
-
-    borderColor: colors.icyBlue,
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
-    borderTopWidth: 1.5,
-    borderLeftWidth: 1.5,
-    borderRightWidth: 1.5,
   },
 
   // Wrap for bottom half (progress bar)
   bottom: {
+    marginTop: 15,
+    marginBottom: 15,
     flex: 0.35,
-    backgroundColor: colors.darkGrey,
-
-    borderColor: colors.icyBlue,
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
-    borderWidth: 1.5,
-
+    backgroundColor: 'transparent',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -47,14 +35,15 @@ const styles = StyleSheet.create({
 
   // Progress bar styles
   barWrap: {
-    flex: 0.7,
+    flex: 0.6,
     flexDirection: 'row',
-    height: 20,
+    height: 22,
     marginLeft: 35,
     marginRight: 35,
-
-    borderRadius: 10,
-    backgroundColor: colors.lightGrey,
+    borderRadius: 15,
+    borderColor: colors.icyBlue,
+    borderWidth: 1.5,
+    backgroundColor: 'transparent',
   },
 
   bar: {
@@ -68,7 +57,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     textAlign: 'center',
-    paddingTop: 3.5,
+    paddingTop: 4.0,
     fontFamily: 'Roboto',
     color: colors.darkGrey,
     fontSize: 10,
@@ -124,7 +113,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
 

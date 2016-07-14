@@ -6,6 +6,7 @@ import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 're
 // Custom helper functions
 import * as Animations from "../../../helpers/animations";
 import * as Validators from "../../../helpers/validators";
+import * as Init from "../../../_init";
 
 // Custom components
 import Header from "../../../components/Header/Header";
@@ -50,7 +51,7 @@ class Summary extends React.Component {
 
    // Callback functions to be passed to the arrow nav
    this.onPressLeft = function() { this.props.dispatchSetPage(4, null, null, null) };
-   this.onPressCheck = function() { this.props.createAccount(this.props.currentUser) };
+   this.onPressCheck = function() { Init.createUser(this.props.currentUser) };
  }
  componentDidMount() {
    Animations.fadeIn(this.animationProps);

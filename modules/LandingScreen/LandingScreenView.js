@@ -5,6 +5,7 @@ import {Reducer, Router, Actions} from 'react-native-router-flux';
 import * as Animations from "../../helpers/animations";
 import FacebookLogin from "../../components/FacebookLogin";
 import GenericSignUp from "../../components/GenericSignUp";
+import GenericSignIn from "../../components/GenericSignIn";
 
 // Stylesheets
 import container from "./styles/container";
@@ -135,7 +136,8 @@ class LandingScreenDisplay extends React.Component {
       </View>
 
         <View style={[container.third]}>
-          <FacebookLogin destination={Actions.SignInWithFacebook}/>
+          { /* <FacebookLogin destination={Actions.SignInWithFacebook}/> */ }
+          <GenericSignIn destination={Actions.SignInViewContainer}/>
           <GenericSignUp destination={Actions.CreateAccountViewContainer}/>
         </View>
 
