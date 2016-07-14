@@ -98,8 +98,16 @@ function generateIAVToken(){
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
-    iav_token = xhttp.responseText;
-    console.log("IAV Token: " + iav_token);
+    var iav = xhttp.responseText.slice(1, -1);
+    dwolla.configure('sandbox');
+    //dwolla.config.dwollaUrl = 'https://uat.dwolla.com';
+    dwolla.iav.start(iav, {
+      container: 'iavContainer',
+      microDeposits: false,
+      fallbackToMicroDeposits: true
+    }, function(err, res) {
+      console.log('Error: ' + JSON.stringify(err) + ' -- Response: ' + JSON.stringify(res));
+    });
   }
   };
   xhttp.open("GET", "iavToken", true);

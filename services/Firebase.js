@@ -63,6 +63,7 @@ export function createAccount(data) {
       .then((response) => response.json())
       .then((responseData) => {
         AsyncStorage.setItem("@Store:session_key", token);
+        console.log(token);
       })
       .done();
 

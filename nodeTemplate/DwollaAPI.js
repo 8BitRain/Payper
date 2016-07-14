@@ -1,7 +1,7 @@
 //NOTE if the server is running into issues you might need to refresh your sandbox tokens at uat-dwolla.com
 var dwolla = require('dwolla-v2'),
     client = new dwolla.Client({id: "kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp", secret: "QgUYW8EYBwDWioWBOdGUi1kQvWh41PJd2yYCAyfkrWUvim5fqP", environment: 'sandbox',}),
-    accountToken = new client.Token({access_token: "9scZQk4eAj2UmikysNYKm5zBJ7Qj5JidPnYlsO84gijNoOHh3F"});
+    accountToken = new client.Token({access_token: "9scZQk4eAj2UmikysNYKm5zBJ7Qj5JidPnYlsO84gijNoOHh3F"}, );
 
 var DwollaAPI = function () {};
 DwollaAPI.prototype.account = accountToken;
@@ -25,16 +25,14 @@ function generateCredentials(){
 
 //2. Exchange the token recieved from generated credentials for new access & refresh token
 function exchangeToken(){
-  var code; //set this equal to the querystring code you recieve ?code=
+  //var code; //set this equal to the querystring code you recieve ?code=
   var form = {
         "client_id": 'kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp',
         "client_secret": 'QgUYW8EYBwDWioWBOdGUi1kQvWh41PJd2yYCAyfkrWUvim5fqP',
-        "code": code,
-        "grant_type": 'authorization_code',
-        "redirect_uri": 'http://localhost:3000/dwollaView'
+        "refresh_token": accountToken.refresh_token,
+        "grant_type": 'refresh_token'
   }
 
-  console.log("accountToken: " +  JSON.stringify(dwollaTest.accountToken));
   url='https://uat.dwolla.com/oauth/v2/token'
         request({
           //headers:{ 'Authorization': 'Bearer 9scZQk4eAj2UmikysNYKm5zBJ7Qj5JidPnYlsO84gijNoOHh3F', 'Content-Type': 'application/json'},
@@ -48,8 +46,8 @@ function exchangeToken(){
               console.log("Response: " + JSON.stringify(response));
               console.log("Error: " + JSON.stringify(error));
               console.log("Body: " + JSON.stringify(body));
-              var options = {access_token: body.access_token, refresh_token: body.refresh_token, expires_in: body.expires_in, scope: body.scope, account_id: body.account_id};
-              swapAccounts(options);
+              //var options = {access_token: body.access_token, refresh_token: body.refresh_token, expires_in: body.expires_in, scope: body.scope, account_id: body.account_id};
+              //swapAccounts(options);
             } else {
               console.log("Response: " + JSON.stringify(response));
               console.log("Error: " + JSON.stringify(error));
@@ -82,6 +80,8 @@ function getIAV(callback){
       console.log("iavToken: " + res.body.token);
       callback(res.body.token);
     }).catch(err => console.log('ERROR', JSON.stringify(err)));
+
+
 }
 
 
