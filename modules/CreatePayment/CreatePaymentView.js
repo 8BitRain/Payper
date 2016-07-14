@@ -189,6 +189,7 @@ class CreatePaymentView extends React.Component {
         confirmed: false,
         type: "request",
         token: this.state.sessionToken,
+        test: 'true'
       }, function() {
         _this.setState({doneLoading: true});
       });
