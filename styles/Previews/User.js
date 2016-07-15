@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
-    backgroundColor: colors.offWhite,
+    backgroundColor: colors.white,
   },
 
   // Wrap for the text portion of the preview
@@ -35,11 +35,17 @@ const styles = StyleSheet.create({
 
   // User's picture
   pic: {
-    width: 45,
-    height: 45,
-    borderRadius: 22.5,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     borderColor: colors.icyBlue,
     borderWidth: 1,
+  },
+
+  initials: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   // Full name text

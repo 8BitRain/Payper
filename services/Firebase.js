@@ -142,6 +142,7 @@ export function signOut(callback) {
 
 
 
+
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 //                                 Listeners
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
@@ -151,10 +152,10 @@ export function signOut(callback) {
   *   Attach listeners from MainView to Firebase payment flows
 **/
 export function listenToPaymentFlow(uid, callback) {
-  firebase.database().ref('/paymentFlow/' + uid + "/in").orderByChild('nextPayment').on('value', (snapshot) => {
+  firebase.database().ref('/paymentFlow/' + uid + "/in").on('value', (snapshot) => {
     callback("in", snapshot.val());
   });
-  firebase.database().ref('/paymentFlow/' + uid + "/out").orderByChild('nextPayment').on('value', (snapshot) => {
+  firebase.database().ref('/paymentFlow/' + uid + "/out").on('value', (snapshot) => {
     callback("out", snapshot.val());
   });
 };

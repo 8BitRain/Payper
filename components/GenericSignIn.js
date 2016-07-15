@@ -24,7 +24,7 @@ var styles = StyleSheet.create({
         marginBottom: 5,
     },
     button: {
-      backgroundColor: '#14D063',
+      backgroundColor: colors.green,
       width: dimensions.width - 50,
       height: 50,
       paddingTop: 14.5,

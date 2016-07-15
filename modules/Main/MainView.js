@@ -31,6 +31,7 @@ class Main extends React.Component {
 
     this.state = {
       tab: 'tracking',
+      empty: true,
       flowFilter: 'out',
 
       // Props to be passed to the Header
@@ -51,73 +52,41 @@ class Main extends React.Component {
       refreshing: false,
     }
 
+    // Initialize Firebase listeners on this user's payment flow
     Async.get('user', (user) => {
       Firebase.listenToPaymentFlow(JSON.parse(user).uid, (type, payment) => {
-        console.log("Type:", type);
-        console.log("Payment:", payment);
-        this._addRow(type, payment);
+        this._genRows(type, payment);
       });
     });
   }
 
 
   /**
-    *   Populate dataSource with this user's transactions
-  **/
-  _genRows(whichFlow) {
-
-    var _this = this,
-        inc = [],
-        out = [];
-
-    try {
-      // Fetch payment flows from AsyncStorage
-      Async.get('payment_flow', (flows) => {
-        flows = JSON.parse(flows);
-
-        // Populate row arrays
-        if (flows) {
-          for (var payment in flows.in) inc.push( flows.in[payment] );
-          for (var payment in flows.out) out.push( flows.out[payment] );
-        }
-
-        // Set state depending on which filter is enabled
-        switch (whichFlow) {
-          case "in":
-            _this.setState({dataSourceIn: this.state.dataSourceIn.cloneWithRows(inc)});
-          break;
-          case "out":
-            _this.setState({dataSourceOut: this.state.dataSourceOut.cloneWithRows(out)});
-          break;
-        }
-      });
-    } catch (err) {
-      console.log("Error getting payment flows from AsyncStorage", err);
-    }
-  }
-
-
-  /**
     *   Add a new payment row
   **/
-  _addRow(flow, snapshot) {
-    var arr = [];
+  _genRows(flow, snapshot) {
+    if (snapshot == null) {
+      this.setState({empty: true});
+    } else {
+      this.setState({empty: false});
+      var arr = [];
 
-    switch(flow) {
-      case "in":
-        for (var payment in snapshot) arr.push(snapshot[payment]);
-        arr.sort(function(a, b) {
-          return parseFloat(a.nextPayment) - parseFloat(b.nextPayment);
-        });
-        this.setState({dataSourceIn: this.state.dataSourceIn.cloneWithRows(arr)});
-      break;
-      case "out":
-        for (var payment in snapshot) arr.push(snapshot[payment]);
-        arr.sort(function(a, b) {
-          return parseFloat(a.nextPayment) - parseFloat(b.nextPayment);
-        });
-        this.setState({dataSourceOut: this.state.dataSourceOut.cloneWithRows(arr)});
-      break;
+      switch(flow) {
+        case "in":
+          for (var payment in snapshot) arr.push(snapshot[payment]);
+          arr.sort(function(a, b) {
+            return parseFloat(a.nextPayment) - parseFloat(b.nextPayment);
+          });
+          this.setState({dataSourceIn: this.state.dataSourceIn.cloneWithRows(arr)});
+        break;
+        case "out":
+          for (var payment in snapshot) arr.push(snapshot[payment]);
+          arr.sort(function(a, b) {
+            return parseFloat(a.nextPayment) - parseFloat(b.nextPayment);
+          });
+          this.setState({dataSourceOut: this.state.dataSourceOut.cloneWithRows(arr)});
+        break;
+      }
     }
   }
 
@@ -132,58 +101,79 @@ class Main extends React.Component {
 
 
   /**
-    *
+    *   TODO:
+    *   Implement actual refresh events here
   **/
   _onRefresh() {
     this.setState({refreshing: true});
     setTimeout(() => {
       this.setState({refreshing: false});
-    }, 1000);
-    // this._genRows().then(() => {
-    //   this.setState({refreshing: false});
-    // });
+    }, 750);
+  }
+
+
+  /**
+    *   Returns a ready-to-render payment ListView
+  **/
+  _getPaymentList() {
+    return(
+      <View style={{flex: 0.8}}>
+        <ListView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+              colors={[colors.darkGrey]}
+              tintColor={colors.darkGrey}
+            />
+          }
+          dataSource={(this.state.flowFilter == "out") ? this.state.dataSourceOut : this.state.dataSourceIn }
+          renderRow={this._renderRow.bind(this)}
+          renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+          enableEmptySections />
+      </View>
+    );
+  }
+
+
+  /**
+    *   Returns a ready-to-render empty state view
+  **/
+  _getEmptyState() {
+    return(
+      <View style={{flex: 0.8, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
+        <Text style={{fontSize: 18, color: colors.darkGrey}}>Empty state baby!</Text>
+      </View>
+    );
   }
 
 
   componentWillMount() {
-    // this._genRows("out");
     Async.get('user', (val) => {
       console.log("USER: " + val);
     });
   }
 
-  render() {
 
+  render() {
     switch (this.state.tab) {
       case "tracking":
         return (
           <View style={{flex: 1, backgroundColor: colors.white}}>
 
+            { /* Header */ }
             <View style={{flex: 0.1}}>
               <Header
-                dark
                 headerProps={this.state.headerProps}
                 callbackOut={ () => this.setState({flowFilter: 'out'}) }
                 callbackIn={ () => this.setState({flowFilter: 'in'}) }
                 callbackSettings={() => Init.signOut()} />
             </View>
 
-            <View style={{flex: 0.8}}>
-              <ListView
-                refreshControl={
-                  <RefreshControl
-                    refreshing={this.state.refreshing}
-                    onRefresh={this._onRefresh.bind(this)}
-                    colors={[colors.darkGrey]}
-                    tintColor={colors.darkGrey}
-                  />
-                }
-                dataSource={(this.state.flowFilter == "out") ? this.state.dataSourceOut : this.state.dataSourceIn }
-                renderRow={this._renderRow.bind(this)}
-                renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-                enableEmptySections />
-            </View>
+            { /* Render list of payments or empty state */  }
+            {(this.state.empty) ? this._getEmptyState() : this._getPaymentList() }
 
+            { /* Footer */ }
             <View style={{flex: 0.1}}>
               <Footer
                 callbackFeed={() => console.log("FEED")}
@@ -196,13 +186,6 @@ class Main extends React.Component {
       break;
       case "feed":
 
-      break;
-      case "empty":
-        return(
-          <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
-            <Text style={{fontSize: 18, color: colors.darkGrey}}>Empty state baby!</Text>
-          </View>
-        );
       break;
     }
   }

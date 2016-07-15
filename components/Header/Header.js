@@ -14,34 +14,26 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    // backgroundColor: "#593F62",
-    backgroundColor: "transparent",
+    backgroundColor: colors.icyBlue,
     paddingTop: 30,
     paddingBottom: 10,
-    flexDirection: "row"
+    flexDirection: "row",
+
+    // borderBottomWidth: 1,
+    // borderBottomColor: colors.lightGrey,
   },
 
   // Header chunk sizing
   chunkQuo: {
     flex: 0.25,
-    // alignItems: "center",
-    // For testing
-    // borderColor: "red",
-    // borderWidth: 1
   },
   chunkHalf: {
     flex: 0.5,
     alignItems: "center",
-    // For testing
-    // borderColor: "blue",
-    // borderWidth: 1
   },
   chunkThird: {
     flex: 0.33,
     alignItems: "center",
-    // For testing
-    // borderColor: "green",
-    // borderWidth: 1
   },
 
   // Inline icon positioning
@@ -130,7 +122,7 @@ const styles = StyleSheet.create({
 
   // Active tab styles
   activeTab: { backgroundColor: colors.white },
-  activeTabText: { color: colors.darkGrey },
+  activeTabText: { color: colors.icyBlue },
 
 });
 
@@ -182,14 +174,22 @@ function getFlowTabs(activeTab, callbackIn, callbackOut) {
   return(
     <View style={styles.flowTabWrap}>
       { /* 'In' tab */ }
-      <TouchableHighlight style={[styles.flowTabIn, (activeTab == 'in') ? styles.activeTab : null]} onPress={() => callbackIn()}>
+      <TouchableHighlight
+        activeOpacity={0.7}
+        underlayColor={'transparent'}
+        style={[styles.flowTabIn, (activeTab == 'in') ? styles.activeTab : null]}
+        onPress={() => callbackIn()}>
         <Text style={[styles.flowTabText, (activeTab == 'in') ? styles.activeTabText : null]}>
           In
         </Text>
       </TouchableHighlight>
 
       { /* 'Out' tab */ }
-      <TouchableHighlight style={[styles.flowTabOut, (activeTab == 'out') ? styles.activeTab : null]} onPress={() => callbackOut()}>
+      <TouchableHighlight
+        activeOpacity={0.7}
+        underlayColor={'transparent'}
+        style={[styles.flowTabOut, (activeTab == 'out') ? styles.activeTab : null]}
+        onPress={() => callbackOut()}>
         <Text style={[styles.flowTabText, (activeTab == 'out') ? styles.activeTabText : null]}>
           Out
         </Text>

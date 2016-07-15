@@ -12,6 +12,7 @@
     "moment": "^2.14.1",
     "react": "15.0.2",
     "react-native": "0.26.x",
+    "react-native-autocomplete-input": "^1.1.0",
     "react-native-button": "github:ide/react-native-button",
     "react-native-carousel": "^0.8.0",
     "react-native-drawer": "^2.2.2",
