@@ -117,7 +117,7 @@ class Main extends React.Component {
   **/
   _getPaymentList() {
     return(
-      <View style={{flex: 0.8}}>
+      <View style={{flex: 0.835}}>
         <ListView
           refreshControl={
             <RefreshControl
@@ -141,17 +141,10 @@ class Main extends React.Component {
   **/
   _getEmptyState() {
     return(
-      <View style={{flex: 0.8, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
+      <View style={{flex: 0.835, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
         <Text style={{fontSize: 18, color: colors.darkGrey}}>Empty state baby!</Text>
       </View>
     );
-  }
-
-
-  componentWillMount() {
-    Async.get('user', (val) => {
-      console.log("USER: " + val);
-    });
   }
 
 
@@ -174,7 +167,7 @@ class Main extends React.Component {
             {(this.state.empty) ? this._getEmptyState() : this._getPaymentList() }
 
             { /* Footer */ }
-            <View style={{flex: 0.1}}>
+            <View style={{flex: 0.065}}>
               <Footer
                 callbackFeed={() => console.log("FEED")}
                 callbackTracking={() => console.log("TRACKING")}

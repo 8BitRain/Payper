@@ -93,11 +93,11 @@ export function signInWithToken(callback) {
             initializeAppState(user);
             if (typeof callback == 'function') callback(true);
           } else {
-            Actions.SignInViewContainer();
+            Actions.LandingScreenView();
           }
         });
       } else {
-        Actions.SignInViewContainer();
+        Actions.LandingScreenView();
       }
     });
   } catch (err) {

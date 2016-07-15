@@ -9,6 +9,7 @@ import * as Firebase from './services/Firebase';
 // Custom components
 import LandingView from './components/LandingView'
 import LandingScreenView from './modules/LandingScreen/LandingScreenView'
+import SplashView from './modules/Splash/SplashView'
 import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer'
 import CreatePaymentViewContainer from './modules/CreatePayment/CreatePaymentViewContainer'
 import SignInViewContainer from './modules/SignIn/SignInViewContainer'
@@ -57,8 +58,10 @@ export default class Coincast extends React.Component {
         <Scene key="modal" component={Modal} >
           <Scene key="root" hideNavBar hideTabBar>
 
+            <Scene key="landingView" component={LandingView} title="LandingView" />
+
             { /* Main app flow */ }
-            <Scene key="landingView" component={LandingView} title="LandingView" initial={true} />
+            <Scene key="SplashView" component={SplashView} title="SplashView"  initial={true} />
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" />
             <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
