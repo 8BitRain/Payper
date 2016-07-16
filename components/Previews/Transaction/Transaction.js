@@ -12,7 +12,10 @@ import styles from '../../../styles/Previews/Transaction';
 import colors from '../../../styles/colors';
 var dimensions = Dimensions.get('window');
 
-// Return a profile picture with the given source image
+
+/**
+  *   Return a profile picture with the given source image
+**/
 function getUserPic(pic, name) {
 
   // If no profile picture, create and return initials thumbnail
@@ -33,55 +36,191 @@ function getUserPic(pic, name) {
   return <Image style={styles.pic} source={{uri: pic}} />;
 };
 
+
+/**
+  *   Return a ready-to-render confirm button
+**/
+function getConfirmButton(callback) {
+  return(
+    <TouchableHighlight
+      onPress={() => callback()}
+      style={[styles.confirmationButton, {backgroundColor: colors.alertGreen}]}>
+      <Text style={styles.confirmText}>Confirm</Text>
+    </TouchableHighlight>
+  );
+};
+
+
+/**
+  *   Return a ready-to-render deny button
+**/
+function getDenyButton(callback) {
+  return(
+    <TouchableHighlight
+      onPress={() => callback()}
+      style={[styles.confirmationButton, {backgroundColor: colors.alertRed}]}>
+      <Text style={styles.confirmText}>Deny</Text>
+    </TouchableHighlight>
+  );
+};
+
+
+/**
+  *   Return full confirmation button wrap View
+**/
+function getConfirmButtons(callbackConfirm, callbackDeny) {
+  return(
+    <View style={styles.bottom}>
+      <View style={styles.confirmationWrap}>
+        { getConfirmButton(callbackConfirm) }
+        { getDenyButton(callbackDeny) }
+      </View>
+    </View>
+  );
+};
+
+
+/**
+  *   Return a ready-to-render progress bar
+**/
+function getProgressBar(payment) {
+  return(
+    <View style={styles.bottom}>
+      <View style={styles.barWrap}>
+        <View style={[styles.bar, {flex: payment.paymentsMade / payment.payments}]}></View>
+        <View style={{flex: 1 - payment.paymentsMade / payment.payments}}></View>
+        <Text style={styles.progressText}>{ payment.paymentsMade } of { payment.payments }</Text>
+      </View>
+    </View>
+  );
+};
+
+
+/**
+  *   Return a 'Pending confirmation' alert to render in place of the progress bar
+**/
+function getPendingAlert() {
+  return(
+    <View style={styles.bottom}>
+      <View style={styles.alert}>
+        <Text style={styles.confirmText}>Pending Confirmation</Text>
+      </View>
+    </View>
+  );
+};
+
+
 /**
   *   Returns a user preview for each the user specified in 'user' prop
 **/
 class TransactionPreview extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props.payment);
   }
 
   render() {
-    return(
-      <View style={styles.wrap}>
-        { /* Top chunk (pic, name, payment info) */ }
-        <View style={styles.top}>
 
-          { /* Profile picture */ }
-          <View style={styles.picWrap}>
-            {
-              (this.props.out)
-              ? getUserPic(this.props.payment.recip_pic, this.props.payment.recip_name)
-              : getUserPic(this.props.payment.sender_pic, this.props.payment.sender_name)
-            }
+    /**
+      *   Confirmed payements
+      *   (handle incoming vs. outgoing conditionals inline)
+    **/
+    if (this.props.payment.confirmed) {
+      return(
+        <View style={styles.wrap}>
+          { /* Top chunk (pic, name, payment info) */ }
+          <View style={styles.top}>
+
+            { /* Profile picture */ }
+            <View style={styles.picWrap}>
+              {
+                (this.props.out)
+                ? getUserPic(this.props.payment.recip_pic, this.props.payment.recip_name)
+                : getUserPic(this.props.payment.sender_pic, this.props.payment.sender_name)
+              }
+            </View>
+
+            { /* Name and payment info */ }
+            <View style={styles.textWrap}>
+              <Text style={styles.name}>{ (this.props.out) ? this.props.payment.recip_name : this.props.payment.sender_name }</Text>
+              <Text style={styles.text}>${ this.props.payment.amount } per month - { this.props.payment.purpose }</Text>
+              <Text style={styles.text}>Next payment: { (this.props.payment.nextPayment) ? Timestamp.calendarize(this.props.payment.nextPayment) : "Unbeknownst to thee!" }</Text>
+            </View>
+
+            { /* Payment settings button */ }
+            <TouchableHighlight
+              activeOpacity={0.7}
+              underlayColor={'transparent'}
+              onPress={() => console.log("TRANSACTION DOTS PRESSED")}
+              style={styles.dots}>
+              <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.icyBlue}/>
+            </TouchableHighlight>
           </View>
 
-          { /* Name and payment info */ }
-          <View style={styles.textWrap}>
-            <Text style={styles.name}>{ (this.props.out) ? this.props.payment.recip_name : this.props.payment.sender_name }</Text>
-            <Text style={styles.text}>${ this.props.payment.amount } per month - { this.props.payment.purpose }</Text>
-            <Text style={styles.text}>Next payment: { (this.props.payment.nextPayment) ? Timestamp.calendarize(this.props.payment.nextPayment) : "Unbeknownst to thee!" }</Text>
+          { /* Bottom chunk (progress bar) */ }
+          <View style={styles.bottom}>
+            <View style={styles.barWrap}>
+              <View style={[styles.bar, {flex: this.props.payment.paymentsMade / this.props.payment.payments}]}></View>
+              <View style={{flex: 1 - this.props.payment.paymentsMade / this.props.payment.payments}}></View>
+              <Text style={styles.progressText}>{ this.props.payment.paymentsMade } of { this.props.payment.payments }</Text>
+            </View>
           </View>
-
-          { /* Payment settings button */ }
-          <TouchableHighlight
-            activeOpacity={0.7}
-            underlayColor={'transparent'}
-            onPress={() => console.log("TRANSACTION DOTS PRESSED")} style={styles.dots}>
-            <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.icyBlue}/>
-          </TouchableHighlight>
         </View>
+      );
+    }
 
-        { /* Bottom chunk (progress bar) */ }
-        <View style={styles.bottom}>
-          <View style={styles.barWrap}>
-            <View style={[styles.bar, {flex: this.props.payment.paymentsMade / this.props.payment.payments}]}></View>
-            <View style={{flex: 1 - this.props.payment.paymentsMade / this.props.payment.payments}}></View>
-            <Text style={styles.progressText}>{ this.props.payment.paymentsMade } of { this.props.payment.payments }</Text>
+    /**
+      *   Unconfirmed payements
+      *   (handle incoming vs. outgoing conditionals inline)
+    **/
+    else {
+      return(
+        <View style={styles.wrap}>
+          { /* Top chunk (pic, name, payment info) */ }
+          <View style={styles.top}>
+
+            { /* Profile picture */ }
+            <View style={styles.picWrap}>
+              { (this.props.out)
+                ? getUserPic(this.props.payment.recip_pic, this.props.payment.recip_name)
+                : getUserPic(this.props.payment.sender_pic, this.props.payment.sender_name) }
+            </View>
+
+            { /* Name and payment info */ }
+            <View style={styles.textWrap}>
+              <Text style={styles.name}>
+                { (this.props.out)
+                  ? this.props.payment.recip_name
+                  : this.props.payment.sender_name }
+              </Text>
+              <Text style={styles.text}>
+                { (this.props.out)
+                  ? ("Requesting $" + this.props.payment.amount + " per month for " + this.props.payment.payments + " months")
+                  : ("$" + this.props.payment.amount + " per month - " + this.props.payment.purpose) }
+              </Text>
+              <Text style={styles.text}>
+                { (this.props.out)
+                  ? "for " + this.props.payment.purpose
+                  : "Payments will begin 24 hours after confirmation." }
+              </Text>
+            </View>
+
+            { /* Payment settings button */ }
+            <TouchableHighlight
+              activeOpacity={0.7}
+              underlayColor={'transparent'}
+              onPress={() => console.log("TRANSACTION DOTS PRESSED")}
+              style={styles.dots}>
+              <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.icyBlue}/>
+            </TouchableHighlight>
           </View>
+
+          { /* Get bottom half contents */ }
+          { (this.props.out) ? getConfirmButtons(this.props.callbackConfirm, this.props.callbackDeny) : getPendingAlert() }
+
         </View>
-      </View>
-    );
+      );
+    }
   }
 };
 

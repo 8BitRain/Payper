@@ -11,6 +11,9 @@ const colors = {
   oldGrey: "#292B2E",
   oldBlue: "#36E5FF",
   green: "#10bf5a",
+  alertRed: "#FB3640",
+  alertYellow: "#f7f523",
+  alertGreen: "#10bf5a",
 }
 
 export default colors;

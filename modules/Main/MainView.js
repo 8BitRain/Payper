@@ -65,28 +65,30 @@ class Main extends React.Component {
     *   Add a new payment row
   **/
   _genRows(flow, snapshot) {
-    if (snapshot == null) {
-      this.setState({empty: true});
-    } else {
-      this.setState({empty: false});
-      var arr = [];
+    this.setState({empty: false});
+    var arr = [];
 
-      switch(flow) {
-        case "in":
-          for (var payment in snapshot) arr.push(snapshot[payment]);
-          arr.sort(function(a, b) {
-            return parseFloat(a.nextPayment) - parseFloat(b.nextPayment);
-          });
-          this.setState({dataSourceIn: this.state.dataSourceIn.cloneWithRows(arr)});
-        break;
-        case "out":
-          for (var payment in snapshot) arr.push(snapshot[payment]);
-          arr.sort(function(a, b) {
-            return parseFloat(a.nextPayment) - parseFloat(b.nextPayment);
-          });
-          this.setState({dataSourceOut: this.state.dataSourceOut.cloneWithRows(arr)});
-        break;
-      }
+    switch(flow) {
+      case "in":
+        for (var paymentID in snapshot) {
+          snapshot[paymentID].pid = paymentID;
+          arr.push(snapshot[paymentID]);
+        }
+        arr.sort(function(a, b) {
+          return parseFloat(a.nextPayment) - parseFloat(b.nextPayment);
+        });
+        this.setState({dataSourceIn: this.state.dataSourceIn.cloneWithRows(arr)});
+      break;
+      case "out":
+        for (var paymentID in snapshot) {
+          snapshot[paymentID].pid = paymentID;
+          arr.push(snapshot[paymentID]);
+        }
+        arr.sort(function(a, b) {
+          return parseFloat(a.nextPayment) - parseFloat(b.nextPayment);
+        });
+        this.setState({dataSourceOut: this.state.dataSourceOut.cloneWithRows(arr)});
+      break;
     }
   }
 

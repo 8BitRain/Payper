@@ -94,18 +94,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
+  // Generic text styles
   text: {
     fontFamily: 'Roboto',
     color: colors.darkGrey,
     fontSize: 12,
   },
 
+  // Name text styles
   name: {
     fontFamily: 'Roboto',
     fontSize: 16,
     color: colors.icyBlue,
   },
 
+  // Dot TouchableHighlight wrap
   dots: {
     position: 'absolute',
     top: 0,
@@ -115,6 +118,55 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
+  },
+
+  // Pending confirmation alert wrapper
+  alertWrap: {
+    position: 'absolute',
+    top: 0,
+    right: 12.5,
+    width: 200,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+
+  // "Pending Confirmation"
+  alert: {
+    backgroundColor: colors.alertRed,
+    borderRadius: 4,
+    padding: 10,
+    height: 30,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  // Confirm and deny buttons wrapper
+  confirmationWrap: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  // Confirm and deny buttons
+  confirmationButton: {
+    marginLeft: 3.5,
+    marginRight: 3.5,
+    padding: 10,
+    height: 30,
+    width: 80,
+    borderRadius: 4,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  // Inner text for confirmation buttons
+  confirmText: {
+    fontFamily: 'Roboto',
+    fontSize: 12,
+    color: colors.white,
   },
 
 });
