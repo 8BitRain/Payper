@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, RefreshControl} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, RefreshControl, Dimensions} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 
@@ -9,6 +9,7 @@ import * as Validators from "../../helpers/validators";
 import * as Async from "../../helpers/Async";
 import * as Firebase from "../../services/Firebase";
 import * as Init from "../../_init";
+import * as Lambda from "../../services/Lambda";
 
 // Custom stylesheets
 import containers from "../../styles/containers";
@@ -22,6 +23,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Header from '../../components/Header/Header.js';
 import Footer from '../../components/Footer/Footer.js';
 import Transaction from '../../components/Previews/Transaction/Transaction.js';
+
+var dimensions = Dimensions.get('window');
 
 class Main extends React.Component {
   constructor(props) {
@@ -58,6 +61,42 @@ class Main extends React.Component {
         this._genRows(type, payment);
       });
     });
+
+    // Log session token to our state
+    Async.get('session_token', (token) => {
+      this.setState({token: token});
+    });
+  }
+
+
+  /**
+    *   1) Confirm the cancel request
+    *   2) Cancel the specified payment
+  **/
+  cancelPayment(pid) {
+    Lambda.cancelPayment({payment_id: pid, token: this.state.token}, (success) => {
+      console.log("Cancel payment was a", success);
+    });
+  }
+
+
+  /**
+    *   Confirm the specified payment
+  **/
+  confirmPayment(pid) {
+    Lambda.confirmPayment({payment_id: pid, token: this.state.token}, (success) => {
+      console.log("Confirm payment was a", success);
+    });
+  }
+
+
+  /**
+    *   Confirm the specified payment
+  **/
+  rejectPayment(pid) {
+    Lambda.rejectPayment({payment_id: pid, token: this.state.token}, (success) => {
+      console.log("Reject payment was a", success);
+    });
   }
 
 
@@ -66,30 +105,23 @@ class Main extends React.Component {
   **/
   _genRows(flow, snapshot) {
     this.setState({empty: false});
-    var arr = [];
 
-    switch(flow) {
-      case "in":
-        for (var paymentID in snapshot) {
-          snapshot[paymentID].pid = paymentID;
-          arr.push(snapshot[paymentID]);
-        }
-        arr.sort(function(a, b) {
-          return parseFloat(a.nextPayment) - parseFloat(b.nextPayment);
-        });
-        this.setState({dataSourceIn: this.state.dataSourceIn.cloneWithRows(arr)});
-      break;
-      case "out":
-        for (var paymentID in snapshot) {
-          snapshot[paymentID].pid = paymentID;
-          arr.push(snapshot[paymentID]);
-        }
-        arr.sort(function(a, b) {
-          return parseFloat(a.nextPayment) - parseFloat(b.nextPayment);
-        });
-        this.setState({dataSourceOut: this.state.dataSourceOut.cloneWithRows(arr)});
-      break;
+    // Attach payment id to payment object, append it to payments arr
+    var payments = [];
+    for (var paymentID in snapshot) {
+      snapshot[paymentID].pid = paymentID;
+      payments.push(snapshot[paymentID]);
     }
+
+    // Sort payments so that soonest next payment appears at front
+    payments.sort(function(a, b) {
+      return parseFloat(a.nextPayment) - parseFloat(b.nextPayment);
+    });
+
+    // Set state, triggering re-rerender of list
+    (flow == "in")
+      ? this.setState({dataSourceIn: this.state.dataSourceIn.cloneWithRows(payments)})
+      : this.setState({dataSourceOut: this.state.dataSourceOut.cloneWithRows(payments)});
   }
 
 
@@ -97,8 +129,14 @@ class Main extends React.Component {
     *   Return a list of ready to render rows
   **/
   _renderRow(payment) {
-    if (this.state.flowFilter == "out") return <Transaction out payment={payment} />;
-    else return <Transaction inc payment={payment} />;
+    return(
+      <Transaction
+        out={this.state.flowFilter == "out"}
+        payment={payment}
+        callbackCancel={() => this.cancelPayment(payment.pid)}
+        callbackConfirm={() => this.confirmPayment(payment.pid)}
+        callbackReject={() => this.rejectPayment(payment.pid)} />
+    );
   }
 
 

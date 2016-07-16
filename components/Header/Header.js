@@ -59,13 +59,6 @@ const styles = StyleSheet.create({
     marginLeft: 2,
     marginRight: 2
   },
-  iconPayment: {
-    width: 20,
-    height: 20,
-    marginLeft: 4,
-    marginRight: 4,
-    opacity: 0.5
-  },
 
   // Active icons are fully opaque
   iconActive: { opacity: 1.0 },
@@ -131,7 +124,7 @@ const styles = StyleSheet.create({
 function getCloseIcon(callback) {
   return(
     <Button onPress={() => {callback()}}>
-      <Image style={styles.iconClose} source={require('./assets/close.png')} />
+      <Entypo style={styles.iconClose} name="cross" size={25} color="white"/>
     </Button>
   );
 };
@@ -149,9 +142,9 @@ function getSettingsIcon(callback) {
 function getPaymentIcons(index) {
   return(
     <View style={styles.iconWrap}>
-      <Image style={[styles.iconPayment, (index == 0) ? styles.iconActive : null]} source={require('./assets/user.png')} />
-      <Image style={[styles.iconPayment, (index == 1) ? styles.iconActive : null]} source={require('./assets/dollar.png')} />
-      <Image style={[styles.iconPayment, (index == 2) ? styles.iconActive : null]} source={require('./assets/memo.png')} />
+      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 0) ? styles.iconActive : null]} name="user" size={20} color="white"/>
+      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 1) ? styles.iconActive : null]} name="credit" size={20} color="white"/>
+      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 2) ? styles.iconActive : null]} name="new-message" size={20} color="white"/>
     </View>
   );
 };
@@ -205,10 +198,13 @@ class Header extends React.Component {
 
     this.state = {
       active: 'out',
+      index: 0,
     }
 
     this.headerProps = this.props.headerProps;
   }
+
+
   render() {
     return(
       <View style={[styles.headerWrap, (this.props.dark) ? {backgroundColor: colors.darkGrey} : null ]}>
@@ -220,7 +216,7 @@ class Header extends React.Component {
 
         { /* Contains 'CircleIcons' or 'PaymentIcons' if specified */ }
         <View style={styles.chunkHalf}>
-          { this.headerProps.types.paymentIcons ? getPaymentIcons(this.headerProps.index) : null }
+          { this.headerProps.types.paymentIcons ? getPaymentIcons(this.props.index) : null }
           { this.headerProps.types.circleIcons ? getCircleIcons(this.headerProps.numCircles, this.headerProps.index) : null }
           { this.headerProps.types.flowTabs
             ? getFlowTabs(this.state.active, () => {this.setState({active: 'in'}); this.props.callbackIn()}, () => {this.setState({active: 'out'}); this.props.callbackOut()})

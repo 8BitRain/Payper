@@ -33,6 +33,7 @@ class CreatePaymentView extends React.Component {
     this.state = {
       // Keeps track of pagination
       inputting: "name",
+      index: 0,
 
       // For user filtering
       users: [],
@@ -90,6 +91,7 @@ class CreatePaymentView extends React.Component {
    componentWillReceiveProps(nextProps) {
      this.setState({
        inputting: nextProps.inputting,
+       index: nextProps.index,
        users: nextProps.users,
        query: nextProps.query,
        to: nextProps.to,
@@ -236,7 +238,7 @@ class CreatePaymentView extends React.Component {
 
 
   /**
-    *
+    *   Return a ready-to-render user preview
   **/
   _genUserPreview(user, options) {
     console.log(JSON.stringify(user));
@@ -282,13 +284,13 @@ class CreatePaymentView extends React.Component {
             </View>
 
             { /* Header */ }
-            <Header callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
+            <Header callbackClose={() => {this.callbackClose()}} index={this.state.index} headerProps={this.state.headerProps} />
 
             { /* Arrow nav buttons */ }
             <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
               <ArrowNav
               arrowNavProps={this.state.arrowNavProps}
-              callbackRight={() => { this.setState({inputting: "frequency", arrowNavProps: {left: true, right: true} }); }} />
+              callbackRight={() => { this.setState({inputting: "frequency", arrowNavProps: {left: true, right: true}, index: 1}); }} />
             </Animated.View>
           </View>
 
@@ -350,15 +352,15 @@ class CreatePaymentView extends React.Component {
             </View>
 
             { /* Header */ }
-            <Header dark callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
+            <Header callbackClose={() => {this.callbackClose()}} index={this.state.index} headerProps={this.state.headerProps} />
 
             { /* Arrow nav buttons */ }
             <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
               <ArrowNav
               dark
               arrowNavProps={this.state.arrowNavProps}
-              callbackLeft={() => { this.setState({inputting: "name", arrowNavProps: {left: false, right: true} }); }}
-              callbackRight={() => { this.setState({inputting: "memo", arrowNavProps: {left: true, right: false} }); }} />
+              callbackLeft={() => { this.setState({inputting: "name", arrowNavProps: {left: false, right: true}, index: 0}); }}
+              callbackRight={() => { this.setState({inputting: "memo", arrowNavProps: {left: true, right: false}, index: 2}); }} />
             </Animated.View>
           </View>
 
@@ -407,7 +409,7 @@ class CreatePaymentView extends React.Component {
               </View>
 
               { /* Header */ }
-              <Header dark callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
+              <Header callbackClose={() => {this.callbackClose()}} index={this.state.index} headerProps={this.state.headerProps} />
 
               { /* Arrow nav buttons */ }
               <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>

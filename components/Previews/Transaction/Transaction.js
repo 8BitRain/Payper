@@ -45,21 +45,21 @@ function getConfirmButton(callback) {
     <TouchableHighlight
       onPress={() => callback()}
       style={[styles.confirmationButton, {backgroundColor: colors.alertGreen}]}>
-      <Text style={styles.confirmText}>Confirm</Text>
+      <Text style={styles.confirmText}>Accept</Text>
     </TouchableHighlight>
   );
 };
 
 
 /**
-  *   Return a ready-to-render deny button
+  *   Return a ready-to-render reject button
 **/
-function getDenyButton(callback) {
+function getRejectButton(callback) {
   return(
     <TouchableHighlight
       onPress={() => callback()}
       style={[styles.confirmationButton, {backgroundColor: colors.alertRed}]}>
-      <Text style={styles.confirmText}>Deny</Text>
+      <Text style={styles.confirmText}>Reject</Text>
     </TouchableHighlight>
   );
 };
@@ -68,12 +68,12 @@ function getDenyButton(callback) {
 /**
   *   Return full confirmation button wrap View
 **/
-function getConfirmButtons(callbackConfirm, callbackDeny) {
+function getConfirmButtons(callbackConfirm, callbackReject) {
   return(
     <View style={styles.bottom}>
       <View style={styles.confirmationWrap}>
         { getConfirmButton(callbackConfirm) }
-        { getDenyButton(callbackDeny) }
+        { getRejectButton(callbackReject) }
       </View>
     </View>
   );
@@ -116,7 +116,6 @@ function getPendingAlert() {
 class TransactionPreview extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props.payment);
   }
 
   render() {
@@ -154,6 +153,15 @@ class TransactionPreview extends React.Component {
               onPress={() => console.log("TRANSACTION DOTS PRESSED")}
               style={styles.dots}>
               <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.icyBlue}/>
+            </TouchableHighlight>
+
+            { /* Cancel payment button */ }
+            <TouchableHighlight
+              activeOpacity={0.7}
+              underlayColor={'transparent'}
+              onPress={() => this.props.callbackCancel(this.props.payment.pid)}
+              style={[styles.dots, styles.cancel]}>
+              <Entypo style={styles.iconSettings} name="block" size={17.5} color={colors.alertRed}/>
             </TouchableHighlight>
           </View>
 
@@ -216,7 +224,7 @@ class TransactionPreview extends React.Component {
           </View>
 
           { /* Get bottom half contents */ }
-          { (this.props.out) ? getConfirmButtons(this.props.callbackConfirm, this.props.callbackDeny) : getPendingAlert() }
+          { (this.props.out) ? getConfirmButtons(this.props.callbackConfirm, this.props.callbackReject) : getPendingAlert() }
 
         </View>
       );

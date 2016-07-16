@@ -111,13 +111,17 @@ const styles = StyleSheet.create({
   // Dot TouchableHighlight wrap
   dots: {
     position: 'absolute',
-    top: 0,
-    right: 10,
+    top: -5,
+    right: 5,
     width: 50,
     height: 50,
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
+  },
+
+  cancel: {
+    right: 35,
   },
 
   // Pending confirmation alert wrapper
@@ -142,14 +146,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  // Confirm and deny buttons wrapper
+  // Confirm and reject buttons wrapper
   confirmationWrap: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
 
-  // Confirm and deny buttons
+  // Confirm and reject buttons
   confirmationButton: {
     marginLeft: 3.5,
     marginRight: 3.5,

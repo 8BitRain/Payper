@@ -11,6 +11,7 @@ export default connect(
   }),
   dispatch => ({
 
+
   })
 )(MainView);
 /* END Connect function for MainView.js */
