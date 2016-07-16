@@ -117,7 +117,8 @@ class CreatePaymentView extends React.Component {
     var _this = this;
     this.setState({loading: true});
     var currUser = JSON.parse(this.state.currentUser);
-    console.log(currUser);
+    console.log("current user", currUser);
+    console.log("other user", this.state.user);
 
     if (flow == 'in') {
       this.props.dispatchCreatePayment({
@@ -142,10 +143,10 @@ class CreatePaymentView extends React.Component {
         purpose: this.state.memo,
         payments: this.state.totalPayments,
         recip_id: this.state.user.uid,
-        recip_name: this.state.user.full_name,
+        recip_name: this.state.user.first_name + " " + this.state.user.last_name,
         recip_pic: this.state.user.profile_pic,
         sender_id: currUser.uid,
-        sender_name: currUser.first_name + " " + currUser.last_name,
+        sender_name: currUser.last_name,
         sender_pic: currUser.profile_pic,
         confirmed: true,
         type: "pay",

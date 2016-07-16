@@ -29,7 +29,7 @@ import { Actions } from 'react-native-router-flux';
 **/
 function initializeAppState(user) {
   user.full_name = user.first_name + " " + user.last_name;
-  
+
   try {
     Async.set('user', JSON.stringify(user));
     Async.set('session_token', user.token);
