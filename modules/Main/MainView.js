@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, RefreshControl, Dimensions} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, RefreshControl, Dimensions, StatusBar} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import SideMenu from 'react-native-side-menu';
@@ -279,6 +279,7 @@ class Main extends React.Component {
         isOpen={this.state.isOpen}
         onChange={(isOpen) => this.updateMenuState(isOpen)}
         disableGestures={true}>
+        <StatusBar barStyle="light-content" />
         <Content toggleMenu={() => this.toggle()} />
       </SideMenu>
     );
