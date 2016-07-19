@@ -3,7 +3,7 @@ import {View, Text, TextInput, StyleSheet, Animated, Image, Dimensions} from "re
 import Button from "react-native-button";
 import {Reducer, Router, Actions} from 'react-native-router-flux';
 import * as Animations from "../../helpers/animations";
-import FacebookLogin from "../../components/FacebookLogin";
+import FacebookSignIn from "../../components/FacebookSignIn";
 import GenericSignUp from "../../components/GenericSignUp";
 import GenericSignIn from "../../components/GenericSignIn";
 
@@ -64,9 +64,9 @@ class LandingScreenDisplay extends React.Component {
         </View>
 
         <View style={[container.third]}>
-          { /* <FacebookLogin destination={Actions.SignInWithFacebook}/> */ }
-          <GenericSignIn destination={Actions.SignInViewContainer}/>
-          <GenericSignUp destination={Actions.CreateAccountViewContainer}/>
+          <FacebookSignIn />
+          <GenericSignIn destination={Actions.SignInViewContainer} />
+          <GenericSignUp destination={Actions.CreateAccountViewContainer} />
         </View>
       </Animated.View>
     );
