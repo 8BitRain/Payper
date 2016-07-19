@@ -133,7 +133,7 @@ function getCloseIcon(callback) {
 function getSettingsIcon(callback) {
   return(
     <Button onPress={() => {callback()}}>
-      <Entypo style={styles.iconSettings} name="cog" size={25} color="white"/>
+      <Entypo style={styles.iconSettings} name="menu" size={25} color="white"/>
     </Button>
   );
 };

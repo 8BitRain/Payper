@@ -27,6 +27,7 @@ export function getUserWithToken(sessionToken, callback) {
     fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get", {method: "POST", body: JSON.stringify(data)})
     .then((response) => response.json())
     .then((responseData) => {
+      console.log("RESPONSE:", responseData);
       if (!responseData.errorMessage) {
         if (typeof callback == 'function') callback(responseData);
       } else {

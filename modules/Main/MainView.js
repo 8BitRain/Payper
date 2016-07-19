@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, TextInput, StyleSheet, Animated, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, RefreshControl, Dimensions} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
+import SideMenu from 'react-native-side-menu';
 
 // Helper functions
 import * as Animations from "../../helpers/animations";
@@ -23,10 +24,11 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Header from '../../components/Header/Header.js';
 import Footer from '../../components/Footer/Footer.js';
 import Transaction from '../../components/Previews/Transaction/Transaction.js';
+import Settings from '../../modules/Settings/Settings.js';
 
 var dimensions = Dimensions.get('window');
 
-class Main extends React.Component {
+class Content extends React.Component {
   constructor(props) {
     super(props);
 
@@ -200,7 +202,7 @@ class Main extends React.Component {
                 headerProps={this.state.headerProps}
                 callbackOut={ () => this.setState({flowFilter: 'out'}) }
                 callbackIn={ () => this.setState({flowFilter: 'in'}) }
-                callbackSettings={() => Init.signOut()} />
+                callbackSettings={() => this.props.toggleMenu()} />
             </View>
 
             { /* Render list of payments or empty state */  }
@@ -209,18 +211,77 @@ class Main extends React.Component {
             { /* Footer */ }
             <View style={{flex: 0.09}}>
               <Footer
-                callbackFeed={() => console.log("FEED")}
-                callbackTracking={() => console.log("TRACKING")}
+                callbackFeed={() => this.setState({tab: 'feed'})}
+                callbackTracking={() => console.log("Tracking tab is already active.")}
                 callbackPay={() => Actions.CreatePaymentViewContainer()} />
             </View>
-
           </View>
         );
       break;
       case "feed":
+        return(
+          <View style={{flex: 1, backgroundColor: colors.white}}>
 
+            { /* Header */ }
+            <View style={{flex: 0.1}}>
+              <Header
+                headerProps={this.state.headerProps}
+                callbackOut={ () => this.setState({flowFilter: 'out'}) }
+                callbackIn={ () => this.setState({flowFilter: 'in'}) }
+                callbackSettings={() => this.props.toggle()} />
+            </View>
+
+            { /* Gradient testing */  }
+            <View style={{flex: 0.81, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red'}}>
+            </View>
+
+            { /* Footer */ }
+            <View style={{flex: 0.09}}>
+              <Footer
+                callbackFeed={() => console.log("Feed tab is already active.")}
+                callbackTracking={() => this.setState({tab: 'tracking'})}
+                callbackPay={() => Actions.CreatePaymentViewContainer()} />
+            </View>
+          </View>
+        );
       break;
     }
+  }
+}
+
+
+class Main extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isOpen: false,
+    };
+  }
+
+  toggle() {
+    this.setState({
+      isOpen: !this.state.isOpen,
+    });
+  }
+
+  updateMenuState(isOpen) {
+    this.setState({ isOpen, });
+  }
+
+  render() {
+    const menu = <Settings />;
+
+    return (
+      <SideMenu
+        bounceBackOnOverdraw={false}
+        menu={menu}
+        isOpen={this.state.isOpen}
+        onChange={(isOpen) => this.updateMenuState(isOpen)}
+        disableGestures={true}>
+        <Content toggleMenu={() => this.toggle()} />
+      </SideMenu>
+    );
   }
 }
 
