@@ -51,7 +51,7 @@ const getSceneStyle = function (props, computedProps) {
 
 // UNCOMMENT AND RUN TO CLEAR USER SESSION FROM ASYNC STORAGE:
 // =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
-AsyncStorage.multiSet([["@Store:payment_flow", ""], ["@Store:user", ""]]);
+AsyncStorage.multiSet([["@Store:payment_flow", ""], ["@Store:user", ""]/*, ["@Store:session", ""]*/]);
 require('firebase').auth().signOut();
 // =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
 

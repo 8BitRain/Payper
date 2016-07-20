@@ -6,13 +6,23 @@ import {loop, Effects} from 'redux-loop';
 
 // Initialize state
 const initialState = Map({
-
+    currentPage: 0,
+    startIav: ''
 });
 
 // Action types
+const SET_PAGE = 'SET_PAGE',
+      SET_IAV = 'SET_IAV';
 
 
 // Action creators
+export function setPage(index) {
+  return { type: SET_PAGE, index: index };
+};
+
+export function setIav(index){
+  return { type: SET_IAV, index: index};
+};
 
 
 /**
@@ -24,6 +34,15 @@ const initialState = Map({
 **/
 export default function BankOnboardingReducer(state = initialState, action = {}) {
   switch (action.type) {
+    case SET_PAGE:
+      var newState = state.set('currentPage', action.index);
+      return newState;
+      break;
+
+    case SET_IAV:
+      var newState = state.set('startIav', action.index);
+      return newState;
+      break;
 
   }
 

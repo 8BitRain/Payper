@@ -5,9 +5,10 @@ import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 're
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
 import * as Firebase from "../../services/Firebase";
+import * as Async from "../../helpers/Async";
 import Entypo from 'react-native-vector-icons/Entypo';
 import Header from '../../components/Header/Header.js';
-
+/*import WebViewBridge from 'react-native-webview-bridge';*/
 
 
 //styles
@@ -20,7 +21,42 @@ import colors from '../../styles/colors';
 
 var Mixpanel = require('react-native-mixpanel');
 
+class OnTest extends React.Component {
+  constructor(props) {
+    super(props);
 
+    //Attempt that causes looping of code in webview
+    this.injectedJS = 'var iav_token = ' + "'" + this.props.startIav + "'" + ';' + ' $( document ).ready(function() { generateIAVToken()});';
+
+    //Attempt that has no effect (white blank screen)
+    //this.injectedJS = 'var iav_token = ' + "'" + this.props.startIav + "'" + ';' + ' window.onload = function() { dwolla.configure(\'sandbox\'); //Enable the falling log to see iav_token passed $div = $(\'<div />\'); $div.text(JSON.stringify("Value of iav_token: " + iav_token)); $(\'#logs\').append($div); dwolla.iav.start(iav_token, { container: \'iavContainer\', microDeposits: false, fallbackToMicroDeposits: true}, function(err, res) {console.log(\'Error: \' + JSON.stringify(err) + \' -- Response: \' + JSON.stringify(res)); $div.text(JSON.stringify(err)); $div.text(JSON.stringify(res)); $(\'#logs\').append($div);});});';
+
+    //Attempt that in sync with having the user click a button, loads the IAV properly
+    //this.injectedJS = 'var iav_token = ' + "'" + this.props.startIav + "'" + ';'
+    this.numInjectedJSCalls = 0;
+
+    console.log(this.injectedJS);
+  }
+
+  injectJS(){
+    console.log("injectedJS Code: " + this.injectedJS);
+    this.numInjectedJSCalls +=1;
+    console.log("number of times injectedJS ran" + this.numInjectedJSCalls);
+    return (JSON.stringify(this.injectedJS));
+  }
+
+  errorRender(){
+    console.log("There was an error :()");
+  }
+  render() {
+    return(
+      <WebView
+       source={{uri: 'https://www.getcoincast.com/iav'}} injectedJavaScript={this.injectedJS}
+       style={{marginTop: 20}}
+     />
+    );
+  }
+}
 
 class OnBoardingSummaryTest extends React.Component {
    constructor(props) {
@@ -43,7 +79,14 @@ class OnBoardingSummaryTest extends React.Component {
      this.phone;
      this.token1 = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjZjY2YzZDBhNTU1N2JiNjg1MzNjMDUyZWUwY2U4Y2U2Njc2MTY0MTIifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmlyZWJhc2UtY29pbmNhc3QiLCJhdWQiOiJmaXJlYmFzZS1jb2luY2FzdCIsImF1dGhfdGltZSI6MTQ2ODUxMzQ1MSwidXNlcl9pZCI6ImdtdXVpU2NoVTZXSHpHYko0TXNTbk1ETVd1QjIiLCJzdWIiOiJnbXV1aVNjaFU2V0h6R2JKNE1zU25NRE1XdUIyIiwiaWF0IjoxNDY4NTEzNDUyLCJleHAiOjE0Njg1MTcwNTIsImVtYWlsIjoiYXRpamFpdGhAd2lzYy5lZHUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiYXRpamFpdGhAd2lzYy5lZHUiLCJhdGlqYWl0aEB3aXNjLmVkdSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.NTwDTqJP2PtO9gfMdN_K8h4R9tiOkcFP9wlbxwFZzGjQWjPa5CoKt556okG1IXzNtCZ8AIRcxL-X2pTxgfM0bF6-haHstAmUktWiMnKgjPUfcE__KzcsUQtNDffUEW_3Yxuqeih7pEw9ADArwWxOPELhSDF-fGZD7ZF7UtiOeDZDj6N0QlQOKG5j0txpZJ1b_OCYNYCjzud9_okH_I7sBycEEs5XZlYidZTbWbmT2u_H_3ulbL3CI3oTzuVkraXOD9L-TiYTw_Jie43or2-_a8CevO426waWJZdV-RlBra333onJuPibc_1SufbhhoC0lDJbgmtGgpa6sFQ1Q283HA';
      this.token2 = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjZjY2YzZDBhNTU1N2JiNjg1MzNjMDUyZWUwY2U4Y2U2Njc2MTY0MTIifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmlyZWJhc2UtY29pbmNhc3QiLCJhdWQiOiJmaXJlYmFzZS1jb2luY2FzdCIsImF1dGhfdGltZSI6MTQ2ODUxMzc5NSwidXNlcl9pZCI6ImJLUHdQWjEzM2hRallJV3c2cjREUG1QVnc4cDIiLCJzdWIiOiJiS1B3UFoxMzNoUWpZSVd3NnI0RFBtUFZ3OHAyIiwiaWF0IjoxNDY4NTEzNzk1LCJleHAiOjE0Njg1MTczOTUsImVtYWlsIjoiaWVhaG9nZ2hvQHdpc2MuZWR1IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImllYWhvZ2dob0B3aXNjLmVkdSIsImllYWhvZ2dob0B3aXNjLmVkdSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.er53keRDIpj3bU1SqSuC20RJH7EuvuK3fSZ8xQRIr8sg_oT83KSutjMxc4e22iuvlTsmmW7uY8cqb6tuEnM9O-XmRqGcSWldZwAERs4xCKCA3u1QIee_qyYd3KyOJP1Jg2AQNVVpS5rgZhI_kDUNl3RDxFvD_taIbs7vNG6XRmalv0D0fg374Ek9hijQf3vlaFDuKGwwLbJPuumZijOeORc4YSd7kmQglTel51IqiCRgandQlAh5cQChXjbQTtfUuPLOxZQ-ZNAMxLLfTqvu5G5KAMXyuhqsgOnzkeaRTHTM9aG6HQFYOyuj17QI3FBVNsW8FK6laGzBHEHSRui_Xg';
-     this.token = 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImJiYjkxMDAyMTdjZTQ3MGE1MGNjMDU0MWQ3NGMzNmU2ZmFkNTRmYjYifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmlyZWJhc2UtY29pbmNhc3QiLCJhdWQiOiJmaXJlYmFzZS1jb2luY2FzdCIsImF1dGhfdGltZSI6MTQ2ODQzOTk1NywidXNlcl9pZCI6ImNDOHRmVzVTZnlhTlRiU3gyTEtBWGJqVjBCZjIiLCJzdWIiOiJjQzh0Zlc1U2Z5YU5UYlN4MkxLQVhialYwQmYyIiwiaWF0IjoxNDY4NDM5OTU3LCJleHAiOjE0Njg0NDM1NTcsImVtYWlsIjoiZmlyZW1hbkBmaXJlLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJmaXJlbWFuQGZpcmUuY29tIiwiZmlyZW1hbkBmaXJlLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.w98zDKFkfG4SmSn_zaY-edkSdGBlys8_qZjiEtl3xm7-DfoIMJTj5MgTNRm8Tm8945cOzij3WFHiZ1x0Iqxwgak9j1yHNmq-5hRC0w0YBO5IuCSAiulvGpE0AKCEfVzXei60Xo3MbKWbDzTxdNTSudmyE8dq-mZhW0s_NZyoh76T5XJhvLVox6zGsZlQXmlLpF5z3pl59SL1x31wa0nn0QuNcmV_Egq4Sv2RW4iL_Uks-zma8iBkQAI2VxhqbaKskAUq4FVwjemjBrXrd_BYnSNv5bUUmG5193-WYoPXZMadT2ef9ZkAvSpFzjZiKXVZ44gqa0d-W74-ciS_9rZm3g';
+     this.token = '';
+     this.injectedJS = '';
+
+
+     Async.get('session_token', (token) => {
+       this.token = token;
+       console.log("Token: " + token);
+     });
    //Header props
    this.headerProps = {
       types: {
@@ -55,26 +98,35 @@ class OnBoardingSummaryTest extends React.Component {
       index: 0,
       numCircles: 6
     };
-
-    /*this.submitUserCredentials = function(){
-      console.log("Submitting user credentials");
-      console.log(this.firstName);
-      console.log(this.lastName);
-      console.log(this.email);
-      console.log(this.ipaddress);
-      console.log(this.type);
-      console.log(this.address1);
-      console.log(this.address2);
-      console.log(this.city);
-      console.log(this.postalCode);
-      console.log(this.dob);
-      console.log(this.ssn);
-      console.log(this.phone);
-    };*/
-
 }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
+   }
+   initiateIAV(){
+     /*Grab IAV token for specic customer*/
+      //Ping the server with firebase token
+        //Server will respond with iav_token
+      //Inject token into webview
+      //Process
+      //On Callback handle what occurs in webview
+
+      var data = {
+        token: this.token
+      };
+
+      var url = 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/utils/getIAV';
+      fetch(url, {method: "POST", body: JSON.stringify(data)})
+      .then((response) => response.json())
+      .then((responseData) => {
+        //AsyncStorage.setItem("@Store:session_key", token);
+        console.log(responseData.token);
+        this.injectedJS = 'var iav_token = ' + responseData;
+        console.log(this.injectedJS);
+        this.props.dispatchSetIav(responseData.token);
+      })
+      .done();
+
+
    }
 
    submitUserCredentials(){
@@ -91,6 +143,7 @@ class OnBoardingSummaryTest extends React.Component {
      console.log(this.phone);
 
      var url = 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/create';
+
      var data = {
        firstName: this.firstName,
        lastName: this.lastName,
@@ -102,7 +155,7 @@ class OnBoardingSummaryTest extends React.Component {
        dob: this.dob,
        ssn: this.ssn,
        phone: this.phone,
-       token: this.token1
+       token: this.token
      };
 
 
@@ -123,7 +176,7 @@ class OnBoardingSummaryTest extends React.Component {
         accountNumber: this.account,
         accountType: this.type,
         accountName: this.name,
-        token: this.token1
+        token: this.token
       }
 
 
@@ -158,29 +211,18 @@ class OnBoardingSummaryTest extends React.Component {
      Actions.ThankYouView();
    }
 
-   dwollaTestData(){
-     console.log("Dwolla Test Data");
+   /*firebase.database().ref('/paymentFlow/' + uid + "/in").on('value', (snapshot) => {
+     console.log("Exit webview");
+   });*/
 
-   }
-
-   onBridgeMessage(message){
-   const { webviewbridge } = this.refs;
-
-   switch (message) {
-     case "hello from webview":
-       webviewbridge.sendToBridge("hello from react-native");
-       break;
-     case "got the message inside webview":
-       console.log("we have got a message from webview! yeah");
-       break;
-   }
- }
 
 
    render() {
      return (
        <Animated.View style={[containers.contentContainer, {opacity: this.animationProps.fadeAnim, backgroundColor: colors.darkGrey}]}>
+       {console.log("Props Value: " + this.props.startIav)}
        <View style={{alignItems:"center"}}>
+
           {/*Legal First name, Legal Last name adress (associated with your bank account)*/}
          <TextInput style={[{height:40}, typography.general]}onChangeText={(text) => {this.firstName = text;}} placeholderFontFamily="Roboto" placeholderTextColor="white" placeholder={"First"}/>
          <TextInput style={[{height:40}, typography.general]}onChangeText={(text) => {this.lastName = text;}} placeholderFontFamily="Roboto" placeholderTextColor="white" placeholder={"Last"}/>
@@ -192,7 +234,6 @@ class OnBoardingSummaryTest extends React.Component {
          <TextInput style={[{height:40}, typography.general]}onChangeText={(text) => {this.dob = text;}} placeholderFontFamily="Roboto" placeholderTextColor="white" placeholder={"dob"}/>
          <TextInput style={[{height:40}, typography.general]}onChangeText={(text) => {this.ssn = text;}} placeholderFontFamily="Roboto" placeholderTextColor="white" placeholder={"ssn"}/>
          <TextInput style={[{height:40}, typography.general]}onChangeText={(text) => {this.phone = text;}} placeholderFontFamily="Roboto" placeholderTextColor="white" placeholder={"phone"}/>
-
          <Button onPress={() => this.submitUserCredentials()}><Text style={typography.general}>Create Verified Customer</Text></Button>
 
 
@@ -212,6 +253,7 @@ class OnBoardingSummaryTest extends React.Component {
          <TextInput style={[{height:40}, typography.general]}onChangeText={(text) => {this.name = text;}} placeholderFontFamily="Roboto" placeholderTextColor="white" placeholder={"Name"} autoCapitalize="none"/>
          <Button onPress={() => this.submitFundingSource()}><Text style={typography.general}>Add routing information to customer</Text></Button>
          <Button onPress={() => this.removeFundingSource()}><Text style={typography.general}>Remove funding informatino</Text></Button>
+          <Button onPress={() => this.initiateIAV()}><Text style={typography.general}>Grab IAV Token</Text></Button>
 
 
        </View>
@@ -224,9 +266,16 @@ class OnBoardingSummaryTest extends React.Component {
 
 const BankOnboardingView = React.createClass({
   render() {
-    return(
-      <OnBoardingSummaryTest  />
-    );
+    if(this.props.startIav == ''){
+      return(
+        <OnBoardingSummaryTest  startIav={this.props.startIav} dispatchSetIav={this.props.dispatchSetIav}/>
+      )
+    } else {
+      console.log("IAV: " + this.props.startIav);
+      return(
+        <OnTest startIav={this.props.startIav}/>
+      )
+    }
   }
 });
 

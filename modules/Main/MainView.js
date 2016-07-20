@@ -68,8 +68,8 @@ class Main extends React.Component {
       // Fetch payment flows from AsyncStorage
       Async.get('payment_flow', (flows) => {
         // Populate row arrays
+        flows = JSON.parse(flows);
         if (flows) {
-          flows = JSON.parse(flows);
           for (var payment in flows.in) inc.push( flows.in[payment] );
           for (var payment in flows.out) out.push( flows.out[payment] );
         }

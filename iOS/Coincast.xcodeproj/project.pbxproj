@@ -13,7 +13,7 @@
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		00E356F31AD99517003FC87E /* CoincastTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CoincastTests.m */; };
-		072B48581D2C405E003DF001 /* libReact-Native-Webview-Bridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 072B48541D2C4039003DF001 /* libReact-Native-Webview-Bridge.a */; };
+		07B9410F1D39B22F001AD244 /* libReact-Native-Webview-Bridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B940E11D39A689001AD244 /* libReact-Native-Webview-Bridge.a */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
@@ -84,9 +84,9 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = Coincast;
 		};
-		072B48531D2C4039003DF001 /* PBXContainerItemProxy */ = {
+		07B940E01D39A689001AD244 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 072B48461D2C4039003DF001 /* React-Native-Webview-Bridge.xcodeproj */;
+			containerPortal = 07B940DC1D39A689001AD244 /* React-Native-Webview-Bridge.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 4114DC4C1C187C3A003CD988;
 			remoteInfo = "React-Native-Webview-Bridge";
@@ -152,7 +152,7 @@
 		00E356EE1AD99517003FC87E /* CoincastTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoincastTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* CoincastTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoincastTests.m; sourceTree = "<group>"; };
-		072B48461D2C4039003DF001 /* React-Native-Webview-Bridge.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "React-Native-Webview-Bridge.xcodeproj"; path = "../node_modules/react-native-webview-bridge/ios/React-Native-Webview-Bridge.xcodeproj"; sourceTree = "<group>"; };
+		07B940DC1D39A689001AD244 /* React-Native-Webview-Bridge.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "React-Native-Webview-Bridge.xcodeproj"; path = "../node_modules/react-native-webview-bridge/ios/React-Native-Webview-Bridge.xcodeproj"; sourceTree = "<group>"; };
 		07FF7BBB1D244F850012701C /* myicon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = myicon.ttf; path = ../myicon.ttf; sourceTree = "<group>"; };
 		09C9369473164F0088059C2E /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		126DC07690FA414E8D852666 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
@@ -199,7 +199,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				072B48581D2C405E003DF001 /* libReact-Native-Webview-Bridge.a in Frameworks */,
+				07B9410F1D39B22F001AD244 /* libReact-Native-Webview-Bridge.a in Frameworks */,
 				5988C65D1D25658300223434 /* libMixpanel.a in Frameworks */,
 				5988C65B1D25658300223434 /* libRNMixpanel.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -277,10 +277,10 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		072B48471D2C4039003DF001 /* Products */ = {
+		07B940DD1D39A689001AD244 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				072B48541D2C4039003DF001 /* libReact-Native-Webview-Bridge.a */,
+				07B940E11D39A689001AD244 /* libReact-Native-Webview-Bridge.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -350,7 +350,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				072B48461D2C4039003DF001 /* React-Native-Webview-Bridge.xcodeproj */,
+				07B940DC1D39A689001AD244 /* React-Native-Webview-Bridge.xcodeproj */,
 				5988C64A1D25657400223434 /* RNMixpanel.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -546,8 +546,8 @@
 					ProjectRef = 139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */;
 				},
 				{
-					ProductGroup = 072B48471D2C4039003DF001 /* Products */;
-					ProjectRef = 072B48461D2C4039003DF001 /* React-Native-Webview-Bridge.xcodeproj */;
+					ProductGroup = 07B940DD1D39A689001AD244 /* Products */;
+					ProjectRef = 07B940DC1D39A689001AD244 /* React-Native-Webview-Bridge.xcodeproj */;
 				},
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
@@ -606,11 +606,11 @@
 			remoteRef = 00C302E31ABCB9EE00DB3ED1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		072B48541D2C4039003DF001 /* libReact-Native-Webview-Bridge.a */ = {
+		07B940E11D39A689001AD244 /* libReact-Native-Webview-Bridge.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = "libReact-Native-Webview-Bridge.a";
-			remoteRef = 072B48531D2C4039003DF001 /* PBXContainerItemProxy */;
+			remoteRef = 07B940E01D39A689001AD244 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		07C9D56A1D23126200F2EF3B /* libRNVectorIcons.a */ = {
@@ -859,7 +859,7 @@
 					"-lc++",
 					"-licucore",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Coincast6999;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.CoincasSomething;
 				PRODUCT_NAME = Coincast;
 				PROVISIONING_PROFILE = "";
 			};
@@ -887,7 +887,7 @@
 					"-lc++",
 					"-licucore",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Coincast6999;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.CoincasSomething;
 				PRODUCT_NAME = Coincast;
 				PROVISIONING_PROFILE = "";
 			};
@@ -912,6 +912,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -960,6 +961,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
