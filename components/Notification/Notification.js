@@ -22,21 +22,21 @@ class Notification extends React.Component {
 
     return(
       <View style={[styles.notificationWrap, {borderLeftWidth: 5, borderLeftColor: n.iconColor}]} onPress={() => options.callback()}>
-            { /* Profile picture of nofication sender */ }
-            <View style={styles.userWrap}>
-              <View style={{marginRight: 10}}>
-                { Partials.getUserPic(n.pic, n.name) }
-                <View style={styles.iconWrap}>
-                  <Entypo name={n.icon} size={14} color={n.iconColor}/>
-                </View>
-              </View>
+        { /* Profile picture of nofication sender */ }
+        <View style={styles.userWrap}>
+          <View style={{marginRight: 10}}>
+            { Partials.getUserPic(n.pic, n.name) }
+            <View style={styles.iconWrap}>
+              <Entypo name={n.icon} size={14} color={n.iconColor}/>
             </View>
+          </View>
+        </View>
 
-            { /* Notification text */ }
-            <View style={styles.textWrap}>
-              <Text style={[styles.text, {color: colors.icyBlue}]}>{ n.ts }</Text>
-              <Text style={styles.text}>{ n.info }</Text>
-            </View>
+        { /* Notification text */ }
+        <View style={styles.textWrap}>
+          <Text style={[styles.text, {color: colors.icyBlue}]}>{ n.ts }</Text>
+          <Text style={styles.text}>{ n.info }</Text>
+        </View>
       </View>
     );
   }

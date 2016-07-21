@@ -210,6 +210,7 @@ class Content extends React.Component {
                   },
                   index: null,
                   numCircles: null,
+                  title: "Notifications",
                 }}
                 callbackSettings={() => this.props.toggleMenu()} />
             </View>

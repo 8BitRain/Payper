@@ -43,43 +43,9 @@ function initializeAppState(user) {
         Actions.MainViewContainer();
       });
     });
-    initializeAppListeners();
   } catch (err) {
     console.log(err);
   }
-};
-
-
-/**
-  *   Enable Firebase listeners
-**/
-function initializeAppListeners(user) {
-  // Firebase.listenToUsers((type, data) => {
-  //   switch (type) {
-  //     case 'child_added':
-  //       var child = {};
-  //       child[data.key] = data.val();
-  //       Async.merge('users', JSON.stringify(child));
-  //       Async.get('users', (users) => {
-  //         console.log(JSON.parse(users));
-  //       });
-  //     break;
-  //     case 'child_removed':
-  //       Async.get('users', (users) => {
-  //         users = JSON.parse(users);
-  //         delete users[data.key];
-  //         Async.set('users', JSON.stringify(users));
-  //       });
-  //     break;
-  //     case 'child_changed':
-  //       Async.get('users', (users) => {
-  //         users = JSON.parse(users);
-  //         users[data.key] = data.val();
-  //         Async.set('users', JSON.stringify(users));
-  //       });
-  //     break;
-  //   }
-  // });
 };
 
 

@@ -20,8 +20,10 @@ class Notifications extends React.Component {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
+      user: {},
       empty: true,
       dataSource: ds.cloneWithRows([]),
+      numUnseen: this.props.numUnseen,
 
       // Props to be passed to the Header
       headerProps: {
@@ -39,6 +41,7 @@ class Notifications extends React.Component {
 
     // Initialize Firebase listeners on this user's notifications
     Async.get('user', (user) => {
+      this.setState({user: user});
       Firebase.listenToNotifications(JSON.parse(user).uid, (snapshot) => {
         this._genRows(snapshot);
       });
@@ -61,7 +64,7 @@ class Notifications extends React.Component {
 
     // Sort notifications by timestamp
     notifications.sort(function(a, b) {
-      return parseFloat(a.ts) - parseFloat(b.ts);
+      return parseFloat(b.ts) - parseFloat(a.ts);
     });
 
     // Set state, triggering re-rerender of list
@@ -127,7 +130,27 @@ class Notifications extends React.Component {
   }
 
 
+  /**
+    *   Mark unseen notifications as seen
+  **/
+  _seeNotifications() {
+    for (var i = 0; i < this.state.dataSource.getRowCount(); i++) {
+      var row = this.state.dataSource.getRowData(0, i)
+      if (row.seen = false) {
+        row.seen = true;
+        Lambda.seeNotification({timestamp: row.ts, token: this.state.user.session_token}, (response) => {
+          console.log("Lambda.seeNotification() response:", response);
+        });
+        this.setState({numUnseen: this.state.numUnseen - 1});
+        console.log("SAW:", row.ts);
+      }
+    }
+  }
+
+
   render() {
+    this._seeNotifications();
+
     return (
       <View style={{flex: 1, backgroundColor: colors.white}}>
         { /* Render list of notifications or empty state */  }

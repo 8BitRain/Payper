@@ -5,11 +5,12 @@
   *   💣  Lambda.js  💣
   *
   *   Lambda endpoints:
-  *     💣  Base:           'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev'
-  *     💣  Create user:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create'
-  *     💣  Create payment: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create'
-  *     💣  Get user:       'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get'
-  *     💣  Accept payment: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
+  *     💣  Base:              'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev'
+  *     💣  Create user:       'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create'
+  *     💣  Create payment:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create'
+  *     💣  Get user:          'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get'
+  *     💣  Accept payment:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
+  *     💣  Read notification: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
   *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
   *
@@ -147,6 +148,29 @@ export function cancelPayment(options) {
         if (typeof callback == 'function') callback(responseData);
       } else {
         console.log("Error cancelling payment:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given timestamp, and session_token, mark a notification as read
+**/
+export function seeNotification(options) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/notifications/markSeen", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("See notification Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error seeing notification:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
       }
     })

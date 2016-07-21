@@ -39,18 +39,28 @@ export function formatNotification(n) {
       notification.iconColor = colors.alertGreen;
       break;
     case "PAYMENT_DELETED":
-      notification.info = firstName + " stopped paying you " + formatPurpose(n.purpose) + ". " + n.paymentsMade + " of " + n.payments + " were made.";
+      notification.info = firstName + " stopped paying you " + formatPurpose(n.purpose) + ".\n" + n.paymentsMade + " of " + n.payments + " payments were made.";
       notification.icon = "cross";
       notification.iconColor = colors.alertRed;
       break;
     case "REQUEST":
       notification.info = firstName + " requested $" + n.amount + " per month " + formatPurpose(n.purpose) + ".";
-      notification.icon = "credit";
+      notification.icon = "hand";
       notification.iconColor = colors.alertYellow;
+      break;
+    case "PAYMENT_ACCEPT":
+      notification.info = firstName + " accepted your payment request " + formatPurpose(n.purpose) + ".";
+      notification.icon = "credit";
+      notification.iconColor = colors.alertGreen;
+      break;
+    case "PAYMENT_REJECT":
+      notification.info = firstName + " rejected your payment request " + formatPurpose(n.purpose) + ".";
+      notification.icon = "cross";
+      notification.iconColor = colors.alertRed;
       break;
     default:
       notification.info = "Notification couldn't be loaded.";
-      notification.icon = "";
+      notification.icon = "cross";
       notification.iconColor = colors.alertRed;
   }
 
