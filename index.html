@@ -3,12 +3,26 @@
 <head>
   <script src="https://cdn.dwolla.com/1/dwolla.js"></script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+  <style>
+    #loadingSpinnerDiv{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #loadingSpinnerImage{
+      width: 64px;
+      height: 64px;
+    }
+  </style>
 </head>
+
+
 <body>
 
-  <img id="loadingSpinner" src="spin.svg"></img>
+  <div id="loadingSpinnerDiv"><img id="loadingSpinnerImage" src="spin.svg"></img></div>
 
-  <div id="iavContainer" onload="hideSpinner()">
+  <div id="iavContainer">
     <!-- Place loading icon here, when iframe is loaded hide the image -->
     <!-- Once the iframe loads remove loading image onload="document.getElementById('loadImg').style.display='none' -->
   </div>
@@ -27,54 +41,86 @@ function generateIAVToken(){
 	if(generateIAVTokenRan == false){
 		console.log("Running IAV Generator");
 		dwolla.configure('sandbox');
-		//Enable the falling log to see iav_token passed
-		$div = $('<div />');
+		/*
+    * Enable the following code to easily view iavToken passed
+    */
+		/*$div = $('<div />');
 		$div.text(JSON.stringify("Value of iav_token: " + iav_token));
-		$('#logs').append($div);
+		$('#logs').append($div);*/
 
+    /*
+    * Start the iav process. IAV token is recieved from the server and sent to
+    * Dwolla.
+    */
 		dwolla.iav.start(iav_token, {
 			container: 'iavContainer',
 			microDeposits: false,
 			fallbackToMicroDeposits: true
 		}, function(err, res) {
 			console.log('Error: ' + JSON.stringify(err) + ' -- Response: ' + JSON.stringify(res));
-			$div.text(JSON.stringify(err));
-			$div.text(JSON.stringify(res));
-			$('#logs').append($div);
+			//$div.text(JSON.stringify(err));
+			//$div.text(JSON.stringify(res));
+      //respondToFirebase(res);
+      console.log(JSON.stringify(res._links["funding-source"]["href"]));
+      var fundingSource = JSON.stringify(res._links["funding-source"]["href"]);
+      respondToFirebase(fundingSource);
 		});
-    var iframe = document.getElementById('iframe');
-    console.log(iframe);
 		generateIAVTokenRan = true;
 	}
-
 }
 
+/*
+* Communicate with Firebase to link unique IAV Token with a unique funding Source
+*/
+function respondToFirebase(fundingSource){
+  var data = {
 
-//Observer
+    token: firebase_token,
+    fundingSource: fundingSource,
+    iavToken: iav_token
+
+  }
+  $.ajax({
+    url: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/addIAVFunding',
+    type: 'POST',
+    data: JSON.stringify(data),
+    contentType: 'application/json; charset=utf-8',
+    dataType: 'json',
+    async: true,
+    success: function(msg) {
+        console.log(msg);
+    }
+});
+}
+
+/*
+* Mutation Observer, this is being used to listen to when the iframe has been fully loaded
+* Are there possible security issues with doing this?
+*/
 // select the target node
 var target = document.getElementById('iavContainer');
-var loadingSpinner = document.getElementById("loadingSpinner");
+var loadingSpinner = document.getElementById("loadingSpinnerDiv");
+var iframe;
 
 // create an observer instance
 var observer = new MutationObserver(function(mutations) {
   mutations.forEach(function(mutation) {
-    console.log(mutation.type);
-    loadingSpinner.style.display = 'none';
+      iframe = document.getElementsByTagName('iframe')[0];
+      iframe.addEventListener('load', hideLoadingSpinner(), true);
     // later, you can stop observing
     observer.disconnect();
   });
 });
+
+
+function hideLoadingSpinner(){
+  loadingSpinner.style.display = 'none';
+}
 
 // configuration of the observer:
 var config = { attributes: true, childList: true, characterData: true };
 
 // pass in the target node, as well as the observer options
 observer.observe(target, config);
-
-
-
-
-
-
 </script>
 </html>

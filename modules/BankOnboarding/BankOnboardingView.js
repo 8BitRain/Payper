@@ -24,6 +24,10 @@ var Mixpanel = require('react-native-mixpanel');
 class Iav extends React.Component {
   constructor(props) {
     super(props);
+    this.firebase_token =  '';
+    Async.get('session_token', (token) => {
+      this.firebase_token = token;
+    });
     /*
     * IAV FLOW
     * 1.) Client needs to check to see if the IAV has been correctly loaded. This can be done within
@@ -37,7 +41,7 @@ class Iav extends React.Component {
     *       Unsupported Bank - Fallback to microDeposits
     */
     //Attempt that causes looping of code in webview
-    this.injectedJS = 'var iav_token = ' + "'" + this.props.startIav + "'" + ';' + ' $( document ).ready(function() { generateIAVToken()});';
+    this.injectedJS = 'var firebase_token = ' + "'" + this.firebase_token + "'" + ';' + ' var iav_token = ' + "'" + this.props.startIav + "'" + ';' + ' $( document ).ready(function() { generateIAVToken()});';
 
     //Attempt that has no effect (white blank screen)
     //this.injectedJS = 'var iav_token = ' + "'" + this.props.startIav + "'" + ';' + ' window.onload = function() { dwolla.configure(\'sandbox\'); //Enable the falling log to see iav_token passed $div = $(\'<div />\'); $div.text(JSON.stringify("Value of iav_token: " + iav_token)); $(\'#logs\').append($div); dwolla.iav.start(iav_token, { container: \'iavContainer\', microDeposits: false, fallbackToMicroDeposits: true}, function(err, res) {console.log(\'Error: \' + JSON.stringify(err) + \' -- Response: \' + JSON.stringify(res)); $div.text(JSON.stringify(err)); $div.text(JSON.stringify(res)); $(\'#logs\').append($div);});});';
@@ -45,6 +49,8 @@ class Iav extends React.Component {
     //Attempt that in sync with having the user click a button, loads the IAV properly
     //this.injectedJS = 'var iav_token = ' + "'" + this.props.startIav + "'" + ';'
     this.numInjectedJSCalls = 0;
+
+
 
     console.log(this.injectedJS);
   }
@@ -64,6 +70,7 @@ class Iav extends React.Component {
       <WebView
        source={{uri: 'http://localhost:8000'/*'https://www.getcoincast.com/iav'*/ }} injectedJavaScript={this.injectedJS}
        style={{marginTop: 20}}
+       startInLoadingState={true}
      />
     );
   }
@@ -133,7 +140,7 @@ class OnBoardingSummaryTest extends React.Component {
         console.log(responseData.token);
         this.injectedJS = 'var iav_token = ' + responseData;
         console.log(this.injectedJS);
-        this.props.dispatchSetIav(responseData.token);
+        //this.props.dispatchSetIav(responseData.token);
       })
       .done();
 
