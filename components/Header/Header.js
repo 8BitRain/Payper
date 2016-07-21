@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
 
   // Icon sizing
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 function getCloseIcon(callback) {
   return(
     <Button onPress={() => {callback()}}>
-      <Entypo style={styles.iconClose} name="cross" size={25} color="white"/>
+      <Entypo style={styles.iconClose} name="cross" size={25} color={colors.white}/>
     </Button>
   );
 };
@@ -133,7 +133,7 @@ function getCloseIcon(callback) {
 function getSettingsIcon(callback) {
   return(
     <Button onPress={() => {callback()}}>
-      <Entypo style={styles.iconSettings} name="menu" size={25} color="white"/>
+      <Entypo style={styles.iconSettings} name="menu" size={25} color={colors.white}/>
     </Button>
   );
 };
@@ -142,9 +142,9 @@ function getSettingsIcon(callback) {
 function getPaymentIcons(index) {
   return(
     <View style={styles.iconWrap}>
-      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 0) ? styles.iconActive : null]} name="user" size={20} color="white"/>
-      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 1) ? styles.iconActive : null]} name="credit" size={20} color="white"/>
-      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 2) ? styles.iconActive : null]} name="new-message" size={20} color="white"/>
+      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 0) ? styles.iconActive : null]} name="user" size={20} color={colors.white}/>
+      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 1) ? styles.iconActive : null]} name="credit" size={20} color={colors.white}/>
+      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 2) ? styles.iconActive : null]} name="new-message" size={20} color={colors.white}/>
     </View>
   );
 };
@@ -153,7 +153,7 @@ function getPaymentIcons(index) {
 function getCircleIcons(numCircles, index) {
   var circles = [];
   for (var i = 0; i < numCircles; i++) {
-    circles.push(<Image key={"circle#" + i} style={(styles.iconCircle)} source={(i == index) ? require('./assets/circle-active.png') : require('./assets/circle-inactive.png')} />);
+    circles.push(<Entypo key={i} style={{marginLeft: 2.5, marginRight: 2.5, marginTop: (index == i) ? 1.1 : 0}} name={(index == i) ? "controller-record" : "circle"} size={(index == i) ? 16 : 11} color={colors.white} />);
   };
   return(
     <View style={styles.iconWrap}>
@@ -200,8 +200,6 @@ class Header extends React.Component {
       active: 'out',
       index: 0,
     }
-
-    this.headerProps = this.props.headerProps;
   }
 
 
@@ -210,17 +208,15 @@ class Header extends React.Component {
       <View style={[styles.headerWrap, (this.props.dark) ? {backgroundColor: colors.darkGrey} : null ]}>
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
-          { this.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
-          { this.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings) : null }
+          { this.props.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
+          { this.props.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings) : null }
         </View>
 
         { /* Contains 'CircleIcons' or 'PaymentIcons' if specified */ }
         <View style={styles.chunkHalf}>
-          { this.headerProps.types.paymentIcons ? getPaymentIcons(this.props.index) : null }
-          { this.headerProps.types.circleIcons ? getCircleIcons(this.headerProps.numCircles, this.headerProps.index) : null }
-          { this.headerProps.types.flowTabs
-            ? getFlowTabs(this.state.active, () => {this.setState({active: 'in'}); this.props.callbackIn()}, () => {this.setState({active: 'out'}); this.props.callbackOut()})
-            : null }
+          { this.props.headerProps.types.paymentIcons ? getPaymentIcons(this.props.index) : null }
+          { this.props.headerProps.types.circleIcons ? getCircleIcons(this.props.headerProps.numCircles, this.props.headerProps.index) : null }
+          { this.props.headerProps.types.flowTabs ? getFlowTabs(this.state.active, () => {this.setState({active: 'in'}); this.props.callbackIn()}, () => {this.setState({active: 'out'}); this.props.callbackOut()}) : null }
         </View>
 
         { /* Filler */ }

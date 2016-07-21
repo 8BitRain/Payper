@@ -25,6 +25,7 @@ import Header from '../../components/Header/Header.js';
 import Footer from '../../components/Footer/Footer.js';
 import Transaction from '../../components/Previews/Transaction/Transaction.js';
 import Settings from '../../modules/Settings/Settings.js';
+import Notifications from '../../modules/Notifications/Notifications.js';
 
 var dimensions = Dimensions.get('window');
 
@@ -35,7 +36,7 @@ class Content extends React.Component {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
-      tab: 'tracking',
+      tab: "tracking",
       empty: true,
       flowFilter: 'out',
 
@@ -159,7 +160,7 @@ class Content extends React.Component {
   **/
   _getPaymentList() {
     return(
-      <View style={{flex: 0.81, paddingTop: 15}}>
+      <View style={{flex: 0.81, paddingTop: 0}}>
         <ListView
           refreshControl={
             <RefreshControl
@@ -191,60 +192,92 @@ class Content extends React.Component {
 
 
   render() {
-    switch (this.state.tab) {
-      case "tracking":
-        return (
+    /* If a settings page is active, render it */
+    switch (this.props.settingsPage) {
+      case "notifications":
+        return(
           <View style={{flex: 1, backgroundColor: colors.white}}>
-
             { /* Header */ }
             <View style={{flex: 0.1}}>
               <Header
-                headerProps={this.state.headerProps}
-                callbackOut={ () => this.setState({flowFilter: 'out'}) }
-                callbackIn={ () => this.setState({flowFilter: 'in'}) }
+                headerProps={{
+                  types: {
+                    "paymentIcons": false,
+                    "circleIcons": false,
+                    "settingsIcon": true,
+                    "closeIcon": false,
+                    "flowTabs": false,
+                  },
+                  index: null,
+                  numCircles: null,
+                }}
                 callbackSettings={() => this.props.toggleMenu()} />
             </View>
 
-            { /* Render list of payments or empty state */  }
-            {(this.state.empty) ? this._getEmptyState() : this._getPaymentList() }
-
-            { /* Footer */ }
-            <View style={{flex: 0.09}}>
-              <Footer
-                callbackFeed={() => this.setState({tab: 'feed'})}
-                callbackTracking={() => console.log("Tracking tab is already active.")}
-                callbackPay={() => Actions.CreatePaymentViewContainer()} />
+            { /* Global feed */ }
+            <View style={{flex: 0.9}}>
+              <Notifications />
             </View>
           </View>
         );
       break;
-      case "feed":
-        return(
-          <View style={{flex: 1, backgroundColor: colors.white}}>
 
-            { /* Header */ }
-            <View style={{flex: 0.1}}>
-              <Header
-                headerProps={this.state.headerProps}
-                callbackOut={ () => this.setState({flowFilter: 'out'}) }
-                callbackIn={ () => this.setState({flowFilter: 'in'}) }
-                callbackSettings={() => this.props.toggle()} />
-            </View>
+      /* If no settings page is active, render a MainView page */
+      default:
+      switch (this.state.tab) {
+        case "tracking":
+          return (
+            <View style={{flex: 1, backgroundColor: colors.white}}>
 
-            { /* Gradient testing */  }
-            <View style={{flex: 0.81, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red'}}>
-            </View>
+              { /* Header */ }
+              <View style={{flex: 0.1}}>
+                <Header
+                  headerProps={this.state.headerProps}
+                  callbackOut={ () => this.setState({flowFilter: 'out'}) }
+                  callbackIn={ () => this.setState({flowFilter: 'in'}) }
+                  callbackSettings={() => this.props.toggleMenu()} />
+              </View>
 
-            { /* Footer */ }
-            <View style={{flex: 0.09}}>
-              <Footer
-                callbackFeed={() => console.log("Feed tab is already active.")}
-                callbackTracking={() => this.setState({tab: 'tracking'})}
-                callbackPay={() => Actions.CreatePaymentViewContainer()} />
+              { /* Render list of payments or empty state */  }
+              {(this.state.empty) ? this._getEmptyState() : this._getPaymentList() }
+
+              { /* Footer */ }
+              <View style={{flex: 0.09}}>
+                <Footer
+                  callbackFeed={() => this.setState({tab: 'feed'})}
+                  callbackTracking={() => console.log("Tracking tab is already active.")}
+                  callbackPay={() => Actions.CreatePaymentViewContainer()} />
+              </View>
             </View>
-          </View>
-        );
-      break;
+          );
+        break;
+        case "feed":
+          return(
+            <View style={{flex: 1, backgroundColor: colors.white}}>
+
+              { /* Header */ }
+              <View style={{flex: 0.1}}>
+                <Header
+                  headerProps={this.state.headerProps}
+                  callbackOut={ () => this.setState({flowFilter: 'out'}) }
+                  callbackIn={ () => this.setState({flowFilter: 'in'}) }
+                  callbackSettings={() => this.props.toggleMenu()} />
+              </View>
+
+              { /* Global feed */ }
+              <View style={{flex: 0.81, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red'}}></View>
+
+              { /* Footer */ }
+              <View style={{flex: 0.09}}>
+                <Footer
+                  callbackFeed={() => console.log("Feed tab is already active.")}
+                  callbackTracking={() => this.setState({tab: 'tracking'})}
+                  callbackPay={() => Actions.CreatePaymentViewContainer()} />
+              </View>
+            </View>
+          );
+        break;
+      }
     }
   }
 }
@@ -256,6 +289,7 @@ class Main extends React.Component {
 
     this.state = {
       isOpen: false,
+      page: "",
     };
   }
 
@@ -269,8 +303,12 @@ class Main extends React.Component {
     this.setState({ isOpen, });
   }
 
+  changePage(newPage) {
+    this.setState({page: newPage, isOpen: !this.state.isOpen});
+  }
+
   render() {
-    const menu = <Settings />;
+    var menu = <Settings changePage={(newPage) => this.changePage(newPage)} />;
 
     return (
       <SideMenu
@@ -279,8 +317,10 @@ class Main extends React.Component {
         isOpen={this.state.isOpen}
         onChange={(isOpen) => this.updateMenuState(isOpen)}
         disableGestures={true}>
+
         <StatusBar barStyle="light-content" />
-        <Content toggleMenu={() => this.toggle()} />
+        <Content settingsPage={this.state.page} toggleMenu={() => this.toggle()} />
+
       </SideMenu>
     );
   }

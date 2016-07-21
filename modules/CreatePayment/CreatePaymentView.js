@@ -8,7 +8,7 @@ import Autocomplete from 'react-native-autocomplete-input';
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
 import * as Async from "../../helpers/Async";
-import * as db from "../../helpers/db";
+import * as Init from '../../_init';
 
 // Custom components
 import Header from "../../components/Header/Header";
@@ -123,11 +123,13 @@ class CreatePaymentView extends React.Component {
     console.log("other user", this.state.user);
 
     if (flow == 'in') {
-      this.props.dispatchCreatePayment({
+      console.log("TOKEN:::", this.state.sessionToken);
+      Init.createPayment({
         amount: this.state.eachCost,
         purpose: this.state.memo,
         payments: this.state.totalPayments,
         recip_id: currUser.uid,
+        recip_name: currUser.first_name + " " + currUser.last_name,
         sender_name: currUser.first_name + " " + currUser.last_name,
         recip_pic: currUser.profile_pic,
         sender_id: this.state.user.uid,
@@ -136,11 +138,11 @@ class CreatePaymentView extends React.Component {
         confirmed: false,
         type: "request",
         token: this.state.sessionToken,
-      }, function() {
+      }, function(res) {
         _this.setState({doneLoading: true});
       });
     } else if (flow == 'out') {
-      this.props.dispatchCreatePayment({
+      Init.createPayment({
         amount: this.state.eachCost,
         purpose: this.state.memo,
         payments: this.state.totalPayments,
@@ -153,7 +155,7 @@ class CreatePaymentView extends React.Component {
         confirmed: true,
         type: "pay",
         token: this.state.sessionToken,
-      }, function() {
+      }, function(res) {
         _this.setState({doneLoading: true});
       });
     }

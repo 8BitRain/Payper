@@ -149,7 +149,7 @@ export function signOut(callback) {
 
 
 /**
-  *   Attach listeners from MainView to Firebase payment flows
+  *   Listen for changes in the specified user's payment flow
 **/
 export function listenToPaymentFlow(uid, callback) {
   firebase.database().ref('/paymentFlow/' + uid + "/in").on('value', (snapshot) => {
@@ -157,6 +157,16 @@ export function listenToPaymentFlow(uid, callback) {
   });
   firebase.database().ref('/paymentFlow/' + uid + "/out").on('value', (snapshot) => {
     callback("out", snapshot.val());
+  });
+};
+
+
+/**
+  *   Listen for changes in the specified user's notifications
+**/
+export function listenToNotifications(uid, callback) {
+  firebase.database().ref('/notifications/' + uid).on('value', (snapshot) => {
+    callback(snapshot.val());
   });
 };
 

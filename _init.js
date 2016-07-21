@@ -168,3 +168,13 @@ export function signOut() {
     Actions.LandingScreenView();
   });
 };
+
+
+/**
+  *   Initialize a payment
+**/
+export function createPayment(data, callback) {
+  Lambda.createPayment(data, (res) => {
+    callback(res);
+  });
+};

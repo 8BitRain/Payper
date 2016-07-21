@@ -22,10 +22,13 @@ class Settings extends React.Component {
 
     this.state = {
       dataSource: ds.cloneWithRows([
+        {rowTitle: "Home", iconName: "home", destination: () => this.props.changePage("")},
+        {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
         {rowTitle: "Payment History", iconName: "line-graph", destination: Actions.CreateAccountViewContainer},
         {rowTitle: "FAQ", iconName: "help-with-circle", destination: Actions.CreateAccountViewContainer},
         {rowTitle: "Sign Out", iconName: "moon", destination: Init.signOut},
       ]),
+      user: {},
     }
   }
 
@@ -38,8 +41,7 @@ class Settings extends React.Component {
       <TouchableHighlight
         activeOpacity={0.7}
         underlayColor={'transparent'}
-        onPress={() => options.destination()}
-        style={{borderBottomWidth: 1, borderBottomColor: colors.white}}>
+        onPress={() => options.destination()}>
         <View style={styles.row}>
           <Entypo style={styles.icon} name={options.iconName} size={20} color={colors.icyBlue} />
           <Text style={styles.rowTitle}>{ options.rowTitle }</Text>
@@ -63,19 +65,29 @@ class Settings extends React.Component {
   }
 
 
+  componentDidMount() {
+    Async.get('user', (user) => {
+      this.setState({user: JSON.parse(user)});
+    });
+  }
+
+
   render() {
     return (
       <View style={{flex: 1, backgroundColor: colors.darkGrey}}>
+
         { /* Header */ }
         <TouchableHighlight
           activeOpacity={0.7}
           underlayColor={'transparent'}
           onPress={() => console.log("EDIT PROFILE")}
           style={{borderBottomWidth: 1, borderBottomColor: colors.icyBlue}}>
+
           <View style={{height: 70, marginTop: 30, paddingBottom: 12.5, paddingLeft: 20, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: colors.icyBlue}}>
-            { Partials.getUserPic("", "Brady Sheridan") }
+            { Partials.getUserPic(this.state.user.profile_pic, this.state.user.full_name) }
+
             <View style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
-              <Text style={[styles.rowTitle, {fontSize: 18, paddingLeft: 0}]}>Brady Sheridan</Text>
+              <Text style={[styles.rowTitle, {fontSize: 18, paddingLeft: 0}]}>{ this.state.user.full_name }</Text>
               <Text style={[styles.rowTitle, {fontSize: 12, color: colors.icyBlue, paddingLeft: 0}]}>Edit profile</Text>
             </View>
           </View>
@@ -83,6 +95,7 @@ class Settings extends React.Component {
 
         { /* ListView */ }
         { this._getSettingsList() }
+
       </View>
     );
   }

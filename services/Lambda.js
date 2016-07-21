@@ -66,6 +66,29 @@ export function createUser(user, callback) {
 
 
 /**
+  *   Given session_token and payment info, initialize a payment
+**/
+export function createPayment(data, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create", {method: "POST", body: JSON.stringify(data)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Create payment Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error creating payment:", responseData.errorMessage);
+        if (typeof callback == 'function') callback("error");
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+
+/**
   *   Given session_token and payment_id, confirm a payment request
 **/
 export function confirmPayment(options) {
