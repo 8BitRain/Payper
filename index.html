@@ -6,11 +6,13 @@
 </head>
 <body>
 
-  <button type="button" onclick="generateCredentials()">Generate Credentials</button>
-  <button type="button" onclick="generateIAVToken()">GenerateIAVToken</button>
-  <button type="button" onclick="testDwolla()">Test Dwolla API</button>
-  <button type="button" onclick="runIAV()">Run IAV</button>
-  <div id="iavContainer"></div>
+  <img id="loadingSpinner" src="spin.svg"></img>
+
+  <div id="iavContainer" onload="hideSpinner()">
+    <!-- Place loading icon here, when iframe is loaded hide the image -->
+    <!-- Once the iframe loads remove loading image onload="document.getElementById('loadImg').style.display='none' -->
+  </div>
+
   <div id="logs">
   </div>
 
@@ -20,103 +22,59 @@
 
 <script type="text/javascript">
 
-
+var generateIAVTokenRan = false;
 function generateIAVToken(){
-  dwolla.configure('sandbox');
-  //Enable the falling log to see iav_token passed
-  $div = $('<div />');
-  $div.text(JSON.stringify("Value of iav_token: " + iav_token));
-  $('#logs').append($div);
-  dwolla.iav.start(iav_token, {
-    container: 'iavContainer',
-    microDeposits: false,
-    fallbackToMicroDeposits: true
-  }, function(err, res) {
-    console.log('Error: ' + JSON.stringify(err) + ' -- Response: ' + JSON.stringify(res));
-    $div.text(JSON.stringify(err));
-    $('#logs').append($div);
+	if(generateIAVTokenRan == false){
+		console.log("Running IAV Generator");
+		dwolla.configure('sandbox');
+		//Enable the falling log to see iav_token passed
+		$div = $('<div />');
+		$div.text(JSON.stringify("Value of iav_token: " + iav_token));
+		$('#logs').append($div);
+
+		dwolla.iav.start(iav_token, {
+			container: 'iavContainer',
+			microDeposits: false,
+			fallbackToMicroDeposits: true
+		}, function(err, res) {
+			console.log('Error: ' + JSON.stringify(err) + ' -- Response: ' + JSON.stringify(res));
+			$div.text(JSON.stringify(err));
+			$div.text(JSON.stringify(res));
+			$('#logs').append($div);
+		});
+    var iframe = document.getElementById('iframe');
+    console.log(iframe);
+		generateIAVTokenRan = true;
+	}
+
+}
+
+
+//Observer
+// select the target node
+var target = document.getElementById('iavContainer');
+var loadingSpinner = document.getElementById("loadingSpinner");
+
+// create an observer instance
+var observer = new MutationObserver(function(mutations) {
+  mutations.forEach(function(mutation) {
+    console.log(mutation.type);
+    loadingSpinner.style.display = 'none';
+    // later, you can stop observing
+    observer.disconnect();
   });
-}
+});
 
-/*function generateIAVToken(){
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
-    //iav_token = xhttp.responseText;
-    dwolla.configure('sandbox');
-    //var iav = xhttp.responseText;
-    var iav = xhttp.responseText.slice(1, -1);
-    console.log("IAV: " + iav);
-    dwolla.iav.start(iav_token, {
-      container: 'iavContainer',
-      microDeposits: false,
-      fallbackToMicroDeposits: true
-    }, function(err, res) {
-      console.log('Error: ' + JSON.stringify(err) + ' -- Response: ' + JSON.stringify(res));
-    });
-    //console.log("IAV Token: " + iav_token);
-  }
-  };
-  xhttp.open("GET", "iavToken", true);
-  xhttp.send();
-}*/
-function generateToken(){
-  console.log("Working");
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
-    userToken = xhttp.responseText;
-    console.log(userToken)
-  } else {
+// configuration of the observer:
+var config = { attributes: true, childList: true, characterData: true };
 
-  }
-  };
-  xhttp.open("GET", "simpleListen", true);
-  xhttp.send();
-/*window.open(
-  oAuthUrl,
-  '_blank' // <- This is what makes it open in a new window.
-);*/
-}
+// pass in the target node, as well as the observer options
+observer.observe(target, config);
 
 
-//Function for generating Credentials
-function generateCredentials(){
-  var baseUrl = "https://uat.dwolla.com/oauth/v2/authenticate?client_id=",
-    clientID = 'kPEAtEMhkbo3a40CtKeK0l8kQo1WZcorA3KKm9fttLKI7WeXTp',
-    responseAndRedirect = "&response_type=code&redirect_uri=",
-    scope = "send|transactions|funding|managecustomers",
-    uri = 'http://localhost:3000/dwollaView',
-    authScope = "&scope=ManageCustomers%7CSend%7CFunding%7CScheduled%7CTransactions";
-var oAuthUrl= baseUrl + encodeURI(clientID + responseAndRedirect + uri) + authScope;
-window.location.href = oAuthUrl;
-}
 
-//Function for testing Dwolla
-function testDwolla(){
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (xhttp.readyState == 4 && xhttp.status == 200) {
-    stuff= xhttp.responseText;
-    console.log(stuff)
-  } else{
-    //console.log(xhttp.responseText);
-  }
-  };
-  xhttp.open("GET", "dwollaTestView", true);
-  xhttp.send();
-}
 
-/*function callback(err, res) {
-  $div = $('<div />')
-  var logValue = {
-    error: err,
-    response: res
-  }
-  $div.text(JSON.stringify(logValue))
-  console.log(logValue)
-  //console.log(JSON.stringify(logValue.res));
-  $('#logs').append($div)
-}*/
+
+
 </script>
 </html>

@@ -21,10 +21,21 @@ import colors from '../../styles/colors';
 
 var Mixpanel = require('react-native-mixpanel');
 
-class OnTest extends React.Component {
+class Iav extends React.Component {
   constructor(props) {
     super(props);
-
+    /*
+    * IAV FLOW
+    * 1.) Client needs to check to see if the IAV has been correctly loaded. This can be done within
+    *     the iav.html code. Should require some check for the div being loaded. Iav.html should include a
+    *     loading animation, as well as some text explaining what is being loaded?
+    * 2.) Once the IAV is loaded allow the user to carry through with the sign up process.
+    * 3.) On completion handle the different callback cases
+    *       Invalid IAV Token -
+    *       Unexpected Page Error -
+    *       Too many attempts with single IAV Token - ?
+    *       Unsupported Bank - Fallback to microDeposits
+    */
     //Attempt that causes looping of code in webview
     this.injectedJS = 'var iav_token = ' + "'" + this.props.startIav + "'" + ';' + ' $( document ).ready(function() { generateIAVToken()});';
 
@@ -51,7 +62,7 @@ class OnTest extends React.Component {
   render() {
     return(
       <WebView
-       source={{uri: 'https://www.getcoincast.com/iav'}} injectedJavaScript={this.injectedJS}
+       source={{uri: 'http://localhost:8000'/*'https://www.getcoincast.com/iav'*/ }} injectedJavaScript={this.injectedJS}
        style={{marginTop: 20}}
      />
     );
@@ -273,7 +284,7 @@ const BankOnboardingView = React.createClass({
     } else {
       console.log("IAV: " + this.props.startIav);
       return(
-        <OnTest startIav={this.props.startIav}/>
+        <Iav startIav={this.props.startIav}/>
       )
     }
   }
