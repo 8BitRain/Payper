@@ -1,28 +1,34 @@
-<snippet>
-  <content><![CDATA[
-# ${1:Project Name}
-TODO: Write a project description
+## Payper
+Recurring payments made easy.
 ## Installation
-TODO: Describe the installation process
-## Usage
-TODO: Write usage instructions
+1. `git clone https://github.com/8BitRain/GetCoincast.git`
+2. `cd ~/path/to/repo`
+3. `git fetch`
+4. `git branch --track desired-branch-name origin/desired-branch-name`
+5. `git checkout desired-branch-name`
+6. `npm install`
+7. `react-native run-ios`
+## Installation Troubleshooting
+1. If a non-existent node module error is thrown, run `npm install --save node-module-name`
 ## Contributing
 1. Fork it!
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request :D
+2. Create your branch: `git checkout -b yung-branch`
+3. Commit your changes: `git commit -am 'Changed a lil somethin'`
+4. Push to the branch: `git push origin yung-branch`
+5. Submit a pull request or leave it & merge later
 ## History
 TODO: Write history
 ## Credits
-TODO: Write credits
-## License
-TODO: Write license
-]]></content>
-  <tabTrigger>readme</tabTrigger>
-</snippet>
+Back End:
+💣 Vash
+Yung Front End:
+💣 Brady
+💣 Eric
+Ulcer Patients:
+💣 Mo
+Tories:
+💣 Luke
 ## Note:
-
 Normally, after a code change to react-native-router-flux src files,
 you must remove the node_modules/react-native-router-flux directory
 and npm install.  The react-native packager wont follow symlinks.
