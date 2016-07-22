@@ -2,10 +2,12 @@
 Recurring payments made easy.
 
 ## Todo
-| Brady         |
-| ------------- |
-| - [ ] incomplete |
-| - [x] completed  |
+
+#### Frontend
+- [ ] Facebook auth
+- [ ] Contact sync (both native contacts and Facebook friends)
+- [ ] In-app notifications
+- [ ] Push notifications
 
 ## Installation
 ```
