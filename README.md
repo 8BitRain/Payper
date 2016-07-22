@@ -35,7 +35,7 @@ react-native run-ios
 5. Submit a pull request or leave it & merge later
 
 ## The Team
-| Front end (💣)       | Back end | Multipurpose Gurus |
+| Front end (💣)       | Back end | Multi-purpose Gurus |
 |----------------------|:---------:|:-----------------:|
 | Eric & Brady         | Vash      | Mo & Luke         |
 
