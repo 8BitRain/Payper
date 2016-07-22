@@ -1,6 +1,12 @@
 # ![](./godmode.png) **Payper**
 Recurring payments made easy.
 
+## Todo
+| Brady         |
+| ------------- |
+| - [ ] incomplete |
+| - [x] completed  |
+
 ## Installation
 ```
 git clone https://github.com/8BitRain/GetCoincast.git
@@ -23,10 +29,9 @@ react-native run-ios
 5. Submit a pull request or leave it & merge later
 
 ## The Team
-| 💣 YUNG FRONT END 💣 | Back End | Dudes with ulcers | Tories |
-|----------------------|:---------:|:----------------:|:------:|
-| Eric & Brady         | Vash      | Mo               | Luke   |
-
+| Front end (💣)       | Back end | Multipurpose Gurus |
+|----------------------|:---------:|:-----------------:|
+| Eric & Brady         | Vash      | Mo & Luke         |
 
 ## Note:
 Normally, after a code change to react-native-router-flux src files,
