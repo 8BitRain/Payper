@@ -4,7 +4,7 @@ Recurring payments made easy.
 ## Todo
 
 #### Frontend
-- [ ] Sidebar
+- [x] Sidebar
 - [ ] In-app notifications
 - [ ] Push notifications
 - [ ] Edit profile panel
