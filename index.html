@@ -58,11 +58,8 @@ function generateIAVToken(){
 			fallbackToMicroDeposits: true
 		}, function(err, res) {
 			console.log('Error: ' + JSON.stringify(err) + ' -- Response: ' + JSON.stringify(res));
-			//$div.text(JSON.stringify(err));
-			//$div.text(JSON.stringify(res));
-      //respondToFirebase(res);
       console.log(JSON.stringify(res._links["funding-source"]["href"]));
-      var fundingSource = JSON.stringify(res._links["funding-source"]["href"]);
+      var fundingSource = res._links["funding-source"]["href"];
       respondToFirebase(fundingSource);
 		});
 		generateIAVTokenRan = true;
@@ -83,6 +80,9 @@ function respondToFirebase(fundingSource){
   $.ajax({
     url: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/addIAVFunding',
     type: 'POST',
+    beforeSend: function (request){
+      request.setRequestHeader("Auth", "allow");
+    },
     data: JSON.stringify(data),
     contentType: 'application/json; charset=utf-8',
     dataType: 'json',

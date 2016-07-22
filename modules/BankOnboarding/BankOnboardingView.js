@@ -24,10 +24,10 @@ var Mixpanel = require('react-native-mixpanel');
 class Iav extends React.Component {
   constructor(props) {
     super(props);
-    this.firebase_token =  '';
-    Async.get('session_token', (token) => {
-      this.firebase_token = token;
-    });
+    this.firebase_token =  this.props.firebase_token;
+    if(this.firebase_token == ''){
+      console.log("Async Error: Make sure Firebase token is properly being stored and retrieved via dispatch");
+    }
     /*
     * IAV FLOW
     * 1.) Client needs to check to see if the IAV has been correctly loaded. This can be done within
@@ -42,15 +42,6 @@ class Iav extends React.Component {
     */
     //Attempt that causes looping of code in webview
     this.injectedJS = 'var firebase_token = ' + "'" + this.firebase_token + "'" + ';' + ' var iav_token = ' + "'" + this.props.startIav + "'" + ';' + ' $( document ).ready(function() { generateIAVToken()});';
-
-    //Attempt that has no effect (white blank screen)
-    //this.injectedJS = 'var iav_token = ' + "'" + this.props.startIav + "'" + ';' + ' window.onload = function() { dwolla.configure(\'sandbox\'); //Enable the falling log to see iav_token passed $div = $(\'<div />\'); $div.text(JSON.stringify("Value of iav_token: " + iav_token)); $(\'#logs\').append($div); dwolla.iav.start(iav_token, { container: \'iavContainer\', microDeposits: false, fallbackToMicroDeposits: true}, function(err, res) {console.log(\'Error: \' + JSON.stringify(err) + \' -- Response: \' + JSON.stringify(res)); $div.text(JSON.stringify(err)); $div.text(JSON.stringify(res)); $(\'#logs\').append($div);});});';
-
-    //Attempt that in sync with having the user click a button, loads the IAV properly
-    //this.injectedJS = 'var iav_token = ' + "'" + this.props.startIav + "'" + ';'
-    this.numInjectedJSCalls = 0;
-
-
 
     console.log(this.injectedJS);
   }
@@ -68,9 +59,9 @@ class Iav extends React.Component {
   render() {
     return(
       <WebView
-       source={{uri: 'http://localhost:8000'/*'https://www.getcoincast.com/iav'*/ }} injectedJavaScript={this.injectedJS}
+       source={{uri: /*'http://localhost:8000'*/ 'http://localhost:5000/iav'/*'https://www.getcoincast.com/iav'*/}} injectedJavaScript={this.injectedJS}
        style={{marginTop: 20}}
-       startInLoadingState={true}
+       startInLoadingState={false}
      />
     );
   }
@@ -97,14 +88,19 @@ class OnBoardingSummaryTest extends React.Component {
      this.phone;
      this.token1 = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjZjY2YzZDBhNTU1N2JiNjg1MzNjMDUyZWUwY2U4Y2U2Njc2MTY0MTIifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmlyZWJhc2UtY29pbmNhc3QiLCJhdWQiOiJmaXJlYmFzZS1jb2luY2FzdCIsImF1dGhfdGltZSI6MTQ2ODUxMzQ1MSwidXNlcl9pZCI6ImdtdXVpU2NoVTZXSHpHYko0TXNTbk1ETVd1QjIiLCJzdWIiOiJnbXV1aVNjaFU2V0h6R2JKNE1zU25NRE1XdUIyIiwiaWF0IjoxNDY4NTEzNDUyLCJleHAiOjE0Njg1MTcwNTIsImVtYWlsIjoiYXRpamFpdGhAd2lzYy5lZHUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiYXRpamFpdGhAd2lzYy5lZHUiLCJhdGlqYWl0aEB3aXNjLmVkdSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.NTwDTqJP2PtO9gfMdN_K8h4R9tiOkcFP9wlbxwFZzGjQWjPa5CoKt556okG1IXzNtCZ8AIRcxL-X2pTxgfM0bF6-haHstAmUktWiMnKgjPUfcE__KzcsUQtNDffUEW_3Yxuqeih7pEw9ADArwWxOPELhSDF-fGZD7ZF7UtiOeDZDj6N0QlQOKG5j0txpZJ1b_OCYNYCjzud9_okH_I7sBycEEs5XZlYidZTbWbmT2u_H_3ulbL3CI3oTzuVkraXOD9L-TiYTw_Jie43or2-_a8CevO426waWJZdV-RlBra333onJuPibc_1SufbhhoC0lDJbgmtGgpa6sFQ1Q283HA';
      this.token2 = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjZjY2YzZDBhNTU1N2JiNjg1MzNjMDUyZWUwY2U4Y2U2Njc2MTY0MTIifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmlyZWJhc2UtY29pbmNhc3QiLCJhdWQiOiJmaXJlYmFzZS1jb2luY2FzdCIsImF1dGhfdGltZSI6MTQ2ODUxMzc5NSwidXNlcl9pZCI6ImJLUHdQWjEzM2hRallJV3c2cjREUG1QVnc4cDIiLCJzdWIiOiJiS1B3UFoxMzNoUWpZSVd3NnI0RFBtUFZ3OHAyIiwiaWF0IjoxNDY4NTEzNzk1LCJleHAiOjE0Njg1MTczOTUsImVtYWlsIjoiaWVhaG9nZ2hvQHdpc2MuZWR1IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbImllYWhvZ2dob0B3aXNjLmVkdSIsImllYWhvZ2dob0B3aXNjLmVkdSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.er53keRDIpj3bU1SqSuC20RJH7EuvuK3fSZ8xQRIr8sg_oT83KSutjMxc4e22iuvlTsmmW7uY8cqb6tuEnM9O-XmRqGcSWldZwAERs4xCKCA3u1QIee_qyYd3KyOJP1Jg2AQNVVpS5rgZhI_kDUNl3RDxFvD_taIbs7vNG6XRmalv0D0fg374Ek9hijQf3vlaFDuKGwwLbJPuumZijOeORc4YSd7kmQglTel51IqiCRgandQlAh5cQChXjbQTtfUuPLOxZQ-ZNAMxLLfTqvu5G5KAMXyuhqsgOnzkeaRTHTM9aG6HQFYOyuj17QI3FBVNsW8FK6laGzBHEHSRui_Xg';
-     this.token = '';
+     this.firebase_token = this.props.firebase_token;
      this.injectedJS = '';
 
-
-     Async.get('session_token', (token) => {
-       this.token = token;
-       console.log("Token: " + token);
-     });
+     //Make sure this actually works and code doesn't run until this process is done
+     console.log("firebase_token: " + this.firebase_token);
+     if(this.firebase_token == ''){
+       Async.get('session_token', (token) => {
+         this.token = token;
+         //dispatchSetFirebaseToken
+         console.log("Token: " + token);
+         this.props.dispatchSetFirebaseToken(this.token);
+       });
+     }
    //Header props
    this.headerProps = {
       types: {
@@ -140,7 +136,7 @@ class OnBoardingSummaryTest extends React.Component {
         console.log(responseData.token);
         this.injectedJS = 'var iav_token = ' + responseData;
         console.log(this.injectedJS);
-        //this.props.dispatchSetIav(responseData.token);
+        this.props.dispatchSetIav(responseData.token);
       })
       .done();
 
@@ -286,12 +282,12 @@ const BankOnboardingView = React.createClass({
   render() {
     if(this.props.startIav == ''){
       return(
-        <OnBoardingSummaryTest  startIav={this.props.startIav} dispatchSetIav={this.props.dispatchSetIav}/>
+        <OnBoardingSummaryTest  firebase_token = {this.props.firebase_token} startIav={this.props.startIav} dispatchSetIav={this.props.dispatchSetIav} dispatchSetFirebaseToken={this.props.dispatchSetFirebaseToken}/>
       )
     } else {
       console.log("IAV: " + this.props.startIav);
       return(
-        <Iav startIav={this.props.startIav}/>
+        <Iav firebase_token = {this.props.firebase_token} startIav={this.props.startIav}/>
       )
     }
   }

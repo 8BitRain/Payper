@@ -14,12 +14,20 @@ export default connect(
 
     //Tracks whether or not iav has been started
     startIav: state.getIn(['bankOnboarding', 'startIav']),
+    firebase_token: state.getIn(['bankOnboarding', 'firebase_token']),
+
   }),
   dispatch => ({
 
       dispatchSetIav(input){
         dispatch(dispatchFunctions.setIav(input));
+      },
+
+      dispatchSetFirebaseToken(input){
+        dispatch(dispatchFunctions.setFirebaseToken(input));
       }
+
+
     // Handles pagination
     // Handles pagination
     /*dispatchSetPage(index, direction, validations, input) {

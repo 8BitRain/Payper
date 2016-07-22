@@ -7,12 +7,14 @@ import {loop, Effects} from 'redux-loop';
 // Initialize state
 const initialState = Map({
     currentPage: 0,
-    startIav: ''
+    startIav: '',
+    firebase_token: ''
 });
 
 // Action types
 const SET_PAGE = 'SET_PAGE',
-      SET_IAV = 'SET_IAV';
+      SET_IAV = 'SET_IAV',
+      SET_FIREBASETOKEN = "SET_FIREBASETOKEN";
 
 
 // Action creators
@@ -23,6 +25,10 @@ export function setPage(index) {
 export function setIav(index){
   return { type: SET_IAV, index: index};
 };
+
+export function setFirebaseToken(index){
+  return { type: SET_FIREBASETOKEN, index: index}
+}
 
 
 /**
@@ -41,6 +47,10 @@ export default function BankOnboardingReducer(state = initialState, action = {})
 
     case SET_IAV:
       var newState = state.set('startIav', action.index);
+      return newState;
+      break;
+    case SET_FIREBASETOKEN:
+      var newState = state.set('firebase_token', action.index);
       return newState;
       break;
 
