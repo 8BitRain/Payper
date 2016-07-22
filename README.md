@@ -1,4 +1,4 @@
-## Payper
+## ![](https://pbs.twimg.com/profile_images/752576771069923332/iYvJ798O.jpg) Payper
 Recurring payments made easy.
 
 ## Installation
@@ -25,7 +25,7 @@ react-native run-ios
 ## The Team
 | 💣 YUNG FRONT END 💣 | Back End | Dudes with ulcers | Tories |
 |----------------------|:---------:|:----------------:|:------:|
-| Eric& & Brady         | Vash      | Mo               | Luke   |
+| Eric & Brady         | Vash      | Mo               | Luke   |
 
 
 ## Note:
