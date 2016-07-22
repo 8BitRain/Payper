@@ -39,6 +39,7 @@ class Content extends React.Component {
       tab: "tracking",
       empty: true,
       flowFilter: 'out',
+      numNotifications: 0,
 
       // Props to be passed to the Header
       headerProps: {
@@ -68,6 +69,11 @@ class Content extends React.Component {
     // Log session token to our state
     Async.get('session_token', (token) => {
       this.setState({token: token});
+    });
+
+    // Find out how many unseen notifications this user has (if any)
+    Async.get('numNotifications', (num) => {
+      this.setState({numNotifications: num});
     });
   }
 

@@ -148,9 +148,19 @@ class Notifications extends React.Component {
   }
 
 
-  render() {
-    this._seeNotifications();
+  componentDidMount() {
+    // const _this = this;
+    //
+    // setTimeout(function() {
+    //   _this._seeNotifications();
+    // }, 1000)
+    Async.get('num_notifications', (num) => {
+      console.log("NUM NOTIFICATIONS:", num);
+    });
+  }
 
+
+  render() {
     return (
       <View style={{flex: 1, backgroundColor: colors.white}}>
         { /* Render list of notifications or empty state */  }

@@ -83,6 +83,25 @@ export function getCurrentUser(callback) {
 };
 
 
+/**
+  *   Count number of unseen notifications for the current user and return
+  *   it via callback
+**/
+export function getNumNotifications(uid, callback) {
+  console.log(uid);
+  firebase.database().ref('/notifications/' + uid).once('value', (snapshot) => {
+    var numNotifications = 0;
+    console.log(snapshot.val());
+    for (var n in snapshot.val()) {
+      console.log(n);
+      if (!n.seen) numNotifications++;
+    }
+    console.log("NUM NOTIFICATIONS:", numNotifications);
+    callback(numNotifications);
+  });
+};
+
+
 
 
 

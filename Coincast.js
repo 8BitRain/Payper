@@ -50,13 +50,13 @@ const getSceneStyle = function (props, computedProps) {
 
 // UNCOMMENT AND RUN TO CLEAR USER SESSION FROM ASYNC STORAGE:
 require('firebase').auth().signOut();
-
+console.log("12341234!");
 export default class Coincast extends React.Component {
 
   render() {
     return (
       <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
-        <Scene key="modal" component={Modal} >
+        <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 
             <Scene key="landingView" component={LandingView} title="LandingView" />

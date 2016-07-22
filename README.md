@@ -1,9 +1,9 @@
 # ![](./godmode.png) **Payper**
-Recurring payments made easy.
+### Recurring payments made easy.
 
 ## Todo
 
-#### Frontend
+### Frontend
 - [x] Sidebar
 - [ ] In-app notifications
 - [ ] Push notifications
@@ -24,15 +24,15 @@ npm install
 react-native run-ios
 ```
 
-## Installation Troubleshooting
-* If a non-existent node module error is thrown, run `npm install --save node-module-name`.
-
 ## Contributing
-1. Fork it!
+1. Fork it
 2. Create your branch: `git checkout -b yung-branch`
 3. Commit your changes: `git commit -am 'Changed a lil somethin'`
 4. Push to the branch: `git push origin yung-branch`
 5. Submit a pull request or leave it & merge later
+
+## Troubleshooting
+* If a non-existent node module error is thrown, run `npm install --save node-module-name`.
 
 ## The Team
 | Front end (💣)       | Back end | Multi-purpose Gurus |

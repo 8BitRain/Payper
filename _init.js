@@ -35,8 +35,9 @@ function initializeAppState(user) {
     Async.set('session_token', user.token);
     Firebase.getUsers((users) => {
       Async.set('users', JSON.stringify(users));
-      console.log("=-=-= Users =-=-=");
-      console.log(users);
+    });
+    Firebase.getNumNotifications(user.uid, (num) => {
+      Async.set('num_notifications', num.toString());
     });
     Firebase.getPaymentFlow(user, (flow) => {
       Async.set('payment_flow', JSON.stringify(flow), () => {
