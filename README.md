@@ -1,15 +1,17 @@
 ## Payper
 Recurring payments made easy.
 ## Installation
-1. `git clone https://github.com/8BitRain/GetCoincast.git`
-2. `cd ~/path/to/repo`
-3. `git fetch`
-4. `git branch --track desired-branch-name origin/desired-branch-name`
-5. `git checkout desired-branch-name`
-6. `npm install`
-7. `react-native run-ios`
-## InstallationTroubleshooting
-1. If a non-existent node module error is thrown, run `npm install --save node-module-name`
+```
+git clone https://github.com/8BitRain/GetCoincast.git
+cd ~/path/to/repo
+git fetch
+git branch --track desired-branch-name origin/desired-branch-name
+git checkout desired-branch-name
+npm install
+react-native run-ios
+```
+## Installation Troubleshooting
+* If a non-existent node module error is thrown, run `npm install --save node-module-name`
 ## Contributing
 1. Fork it!
 2. Create your branch: `git checkout -b yung-branch`
