@@ -1,4 +1,4 @@
-## ![](https://pbs.twimg.com/profile_images/752576771069923332/iYvJ798O.jpg) Payper
+# ![](https://pbs.twimg.com/profile_images/752576771069923332/iYvJ798O.jpg) **Payper**
 Recurring payments made easy.
 
 ## Installation
