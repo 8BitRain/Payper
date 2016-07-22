@@ -4,10 +4,14 @@ Recurring payments made easy.
 ## Todo
 
 #### Frontend
-- [ ] Facebook auth
-- [ ] Contact sync (both native contacts and Facebook friends)
+- [ ] Sidebar
 - [ ] In-app notifications
 - [ ] Push notifications
+- [ ] Edit profile panel
+- [ ] Facebook auth
+- [ ] Facebook friend synchronization
+- [ ] Contact synchronization
+- [ ] Invites
 
 ## Installation
 ```
