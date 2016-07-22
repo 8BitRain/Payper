@@ -8,7 +8,7 @@ Recurring payments made easy.
 5. `git checkout desired-branch-name`
 6. `npm install`
 7. `react-native run-ios`
-## Installation Troubleshooting
+## InstallationTroubleshooting
 1. If a non-existent node module error is thrown, run `npm install --save node-module-name`
 ## Contributing
 1. Fork it!
