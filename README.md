@@ -23,15 +23,10 @@ react-native run-ios
 5. Submit a pull request or leave it & merge later
 
 ## The Team
-Back End:
-💣 Vash
-Yung Front End:
-💣 Brady
-💣 Eric
-Ulcer Patients:
-💣 Mo
-Tories:
-💣 Luke
+| 💣 YUNG FRONT END 💣 | Back End | Dudes with ulcers | Tories |
+|----------------------|:---------:|:----------------:|:------:|
+| Eric& & Brady         | Vash      | Mo               | Luke   |
+
 
 ## Note:
 Normally, after a code change to react-native-router-flux src files,
