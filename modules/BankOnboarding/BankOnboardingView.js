@@ -59,7 +59,7 @@ class Iav extends React.Component {
   render() {
     return(
       <WebView
-       source={{uri: /*'http://localhost:8000'*/ 'http://localhost:5000/iav'/*'https://www.getcoincast.com/iav'*/}} injectedJavaScript={this.injectedJS}
+       source={{uri: /*'http://localhost:8000'*/ /*'http://localhost:5000/iav'*/ 'https://www.getcoincast.com/iav'}} injectedJavaScript={this.injectedJS}
        style={{marginTop: 20}}
        startInLoadingState={false}
      />

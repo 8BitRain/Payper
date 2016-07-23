@@ -6,6 +6,7 @@ import Error from './components/Error'
 import Button from "react-native-button";
 import * as Firebase from './services/Firebase';
 
+
 // Custom components
 import LandingView from './components/LandingView'
 import ThankYouView from './components/ThankYouView'
@@ -51,7 +52,7 @@ const getSceneStyle = function (props, computedProps) {
 
 // UNCOMMENT AND RUN TO CLEAR USER SESSION FROM ASYNC STORAGE:
 // =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
-AsyncStorage.multiSet([["@Store:payment_flow", ""], ["@Store:user", ""]/*, ["@Store:session", ""]*/]);
+AsyncStorage.multiSet([["@Store:payment_flow", ""], ["@Store:user", ""], ["@Store:session_token", ""]]);
 require('firebase').auth().signOut();
 // =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
 

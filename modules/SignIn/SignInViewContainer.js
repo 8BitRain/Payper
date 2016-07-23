@@ -5,6 +5,12 @@ import {Reducer, Router, Actions} from 'react-native-router-flux';
 import * as Animations from "../../helpers/animations";
 import * as Firebase from "../../services/Firebase";
 import * as Init from "../../_init";
+const FBSDK = require('react-native-fbsdk');
+const {
+  LoginButton,
+  ShareDialog,
+} = FBSDK;
+
 
 // Stylesheets
 import containers from "../../styles/containers";
@@ -13,6 +19,7 @@ import typography from "../../styles/typography";
 import colors from "../../styles/colors";
 
 import ArrowNav from "../../components/Navigation/Arrows/ArrowDouble";
+
 
 var dimensions = Dimensions.get('window');
 
@@ -54,10 +61,12 @@ class SignInView extends React.Component {
   render() {
     return (
       <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', backgroundColor: colors.white}}>
-
-        <View style={{flex: 0.2, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+        {/*Change payment back to flex .2*/}
+        <View style={{flex: 0.1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
           <Text style={{fontFamily: 'Roboto', fontSize: 45, fontWeight: '300', color: colors.darkGrey, textAlign: 'center'}}>Coincast</Text>
         </View>
+
+
 
         <View style={{flex: 0.4, flexDirection: 'column', justifyContent: 'center', backgroundColor: colors.darkGrey}}>
           <Text style={{fontFamily: 'Roboto', fontSize: 30, fontWeight: '300', textAlign: 'center', color: colors.white}}>
@@ -76,17 +85,36 @@ class SignInView extends React.Component {
             autoFocus={true}
             secureTextEntry
             onChangeText={(text) => this.setState({password: text}) } />
+
+
         </View>
 
         { /* Filler */ }
         <View style={{flex:0.4, backgroundColor: colors.darkGrey}}></View>
-
         { /* Arrow nav buttons */ }
         <View style={{position: 'absolute', bottom: 220, left: 0, right: 0}}>
           <ArrowNav
           arrowNavProps={this.arrowNavProps}
           callbackRight={() => { this.signInWithEmail() }} />
         </View>
+        <LoginButton
+        publishPermissions={["publish_actions"]}
+        onLoginFinished={
+          (error, result) => {
+            if (error) {
+              alert("login has error: " + result.error);
+            } else if (result.isCancelled) {
+              alert("login is cancelled.");
+            } else {
+              AccessToken.getCurrentAccessToken().then(
+                (data) => {
+                  alert(data.accessToken.toString())
+                }
+              )
+            }
+          }
+        }
+        onLogoutFinished={() => alert("logout.")}/>
       </View>
     );
   }
