@@ -88,15 +88,11 @@ export function getCurrentUser(callback) {
   *   it via callback
 **/
 export function getNumNotifications(uid, callback) {
-  console.log(uid);
   firebase.database().ref('/notifications/' + uid).once('value', (snapshot) => {
     var numNotifications = 0;
-    console.log(snapshot.val());
     for (var n in snapshot.val()) {
-      console.log(n);
       if (!n.seen) numNotifications++;
     }
-    console.log("NUM NOTIFICATIONS:", numNotifications);
     callback(numNotifications);
   });
 };
@@ -181,7 +177,7 @@ export function listenToPaymentFlow(uid, callback) {
 
 
 /**
-  *   Listen for changes in the specified user's notifications
+  *   Listen for changes in the specified user's notifications, pass new
 **/
 export function listenToNotifications(uid, callback) {
   firebase.database().ref('/notifications/' + uid).on('value', (snapshot) => {

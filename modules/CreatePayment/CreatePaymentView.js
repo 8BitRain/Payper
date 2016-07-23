@@ -142,6 +142,7 @@ class CreatePaymentView extends React.Component {
         _this.setState({doneLoading: true});
       });
     } else if (flow == 'out') {
+      console.log(JSON.stringify(currUser));
       Init.createPayment({
         amount: this.state.eachCost,
         purpose: this.state.memo,

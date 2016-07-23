@@ -39,7 +39,6 @@ class Content extends React.Component {
       tab: "tracking",
       empty: true,
       flowFilter: 'out',
-      numNotifications: 0,
 
       // Props to be passed to the Header
       headerProps: {
@@ -52,6 +51,7 @@ class Content extends React.Component {
         },
         index: null,
         numCircles: null,
+        numNotifications: this.props.numNotifications,
       },
 
       dataSourceOut: ds.cloneWithRows([]),
@@ -69,11 +69,6 @@ class Content extends React.Component {
     // Log session token to our state
     Async.get('session_token', (token) => {
       this.setState({token: token});
-    });
-
-    // Find out how many unseen notifications this user has (if any)
-    Async.get('numNotifications', (num) => {
-      this.setState({numNotifications: num});
     });
   }
 
@@ -198,6 +193,7 @@ class Content extends React.Component {
 
 
   render() {
+    console.log(this.props);
     /* If a settings page is active, render it */
     switch (this.props.settingsPage) {
       case "notifications":
@@ -217,13 +213,14 @@ class Content extends React.Component {
                   index: null,
                   numCircles: null,
                   title: "Notifications",
+                  numNotifications: this.props.numNotifications,
                 }}
                 callbackSettings={() => this.props.toggleMenu()} />
             </View>
 
             { /* Global feed */ }
             <View style={{flex: 0.9}}>
-              <Notifications />
+              <Notifications numUnseen={this.state.numNotifications} />
             </View>
           </View>
         );
@@ -297,22 +294,60 @@ class Main extends React.Component {
     this.state = {
       isOpen: false,
       page: "",
+      numNotifications: 0,
     };
   }
 
+
+  /**
+    *   Toggle menu
+  **/
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen,
     });
   }
 
+
+  /**
+    *   Also tggle menu (? lol)
+  **/
   updateMenuState(isOpen) {
     this.setState({ isOpen, });
   }
 
+
+  /**
+    *   Switch page to be rendered in <Content />
+  **/
   changePage(newPage) {
     this.setState({page: newPage, isOpen: !this.state.isOpen});
   }
+
+
+  /**
+    *   Update number of unseen notifications
+  **/
+  _getNumUnseen(notifications) {
+    var numNotifications = 0;
+    for (var n in notifications) {
+      if (!notifications[n].seen) numNotifications++;
+    }
+    return numNotifications;
+  }
+
+
+  /**
+    *   Initialize notification listener
+  **/
+  componentWillMount() {
+    Async.get('user', (user) => {
+      Firebase.listenToNotifications(JSON.parse(user).uid, (snapshot) => {
+        this.setState({numNotifications: this._getNumUnseen(snapshot)});
+      });
+    });
+  }
+
 
   render() {
     var menu = <Settings changePage={(newPage) => this.changePage(newPage)} />;
@@ -326,7 +361,10 @@ class Main extends React.Component {
         disableGestures={true}>
 
         <StatusBar barStyle="light-content" />
-        <Content settingsPage={this.state.page} toggleMenu={() => this.toggle()} />
+        <Content
+          settingsPage={this.state.page}
+          toggleMenu={() => this.toggle()}
+          numNotifications={this.state.numNotifications} />
 
       </SideMenu>
     );

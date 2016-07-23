@@ -4,7 +4,12 @@ import {View, Text, TextInput, StyleSheet, Image, TouchableHighlight} from "reac
 import Button from "react-native-button";
 import Entypo from "react-native-vector-icons/Entypo"
 
+// Styles
 import colors from '../../styles/colors';
+
+// Helper functions
+import * as Async from '../../helpers/Async';
+import * as Firebase from '../../services/Firebase';
 
 // Header styles
 const styles = StyleSheet.create({
@@ -119,6 +124,8 @@ const styles = StyleSheet.create({
 
 });
 
+// Styles for unread notifications indicator
+import notificationStyles from '../../styles/Notifications/Preview';
 
 // Return a close modal icon
 function getCloseIcon(callback) {
@@ -130,10 +137,13 @@ function getCloseIcon(callback) {
 };
 
 // Return a settings icon
-function getSettingsIcon(callback) {
+function getSettingsIcon(callback, numNotifications) {
   return(
     <Button onPress={() => {callback()}}>
       <Entypo style={styles.iconSettings} name="menu" size={25} color={colors.white}/>
+      <View style={notificationStyles.numNotificationsWrap}>
+        <Text style={notificationStyles.numNotificationsText}>{ numNotifications }</Text>
+      </View>
     </Button>
   );
 };
@@ -202,14 +212,13 @@ class Header extends React.Component {
     }
   }
 
-
   render() {
     return(
       <View style={[styles.headerWrap, (this.props.dark) ? {backgroundColor: colors.darkGrey} : null ]}>
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
           { this.props.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
-          { this.props.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings) : null }
+          { this.props.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings, this.props.headerProps.numNotifications) : null }
         </View>
 
         { /* Contains 'CircleIcons' or 'PaymentIcons' if specified */ }
