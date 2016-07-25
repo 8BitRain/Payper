@@ -118,7 +118,7 @@ class SignInView extends React.Component {
         onLogoutFinished={() => alert("logout.")}/>
       </View>
     );
->>>>>>> 4a6be2d0ae2b1cb689846ee6861cf003b1013267
+
   }
 }
 

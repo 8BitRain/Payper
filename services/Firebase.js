@@ -83,7 +83,7 @@ export function getCurrentUser(callback) {
 };
 
 
-<<<<<<< HEAD
+
 /**
   *   Count number of unseen notifications for the current user and return
   *   it via callback
@@ -101,10 +101,6 @@ export function getNumNotifications(uid, callback) {
 
 
 
-
-
-=======
->>>>>>> 4a6be2d0ae2b1cb689846ee6861cf003b1013267
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 //                             User creation
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣

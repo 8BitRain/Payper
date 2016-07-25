@@ -106,11 +106,6 @@ class Content extends React.Component {
       console.log("=-=-= ERROR GETTING PAYMENT FLOW FROM ASYNC STORAGE =-=-=");
       console.log(err);
     }
-
-  cancelPayment(pid) {
-    Lambda.cancelPayment({payment_id: pid, token: this.state.token}, (success) => {
-      console.log("Cancel payment was a", success);
-    });
   }
 
 

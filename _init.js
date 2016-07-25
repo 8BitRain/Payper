@@ -101,6 +101,33 @@ export function signInWithEmail(data, callback) {
   }
 };
 
+/**
+  *   Sign in with credentials (Facebook Login)
+**/
+export function signInWithCredentials(credential, callback) {
+  if (credential) {
+    Firebase.signInWithCredential(credential, (success) => {
+      if (!success) {
+        console.log("Could not")
+        callback(false);
+      } else {
+        Firebase.getSessionToken((token) => {
+          if (token) {
+            Lambda.getUserWithToken(token, (userData) => {
+              if (userData) {
+                initializeAppState(userData);
+                if (typeof callback == 'function') callback(true);
+              }
+            });
+          }
+        });
+      }
+    });
+  } else {
+    console.log("Access Token cannot be null");
+  }
+};
+
 
 /**
   *   1) Create Firebase user
