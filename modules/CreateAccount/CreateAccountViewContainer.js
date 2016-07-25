@@ -3,6 +3,7 @@ import * as dispatchFunctions from  './CreateAccountState';
 import CreateAccountView from './CreateAccountView';
 import Validators from '../../helpers/validators';
 import * as Firebase from '../../services/Firebase';
+import * as Init from '../../_init';
 
 /**
   *   Connect function for CreateAccountView.js
@@ -84,7 +85,7 @@ export default connect(
     },
     dispatchCreateAccount(user) {
       // Create account
-      Firebase.createAccount(user);
+      Init.createUser(user);
     }
   })
 )(CreateAccountView);

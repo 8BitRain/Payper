@@ -7,7 +7,8 @@ var currentUser = {
     password: "",
     firstName: "",
     lastName: "",
-    phoneNumber: ""
+    phoneNumber: "",
+    numNotifications: 0,
   },
   passwordValidations = {
     length: false,

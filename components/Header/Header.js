@@ -1,10 +1,15 @@
 // Dependencies
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Image} from "react-native";
+import {View, Text, TextInput, StyleSheet, Image, TouchableHighlight} from "react-native";
 import Button from "react-native-button";
 import Entypo from "react-native-vector-icons/Entypo"
 
+// Styles
 import colors from '../../styles/colors';
+
+// Helper functions
+import * as Async from '../../helpers/Async';
+import * as Firebase from '../../services/Firebase';
 
 // Header styles
 const styles = StyleSheet.create({
@@ -14,34 +19,26 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    // backgroundColor: "#593F62",
-    backgroundColor: "transparent",
+    backgroundColor: colors.icyBlue,
     paddingTop: 30,
     paddingBottom: 10,
-    flexDirection: "row"
+    flexDirection: "row",
+
+    // borderBottomWidth: 1,
+    // borderBottomColor: colors.lightGrey,
   },
 
   // Header chunk sizing
   chunkQuo: {
     flex: 0.25,
-    // alignItems: "center",
-    // For testing
-    // borderColor: "red",
-    // borderWidth: 1
   },
   chunkHalf: {
     flex: 0.5,
     alignItems: "center",
-    // For testing
-    // borderColor: "blue",
-    // borderWidth: 1
   },
   chunkThird: {
     flex: 0.33,
     alignItems: "center",
-    // For testing
-    // borderColor: "green",
-    // borderWidth: 1
   },
 
   // Inline icon positioning
@@ -49,7 +46,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
 
   // Icon sizing
@@ -67,33 +64,86 @@ const styles = StyleSheet.create({
     marginLeft: 2,
     marginRight: 2
   },
-  iconPayment: {
-    width: 20,
-    height: 20,
-    marginLeft: 4,
-    marginRight: 4,
-    opacity: 0.5
-  },
 
   // Active icons are fully opaque
-  iconActive: { opacity: 1.0 }
+  iconActive: { opacity: 1.0 },
+
+  // Flow tab wrapper
+  flowTabWrap: {
+    height: 30,
+    width: 100,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  // Left (in) flow tab
+  flowTabIn: {
+    flex: 0.5,
+    borderColor: colors.white,
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderRightWidth: 1,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    padding: 2.5,
+  },
+
+  // Right (out) flow tab
+  flowTabOut: {
+    flex: 0.5,
+    borderColor: colors.white,
+    backgroundColor: 'transparent',
+    borderWidth: 2,
+    borderLeftWidth: 1,
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    padding: 2.5,
+  },
+
+  // Flow tab inner text
+  flowTabText: {
+    fontFamily: 'Roboto',
+    fontSize: 14,
+    color: colors.white,
+  },
+
+  // Active tab styles
+  activeTab: { backgroundColor: colors.white },
+  activeTabText: { color: colors.icyBlue },
+
 });
 
+// Styles for unread notifications indicator
+import notificationStyles from '../../styles/Notifications/Preview';
 
 // Return a close modal icon
 function getCloseIcon(callback) {
   return(
     <Button onPress={() => {callback()}}>
-      <Image style={styles.iconClose} source={require('./assets/close.png')} />
+      <Entypo style={styles.iconClose} name="cross" size={25} color={colors.white}/>
     </Button>
   );
 };
 
 // Return a settings icon
-function getSettingsIcon() {
+function getSettingsIcon(callback, numNotifications) {
   return(
-    <Button>
-      <Entypo style={styles.iconSettings} name="cog" size={24} color="white"/>
+    <Button onPress={() => {callback()}}>
+      <Entypo style={styles.iconSettings} name="menu" size={25} color={colors.white}/>
+      <View style={notificationStyles.numNotificationsWrap}>
+        <Text style={notificationStyles.numNotificationsText}>{ numNotifications }</Text>
+      </View>
     </Button>
   );
 };
@@ -102,9 +152,9 @@ function getSettingsIcon() {
 function getPaymentIcons(index) {
   return(
     <View style={styles.iconWrap}>
-      <Image style={[styles.iconPayment, (index == 0) ? styles.iconActive : null]} source={require('./assets/user.png')} />
-      <Image style={[styles.iconPayment, (index == 1) ? styles.iconActive : null]} source={require('./assets/dollar.png')} />
-      <Image style={[styles.iconPayment, (index == 2) ? styles.iconActive : null]} source={require('./assets/memo.png')} />
+      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 0) ? styles.iconActive : null]} name="user" size={20} color={colors.white}/>
+      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 1) ? styles.iconActive : null]} name="credit" size={20} color={colors.white}/>
+      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 2) ? styles.iconActive : null]} name="new-message" size={20} color={colors.white}/>
     </View>
   );
 };
@@ -113,7 +163,7 @@ function getPaymentIcons(index) {
 function getCircleIcons(numCircles, index) {
   var circles = [];
   for (var i = 0; i < numCircles; i++) {
-    circles.push(<Image key={"circle#" + i} style={(styles.iconCircle)} source={(i == index) ? require('./assets/circle-active.png') : require('./assets/circle-inactive.png')} />);
+    circles.push(<Entypo key={i} style={{marginLeft: 2.5, marginRight: 2.5, marginTop: (index == i) ? 1.1 : 0}} name={(index == i) ? "controller-record" : "circle"} size={(index == i) ? 16 : 11} color={colors.white} />);
   };
   return(
     <View style={styles.iconWrap}>
@@ -122,39 +172,61 @@ function getCircleIcons(numCircles, index) {
   );
 };
 
-/**
-      Toolbar for the create account onboarding process
+// Return tabs for switching between tracking flows
+function getFlowTabs(activeTab, callbackIn, callbackOut) {
+  return(
+    <View style={styles.flowTabWrap}>
+      { /* 'In' tab */ }
+      <TouchableHighlight
+        activeOpacity={0.7}
+        underlayColor={'transparent'}
+        style={[styles.flowTabIn, (activeTab == 'in') ? styles.activeTab : null]}
+        onPress={() => callbackIn()}>
+        <Text style={[styles.flowTabText, (activeTab == 'in') ? styles.activeTabText : null]}>
+          In
+        </Text>
+      </TouchableHighlight>
 
-      Props to be passed to the header
-      =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      this.headerProps = {
-        types: {
-         "paymentIcons": false,
-         "circleIcons": true,
-         "settingsIcon": false,
-         "closeIcon": true
-       },
-       index: 0,
-       numCircles: 6
-**/
+      { /* 'Out' tab */ }
+      <TouchableHighlight
+        activeOpacity={0.7}
+        underlayColor={'transparent'}
+        style={[styles.flowTabOut, (activeTab == 'out') ? styles.activeTab : null]}
+        onPress={() => callbackOut()}>
+        <Text style={[styles.flowTabText, (activeTab == 'out') ? styles.activeTabText : null]}>
+          Out
+        </Text>
+      </TouchableHighlight>
+    </View>
+  );
+};
+
+
 class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.headerProps = this.props.headerProps;
+
+    this.state = {
+      active: 'out',
+      index: 0,
+    }
   }
+
   render() {
     return(
       <View style={[styles.headerWrap, (this.props.dark) ? {backgroundColor: colors.darkGrey} : null ]}>
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
-          { this.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
-          { this.headerProps.types.settingsIcon ? getSettingsIcon() : null }
+          { this.props.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
+          { this.props.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings, this.props.headerProps.numNotifications) : null }
         </View>
 
         { /* Contains 'CircleIcons' or 'PaymentIcons' if specified */ }
         <View style={styles.chunkHalf}>
-          { this.headerProps.types.paymentIcons ? getPaymentIcons(this.headerProps.index) : null }
-          { this.headerProps.types.circleIcons ? getCircleIcons(this.headerProps.numCircles, this.headerProps.index) : null }
+          { this.props.headerProps.title ? <Text style={{fontFamily: 'Roboto', fontSize: 16, color: colors.white, paddingTop: 5}}>{ this.props.headerProps.title }</Text> : null }
+          { this.props.headerProps.types.paymentIcons ? getPaymentIcons(this.props.index) : null }
+          { this.props.headerProps.types.circleIcons ? getCircleIcons(this.props.headerProps.numCircles, this.props.headerProps.index) : null }
+          { this.props.headerProps.types.flowTabs ? getFlowTabs(this.state.active, () => {this.setState({active: 'in'}); this.props.callbackIn()}, () => {this.setState({active: 'out'}); this.props.callbackOut()}) : null }
         </View>
 
         { /* Filler */ }

@@ -9,10 +9,12 @@ import * as Firebase from './services/Firebase';
 // Custom components
 import LandingView from './components/LandingView'
 import LandingScreenView from './modules/LandingScreen/LandingScreenView'
+import SplashView from './modules/Splash/SplashView'
 import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer'
 import CreatePaymentViewContainer from './modules/CreatePayment/CreatePaymentViewContainer'
 import SignInViewContainer from './modules/SignIn/SignInViewContainer'
 import MainViewContainer from './modules/Main/MainViewContainer'
+import Notifications from './modules/Notifications/Notifications'
 import TrackingContainer from './modules/Tracking/TrackingContainer'
 import Header from './components/Header/Header'
 import ArrowNavDouble from './components/Navigation/Arrows/ArrowDouble'
@@ -30,7 +32,7 @@ const reducerCreate = (params) => {
 };
 
 // define this based on the styles/dimensions you use
-const getSceneStyle = function (/* NavigationSceneRendererProps */ props, computedProps) {
+const getSceneStyle = function (props, computedProps) {
   const style = {
     flex: 1,
     backgroundColor: '#fff',
@@ -46,35 +48,27 @@ const getSceneStyle = function (/* NavigationSceneRendererProps */ props, comput
   return style;
 };
 
-
-/**
-  *   Get Firebase users and log them to AsyncStorage
-**/
-Firebase.getUsers();
-
-
 // UNCOMMENT AND RUN TO CLEAR USER SESSION FROM ASYNC STORAGE:
-// =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
-// AsyncStorage.multiSet([["@Store:session_key", ""], ["@Store:user", ""]]);
 require('firebase').auth().signOut();
-// =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
-
-
+console.log("12341234!");
 export default class Coincast extends React.Component {
 
   render() {
     return (
       <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
-        <Scene key="modal" component={Modal} >
+        <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 
+            <Scene key="landingView" component={LandingView} title="LandingView" />
+
             { /* Main app flow */ }
-            <Scene key="landingView" component={LandingView} title="LandingView" initial={true} />
+            <Scene key="SplashView" component={SplashView} title="SplashView" initial={true} />
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" />
             <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
             <Scene key="MainViewContainer" component={MainViewContainer} title="MainViewContainer" />
             <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
+            <Scene key="Notifications" component={Notifications} title="Notifications" />
 
             { /* Testing POST requests */ }
             <Scene key="POSTPayment" component={POSTPayment} title="POSTPayment" initial={false} />

@@ -2,6 +2,7 @@
 import React from 'react';
 import {View, Text, Image} from "react-native";
 
+// Custom styles
 import colors from '../../styles/colors';
 
 class Loading extends React.Component {
@@ -10,7 +11,6 @@ class Loading extends React.Component {
   }
 
   render() {
-
     // Success animation, then switch to destination view
     if (this.props.complete) {
 
@@ -22,7 +22,7 @@ class Loading extends React.Component {
       }
 
       return(
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.icyBlue}}>
+        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.icyBlue}}>
           <Text style={{fontFamily: 'Roboto', fontSize: 20, fontWeight: '300', color: colors.white}}>
             {(this.props.msgSuccess) ? this.props.msgSuccess : "Success" }
           </Text>
@@ -33,9 +33,9 @@ class Loading extends React.Component {
     // Loading animation
     else {
       return(
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.icyBlue}}>
+        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.icyBlue}}>
           <Text style={{fontFamily: 'Roboto', fontSize: 20, fontWeight: '300', color: colors.white}}>
-            {(this.props.msgLoading) ? this.props.msgLoading : "Loadings" }
+            {(this.props.msgLoading) ? this.props.msgLoading : "Loading" }
           </Text>
         </View>
       );

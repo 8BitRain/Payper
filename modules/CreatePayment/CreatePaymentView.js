@@ -1,12 +1,14 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, Picker, AsyncStorage, Dimensions, DeviceEventEmitter, TouchableHighlight} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, Picker, AsyncStorage, Dimensions, DeviceEventEmitter, TouchableHighlight, TouchableOpacity} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
+import Autocomplete from 'react-native-autocomplete-input';
 
 // Custom helper functions
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
-import * as db from "../../helpers/db";
+import * as Async from "../../helpers/Async";
+import * as Init from '../../_init';
 
 // Custom components
 import Header from "../../components/Header/Header";
@@ -31,6 +33,11 @@ class CreatePaymentView extends React.Component {
     this.state = {
       // Keeps track of pagination
       inputting: "name",
+      index: 0,
+
+      // For user filtering
+      users: [],
+      query: "",
 
       // Payment props
       to: "",
@@ -75,53 +82,20 @@ class CreatePaymentView extends React.Component {
 
      // Callback functions to be passed to the header
      this.callbackClose = function() { Actions.MainViewContainer() };
-
-     // Firebase => AynscStorage => this.allUsers[]
-     this.allUsers = [];
-
-     // Get current user and store it in our state
-     try {
-       AsyncStorage.getItem('@Store:user').then(function(val) {
-         this.setState({currentUser: val});
-         console.log("=-=-= SET CURRENT USER TO: ");
-         console.log(this.state.currentUser);
-       }.bind(this));
-     } catch (err) {
-       console.log("=-=-= ERROR GETTING USER FROM ASYNC STORAGE =-=-=");
-       console.log(err);
-     }
-
-     // Get session token and store it in our state
-     try {
-       AsyncStorage.getItem('@Store:session_key').then(function(val) {
-         this.setState({sessionToken: val});
-         console.log("=-=-= SET SESSION TOKEN IN STATE TO: ");
-         console.log(this.state.sessionToken.substring(this.state.sessionToken.length - 5, this.state.sessionToken.length));
-       }.bind(this));
-     } catch (err) {
-       console.log("=-=-= ERROR GETTING SESSION TOKEN FROM ASYNC STORAGE =-=-=");
-       console.log(err);
-     }
-
-     // Get user list and store it in our state
-     try {
-       AsyncStorage.getItem('@Store:users').then(function(users) {
-         users = JSON.parse(users);
-         for (var i in users) {
-           users[i].username = i;
-           this.allUsers.push(users[i]);
-         }
-       }.bind(this));
-     } catch (err) {
-       console.log("=-=-= ERROR GETTING USERS FROM ASYNC STORAGE =-=-=");
-       console.log(err);
-     }
    }
 
+
+   /**
+     *   Ensure that state props change
+   **/
    componentWillReceiveProps(nextProps) {
      this.setState({
        inputting: nextProps.inputting,
+       index: nextProps.index,
+       users: nextProps.users,
+       query: nextProps.query,
        to: nextProps.to,
+       currentUser: nextProps.currentUser,
        user: nextProps.user,
        memo: nextProps.memo,
        frequency: nextProps.frequency,
@@ -129,10 +103,7 @@ class CreatePaymentView extends React.Component {
        eachCost: nextProps.eachCost,
        totalPayments: nextProps.totalPayments,
        completedPayments: nextProps.completedPayments,
-       filteredUsers: nextProps.filteredUsers,
-       allUsers: nextProps.allusers,
-       filteredUsers: nextProps.filteredUsers,
-       filtered: nextProps.filtered,
+       cashFlow: nextProps.cashFlow,
        costInputWidth: nextProps.costInputWidth,
        arrowNavProps: nextProps.headerProps,
        headerProps: nextProps.headerProps,
@@ -140,78 +111,39 @@ class CreatePaymentView extends React.Component {
      });
    }
 
-   filterUsers(filter) {
-     if (filter == "" || filter == "-" || filter == "@") {
-       this.setState({filteredUsers: []});
-     } else {
-       // Generate regex with user's input
-       var re = new RegExp(filter + '.+$', 'i');
 
-       // Get users that match this filter
-       var users = this.allUsers.filter(function(e, i, a) {
-         return e.username.search(re) != -1;
-       });
-
-       // Update state resulting in re-render of user previews
-       this.setState({filteredUsers: users});
-     }
-   }
-
-   // Return user preview components for each filtered user
-   getUserPreviews() {
-     var previews = [];
-     for (var i = 0; i < this.state.filteredUsers.length; i++) {
-       var currUser = this.state.filteredUsers[i];
-       previews.push(
-         <UserPreview
-            key={currUser.username}
-            user={currUser}
-            width={dimensions.width * 0.9}
-            callback={() => { this.setState({to: currUser.username, user: currUser}); }} />
-      );
-    };
-    return previews;
-   };
-
-  // Return user preview for the specified user
-  getUserPreview(user) {
-    return(
-      <UserPreview
-        key={user.username}
-        user={user}
-        width={dimensions.width}
-        callback={() => { this.setState({to: user.username}); }} />
-    );
-  };
-
+  /**
+    *   Initializes payment creation process
+  **/
   createPayment(flow) {
-
-    // Pass down scope
     var _this = this;
-
-    // Start loading animation
     this.setState({loading: true});
-
     var currUser = JSON.parse(this.state.currentUser);
+    console.log("current user", currUser);
+    console.log("other user", this.state.user);
+
     if (flow == 'in') {
-      this.props.dispatchCreatePayment({
+      console.log("TOKEN:::", this.state.sessionToken);
+      Init.createPayment({
         amount: this.state.eachCost,
         purpose: this.state.memo,
         payments: this.state.totalPayments,
         recip_id: currUser.uid,
-        recip_name: currUser.first_name + " " + this.state.currentUser.last_name,
+        recip_name: currUser.first_name + " " + currUser.last_name,
+        sender_name: currUser.first_name + " " + currUser.last_name,
         recip_pic: currUser.profile_pic,
         sender_id: this.state.user.uid,
         sender_name: this.state.user.first_name + " " + this.state.user.last_name,
-        sender_pic: this.state.user.pic,
+        sender_pic: this.state.user.profile_pic,
         confirmed: false,
         type: "request",
         token: this.state.sessionToken,
-      }, function() {
+      }, function(res) {
         _this.setState({doneLoading: true});
       });
     } else if (flow == 'out') {
-      this.props.dispatchCreatePayment({
+      console.log(JSON.stringify(currUser));
+      Init.createPayment({
         amount: this.state.eachCost,
         purpose: this.state.memo,
         payments: this.state.totalPayments,
@@ -224,7 +156,7 @@ class CreatePaymentView extends React.Component {
         confirmed: true,
         type: "pay",
         token: this.state.sessionToken,
-      }, function() {
+      }, function(res) {
         _this.setState({doneLoading: true});
       });
     }
@@ -238,13 +170,16 @@ class CreatePaymentView extends React.Component {
   //   });
   // }
 
+
+  /**
+    *   Sticky chevron functionality
+  **/
   _keyboardWillShow(e) {
     Animated.spring(this.kbOffset, {
       toValue: e.endCoordinates.height,
       friction: 6
     }).start();
   }
-
   _keyboardWillHide(e) {
     Animated.spring(this.kbOffset, {
       toValue: 0,
@@ -252,20 +187,72 @@ class CreatePaymentView extends React.Component {
     }).start();
   }
 
-  /**
-    *   Add keyboard measuring event listeners
-  **/
-  componentDidMount() {
-    _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
-    _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
-  }
 
   /**
-    *   Remove keyboard measuring event listeners
+    *   1) Add keyboard measuring event listeners
+    *   2) Initialize state
+  **/
+  componentDidMount() {
+    var _this = this;
+
+    _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
+    _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+
+    Async.get('user', (user) => {
+      _this.setState({currentUser: user});
+    });
+
+    Async.get('session_token', (token) => {
+      _this.setState({sessionToken: token});
+    });
+
+    Async.get('users', (users) => {
+      users = JSON.parse(users);
+      var arr = [];
+      for (var i in users) {
+        users[i].username = i;
+        users[i].name = users[i].first_name + users[i].last_name;
+        arr.push(users[i]);
+      }
+      _this.setState({users: arr});
+    });
+  }
+
+
+  /**
+    *   Remove listeners on dismount
   **/
   componentWillUnmount() {
     _keyboardWillShowSubscription.remove();
     _keyboardWillHideSubscription.remove();
+  }
+
+
+  /**
+    *   Return filtered user array
+  **/
+  _findUser(query) {
+    if (query === '') return [];
+
+    const { users } = this.state;
+    const regex = new RegExp(query + '.+$', 'i');
+    return users.filter(user => user.name.search(regex) >= 0);
+  }
+
+
+  /**
+    *   Return a ready-to-render user preview
+  **/
+  _genUserPreview(user, options) {
+    console.log(JSON.stringify(user));
+    return(
+      <UserPreview
+        key={user.username}
+        user={user}
+        width={dimensions.width}
+        callback={() => { this.setState({query: user.username, user: user}); }}
+        touchable={options.touchable} />
+    );
   }
 
 
@@ -275,38 +262,38 @@ class CreatePaymentView extends React.Component {
 
       // User is inputting name of other party
       case "name":
+
+        const { query } = this.state;
+        const user = this._findUser(query);
+
         return(
 
           <View style={[containers.container, {backgroundColor: colors.darkGrey}]}>
             <View style={containers.padHeader}>
               { /* Input */ }
               <View>
-                <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, {color: colors.white}]}>Who are you splitting with?</Text>
-                <TextInput
-                  style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15, marginTop: 10}]}
-                  placeholder={"John Doe"}
-                  autoFocus={true}
-                  defaultValue={this.state.to}
-                  onChangeText={(text) => { this.filterUsers(text); this.setState({to: text}); }} />
-
-                { /* Separator */ }
-                <View style={{height: 2.0, backgroundColor: 'transparent'}}></View>
-
-                { /* Dynamically populated user previews */ }
-                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                  { this.getUserPreviews() }
-                </View>
+                <Autocomplete
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  autoFocus
+                  containerStyle={styles.autocompleteContainer}
+                  inputContainerStyle={styles.inputContainer}
+                  style={styles.input}
+                  data={user}
+                  defaultValue={query}
+                  onChangeText={text => this.setState({query: text})}
+                  renderItem={data => this._genUserPreview(data, {touchable: true}) } />
               </View>
             </View>
 
             { /* Header */ }
-            <Header callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
+            <Header callbackClose={() => {this.callbackClose()}} index={this.state.index} headerProps={this.state.headerProps} />
 
             { /* Arrow nav buttons */ }
             <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
               <ArrowNav
               arrowNavProps={this.state.arrowNavProps}
-              callbackRight={() => { this.setState({inputting: "frequency", arrowNavProps: {left: true, right: true} }); }} />
+              callbackRight={() => { this.setState({inputting: "frequency", arrowNavProps: {left: true, right: true}, index: 1}); }} />
             </Animated.View>
           </View>
 
@@ -328,7 +315,7 @@ class CreatePaymentView extends React.Component {
               </Text>
 
               { /* User preview for the user we are paying or requesting  */ }
-              { this.getUserPreview(this.state.user) }
+              { this._genUserPreview(this.state.user, {touchable: false}) }
 
               { /* Input */ }
               <View style={[{flex: 1, alignItems: "center", paddingTop: 45}]}>
@@ -368,15 +355,15 @@ class CreatePaymentView extends React.Component {
             </View>
 
             { /* Header */ }
-            <Header dark callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
+            <Header callbackClose={() => {this.callbackClose()}} index={this.state.index} headerProps={this.state.headerProps} />
 
             { /* Arrow nav buttons */ }
             <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
               <ArrowNav
               dark
               arrowNavProps={this.state.arrowNavProps}
-              callbackLeft={() => { this.setState({inputting: "name", arrowNavProps: {left: false, right: true} }); }}
-              callbackRight={() => { this.setState({inputting: "memo", arrowNavProps: {left: true, right: false} }); }} />
+              callbackLeft={() => { this.setState({inputting: "name", arrowNavProps: {left: false, right: true}, index: 0}); }}
+              callbackRight={() => { this.setState({inputting: "memo", arrowNavProps: {left: true, right: false}, index: 2}); }} />
             </Animated.View>
           </View>
 
@@ -400,7 +387,7 @@ class CreatePaymentView extends React.Component {
               <View style={containers.padHeader}>
 
                 { /* User preview for the user we are paying or requesting  */ }
-                { this.getUserPreview(this.state.user) }
+                { this._genUserPreview(this.state.user, {touchable: false}) }
                 <Text style={[typography.textInput, {fontSize: 16.5, textAlign: 'center', padding: 15, color: colors.darkGrey}]}>
                   ${this.state.eachCost} per month for the next {this.state.totalPayments} months.
                 </Text>
@@ -425,7 +412,7 @@ class CreatePaymentView extends React.Component {
               </View>
 
               { /* Header */ }
-              <Header dark callbackClose={() => {this.callbackClose()}} headerProps={this.state.headerProps} />
+              <Header callbackClose={() => {this.callbackClose()}} index={this.state.index} headerProps={this.state.headerProps} />
 
               { /* Arrow nav buttons */ }
               <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
@@ -440,5 +427,31 @@ class CreatePaymentView extends React.Component {
     }
   }
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'transparent',
+    flex: 1,
+    paddingTop: 20,
+  },
+  autocompleteContainer: {
+    backgroundColor: 'transparent',
+    flex: 1,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+  },
+  inputContainer: {
+    borderWidth: 1,
+    borderColor: colors.white,
+    borderRadius: 4,
+  },
+  input: {
+    backgroundColor: 'transparent',
+    paddingLeft: 12.5,
+    color: colors.white,
+  }
+});
 
 export default CreatePaymentView;

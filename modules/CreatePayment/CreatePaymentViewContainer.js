@@ -22,23 +22,6 @@ export default connect(
   }),
   dispatch => ({
 
-    // Creates data
-    dispatchCreatePayment(data, callback) {
-      console.log("=-=-=  REACHED dispatchCreatePayment(data)  =-=-=")
-
-      var url = "https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create";
-      fetch(url, {method: "POST", body: JSON.stringify(data)})
-      .then((response) => response.json())
-      .then((responseData) => {
-        console.log("POST response");
-        console.log('=-=-=-=-=-=-=-=-=-=-=-=-=-=');
-        console.log(responseData);
-        callback();
-      })
-      .done();
-
-    },
-
     // Fetches users from FB
     getUsers() {
       return Firebase.getUsers();
