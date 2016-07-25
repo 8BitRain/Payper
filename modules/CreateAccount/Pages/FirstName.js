@@ -2,10 +2,13 @@ import React from 'react';
 import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
+import Entypo from "react-native-vector-icons/Entypo"
+var Mixpanel = require('react-native-mixpanel');
 
 // Custom helper functions
 import * as Animations from "../../../helpers/animations";
 import * as Validators from "../../../helpers/validators";
+var Mixpanel = require('react-native-mixpanel');
 
 // Custom components
 import Header from "../../../components/Header/Header";
@@ -55,33 +58,39 @@ class FirstName extends React.Component {
   }
   componentDidMount() {
     Animations.fadeIn(this.animationProps);
+    Mixpanel.track("Password Page Finished");
+    Mixpanel.timeEvent("FirstName page Finished");
   }
+
   render() {
     return (
-      <Animated.View style={[containers.container, {opacity: this.animationProps.fadeAnim}]}>
-        { /* Background */ }
-        <View style={[backgrounds.background, backgrounds.firstName]}></View>
+      <View style={[containers.container, backgrounds.firstName]}>
+        <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
 
-        { /* Prompt and input field */ }
-        <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.firstName]}>
-          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>What&#39;s your first name?</Text>
-          <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} defaultValue={this.props.firstName} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(3, "forward", this.props.firstNameValidations, this.firstNameInput)}} onChangeText={(text) => {this.firstNameInput = text; this.props.dispatchSetFirstNameValidations(this.firstNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"John"} />
-        </View>
+          { /* Prompt and input field */ }
+          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.firstName]}>
+            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>What&#39;s your first name?</Text>
+            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} defaultValue={this.props.firstName} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(3, "forward", this.props.firstNameValidations, this.firstNameInput)}} onChangeText={(text) => {this.firstNameInput = text; this.props.dispatchSetFirstNameValidations(this.firstNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"John"} />
+          </View>
 
-        { /* Arrow nav buttons */ }
-        <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackRight={() => {this.onPressRight()}} />
+          { /* Arrow nav buttons */ }
+          <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackRight={() => {this.onPressRight()}} />
 
-        { /* Error messages */ }
-        <View style={[containers.sixTenths, backgrounds.firstName]}>
-          { this.props.firstNameValidations.capitalized ? null
-            : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Not capitalized</Text> }
-          { this.props.firstNameValidations.format ? null: <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Invalid character (. and - are allowed)</Text>
-             }
-        </View>
+          { /* Error messages */ }
+          <View style={[containers.sixTenths, backgrounds.firstName]}>
+            { this.props.firstNameValidations.capitalized ? null
+              : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Not capitalized</Text> }
+            { this.props.firstNameValidations.format ? null: <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Invalid character (. and - are allowed)</Text>
+               }
+            { this.props.firstNameValidations.valid ? <Text style={[typography.validationSuccess, typography.fontSizeError, typography.marginSides]}>Good to go!</Text>
+              : null }
+          </View>
 
-        { /* Header */ }
-        <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
-      </Animated.View>
+          { /* Header */ }
+          <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+
+        </Animated.View>
+      </View>
     );
   }
 }

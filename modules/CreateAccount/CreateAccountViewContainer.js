@@ -5,6 +5,8 @@ import Validators from '../../helpers/validators';
 import * as Firebase from '../../services/Firebase';
 import * as Init from '../../_init';
 
+var Mixpanel = require('react-native-mixpanel');
+
 /**
   *   Connect function for CreateAccountView.js
 **/
@@ -61,8 +63,20 @@ export default connect(
               break;
           }
           dispatch(dispatchFunctions.setPage(index));
+        } else{
+
+            console.log("hit");
+            if(validations.valid==false){
+              for (var temp in validations) {
+            if(!validations[temp]&&temp!='valid'){
+            Mixpanel.track(temp);
+            }
+
+            }
+          }
         }
-      } else {
+
+      }else {
         dispatch(dispatchFunctions.setPage(index));
       }
     },

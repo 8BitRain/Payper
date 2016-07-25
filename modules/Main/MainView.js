@@ -82,21 +82,24 @@ class Content extends React.Component {
     var _this = this;
 
     try {
-      AsyncStorage.getItem('@Store:payment_flow').then(function(pf) {
-        console.log("=-=-= SUCCESSFULLY RETRIEVED PAYMENT FLOW FROM ASYNC STORAGE =-=-=");
-        pf = JSON.parse(pf);
-        _this.setState({paymentFlow: pf});
-
-        // Incoming payments
-        var inc = [];
-        for (var payment in pf.in) {
-          inc.push({payment: pf.in[payment]});
+      // Fetch payment flows from AsyncStorage
+      Async.get('payment_flow', (flows) => {
+        // Populate row arrays
+        flows = JSON.parse(flows);
+        if (flows) {
+          for (var payment in flows.in) inc.push( flows.in[payment] );
+          for (var payment in flows.out) out.push( flows.out[payment] );
         }
 
-        // Outgoing payments
-        var out = [];
-        for (var payment in pf.out) {
-          inc.push({payment: pf.out[payment]});
+        // Set state depending on which filter is enabled
+        switch (whichFlow) {
+          case "in":
+            console.log(inc);
+            _this.setState({dataSourceIn: ds.cloneWithRows(inc)});
+          break;
+          case "out":
+            _this.setState({dataSourceOut: ds.cloneWithRows(out)});
+          break;
         }
       });
     } catch (err) {

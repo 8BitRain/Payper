@@ -12,6 +12,10 @@ import Header from '../../components/Header/Header.js';
 import backgrounds from "./styles/backgrounds";
 import containers from "./styles/containers";
 import typography from "./styles/typography";
+import colors from '../../styles/colors';
+
+var Mixpanel = require('react-native-mixpanel');
+
 
 class TrackingEmpty extends React.Component {
    constructor(props) {
@@ -39,7 +43,7 @@ class TrackingEmpty extends React.Component {
 }
 
  /*Animations */
-    bouncingArrow(){
+     bouncingArrow(){
       Animated.sequence([
         Animated.timing(this.state.animatedStartValue, {
           toValue: 55,
@@ -71,10 +75,16 @@ class TrackingEmpty extends React.Component {
     this.bouncingArrow();
    }
 
+   onThankYouPress() {
+
+     Mixpanel.track("Completed signup");
+     Actions.ThankYouView();
+   }
+
    render() {
      return (
 
-       <Animated.View style={[containers.contentContainer, {opacity: this.animationProps.fadeAnim, backgroundColor: "#292B2E"}]}>
+       <Animated.View style={[containers.contentContainer, {opacity: this.animationProps.fadeAnim, backgroundColor: colors.darkGrey}]}>
 
        <Header headerProps={this.headerProps}>
        </Header>
@@ -84,18 +94,19 @@ class TrackingEmpty extends React.Component {
           style={{
             width: 64,
             height: 64,
+            left: 7,
             transform: [                        // `transform` is an ordered array
               {translateY: this.state.animatedStartValue},  // Map `bounceValue` to `scale`
             ]
           }}>
-                <Entypo name="chevron-thin-down" size={48} color="white" />
+            <Entypo name="chevron-thin-down" size={48} color="white"/>
           </Animated.Text>
 
         </View>
 
         <View style={containers.paymentContainer}>
-          <Button>
-             <View style={{borderRadius: 50, backgroundColor: "white", width: 64, height: 64, overflow: "hidden", alignItems: "center", justifyContent: "center", alignSelf: "center", right: 7.5}}>
+          <Button onPress={this.onThankYouPress.bind(this)}>
+             <View style={{borderRadius: 50, backgroundColor: "white", width: 64, height: 64, overflow: "hidden", alignItems: "center", justifyContent: "center", alignSelf: "center"}}>
                  <Entypo name="credit" size={36} color="black"/>
              </View>
           </Button>

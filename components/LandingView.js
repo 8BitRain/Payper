@@ -26,6 +26,10 @@ class LandingView extends React.Component {
         <Button style={{fontFamily: "Roboto"}} onPress={Actions.LandingScreenView}>UX Test V1.0</Button>
         <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.CreatePaymentViewContainer}>Create Payment</Button>
         <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.CreateAccountViewContainer}>Create Account</Button>
+        <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.ArrowNavDouble}>Arrow Nav Double</Button>
+        <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.TrackingContainer}>TrackingContainer</Button>
+        <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.LandingScreenView}>Landing Page</Button>
+        <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.BankOnboardingContainer}>Bank Onboarding</Button>
         <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.SignInViewContainer}>Sign In</Button>
         <Button style={{fontFamily: "Roboto", fontWeight:"100"}} onPress={Actions.MainViewContainer}>Main</Button>
       </View>

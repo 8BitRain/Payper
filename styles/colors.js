@@ -14,6 +14,7 @@ const colors = {
   alertRed: "#FB3640",
   alertYellow: "#f7ca2a",
   alertGreen: "#10bf5a",
+  mountainGrey: "#292B2E"
 }
 
 export default colors;
