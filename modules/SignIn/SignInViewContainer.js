@@ -9,6 +9,7 @@ const FBSDK = require('react-native-fbsdk');
 const {
   LoginButton,
   ShareDialog,
+  AccessToken
 } = FBSDK;
 
 
@@ -97,6 +98,7 @@ class SignInView extends React.Component {
           arrowNavProps={this.arrowNavProps}
           callbackRight={() => { this.signInWithEmail() }} />
         </View>
+
         <LoginButton
         publishPermissions={["publish_actions"]}
         onLoginFinished={
@@ -109,6 +111,7 @@ class SignInView extends React.Component {
               AccessToken.getCurrentAccessToken().then(
                 (data) => {
                   alert(data.accessToken.toString())
+                  
                 }
               )
             }
