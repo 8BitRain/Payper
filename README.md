@@ -13,15 +13,26 @@
 - [ ] Contact synchronization
 - [ ] Invites
 
+### Polish
+- [X] CreatePaymentView.js predictive search: limit predictions to 4
+- [X] CreatePaymentView.js predictive search: don't show signed in user in predictions
+- [ ] Pass numNotifications to menu in sidebar and render preview indicator next to notifications lightbulb
+- [ ] Apply fade animation to inner content during animation project, not entire view
+- [ ] App-wide padding (look into pixel density for screen size detection)
+
+### Bugs
+- [ ] Header only displays notifications on Notifications page (probably an
+  issue with how numNotifications is passed to <Content />)
+
 ## Installation
 ```
-git clone https://github.com/8BitRain/GetCoincast.git
-cd ~/path/to/repo
-git fetch
-git branch --track desired-branch-name origin/desired-branch-name
-git checkout desired-branch-name
-npm install
-react-native run-ios
+$  git clone https://github.com/8BitRain/GetCoincast.git
+$  cd ~/path/to/repo
+$  git fetch
+$  git branch --track desired-branch-name origin/desired-branch-name
+$  git checkout desired-branch-name
+$  npm install
+$  react-native run-ios
 ```
 
 ## Contributing
@@ -35,9 +46,9 @@ react-native run-ios
 * If a non-existent node module error is thrown, run `npm install --save node-module-name`.
 
 ## The Team
-| Front end (💣)       | Back end | Multi-purpose Gurus |
-|----------------------|:---------:|:-----------------:|
-| Eric & Brady         | Vash      | Mo & Luke         |
+| Front end (💣)       | Back end  | Multi-purpose Gurus|
+|:--------------------:|:---------:|:------------------:|
+| Eric & Brady         | Vash      | Mo & Luke          |
 
 ## Note:
 Normally, after a code change to react-native-router-flux src files,

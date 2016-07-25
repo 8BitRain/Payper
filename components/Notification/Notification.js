@@ -21,23 +21,28 @@ class Notification extends React.Component {
     const n = StringMaster5000.formatNotification(this.props.notification);
 
     return(
-      <View style={[styles.notificationWrap, {borderLeftWidth: 5, borderLeftColor: n.iconColor}]} onPress={() => options.callback()}>
-        { /* Profile picture of nofication sender */ }
-        <View style={styles.userWrap}>
-          <View style={{marginRight: 10}}>
-            { Partials.getUserPic(n.pic, n.name) }
-            <View style={styles.iconWrap}>
-              <Entypo name={n.icon} size={14} color={n.iconColor}/>
+      <TouchableHighlight
+      onPress={() => Actions.MainViewContainer()}
+      underlayColor={'transparent'}
+      opacity={0.7}>
+        <View style={[styles.notificationWrap, {borderLeftWidth: 5, borderLeftColor: n.iconColor}]} onPress={() => options.callback()}>
+          { /* Profile picture of nofication sender */ }
+          <View style={styles.userWrap}>
+            <View style={{marginRight: 10}}>
+              { Partials.getUserPic(n.pic, n.name) }
+              <View style={styles.iconWrap}>
+                <Entypo name={n.icon} size={14} color={n.iconColor}/>
+              </View>
             </View>
           </View>
-        </View>
 
-        { /* Notification text */ }
-        <View style={styles.textWrap}>
-          <Text style={[styles.text, {color: colors.icyBlue}]}>{ n.ts }</Text>
-          <Text style={styles.text}>{ n.info }</Text>
+          { /* Notification text */ }
+          <View style={styles.textWrap}>
+            <Text style={[styles.text, {color: colors.icyBlue}]}>{ n.ts }</Text>
+            <Text style={styles.text}>{ n.info }</Text>
+          </View>
         </View>
-      </View>
+      </TouchableHighlight>
     );
   }
 }

@@ -161,7 +161,7 @@ class Content extends React.Component {
   **/
   _getPaymentList() {
     return(
-      <View style={{flex: 0.81, paddingTop: 0}}>
+      <View style={{flex: 0.8, paddingTop: 0}}>
         <ListView
           refreshControl={
             <RefreshControl
@@ -185,7 +185,7 @@ class Content extends React.Component {
   **/
   _getEmptyState() {
     return(
-      <View style={{flex: 0.81, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
+      <View style={{flex: 0.8, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
         <Text style={{fontSize: 18, color: colors.darkGrey}}>Empty state baby!</Text>
       </View>
     );
@@ -246,7 +246,7 @@ class Content extends React.Component {
               {(this.state.empty) ? this._getEmptyState() : this._getPaymentList() }
 
               { /* Footer */ }
-              <View style={{flex: 0.09}}>
+              <View style={{flex: 0.1}}>
                 <Footer
                   callbackFeed={() => this.setState({tab: 'feed'})}
                   callbackTracking={() => console.log("Tracking tab is already active.")}
@@ -269,10 +269,10 @@ class Content extends React.Component {
               </View>
 
               { /* Global feed */ }
-              <View style={{flex: 0.81, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red'}}></View>
+              <View style={{flex: 0.8, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red'}}></View>
 
               { /* Footer */ }
-              <View style={{flex: 0.09}}>
+              <View style={{flex: 0.1}}>
                 <Footer
                   callbackFeed={() => console.log("Feed tab is already active.")}
                   callbackTracking={() => this.setState({tab: 'tracking'})}
@@ -310,7 +310,7 @@ class Main extends React.Component {
 
 
   /**
-    *   Also tggle menu (? lol)
+    *   Also toggle menu (? lol)
   **/
   updateMenuState(isOpen) {
     this.setState({ isOpen, });

@@ -116,14 +116,16 @@ class CreatePaymentView extends React.Component {
     *   Initializes payment creation process
   **/
   createPayment(flow) {
-    var _this = this;
+    const _this = this;
     this.setState({loading: true});
-    var currUser = JSON.parse(this.state.currentUser);
-    console.log("current user", currUser);
-    console.log("other user", this.state.user);
+    console.log("CURR USER:", this.state.currentUser);
+    console.log("OTHER USER:", this.state.user);
+    var currUser = this.state.currentUser;
+    // console.log("current user", currUser);
+    // console.log("other user", this.state.user);
 
     if (flow == 'in') {
-      console.log("TOKEN:::", this.state.sessionToken);
+      console.log("TOKEN:", this.state.sessionToken);
       Init.createPayment({
         amount: this.state.eachCost,
         purpose: this.state.memo,
@@ -193,13 +195,13 @@ class CreatePaymentView extends React.Component {
     *   2) Initialize state
   **/
   componentDidMount() {
-    var _this = this;
+    const _this = this;
 
     _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
     _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
 
     Async.get('user', (user) => {
-      _this.setState({currentUser: user});
+      _this.setState({currentUser: JSON.parse(user)});
     });
 
     Async.get('session_token', (token) => {
@@ -233,10 +235,12 @@ class CreatePaymentView extends React.Component {
   **/
   _findUser(query) {
     if (query === '') return [];
-
     const { users } = this.state;
     const regex = new RegExp(query + '.+$', 'i');
-    return users.filter(user => user.name.search(regex) >= 0);
+    var u = users.filter(user => user.name.search(regex) >= 0);
+    for (var i = 0; i < u.length; i++) if (u[i].uid = this.state.currentUser.uid) u.splice(i, 1);
+    if (u.length > 4) u.splice(0, 4);
+    return u;
   }
 
 

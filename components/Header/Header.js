@@ -23,9 +23,6 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 10,
     flexDirection: "row",
-
-    // borderBottomWidth: 1,
-    // borderBottomColor: colors.lightGrey,
   },
 
   // Header chunk sizing
@@ -141,9 +138,11 @@ function getSettingsIcon(callback, numNotifications) {
   return(
     <Button onPress={() => {callback()}}>
       <Entypo style={styles.iconSettings} name="menu" size={25} color={colors.white}/>
-      <View style={notificationStyles.numNotificationsWrap}>
-        <Text style={notificationStyles.numNotificationsText}>{ numNotifications }</Text>
-      </View>
+      { (numNotifications == 0) ? null :
+        <View style={notificationStyles.numNotificationsWrap}>
+          <Text style={notificationStyles.numNotificationsText}>{ numNotifications }</Text>
+        </View>
+      }
     </Button>
   );
 };
@@ -210,6 +209,8 @@ class Header extends React.Component {
       active: 'out',
       index: 0,
     }
+
+    console.log("NUMBER OF NOTIFICATIONS RECEIVED BY HEADER:", this.props.headerProps.numNotifications);
   }
 
   render() {

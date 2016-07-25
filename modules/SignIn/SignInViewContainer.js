@@ -1,3 +1,4 @@
+// Dependencies
 import React from 'react';
 import {View, Text, TextInput, StyleSheet, Animated, Image, Dimensions, AsyncStorage} from "react-native";
 import Button from "react-native-button";
@@ -49,6 +50,7 @@ class SignInView extends React.Component {
         <Loading
           complete={this.state.doneLoading}
           msgSuccess={"Welcome!"}
+          msgError={"Sign in failed"}
           msgLoading={"One sec..."}
           destination={() => Actions.MainViewContainer()} />
       );

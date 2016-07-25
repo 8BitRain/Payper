@@ -114,7 +114,7 @@ export function createUser(input) {
       Firebase.getSessionToken((token) => {
         input.token = token;
         Lambda.createUser(input, (user) => {
-          if(user) initializeAppState(user);
+          if (user) initializeAppState(user);
         });
       });
     }

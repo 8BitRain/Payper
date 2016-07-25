@@ -118,7 +118,7 @@ class Notifications extends React.Component {
   _getEmptyState() {
     return(
       <View style={{flex: 0.9, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
-        <Text style={{fontSize: 18, color: colors.darkGrey}}>No notifications{"\n"}:(</Text>
+        <Text style={{fontSize: 18, color: colors.darkGrey}}>No notifications</Text>
       </View>
     );
   }
