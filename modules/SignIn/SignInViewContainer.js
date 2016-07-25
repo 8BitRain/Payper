@@ -16,6 +16,7 @@ const {
 // Stylesheets
 import colors from "../../styles/colors";
 import styles from '../../styles/SignIn/Generic';
+import typography from '../../styles/typography';
 
 // Custom components
 import ArrowNav from "../../components/Navigation/Arrows/ArrowDouble";
@@ -51,8 +52,13 @@ class SignInView extends React.Component {
   }
 
   //Sign in for facebook
-  signInWithCredential(){
+  signInWithCredentials(token){
+    var _this = this;
+    alert("Signing in With Credentials: " + token);
     this.setState({loading: true});
+    Init.signInWithCredentials(token, function(signedIn) {
+      _this.setState({doneLoading: true});
+    });
 
   }
 
@@ -108,8 +114,8 @@ class SignInView extends React.Component {
             } else {
               AccessToken.getCurrentAccessToken().then(
                 (data) => {
-                  alert(data.accessToken.toString())
-
+                  console.log(data.accessToken.toString());
+                  this.signInWithCredentials(data.accessToken.toString());
                 }
               )
             }
