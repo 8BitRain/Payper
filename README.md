@@ -23,8 +23,9 @@
 ### Bugs
 - [X] Header only displays notifications on Notifications page (probably an
   issue with how numNotifications is passed to <Content />)
-- [ ] "Runtime is not ready for debugging" randomly appears.
+- [X] "Runtime is not ready for debugging" randomly appears.
   https://github.com/facebook/react-native/issues/6682
+  **This went away when I downgraded from Node 6.2.0 to 5.5.0**
 
 ## Installation
 ```
