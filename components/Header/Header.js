@@ -209,8 +209,6 @@ class Header extends React.Component {
       active: 'out',
       index: 0,
     }
-
-    console.log("NUMBER OF NOTIFICATIONS RECEIVED BY HEADER:", this.props.headerProps.numNotifications);
   }
 
   render() {
@@ -219,7 +217,7 @@ class Header extends React.Component {
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
           { this.props.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
-          { this.props.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings, this.props.headerProps.numNotifications) : null }
+          { this.props.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings, this.props.numNotifications) : null }
         </View>
 
         { /* Contains 'CircleIcons' or 'PaymentIcons' if specified */ }

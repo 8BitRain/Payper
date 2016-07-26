@@ -128,8 +128,6 @@ class Notifications extends React.Component {
     *   Mark unseen notifications as seen
   **/
   _seeNotifications(user) {
-    console.log("DS #ROWS:", this.state.dataSource.getRowCount());
-
     for (var i = 0; i < this.state.dataSource.getRowCount(); i++) {
       var row = this.state.dataSource.getRowData(0, i)
       if (!row.seen) {

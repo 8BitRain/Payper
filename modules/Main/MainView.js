@@ -51,7 +51,7 @@ class Content extends React.Component {
         },
         index: null,
         numCircles: null,
-        numNotifications: this.props.numNotifications,
+        numNotifications: -1,
       },
 
       dataSourceOut: ds.cloneWithRows([]),
@@ -70,8 +70,6 @@ class Content extends React.Component {
     Async.get('session_token', (token) => {
       this.setState({token: token});
     });
-
-    console.log("NUMBER OF NOTIFICATIONS RECEIVED BY CONTENT", this.props.numNotifications);
   }
 
 
@@ -195,7 +193,6 @@ class Content extends React.Component {
 
 
   render() {
-    console.log(this.props);
     /* If a settings page is active, render it */
     switch (this.props.settingsPage) {
       case "notifications":
@@ -215,8 +212,8 @@ class Content extends React.Component {
                   index: null,
                   numCircles: null,
                   title: "Notifications",
-                  numNotifications: this.props.numNotifications,
                 }}
+                numNotifications={this.props.numNotifications}
                 callbackSettings={() => this.props.toggleMenu()} />
             </View>
 
@@ -239,6 +236,7 @@ class Content extends React.Component {
               <View style={{flex: 0.1}}>
                 <Header
                   headerProps={this.state.headerProps}
+                  numNotifications={this.props.numNotifications}
                   callbackOut={ () => this.setState({flowFilter: 'out'}) }
                   callbackIn={ () => this.setState({flowFilter: 'in'}) }
                   callbackSettings={() => this.props.toggleMenu()} />
@@ -265,6 +263,7 @@ class Content extends React.Component {
               <View style={{flex: 0.1}}>
                 <Header
                   headerProps={this.state.headerProps}
+                  numNotifications={this.props.numNotifications}
                   callbackOut={ () => this.setState({flowFilter: 'out'}) }
                   callbackIn={ () => this.setState({flowFilter: 'in'}) }
                   callbackSettings={() => this.props.toggleMenu()} />
@@ -344,9 +343,10 @@ class Main extends React.Component {
   **/
   componentWillMount() {
     Async.get('user', (user) => {
-      console.log("GOT USER", user);
       Firebase.listenToNotifications(JSON.parse(user).uid, (snapshot) => {
-        this.setState({numNotifications: this._getNumUnseen(snapshot)});
+        this.setState({numNotifications: this._getNumUnseen(snapshot)}, () => {
+          console.log("New number of notifications:", this.state.numNotifications);
+        });
       });
     });
   }
