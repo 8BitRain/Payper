@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, TouchableHighlight, Text } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import { Actions } from 'react-native-router-flux';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -22,9 +23,9 @@ class Notification extends React.Component {
 
     return(
       <TouchableHighlight
-      onPress={() => Actions.MainViewContainer()}
-      underlayColor={'transparent'}
-      opacity={0.7}>
+        onPress={ () => Actions.MainViewContainer({page: ""}) }
+        underlayColor={'transparent'}
+        opacity={0.7}>
         <View style={[styles.notificationWrap, {borderLeftWidth: 5, borderLeftColor: n.iconColor}]} onPress={() => options.callback()}>
           { /* Profile picture of nofication sender */ }
           <View style={styles.userWrap}>

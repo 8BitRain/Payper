@@ -79,9 +79,11 @@ class CreatePaymentView extends React.Component {
     }
 
     this.kbOffset = new Animated.Value(0);
+   }
 
-     // Callback functions to be passed to the header
-     this.callbackClose = function() { Actions.MainViewContainer() };
+
+   callbackClose() {
+     Actions.MainViewContainer();
    }
 
 
@@ -210,13 +212,17 @@ class CreatePaymentView extends React.Component {
 
     Async.get('users', (users) => {
       users = JSON.parse(users);
+      console.log("USERS AFTER GETTING THEM FROM ASYNC STORAGE\n", users);
       var arr = [];
+      var user = {};
       for (var i in users) {
-        users[i].username = i;
-        users[i].name = users[i].first_name + users[i].last_name;
+        user = users[i];
+        user.username = i;
+        user.name = user.first_name + " " + user.last_name;
         arr.push(users[i]);
       }
-      _this.setState({users: arr});
+      console.log("USERS ARRAY:", arr);
+      this.setState({users: arr});
     });
   }
 
@@ -235,11 +241,9 @@ class CreatePaymentView extends React.Component {
   **/
   _findUser(query) {
     if (query === '') return [];
-    const { users } = this.state;
+    const users = this.state.users;
     const regex = new RegExp(query + '.+$', 'i');
-    var u = users.filter(user => user.name.search(regex) >= 0);
-    for (var i = 0; i < u.length; i++) if (u[i].uid = this.state.currentUser.uid) u.splice(i, 1);
-    if (u.length > 4) u.splice(0, 4);
+    var u = users.filter(user => user.name.search(regex) >= 0 && user.username != this.state.currentUser.username);
     return u;
   }
 

@@ -34,6 +34,7 @@ function initializeAppState(user) {
     Async.set('user', JSON.stringify(user));
     Async.set('session_token', user.token);
     Firebase.getUsers((users) => {
+      console.log("USERS BEFORE SETTING THEM IN ASYNC STORAGE\n", users);
       Async.set('users', JSON.stringify(users));
     });
     Firebase.getNumNotifications(user.uid, (num) => {

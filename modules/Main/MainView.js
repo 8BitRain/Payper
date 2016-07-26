@@ -70,6 +70,8 @@ class Content extends React.Component {
     Async.get('session_token', (token) => {
       this.setState({token: token});
     });
+
+    console.log("NUMBER OF NOTIFICATIONS RECEIVED BY CONTENT", this.props.numNotifications);
   }
 
 
@@ -342,6 +344,7 @@ class Main extends React.Component {
   **/
   componentWillMount() {
     Async.get('user', (user) => {
+      console.log("GOT USER", user);
       Firebase.listenToNotifications(JSON.parse(user).uid, (snapshot) => {
         this.setState({numNotifications: this._getNumUnseen(snapshot)});
       });

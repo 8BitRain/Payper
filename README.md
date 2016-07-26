@@ -23,6 +23,8 @@
 ### Bugs
 - [ ] Header only displays notifications on Notifications page (probably an
   issue with how numNotifications is passed to <Content />)
+- [ ] "Runtime is not ready for debugging" randomly appears.
+  https://github.com/facebook/react-native/issues/6682
 
 ## Installation
 ```
@@ -49,6 +51,9 @@ $  react-native run-ios
 | Front end (💣)       | Back end  | Multi-purpose Gurus|
 |:--------------------:|:---------:|:------------------:|
 | Eric & Brady         | Vash      | Mo & Luke          |
+
+## Versions
+* Stay at Node 5.5.0 for now! Things break on 6.2.0
 
 ## Note:
 Normally, after a code change to react-native-router-flux src files,

@@ -44,6 +44,7 @@ var usernamesRef = firebase.database().ref('/usernames');
 **/
 export function getUsers(callback) {
   usernamesRef.once('value', function(snapshot) {
+    console.log("USERS RIGHT AFTER GETTING THEM FROM FIREBASE\n", snapshot.val());
     if (typeof callback == 'function') callback(snapshot.val());
   }).catch(function(err) {
     console.log("Error code", error.code, "\nError message", error.message);
