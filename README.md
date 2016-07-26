@@ -21,7 +21,7 @@
 - [ ] App-wide padding (look into pixel density for screen size detection)
 
 ### Bugs
-- [ ] Header only displays notifications on Notifications page (probably an
+- [X] Header only displays notifications on Notifications page (probably an
   issue with how numNotifications is passed to <Content />)
 - [ ] "Runtime is not ready for debugging" randomly appears.
   https://github.com/facebook/react-native/issues/6682
