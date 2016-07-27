@@ -97,38 +97,8 @@ class SignInView extends React.Component {
           { /* Filler */ }
           <View style={{flex:0.18}} />
         </View>
-<<<<<<< Updated upstream
-
-        <Button onPress={() => {this.fbAPIRequest()}}><Text>FBRequest</Text></Button>
-        <LoginButton
-        readPermissions={["email","public_profile", "user_friends"]}
-        onLoginFinished={
-          (error, result) => {
-            if (error) {
-              alert("login has error: " + result.error);
-            } else if (result.isCancelled) {
-              alert("login is cancelled.");
-            } else {
-              AccessToken.getCurrentAccessToken().then(
-                (data) => {
-                  console.log("Grabbing Facebook AccesToken for User: " +
-                   "\n" + "======+++++==========++++++======="
-                   + "\n" + JSON.stringify(data));
-                  this.state.fbAcessToken = data.accessToken;
-                  this.fbAPIRequest();
-                }
-              )
-            }
-          }
-        }
-        onLogoutFinished={() => alert("logout.")}/>
-      </View>
-    );
-
-=======
       );
     }
->>>>>>> Stashed changes
   }
 }
 

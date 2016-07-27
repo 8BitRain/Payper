@@ -61,6 +61,7 @@ class Content extends React.Component {
 
     // Initialize Firebase listeners on this user's payment flow
     Async.get('user', (user) => {
+      alert(user);
       Firebase.listenToPaymentFlow(JSON.parse(user).uid, (type, payment) => {
         this._genRows(type, payment);
       });

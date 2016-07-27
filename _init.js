@@ -114,9 +114,14 @@ export function signInWithFacebook(data, callback) {
         + "\n" + token);
         data.user.token = token;
         Lambda.createFBUser(data.user, (user) => {
-          console.log("INITIALIZING USER:", user);
-          if (user) initializeAppState(user);
-          else console.log("Received null user");
+          if (user) {
+            initializeAppState(user);
+            callback(true);
+          }
+          else {
+            console.log("Received null user");
+            callback(false);
+          }
         });
       });
     }

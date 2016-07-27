@@ -6,6 +6,7 @@ import * as Animations from "../../helpers/animations";
 import FacebookLogin from "../../components/FacebookLogin";
 import GenericSignUp from "../../components/GenericSignUp";
 import GenericSignIn from "../../components/GenericSignIn";
+import Loading from "../../components/Loading/Loading";
 const FBSDK = require('react-native-fbsdk');
 const {
   LoginButton,
@@ -14,6 +15,9 @@ const {
   GraphRequest,
   GraphRequestManager
 } = FBSDK;
+
+// Helpers
+import * as Init from '../../_init';
 
 // Stylesheets
 import container from "./styles/container";
@@ -50,6 +54,16 @@ class ImageCarousel extends React.Component {
 class LandingScreenDisplay extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      email: "",
+      password: "",
+      loading: false,
+      doneLoading: false,
+      fbAcessToken: "Test Value",
+      fbUser: {}
+    }
+
     this.animationProps = {
       fadeAnim: new Animated.Value(0) // init opacity 0
     };
@@ -183,8 +197,8 @@ class LandingScreenDisplay extends React.Component {
         token: ''
       }
     };
-    var _this = this;
-    this.setState({loading: true});
+    const _this = this;
+    _this.setState({loading: true});
     Init.signInWithFacebook(data, function(signedIn) {
       _this.setState({doneLoading: true});
     });
@@ -192,48 +206,56 @@ class LandingScreenDisplay extends React.Component {
 
 
   render() {
-    var imgWidth = 250;
-    var imgHeight = 165 / 350;
-        imgHeight *= imgWidth;
-    return (
-      <Animated.View style={[container.main, background.main, {opacity: this.animationProps.fadeAnim}]}>
+    if (this.state.loading) {
+      return(
+        <Loading
+          complete={this.state.doneLoading}
+          msgSuccess={"Welcome!"}
+          msgError={"Sign in failed"}
+          msgLoading={"One sec..."}
+          destination={() => Actions.MainViewContainer()} />
+      );
+    } else {
+      return (
+        <Animated.View style={[container.main, background.main, {opacity: this.animationProps.fadeAnim}]}>
 
-        <View style={[container.third, container.image]}>
-          <Text style={[typography.main, typography.fontSizeTitle]}>Coincast</Text>
-        </View>
+          <View style={[container.third, container.image]}>
+            <Text style={[typography.main, typography.fontSizeTitle]}>Coincast</Text>
+          </View>
 
-        <View style={[container.quo, container.image]}>
-          <ImageCarousel />
-        </View>
+          <View style={[container.quo, container.image]}>
+            <ImageCarousel />
+          </View>
 
-        <View style={[container.third]}>
-          <GenericSignIn destination={Actions.SignInViewContainer}/>
-          <GenericSignUp destination={Actions.CreateAccountViewContainer}/>
-          <LoginButton
-            readPermissions={["email","public_profile", "user_friends"]}
-            onLoginFinished={
-              (error, result) => {
-                if (error) {
-                  alert("login has error: " + result.error);
-                } else if (result.isCancelled) {
-                  alert("login is cancelled.");
-                } else {
-                  AccessToken.getCurrentAccessToken().then(
-                    (data) => {
-                      console.log("Grabbing Facebook AccesToken for User: " +
-                       "\n" + "======+++++==========++++++======="
-                       + "\n" + JSON.stringify(data));
-                      this.state.fbAcessToken = data.accessToken;
-                      this.fbAPIRequest();
-                    }
-                  )
+          <View style={[container.third]}>
+            <GenericSignIn destination={Actions.SignInViewContainer}/>
+            <GenericSignUp destination={Actions.CreateAccountViewContainer}/>
+            <LoginButton
+              readPermissions={["email","public_profile", "user_friends"]}
+              onLoginFinished={
+                (error, result) => {
+                  if (error) {
+                    alert("login has error: " + result.error);
+                  } else if (result.isCancelled) {
+                    alert("login is cancelled.");
+                  } else {
+                    AccessToken.getCurrentAccessToken().then(
+                      (data) => {
+                        console.log("Grabbing Facebook AccesToken for User: " +
+                         "\n" + "======+++++==========++++++======="
+                         + "\n" + JSON.stringify(data));
+                        this.state.fbAcessToken = data.accessToken;
+                        this.fbAPIRequest();
+                      }
+                    )
+                  }
                 }
               }
-            }
-            onLogoutFinished={() => alert("logout.")}/>
-        </View>
-      </Animated.View>
-    );
+              onLogoutFinished={() => alert("logout.")}/>
+          </View>
+        </Animated.View>
+      );
+    }
   }
 }
 
