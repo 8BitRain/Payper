@@ -34,7 +34,6 @@ function initializeAppState(user) {
     Async.set('user', JSON.stringify(user));
     Async.set('session_token', user.token);
     Firebase.getUsers((users) => {
-      console.log("USERS BEFORE SETTING THEM IN ASYNC STORAGE\n", users);
       Async.set('users', JSON.stringify(users));
     });
     Firebase.getNumNotifications(user.uid, (num) => {
@@ -102,34 +101,6 @@ export function signInWithEmail(data, callback) {
   }
 };
 
-/**
-  *   Sign in with credentials (Facebook Login)
-**/
-export function signInWithCredentials(accessToken, callback) {
-  if (accessToken) {
-    console.log("_init.js Recieved token: " + accessToken);
-    Firebase.signInWithCredentials(accessToken, (success) => {
-      if (!success) {
-        console.log("Could not sign in :(");
-        callback(false);
-      } else {
-        Firebase.getSessionToken((token) => {
-          if (token) {
-            Lambda.getUserWithToken(token, (userData) => {
-              if (userData) {
-                initializeAppState(userData);
-                if (typeof callback == 'function') callback(true);
-              }
-            });
-          }
-        });
-      }
-    });
-  } else {
-    console.log("Access Token cannot be null");
-  }
-};
-
 
 /**
   *   Sign in with Facebook token. Upon success, initialize app
@@ -143,6 +114,7 @@ export function signInWithFacebook(data, callback) {
         + "\n" + token);
         data.user.token = token;
         Lambda.createFBUser(data.user, (user) => {
+          console.log("INITIALIZING USER:", user);
           if (user) initializeAppState(user);
           else console.log("Received null user");
         });
