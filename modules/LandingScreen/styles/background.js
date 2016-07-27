@@ -3,7 +3,7 @@ import colors from '../../../styles/colors';
 
 const background = StyleSheet.create({
   main: {
-    backgroundColor: colors.lightGrey,
+    backgroundColor: colors.darkGrey,
   }
 });
 

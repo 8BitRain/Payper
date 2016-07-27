@@ -77,10 +77,35 @@ class Content extends React.Component {
     *   1) Confirm the cancel request
     *   2) Cancel the specified payment
   **/
-  cancelPayment(pid) {
-    Lambda.cancelPayment({payment_id: pid, token: this.state.token}, (success) => {
-      console.log("Cancel payment was a", success);
-    });
+
+  _genRows() {
+    var _this = this;
+
+    try {
+      // Fetch payment flows from AsyncStorage
+      Async.get('payment_flow', (flows) => {
+        // Populate row arrays
+        flows = JSON.parse(flows);
+        if (flows) {
+          for (var payment in flows.in) inc.push( flows.in[payment] );
+          for (var payment in flows.out) out.push( flows.out[payment] );
+        }
+
+        // Set state depending on which filter is enabled
+        switch (whichFlow) {
+          case "in":
+            console.log(inc);
+            _this.setState({dataSourceIn: ds.cloneWithRows(inc)});
+          break;
+          case "out":
+            _this.setState({dataSourceOut: ds.cloneWithRows(out)});
+          break;
+        }
+      });
+    } catch (err) {
+      console.log("=-=-= ERROR GETTING PAYMENT FLOW FROM ASYNC STORAGE =-=-=");
+      console.log(err);
+    }
   }
 
 

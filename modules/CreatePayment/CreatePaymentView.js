@@ -143,6 +143,8 @@ class CreatePaymentView extends React.Component {
         type: "request",
         token: this.state.sessionToken,
       }, function(res) {
+        test: "true"
+      }, function() {
         _this.setState({doneLoading: true});
       });
     } else if (flow == 'out') {
@@ -161,6 +163,8 @@ class CreatePaymentView extends React.Component {
         type: "pay",
         token: this.state.sessionToken,
       }, function(res) {
+        test: "true"
+      }, function() {
         _this.setState({doneLoading: true});
       });
     }

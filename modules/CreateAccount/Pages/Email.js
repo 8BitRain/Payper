@@ -2,10 +2,13 @@ import React from 'react';
 import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
+import Entypo from "react-native-vector-icons/Entypo";
+var Mixpanel = require('react-native-mixpanel');
 
 // Custom helper functions
 import * as Animations from "../../../helpers/animations";
 import * as Validators from "../../../helpers/validators";
+var Mixpanel = require('react-native-mixpanel');
 
 // Custom components
 import Header from "../../../components/Header/Header";
@@ -63,33 +66,37 @@ class Email extends React.Component {
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
+     Mixpanel.timeEvent("Email page Finished");
    }
    render() {
      return (
-       <Animated.View style={[containers.container, {opacity: this.animationProps.fadeAnim}]}>
-         { /* Background */ }
-         <View style={[backgrounds.background, backgrounds.email]}></View>
+       <View style={[containers.container, backgrounds.email]}>
+         <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
 
-         { /* Prompt and input field */ }
-         <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Hey, what&#39;s your email?</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(1, "forward", this.props.emailValidations, this.emailInput)}} defaultValue={this.props.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmailValidations(this.emailInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />
-         </View>
+           { /* Prompt and input field */ }
+           <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
+             <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Hey, what&#39;s your email?</Text>
+             <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(1, "forward", this.props.emailValidations, this.emailInput)}} defaultValue={this.props.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmailValidations(this.emailInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />
+           </View>
 
-         { /* Arrow nav buttons */ }
-         <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} />
+           { /* Arrow nav buttons */ }
+           <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} />
 
-         { /* Error messages */ }
-         <View style={[containers.sixTenths, backgrounds.email]}>
-            { this.props.emailValidations.format ? null
-              : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Not a valid email</Text> }
-            { this.props.emailValidations.duplicate ? <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Email already exists</Text>
-              : null }
-         </View>
+           { /* Error messages */ }
+           <View style={[containers.sixTenths, backgrounds.email]}>
+              { this.props.emailValidations.format ? null
+                : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Not a valid email</Text> }
+              { this.props.emailValidations.duplicate ? <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Email already exists</Text>
+                : null }
+              { this.props.emailValidations.valid ? <Text style={[typography.validationSuccess, typography.fontSizeError, typography.marginSides]}>Good to go!</Text>
+                : null }
+           </View>
 
-         { /* Header */ }
-         <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
-       </Animated.View>
+           { /* Header */ }
+           <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+
+         </Animated.View>
+       </View>
      );
    }
  }

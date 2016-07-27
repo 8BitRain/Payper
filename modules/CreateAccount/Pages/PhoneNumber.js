@@ -10,11 +10,15 @@ import * as Validators from "../../../helpers/validators";
 // Custom components
 import Header from "../../../components/Header/Header";
 import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
+var Mixpanel = require('react-native-mixpanel');
 
 // Stylesheets
 import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
+
+//Icons
+import Entypo from "react-native-vector-icons/Entypo"
 
 class PhoneNumber extends React.Component {
  constructor(props) {
@@ -55,6 +59,8 @@ class PhoneNumber extends React.Component {
  }
  componentDidMount() {
    Animations.fadeIn(this.animationProps);
+   Mixpanel.track("LastName page Finsihed");
+   Mixpanel.timeEvent("Phone# page Finished");
  }
  render() {
    return (

@@ -5,6 +5,7 @@ import AuthStateReducer from '../modules/auth/AuthState';
 import CounterStateReducer from '../modules/counter/CounterState';
 import SessionStateReducer, {RESET_STATE} from '../modules/session/SessionState';*/
 import CreateAccountReducer from '../modules/CreateAccount/CreateAccountState';
+import BankOnboardingReducer from '../modules/BankOnboarding/BankOnboardingState';
 
 const reducers = {
   // Authentication/login state
@@ -20,6 +21,7 @@ const reducers = {
   session: SessionStateReducer*/
 
   createAccount: CreateAccountReducer,
+  bankOnboarding: BankOnboardingReducer,
 
 };
 

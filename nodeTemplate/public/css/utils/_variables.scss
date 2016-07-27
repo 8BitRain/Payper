@@ -1,0 +1,11 @@
+/**
+  *   Handles all site-wide variables (colors, font-stack, etc)
+**/
+
+// Usage example:
+// color: map-get($colors, red);
+// NOTE: internal variable names cannot start with '$'
+$colors: (
+  red: #8B0000,
+  blue: #001D66
+);

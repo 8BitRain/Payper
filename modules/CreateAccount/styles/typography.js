@@ -9,6 +9,13 @@ const typography = StyleSheet.create({
     color: "#F4F4F9"
   },
 
+  validationSuccess: {
+    fontFamily: "sans-serif",
+    fontFamily: "Roboto",
+    fontWeight: "normal",
+    color: "green"
+  },
+
   // Varying font sizes (ex. "What's your email?")
   fontSizeTitle: { fontSize: 25 },
   fontSizeNote: { fontSize: 20 },

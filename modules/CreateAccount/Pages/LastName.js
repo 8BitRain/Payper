@@ -2,6 +2,8 @@ import React from 'react';
 import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
+import Entypo from "react-native-vector-icons/Entypo"
+var Mixpanel = require('react-native-mixpanel');
 
 // Custom helper functions
 import * as Animations from "../../../helpers/animations";
@@ -10,6 +12,7 @@ import * as Validators from "../../../helpers/validators";
 // Custom components
 import Header from "../../../components/Header/Header";
 import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
+var Mixpanel = require('react-native-mixpanel');
 
 // Stylesheets
 import backgrounds from "../styles/backgrounds";
@@ -55,10 +58,15 @@ class LastName extends React.Component {
  }
  componentDidMount() {
    Animations.fadeIn(this.animationProps);
+   Mixpanel.track("FirstName page Finished");
+   Mixpanel.timeEvent("LastName page Finished");
+   Mixpanel.timeEvent("LastName page Finsihed");
  }
  render() {
    return (
-     <Animated.View style={[containers.container, {opacity: this.animationProps.fadeAnim}]}>
+     <View style={[containers.container, backgrounds.lastName]}>
+       <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
+
        { /* Background */ }
        <View style={[backgrounds.background, backgrounds.lastName]}></View>
 
@@ -77,11 +85,14 @@ class LastName extends React.Component {
            : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Not capitalized</Text> }
          { this.props.lastNameValidations.format ? null
            : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Invalid character (. and - are allowed)</Text> }
+         { this.props.lastName.valid ? <Text style={[typography.validationSuccess, typography.fontSizeError, typography.marginSides]}>Good to go!</Text>
+           : null }
        </View>
 
        { /* Header */ }
        <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
-     </Animated.View>
+       </Animated.View>
+     </View>
    );
  }
 }

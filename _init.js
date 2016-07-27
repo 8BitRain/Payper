@@ -102,6 +102,56 @@ export function signInWithEmail(data, callback) {
   }
 };
 
+/**
+  *   Sign in with credentials (Facebook Login)
+**/
+export function signInWithCredentials(accessToken, callback) {
+  if (accessToken) {
+    console.log("_init.js Recieved token: " + accessToken);
+    Firebase.signInWithCredentials(accessToken, (success) => {
+      if (!success) {
+        console.log("Could not sign in :(");
+        callback(false);
+      } else {
+        Firebase.getSessionToken((token) => {
+          if (token) {
+            Lambda.getUserWithToken(token, (userData) => {
+              if (userData) {
+                initializeAppState(userData);
+                if (typeof callback == 'function') callback(true);
+              }
+            });
+          }
+        });
+      }
+    });
+  } else {
+    console.log("Access Token cannot be null");
+  }
+};
+
+
+/**
+  *   Sign in with Facebook token. Upon success, initialize app
+**/
+export function signInWithFacebook(data, callback) {
+  if (data.FBToken) Firebase.authWithFacebook(data.FBToken, (success) => {
+    if (success) {
+      Firebase.getSessionToken((token) => {
+        console.log("Token Retrieved from Firebase.getSessionToken"
+        + "\n" + "====================================="
+        + "\n" + token);
+        data.user.token = token;
+        Lambda.createFBUser(data.user, (user) => {
+          if (user) initializeAppState(user);
+          else console.log("Received null user");
+        });
+      });
+    }
+  });
+  else console.log("Access Token cannot be null");
+};
+
 
 /**
   *   1) Create Firebase user

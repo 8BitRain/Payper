@@ -7,13 +7,14 @@ const typography = StyleSheet.create({
     fontFamily: "sans-serif",
     fontFamily: "Roboto",
     fontWeight: "300",
-    color: colors.oldGrey,
+    color: colors.white,
   },
 
   // Varying font sizes (ex. "What's your email?")
   fontSizeTitle: { fontSize: 50 },
   fontSizeNote: { fontSize: 20 },
   fontSizeError: { fontSize: 15},
+  fontSizeSubtleTitle: {fontSize: 25}
 });
 
 

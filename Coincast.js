@@ -6,8 +6,10 @@ import Error from './components/Error'
 import Button from "react-native-button";
 import * as Firebase from './services/Firebase';
 
+
 // Custom components
 import LandingView from './components/LandingView'
+import ThankYouView from './components/ThankYouView'
 import LandingScreenView from './modules/LandingScreen/LandingScreenView'
 import SplashView from './modules/Splash/SplashView'
 import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer'
@@ -16,6 +18,7 @@ import SignInViewContainer from './modules/SignIn/SignInViewContainer'
 import MainViewContainer from './modules/Main/MainViewContainer'
 import Notifications from './modules/Notifications/Notifications'
 import TrackingContainer from './modules/Tracking/TrackingContainer'
+import BankOnboardingContainer from './modules/BankOnboarding/BankOnboardingContainer'
 import Header from './components/Header/Header'
 import ArrowNavDouble from './components/Navigation/Arrows/ArrowDouble'
 
@@ -49,6 +52,8 @@ const getSceneStyle = function (props, computedProps) {
 };
 
 // UNCOMMENT AND RUN TO CLEAR USER SESSION FROM ASYNC STORAGE:
+// =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
+AsyncStorage.multiSet([["@Store:payment_flow", ""], ["@Store:user", ""]/*, ["@Store:session_token", ""]*/]);
 require('firebase').auth().signOut();
 console.log("12341234!");
 export default class Coincast extends React.Component {
@@ -63,12 +68,15 @@ export default class Coincast extends React.Component {
 
             { /* Main app flow */ }
             <Scene key="SplashView" component={SplashView} title="SplashView" initial={true} />
+            <Scene key="landingView" component={LandingView} title="LandingView"  initial={true} ></Scene>
+            <Scene key="ThankYouView" component={ThankYouView} title="ThankYouView"></Scene>
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" />
             <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
             <Scene key="MainViewContainer" component={MainViewContainer} title="MainViewContainer" />
             <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
             <Scene key="Notifications" component={Notifications} title="Notifications" />
+            <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" />
 
             { /* Testing POST requests */ }
             <Scene key="POSTPayment" component={POSTPayment} title="POSTPayment" initial={false} />
