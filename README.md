@@ -24,6 +24,7 @@
 - [ ] App-wide padding (look into pixel density for screen size detection)
 - [ ] Redesign footer (action button for new payment)
 - [ ] Fix loading for IAV
+- [ ] Style 'Continue with Facebook' button
 
 ### Bugs
 - [X] Header only displays notifications on Notifications page (probably an

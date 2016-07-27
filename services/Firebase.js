@@ -144,34 +144,9 @@ export function authWithEmail(data, callback) {
   });
 };
 
-/**
-  *   Authenticates user with specified credentials (Facebook)
-**/
-export function signInWithCredentials(data, callback) {
-  //data = '\'' + data + '\'';
-  console.log("Token: " + data);
-  var credential = firebase.auth.FacebookAuthProvider.credential(
-        data);
-  firebase.auth().signInWithCredential(credential)
-  .then(() => {
-    if (firebase.auth().currentUser) callback(true);
-    //Insert Callback
-    else if (typeof callback == 'function') callback(false);
-    callback(true);
-  })
-  .catch((err) => {
-    console.log("Caught an error");
-    console.log("Error code", err.code, "\nError message", err.message, "\nError", err);
-    //alert("Error code", err.code, "\nError message", err.message);
-    if (typeof callback == 'function') callback(false);
-  });
-};
 
 /**
-  *   Authenticates user with specified Brady credentials (Facebook)
-**/
-/**
-  *   Authenticates user with Facebook access token
+  *   Authenticates user with Facebook access token, alerts caller of successs
 **/
 export function authWithFacebook(FBToken, callback) {
   // Get user credential from Firebase with FBToken

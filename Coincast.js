@@ -51,10 +51,13 @@ const getSceneStyle = function (props, computedProps) {
   return style;
 };
 
-// UNCOMMENT AND RUN TO CLEAR USER SESSION FROM ASYNC STORAGE:
-// =-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=
+
+
+// TODO
 require('firebase').auth().signOut();
-console.log("12341234!");
+
+
+
 export default class Coincast extends React.Component {
 
   render() {
@@ -66,8 +69,8 @@ export default class Coincast extends React.Component {
             <Scene key="landingView" component={LandingView} title="LandingView" />
 
             { /* Main app flow */ }
-            <Scene key="SplashView" component={SplashView} title="SplashView" initial={true} />
-            <Scene key="landingView" component={LandingView} title="LandingView"  initial={true} ></Scene>
+            <Scene key="SplashView" component={SplashView} title="SplashView" initial />
+            <Scene key="landingView" component={LandingView} title="LandingView" />
             <Scene key="ThankYouView" component={ThankYouView} title="ThankYouView"></Scene>
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" />
@@ -78,8 +81,8 @@ export default class Coincast extends React.Component {
             <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" />
 
             { /* Testing POST requests */ }
-            <Scene key="POSTPayment" component={POSTPayment} title="POSTPayment" initial={false} />
-            <Scene key="POSTCustomer" component={POSTCustomer} title="POSTCustomer" initial={false} />
+            <Scene key="POSTPayment" component={POSTPayment} title="POSTPayment" />
+            <Scene key="POSTCustomer" component={POSTCustomer} title="POSTCustomer" />
 
             { /* Individual component test views */ }
             <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />
