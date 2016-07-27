@@ -5,13 +5,16 @@
 
 ### Frontend
 - [x] Sidebar
-- [ ] In-app notifications
+- [x] In-app notifications
 - [ ] Push notifications
 - [ ] Edit profile panel
-- [ ] Facebook auth
+- [x] Facebook auth
 - [ ] Facebook friend synchronization
 - [ ] Contact synchronization
 - [ ] Invites
+- [ ] App-wide validations
+- [ ] App-wide empty states
+- [ ] Revamp loading screen component
 
 ### Polish
 - [X] CreatePaymentView.js predictive search: limit predictions to 4
@@ -19,6 +22,8 @@
 - [ ] Pass numNotifications to menu in sidebar and render preview indicator next to notifications lightbulb
 - [ ] Apply fade animation to inner content during animation project, not entire view
 - [ ] App-wide padding (look into pixel density for screen size detection)
+- [ ] Redesign footer (action button for new payment)
+- [ ] Fix loading for IAV
 
 ### Bugs
 - [X] Header only displays notifications on Notifications page (probably an
