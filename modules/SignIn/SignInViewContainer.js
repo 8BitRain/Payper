@@ -95,70 +95,10 @@ class SignInView extends React.Component {
           </View>
 
           { /* Filler */ }
-          <View style={{flex:0.18}} />
+          <View style={{flex:0.18}}></View>
         </View>
-<<<<<<< HEAD
-
-
-
-        <View style={{flex: 0.4, flexDirection: 'column', justifyContent: 'center', backgroundColor: colors.darkGrey}}>
-          <Text style={{fontFamily: 'Roboto', fontSize: 30, fontWeight: '300', textAlign: 'center', color: colors.white}}>
-            Sign In
-          </Text>
-          <TextInput
-            style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15, marginTop: 10}]}
-            placeholder={"Email"}
-            autoFocus={true}
-            autocapitalize={false}
-            keyboardType={"email-address"}
-            onChangeText={(text) => this.setState({email: text}) } />
-          <TextInput
-            style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15, marginTop: 10}]}
-            placeholder={"Password"}
-            autoFocus={true}
-            secureTextEntry
-            onChangeText={(text) => this.setState({password: text}) } />
-        </View>
-
-        { /* Filler */ }
-        <View style={{flex:0.4, backgroundColor: colors.darkGrey}}></View>
-        { /* Arrow nav buttons */ }
-        <View style={{position: 'absolute', bottom: 220, left: 0, right: 0}}>
-          <ArrowNav
-          arrowNavProps={this.arrowNavProps}
-          callbackRight={() => { this.signInWithEmail() }} />
-        </View>
-
-
-        <LoginButton
-        readPermissions={["email","public_profile", "user_friends"]}
-        onLoginFinished={
-          (error, result) => {
-            if (error) {
-              alert("login has error: " + result.error);
-            } else if (result.isCancelled) {
-              alert("login is cancelled.");
-            } else {
-              AccessToken.getCurrentAccessToken().then(
-                (data) => {
-                  console.log("Grabbing Facebook AccesToken for User: " +
-                   "\n" + "======+++++==========++++++======="
-                   + "\n" + JSON.stringify(data));
-                  this.state.fbAcessToken = data.accessToken;
-                  this.fbAPIRequest();
-                }
-              )
-            }
-          }
-        }
-        onLogoutFinished={() => alert("logout.")}/>
-      </View>
-    );
-
-=======
       );
     }
->>>>>>> app-flow
   }
 }
 
