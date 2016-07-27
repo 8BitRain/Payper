@@ -104,11 +104,12 @@ export function signInWithEmail(data, callback) {
 /**
   *   Sign in with credentials (Facebook Login)
 **/
-export function signInWithCredentials(credential, callback) {
-  if (credential) {
-    Firebase.signInWithCredential(credential, (success) => {
+export function signInWithCredentials(accessToken, callback) {
+  if (accessToken) {
+    console.log("_init.js Recieved token: " + accessToken);
+    Firebase.signInWithCredentials(accessToken, (success) => {
       if (!success) {
-        console.log("Could not")
+        console.log("Could not sign in :(");
         callback(false);
       } else {
         Firebase.getSessionToken((token) => {
@@ -126,6 +127,28 @@ export function signInWithCredentials(credential, callback) {
   } else {
     console.log("Access Token cannot be null");
   }
+};
+
+
+/**
+  *   Sign in with Facebook token. Upon success, initialize app
+**/
+export function signInWithFacebook(data, callback) {
+  if (data.FBToken) Firebase.authWithFacebook(data.FBToken, (success) => {
+    if (success) {
+      Firebase.getSessionToken((token) => {
+        console.log("Token Retrieved from Firebase.getSessionToken"
+        + "\n" + "====================================="
+        + "\n" + token);
+        data.user.token = token;
+        Lambda.createFBUser(data.user, (user) => {
+          if (user) initializeAppState(user);
+          else console.log("Received null user");
+        });
+      });
+    }
+  });
+  else console.log("Access Token cannot be null");
 };
 
 

@@ -65,6 +65,28 @@ export function createUser(user, callback) {
   }
 };
 
+/**
+  *   Given a FB user object, store the FB user in our Lambda-connected database
+**/
+export function createFBUser(user, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/facebookCreate", {method: "POST", body: JSON.stringify(user)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Create user Lambda response", responseData);
+        if (typeof callback == 'function') callback(responseData.user);
+      } else {
+        console.log("Error getting FBuser with token", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 
 /**
   *   Given session_token and payment info, initialize a payment
