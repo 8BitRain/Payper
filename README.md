@@ -7,13 +7,13 @@
 - [x] Sidebar
 - [x] In-app notifications
 - [ ] Push notifications
-- [ ] Edit profile panel
+- [ ] Edit profile panel (Eric)
 - [x] Facebook auth
 - [ ] Facebook friend synchronization
 - [ ] Contact synchronization
 - [ ] Invites
-- [ ] App-wide validations
-- [ ] App-wide empty states
+- [ ] App-wide validations (Bank Onboarding, Payper Account Creation, Pay & Request)
+- [ ] App-wide empty states (Tracking Page, Notifications, Payment History)
 - [ ] Revamp loading screen component
 
 ### Polish

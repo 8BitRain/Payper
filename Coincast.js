@@ -22,9 +22,6 @@ import BankOnboardingContainer from './modules/BankOnboarding/BankOnboardingCont
 import Header from './components/Header/Header'
 import ArrowNavDouble from './components/Navigation/Arrows/ArrowDouble'
 
-// POST test components
-import POSTPayment from './_MOCKDB/TestComponents/POSTPayment';
-import POSTCustomer from './_MOCKDB/TestComponents/POSTCustomer';
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
@@ -80,9 +77,6 @@ export default class Coincast extends React.Component {
             <Scene key="Notifications" component={Notifications} title="Notifications" />
             <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" />
 
-            { /* Testing POST requests */ }
-            <Scene key="POSTPayment" component={POSTPayment} title="POSTPayment" />
-            <Scene key="POSTCustomer" component={POSTCustomer} title="POSTCustomer" />
 
             { /* Individual component test views */ }
             <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />

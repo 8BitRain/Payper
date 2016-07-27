@@ -119,6 +119,16 @@ class Content extends React.Component {
     });
   }
 
+  /**
+    *   1) Confirm the cancel request
+    *   2) Cancel the specified payment
+  **/
+  cancelPayment(pid) {
+    Lambda.cancelPayment({payment_id: pid, token: this.state.token}, (success) => {
+      console.log("Cancel payment was a", success);
+    });
+  }
+
 
   /**
     *   Confirm the specified payment
