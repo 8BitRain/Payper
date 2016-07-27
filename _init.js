@@ -28,7 +28,10 @@ import { Actions } from 'react-native-router-flux';
   *   to AsyncStorage.
 **/
 function initializeAppState(user) {
+  console.log(user);
   user.full_name = user.first_name + " " + user.last_name;
+  console.log(user);
+  console.log(user.full_name);
 
   try {
     Async.set('user', JSON.stringify(user));
@@ -115,6 +118,7 @@ export function signInWithFacebook(data, callback) {
         + "\n" + token);
         data.user.token = token;
         Lambda.createFBUser(data.user, (user) => {
+          console.log("USER\n" + JSON.stringify(user));
           if (user) initializeAppState(user);
           else console.log("Received null user");
         });

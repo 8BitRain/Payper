@@ -218,7 +218,7 @@ class SignInView extends React.Component {
           callbackRight={() => { this.signInWithEmail() }} />
         </View>
 
-        <Button onPress={() => {this.fbAPIRequest()}}><Text>FBRequest</Text></Button>
+
         <LoginButton
         readPermissions={["email","public_profile", "user_friends"]}
         onLoginFinished={
