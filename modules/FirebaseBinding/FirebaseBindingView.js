@@ -1,39 +1,44 @@
 // Dependencies
 import React from 'react';
 import { View, Text, TouchableHighlight } from 'react-native';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import * as Firebase from '../../services/Firebase';
 
 class FirebaseBindingView extends React.Component {
   constructor(props) {
     super(props);
-
-    this.activeListeners = [];
   }
+
 
   /**
-    *   Set up listeners
+    *   Start listening to Firebase
   **/
   componentDidMount() {
-    Firebase.listenToTest((snapshot) => {
-      this.activeListeners.push('FirebaseBindingTest');
-      this.props.setTest(snapshot.test);
-    });
+    this.props.listen(this.props.activeFirebaseListeners);
   }
 
+
+  /**
+    *   Stop listening to Firebase
+  **/
   componentWillUnmount() {
-    Firebase.stopListening(this.activeListeners);
+    this.props.stopListening(this.props.activeFirebaseListeners);
   }
+
 
   render() {
+
+    var valueOneTemp = "",
+        valueTwoTemp = "";
+
     return(
       <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
         <Text style={{fontFamily: 'Roboto', color: 'black', fontSize: 16}}>
-          Test value: { this.props.test }
+          valueOne == { this.props.valueOne }
         </Text>
-        <TouchableHighlight onPress={() => this.props.setTest("1")}><Text>test=1</Text></TouchableHighlight>
-        <TouchableHighlight onPress={() => this.props.setTest("2")}><Text>test=2</Text></TouchableHighlight>
-        <TouchableHighlight onPress={() => this.props.setTest("3")}><Text>test=3</Text></TouchableHighlight>
+        <Text style={{fontFamily: 'Roboto', color: 'black', fontSize: 16}}>
+          valueTwo == { this.props.valueTwo }
+        </Text>
       </View>
     );
   }

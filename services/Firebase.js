@@ -32,8 +32,6 @@ var usernamesRef = firebase.database().ref('/usernames');
 
 
 
-
-
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 //                                 Getters
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
@@ -239,10 +237,29 @@ export function listenToUsers(callback) {
 
 
 /**
+  *   Listen to each of the specified routes
+**/
+export function listenTo(endpoints, callback) {
+  var endpoint;
+
+  for (var e in endpoints) {
+    endpoint = endpoints[e];
+    firebase.database().ref('/' + endpoints[e]).on('value', (snapshot) => {
+      if (typeof callback == 'function') callback({ name: snapshot.key, value: snapshot.val() });
+      else console.log("Callback is not a function");
+    });
+  }
+};
+
+
+/**
   *   Turn off all listeners for the provided database endpoints
 **/
-export function stopListening(endpoints, callback) {
-  firebase.database().ref('/' + endpoints[0]).off('value', () => {
-    if (typeof callback == 'function') callback();
-  });
+export function stopListeningTo(endpoints, callback) {
+  for (var e in endpoints) {
+    firebase.database().ref('/' + endpoints[e]).off('value', () => {
+      if (typeof callback == 'function') callback();
+      else console.log("Callback is not a function");
+    });
+  }
 };

@@ -5,19 +5,28 @@ import {loop, Effects} from 'redux-loop';
 import * as Firebase from '../../services/Firebase';
 
 // Initialize state
-var test = "initial value";
-
 const initialState = Map({
-  test
+  valueOne: "1",
+  valueTwo: "2",
+  activeFirebaseListeners: ['TestValueOne', "TestValueTwo"]
 });
 
 // Action types
-const SET_TEST = 'SET_TEST';
+const SET_VALUE_ONE = 'SET_VALUE_ONE',
+      SET_VALUE_TWO = 'SET_VALUE_TWO',
+      SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_LISTENERS';
 
 // Action creators
-export function setTest(input) {
-  console.log("INPUT", input);
-  return { type: SET_TEST, input: input };
+export function setValueOne(input) {
+  return { type: SET_VALUE_ONE, input: input };
+};
+
+export function setValueTwo(input) {
+  return { type: SET_VALUE_TWO, input: input };
+};
+
+export function setactiveFirebaseListeners(input) {
+  return { type: SET_ACTIVE_FIREBASE_LISTENERS, input: input };
 };
 
 /**
@@ -29,9 +38,16 @@ export function setTest(input) {
 **/
 export default function CreateAccountReducer(state = initialState, action = {}) {
   switch (action.type) {
-    case SET_TEST:
-      console.log("INPUT2", action.input);
-      var newState = state.set('test', action.input);
+    case SET_VALUE_ONE:
+      var newState = state.set('valueOne', action.input);
+      return newState;
+      break;
+    case SET_VALUE_TWO:
+      var newState = state.set('valueTwo', action.input);
+      return newState;
+      break;
+    case SET_ACTIVE_FIREBASE_LISTENERS:
+      var newState = state.set('activeFirebaseListeners', action.input);
       return newState;
       break;
   }
