@@ -99,8 +99,24 @@ export function getNumNotifications(uid, callback) {
   });
 };
 
+//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
+//                                 Setters
+//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 
 
+// firebase.database().ref('/appFlags/' + uid).set({ val: true, hasx: false });
+/**
+  *   Create a flag
+  *
+  *   add in callback information
+**/
+
+export function createAppFlags(uid, callback){
+  //Needs to pull data
+  firebase.database().ref('/appFlags/' + uid).set({ val: true, accountStatus: "exists" });
+  console.log("CREATING APP FLAGS")
+
+};
 
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 //                             User creation
