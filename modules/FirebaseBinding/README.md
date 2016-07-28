@@ -72,24 +72,12 @@ The `mapDispatchToProps` function in `FirebaseBindingViewContainer.js` contains 
 
     // Wipe our list of active Firebase listeners
     dispatch(d.setactiveFirebaseListeners([]));
-    
+
   }
   ```
 
 ## The Firebase Helpers
 We've defined two helper functions in `~/services/Firebase.js` to enable Firebase connectivity:
-  1. `listenTo(endpoints, callback)` instantiates listeners and returns new values via callback function. Return data from this function looks like this: `{ name: snapshot.key, value: snapshot.val() }`
-
-    ```javascript
-    export function listenTo(endpoints, callback) {
-      var endpoint;
-
-      for (var e in endpoints) {
-        endpoint = endpoints[e];
-        firebase.database().ref('/' + endpoints[e]).on('value', (snapshot) => {
-          if (typeof callback == 'function') callback({ key: snapshot.key, value: snapshot.val() });
-          else console.log("Callback is not a function");
-        });
-      }
-    };
-    ```
+  1. `listenTo(endpoints, callback)` instantiates listeners for the provided endpoints and returns new values via callback function.
+  **Return data from this function looks like this: `{ name: snapshot.key, value: snapshot.val() }`**
+  2. `stopListeningTo(endpoints)` turns off active listeners for the provided endpoints
