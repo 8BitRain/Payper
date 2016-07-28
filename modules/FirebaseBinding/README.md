@@ -38,9 +38,28 @@ The connect function has two jobs:
     **Note: dispatch functions can act as more than just action creators, but we use them for this base purpose only**
 
 The `mapDispatchToProps` function in `FirebaseBindingViewContainer.js` contains two important functions that enable Firebase connectivity:
-  1. `listen: (listeners) => { /* your logic here */ }` triggers the `listenTo(listeners, callback)` function in our Firebase helper script. In our example, we use this callback function to simply update the redux store. **Define your custom behavior for incoming Firebase data in this callback function.**
+  1. Triggers the `listenTo(endpoints, callback)` function in our Firebase helper script. In our example, we use the callback function to simply update the redux store. **Define your custom behavior for incoming Firebase data in this callback function.**
+  ```javascript
+  listen: (listeners) => {
+    // Initialize Firebase listeners
+    Firebase.listenTo(listeners, (response) => {
+      // Update redux store with Firebase data
+      switch (response.key) {
+        case "TestValueOne":
+          dispatch(d.setValueOne(response.value));
+        break;
+        case "TestValueTwo":
+          dispatch(d.setValueTwo(response.value));
+        break;
+      }
+    });
 
-  2.
+    //  Update state's list of active Firebase listeners
+    dispatch(d.setactiveFirebaseListeners(listeners));
+  }
+  ```
+
+  2.  Triggers the `stopListeningTo(endpoints)` function in our Firebase helper script, disabling listeners on all endpoints in our state's list of active Firebase listeners.
   ```javascript
   stopListening: (listeners) => {
     Firebase.stopListeningTo(listeners);
@@ -59,7 +78,7 @@ We've defined two helper functions in `~/services/Firebase.js` to enable Firebas
       for (var e in endpoints) {
         endpoint = endpoints[e];
         firebase.database().ref('/' + endpoints[e]).on('value', (snapshot) => {
-          if (typeof callback == 'function') callback({ name: snapshot.key, value: snapshot.val() });
+          if (typeof callback == 'function') callback({ key: snapshot.key, value: snapshot.val() });
           else console.log("Callback is not a function");
         });
       }
