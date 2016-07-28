@@ -1,4 +1,4 @@
-## Binding Firebase and Redux
+# Binding Firebase and Redux
 #### A blueprint for a responsive, real-time Redux store populated by Firebase
 
 ## Overview
@@ -80,6 +80,27 @@ The `mapDispatchToProps` function in `FirebaseBindingViewContainer.js` contains 
 We've defined two helper functions in `~/services/Firebase.js` to enable Firebase connectivity:
   1. `listenTo(endpoints, callback)` instantiates listeners for the provided endpoints and returns new values via callback function.
 
-  **Return data from this function looks like this: `{ name: snapshot.key, value: snapshot.val() }`**
-  
+  **Return data from this function looks like this:** `{ name: snapshot.key, value: snapshot.val() }`
+
   2. `stopListeningTo(endpoints)` turns off active listeners for the provided endpoints
+
+## The View
+Our view has three jobs:
+  1. Instantiate Firebase listeners on mount
+  ```javascript
+  componentDidMount() {
+    this.props.listen(this.props.activeFirebaseListeners);
+  }
+  ```
+  2. Disable Firebase listeners on unmount
+  ```javascript
+  componentWillUnmount() {
+    this.props.stopListening(this.props.activeFirebaseListeners);
+  }
+  ```
+  3. Render redux state values provided as props by the connect function
+  ```javascript
+  <Text style={{fontFamily: 'Roboto', color: 'black', fontSize: 16}}>
+    valueOne == { this.props.valueOne }
+  </Text>
+  ```
