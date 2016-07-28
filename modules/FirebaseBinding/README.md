@@ -87,18 +87,22 @@ We've defined two helper functions in `~/services/Firebase.js` to enable Firebas
 ## The View
 Our view has three jobs:
   1. Instantiate Firebase listeners on mount
+  
   ```javascript
   componentDidMount() {
     this.props.listen(this.props.activeFirebaseListeners);
   }
   ```
   2. Disable Firebase listeners on unmount
+
   ```javascript
   componentWillUnmount() {
     this.props.stopListening(this.props.activeFirebaseListeners);
   }
   ```
+
   3. Render redux state values provided as props by the connect function
+
   ```javascript
   <Text style={{fontFamily: 'Roboto', color: 'black', fontSize: 16}}>
     valueOne == { this.props.valueOne }
