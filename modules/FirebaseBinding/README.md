@@ -20,7 +20,7 @@ Our module's state uses the standard Redux architecture, consisting of the follo
 * Be sure to update the list of connected reducers in `~/redux/reducer.js`
 * **Provide an ActiveFirebaseListeners array in the initial state containing each Firebase endpoint that you'd like to subscribe to**
 
-  For example, the following will enable listeners for 'firebase.database.ref('/TestEndpoint')'
+  For example, the following will enable listeners for **firebase.database.ref('/TestEndpoint')**
 
   ```
   const initialState = Map({
@@ -36,5 +36,9 @@ The connect function has two jobs:
   1. Map Redux state to props
   2. Map dispatch functions (AKA action creators, setter functions) to props
 
-    The `mapDispatchToProps` function in `FirebaseBindingViewContainer.js` contains two important functions that enable Firebase connectivity.
-  3. `listen: (listeners) => { ... }` provides
+The `mapDispatchToProps` function in `FirebaseBindingViewContainer.js` contains two important functions that enable Firebase connectivity:
+  1. `listen: (listeners) => { ... }` triggers the `listenTo(listeners, callback)` function in our Firebase helper script.
+
+  `Firebase.listenTo(listeners, callback)` will enable listeners on each endpoint we provide in the activeFirebaseListeners array, and return new values via callback function when they change in Firebase. **Define custom behavior for data in this callback function.**
+
+  2. `stopListening: (listeners) => { ... }`
