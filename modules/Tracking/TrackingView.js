@@ -66,13 +66,13 @@ class TrackingEmpty extends React.Component {
      this.state.animatedStartValue.setValue(0);
 
      Animated.spring(                          // Base: spring, decay, timing
-     this.state.bounceValue,                 // Animate `bounceValue`
-     {
-      toValue: 50,                         // Animate to smaller size
-      friction: 1,                          // Bouncier spring
-     }
-  ).start();
-    this.bouncingArrow();
+       this.state.bounceValue,                 // Animate `bounceValue`
+       {
+         toValue: 50,                         // Animate to smaller size
+         friction: 1,                          // Bouncier spring
+       }
+    ).start();
+        this.bouncingArrow();
    }
 
    onThankYouPress() {

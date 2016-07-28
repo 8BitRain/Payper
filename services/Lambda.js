@@ -53,7 +53,8 @@ export function createUser(user, callback) {
     .then((responseData) => {
       if (!responseData.errorMessage) {
         console.log("Create user Lambda response", responseData);
-        if (typeof callback == 'function') callback(responseData);
+        //Note responseData can come with additional fields so has a +1 level of encapsulation
+        if (typeof callback == 'function') callback(responseData.user);
       } else {
         console.log("Error getting user with token", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
@@ -75,7 +76,9 @@ export function createFBUser(user, callback) {
     .then((responseData) => {
       if (!responseData.errorMessage) {
         console.log("Create user Lambda response", responseData);
-        if (typeof callback == 'function') callback(responseData);
+        //Note responseData can come with additional fields so has a +1 level of encapsulation
+        console.log("User Creation Stats: " + responseData.account_status);
+        if (typeof callback == 'function') callback(responseData.user);
       } else {
         console.log("Error getting FBuser with token", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);

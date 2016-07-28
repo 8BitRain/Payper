@@ -136,12 +136,15 @@ export function signInWithFacebook(data, callback) {
 /**
   *   1) Create Firebase user
   *   2) Get a token for the user and attach it to the user's object
+  * 2.5) Set initial flags for user 
   *   3) POST user's object to Lambda endpoint
   *   4) Initialize the app
 **/
 export function createUser(input) {
   Firebase.createUser(input, (success) => {
     if (success) {
+      //Set initial flags for the user created
+      console.log("SETTING INITIAL USER FLAGS")
       Firebase.getSessionToken((token) => {
         input.token = token;
         Lambda.createUser(input, (user) => {
