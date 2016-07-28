@@ -1,7 +1,7 @@
 # ![](./godmode.png) **Payper**
 ### Recurring payments made easy.
 
-## Todo
+## **Todo**
 
 ### Frontend
 - [x] Sidebar
@@ -16,9 +16,8 @@
 - [ ] App-wide empty states (Tracking Page, Notifications, Payment History)
 - [ ] Revamp loading screen component
 
-##### Sign in/sign out
+### Sign in/sign out
 - [ ] Add sign out functionality for Facebook users
-- [ ]
 
 ### Polish
 - [X] CreatePaymentView.js predictive search: limit predictions to 4
@@ -30,6 +29,11 @@
 - [ ] Fix loading for IAV
 - [ ] Style 'Continue with Facebook' button
 
+### Architecture
+**Refactor the following to fit new Firebase/Redux model:**
+- [ ] Main
+- [ ]
+
 ### Bugs
 - [X] Header only displays notifications on Notifications page (probably an
   issue with how numNotifications is passed to <Content />)
@@ -39,36 +43,42 @@
   https://github.com/facebook/react-native/issues/6682
   **This went away when I downgraded from Node 6.2.0 to 5.5.0**
 
-## Installation
+## **Installation**
 ```
 $  git clone https://github.com/8BitRain/GetCoincast.git
 $  cd ~/path/to/repo
-$  git fetch
-$  git branch --track desired-branch-name origin/desired-branch-name
-$  git checkout desired-branch-name
 $  npm install
+$  git push -u origin master
+```
+
+## **Running**
+```
+$  cd ~/path/to/repo
 $  react-native run-ios
 ```
 
-## Contributing
-1. Fork it
-2. Create your branch: `git checkout -b yung-branch`
-3. Commit your changes: `git commit -am 'Changed a lil somethin'`
-4. Push to the branch: `git push origin yung-branch`
-5. Submit a pull request or leave it & merge later
+## **Contributing**
+1. Create your branch: `git checkout -b yung-branch`
+2. Commit your changes: `git commit -am 'Change a lil somethin'`
+3. Push to the branch: `git push origin yung-branch`
+4. Checkout master: `git checkout master`
+5. Merge with branch: `git merge yung-branch`
+6. Resolve conflicts (if any)
+7. Commit your changes `git commit -am 'Merge with yung-branch'`
+8. Push to master `git push origin master`
 
-## Troubleshooting
+## **Troubleshooting**
 * If a non-existent node module error is thrown, run `npm install --save node-module-name`.
 
-## The Team
+## **The Team**
 | Front end (💣)       | Back end  | Multi-purpose Gurus|
 |:--------------------:|:---------:|:------------------:|
 | Eric & Brady         | Vash      | Mo & Luke          |
 
-## Versions
+## **Versions**
 * Stay at Node 5.5.0 for now! Things break on 6.2.0
 
-## Note:
+## **Note:**
 Normally, after a code change to react-native-router-flux src files,
 you must remove the node_modules/react-native-router-flux directory
 and npm install.  The react-native packager wont follow symlinks.
