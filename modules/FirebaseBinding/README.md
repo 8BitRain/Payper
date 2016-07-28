@@ -14,11 +14,14 @@ Our module's state uses the standard Redux architecture, consisting of the follo
   2. Action types
   3. Action creators
   4. A reducer
-  
+
 #### Configuring the state
-* Use `FirebaseBindingState.js` as a blueprint.
-* Be sure to update the list of connected reducers in `~/redux/reducer.js`.
-* **Be sure to provide an ActiveFirebaseListeners array in the initial state containing each Firebase endpoint that you'd like to subscribe to. For example, the following will enable listeners for 'firebase.database.ref('/TestEndpoint')'**
+* Use `FirebaseBindingState.js` as a blueprint
+* Be sure to update the list of connected reducers in `~/redux/reducer.js`
+* **Provide an ActiveFirebaseListeners array in the initial state containing each Firebase endpoint that you'd like to subscribe to**
+
+  For example, the following will enable listeners for 'firebase.database.ref('/TestEndpoint')'
+
   ```
   const initialState = Map({
     valueOne: "1",
