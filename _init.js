@@ -118,10 +118,15 @@ export function signInWithFacebook(data, callback) {
         + "\n" + "====================================="
         + "\n" + token);
         data.user.token = token;
-        Lambda.createFBUser(data.user, (user) => {
+        Lambda.createFBUser(data.user, (user, account_status) => {
           if (user) {
+            console.log("USER: " + JSON.stringify(user));
+            console.log("USER ACCOUNT STATUS: " + JSON.stringify(account_status));
+            //Create Flags for the new user
+            Firebase.createAppFlags(user, account_status);
             initializeAppState(user);
             callback(true);
+
           }
           else {
             console.log("Received null user");
@@ -138,7 +143,7 @@ export function signInWithFacebook(data, callback) {
 /**
   *   1) Create Firebase user
   *   2) Get a token for the user and attach it to the user's object
-  * 2.5) Set initial flags for user 
+  * 2.5) Set initial flags for user
   *   3) POST user's object to Lambda endpoint
   *   4) Initialize the app
 **/

@@ -17,7 +17,7 @@ export default connect(
     lastName: state.getIn(['createAccount', 'currentUser']).lastName,
     email: state.getIn(['createAccount', 'currentUser']).email,
     password: state.getIn(['createAccount', 'currentUser']).password,
-    phoneNumber: state.getIn(['createAccount', 'currentUser']).phoneNumber,
+    phone: state.getIn(['createAccount', 'currentUser']).phone,
     currentUser: state.getIn(['createAccount', 'currentUser']),
 
     // Tracks pagination
@@ -28,7 +28,7 @@ export default connect(
     passwordValidations: state.getIn(['createAccount', 'passwordValidations']),
     firstNameValidations: state.getIn(['createAccount', 'firstNameValidations']),
     lastNameValidations: state.getIn(['createAccount', 'lastNameValidations']),
-    phoneNumberValidations: state.getIn(['createAccount', 'phoneNumberValidations'])
+    phoneValidations: state.getIn(['createAccount', 'phoneValidations'])
   }),
   dispatch => ({
     // Handles pagination
@@ -59,7 +59,7 @@ export default connect(
               break;
             // Phone number
             case 4:
-              dispatch(dispatchFunctions.setPhoneNumber(input));
+              dispatch(dispatchFunctions.setPhone(input));
               break;
           }
           dispatch(dispatchFunctions.setPage(index));
@@ -94,8 +94,8 @@ export default connect(
     dispatchSetLastNameValidations(input) {
       dispatch(dispatchFunctions.setLastNameValidations(input));
     },
-    dispatchSetPhoneNumberValidations(input) {
-      dispatch(dispatchFunctions.setPhoneNumberValidations(input));
+    dispatchSetPhoneValidations(input) {
+      dispatch(dispatchFunctions.setPhoneValidations(input));
     },
     dispatchCreateAccount(user) {
       // Create account

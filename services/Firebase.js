@@ -21,7 +21,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyAwRj_BiJNEvKJC7GQSm9rv9dF_mjIhuzM",
   authDomain: "coincast.firebaseapp.com",
   databaseURL: "https://coincast.firebaseio.com",
-  storageBucket: "firebase-coincast.appspot.com",
+  storageBucket: "firebase-coincast.appspot.com"
 };
 firebase.initializeApp(firebaseConfig);
 
@@ -110,18 +110,16 @@ export function getNumNotifications(uid, callback) {
   *   add in callback information
 **/
 
-export function createAppFlags(uid){
+export function createAppFlags(user, account_status){
   //Needs to pull data
-  firebase.database().ref('/appFlags/' + uid).set({ val: true, accountStatus: "exists" });
+  firebase.database().ref('/appFlags/' + user.uid).set({ val: true, account_status: account_status  });
   console.log("CREATING APP FLAGS");
-
 };
 
 // firebase.database().ref('/appFlags/' + uid).set({ val: true, hasx: false });
 /**
   *   Create a flag
 **/
->>>>>>> master
 
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 //                             User creation
