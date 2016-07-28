@@ -22,7 +22,7 @@ Our module's state uses a standard Redux architecture, consisting of the followi
 
   For example, the following will enable listeners for `firebase.database.ref('/TestEndpoint')`
 
-  ```
+  ```javascript
   const initialState = Map({
     valueOne: "1",
     valueTwo: "2",
@@ -31,15 +31,31 @@ Our module's state uses a standard Redux architecture, consisting of the followi
   ```
 
 ## The View Container
-Our module's view container has one purpose: to give our base View access to Redux store values and setter functions through props.
+Our module's view container has one purpose: to give our base view access to redux store values and setter functions through props.
 The connect function has two jobs:
   1. Map Redux state to props
   2. Map dispatch functions (AKA action creators, setter functions) to props  
-    **Note: dispatch functions can contain than just creating actions for the reducer, but we use them for this base purpose only**
+    **Note: dispatch functions can act as more than just action creators, but we use them for this base purpose only**
 
 The `mapDispatchToProps` function in `FirebaseBindingViewContainer.js` contains two important functions that enable Firebase connectivity:
-  1. `listen: (listeners) => { ... }` triggers the `listenTo(listeners, callback)` function in our Firebase helper script.
-
-  `Firebase.listenTo(listeners, callback)` will enable listeners on each endpoint we provide in the activeFirebaseListeners array, and return new values via callback function when they change in Firebase. **Define custom behavior for data in this callback function.**
+  1. `listen: (listeners) => { /* your logic here */ }` triggers the `listenTo(listeners, callback)` function in our Firebase helper script. In our example, we use this callback function to simply update the redux store. **Define your custom behavior for incoming Firebase data in this callback function.**
 
   2. `stopListening: (listeners) => { ... }`
+
+## The Firebase Helpers
+We've defined two helper functions in `~/services/Firebase.js` to enable Firebase connectivity:
+  1. `listenTo(endpoints, callback)` instantiates listeners and returns new values via callback function. Return data from this function looks like this: `{ name: snapshot.key, value: snapshot.val() }`
+
+    ```javascript
+    export function listenTo(endpoints, callback) {
+      var endpoint;
+
+      for (var e in endpoints) {
+        endpoint = endpoints[e];
+        firebase.database().ref('/' + endpoints[e]).on('value', (snapshot) => {
+          if (typeof callback == 'function') callback({ name: snapshot.key, value: snapshot.val() });
+          else console.log("Callback is not a function");
+        });
+      }
+    };
+    ```
