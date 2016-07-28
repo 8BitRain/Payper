@@ -34,9 +34,8 @@ Our module's state uses a standard Redux architecture, consisting of the followi
 Our module's view container has one purpose: to give our base View access to Redux store values and setter functions through props.
 The connect function has two jobs:
   1. Map Redux state to props
-  2. Map dispatch functions (AKA action creators, setter functions) to props
-  
-        **Note: dispatch functions can contain than just creating actions for the reducer, but we use them for this base purpose only**
+  2. Map dispatch functions (AKA action creators, setter functions) to props  
+    **Note: dispatch functions can contain than just creating actions for the reducer, but we use them for this base purpose only**
 
 The `mapDispatchToProps` function in `FirebaseBindingViewContainer.js` contains two important functions that enable Firebase connectivity:
   1. `listen: (listeners) => { ... }` triggers the `listenTo(listeners, callback)` function in our Firebase helper script.
