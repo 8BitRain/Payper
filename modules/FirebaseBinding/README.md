@@ -14,6 +14,7 @@ Our module's state uses the standard Redux architecture, consisting of the follo
   2. Action types
   3. Action creators
   4. A reducer
+  
 #### Configuring the state
 * Use `FirebaseBindingState.js` as a blueprint.
 * Be sure to update the list of connected reducers in `~/redux/reducer.js`.
