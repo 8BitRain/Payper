@@ -76,6 +76,7 @@ export function createFBUser(user, callback) {
       if (!responseData.errorMessage) {
         console.log("Create user Lambda response", responseData);
         //Account Status & created can be used
+        firebase.createAppFlags();
         console.log("USER ACCOUNT STATUS: " +  responseData.accountStatus);
         if (typeof callback == 'function') callback(responseData.user);
       } else {
