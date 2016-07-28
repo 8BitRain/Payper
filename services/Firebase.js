@@ -164,6 +164,8 @@ export function authWithFacebook(FBToken, callback) {
     if (typeof callback == 'function') callback(false);
   });
 };
+
+
 /**
   *   Sign current user out
 **/
@@ -205,6 +207,22 @@ export function listenToNotifications(uid, callback) {
 
 
 /**
+  *   Listen for changes in the specified user's contact list, pass mutated
+  *   list to caller on change
+**/
+export function listenToContacts(uid, callback) {
+  firebase.database().ref('/contactList/' + uid).on('value', (snapshot) => {
+    callback(snapshot.val());
+  });
+};
+
+export function listenToTest(callback) {
+  firebase.database().ref('/FirebaseBindingTest').on('value', (snapshot) => {
+    callback(snapshot.val());
+  });
+};
+
+/**
   *   Listen for changes in Firebase user list, returns event type and snapshot
 **/
 export function listenToUsers(callback) {
@@ -216,5 +234,15 @@ export function listenToUsers(callback) {
   });
   usernamesRef.on('child_changed', (childSnapshot, prevChildKey) => {
     callback('child_changed', childSnapshot);
+  });
+};
+
+
+/**
+  *   Turn off all listeners for the provided database endpoints
+**/
+export function stopListening(endpoints, callback) {
+  firebase.database().ref('/' + endpoints[0]).off('value', () => {
+    if (typeof callback == 'function') callback();
   });
 };

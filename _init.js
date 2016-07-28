@@ -9,14 +9,12 @@
   *     💣  ~/services/Lambda.js
   *     💣  ~/helpers/Async.js
   *
-  *   After initialization, triggers listeners located in
-  *     💣  ~/_listen.js
-  *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 **/
 
 
 // Dependencies
+const Contacts = require('react-native-contacts');
 import * as Firebase from './services/Firebase';
 import * as Lambda from './services/Lambda';
 import * as Async from './helpers/Async';
@@ -28,28 +26,32 @@ import { Actions } from 'react-native-router-flux';
   *   to AsyncStorage.
 **/
 function initializeAppState(user) {
-  console.log(user);
   user.full_name = user.first_name + " " + user.last_name;
-  console.log(user);
-  console.log(user.full_name);
 
-  try {
-    Async.set('user', JSON.stringify(user));
-    Async.set('session_token', user.token);
-    Firebase.getUsers((users) => {
-      Async.set('users', JSON.stringify(users));
+  // Log user object and session token to AsyncStorage
+  Async.set('user', JSON.stringify(user));
+  Async.set('session_token', user.token);
+
+  // Log global user list to AsyncStorage
+  Firebase.getUsers((users) => {
+    Async.set('users', JSON.stringify(users));
+  });
+
+  initializeUsers(user.uid, () => {
+    console.log("initializeUsers() callback reached");
+  });
+
+  // Log number of unseen notifications to AsyncStorage
+  Firebase.getNumNotifications(user.uid, (num) => {
+    Async.set('num_notifications', num.toString());
+  });
+
+  // Log user's payment flow to AsyncStorage
+  Firebase.getPaymentFlow(user, (flow) => {
+    Async.set('payment_flow', JSON.stringify(flow), () => {
+      Actions.MainViewContainer();
     });
-    Firebase.getNumNotifications(user.uid, (num) => {
-      Async.set('num_notifications', num.toString());
-    });
-    Firebase.getPaymentFlow(user, (flow) => {
-      Async.set('payment_flow', JSON.stringify(flow), () => {
-        Actions.MainViewContainer();
-      });
-    });
-  } catch (err) {
-    console.log(err);
-  }
+  });
 };
 
 
@@ -175,4 +177,43 @@ export function createPayment(data, callback) {
   Lambda.createPayment(data, (res) => {
     callback(res);
   });
+};
+
+
+/**
+  *
+**/
+export function initializeUsers(options, callback) {
+  if (options.uid) {
+    var users = {
+      phone: [],
+      facebook: [],
+      payper: [],
+    };
+
+    // Get Payper contact list from Firebase
+    Firebase.listenToPayperContacts(options.uid, (contacts) => {
+      users.payper = contacts;
+    });
+
+    // Send phone numbers to Lambda endpoint to log them to user's Payper contacts
+    Contacts.getAll((err, contacts) => {
+      if (err && err.type === 'permissionDenied') {
+        console.error("Error getting contacts:\n", err);
+      } else {
+        Lambda.updateContacts({token: options.token, })
+      }
+    });
+
+    // Get cell phone contacts who use Payper
+    Contacts.getAll((err, contacts) => {
+      if (err && err.type === 'permissionDenied') {
+        console.error("ERROR GETTING CONTACTS:", err);
+      } else {
+        Lambda.logContacts(contacts);
+        console.log("USERS:", users);
+        callback();
+      }
+    });
+  } else console.log("Received null uid.");
 };

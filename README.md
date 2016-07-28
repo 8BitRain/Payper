@@ -16,6 +16,10 @@
 - [ ] App-wide empty states
 - [ ] Revamp loading screen component
 
+##### Sign in/sign out
+- [ ] Add sign out functionality for Facebook users
+- [ ]
+
 ### Polish
 - [X] CreatePaymentView.js predictive search: limit predictions to 4
 - [X] CreatePaymentView.js predictive search: don't show signed in user in predictions

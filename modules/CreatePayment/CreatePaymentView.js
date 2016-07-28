@@ -142,8 +142,6 @@ class CreatePaymentView extends React.Component {
         confirmed: false,
         type: "request",
         token: this.state.sessionToken,
-      }, function(res) {
-        test: "true"
       }, function() {
         _this.setState({doneLoading: true});
       });
@@ -162,8 +160,6 @@ class CreatePaymentView extends React.Component {
         confirmed: true,
         type: "pay",
         token: this.state.sessionToken,
-      }, function(res) {
-        test: "true"
       }, function() {
         _this.setState({doneLoading: true});
       });
@@ -178,9 +174,8 @@ class CreatePaymentView extends React.Component {
   //   });
   // }
 
-
   /**
-    *   Sticky chevron functionality
+    *   Sticky chevron
   **/
   _keyboardWillShow(e) {
     Animated.spring(this.kbOffset, {
