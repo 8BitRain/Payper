@@ -8,7 +8,7 @@ import * as Firebase from '../../services/Firebase';
 const initialState = Map({
   valueOne: "1",
   valueTwo: "2",
-  activeFirebaseListeners: ['TestValueOne', "TestValueTwo"]
+  activeFirebaseListeners: ['TestValueOne', 'TestValueTwo']
 });
 
 // Action types
