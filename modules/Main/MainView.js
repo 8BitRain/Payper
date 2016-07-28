@@ -327,7 +327,7 @@ class Content extends React.Component {
               {(this.state.empty) ? this._getEmptyState() : this._getPaymentList() }
 
               {/* Bouncing Arrow*/}
-              <View style={{flex: 0.8, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
+              {/*<View style={{flex: 0.8, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
               <View style = {containers.bouncingArrowContainer}>
                 <Text style={[typography.fontSizeTitle, typography.marginTop, typography.marginBottom, typography.marginSides]}>Tap the payment button to start using Coincast!</Text>
                 <Animated.Text                       // Base: Image, Text, View
@@ -343,7 +343,7 @@ class Content extends React.Component {
                </Animated.Text>
 
              </View>
-             </View>
+             </View>*/}
 
               { /* Footer */ }
               <View style={{flex: 0.1}}>

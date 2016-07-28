@@ -77,7 +77,18 @@ export function createFBUser(user, callback) {
       if (!responseData.errorMessage) {
         console.log("Create user Lambda response", responseData);
         //Note responseData can come with additional fields so has a +1 level of encapsulation
+        /* responseData.account_status can either be created or exists*/
         console.log("User Creation Stats: " + responseData.account_status);
+        if(responseData.account_status == "exists"){
+          //Set a flag in Firebase to assist with actions that require an account to already
+          //be in the exist state.
+        }
+        if(responseData.account_status == "created"){
+          //Set a flag
+          //Set Phone Numbers
+          //Set a flag in Firebase to assist with actions that require an account to already
+          //be in the created state.
+        }
         if (typeof callback == 'function') callback(responseData.user);
       } else {
         console.log("Error getting FBuser with token", responseData.errorMessage);

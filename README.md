@@ -31,7 +31,7 @@
   issue with how numNotifications is passed to <Content />)
 - [X] "Runtime is not ready for debugging" randomly appears.
 - [] "Severe Error, duplicates recorded in Firebase, with no auth information. To reproduce
-      delete an id but not a users and facebook id, or switch this around until you can get duplicate users through facebook sign in or regular user sign in."
+      delete an id but not a users and Facebook id, or switch this around until you can get duplicate users through Facebook sign in or regular user sign in."
   https://github.com/facebook/react-native/issues/6682
   **This went away when I downgraded from Node 6.2.0 to 5.5.0**
 
