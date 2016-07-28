@@ -40,9 +40,11 @@ Our connect function breaks this down into two tasks:
 The `mapDispatchToProps` function in `FirebaseBindingViewContainer.js` contains two important functions that enable Firebase connectivity:
   1. Triggers the `listenTo(endpoints, callback)` function in our Firebase helper script. In our example, we use the callback function to simply update the redux store. **Define your custom behavior for incoming Firebase data in this callback function.**
   ```javascript
-  listen: (listeners) => {
+  listen: (endpoints) => {
+
     // Initialize Firebase listeners
-    Firebase.listenTo(listeners, (response) => {
+    Firebase.listenTo(endpoints, (response) => {
+
       // Update redux store with Firebase data
       switch (response.key) {
         case "TestValueOne":
@@ -52,18 +54,25 @@ The `mapDispatchToProps` function in `FirebaseBindingViewContainer.js` contains 
           dispatch(d.setValueTwo(response.value));
         break;
       }
+
     });
 
     //  Update state's list of active Firebase listeners
-    dispatch(d.setactiveFirebaseListeners(listeners));
+    dispatch(d.setactiveFirebaseListeners(endpoints));
+
   }
   ```
 
   2.  Triggers the `stopListeningTo(endpoints)` function in our Firebase helper script, disabling listeners on all endpoints in our state's list of active Firebase listeners.
   ```javascript
-  stopListening: (listeners) => {
-    Firebase.stopListeningTo(listeners);
+  stopListening: (endpoints) => {
+
+    // Disable Firebase listeners
+    Firebase.stopListeningTo(endpoints);
+
+    // Wipe our list of active Firebase listeners
     dispatch(d.setactiveFirebaseListeners([]));
+    
   }
   ```
 
