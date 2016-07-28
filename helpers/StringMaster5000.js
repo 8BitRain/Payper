@@ -83,6 +83,40 @@ export function formatPurpose(purpose) {
 
 
 /**
+  *   Formats array of contacts and returns them to be rendered
+  *   Rules:
+  *     💣  No more than 3 Facebook contacts
+  *     💣  No more than 3 Phone contacts
+**/
+export function formatContacts(contacts) {
+  var arr = [],
+      numFacebook = 0,
+      numPhone = 0,
+      curr;
+
+  for (var c in contacts) {
+    curr = contacts[c];
+    if (curr.type == "facebook") {
+      if (numFacebook < 3) arr.push(contacts[c]);
+      numFacebook++;
+    } else if (curr.type == "phone") {
+      if (numFacebook < 3) arr.push(contacts[c]);
+      numPhone++;
+    } else {
+      arr.push(contacts[c]);
+    }
+  }
+
+  arr.sort((a, b) => {
+    if (a.type == "facebook" && b.type == "phone") return -1;
+    else return 1;
+  });
+
+  return arr;
+};
+
+
+/**
   *   Formats timestamps with Moment.js
 **/
 export function formatTimestamp(ts) {

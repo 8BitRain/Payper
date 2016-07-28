@@ -23,6 +23,7 @@ import Header from './components/Header/Header'
 import ArrowNavDouble from './components/Navigation/Arrows/ArrowDouble'
 
 import FirebaseBindingViewContainer from './modules/FirebaseBinding/FirebaseBindingViewContainer';
+import PredictiveSearchViewContainer from './modules/PredictiveSearch/PredictiveSearchViewContainer';
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
@@ -55,7 +56,7 @@ const getSceneStyle = function (props, computedProps) {
 require('firebase').auth().signOut();
 
 
-
+console.log('test');
 export default class Coincast extends React.Component {
 
   render() {
@@ -67,9 +68,9 @@ export default class Coincast extends React.Component {
             <Scene key="landingView" component={LandingView} title="LandingView" />
 
             { /* Main app flow */ }
-            <Scene key="SplashView" component={SplashView} title="SplashView" />
+            <Scene key="SplashView" component={SplashView} title="SplashView" initial />
             <Scene key="landingView" component={LandingView} title="LandingView" />
-            <Scene key="ThankYouView" component={ThankYouView} title="ThankYouView"></Scene>
+            <Scene key="ThankYouView" component={ThankYouView} title="ThankYouView"/>
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" />
             <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
@@ -79,7 +80,8 @@ export default class Coincast extends React.Component {
             <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" />
 
             { /* Testing */ }
-            <Scene key="FirebaseBindingViewContainer" component={FirebaseBindingViewContainer} title="FirebaseBindingViewContainer" initial />
+            <Scene key="FirebaseBindingViewContainer" component={FirebaseBindingViewContainer} title="FirebaseBindingViewContainer" />
+            <Scene key="PredictiveSearchViewContainer" component={PredictiveSearchViewContainer} title="PredictiveSearchViewContainer" />
 
             { /* Individual component test views */ }
             <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />

@@ -15,8 +15,8 @@ function mapStateToProps(state) {
 // Which action creators does it want to receive by props?
 function mapDispatchToProps(dispatch) {
   return {
-    listen: (listeners) => {
-      Firebase.listenTo(listeners, (response) => {
+    listen: (endpoints) => {
+      Firebase.listenTo(endpoints, (response) => {
         switch (response.key) {
           case "TestValueOne":
             dispatch(d.setValueOne(response.value));
@@ -27,10 +27,10 @@ function mapDispatchToProps(dispatch) {
         }
       });
 
-      dispatch(d.setactiveFirebaseListeners(listeners));
+      dispatch(d.setactiveFirebaseListeners(endpoints));
     },
-    stopListening: (listeners) => {
-      Firebase.stopListeningTo(listeners);
+    stopListening: (endpoints) => {
+      Firebase.stopListeningTo(endpoints);
       dispatch(d.setactiveFirebaseListeners([]));
     }
   }
