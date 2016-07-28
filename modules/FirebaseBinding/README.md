@@ -13,7 +13,7 @@ Our module's state uses a standard Redux architecture, consisting of the followi
   1. A state initializer
   2. Action types
   3. Action creators
-  4. A reducer
+  4. A reducer to carry out actions
 
 #### Configuring the state
 * Use `FirebaseBindingState.js` as a blueprint
@@ -87,7 +87,7 @@ We've defined two helper functions in `~/services/Firebase.js` to enable Firebas
 ## The View
 Our view has three jobs:
   1. Instantiate Firebase listeners on mount
-  
+
   ```javascript
   componentDidMount() {
     this.props.listen(this.props.activeFirebaseListeners);
