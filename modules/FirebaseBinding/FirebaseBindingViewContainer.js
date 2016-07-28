@@ -32,8 +32,7 @@ function mapDispatchToProps(dispatch) {
     stopListening: (listeners) => {
       Firebase.stopListeningTo(listeners);
       dispatch(d.setactiveFirebaseListeners([]));
-    },
-    setTest: (input) => dispatch(d.setTest(input))
+    }
   }
 }
 
