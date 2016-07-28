@@ -35,6 +35,7 @@ Our module's view container has one purpose: to give our base View access to Red
 The connect function has two jobs:
   1. Map Redux state to props
   2. Map dispatch functions (AKA action creators, setter functions) to props
+  
         **Note: dispatch functions can contain than just creating actions for the reducer, but we use them for this base purpose only**
 
 The `mapDispatchToProps` function in `FirebaseBindingViewContainer.js` contains two important functions that enable Firebase connectivity:
