@@ -32,8 +32,6 @@ var usernamesRef = firebase.database().ref('/usernames');
 
 
 
-
-
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 //                                 Getters
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
@@ -104,6 +102,7 @@ export function getNumNotifications(uid, callback) {
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 
 
+
 // firebase.database().ref('/appFlags/' + uid).set({ val: true, hasx: false });
 /**
   *   Create a flag
@@ -111,12 +110,18 @@ export function getNumNotifications(uid, callback) {
   *   add in callback information
 **/
 
-export function createAppFlags(uid, callback){
+export function createAppFlags(uid){
   //Needs to pull data
   firebase.database().ref('/appFlags/' + uid).set({ val: true, accountStatus: "exists" });
-  console.log("CREATING APP FLAGS")
+  console.log("CREATING APP FLAGS");
 
 };
+
+// firebase.database().ref('/appFlags/' + uid).set({ val: true, hasx: false });
+/**
+  *   Create a flag
+**/
+>>>>>>> master
 
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 //                             User creation
@@ -180,6 +185,8 @@ export function authWithFacebook(FBToken, callback) {
     if (typeof callback == 'function') callback(false);
   });
 };
+
+
 /**
   *   Sign current user out
 **/
@@ -221,6 +228,22 @@ export function listenToNotifications(uid, callback) {
 
 
 /**
+  *   Listen for changes in the specified user's contact list, pass mutated
+  *   list to caller on change
+**/
+export function listenToContacts(uid, callback) {
+  firebase.database().ref('/contactList/' + uid).on('value', (snapshot) => {
+    callback(snapshot.val());
+  });
+};
+
+export function listenToTest(callback) {
+  firebase.database().ref('/FirebaseBindingTest').on('value', (snapshot) => {
+    callback(snapshot.val());
+  });
+};
+
+/**
   *   Listen for changes in Firebase user list, returns event type and snapshot
 **/
 export function listenToUsers(callback) {
@@ -233,4 +256,33 @@ export function listenToUsers(callback) {
   usernamesRef.on('child_changed', (childSnapshot, prevChildKey) => {
     callback('child_changed', childSnapshot);
   });
+};
+
+
+/**
+  *   Listen to each of the specified routes
+**/
+export function listenTo(endpoints, callback) {
+  var endpoint;
+
+  for (var e in endpoints) {
+    endpoint = endpoints[e];
+    firebase.database().ref('/' + endpoints[e]).on('value', (snapshot) => {
+      if (typeof callback == 'function') callback({ name: snapshot.key, value: snapshot.val() });
+      else console.log("Callback is not a function");
+    });
+  }
+};
+
+
+/**
+  *   Turn off all listeners for the provided database endpoints
+**/
+export function stopListeningTo(endpoints, callback) {
+  for (var e in endpoints) {
+    firebase.database().ref('/' + endpoints[e]).off('value', () => {
+      if (typeof callback == 'function') callback();
+      else console.log("Callback is not a function");
+    });
+  }
 };
