@@ -80,7 +80,7 @@ The `mapDispatchToProps` function in `FirebaseBindingViewContainer.js` contains 
 We've defined two helper functions in `~/services/Firebase.js` to enable Firebase connectivity:
   1. `listenTo(endpoints, callback)` instantiates listeners for the provided endpoints and returns new values via callback function.
 
-  **Return data from this function looks like this:** `{ name: snapshot.key, value: snapshot.val() }`
+  **Return data from this function looks like this:** `{ key: snapshot.key, value: snapshot.val() }`
 
   2. `stopListeningTo(endpoints)` turns off active listeners for the provided endpoints
 

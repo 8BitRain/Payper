@@ -17,7 +17,7 @@ function mapDispatchToProps(dispatch) {
   return {
     listen: (listeners) => {
       Firebase.listenTo(listeners, (response) => {
-        switch (response.name) {
+        switch (response.key) {
           case "TestValueOne":
             dispatch(d.setValueOne(response.value));
           break;
