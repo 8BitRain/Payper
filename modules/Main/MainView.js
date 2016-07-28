@@ -19,6 +19,9 @@ import colors from "../../styles/colors";
 
 // Iconography
 import Entypo from 'react-native-vector-icons/Entypo';
+import Foundation from 'react-native-vector-icons/Foundation';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+
 
 // Partial components
 import Header from '../../components/Header/Header.js';
@@ -54,6 +57,11 @@ class Content extends React.Component {
         numNotifications: -1,
       },
 
+      animationProps: {
+        bounceValue: new Animated.Value(0),
+        animatedStartValue: new Animated.Value(0)
+      },
+
       dataSourceOut: ds.cloneWithRows([]),
       dataSourceIn: ds.cloneWithRows([]),
       refreshing: false,
@@ -73,6 +81,42 @@ class Content extends React.Component {
     });
   }
 
+  /**
+    *   Initialize Bouncing Arrow
+  **/
+  componentDidMount() {
+    this.state.animationProps.bounceValue.setValue(1.5);     // Start large
+    this.state.animationProps.animatedStartValue.setValue(0);
+
+    Animated.spring(                          // Base: spring, decay, timing
+      this.state.animationProps.bounceValue,                 // Animate `bounceValue`
+      {
+        toValue: 50,                         // Animate to smaller size
+        friction: 1,                          // Bouncier spring
+      }
+   ).start();
+   this.bouncingArrow();
+  }
+
+  /**
+    * Animations for bouncing Arrow Empty State
+  **/
+     bouncingArrow(){
+       Animated.sequence([
+         Animated.timing(this.state.animationProps.animatedStartValue, {
+           toValue: 55,
+           duration: 550,
+           delay: 0
+         }),
+         Animated.timing(this.state.animationProps.animatedStartValue, {
+           toValue: 0,
+           duration: 550
+         })
+       ]).start(() => {
+         this.bouncingArrow();
+       }
+     );
+   }
 
   /**
     *   1) Confirm the cancel request
@@ -116,6 +160,16 @@ class Content extends React.Component {
   confirmPayment(pid) {
     Lambda.confirmPayment({payment_id: pid, token: this.state.token}, (success) => {
       console.log("Confirm payment was a", success);
+    });
+  }
+
+  /**
+    *   1) Confirm the cancel request
+    *   2) Cancel the specified payment
+  **/
+  cancelPayment(pid) {
+    Lambda.cancelPayment({payment_id: pid, token: this.state.token}, (success) => {
+      console.log("Cancel payment was a", success);
     });
   }
 
@@ -186,6 +240,7 @@ class Content extends React.Component {
     *   Returns a ready-to-render payment ListView
   **/
   _getPaymentList() {
+    console.log("RETURNING PAYMENTLIST STATE");
     return(
       <View style={{flex: 0.8, paddingTop: 0}}>
         <ListView
@@ -210,13 +265,13 @@ class Content extends React.Component {
     *   Returns a ready-to-render empty state view
   **/
   _getEmptyState() {
+    console.log("Returning Empty State");
     return(
       <View style={{flex: 0.8, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
         <Text style={{fontSize: 18, color: colors.darkGrey}}>Empty state baby!</Text>
       </View>
     );
   }
-
 
   render() {
     /* If a settings page is active, render it */
@@ -270,6 +325,25 @@ class Content extends React.Component {
 
               { /* Render list of payments or empty state */  }
               {(this.state.empty) ? this._getEmptyState() : this._getPaymentList() }
+
+              {/* Bouncing Arrow*/}
+              {/*<View style={{flex: 0.8, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
+              <View style = {containers.bouncingArrowContainer}>
+                <Text style={[typography.fontSizeTitle, typography.marginTop, typography.marginBottom, typography.marginSides]}>Tap the payment button to start using Coincast!</Text>
+                <Animated.Text                       // Base: Image, Text, View
+               style={{
+                 width: 64,
+                 height: 64,
+                 left: 7,
+                 transform: [                        // `transform` is an ordered array
+                   {translateY: this.state.animationProps.animatedStartValue},  // Map `bounceValue` to `scale`
+                 ]
+               }}>
+                 <Entypo name="chevron-thin-down" size={48} color="white"/>
+               </Animated.Text>
+
+             </View>
+             </View>*/}
 
               { /* Footer */ }
               <View style={{flex: 0.1}}>
@@ -377,7 +451,6 @@ class Main extends React.Component {
     });
   }
 
-
   render() {
     var menu = <Settings changePage={(newPage) => this.changePage(newPage)} />;
 
@@ -388,6 +461,7 @@ class Main extends React.Component {
         isOpen={this.state.isOpen}
         onChange={(isOpen) => this.updateMenuState(isOpen)}
         disableGestures={true}>
+
 
         <StatusBar barStyle="light-content" />
         <Content

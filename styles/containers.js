@@ -13,6 +13,11 @@ const containers = StyleSheet.create({
   padHeader: {
     paddingTop: 80
   },
+  bouncingArrowContainer: {
+    flex: .1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 
   //
   whole: { flex: 1.0 },

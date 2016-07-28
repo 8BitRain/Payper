@@ -7,13 +7,13 @@
 - [x] Sidebar
 - [x] In-app notifications
 - [ ] Push notifications
-- [ ] Edit profile panel
+- [ ] Edit profile panel (Eric)
 - [x] Facebook auth
 - [ ] Facebook friend synchronization
 - [ ] Contact synchronization
 - [ ] Invites
-- [ ] App-wide validations
-- [ ] App-wide empty states
+- [ ] App-wide validations (Bank Onboarding, Payper Account Creation, Pay & Request)
+- [ ] App-wide empty states (Tracking Page, Notifications, Payment History)
 - [ ] Revamp loading screen component
 
 ##### Sign in/sign out
@@ -34,6 +34,8 @@
 - [X] Header only displays notifications on Notifications page (probably an
   issue with how numNotifications is passed to <Content />)
 - [X] "Runtime is not ready for debugging" randomly appears.
+- [] "Severe Error, duplicates recorded in Firebase, with no auth information. To reproduce
+      delete an id but not a users and Facebook id, or switch this around until you can get duplicate users through Facebook sign in or regular user sign in."
   https://github.com/facebook/react-native/issues/6682
   **This went away when I downgraded from Node 6.2.0 to 5.5.0**
 
