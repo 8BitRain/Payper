@@ -8,20 +8,20 @@ const EMPTY_DATA_SOURCE = new ListView.DataSource({rowHasChanged: (r1, r2) => r1
 
 // Initialize state
 const initialState = Map({
-  activeFirebaseListeners: ['TestContacts/auserid'],
-  contacts: EMPTY_DATA_SOURCE.cloneWithRows([]),
-  empty: true
+  activeFirebaseListeners: [],
+  allContacts: EMPTY_DATA_SOURCE.cloneWithRows([]),
+  filteredContacts: EMPTY_DATA_SOURCE.cloneWithRows([])
 });
 
 // Action types
-const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASLISTENERS',
-      SET_CONTACTS = 'SET_CONTACTS',
-      SET_EMPTY = 'SET_EMPTY';
+const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
+      SET_ALL_CONTACTS = 'SET_ALL_CONTACTS',
+      SET_FILTERED_CONTACTS = 'SET_FILTERED_CONTACTS';
 
 // Action creators
 export function activeFirebaseListeners(input) { return {type: SET_ACTIVE_FIREBASE_LISTENERS, input: input} };
-export function contacts(input) { return {type: SET_CONTACTS, input: input} };
-export function empty(input) { return {type: SET_EMPTY, input: input} };
+export function allContacts(input) { return {type: SET_ALL_CONTACTS, input: input} };
+export function filteredContacts(input) { return {type: SET_FILTERED_CONTACTS, input: input} };
 
 /**
   *   Reducer
@@ -36,12 +36,12 @@ export default function PredictiveSearchReducer(state = initialState, action = {
       var newState = state.set('activeFirebaseListeners', action.input);
       return newState;
       break;
-    case SET_CONTACTS:
-      var newState = state.set('contacts', EMPTY_DATA_SOURCE.cloneWithRows(action.input));
+    case SET_ALL_CONTACTS:
+      var newState = state.set('allContacts', EMPTY_DATA_SOURCE.cloneWithRows(action.input));
       return newState;
       break;
-    case SET_EMPTY:
-      var newState = state.set('empty', action.input);
+    case SET_FILTERED_CONTACTS:
+      var newState = state.set('filteredContacts', EMPTY_DATA_SOURCE.cloneWithRows(action.input));
       return newState;
       break;
   }

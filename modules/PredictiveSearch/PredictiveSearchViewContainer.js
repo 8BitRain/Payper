@@ -14,9 +14,13 @@ import PredictiveSearchView from './PredictiveSearchView';
 // Decide which chunk of Redux global state our component will receive as props
 function mapStateToProps(state) {
   return {
+
+    // predictiveSearch
     activeFirebaseListeners: state.getIn(['predictiveSearch', 'activeFirebaseListeners']),
-    contacts: state.getIn(['predictiveSearch', 'contacts']),
-    empty: state.getIn(['predictiveSearch', 'empty'])
+    allContacts: state.getIn(['predictiveSearch', 'allContacts']),
+    filteredContacts: state.getIn(['predictiveSearch', 'filteredContacts']),
+    empty: state.getIn(['predictiveSearch', 'empty']),
+
   }
 }
 
@@ -25,13 +29,8 @@ function mapDispatchToProps(dispatch) {
   return {
     listen: (endpoints) => {
       Firebase.listenTo(endpoints, (response) => {
-        switch (response.key) {
-          case "auserid":
-            response.value = StringMaster5000.formatContacts(response.value);
-            dispatch(set.contacts(response.value));
-            dispatch(set.empty(false));
-          break;
-        }
+        response.value = StringMaster5000.formatContacts(response.value);
+        dispatch(set.allContacts(response.value));
       });
 
       dispatch(set.activeFirebaseListeners(endpoints));
@@ -40,6 +39,10 @@ function mapDispatchToProps(dispatch) {
     stopListening: (endpoints) => {
       Firebase.stopListeningTo(endpoints);
       dispatch(set.activeFirebaseListeners([]));
+    },
+
+    setFilteredContacts: (contacts) => {
+      dispatch(set.filteredContacts(contacts));
     }
   }
 }

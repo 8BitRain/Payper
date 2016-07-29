@@ -19,7 +19,6 @@ import moment from 'moment';
 import * as Timestamp from './Timestamp';
 import colors from '../styles/colors';
 
-
 /**
   *   Given a notification object, return ready-to-render strings
 **/
@@ -96,15 +95,21 @@ export function formatContacts(contacts) {
 
   for (var c in contacts) {
     curr = contacts[c];
-    if (curr.type == "facebook") {
-      if (numFacebook < 3) arr.push(contacts[c]);
-      numFacebook++;
-    } else if (curr.type == "phone") {
-      if (numFacebook < 3) arr.push(contacts[c]);
-      numPhone++;
-    } else {
-      arr.push(contacts[c]);
-    }
+
+    // Limted number of contacts
+    // if (curr.type == "facebook") {
+    //   if (numFacebook < 3) arr.push(contacts[c]);
+    //   numFacebook++;
+    // } else if (curr.type == "phone") {
+    //   if (numPhone < 3) arr.push(contacts[c]);
+    //   numPhone++;
+    // } else {
+    //   arr.push(contacts[c]);
+    // }
+
+    // Unlimited number of contacts
+    arr.push(contacts[c]);
+
   }
 
   arr.sort((a, b) => {
@@ -113,6 +118,19 @@ export function formatContacts(contacts) {
   });
 
   return arr;
+};
+
+
+/**
+  *   Filters array of contacts lexicographically given a set and a query string
+**/
+export function filterContacts(contacts, query) {
+  // Don't run the set through our regex if there's no query
+  if (query === '') return contacts;
+
+  // If user's first or last name contains the regex, add them to the filtered set
+  const regex = new RegExp(query + '.+$', 'i');
+  return contacts.filter(c => c.first_name.search(regex) >= 0 || c.last_name.search(regex) >= 0);
 };
 
 

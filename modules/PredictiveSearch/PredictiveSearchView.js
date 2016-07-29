@@ -2,6 +2,10 @@
 import React from 'react';
 import { Dimensions, StyleSheet, View, Text, TextInput, TouchableHighlight, ListView, RecyclerViewBackedScrollView } from 'react-native';
 
+// Helpers
+import * as Async from '../../helpers/Async';
+import * as StringMaster5000 from '../../helpers/StringMaster5000';
+
 const dimensions = Dimensions.get('window');
 
 // Row styles
@@ -27,6 +31,10 @@ const rowStyles = StyleSheet.create({
 class PredictiveSearchView extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      user: {}
+    };
   }
 
 
@@ -34,7 +42,14 @@ class PredictiveSearchView extends React.Component {
     *   Start listening to Firebase
   **/
   componentDidMount() {
-    this.props.listen(this.props.activeFirebaseListeners);
+    Async.get('user', (user) => {
+      user = JSON.parse(user);
+
+      // Store user in local states
+      this.setState({user: user});
+      var uid = user.uid;
+      this.props.listen(['TestContacts/' + uid]);
+    });
   }
 
 
@@ -58,6 +73,12 @@ class PredictiveSearchView extends React.Component {
   }
 
 
+  _filterContacts(query) {
+    var filtered = StringMaster5000.filterContacts(this.props.allContacts._dataBlob.s1, query);
+    this.props.setFilteredContacts(filtered);
+  }
+
+
   render() {
     return(
       <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
@@ -65,14 +86,13 @@ class PredictiveSearchView extends React.Component {
           <Text style={[rowStyles.text], {color: '#000'}}>Who are you splitting with?</Text>
           <TextInput
             style={{height: 40, width: dimensions.width * 0.9, padding: 10, marginTop: 10, borderColor: '#000', borderRadius: 4, borderWidth: 1}}
-            onChangeText={ (text) => console.log(text) }
+            onChangeText={ (query) => this._filterContacts(query) }
             />
         </View>
 
         <View style={{flex: 0.8, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={[rowStyles.text, {color: '#000', paddingBottom: 10}]}>Empty: { this.props.empty.toString() }</Text>
           <ListView
-            dataSource={this.props.contacts}
+            dataSource={(this.props.filteredContacts._dataBlob.s1.length > 0) ? this.props.filteredContacts : this.props.allContacts}
             renderRow={this._renderRow.bind(this)}
             renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
             enableEmptySections />
