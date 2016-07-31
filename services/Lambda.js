@@ -215,3 +215,26 @@ export function seeNotification(options) {
     console.log(err);
   }
 };
+
+
+/**
+  *   Update specified user's phone contact list
+**/
+export function updatePhoneContacts(options, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneContacts", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Update phone contacts Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error updating phone contacts:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};

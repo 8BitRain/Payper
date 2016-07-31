@@ -37,8 +37,22 @@ function initializeAppState(user) {
     Async.set('users', JSON.stringify(users));
   });
 
-  initializeUsers(user.uid, () => {
-    console.log("initializeUsers() callback reached");
+  Contacts.getAll((err, contacts) => {
+    if (err && err.type === 'permissionDenied') {
+      console.error("Error getting contacts:\n", err);
+    } else {
+      var phoneNumbers = [];
+
+      // Extract phone numbers
+      for (var c in contacts) {
+        var numbers = contacts[c].phoneNumbers;
+        for (var n in numbers) {
+          phoneNumbers.push(numbers[n].number.replace(/\D/g,''));
+        }
+      }
+
+      Lambda.updatePhoneContacts({token: user.token, phoneNumbers: phoneNumbers});
+    }
   });
 
   // Log number of unseen notifications to AsyncStorage
@@ -138,7 +152,7 @@ export function signInWithFacebook(data, callback) {
 /**
   *   1) Create Firebase user
   *   2) Get a token for the user and attach it to the user's object
-  * 2.5) Set initial flags for user 
+  * 2.5) Set initial flags for user
   *   3) POST user's object to Lambda endpoint
   *   4) Initialize the app
 **/
@@ -180,43 +194,4 @@ export function createPayment(data, callback) {
   Lambda.createPayment(data, (res) => {
     callback(res);
   });
-};
-
-
-/**
-  *
-**/
-export function initializeUsers(options, callback) {
-  if (options.uid) {
-    var users = {
-      phone: [],
-      facebook: [],
-      payper: [],
-    };
-
-    // Get Payper contact list from Firebase
-    Firebase.listenToPayperContacts(options.uid, (contacts) => {
-      users.payper = contacts;
-    });
-
-    // Send phone numbers to Lambda endpoint to log them to user's Payper contacts
-    Contacts.getAll((err, contacts) => {
-      if (err && err.type === 'permissionDenied') {
-        console.error("Error getting contacts:\n", err);
-      } else {
-        Lambda.updateContacts({token: options.token, })
-      }
-    });
-
-    // Get cell phone contacts who use Payper
-    Contacts.getAll((err, contacts) => {
-      if (err && err.type === 'permissionDenied') {
-        console.error("ERROR GETTING CONTACTS:", err);
-      } else {
-        Lambda.logContacts(contacts);
-        console.log("USERS:", users);
-        callback();
-      }
-    });
-  } else console.log("Received null uid.");
 };

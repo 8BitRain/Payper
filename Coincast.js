@@ -68,7 +68,7 @@ export default class Coincast extends React.Component {
             <Scene key="landingView" component={LandingView} title="LandingView" />
 
             { /* Main app flow */ }
-            <Scene key="SplashView" component={SplashView} title="SplashView" />
+            <Scene key="SplashView" component={SplashView} title="SplashView" initial />
             <Scene key="landingView" component={LandingView} title="LandingView" />
             <Scene key="ThankYouView" component={ThankYouView} title="ThankYouView"/>
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
@@ -81,7 +81,7 @@ export default class Coincast extends React.Component {
 
             { /* Testing */ }
             <Scene key="FirebaseBindingViewContainer" component={FirebaseBindingViewContainer} title="FirebaseBindingViewContainer" />
-            <Scene key="PredictiveSearchViewContainer" component={PredictiveSearchViewContainer} title="PredictiveSearchViewContainer" initial />
+            <Scene key="PredictiveSearchViewContainer" component={PredictiveSearchViewContainer} title="PredictiveSearchViewContainer" />
 
             { /* Individual component test views */ }
             <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />
