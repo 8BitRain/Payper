@@ -141,3 +141,17 @@ export function formatTimestamp(ts) {
   ts = parseInt(ts);
   return moment(ts).calendar();;
 };
+
+
+/**
+  *   String checker:
+  *     Empty:
+  *     💣 string is not null
+  *     💣 string is not ""
+  *     💣 string is not full of white space
+**/
+export function checkIf(query) {
+  return {
+    isEmpty: query != null && query != "" && query.replace(/\s/g, '').length > 0,
+  };
+}

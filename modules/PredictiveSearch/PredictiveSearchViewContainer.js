@@ -19,6 +19,7 @@ function mapStateToProps(state) {
     activeFirebaseListeners: state.getIn(['predictiveSearch', 'activeFirebaseListeners']),
     allContacts: state.getIn(['predictiveSearch', 'allContacts']),
     filteredContacts: state.getIn(['predictiveSearch', 'filteredContacts']),
+    selectedContact: state.getIn(['predictiveSearch', 'selectedContact']),
     empty: state.getIn(['predictiveSearch', 'empty']),
 
   }
@@ -41,9 +42,21 @@ function mapDispatchToProps(dispatch) {
       dispatch(set.activeFirebaseListeners([]));
     },
 
-    setFilteredContacts: (contacts) => {
-      dispatch(set.filteredContacts(contacts));
-    }
+    setFilteredContacts: (contacts, callback) => {
+      dispatch(set.filteredContacts(contacts))
+      .then(() => {
+        if (typeof callback == 'function') callback();
+        else console.log("Callback is not a function.");
+      });
+    },
+
+    setSelectedContact: (contact, callback) => {
+      dispatch(set.selectedContact(contact))
+      .then(() => {
+        if (typeof callback == 'function') callback();
+        else console.log("Callback is not a function.");
+      });
+    },
   }
 }
 

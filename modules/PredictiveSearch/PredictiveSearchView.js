@@ -1,14 +1,22 @@
 // Dependencies
 import React from 'react';
 import { Dimensions, StyleSheet, View, Text, TextInput, TouchableHighlight, ListView, RecyclerViewBackedScrollView } from 'react-native';
+import Entypo from 'react-native-vector-icons/Entypo';
+const dimensions = Dimensions.get('window');
 
 // Helpers
 import * as Async from '../../helpers/Async';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
+import * as Partials from '../../helpers/Partials';
 
-const dimensions = Dimensions.get('window');
+// Partial components
+import UserPreview from '../../components/Previews/User/User';
+import Header from '../../components/Header/Header';
+import UserPic from '../../helpers/Partials';
+import ArrowNav from '../../components/Navigation/Arrows/ArrowDouble';
 
-// Row styles
+// Styles
+import colors from '../../styles/colors';
 const rowStyles = StyleSheet.create({
   wrap: {
     height: 100,
@@ -27,13 +35,70 @@ const rowStyles = StyleSheet.create({
     color: '#FFF',
   },
 });
+const styles = StyleSheet.create({
+  textInput: {
+    height: 40,
+    paddingLeft: 25,
+    paddingRight: 25,
+    paddingTop: 10,
+    paddingBottom: 10,
+    color: colors.white,
+  },
+
+  // Confirmation
+  confirmationWrap: {
+    flex: 1.0,
+    backgroundColor: colors.darkGrey,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingTop: 25,
+  },
+
+  confirmationPic: {
+    width: dimensions.width * 0.5,
+    height: dimensions.width * 0.5,
+    borderRadius: (dimensions.width * 0.5) / 2,
+  },
+
+  confirmationName: {
+    fontFamily: 'Roboto',
+    fontSize: 22,
+    color: colors.white,
+    paddingTop: 10,
+  },
+
+  confirmationUsername: {
+    fontFamily: 'Roboto',
+    fontSize: 14,
+    color: colors.icyBlue,
+    paddingTop: 10,
+  },
+
+  confirmationPhone: {
+    fontFamily: 'Roboto',
+    fontSize: 14,
+    color: colors.alertGreen,
+    paddingTop: 10,
+  },
+
+  confirmationMessage: {
+    fontFamily: 'Roboto',
+    fontSize: 18,
+    color: colors.white,
+    paddingTop: 10,
+    paddingLeft: 25,
+    paddingRight: 25,
+  },
+
+});
 
 class PredictiveSearchView extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      user: {}
+      user: {},
+      inputBackgroundColor: 'transparent',
     };
   }
 
@@ -48,7 +113,7 @@ class PredictiveSearchView extends React.Component {
       // Store user in local states
       this.setState({user: user});
       var uid = user.uid;
-      this.props.listen(['TestContacts/' + uid]);
+      this.props.listen(['TestContacts/' + /* uid */ "FmXlDusbVKQTuqnAG22KX7yZKWL2"]);
     });
   }
 
@@ -63,13 +128,19 @@ class PredictiveSearchView extends React.Component {
 
   _renderRow(data) {
     return(
-      <View style={rowStyles.wrap}>
-        <Text style={rowStyles.text}>Name: { data.first_name + " " + data.last_name }</Text>
-        <Text style={rowStyles.text}>Username: { data.username }</Text>
-        <Text style={rowStyles.text}>Img src: { (data.profile_pic) ? data.profile_pic : "no profile pic" }</Text>
-        <Text style={rowStyles.text}>Type: { data.type }</Text>
-      </View>
+      <UserPreview
+        user={data}
+        touchable
+        callback={() => this._setSelectedContact(data)}
+        />
     );
+  }
+
+
+  _setSelectedContact(data) {
+    this.props.setSelectedContact(data, () => {
+      this._setInputBackgroundColor(data.username || data.first_name + " " + data.last_name)
+    });
   }
 
 
@@ -79,23 +150,116 @@ class PredictiveSearchView extends React.Component {
   }
 
 
+  _setInputBackgroundColor(query) {
+    var notEmpty = StringMaster5000.checkIf(query).isEmpty;
+
+    if (notEmpty) {
+      if (query == this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name || query == this.props.selectedContact.username)
+        this.setState({inputBackgroundColor: colors.alertGreen});
+      else if (this.state.inputBackgroundColor != 'transparent')
+        this.setState({inputBackgroundColor: 'transparent'});
+    }
+  }
+
+
+  _getContactList() {
+    return(
+      <ListView
+        dataSource={(this.props.filteredContacts._dataBlob.s1.length > 0) ? this.props.filteredContacts : this.props.allContacts}
+        renderRow={this._renderRow.bind(this)}
+        renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+        enableEmptySections
+        />
+    );
+  }
+
+
+  _getConfirmation() {
+    return(
+      <View style={styles.confirmationWrap}>
+        <UserPic
+          pic={this.props.selectedContact.profile_pic}
+          name={this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name}
+          width={dimensions.width * 0.3}
+          height={dimensions.width * 0.3}
+          />
+
+        { /* Full name */ }
+        <Text style={styles.confirmationName}>
+          { this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name }
+        </Text>
+
+        { /* Username or phone number */ }
+        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+          {(this.props.selectedContact.type == "facebook")
+            ? <Entypo style={{paddingTop: 10}} name="facebook" size={25} color={colors.icyBlue}/>
+            : <Entypo style={{paddingTop: 10}} name="phone" size={25} color={colors.alertGreen}/> }
+          <Text style={(this.props.selectedContact.username) ? styles.confirmationUsername : styles.confirmationPhone}>
+            { " +" + this.props.selectedContact.phone }
+          </Text>
+        </View>
+
+        { /* Confirmation Message */ }
+        {(!this.props.selectedContact.username)
+          ? <Text style={styles.confirmationMessage}>{"We'll invite " + this.props.selectedContact.first_name + " to join Payper."}</Text>
+          : null }
+
+        { /* Arrow nav */ }
+        <ArrowNav
+          arrowNavProps={{right: true}}
+          callbackRight={() => console.log("Clicked next")}
+          />
+
+      </View>
+    );
+  }
+
+
   render() {
     return(
-      <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-        <View style={{flex: 0.2, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={[rowStyles.text], {color: '#000'}}>Who are you splitting with?</Text>
-          <TextInput
-            style={{height: 40, width: dimensions.width * 0.9, padding: 10, marginTop: 10, borderColor: '#000', borderRadius: 4, borderWidth: 1}}
-            onChangeText={ (query) => this._filterContacts(query) }
+      <View style={{flex: 1.0}}>
+
+        { /* Header */ }
+        <View style={{flex: 0.1}}>
+          <Header
+            headerProps={{
+              types: {
+                "paymentIcons": true,
+                "circleIcons": false,
+                "settingsIcon": false,
+                "closeIcon": true,
+                "flowTabs": false,
+              },
+              numCircles: null,
+            }}
+            index={0}
+            numNotifications={this.props.numNotifications}
+            callbackSettings={() => this.props.toggleMenu()}
             />
         </View>
 
-        <View style={{flex: 0.8, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-          <ListView
-            dataSource={(this.props.filteredContacts._dataBlob.s1.length > 0) ? this.props.filteredContacts : this.props.allContacts}
-            renderRow={this._renderRow.bind(this)}
-            renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-            enableEmptySections />
+        { /* Query and ListView or Confirmation, depending on if a user is selected */ }
+        <View style={{flex: 0.9, justifyContent: 'center', backgroundColor: colors.icyBlue}}>
+          <TextInput
+            style={[styles.textInput, {backgroundColor: this.state.inputBackgroundColor}]}
+            placeholder={"Who are you splitting with?"}
+            selectionColor={colors.white}
+            onChangeText={ (query) => { this._filterContacts(query); this._setInputBackgroundColor(query); }}
+            autoFocus={true}
+            enablesReturnKeyAutomatically={true}
+            returnKeyType={"next"}
+            defaultValue={
+              (this.props.selectedContact.username)
+                ? this.props.selectedContact.username
+                : (this.props.selectedContact.first_name)
+                  ? this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name
+                  : ""
+            }
+            />
+
+          { (this.props.selectedContact.username || this.props.selectedContact.first_name )
+            ? this._getConfirmation()
+            : this._getContactList() }
         </View>
       </View>
     );

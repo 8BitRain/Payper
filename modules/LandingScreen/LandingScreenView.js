@@ -126,63 +126,66 @@ class LandingScreenDisplay extends React.Component {
   /*
   * Submit Facebook User information
   */
-  submitFbUser(result){
-    var picture ='';
-    console.log(result.picture.data.is_silhouette);
-    if(result.picture.data.is_silhouette){
-      picture = '';
-    } else {
-      picture = result.picture.data.url;
-    }
-
-    var user = {
-      email: result.email,
-      first_name: result.first_name,
-      last_name: result.last_name,
-      profile_pic: picture,
-      phone: '3133133113',
-      provider: 'payper',
-      gender: result.gender,
-      friends: result.friends.data,
-      id: result.id
-    };
-    this.state.fbUser = user;
-    //Note this should send information from Client to FB
-
-    console.log("User Data " + JSON.stringify(user));
-    var url = 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/facebookCreate';
-    fetch(url, {method: "POST", body: JSON.stringify(user)})
-    .then((response) => response.json())
-    .then((responseData) => {
-      console.log(responseData);
-      //After adding information to the Server
-      //Send FB Contact information to FB
-
-      console.log(this.state.fbAcessToken);
-      this.state.fbUser = user;
-
-      //this.setState({loading: true});
-      /*Init.signInWithCredentials(this.state.fbAcessToken, function(signedIn) {
-        _this.setState({doneLoading: true});
-      });*/
-    })
-    .done();
-  }
+  // submitFbUser(result){
+  //   var picture ='';
+  //   console.log(result.picture.data.is_silhouette);
+  //   if(result.picture.data.is_silhouette){
+  //     picture = '';
+  //   } else {
+  //     picture = result.picture.data.url;
+  //   }
+  //
+  //   console.log("Facebook account:", result);
+  //
+  //   var user = {
+  //     email: result.email,
+  //     first_name: result.first_name,
+  //     last_name: result.last_name,
+  //     profile_pic: picture,
+  //     phone: '3133133113',
+  //     provider: 'payper',
+  //     gender: result.gender,
+  //     friends: result.friends.data,
+  //     id: result.id
+  //   };
+  //   this.state.fbUser = user;
+  //   //Note this should send information from Client to FB
+  //
+  //   console.log("User Data " + JSON.stringify(user));
+  //   var url = 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/facebookCreate';
+  //   fetch(url, {method: "POST", body: JSON.stringify(user)})
+  //   .then((response) => response.json())
+  //   .then((responseData) => {
+  //     console.log(responseData);
+  //     //After adding information to the Server
+  //     //Send FB Contact information to FB
+  //
+  //     console.log(this.state.fbAcessToken);
+  //     this.state.fbUser = user;
+  //
+  //     //this.setState({loading: true});
+  //     /*Init.signInWithCredentials(this.state.fbAcessToken, function(signedIn) {
+  //       _this.setState({doneLoading: true});
+  //     });*/
+  //   })
+  //   .done();
+  // }
 
 
   /*
   * Sign In With Facebook
   */
-  signInWithFacebook(FBToken, result){
+  signInWithFacebook(FBToken, result) {
 
-    var picture ='';
-    console.log(result.picture.data.is_silhouette);
-    if(result.picture.data.is_silhouette){
-      picture = '';
-    } else {
-      picture = result.picture.data.url;
-    }
+    // Extend scope
+    const _this = this;
 
+    // Get profile picture
+    var picture;
+    if (result.picture.data.is_silhouette) picture = '';
+    else picture = result.picture.data.url;
+
+    // Set up user object
     var data = {
       FBToken: FBToken,
       user: {
@@ -190,18 +193,23 @@ class LandingScreenDisplay extends React.Component {
         last_name: result.last_name,
         email: result.email,
         profile_pic: picture,
-        phone: '3133133113',
+        phone: '2623058038',
         gender: result.gender,
         friends: result.friends.data,
         facebook_id: result.id,
         token: ''
       }
     };
-    const _this = this;
-    _this.setState({loading: true});
+
+    // Start loading
+    this.setState({loading: true});
+
+    // Push user object to Lambda function
     Init.signInWithFacebook(data, function(signedIn) {
+      // Stop loading
       _this.setState({doneLoading: true});
     });
+
   }
 
 
