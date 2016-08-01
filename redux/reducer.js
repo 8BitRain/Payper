@@ -8,6 +8,7 @@ import CreateAccountReducer from '../modules/CreateAccount/CreateAccountState';
 import BankOnboardingReducer from '../modules/BankOnboarding/BankOnboardingState';
 import FirebaseBindingReducer from '../modules/FirebaseBinding/FirebaseBindingState';
 import PredictiveSearchReducer from '../modules/PredictiveSearch/PredictiveSearchState';
+import MainReducer from '../modules/Main/MainState';
 
 const reducers = {
   // Authentication/login state
@@ -26,6 +27,7 @@ const reducers = {
   bankOnboarding: BankOnboardingReducer,
   firebaseBinding: FirebaseBindingReducer,
   predictiveSearch: PredictiveSearchReducer,
+  main: MainReducer,
 
 };
 

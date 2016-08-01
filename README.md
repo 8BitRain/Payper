@@ -28,6 +28,7 @@
 - [ ] Redesign footer (action button for new payment)
 - [ ] Fix loading for IAV
 - [ ] Style 'Continue with Facebook' button
+- [ ] Implement section headers in predictive user search module's ListView
 
 ### Architecture
 **Refactor the following to fit new Firebase/Redux model:**

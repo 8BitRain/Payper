@@ -16,6 +16,7 @@ import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountVie
 import CreatePaymentViewContainer from './modules/CreatePayment/CreatePaymentViewContainer'
 import SignInViewContainer from './modules/SignIn/SignInViewContainer'
 import MainViewContainer from './modules/Main/MainViewContainer'
+import MainViewContainerV2 from './modules/Main/MainViewContainerV2'
 import Notifications from './modules/Notifications/Notifications'
 import TrackingContainer from './modules/Tracking/TrackingContainer'
 import BankOnboardingContainer from './modules/BankOnboarding/BankOnboardingContainer'
@@ -75,13 +76,14 @@ export default class Coincast extends React.Component {
             <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" />
             <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
             <Scene key="MainViewContainer" component={MainViewContainer} title="MainViewContainer" />
+            <Scene key="MainViewContainerV2" component={MainViewContainerV2} title="MainViewContainerV2" initial />
             <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
             <Scene key="Notifications" component={Notifications} title="Notifications" />
             <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" />
 
             { /* Testing */ }
             <Scene key="FirebaseBindingViewContainer" component={FirebaseBindingViewContainer} title="FirebaseBindingViewContainer" />
-            <Scene key="PredictiveSearchViewContainer" component={PredictiveSearchViewContainer} title="PredictiveSearchViewContainer" initial />
+            <Scene key="PredictiveSearchViewContainer" component={PredictiveSearchViewContainer} title="PredictiveSearchViewContainer" />
 
             { /* Individual component test views */ }
             <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />
