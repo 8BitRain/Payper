@@ -7,6 +7,9 @@ import SessionStateReducer, {RESET_STATE} from '../modules/session/SessionState'
 import CreateAccountReducer from '../modules/CreateAccount/CreateAccountState';
 import BankOnboardingReducer from '../modules/BankOnboarding/BankOnboardingState';
 import FirebaseBindingReducer from '../modules/FirebaseBinding/FirebaseBindingState';
+import LandingScreenReducer from '../modules/LandingScreen/LandingScreenState';
+//import MainReducer from '../modules/Main/MainState';
+
 
 const reducers = {
   // Authentication/login state
@@ -24,6 +27,7 @@ const reducers = {
   createAccount: CreateAccountReducer,
   bankOnboarding: BankOnboardingReducer,
   firebaseBinding: FirebaseBindingReducer,
+  landingScreen: LandingScreenReducer,
 
 };
 

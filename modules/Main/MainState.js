@@ -1,29 +1,18 @@
 // import {Map} from 'immutable';
 // import {loop, Effects} from 'redux-loop';
 //
-// // Initialize currentUser vars
-// var payment = {
-//   to: "",
-//   from: "",
-//   memo: "",
-//   frequency: "",
-//   totalCost: -1,
-//   singleCost: -1,
-//   totalPayments: -1,
-//   completedPayments: -1,
-// }
 //
 // // Initialize state
 // const initialState = Map({
-//   payment,
+//   token: ''
 // });
 //
 // // Action types
-// var SET_USER;
+// const SET_TOKEN = "SET_TOKEN";
 //
 // // Action creators
-// export function setFrom(input) {
-//   return { type: SET_FROM, input: input };
+// export function setToken(input) {
+//   return { type: SET_TOKEN, input: input };
 // };
 //
 // /**
@@ -33,12 +22,10 @@
 //   *   tree based on that action and returns full state tree.
 //   *
 // **/
-// export default function CreateAccountReducer(state = initialState, action = {}) {
+// export default function MainReducer(state = initialState, action = {}) {
 //   switch (action.type) {
-//     case SET_USER:
-//       var payment = state.get('payment');
-//       var user = action.input;
-//       var newState = state.set('user', user);
+//     case SET_TOKEN:
+//       var newState = state.set('token', action.input );
 //       return newState;
 //       break;
 //   }

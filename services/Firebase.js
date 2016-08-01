@@ -23,11 +23,24 @@ const firebaseConfig = {
   databaseURL: "https://coincast.firebaseio.com",
   storageBucket: "firebase-coincast.appspot.com"
 };
+
+
+
 firebase.initializeApp(firebaseConfig);
 
 
 // Firebase reference points
 var usernamesRef = firebase.database().ref('/usernames');
+var fireRef = firebase.database().ref();
+var activePaymentRef = fireRef.child("activePayments"); // reference of all active recurring payments
+var pendingPaymentRef = fireRef.child("pendingPayments"); //
+var payQueue = fireRef.child("paymentQueue"); // reference of payment instances
+var payFlow = fireRef.child("paymentFlow");
+var userRef = fireRef.child("users");
+var notifRef = fireRef.child('notifications');
+var facebookRef = fireRef.child('facebook');
+var contactRef = fireRef.child('contactList');
+var appFlagsRef = fireRef.child('appFlags');
 
 
 
@@ -74,6 +87,20 @@ export function getSessionToken(callback) {
 };
 
 
+/** NOTE This is probably unnesescary! Use the Firebase listeners instead!
+  *   Get a specific user's app flag
+  *   Current Flags: account_status,
+**/
+
+export function getAppFlags(user_id){
+  //Needs to pull data
+  appFlagsRef.child(user_id).once('value', function(snap){
+    var flags = snap.val();
+    return(flags);
+  });
+};
+
+
 /**
   *   Gets current user from Firebase and returns it via callback function
 **/
@@ -105,9 +132,8 @@ export function getNumNotifications(uid, callback) {
 
 // firebase.database().ref('/appFlags/' + uid).set({ val: true, hasx: false });
 /**
-  *   Create a flag
-  *
-  *   add in callback information
+  *   Create the flags necessary for a user
+  *   Current Flags: account_status,
 **/
 
 export function createAppFlags(user, account_status){

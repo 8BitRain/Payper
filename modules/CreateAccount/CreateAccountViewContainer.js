@@ -20,6 +20,12 @@ export default connect(
     phone: state.getIn(['createAccount', 'currentUser']).phone,
     currentUser: state.getIn(['createAccount', 'currentUser']),
 
+    //Token Information
+    token: state.getIn(['landingScreen', 'token']),
+
+    //Provider information
+    provider: state.getIn(['createAccount', 'provider']),
+
     // Tracks pagination
     currentPage: state.getIn(['createAccount', 'currentPage']),
 
@@ -81,6 +87,10 @@ export default connect(
       }
     },
 
+    //Update provider (How the account view container was reached)
+    dispatchSetProvider(input){
+      dispatch(dispatchFunctions.setProvider(input));
+    },
     // Updates validation booleans
     dispatchSetPasswordValidations(input) {
       dispatch(dispatchFunctions.setPasswordValidations(input));
@@ -96,6 +106,9 @@ export default connect(
     },
     dispatchSetPhoneValidations(input) {
       dispatch(dispatchFunctions.setPhoneValidations(input));
+    },
+    dispatchSetToken(input){
+      dispatch(dispatchFunctions.setToken(input));
     },
     dispatchCreateAccount(user) {
       // Create account

@@ -54,11 +54,12 @@ class ImageCarousel extends React.Component {
 class LandingScreenDisplay extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       email: "",
       password: "",
       loading: false,
+      fbPhone: false,
+      provider: "",
       doneLoading: false,
       fbAcessToken: "Test Value",
       fbUser: {}
@@ -123,52 +124,6 @@ class LandingScreenDisplay extends React.Component {
   }
 
 
-  /*
-  * Submit Facebook User information
-  */
-  submitFbUser(result){
-    var picture ='';
-    console.log(result.picture.data.is_silhouette);
-    if(result.picture.data.is_silhouette){
-      picture = '';
-    } else {
-      picture = result.picture.data.url;
-    }
-
-    var user = {
-      email: result.email,
-      first_name: result.first_name,
-      last_name: result.last_name,
-      profile_pic: picture,
-      phone: '3133133113',
-      provider: 'payper',
-      gender: result.gender,
-      friends: result.friends.data,
-      id: result.id
-    };
-    this.state.fbUser = user;
-    //Note this should send information from Client to FB
-
-    console.log("User Data " + JSON.stringify(user));
-    var url = 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/facebookCreate';
-    fetch(url, {method: "POST", body: JSON.stringify(user)})
-    .then((response) => response.json())
-    .then((responseData) => {
-      console.log(responseData);
-      //After adding information to the Server
-      //Send FB Contact information to FB
-
-      console.log(this.state.fbAcessToken);
-      this.state.fbUser = user;
-
-      //this.setState({loading: true});
-      /*Init.signInWithCredentials(this.state.fbAcessToken, function(signedIn) {
-        _this.setState({doneLoading: true});
-      });*/
-    })
-    .done();
-  }
-
 
   /*
   * Sign In With Facebook
@@ -190,7 +145,6 @@ class LandingScreenDisplay extends React.Component {
         last_name: result.last_name,
         email: result.email,
         profile_pic: picture,
-        phone: '3133133113',
         gender: result.gender,
         friends: result.friends.data,
         facebook_id: result.id,
@@ -198,23 +152,66 @@ class LandingScreenDisplay extends React.Component {
       }
     };
     const _this = this;
+    //Critical line causing loading issues.
+    _this.setState({provider: "facebook"});
     _this.setState({loading: true});
-    Init.signInWithFacebook(data, function(signedIn) {
-      _this.setState({doneLoading: true});
+    Init.signInWithFacebook(data, function(signedIn, user) {
+        console.log("LandingScreenView - UserPhone: " + user.phone);
+        console.log("TOKEN: " + user.token);
+        if(!user.phone){
+          console.log("userPhone is false");
+          _this.props.dispatchSetProvider(_this.state.provider);
+          _this.props.dispatchSetToken(user.token);
+        }
+        _this.setState({fbPhoneNumber: user.phone});
+        //_this.setState({provider: user.provider});
+        _this.setState({doneLoading: true});
     });
   }
 
 
   render() {
     if (this.state.loading) {
-      return(
-        <Loading
-          complete={this.state.doneLoading}
-          msgSuccess={"Welcome!"}
-          msgError={"Sign in failed"}
-          msgLoading={"One sec..."}
-          destination={() => Actions.MainViewContainer()} />
-      );
+      //FacebookAccount Either null or Already Created
+      if(this.state.provider == ""){
+        console.log("LandingScreen: GENERIC ROUTE")
+        return(
+          <Loading
+            complete={this.state.doneLoading}
+            msgSuccess={"Welcome!"}
+            msgError={"Sign in failed"}
+            msgLoading={"One sec..."}
+            destination={() => Actions.MainViewContainer()} />
+        );
+      }
+
+      if(this.state.provider == "facebook"){
+        console.log("LandingScreen: FACEBOOK ROUTE");
+        if(this.state.fbPhone){
+          console.log("Value of fbPhone (Existing case): " + this.state.fbPhone);
+          return(
+            <Loading
+              complete={this.state.doneLoading}
+              msgSuccess={"Welcome!"}
+              msgError={"Sign in failed"}
+              msgLoading={"One sec..."}
+              destination={() => Actions.MainViewContainer()} />
+          );
+        }
+        //Facebook Account Newly Created
+        if(!this.state.fbPhone){
+          console.log("Value of fbPhone (Non-Existing case): " + this.state.fbPhone);
+          console.log(this.props);
+          return(
+            <Loading
+              complete={this.state.doneLoading}
+              msgSuccess={"Welcome!"}
+              msgError={"Sign in failed"}
+              msgLoading={"One sec..."}
+              destination={() => Actions.CreateAccountViewContainer()} />
+          );
+        }
+      }
     } else {
       return (
         <Animated.View style={[container.main, background.main, {opacity: this.animationProps.fadeAnim}]}>
@@ -230,6 +227,7 @@ class LandingScreenDisplay extends React.Component {
           <View style={[container.third]}>
             <GenericSignIn destination={Actions.SignInViewContainer}/>
             <GenericSignUp destination={Actions.CreateAccountViewContainer}/>
+            {/*TODO Add a Login to Facebook options that covers what is going on with Facebook*/}
             <LoginButton
               readPermissions={["email","public_profile", "user_friends"]}
               onLoginFinished={
@@ -260,9 +258,11 @@ class LandingScreenDisplay extends React.Component {
 }
 
 const LandingScreenView= React.createClass({
+
   render() {
+    console.log("PROPS: " + JSON.stringify(this.props));
     return(
-      <LandingScreenDisplay  />
+      <LandingScreenDisplay  dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetToken={this.props.dispatchSetToken}/>
     );
   }
 });

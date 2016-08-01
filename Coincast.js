@@ -11,6 +11,7 @@ import * as Firebase from './services/Firebase';
 import LandingView from './components/LandingView'
 import ThankYouView from './components/ThankYouView'
 import LandingScreenView from './modules/LandingScreen/LandingScreenView'
+import LandingScreenContainer from './modules/LandingScreen/LandingScreenContainer'
 import SplashView from './modules/Splash/SplashView'
 import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer'
 import CreatePaymentViewContainer from './modules/CreatePayment/CreatePaymentViewContainer'
@@ -77,6 +78,7 @@ export default class Coincast extends React.Component {
             <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
             <Scene key="Notifications" component={Notifications} title="Notifications" />
             <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" />
+            <Scene key="LandingScreenContainer" component={LandingScreenContainer} title="LandingScreenContainer" />
 
             { /* Testing */ }
             <Scene key="FirebaseBindingViewContainer" component={FirebaseBindingViewContainer} title="FirebaseBindingViewContainer"  />

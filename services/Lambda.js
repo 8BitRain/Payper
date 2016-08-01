@@ -78,13 +78,6 @@ export function createFBUser(user, callback) {
       if (!responseData.errorMessage) {
         console.log("Create user Lambda response", responseData);
         console.log("USER ACCOUNT STATUS: " +  responseData.account_status);
-        //Note responseData can come with additional fields so has a +1 level of encapsulation
-        /* responseData.account_status can either be created or exists*/
-        console.log("User Creation Stats: " + responseData.account_status);
-        if(responseData.account_status == "exists"){
-        }
-        if(responseData.account_status == "created"){
-        }
         if (typeof callback == 'function') callback(responseData.user, responseData.account_status);
       } else {
         console.log("Error getting FBuser with token", responseData.errorMessage);
@@ -180,6 +173,28 @@ export function cancelPayment(options) {
         if (typeof callback == 'function') callback(responseData);
       } else {
         console.log("Error cancelling payment:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+/**
+  *   Update Phone Number
+**/
+export function updatePhone(data){
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneNumber", {method: "POST", body: JSON.stringify(data)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Update Phone response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
       }
     })

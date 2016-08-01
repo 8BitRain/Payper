@@ -7,11 +7,12 @@ import MainView from './MainView';
 **/
 export default connect(
   state => ({
-
+    //token: state.getIn(['main', 'token']),
   }),
   dispatch => ({
-
-
+    /*dispatchSetToken(input){
+      dispatch(dispatchFunctions.setToken(input));
+    }*/
   })
 )(MainView);
 /* END Connect function for MainView.js */

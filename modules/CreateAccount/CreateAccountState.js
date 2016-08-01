@@ -42,6 +42,8 @@ var currentUser = {
 const initialState = Map({
   currentUser,
   currentPage: 0,
+  provider: '',
+  token: '',
   passwordValidations,
   emailValidations,
   firstNameValidations,
@@ -56,15 +58,21 @@ const SET_PAGE = 'SET_PAGE',
       SET_FIRST_NAME_VALIDATIONS = 'SET_FIRST_NAME_VALIDATIONS',
       SET_LAST_NAME_VALIDATIONS = 'SET_LAST_NAME_VALIDATIONS',
       SET_PHONE_VALIDATIONS = 'SET_PHONE_VALIDATIONS',
+      SET_PROVIDER = 'SET_PROVIDER',
       SET_EMAIL = 'SET_EMAIL',
       SET_PASSWORD = 'SET_PASSWORD',
       SET_FIRST_NAME = 'SET_FIRST_NAME',
       SET_LAST_NAME = 'SET_LAST_NAME',
+      SET_TOKEN = 'SET_TOKEN',
       SET_PHONE = 'SET_PHONE';
 
 // Action creators
 export function setPage(index) {
   return { type: SET_PAGE, index: index };
+};
+
+export function setToken(index) {
+  return { type: SET_TOKEN, index: index };
 };
 
 export function setEmailValidations(input) {
@@ -85,6 +93,10 @@ export function setLastNameValidations(input) {
 
 export function setPhoneValidations(input) {
   return { type: SET_PHONE_VALIDATIONS, input: input };
+};
+
+export function setProvider(input) {
+  return { type: SET_PROVIDER, input: input };
 };
 
 export function setEmail(input) {
@@ -138,6 +150,14 @@ export default function CreateAccountReducer(state = initialState, action = {}) 
       break;
     case SET_PHONE_VALIDATIONS:
       var newState = state.set('phoneValidations', action.input);
+      return newState;
+      break;
+    case SET_PROVIDER:
+      var newState = state.set('provider', action.input);
+      return newState;
+      break;
+    case SET_TOKEN:
+      var newState = state.set('token', action.input);
       return newState;
       break;
     case SET_EMAIL:

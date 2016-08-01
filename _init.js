@@ -49,7 +49,7 @@ function initializeAppState(user) {
   // Log user's payment flow to AsyncStorage
   Firebase.getPaymentFlow(user, (flow) => {
     Async.set('payment_flow', JSON.stringify(flow), () => {
-      Actions.MainViewContainer();
+      //Actions.MainViewContainer();
     });
   });
 };
@@ -59,7 +59,7 @@ function initializeAppState(user) {
   *   Sign in with session token. Upon success, initialize app
 **/
 export function signInWithToken(callback) {
-  try {
+  /*try {
     Async.get('session_token', (val) => {
       if (val) {
         Lambda.getUserWithToken(val, (user) => {
@@ -76,7 +76,9 @@ export function signInWithToken(callback) {
     });
   } catch (err) {
     console.log(err);
-  }
+  }*/
+  //Commented to make debugging easier
+  Actions.LandingScreenContainer();
 };
 
 
@@ -119,13 +121,15 @@ export function signInWithFacebook(data, callback) {
         + "\n" + token);
         data.user.token = token;
         Lambda.createFBUser(data.user, (user, account_status) => {
-          if (user) {
+          if (user && account_status) {
             console.log("USER: " + JSON.stringify(user));
             console.log("USER ACCOUNT STATUS: " + JSON.stringify(account_status));
             //Create Flags for the new user
             Firebase.createAppFlags(user, account_status);
+            //Note send the account_status back in initializeAppState or callback.
+            //Possibe refactor, send a JSON object back that contains user and status info.
             initializeAppState(user);
-            callback(true);
+            callback(true, user);
 
           }
           else {
@@ -186,6 +190,18 @@ export function createPayment(data, callback) {
     callback(res);
   });
 };
+
+/**
+  * Update phone number
+**/
+export function updatePhone(data, callback){
+  console.log(data);
+  Lambda.updatePhone(data, (res) => {
+    callback(res);
+  });
+};
+
+
 
 
 /**
