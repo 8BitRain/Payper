@@ -71,7 +71,7 @@ class Summary extends React.Component {
          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.password}</Text>
          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.firstName}</Text>
          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.lastName}</Text>
-         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.phoneNumber}</Text>
+         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.phone}</Text>
        </View>
 
        { /* Arrow nav buttons */ }
