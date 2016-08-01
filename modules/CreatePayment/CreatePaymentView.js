@@ -125,7 +125,6 @@ class CreatePaymentView extends React.Component {
     var currUser = this.state.currentUser;
     // console.log("current user", currUser);
     // console.log("other user", this.state.user);
-
     if (flow == 'in') {
       console.log("TOKEN:", this.state.sessionToken);
       Init.createPayment({

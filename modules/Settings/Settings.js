@@ -73,6 +73,7 @@ class Settings extends React.Component {
 
 
   render() {
+    console.log("Number of unseen notifications:", this.props.numUnseenNotifications);
     return (
       <View style={{flex: 1, backgroundColor: colors.darkGrey}}>
 
@@ -84,7 +85,7 @@ class Settings extends React.Component {
           style={{borderBottomWidth: 1, borderBottomColor: colors.icyBlue}}>
 
           <View style={{height: 70, marginTop: 30, paddingBottom: 12.5, paddingLeft: 20, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: colors.icyBlue}}>
-            { Partials.getUserPic(this.state.user.profile_pic, this.state.user.full_name) }
+            { Partials.getUserPic(this.state.user.profile_pic, this.state.user.first_name + " " + this.state.user.last_name) }
 
             <View style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
               <Text style={[styles.rowTitle, {fontSize: 18, paddingLeft: 0}]}>{ this.state.user.full_name }</Text>

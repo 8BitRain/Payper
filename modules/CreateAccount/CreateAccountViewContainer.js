@@ -12,6 +12,7 @@ var Mixpanel = require('react-native-mixpanel');
 **/
 export default connect(
   state => ({
+
     // Account setup variables
     firstName: state.getIn(['createAccount', 'currentUser']).firstName,
     lastName: state.getIn(['createAccount', 'currentUser']).lastName,
@@ -28,17 +29,14 @@ export default connect(
     passwordValidations: state.getIn(['createAccount', 'passwordValidations']),
     firstNameValidations: state.getIn(['createAccount', 'firstNameValidations']),
     lastNameValidations: state.getIn(['createAccount', 'lastNameValidations']),
-    phoneNumberValidations: state.getIn(['createAccount', 'phoneNumberValidations'])
+    phoneNumberValidations: state.getIn(['createAccount', 'phoneNumberValidations']),
+
   }),
   dispatch => ({
     // Handles pagination
     dispatchSetPage(index, direction, validations, input) {
       if (direction == "forward") {
         var currentPage = index - 1;
-        // console.log("input: " + input);
-        // console.log("index: " + index);
-        // console.log("direction: " + direction);
-        // console.log("validations: " + JSON.stringify(validations));
         if (validations.valid) {
           switch (currentPage) {
             // Email
@@ -63,20 +61,14 @@ export default connect(
               break;
           }
           dispatch(dispatchFunctions.setPage(index));
-        } else{
-
-            console.log("hit");
-            if(validations.valid==false){
-              for (var temp in validations) {
-            if(!validations[temp]&&temp!='valid'){
-            Mixpanel.track(temp);
-            }
-
+        } else {
+          if (validations.valid==false) {
+            for (var temp in validations) {
+              if (!validations[temp]&&temp!='valid') Mixpanel.track(temp);
             }
           }
         }
-
-      }else {
+      } else {
         dispatch(dispatchFunctions.setPage(index));
       }
     },
@@ -100,7 +92,7 @@ export default connect(
     dispatchCreateAccount(user) {
       // Create account
       Init.createUser(user);
-    }
+    },
   })
 )(CreateAccountView);
 /* END Connect function for CreateAccountView.js */

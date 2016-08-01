@@ -144,6 +144,14 @@ export function formatTimestamp(ts) {
 
 
 /**
+  *   Format phone number
+**/
+export function formatPhoneNumber(num) {
+  return num.replace(/\D/g,'');
+};
+
+
+/**
   *   String checker:
   *     Empty:
   *     💣 string is not null

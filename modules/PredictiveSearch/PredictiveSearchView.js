@@ -107,14 +107,7 @@ class PredictiveSearchView extends React.Component {
     *   Start listening to Firebase
   **/
   componentDidMount() {
-    Async.get('user', (user) => {
-      user = JSON.parse(user);
-
-      // Store user in local states
-      this.setState({user: user});
-      var uid = user.uid;
-      this.props.listen(['TestContacts/' + /* uid */ "FmXlDusbVKQTuqnAG22KX7yZKWL2"]);
-    });
+    this.props.listen(['TestContacts/FmXlDusbVKQTuqnAG22KX7yZKWL2']);
   }
 
 
@@ -177,6 +170,8 @@ class PredictiveSearchView extends React.Component {
   _getConfirmation() {
     return(
       <View style={styles.confirmationWrap}>
+
+        { /* Profile picture or initials */ }
         <UserPic
           pic={this.props.selectedContact.profile_pic}
           name={this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name}
@@ -207,7 +202,19 @@ class PredictiveSearchView extends React.Component {
         { /* Arrow nav */ }
         <ArrowNav
           arrowNavProps={{right: true}}
-          callbackRight={() => console.log("Clicked next")}
+          callbackRight={() => {
+            this.props.invite({
+              amount: 10,
+              purpose: "Test payment invite",
+              invitee: "Test Johnson",
+              payments: 12,
+              type: "payment",
+              phoneNumber: this.props.selectedContact.phone,
+              token: this.props.currentUser.token,
+            }, (success) => {
+              console.log("Payment invite was successful: " + success);
+            });
+          }}
           />
 
       </View>

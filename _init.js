@@ -138,7 +138,7 @@ export function signInWithFacebook(data, callback) {
 /**
   *   1) Create Firebase user
   *   2) Get a token for the user and attach it to the user's object
-  * 2.5) Set initial flags for user 
+  *   2.5) Set initial flags for user
   *   3) POST user's object to Lambda endpoint
   *   4) Initialize the app
 **/

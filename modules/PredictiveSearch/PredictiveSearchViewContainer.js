@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 // Helper functions
 import * as Firebase from '../../services/Firebase';
+import * as Lambda from '../../services/Lambda';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
 
 // Dispatch functions
@@ -21,6 +22,9 @@ function mapStateToProps(state) {
     filteredContacts: state.getIn(['predictiveSearch', 'filteredContacts']),
     selectedContact: state.getIn(['predictiveSearch', 'selectedContact']),
     empty: state.getIn(['predictiveSearch', 'empty']),
+
+    // main
+    currentUser: state.getIn(['main', 'currentUser']),
 
   }
 }
@@ -56,6 +60,22 @@ function mapDispatchToProps(dispatch) {
         if (typeof callback == 'function') callback();
         else console.log("Callback is not a function.");
       });
+    },
+
+    invite: (options, callback) => {
+
+      options.phoneNumber = StringMaster5000.formatPhoneNumber(options.phoneNumber);
+
+      // Lambda.inviteDirect(options, (success) => {
+      //   if (typeof callback == 'function') callback();
+      //   else console.log("Callback is not a function.");
+      // });
+
+      Lambda.inviteViaPayment(options, (success) => {
+        if (typeof callback == 'function') callback();
+        else console.log("Callback is not a function.");
+      });
+
     },
   }
 }

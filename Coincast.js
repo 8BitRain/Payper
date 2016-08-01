@@ -16,7 +16,6 @@ import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountVie
 import CreatePaymentViewContainer from './modules/CreatePayment/CreatePaymentViewContainer'
 import SignInViewContainer from './modules/SignIn/SignInViewContainer'
 import MainViewContainer from './modules/Main/MainViewContainer'
-import MainViewContainerV2 from './modules/Main/MainViewContainerV2'
 import Notifications from './modules/Notifications/Notifications'
 import TrackingContainer from './modules/Tracking/TrackingContainer'
 import BankOnboardingContainer from './modules/BankOnboarding/BankOnboardingContainer'
@@ -69,14 +68,13 @@ export default class Coincast extends React.Component {
             <Scene key="landingView" component={LandingView} title="LandingView" />
 
             { /* Main app flow */ }
-            <Scene key="SplashView" component={SplashView} title="SplashView" />
+            <Scene key="SplashView" component={SplashView} title="SplashView" initial />
             <Scene key="landingView" component={LandingView} title="LandingView" />
             <Scene key="ThankYouView" component={ThankYouView} title="ThankYouView"/>
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" />
             <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
             <Scene key="MainViewContainer" component={MainViewContainer} title="MainViewContainer" />
-            <Scene key="MainViewContainerV2" component={MainViewContainerV2} title="MainViewContainerV2" initial />
             <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
             <Scene key="Notifications" component={Notifications} title="Notifications" />
             <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" />

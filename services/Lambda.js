@@ -223,11 +223,6 @@ export function seeNotification(options) {
   *   Alert caller of success
 **/
 export function inviteDirect(options) {
-
-  // Testing
-  console.log("Session token:", options.token);
-  console.log("Phone number:", options.phoneNumber);
-
   try {
     fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
@@ -251,13 +246,7 @@ export function inviteDirect(options) {
   *   Given payment info, session_token, and phone number, create payment and
   *   invite other party to join the app.
 **/
-export function inviteViaPyment(options) {
-
-  // Testing
-  console.log("Payment info:", JSON.stringify(options.payment));
-  console.log("Session token:", options.token);
-  console.log("Phone number:", options.phoneNumber);
-
+export function inviteViaPayment(options) {
   try {
     fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())

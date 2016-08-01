@@ -28,6 +28,7 @@ const reducers = {
   firebaseBinding: FirebaseBindingReducer,
   predictiveSearch: PredictiveSearchReducer,
   main: MainReducer,
+  payments: PaymentsReducer,
 
 };
 

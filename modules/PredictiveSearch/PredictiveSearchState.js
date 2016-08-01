@@ -17,7 +17,7 @@ const initialState = Map({
     last_name: "",
     profile_pic: "",
     type: "",
-  }
+  },
 });
 
 // Action types

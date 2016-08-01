@@ -23,7 +23,7 @@
 - [X] CreatePaymentView.js predictive search: limit predictions to 4
 - [X] CreatePaymentView.js predictive search: don't show signed in user in predictions
 - [ ] Pass numNotifications to menu in sidebar and render preview indicator next to notifications lightbulb
-- [ ] Apply fade animation to inner content during animation project, not entire view
+- [ ] Apply fade animation to inner content during create account onboarding, not entire view
 - [ ] App-wide padding (look into pixel density for screen size detection)
 - [ ] Redesign footer (action button for new payment)
 - [ ] Fix loading for IAV
@@ -40,7 +40,7 @@
 - [X] "Runtime is not ready for debugging" randomly appears.  **This went away when I downgraded from Node 6.2.0 to 5.5.0**
 - [ ] "Severe Error, duplicates recorded in Firebase, with no auth information. To reproduce
       delete an id but not a users and Facebook id, or switch this around until you can get duplicate users through Facebook sign in or regular user sign in." https://github.com/facebook/react-native/issues/6682
-- [ ] User filter regex does treats an exact match as a non-match ( StringMaster5000.filterContacts() )
+- [ ] User filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
 
 ## **Installation**
 ```

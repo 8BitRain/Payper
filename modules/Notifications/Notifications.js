@@ -1,17 +1,14 @@
 // Dependencies
 import React from 'react';
-import {View, Text, ListView, RecyclerViewBackedScrollView, RefreshControl} from 'react-native';
+import  {View, Text, ListView, RecyclerViewBackedScrollView } from 'react-native';
 
 // Helper functions
-import * as Firebase from "../../services/Firebase";
 import * as Lambda from "../../services/Lambda";
-import * as Async from "../../helpers/Async";
 
 // Custom stylesheets
 import colors from "../../styles/colors";
 
 // Partial components
-import Header from '../../components/Header/Header.js';
 import Notification from '../../components/Notification/Notification.js';
 
 class Notifications extends React.Component {
@@ -24,34 +21,29 @@ class Notifications extends React.Component {
       user: {},
       empty: true,
       dataSource: ds.cloneWithRows([]),
-
-      // Props to be passed to the Header
-      headerProps: {
-        types: {
-          "paymentIcons": false,
-          "circleIcons": false,
-          "settingsIcon": true,
-          "closeIcon": false,
-          "flowTabs": true,
-        },
-        index: null,
-        numCircles: null,
-      },
-    }
+    };
   }
 
 
-  /**
-    *   Add new notification rows
-  **/
-  _genRows(snapshot, callback) {
-    if (snapshot) this.setState({empty: false});
-    var notifications = [];
+  componentDidMount() {
+    this._genRows();
+    console.log("Notification array from main state:\n\n", this.props.notifications);
+  }
 
-    // Attach timestamp to notification object, append it to notifications array
-    for (var timestamp in snapshot) {
-      snapshot[timestamp].ts = timestamp;
-      notifications.push(snapshot[timestamp]);
+
+  // Generate rows for the list view
+  _genRows() {
+    var notifications = this.props.notifications;
+
+    // Check for empty state
+    if (notifications.length == 0) {
+      this.setState({empty: true});
+      return;
+    }
+
+    // Attach timestamp to notification object
+    for (var ts in notifications) {
+      notifications[ts].ts = ts;
     }
 
     // Sort notifications by timestamp
@@ -60,15 +52,11 @@ class Notifications extends React.Component {
     });
 
     // Set state, triggering re-rerender of list
-    this.setState({dataSource: this.state.dataSource.cloneWithRows(notifications)}, () => {
-      callback();
-    });
+    this.setState({dataSource: this.state.dataSource.cloneWithRows(notifications)});
   }
 
 
-  /**
-    *   Return a list of ready to render rows
-  **/
+  //  Return a list of ready to render rows
   _renderRow(n) {
     return(
       <Notification notification={n} />
@@ -76,33 +64,11 @@ class Notifications extends React.Component {
   }
 
 
-  /**
-    *   TODO:
-    *   Implement actual refresh events here
-  **/
-  _onRefresh() {
-    this.setState({refreshing: true});
-    setTimeout(() => {
-      this.setState({refreshing: false});
-    }, 750);
-  }
-
-
-  /**
-    *   Returns a ready-to-render notification ListView
-  **/
+  // Returns a ready-to-render notification ListView
   _getNotificationList() {
     return(
       <View style={{flex: 0.9, paddingTop: 0, backgroundColor: colors.white}}>
         <ListView
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this._onRefresh.bind(this)}
-              colors={[colors.darkGrey]}
-              tintColor={colors.darkGrey}
-            />
-          }
           dataSource={this.state.dataSource}
           renderRow={this._renderRow.bind(this)}
           renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
@@ -127,30 +93,16 @@ class Notifications extends React.Component {
   /**
     *   Mark unseen notifications as seen
   **/
-  _seeNotifications(user) {
+  _seeNotifications() {
     for (var i = 0; i < this.state.dataSource.getRowCount(); i++) {
       var row = this.state.dataSource.getRowData(0, i)
       if (!row.seen) {
         row.seen = true;
-        Lambda.seeNotification({timestamp: row.ts, token: this.state.user.token}, (response) => {
+        Lambda.seeNotification({timestamp: row.ts, token: this.props.currentUser.uid}, (response) => {
           console.log("Lambda.seeNotification() response:", response);
         });
       }
     }
-  }
-
-
-  componentWillMount() {
-    // Initialize Firebase listeners on this user's notifications
-    Async.get('user', (user) => {
-      user = JSON.parse(user);
-      this.setState({user: user});
-      Firebase.listenToNotifications(user.uid, (snapshot) => {
-        this._genRows(snapshot, () => {
-          this._seeNotifications(user);
-        });
-      });
-    });
   }
 
 
