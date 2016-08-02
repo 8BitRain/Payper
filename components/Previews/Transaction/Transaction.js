@@ -113,7 +113,7 @@ function getPendingAlert() {
 /**
   *   Returns a user preview for each the user specified in 'user' prop
 **/
-class TransactionPreview extends React.Component {
+class PaymentPreview extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -232,4 +232,4 @@ class TransactionPreview extends React.Component {
   }
 };
 
-export default TransactionPreview;
+export default PaymentPreview;

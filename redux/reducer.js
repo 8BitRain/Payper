@@ -9,6 +9,7 @@ import BankOnboardingReducer from '../modules/BankOnboarding/BankOnboardingState
 import FirebaseBindingReducer from '../modules/FirebaseBinding/FirebaseBindingState';
 import PredictiveSearchReducer from '../modules/PredictiveSearch/PredictiveSearchState';
 import MainReducer from '../modules/Main/MainState';
+import PaymentsReducer from '../modules/Payments/PaymentsState';
 
 const reducers = {
   // Authentication/login state

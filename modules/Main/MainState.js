@@ -24,16 +24,18 @@ const initialState = Map({
     types: {
       "paymentIcons": false,
       "circleIcons": false,
-      "settingsIcon": true,
+      "settingsIcon": false,
       "closeIcon": false,
       "flowTabs": false,
     },
     index: null,
     numCircles: null,
-    title: "Notifications",
+    title: null,
+    callbackIn: null,
+    callbackOut: null,
   },
   sideMenuIsOpen: false,
-  currentPage: "notifications",
+  currentPage: "payments",
 });
 
 // Action types

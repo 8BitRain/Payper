@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import * as Firebase from '../../services/Firebase';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
 import * as Async from '../../helpers/Async';
+import * as Headers from '../../helpers/Headers';
 
 // Dispatch functions
 import * as set from './MainState';
@@ -62,12 +63,9 @@ function mapDispatchToProps(dispatch) {
 
     listen: (endpoints) => {
       Firebase.listenTo(endpoints, (response) => {
-        console.log("Firebase response key:", response.key);
         switch (response.endpoint.split("/")[0]) {
 
-          // Set number of unseen notifications and notificationList
           case "notifications":
-            console.log("Got notifications:", response.value);
             var notifications = response.value,
                 numUnseen = 0;
             // Count number of unseen notifications
@@ -78,9 +76,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(set.notifications(notifications));
           break;
 
-          // Set user's app flags
           case "appFlags":
-            console.log("Got appFlags:", response.value);
             dispatch(set.flags(response.value));
           break;
 
@@ -89,12 +85,10 @@ function mapDispatchToProps(dispatch) {
       dispatch(set.activeFirebaseListeners(endpoints));
     },
 
-
     stopListening: (endpoints) => {
       Firebase.stopListeningTo(endpoints);
       dispatch(set.activeFirebaseListeners([]));
     },
-
 
     inviteDirect: (options, callback) => {
       Lambda.inviteDirect(options, (success) => {
@@ -111,6 +105,9 @@ function mapDispatchToProps(dispatch) {
     },
 
     setCurrentPage: (page) => {
+      if (page == "notifications") {
+        dispatch(set.header(Headers.notificationsHeader()));
+      }
       dispatch(set.currentPage(page));
     },
   }

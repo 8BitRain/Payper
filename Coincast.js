@@ -16,7 +16,6 @@ import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountVie
 import CreatePaymentViewContainer from './modules/CreatePayment/CreatePaymentViewContainer'
 import SignInViewContainer from './modules/SignIn/SignInViewContainer'
 import MainViewContainer from './modules/Main/MainViewContainer'
-import Notifications from './modules/Notifications/Notifications'
 import TrackingContainer from './modules/Tracking/TrackingContainer'
 import BankOnboardingContainer from './modules/BankOnboarding/BankOnboardingContainer'
 import Header from './components/Header/Header'
@@ -76,7 +75,6 @@ export default class Coincast extends React.Component {
             <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
             <Scene key="MainViewContainer" component={MainViewContainer} title="MainViewContainer" />
             <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
-            <Scene key="Notifications" component={Notifications} title="Notifications" />
             <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" />
 
             { /* Testing */ }
