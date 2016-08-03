@@ -22,40 +22,6 @@ import { Actions } from 'react-native-router-flux';
 
 
 /**
-  *   Log user's object, session_token, payment_flow, and a global user list
-  *   to AsyncStorage.
-**/
-function initializeAppState(user) {
-  user.full_name = user.first_name + " " + user.last_name;
-
-  // Log user object and session token to AsyncStorage
-  Async.set('user', JSON.stringify(user));
-  Async.set('session_token', user.token);
-
-  // Log global user list to AsyncStorage
-  Firebase.getUsers((users) => {
-    Async.set('users', JSON.stringify(users));
-  });
-
-  initializeUsers(user.uid, () => {
-    console.log("initializeUsers() callback reached");
-  });
-
-  // Log number of unseen notifications to AsyncStorage
-  Firebase.getNumNotifications(user.uid, (num) => {
-    Async.set('num_notifications', num.toString());
-  });
-
-  // Log user's payment flow to AsyncStorage
-  Firebase.getPaymentFlow(user, (flow) => {
-    Async.set('payment_flow', JSON.stringify(flow), () => {
-      Actions.MainViewContainer();
-    });
-  });
-};
-
-
-/**
   *   Sign in with session token. Upon success, initialize app
 **/
 export function signInWithToken(callback) {
@@ -171,7 +137,18 @@ export function createUser(input) {
       Firebase.getSessionToken((token) => {
         input.token = token;
         Lambda.createUser(input, (user) => {
-          if (user) initializeAppState(user);
+          if (user) {
+            // Creation succeeded. Log the user to Async storage and take them
+            // to the app.
+            Async.set('user', JSON.stringify(user), () => {
+              if (typeof callback == 'function') callback(true);
+              else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+            });
+          } else {
+            console.log("%cReceived null user.", "color:blue;font-weight:900;");
+            if (typeof callback == 'function') callback(false);
+            else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+          }
         });
       });
     }
@@ -185,11 +162,9 @@ export function createUser(input) {
 **/
 export function signOut() {
   Firebase.signOut(() => {
-    Async.set('user', '');
-    Async.set('payment_flow', '');
-    Async.set('session_token', '');
-    Async.set('users', '');
-    Actions.LandingScreenView();
+    Async.set('user', '', () => {
+      Actions.LandingScreenView();
+    });
   });
 };
 

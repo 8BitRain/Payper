@@ -9,12 +9,14 @@
 - [ ] Push notifications
 - [ ] Edit profile panel (Eric)
 - [x] Facebook auth
-- [ ] Facebook friend synchronization
-- [ ] Contact synchronization
-- [ ] Invites
+- [x] Facebook friend synchronization
+- [x] Contact synchronization
+- [ ] Invites (direct)
+- [x] Invites (via payment)
 - [ ] App-wide validations (Bank Onboarding, Payper Account Creation, Pay & Request)
 - [ ] App-wide empty states (Tracking Page, Notifications, Payment History)
-- [ ] Revamp loading screen component
+- [x] Revamp loading screen component
+- [ ] Bind Facebook sign out to our custom sign out button in the side menu
 
 ### Polish
 - [X] CreatePaymentView.js predictive search: limit predictions to 4
@@ -29,9 +31,9 @@
 
 ### Architecture
 **Refactor the following to fit new Firebase/Redux model:**
-- [ ] Main
+- [x] Main
 - [ ] Payment creation
-- [ ] Splash page
+- [x] Splash page
 
 ### Bugs
 - [X] Header only displays notifications on Notifications page (probably an
