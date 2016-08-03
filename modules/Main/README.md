@@ -22,8 +22,7 @@ dispatch functions include initialize(), startListening(), and stopListening().
 
 1. Gets the current user from AsyncStorage and stores it in the 'main' section of
 the Redux global state
-
-* `state.getIn(['main', 'user'])`
+  * `state.getIn(['main', 'user'])`
 
 2. Stores the 'signedIn' boolean in the 'main' section of the Redux global state
 
