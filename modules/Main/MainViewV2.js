@@ -17,6 +17,9 @@ class InnerContent extends React.Component {
 
   render() {
 
+    console.log("%cGot props:", "color:pink;font-weight:900;");
+    console.log(this.props)
+
     // Show sign in screen if user is not signed in
     if (!this.props.signedIn) {
       return <SignIn />;
