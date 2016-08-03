@@ -52,8 +52,8 @@ const getSceneStyle = function (props, computedProps) {
 
 
 // TODO
-Async.set('session_token', "");
-require('firebase').auth().signOut();
+// Async.set('session_token', "");
+// require('firebase').auth().signOut();
 
 
 console.log('test');

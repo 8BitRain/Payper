@@ -1,13 +1,3 @@
-/**
-  *   Where'd you leave off?
-  *
-  *   State has been set up
-  *   View container has been set up
-  *   You just created the "PaymentFLow" module and were about to start refactoring
-  *     MainView.js to be more modularized and to utilize new Firebase=>Redux linking
-**/
-
-
 // Dependencies
 import { Map } from 'immutable';
 import { loop, Effects } from 'redux-loop';

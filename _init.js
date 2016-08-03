@@ -30,6 +30,8 @@ export function signInWithToken(callback) {
       if (val) {
         Lambda.getUserWithToken(val, (user) => {
           if (user) {
+            console.log("%cSuccessfully retrieved user object:", "color:green;font-weight:900;");
+            console.log(user);
             // Sign in succeeded. Log the user to Async storage and take them
             // to the app.
             Async.set('user', JSON.stringify(user), () => {
@@ -62,8 +64,10 @@ export function signInWithEmail(data, callback) {
       if (success) {
         Firebase.getSessionToken((token) => {
           if (token) {
-            Lambda.getUserWithToken(token, (userData) => {
-              if (userData) {
+            Lambda.getUserWithToken(token, (user) => {
+              if (user) {
+                console.log("%cSuccessfully retrieved user object:", "color:green;font-weight:900;");
+                console.log(user);
                 // Sign in succeeded. Log the user to Async storage and take them
                 // to the app.
                 Async.set('user', JSON.stringify(user), () => {
@@ -103,9 +107,21 @@ export function signInWithFacebook(data, callback) {
 
         Lambda.createFBUser(data.user, (user) => {
           if (user) {
-            // Sign in succeeded. Log the user to Async storage and take them
-            // to the app.
+            console.log("%cSuccessfully retrieved user object:", "color:green;font-weight:900;");
+            console.log(user);
+
+            // Sign in succeeded. Log the user to AsyncStorage
             Async.set('user', JSON.stringify(user), () => {
+
+              // Log session_token to Async storage for next sign in
+              Async.set('session_token', user.token, () => {
+                console.log("%cSuccessfully logged session_token to AsyncStorage", "color:green;font-weight:900;");
+                Async.get('session_token', (token) => {
+                  console.log("TOKEN:", token);
+                });
+              });
+
+              // Alert caller of success
               if (typeof callback == 'function') callback(true);
               else console.log("%cCallback is not a function", "color:red;font-weight:900;");
             });
