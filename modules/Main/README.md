@@ -52,7 +52,8 @@ Those components include:
 * Banks & Cards
 * Payment History
 
-The view contains two components:
+##### The view contains two components:
+
 1. Main
   * Houses code for the SideMenu
   * Connects to MainStateViewContainer's connect() function
