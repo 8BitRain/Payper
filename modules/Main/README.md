@@ -3,6 +3,7 @@
 
 ## Overview
 The Main module has three parts:
+
 1. MainState.js
 2. MainViewContainer.js
 3. MainView.js
@@ -18,19 +19,26 @@ MainStateViewContainer.js contains the connect function for MainView.js. Atypica
 dispatch functions include initialize(), startListening(), and stopListening().
 
 #### initialize()
+
 1. Gets the current user from AsyncStorage and stores it in the 'main' section of
 the Redux global state
+
 * `state.getIn(['main', 'user'])`
+
 2. Stores the 'signedIn' boolean in the 'main' section of the Redux global state
+
 * `state.getIn(['main', 'signedIn'])`
+
 
 #### startListening()
 1. Activates Firebase listeners on the signed in user's notification list and app flags
 and updates the following variables in the 'main' section of the global Redux state
 whenver these Firebase trees change:
+
 * `state.getIn(['main', 'notifications'])`
 * `state.getIn(['main', 'numNotifications'])`
 * `state.getIn(['main', 'flags'])`
+
 2. Is called on MainView mount
 
 #### stopListening()
