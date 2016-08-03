@@ -53,12 +53,12 @@ Those components include:
 * Payment History
 
 The view contains two components:
-1. <Main />
+1. Main
   * Houses code for the SideMenu
   * Connects to MainStateViewContainer's connect() function
-  * Passes global redux state down to <InnerContent />
+  * Passes global redux state down to InnerContent
 
-2. <InnerContent />
+2. InnerContent
   * Houses all page-specific content (all code except SideMenu and Header)
   * Determines which page to render based on switch statement which switches on
   state.getIn(['main', 'currentPage'])
