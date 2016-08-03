@@ -45,7 +45,7 @@ whenver these Firebase trees change:
 
 ## MainStateView.js
 The MainStateView wraps all pages of the app that need access to the SideMenu.
-Those components include:
+These components include:
 * Payments
 * Notifications
 * Edit Profile
@@ -56,6 +56,7 @@ Those components include:
 
 1. Main
   * Houses code for the SideMenu
+  * Houses code for the Header
   * Connects to MainStateViewContainer's connect() function
   * Passes global redux state down to InnerContent
 
