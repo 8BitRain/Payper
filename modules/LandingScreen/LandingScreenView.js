@@ -60,6 +60,7 @@ class LandingScreenDisplay extends React.Component {
       password: "",
       loading: false,
       doneLoading: false,
+      signInSuccess: false,
       fbAcessToken: "Test Value",
       fbUser: {}
     }
@@ -206,8 +207,8 @@ class LandingScreenDisplay extends React.Component {
 
     // Push user object to Lambda function
     Init.signInWithFacebook(data, function(signedIn) {
-      // Stop loading
-      _this.setState({doneLoading: true});
+      // Stop loading, update state with success
+      _this.setState({doneLoading: true, signInSuccess: signedIn});
     });
 
   }
@@ -218,10 +219,12 @@ class LandingScreenDisplay extends React.Component {
       return(
         <Loading
           complete={this.state.doneLoading}
+          success={this.state.signInSuccess}
           msgSuccess={"Welcome!"}
           msgError={"Sign in failed"}
-          msgLoading={"One sec..."}
-          destination={() => Actions.MainViewContainer()} />
+          msgLoading={"Signing in"}
+          successDestination={() => Actions.MainViewContainer()}
+          errorDestination={() => Actions.LandingScreenView()} />
       );
     } else {
       return (

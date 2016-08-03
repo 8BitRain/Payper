@@ -64,14 +64,21 @@ export function signInWithToken(callback) {
       if (val) {
         Lambda.getUserWithToken(val, (user) => {
           if (user) {
-            initializeAppState(user);
-            if (typeof callback == 'function') callback(true);
+            // Sign in succeeded. Log the user to Async storage and take them
+            // to the app.
+            Async.set('user', JSON.stringify(user), () => {
+              if (typeof callback == 'function') callback(true);
+              else console.log("Callback is not a function.");
+            });
+
           } else {
-            Actions.LandingScreenView();
+            if (typeof callback == 'function') callback(false);
+            else console.log("Callback is not a function.");
           }
         });
       } else {
-        Actions.LandingScreenView();
+        if (typeof callback == 'function') callback(false);
+        else console.log("Callback is not a function.");
       }
     });
   } catch (err) {
@@ -86,23 +93,34 @@ export function signInWithToken(callback) {
 export function signInWithEmail(data, callback) {
   if (data.email && data.password) {
     Firebase.authWithEmail(data, (success) => {
-      if (!success) {
-        callback(false);
-      } else {
+      if (success) {
         Firebase.getSessionToken((token) => {
           if (token) {
             Lambda.getUserWithToken(token, (userData) => {
               if (userData) {
-                initializeAppState(userData);
-                if (typeof callback == 'function') callback(true);
+                // Sign in succeeded. Log the user to Async storage and take them
+                // to the app.
+                Async.set('user', JSON.stringify(user), () => {
+                  if (typeof callback == 'function') callback(true);
+                  else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+                });
               }
             });
+          } else {
+            console.log("%cFailed to get session token from Firebase", "color:orange;font-weight:900;");
+            if (typeof callback == 'function') callback(false);
+            else console.log("%cCallback is not a function", "color:red;font-weight:900;");
           }
         });
+      } else {
+        if (typeof callback == 'function') callback(false);
+        else console.log("%cCallback is not a function", "color:red;font-weight:900;");
       }
     });
   } else {
-    console.log("Invalid email and password input (both must be strings)");
+    console.log("%cInvalid email and password input (both must be strings)", "color:red;font-weight:900;");
+    if (typeof callback == 'function') callback(false);
+    else console.log("%cCallback is not a function", "color:red;font-weight:900;");
   }
 };
 
@@ -114,24 +132,27 @@ export function signInWithFacebook(data, callback) {
   if (data.FBToken) Firebase.authWithFacebook(data.FBToken, (success) => {
     if (success) {
       Firebase.getSessionToken((token) => {
-        console.log("Token Retrieved from Firebase.getSessionToken"
-        + "\n" + "====================================="
-        + "\n" + token);
+
         data.user.token = token;
+
         Lambda.createFBUser(data.user, (user) => {
           if (user) {
-            initializeAppState(user);
-            callback(true);
-          }
-          else {
-            console.log("Received null user");
-            callback(false);
+            // Sign in succeeded. Log the user to Async storage and take them
+            // to the app.
+            Async.set('user', JSON.stringify(user), () => {
+              if (typeof callback == 'function') callback(true);
+              else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+            });
+          } else {
+            console.log("%cReceived null user.", "color:blue;font-weight:900;");
+            if (typeof callback == 'function') callback(false);
+            else console.log("%cCallback is not a function", "color:red;font-weight:900;");
           }
         });
       });
     }
   });
-  else console.log("Access Token cannot be null");
+  else console.log("%cAccess Token cannot be null", "color:red;font-weight:900;");
 };
 
 

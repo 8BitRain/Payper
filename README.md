@@ -16,9 +16,6 @@
 - [ ] App-wide empty states (Tracking Page, Notifications, Payment History)
 - [ ] Revamp loading screen component
 
-### Sign in/sign out
-- [ ] Add sign out functionality for Facebook users
-
 ### Polish
 - [X] CreatePaymentView.js predictive search: limit predictions to 4
 - [X] CreatePaymentView.js predictive search: don't show signed in user in predictions
@@ -33,6 +30,8 @@
 ### Architecture
 **Refactor the following to fit new Firebase/Redux model:**
 - [ ] Main
+- [ ] Payment creation
+- [ ] Splash page
 
 ### Bugs
 - [X] Header only displays notifications on Notifications page (probably an

@@ -5,7 +5,7 @@ import {Scene, Reducer, Router, Modal, Actions} from 'react-native-router-flux'
 import Error from './components/Error'
 import Button from "react-native-button";
 import * as Firebase from './services/Firebase';
-
+import * as Async from './helpers/Async';
 
 // Custom components
 import LandingView from './components/LandingView'
@@ -52,6 +52,7 @@ const getSceneStyle = function (props, computedProps) {
 
 
 // TODO
+Async.set('session_token', "");
 require('firebase').auth().signOut();
 
 
