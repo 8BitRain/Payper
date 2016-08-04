@@ -61,11 +61,7 @@ export default connect(
 
       // Handles pagination
       dispatchSetPage(index, direction) {
-        if (direction == "forward") {
-            dispatch(dispatchFunctions.setPage(index));
-        }else {
-          dispatch(dispatchFunctions.setPage(index));
-        }
+        dispatch(dispatchFunctions.setPage(index));
       }
   })
 )(BankOnboardingView);

@@ -49,8 +49,8 @@ class SSN extends React.Component {
          "settingsIcon": false,
          "closeIcon": true
        },
-       index: 0,
-       numCircles: 6
+       index: 3,
+       numCircles: 4
      };
 
      // Callback functions to be passed to the header
@@ -58,18 +58,29 @@ class SSN extends React.Component {
 
      // Props to be passed to the arrow nav
      this.arrowNavProps = {
-       left: false,
-       right: true
+       left: true,
+       right: false,
+       check: true
      };
 
      // Callback functions to be passed to the arrow nav
      this.onPressRight = function() { this.props.dispatchSetPage(4, "forward") };
-     this.onPressLeft = function() { this.props.dispatchSetPage(null, null) };
+     this.onPressLeft = function() { this.props.dispatchSetPage(3, "backward") };
+     this.onPressCheck = function(){
+       createCustomer(this.props.dwollaCustomer);
+     }
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
      //Mixpanel.timeEvent("Email page Finished");
    }
+
+   createCustomer(data){
+     Init.createCustomer(data, function(customerCreated){
+       console.log("CustomerCreated?: " + customerCreated);
+     });
+   }
+
    render() {
      return (
        <View style={[containers.container, backgrounds.email]}>
@@ -77,11 +88,11 @@ class SSN extends React.Component {
 
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>SSN</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"123456780"} keyboardType="phone-pad" />
          </View>
 
            { /* Arrow nav buttons */ }
-           <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} />
+           <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} callbackCheck={() => {this.onPressCheck()}} />
 
            { /* Header */ }
            <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />

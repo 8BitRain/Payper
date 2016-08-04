@@ -167,6 +167,15 @@ export function createUser(input) {
 
 
 /**
+  *   Create a DwollaCustomer
+**/
+export function createCustomer(data, callback){
+  Lambda.createCustomer(data, (response) => {
+    callback(response);
+  });
+}
+
+/**
   *   1) Sign user out of Firebase
   *   2) Redirect user to landing page
 **/

@@ -272,7 +272,7 @@ class OnBoardingSummaryTest extends React.Component {
          <TextInput style={[{height:40}, typography.general]}onChangeText={(text) => {this.name = text;}} placeholderFontFamily="Roboto" placeholderTextColor="white" placeholder={"Name"} autoCapitalize="none"/>
          <Button onPress={() => this.submitFundingSource()}><Text style={typography.general}>Add routing information to customer</Text></Button>
          <Button onPress={() => this.removeFundingSource()}><Text style={typography.general}>Remove funding informatino</Text></Button>
-          <Button onPress={() => this.initiateIAV()}><Text style={typography.general}>Grab IAV Token</Text></Button>
+         <Button onPress={() => this.initiateIAV()}><Text style={typography.general}>Grab IAV Token</Text></Button>
 
 
        </View>
@@ -300,27 +300,36 @@ const BankOnboardingView = React.createClass({
               />
             )
             break;
-          /*case 1:
+          case 1:
             return(
               <Address
-
-              />
-            )
-            break;
-          case 2:
-            return(
-              <SSn
-                ssn
+                dispatchSetAddress={this.props.dispatchSetAddress}
+                dispatchSetCity={this.props.dispatchSetCity}
+                dispatchSetState={this.props.dispatchSetState}
+                dispatchSetZip={this.props.dispatchSetZip}
+                dispatchSetPage={this.props.dispatchSetPage}
+                callbackClose={Actions.landingView}
               />
             )
             break;
           case 2:
             return(
               <Dob
-                dob
+                dispatchSetDob={this.props.dispatchSetDob}
+                dispatchSetPage={this.props.dispatchSetPage}
+                callbackClose={Actions.landingView}
               />
             )
-            break;*/
+            break;
+          case 3:
+            return(
+              <SSN
+                dispatchSetSSN={this.props.dispatchSetSSN}
+                dispatchSetPage={this.props.dispatchSetPage}
+                callbackClose={Actions.landingView}
+              />
+            )
+            break;
         }
         //<OnBoardingSummaryTest  firebase_token = {this.props.firebase_token} startIav={this.props.startIav} dispatchSetIav={this.props.dispatchSetIav} dispatchSetFirebaseToken={this.props.dispatchSetFirebaseToken}/>
     } else {

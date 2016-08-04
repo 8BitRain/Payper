@@ -20,7 +20,7 @@ import containers from "../styles/containers";
 import typography from "../styles/typography";
 
 
-class Dob extends React.Component {
+class AddBank extends React.Component {
    constructor(props) {
      super(props);
 
@@ -29,8 +29,17 @@ class Dob extends React.Component {
        fadeAnim: new Animated.Value(0) // init opacity 0
      };
 
+     /*if(this.firebase_token == ''){
+       Async.get('session_token', (token) => {
+         this.token = token;
+         //dispatchSetFirebaseToken
+         console.log("Token: " + token);
+         this.props.dispatchSetFirebaseToken(this.token);
+       });
+     }*/
+
      // Props for temporary input storage
-     this.dobInput = "";
+     this.SSNInput = "";
 
      // Props to be passed to the header
      this.headerProps = {
@@ -40,7 +49,7 @@ class Dob extends React.Component {
          "settingsIcon": false,
          "closeIcon": true
        },
-       index: 2,
+       index: 3,
        numCircles: 4
      };
 
@@ -50,30 +59,28 @@ class Dob extends React.Component {
      // Props to be passed to the arrow nav
      this.arrowNavProps = {
        left: true,
-       right: true
+       right: false,
+       check: true
      };
-
-     // Callback functions to be passed to the arrow nav
-     this.onPressRight = function() { this.props.dispatchSetPage(3, "forward") };
-     this.onPressLeft = function() { this.props.dispatchSetPage(2, "backward") };
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
      //Mixpanel.timeEvent("Email page Finished");
+   }
+
+   startIAV(){
+
    }
    render() {
      return (
        <View style={[containers.container, backgrounds.email]}>
          <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
 
-         { /* Prompt and input field */ }
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Dob</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.dobInput = text; this.props.dispatchSetDob(this.dobInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"YYYY-MM-DD"} keyboardType="email-address" />
+           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>SSN</Text>
+           <Button onPress={()=> {this.startIAV()}}><Text> Add your Bank</Text></Button>
          </View>
 
-           { /* Arrow nav buttons */ }
-           <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}}  />
 
 
            { /* Header */ }
@@ -85,4 +92,4 @@ class Dob extends React.Component {
    }
  }
 
-export default Dob;
+export default AddBank;

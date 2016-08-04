@@ -62,7 +62,7 @@ export function setEmail(index){
   return { type: SET_EMAIL, index: index};
 };
 
-export function Phone(index){
+export function setPhone(index){
   return { type: SET_PHONE, index: index};
 };
 
@@ -118,61 +118,61 @@ export default function BankOnboardingReducer(state = initialState, action = {})
       break;
     case SET_EMAIL:
       var customer = state.get('dwollaCustomer');
-      customer.email = action.input;
+      customer.email = action.index;
       var newState = state.set('dwollaCustomer', customer);
       return newState;
       break;
     case SET_FIRST_NAME:
       var customer = state.get('dwollaCustomer');
-      customer.firstName = action.input;
+      customer.firstName = action.index;
       var newState = state.set('dwollaCustomer', customer);
       return newState;
       break;
     case SET_LAST_NAME:
       var customer = state.get('dwollaCustomer');
-      customer.lastName = action.input;
+      customer.lastName = action.index;
       var newState = state.set('dwollaCustomer', customer);
       return newState;
       break;
           case SET_PHONE:
             var customer = state.get('dwollaCustomer');
-            customer.phone = action.input;
+            customer.phone = action.index;
             var newState = state.set('dwollaCustomer', customer);
             return newState;
             break;
             case SET_ADDRESS:
               var customer = state.get('dwollaCustomer');
-              customer.address = action.input;
+              customer.address = action.index;
               var newState = state.set('dwollaCustomer', customer);
               return newState;
               break;
               case SET_CITY:
                 var customer = state.get('dwollaCustomer');
-                customer.city = action.input;
+                customer.city = action.index;
                 var newState = state.set('dwollaCustomer', customer);
                 return newState;
                 break;
                 case SET_STATE:
                   var customer = state.get('dwollaCustomer');
-                  customer.state = action.input;
+                  customer.state = action.index;
                   var newState = state.set('dwollaCustomer', customer);
                   return newState;
                   break;
                   case SET_ZIP:
                     var customer = state.get('dwollaCustomer');
-                    customer.zip = action.input;
+                    customer.zip = action.index;
                     var newState = state.set('dwollaCustomer', customer);
                     return newState;
                     break;
                     case SET_DOB:
                       var customer = state.get('dwollaCustomer');
-                      customer.dob = action.input;
+                      customer.dob = action.index;
                       var newState = state.set('dwollaCustomer', customer);
                       return newState;
                       break;
                       case SET_SSN:
                         var customer = state.get('dwollaCustomer');
-                        customer.ssn = action.input;
+                        customer.ssn = action.index;
                         var newState = state.set('dwollaCustomer', customer);
                         return newState;
                         break;

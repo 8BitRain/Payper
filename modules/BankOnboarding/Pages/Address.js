@@ -56,8 +56,8 @@ class Address extends React.Component {
          "settingsIcon": false,
          "closeIcon": true
        },
-       index: 0,
-       numCircles: 6
+       index: 1,
+       numCircles: 4
      };
 
      // Callback functions to be passed to the header
@@ -71,7 +71,7 @@ class Address extends React.Component {
 
      // Callback functions to be passed to the arrow nav
      this.onPressRight = function() { this.props.dispatchSetPage(2, "forward") };
-     this.onPressLeft = function() { this.props.dispatchSetPage(null, null) };
+     this.onPressLeft = function() { this.props.dispatchSetPage(1, "backward") };
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
@@ -84,14 +84,14 @@ class Address extends React.Component {
 
          { /* Prompt and input field */ }
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Email</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.addressInput = text; this.props.dispatchSetAddress(this.addressInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>First Name</Text>
+           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Address</Text>
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.addressInput = text; this.props.dispatchSetAddress(this.addressInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"411 Oshun St"} keyboardType="email-address" />
+           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>City</Text>
            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.cityInput = text; this.props.dispatchSetCity(this.cityInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Last Name</Text>
+           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>State</Text>
            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.stateInput = text; this.props.dispatchSetState(this.stateInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Phone</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.zipInput = text; this.props.dispatchSetZip(this.zipInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />
+           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>PostalCode(ZIP)</Text>
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.zipInput = text; this.props.dispatchSetZip(this.zipInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="phone-pad" />
          </View>
 
            { /* Arrow nav buttons */ }
