@@ -1,21 +1,21 @@
 // Dependencies
 import React from 'react';
-import { AppRegistry, Navigator, StyleSheet, Text, View, AsyncStorage } from 'react-native'
-import { Scene, Reducer, Router, Modal, Actions } from 'react-native-router-flux'
-import Error from './components/Error'
+import { AppRegistry, Navigator, StyleSheet, Text, View, AsyncStorage } from 'react-native';
+import { Scene, Reducer, Router, Modal, Actions } from 'react-native-router-flux';
+import Error from './components/Error';
 import * as Async from './helpers/Async';
 
 // Modules
-import LandingView from './components/LandingView'
-import LandingScreenView from './modules/LandingScreen/LandingScreenView'
-import SplashView from './modules/Splash/SplashView'
-import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer'
-import CreatePaymentViewContainer from './modules/CreatePayment/CreatePaymentViewContainer'
-import SignInViewContainer from './modules/SignIn/SignInViewContainer'
-import MainViewContainer from './modules/Main/MainViewContainer'
-import BankOnboardingContainer from './modules/BankOnboarding/BankOnboardingContainer'
+import LandingScreenView from './modules/LandingScreen/LandingScreenView';
+import SplashView from './modules/Splash/SplashView';
+import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer';
+import CreatePaymentViewContainer from './modules/CreatePayment/CreatePaymentViewContainer';
+import SignInViewContainer from './modules/SignIn/SignInViewContainer';
+import MainViewContainer from './modules/Main/MainViewContainer';
+import BankOnboardingContainer from './modules/BankOnboarding/BankOnboardingContainer';
 
 // Test modules
+import LandingView from './components/LandingView';
 import FirebaseBindingViewContainer from './modules/FirebaseBinding/FirebaseBindingViewContainer';
 
 const reducerCreate = (params) => {
@@ -62,7 +62,7 @@ export default class Coincast extends React.Component {
 
             { /* Main app flow */ }
             <Scene key="SplashView" component={SplashView} title="SplashView" initial />
-            <Scene key="LandingView" component={LandingView} title="LandingView" />
+            <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />
             <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" />
@@ -70,6 +70,7 @@ export default class Coincast extends React.Component {
             <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" />
 
             { /* Testing */ }
+            <Scene key="LandingView" component={LandingView} title="LandingView" />
             <Scene key="FirebaseBindingViewContainer" component={FirebaseBindingViewContainer} title="FirebaseBindingViewContainer" />
 
           </Scene>

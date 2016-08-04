@@ -8,6 +8,7 @@
   *     💣  Tracking (payments)
   *     💣  Global (payments)
   *     💣  Notifications
+  *     💣  Create Payment
   *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
   *
@@ -68,6 +69,27 @@ export function globalHeader(options) {
     index: null,
     numCircles: null,
     title: "Global Payments",
+    callbackIn: null,
+    callbackOut: null,
+  };
+
+  return props;
+};
+
+
+// Header props for Create Payment flow
+export function createPaymentHeader() {
+  var props = {
+    types: {
+      "paymentIcons": true,
+      "circleIcons": false,
+      "settingsIcon": false,
+      "closeIcon": true,
+      "flowTabs": false,
+    },
+    index: 0,
+    numCircles: null,
+    title: null,
     callbackIn: null,
     callbackOut: null,
   };

@@ -10,7 +10,6 @@ import * as Partials from '../../helpers/Partials';
 
 // Partial components
 import UserPreview from '../../components/Previews/User/User';
-import Header from '../../components/Header/Header';
 import UserPic from '../../helpers/Partials';
 import ArrowNav from '../../components/Navigation/Arrows/ArrowDouble';
 
@@ -201,20 +200,8 @@ class UserSearch extends React.Component {
 
         { /* Arrow nav */ }
         <ArrowNav
-          arrowNavProps={{right: true}}
-          callbackRight={() => {
-            this.props.invite({
-              amount: 10,
-              purpose: "Test payment invite",
-              invitee: "Test Johnson",
-              payments: 12,
-              type: "payment",
-              phoneNumber: this.props.selectedContact.phone,
-              token: this.props.currentUser.token,
-            }, (success) => {
-              console.log("Payment invite was successful: " + success);
-            });
-          }}
+          arrowNavProps={ {right: true} }
+          callbackRight={ () => this.props.setHeaderIndex(1) }
           />
 
       </View>
@@ -224,50 +211,28 @@ class UserSearch extends React.Component {
 
   render() {
     return(
-      <View style={{flex: 1.0}}>
-
-        { /* Header */ }
-        <View style={{flex: 0.1}}>
-          <Header
-            headerProps={{
-              types: {
-                "paymentIcons": true,
-                "circleIcons": false,
-                "settingsIcon": false,
-                "closeIcon": true,
-                "flowTabs": false,
-              },
-              numCircles: null,
-            }}
-            index={0}
-            numNotifications={this.props.numNotifications}
-            callbackSettings={() => this.props.toggleMenu()}
-            />
-        </View>
-
+      <View style={{flex: 1.0, justifyContent: 'center', backgroundColor: colors.icyBlue}}>
         { /* Query and ListView or Confirmation, depending on if a user is selected */ }
-        <View style={{flex: 0.9, justifyContent: 'center', backgroundColor: colors.icyBlue}}>
-          <TextInput
-            style={[styles.textInput, {backgroundColor: this.state.inputBackgroundColor}]}
-            placeholder={"Who are you splitting with?"}
-            selectionColor={colors.white}
-            onChangeText={ (query) => { this._filterContacts(query); this._setInputBackgroundColor(query); }}
-            autoFocus={true}
-            enablesReturnKeyAutomatically={true}
-            returnKeyType={"next"}
-            defaultValue={
-              (this.props.selectedContact.username)
-                ? this.props.selectedContact.username
-                : (this.props.selectedContact.first_name)
-                  ? this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name
-                  : ""
-            }
-            />
+        <TextInput
+          style={[styles.textInput, {backgroundColor: this.state.inputBackgroundColor}]}
+          placeholder={"Who are you splitting with?"}
+          selectionColor={colors.white}
+          onChangeText={ (query) => { this._filterContacts(query); this._setInputBackgroundColor(query); }}
+          autoFocus={true}
+          enablesReturnKeyAutomatically={true}
+          returnKeyType={"next"}
+          defaultValue={
+            (this.props.selectedContact.username)
+              ? this.props.selectedContact.username
+              : (this.props.selectedContact.first_name)
+                ? this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name
+                : ""
+          }
+          />
 
-          { (this.props.selectedContact.username || this.props.selectedContact.first_name )
-            ? this._getConfirmation()
-            : this._getContactList() }
-        </View>
+        { (this.props.selectedContact.username || this.props.selectedContact.first_name )
+          ? this._getConfirmation()
+          : this._getContactList() }
       </View>
     );
   }

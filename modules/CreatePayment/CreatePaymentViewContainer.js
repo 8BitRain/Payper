@@ -14,6 +14,9 @@ function mapStateToProps(state) {
     // main
     currentUser: state.getIn(['main', 'currentUser']),
 
+    // userSearch
+    selectedContact: state.getIn(['userSearch', 'selectedContact']),
+
     // payment
     amount: state.getIn(['payment', 'amount']),
     purpose: state.getIn(['payment', 'purpose']),
