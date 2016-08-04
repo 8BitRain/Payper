@@ -1,28 +1,22 @@
 // Dependencies
 import React from 'react';
-import {AppRegistry, Navigator, StyleSheet, Text, View, AsyncStorage} from 'react-native'
-import {Scene, Reducer, Router, Modal, Actions} from 'react-native-router-flux'
+import { AppRegistry, Navigator, StyleSheet, Text, View, AsyncStorage } from 'react-native'
+import { Scene, Reducer, Router, Modal, Actions } from 'react-native-router-flux'
 import Error from './components/Error'
-import Button from "react-native-button";
-import * as Firebase from './services/Firebase';
 import * as Async from './helpers/Async';
 
-// Custom components
+// Modules
 import LandingView from './components/LandingView'
-import ThankYouView from './components/ThankYouView'
 import LandingScreenView from './modules/LandingScreen/LandingScreenView'
 import SplashView from './modules/Splash/SplashView'
 import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer'
 import CreatePaymentViewContainer from './modules/CreatePayment/CreatePaymentViewContainer'
 import SignInViewContainer from './modules/SignIn/SignInViewContainer'
 import MainViewContainer from './modules/Main/MainViewContainer'
-import TrackingContainer from './modules/Tracking/TrackingContainer'
 import BankOnboardingContainer from './modules/BankOnboarding/BankOnboardingContainer'
-import Header from './components/Header/Header'
-import ArrowNavDouble from './components/Navigation/Arrows/ArrowDouble'
 
+// Test modules
 import FirebaseBindingViewContainer from './modules/FirebaseBinding/FirebaseBindingViewContainer';
-import PredictiveSearchViewContainer from './modules/PredictiveSearch/PredictiveSearchViewContainer';
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
@@ -33,10 +27,11 @@ const reducerCreate = (params) => {
 };
 
 // define this based on the styles/dimensions you use
+import colors from './styles/colors';
 const getSceneStyle = function (props, computedProps) {
   const style = {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.icyBlue,
     shadowColor: null,
     shadowOffset: null,
     shadowOpacity: null,
@@ -65,27 +60,17 @@ export default class Coincast extends React.Component {
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 
-            <Scene key="landingView" component={LandingView} title="LandingView" />
-
             { /* Main app flow */ }
             <Scene key="SplashView" component={SplashView} title="SplashView" initial />
-            <Scene key="landingView" component={LandingView} title="LandingView" />
-            <Scene key="ThankYouView" component={ThankYouView} title="ThankYouView"/>
-            <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
-            <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" />
+            <Scene key="LandingView" component={LandingView} title="LandingView" />
             <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
-            <Scene key="MainViewContainer" component={MainViewContainer} title="MainViewContainer" />
-            <Scene key="TrackingContainer" component={TrackingContainer} title="TrackingContainer" />
+            <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" />
+            <Scene key="MainViewContainer" component={MainViewContainer} title="MainViewContainer" />
+            <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" />
 
             { /* Testing */ }
             <Scene key="FirebaseBindingViewContainer" component={FirebaseBindingViewContainer} title="FirebaseBindingViewContainer" />
-            <Scene key="PredictiveSearchViewContainer" component={PredictiveSearchViewContainer} title="PredictiveSearchViewContainer" />
-
-            { /* Individual component test views */ }
-            <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />
-            <Scene key="Header" component={Header} title="Header" />
-            <Scene key="ArrowNavDouble" component={ArrowNavDouble} title="ArrowNavDouble" />
 
           </Scene>
           <Scene key="error" component={Error}/>

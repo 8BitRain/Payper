@@ -7,7 +7,7 @@ import SessionStateReducer, {RESET_STATE} from '../modules/session/SessionState'
 import CreateAccountReducer from '../modules/CreateAccount/CreateAccountState';
 import BankOnboardingReducer from '../modules/BankOnboarding/BankOnboardingState';
 import FirebaseBindingReducer from '../modules/FirebaseBinding/FirebaseBindingState';
-import PredictiveSearchReducer from '../modules/PredictiveSearch/PredictiveSearchState';
+import UserSearchReducer from '../modules/UserSearch/UserSearchState';
 import MainReducer from '../modules/Main/MainState';
 import PaymentsReducer from '../modules/Payments/PaymentsState';
 import PaymentReducer from '../modules/CreatePayment/CreatePaymentState';
@@ -25,11 +25,11 @@ const reducers = {
 
   session: SessionStateReducer*/
 
+  main: MainReducer,
   createAccount: CreateAccountReducer,
   bankOnboarding: BankOnboardingReducer,
   firebaseBinding: FirebaseBindingReducer,
-  predictiveSearch: PredictiveSearchReducer,
-  main: MainReducer,
+  userSearch: UserSearchReducer,
   payments: PaymentsReducer,
   payment: PaymentReducer,
 

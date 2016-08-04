@@ -39,7 +39,7 @@ export function selectedContact(input) { return {type: SET_SELECTED_CONTACT, inp
   *   tree based on that action and returns full state tree.
   *
 **/
-export default function PredictiveSearchReducer(state = initialState, action = {}) {
+export default function UserSearch(state = initialState, action = {}) {
   switch (action.type) {
     case SET_ACTIVE_FIREBASE_LISTENERS:
       var newState = state.set('activeFirebaseListeners', action.input);

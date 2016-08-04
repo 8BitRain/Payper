@@ -2,7 +2,6 @@
 import React from 'react';
 import { Dimensions, StyleSheet, View, Text, TextInput, TouchableHighlight, ListView, RecyclerViewBackedScrollView } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
-const dimensions = Dimensions.get('window');
 
 // Helpers
 import * as Async from '../../helpers/Async';
@@ -17,6 +16,7 @@ import ArrowNav from '../../components/Navigation/Arrows/ArrowDouble';
 
 // Styles
 import colors from '../../styles/colors';
+const dimensions = Dimensions.get('window');
 const rowStyles = StyleSheet.create({
   wrap: {
     height: 100,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
 
 });
 
-class PredictiveSearchView extends React.Component {
+class UserSearch extends React.Component {
   constructor(props) {
     super(props);
 
@@ -273,4 +273,4 @@ class PredictiveSearchView extends React.Component {
   }
 };
 
-export default PredictiveSearchView;
+export default UserSearch;

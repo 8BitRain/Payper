@@ -7,21 +7,21 @@ import * as Lambda from '../../services/Lambda';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
 
 // Dispatch functions
-import * as set from './PredictiveSearchState';
+import * as set from './UserSearchState';
 
 // Base view
-import PredictiveSearchView from './PredictiveSearchView';
+import UserSearchView from './UserSearchView';
 
 // Decide which chunk of Redux global state our component will receive as props
 function mapStateToProps(state) {
   return {
 
-    // predictiveSearch
-    activeFirebaseListeners: state.getIn(['predictiveSearch', 'activeFirebaseListeners']),
-    allContacts: state.getIn(['predictiveSearch', 'allContacts']),
-    filteredContacts: state.getIn(['predictiveSearch', 'filteredContacts']),
-    selectedContact: state.getIn(['predictiveSearch', 'selectedContact']),
-    empty: state.getIn(['predictiveSearch', 'empty']),
+    // userSearch
+    activeFirebaseListeners: state.getIn(['userSearch', 'activeFirebaseListeners']),
+    allContacts: state.getIn(['userSearch', 'allContacts']),
+    filteredContacts: state.getIn(['userSearch', 'filteredContacts']),
+    selectedContact: state.getIn(['userSearch', 'selectedContact']),
+    empty: state.getIn(['userSearch', 'empty']),
 
     // main
     currentUser: state.getIn(['main', 'currentUser']),
@@ -80,4 +80,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect( mapStateToProps, mapDispatchToProps )( PredictiveSearchView );
+export default connect( mapStateToProps, mapDispatchToProps )( UserSearchView );

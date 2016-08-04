@@ -5,18 +5,18 @@ import { loop, Effects } from 'redux-loop';
 
 // Initialize state
 const initialState = Map({
-  amount,
-  purpose,
-  payments,
-  recip_id,
-  recip_name,
-  recip_pic,
-  sender_id,
-  sender_name,
-  sender_pic,
-  type,
-  token,
-  confirmed
+  amount: null,
+  purpose: null,
+  payments: null,
+  recip_id: null,
+  recip_name: null,
+  recip_pic: null,
+  sender_id: null,
+  sender_name: null,
+  sender_pic: null,
+  type: null,
+  token: null,
+  confirmed: null
 });
 
 // Action types

@@ -1,33 +1,54 @@
-import {connect} from 'react-redux';
-import * as dispatchFunctions from  './CreatePaymentState';
+// Dependencies
+import { connect } from 'react-redux';
+
+// Dispatch functions
+import * as set from './CreatePaymentState';
+
+// Base view
 import CreatePaymentView from './CreatePaymentView';
-import * as Firebase from '../../services/Firebase';
 
-/**
-  *   Connect function for CreateAccountView.js
-**/
-export default connect(
-  state => ({
+// Decide which chunk of Redux global state our component will receive as props
+function mapStateToProps(state) {
+  return {
 
-    // Payment setup variables
-    to: state.getIn(['payment', 'to']),
-    from: state.getIn(['payment', 'from']),
-    memo: state.getIn(['payment', 'memo']),
-    frequency: state.getIn(['payment', 'frequency']),
-    totalCost: state.getIn(['payment', 'totalCost']),
-    singleCost: state.getIn(['payment', 'singleCost']),
-    totalPayments: state.getIn(['payment', 'totalPayments']),
-    completedPayments: state.getIn(['payment', 'completedPayments']),
+    // main
+    currentUser: state.getIn(['main', 'currentUser']),
 
-  }),
-  dispatch => ({
+    // payment
+    amount: state.getIn(['payment', 'amount']),
+    purpose: state.getIn(['payment', 'purpose']),
+    payments: state.getIn(['payment', 'payments']),
+    recip_id: state.getIn(['payment', 'recip_id']),
+    recip_name: state.getIn(['payment', 'recip_name']),
+    recip_pic: state.getIn(['payment', 'recip_pic']),
+    sender_id: state.getIn(['payment', 'sender_id']),
+    sender_name: state.getIn(['payment', 'sender_name']),
+    sender_pic: state.getIn(['payment', 'sender_pic']),
+    type: state.getIn(['payment', 'type']),
+    token: state.getIn(['payment', 'token']),
+    confirmed: state.getIn(['payment', 'confirmed']),
 
-    // Fetches users from FB
-    getUsers() {
-      return Firebase.getUsers();
-    }
+  }
+}
 
+// Decide which action creators our component will receive as props
+function mapDispatchToProps(dispatch) {
+  return {
 
-  })
-)(CreatePaymentView);
-/* END Connect function for CreateAccountView.js */
+    setAmount: (input) => dispatch(set.amount(input)),
+    setPurpose: (input) => dispatch(set.purpose(input)),
+    setPayments: (input) => dispatch(set.payments(input)),
+    setRecipID: (input) => dispatch(set.recipID(input)),
+    setRecipName: (input) => dispatch(set.recipName(input)),
+    setRecipPic: (input) => dispatch(set.recipPic(input)),
+    setSenderID: (input) => dispatch(set.senderID(input)),
+    setSenderName: (input) => dispatch(set.senderName(input)),
+    setSenderPic: (input) => dispatch(set.senderPic(input)),
+    setType: (input) => dispatch(set.type(input)),
+    setToken: (input) => dispatch(set.token(input)),
+    setConfirmed: (input) => dispatch(set.confirmed(input)),
+
+  }
+}
+
+export default connect( mapStateToProps, mapDispatchToProps )( CreatePaymentView );
