@@ -116,9 +116,6 @@ class LandingScreenDisplay extends React.Component {
     if (error) {
       alert('Error fetching data: ' + error.toString());
     } else {
-      //alert('Success fetching data: ' + result.toString());
-      console.log(JSON.stringify(result));
-      //this.submitFbUser(result);
       this.signInWithFacebook(this.state.fbAcessToken, result);
     }
   }
@@ -131,7 +128,6 @@ class LandingScreenDisplay extends React.Component {
   signInWithFacebook(FBToken, result){
 
     var picture ='';
-    console.log(result.picture.data.is_silhouette);
     if(result.picture.data.is_silhouette){
       picture = '';
     } else {
@@ -155,15 +151,14 @@ class LandingScreenDisplay extends React.Component {
     //Critical line causing loading issues.
     _this.setState({provider: "facebook"});
     _this.setState({loading: true});
-    Init.signInWithFacebook(data, function(signedIn, user) {
-        console.log("LandingScreenView - UserPhone: " + user.phone);
-        console.log("TOKEN: " + user.token);
+    Init.signInWithFacebook(data, function(signedIn, user, token) {
+        console.log("TOKEN: " + token);
+        console.log("USER: " + JSON.stringify(user));
         if(!user.phone){
-          console.log("userPhone is false");
           _this.props.dispatchSetProvider(_this.state.provider);
-          _this.props.dispatchSetToken(user.token);
+          _this.props.dispatchSetToken(token);
         }
-        _this.setState({fbPhoneNumber: user.phone});
+        _this.setState({fbPhone: user.phone});
         //_this.setState({provider: user.provider});
         _this.setState({doneLoading: true});
     });
@@ -186,9 +181,9 @@ class LandingScreenDisplay extends React.Component {
       }
 
       if(this.state.provider == "facebook"){
-        console.log("LandingScreen: FACEBOOK ROUTE");
+        console.log("FbPhone: " + this.state.fbPhone);
         if(this.state.fbPhone){
-          console.log("Value of fbPhone (Existing case): " + this.state.fbPhone);
+          console.log("LandingScreen: TO MainView");
           return(
             <Loading
               complete={this.state.doneLoading}
@@ -200,8 +195,7 @@ class LandingScreenDisplay extends React.Component {
         }
         //Facebook Account Newly Created
         if(!this.state.fbPhone){
-          console.log("Value of fbPhone (Non-Existing case): " + this.state.fbPhone);
-          console.log(this.props);
+          console.log("LandingScreen: TO CreateAccountViewContainer");
           return(
             <Loading
               complete={this.state.doneLoading}
@@ -260,7 +254,6 @@ class LandingScreenDisplay extends React.Component {
 const LandingScreenView= React.createClass({
 
   render() {
-    console.log("PROPS: " + JSON.stringify(this.props));
     return(
       <LandingScreenDisplay  dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetToken={this.props.dispatchSetToken}/>
     );

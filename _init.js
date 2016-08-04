@@ -122,14 +122,13 @@ export function signInWithFacebook(data, callback) {
         data.user.token = token;
         Lambda.createFBUser(data.user, (user, account_status) => {
           if (user && account_status) {
-            console.log("USER: " + JSON.stringify(user));
-            console.log("USER ACCOUNT STATUS: " + JSON.stringify(account_status));
+            console.log("Init(signInWithFacebook) user: " + JSON.stringify(user));
+
             //Create Flags for the new user
             Firebase.createAppFlags(user, account_status);
             //Note send the account_status back in initializeAppState or callback.
-            //Possibe refactor, send a JSON object back that contains user and status info.
             initializeAppState(user);
-            callback(true, user);
+            callback(true, user, data.user.token);
 
           }
           else {
@@ -197,11 +196,10 @@ export function createPayment(data, callback) {
 export function updatePhone(data, callback){
   console.log(data);
   Lambda.updatePhone(data, (res) => {
+    console.log("Updating Phone Value: " + res);
     callback(res);
   });
 };
-
-
 
 
 /**

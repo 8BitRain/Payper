@@ -24,9 +24,10 @@ const CreateAccountView = React.createClass({
       return(
       <PhoneNumber
         callbackClose={Actions.landingView}
-        phone={this.props.phone}
+        currentUser={this.props.currentUser}
         phoneValidations={this.props.phoneValidations}
         dispatchSetPhoneValidations={(text) => this.props.dispatchSetPhoneValidations(text)}
+        dispatchSetPhone={this.props.dispatchSetPhone}
         dispatchSetPage={this.props.dispatchSetPage}
         provider={this.props.provider}
         token= {this.props.token}

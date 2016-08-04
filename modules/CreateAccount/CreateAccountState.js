@@ -44,6 +44,7 @@ const initialState = Map({
   currentPage: 0,
   provider: '',
   token: '',
+  startIav: '',
   passwordValidations,
   emailValidations,
   firstNameValidations,
@@ -53,6 +54,7 @@ const initialState = Map({
 
 // Action types
 const SET_PAGE = 'SET_PAGE',
+      SET_IAV = 'SET_IAV',
       SET_EMAIL_VALIDATIONS = 'SET_EMAIL_VALIDATIONS',
       SET_PASSWORD_VALIDATIONS = 'SET_PASSWORD_VALIDATIONS',
       SET_FIRST_NAME_VALIDATIONS = 'SET_FIRST_NAME_VALIDATIONS',
@@ -73,6 +75,10 @@ export function setPage(index) {
 
 export function setToken(index) {
   return { type: SET_TOKEN, index: index };
+};
+
+export function setIav(index){
+  return { type: SET_IAV, index: index};
 };
 
 export function setEmailValidations(input) {
@@ -138,6 +144,10 @@ export default function CreateAccountReducer(state = initialState, action = {}) 
       break;
     case SET_PASSWORD_VALIDATIONS:
       var newState = state.set('passwordValidations', action.input);
+      return newState;
+      break;
+    case SET_IAV:
+      var newState = state.set('startIav', action.index);
       return newState;
       break;
     case SET_FIRST_NAME_VALIDATIONS:

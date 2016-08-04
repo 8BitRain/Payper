@@ -185,14 +185,15 @@ export function cancelPayment(options) {
 /**
   *   Update Phone Number
 **/
-export function updatePhone(data){
+export function updatePhone(data, callback){
   try {
     fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneNumber", {method: "POST", body: JSON.stringify(data)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
         console.log("Update Phone response:", responseData);
-        if (typeof callback == 'function') callback(responseData);
+        //if (typeof callback == 'function') callback(true);
+        callback(true);
       } else {
         console.log("Error:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);

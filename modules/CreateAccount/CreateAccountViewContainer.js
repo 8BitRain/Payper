@@ -29,6 +29,9 @@ export default connect(
     // Tracks pagination
     currentPage: state.getIn(['createAccount', 'currentPage']),
 
+    // Tracks IAV Initiation
+    startIav: state.getIn(['createAccount', 'startIav']),
+
     // Input validation booleans
     emailValidations: state.getIn(['createAccount', 'emailValidations']),
     passwordValidations: state.getIn(['createAccount', 'passwordValidations']),
@@ -90,6 +93,13 @@ export default connect(
     //Update provider (How the account view container was reached)
     dispatchSetProvider(input){
       dispatch(dispatchFunctions.setProvider(input));
+    },
+    dispatchSetPhone(input){
+      console.log(input);
+      dispatch(dispatchFunctions.setPhone(input));
+    },
+    dispatchSetIav(input){
+      dispatch(dispatchFunctions.setIav(input));
     },
     // Updates validation booleans
     dispatchSetPasswordValidations(input) {

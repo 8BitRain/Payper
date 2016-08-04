@@ -33,7 +33,7 @@ class PhoneNumber extends React.Component {
    };
 
    // Props for temporary input storage
-   this.phoneNumberInput = this.props.phone;
+   this.phoneNumberInput = this.props.currentUser.phone;
 
    // Props to be passed to the header
    this.headerProps = {
@@ -70,20 +70,25 @@ class PhoneNumber extends React.Component {
    this.onPressRight = function() { this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput) };
    this.onPressLeft = function() { this.props.dispatchSetPage(3, null, null, null) };
    this.onPressCheck = function() {
-     this.props.phone = this.phoneNumberInput;
+     //this.props.phone = this.phoneNumberInput;
      console.log(this.phoneNumberInput);
+     this.props.dispatchSetPhone(this.phoneNumberInput);
+     console.log(this.props.currentUser.phone);
      console.log("Token: " + this.props.token);
      var data = {
        token: this.props.token,
-       phone: this.props.phone
+       phone: this.props.currentUser.phone
      };
+     console.log("Data: " + JSON.stringify(data));
      this.updatePhone(data);
    }
  }
 
   updatePhone(data){
     Init.updatePhone(data, function(updatedPhone){
-      console.log("UpdatedPhone: " + updatePhone);
+      if(updatedPhone){
+        Actions.MainViewContainer();
+      }
     });
   }
 

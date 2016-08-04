@@ -10,6 +10,11 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Header from '../../components/Header/Header.js';
 /*import WebViewBridge from 'react-native-webview-bridge';*/
 
+//components
+import BasicInfo from "./Pages/BasicInfo";
+import Address from "./Pages/Address";
+import Dob from "./Pages/Dob";
+import SSN from "./Pages/SSN";
 
 //styles
 import backgrounds from "./styles/backgrounds";
@@ -281,9 +286,43 @@ class OnBoardingSummaryTest extends React.Component {
 const BankOnboardingView = React.createClass({
   render() {
     if(this.props.startIav == ''){
-      return(
-        <OnBoardingSummaryTest  firebase_token = {this.props.firebase_token} startIav={this.props.startIav} dispatchSetIav={this.props.dispatchSetIav} dispatchSetFirebaseToken={this.props.dispatchSetFirebaseToken}/>
-      )
+        switch(this.props.currentPage){
+          case 0:
+            return(
+              <BasicInfo
+                currentUser={this.props.currentUser}
+                dispatchSetFirstName={this.props.dispatchSetFirstName}
+                dispatchSetLastName={this.props.dispatchSetLastName}
+                dispatchSetEmail={this.props.dispatchSetEmail}
+                dispatchSetPhone={this.props.dispatchSetPhone}
+                dispatchSetPage={this.props.dispatchSetPage}
+                callbackClose={Actions.landingView}
+              />
+            )
+            break;
+          /*case 1:
+            return(
+              <Address
+
+              />
+            )
+            break;
+          case 2:
+            return(
+              <SSn
+                ssn
+              />
+            )
+            break;
+          case 2:
+            return(
+              <Dob
+                dob
+              />
+            )
+            break;*/
+        }
+        //<OnBoardingSummaryTest  firebase_token = {this.props.firebase_token} startIav={this.props.startIav} dispatchSetIav={this.props.dispatchSetIav} dispatchSetFirebaseToken={this.props.dispatchSetFirebaseToken}/>
     } else {
       console.log("IAV: " + this.props.startIav);
       return(
