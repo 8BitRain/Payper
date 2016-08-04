@@ -36,7 +36,7 @@ const rowStyles = StyleSheet.create({
 });
 const styles = StyleSheet.create({
   textInput: {
-    height: 40,
+    height: 60,
     paddingLeft: 25,
     paddingRight: 25,
     paddingTop: 10,
@@ -98,6 +98,7 @@ class UserSearch extends React.Component {
     this.state = {
       user: {},
       inputBackgroundColor: 'transparent',
+      query: "",
     };
   }
 
@@ -105,8 +106,10 @@ class UserSearch extends React.Component {
   /**
     *   Start listening to Firebase
   **/
-  componentDidMount() {
-    this.props.listen(['TestContacts/FmXlDusbVKQTuqnAG22KX7yZKWL2']);
+  componentWillMount() {
+    var contactList = "contactList/" + this.props.currentUser.uid;
+    this.props.listen([contactList], { nativeContacts: this.props.nativeContacts });
+    this.props.initialize(this.props.nativeContacts);
   }
 
 
@@ -132,6 +135,7 @@ class UserSearch extends React.Component {
   _setSelectedContact(data) {
     this.props.setSelectedContact(data, () => {
       this._setInputBackgroundColor(data.username || data.first_name + " " + data.last_name)
+      this.setState({query: data.username || data.first_name + " " + data.last_name});
     });
   }
 
@@ -174,8 +178,8 @@ class UserSearch extends React.Component {
         <UserPic
           pic={this.props.selectedContact.profile_pic}
           name={this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name}
-          width={dimensions.width * 0.3}
-          height={dimensions.width * 0.3}
+          width={ 60 }
+          height={ 60 }
           />
 
         { /* Full name */ }
@@ -185,24 +189,25 @@ class UserSearch extends React.Component {
 
         { /* Username or phone number */ }
         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          {(this.props.selectedContact.type == "facebook")
+          {(this.props.selectedContact.username)
             ? <Entypo style={{paddingTop: 10}} name="facebook" size={25} color={colors.icyBlue}/>
             : <Entypo style={{paddingTop: 10}} name="phone" size={25} color={colors.alertGreen}/> }
-          <Text style={(this.props.selectedContact.username) ? styles.confirmationUsername : styles.confirmationPhone}>
-            { " +" + this.props.selectedContact.phone }
+          <Text style={[{paddingLeft: 10}, (this.props.selectedContact.username) ? styles.confirmationUsername : styles.confirmationPhone]}>
+            { (this.props.selectedContact.username)
+                ? this.props.selectedContact.username
+                : "+" + this.props.selectedContact.phone }
           </Text>
         </View>
 
         { /* Confirmation Message */ }
-        {(!this.props.selectedContact.username)
-          ? <Text style={styles.confirmationMessage}>{"We'll invite " + this.props.selectedContact.first_name + " to join Payper."}</Text>
-          : null }
+        { (!this.props.selectedContact.username)
+            ? <Text style={styles.confirmationMessage}>{"We'll invite " + this.props.selectedContact.first_name + " to join Payper."}</Text>
+            : null }
 
         { /* Arrow nav */ }
         <ArrowNav
           arrowNavProps={ {right: true} }
-          callbackRight={ () => this.props.setHeaderIndex(1) }
-          />
+          callbackRight={ () => this.props.setPageIndex(1) } />
 
       </View>
     );
@@ -217,7 +222,9 @@ class UserSearch extends React.Component {
           style={[styles.textInput, {backgroundColor: this.state.inputBackgroundColor}]}
           placeholder={"Who are you splitting with?"}
           selectionColor={colors.white}
-          onChangeText={ (query) => { this._filterContacts(query); this._setInputBackgroundColor(query); }}
+          onChangeText={(query) => {
+            this.setState({query: query}); this._filterContacts(query); this._setInputBackgroundColor(query);
+          }}
           autoFocus={true}
           enablesReturnKeyAutomatically={true}
           returnKeyType={"next"}
@@ -230,7 +237,7 @@ class UserSearch extends React.Component {
           }
           />
 
-        { (this.props.selectedContact.username || this.props.selectedContact.first_name )
+        { (this.state.query != "" && this.state.query == this.props.selectedContact.username || this.state.query == this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name  )
           ? this._getConfirmation()
           : this._getContactList() }
       </View>

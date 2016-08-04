@@ -31,6 +31,8 @@ function mapStateToProps(state) {
     token: state.getIn(['payment', 'token']),
     confirmed: state.getIn(['payment', 'confirmed']),
 
+    paymentInfo: state.get('payment').toString(),
+
   }
 }
 
@@ -50,6 +52,20 @@ function mapDispatchToProps(dispatch) {
     setType: (input) => dispatch(set.type(input)),
     setToken: (input) => dispatch(set.token(input)),
     setConfirmed: (input) => dispatch(set.confirmed(input)),
+
+    createPayment: (info) => {
+      console.log("%cCreating payment:", "color:orange;font-weight:900;");
+      console.log(info);
+    },
+
+    createRequest: (info) => {
+      console.log("%cCreating request:", "color:orange;font-weight:900;");
+      console.log(info);
+    },
+
+    setAll: (input) => {
+      dispatch(set.all(input));
+    },
 
   }
 }

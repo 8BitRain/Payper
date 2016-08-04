@@ -1,5 +1,6 @@
 // Dependencies
 import { connect } from 'react-redux';
+import Contacts from 'react-native-contacts';
 
 // Helper functions
 import * as Firebase from '../../services/Firebase';
@@ -43,19 +44,38 @@ function mapDispatchToProps(dispatch) {
     **/
     initialize: (callback) => {
 
-      // Set currentUser and loggedIn
       Async.get('user', (user) => {
         if (user == "") {
-          dispatch(set.signedIn(false));
 
+          // Sign in failed
+          dispatch(set.signedIn(false));
           if (typeof callback == 'function') callback(false);
           else console.log("Callback is not a function.");
+
         } else {
+
+          // Sign in succeeded
           dispatch(set.currentUser(JSON.parse(user)));
           dispatch(set.signedIn(true));
 
+          // Get user's native phone contacts
+          Contacts.getAll((err, contacts) => {
+            if (err && err.type === 'permissionDenied') {
+              console.error("%cError getting contacts:", "color:red;font-weight:900;");
+              console.error(err);
+            } else {
+              console.log("%cSuccessfully got native contacts:", "color:green;font-weight:900;");
+              console.log(contacts);
+              // Format contacts then log them to AsyncStorage
+              var c = StringMaster5000.formatNativeContacts(contacts);
+              dispatch(set.nativeContacts(c));
+              Async.set('native_contacts', JSON.stringify(c));
+            }
+          });
+
           if (typeof callback == 'function') callback(true);
           else console.log("Callback is not a function.");
+
         }
       });
 
@@ -105,9 +125,7 @@ function mapDispatchToProps(dispatch) {
     },
 
     setCurrentPage: (page) => {
-      if (page == "notifications") {
-        dispatch(set.header(Headers.notificationsHeader()));
-      }
+      if (page == "notifications") dispatch(set.header(Headers.notificationsHeader()));
       dispatch(set.currentPage(page));
     },
   }

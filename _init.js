@@ -14,7 +14,6 @@
 
 
 // Dependencies
-const Contacts = require('react-native-contacts');
 import * as Firebase from './services/Firebase';
 import * as Lambda from './services/Lambda';
 import * as Async from './helpers/Async';
@@ -30,8 +29,10 @@ export function signInWithToken(callback) {
       if (val) {
         Lambda.getUserWithToken(val, (user) => {
           if (user) {
+
             console.log("%cSuccessfully retrieved user object:", "color:green;font-weight:900;");
             console.log(user);
+
             // Sign in succeeded. Log the user to Async storage and take them
             // to the app.
             Async.set('user', JSON.stringify(user), () => {
@@ -216,6 +217,8 @@ export function initializeUsers(options, callback) {
       if (err && err.type === 'permissionDenied') {
         console.error("Error getting contacts:\n", err);
       } else {
+        console.log("%cSuccessfully got native contacts:", "color:green;font-weight:900;");
+        console.log(contacts);
         Lambda.updateContacts({token: options.token, })
       }
     });

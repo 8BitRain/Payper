@@ -20,18 +20,18 @@ const initialState = Map({
 });
 
 // Action types
-var SET_AMOUNT,
-    SET_PURPOSE,
-    SET_PAYMENTS,
-    SET_RECIP_ID,
-    SET_RECIP_NAME,
-    SET_RECIP_PIC,
-    SET_SENDER_ID,
-    SET_SENDER_NAME,
-    SET_SENDER_PIC,
-    SET_TYPE,
-    SET_TOKEN,
-    SET_CONFIRMED;
+var SET_AMOUNT = 'SET_AMOUNT',
+    SET_PURPOSE = 'SET_PURPOSE',
+    SET_PAYMENTS = 'SET_PAYMENTS',
+    SET_RECIP_ID = 'SET_RECIP_ID',
+    SET_RECIP_NAME = 'SET_RECIP_NAME',
+    SET_RECIP_PIC = 'SET_RECIP_PIC',
+    SET_SENDER_ID = 'SET_SENDER_ID',
+    SET_SENDER_NAME = 'SET_SENDER_NAME',
+    SET_SENDER_PIC = 'SET_SENDER_PIC',
+    SET_TYPE = 'SET_TYPE',
+    SET_TOKEN = 'SET_TOKEN',
+    SET_CONFIRMED = 'SET_CONFIRMED';
 
 // Action creators
 export function amount(input) { return { type: SET_AMOUNT, input: input } };
@@ -46,6 +46,22 @@ export function senderPic(input) { return { type: SET_SENDER_PIC, input: input }
 export function type(input) { return { type: SET_TYPE, input: input } };
 export function token(input) { return { type: SET_TOKEN, input: input } };
 export function confirmed(input) { return { type: SET_CONFIRMED, input: input } };
+
+// Set all values
+export function all(input) {
+  amount(input);
+  purpose(input);
+  payments(input);
+  recipID(input);
+  recipName(input);
+  recipPic(input);
+  senderID(input);
+  senderName(input);
+  senderPic(input);
+  type(input);
+  token(input);
+  confirmed(input);
+};
 
 /**
   *   Reducer

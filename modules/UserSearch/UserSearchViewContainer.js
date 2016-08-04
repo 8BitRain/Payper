@@ -25,6 +25,7 @@ function mapStateToProps(state) {
 
     // main
     currentUser: state.getIn(['main', 'currentUser']),
+    nativeContacts: state.getIn(['main', 'nativeContacts']),
 
   }
 }
@@ -32,10 +33,26 @@ function mapStateToProps(state) {
 // Decide which action creators our component will receive as props
 function mapDispatchToProps(dispatch) {
   return {
-    listen: (endpoints) => {
+
+    initialize: (nativeContacts) => {
+      dispatch(set.allContacts(nativeContacts));
+    },
+
+    listen: (endpoints, options) => {
       Firebase.listenTo(endpoints, (response) => {
-        response.value = StringMaster5000.formatContacts(response.value);
-        dispatch(set.allContacts(response.value));
+        var contacts = StringMaster5000.orderContacts(response.value);
+
+        console.log("%cReceived Payper contacts from Firebase:", "color:orange;font-weight:900;");
+        console.log(contacts);
+
+        console.log("%cNative contacts were passed in:", "color:green;font-weight:900;")
+        console.log(options.nativeContacts);
+
+        console.log("%cConcatenated Payper and native contacts:", "color:green;font-weight:900;")
+        contacts = contacts.concat(options.nativeContacts);
+        console.log(contacts);
+
+        dispatch(set.allContacts(contacts));
       });
 
       dispatch(set.activeFirebaseListeners(endpoints));

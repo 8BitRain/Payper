@@ -82,12 +82,45 @@ export function formatPurpose(purpose) {
 
 
 /**
-  *   Formats array of contacts and returns them to be rendered
-  *   Rules:
-  *     💣  No more than 3 Facebook contacts
-  *     💣  No more than 3 Phone contacts
+  *   Formats array of native cell phone contacts and returns them to be rendered
+  *   Format:
+  *     {
+  *       first_name: "John",
+  *       last_name: "Doe",
+  *       phone: 2623508312,
+  *       pic: "...",
+  *     }
 **/
-export function formatContacts(contacts) {
+export function formatNativeContacts(contacts) {
+  var arr = [],
+      curr;
+
+  for (var contact in contacts) {
+    curr = contacts[contact];
+    if (!curr.phoneNumbers[0]) continue;
+
+    var c = {
+      first_name: curr.givenName,
+      last_name: curr.familyName,
+      phone: curr.phoneNumbers[0].number,
+      pic: curr.thumbnailPath,
+      type: 'phone',
+    }
+
+    arr.push(c);
+  }
+
+  console.log("%cSuccessfully formatted native contacts:", "color:green;font-weight:900;");
+  console.log(arr);
+
+  return arr;
+};
+
+/**
+  *   Orders array of contacts with Payper contacts having higher priority than
+  *   native phone contacts
+**/
+export function orderContacts(contacts) {
   var arr = [],
       numFacebook = 0,
       numPhone = 0,

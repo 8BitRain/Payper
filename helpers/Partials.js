@@ -64,7 +64,7 @@ class UserPic extends React.Component {
         </View>
       );
     } else {
-      return <Image style={[userStyles.pic], {width: this.props.width, height: this.props.height}} source={{uri: this.props.pic}} />;
+      return <Image style={{borderWidth: 1, borderColor: colors.icyBlue, width: this.props.width, height: this.props.height, borderRadius: this.props.height / 2}} source={{uri: this.props.pic}} />;
     }
   }
 };

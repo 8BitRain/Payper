@@ -26,6 +26,7 @@ const initialState = Map({
   },
   sideMenuIsOpen: false,
   currentPage: "payments",
+  nativeContacts: []
 });
 
 // Action types
@@ -37,7 +38,8 @@ const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
       SET_SIGNED_IN = 'SET_SIGNED_IN',
       SET_HEADER = 'SET_HEADER',
       SET_SIDE_MENU_IS_OPEN = 'SET_SIDE_MENU_IS_OPEN',
-      SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
+      SET_CURRENT_PAGE = 'SET_CURRENT_PAGE',
+      SET_NATIVE_CONTACTS = 'SET_NATIVE_CONTACTS';
 
 
 // Action creators
@@ -50,6 +52,7 @@ export function numUnseenNotifications(input) { return {type: SET_NUM_UNSEEN_NOT
 export function header(input) { return {type: SET_HEADER, input: input} };
 export function sideMenuIsOpen(input) { return {type: SET_SIDE_MENU_IS_OPEN, input: input} };
 export function currentPage(input) { return {type: SET_CURRENT_PAGE, input: input} };
+export function nativeContacts(input) { return {type: SET_NATIVE_CONTACTS, input: input} };
 
 /**
   *   Reducer
@@ -94,6 +97,10 @@ export default function MainReducer(state = initialState, action = {}) {
       break;
     case SET_CURRENT_PAGE:
       var newState = state.set('currentPage', action.input);
+      return newState;
+      break;
+    case SET_NATIVE_CONTACTS:
+      var newState = state.set('nativeContacts', action.input);
       return newState;
       break;
   }
