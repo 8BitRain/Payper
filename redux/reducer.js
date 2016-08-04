@@ -10,6 +10,7 @@ import FirebaseBindingReducer from '../modules/FirebaseBinding/FirebaseBindingSt
 import PredictiveSearchReducer from '../modules/PredictiveSearch/PredictiveSearchState';
 import MainReducer from '../modules/Main/MainState';
 import PaymentsReducer from '../modules/Payments/PaymentsState';
+import PaymentReducer from '../modules/CreatePayment/CreatePaymentState';
 
 const reducers = {
   // Authentication/login state
@@ -30,6 +31,7 @@ const reducers = {
   predictiveSearch: PredictiveSearchReducer,
   main: MainReducer,
   payments: PaymentsReducer,
+  payment: PaymentReducer,
 
 };
 

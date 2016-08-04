@@ -1,59 +1,51 @@
-import {Map} from 'immutable';
-import {loop, Effects} from 'redux-loop';
-import {AsyncStorage} from 'react-native';
+// Dependencies
+import { Map } from 'immutable';
+import { loop, Effects } from 'redux-loop';
 
-// Initialize currentUser vars
-var payment = {
-  to: "",
-  from: "",
-  memo: "",
-  frequency: "",
-  totalCost: -1,
-  singleCost: -1,
-  totalPayments: -1,
-  completedPayments: -1,
-}
 
 // Initialize state
 const initialState = Map({
-  payment,
+  amount,
+  purpose,
+  payments,
+  recip_id,
+  recip_name,
+  recip_pic,
+  sender_id,
+  sender_name,
+  sender_pic,
+  type,
+  token,
+  confirmed
 });
 
 // Action types
-var SET_FROM,
-    SET_TO,
-    SET_MEMO,
-    SET_FREQUENCY,
-    SET_TOTAL_COST,
-    SET_SINGLE_COST,
-    SET_TOTAL_PAYMENTS,
-    SET_COMPLETED_PAYMENTS;
+var SET_AMOUNT,
+    SET_PURPOSE,
+    SET_PAYMENTS,
+    SET_RECIP_ID,
+    SET_RECIP_NAME,
+    SET_RECIP_PIC,
+    SET_SENDER_ID,
+    SET_SENDER_NAME,
+    SET_SENDER_PIC,
+    SET_TYPE,
+    SET_TOKEN,
+    SET_CONFIRMED;
 
 // Action creators
-export function setFrom(input) {
-  return { type: SET_FROM, input: input };
-};
-export function setTo(input) {
-  return { type: SET_TO, input: input };
-};
-export function setMemo(input) {
-  return { type: SET_MEMO, input: input };
-};
-export function setFrequency(input) {
-  return { type: SET_FREQUENCY, input: input };
-};
-export function setTotalCost(input) {
-  return { type: SET_TOTAL_COST, input: input };
-};
-export function setSingleCost(input) {
-  return { type: SET_SINGLE_COST, input: input };
-};
-export function setTotalPayments(input) {
-  return { type: SET_TOTAL_PAYMENTS, input: input };
-};
-export function setCompletedPayments(input) {
-  return { type: SET_COMPLETED_PAYMENTS, input: input };
-};
+export function amount(input) { return { type: SET_AMOUNT, input: input } };
+export function purpose(input) { return { type: SET_PURPOSE, input: input } };
+export function payments(input) { return { type: SET_PAYMENTS, input: input } };
+export function recipID(input) { return { type: SET_RECIP_ID, input: input } };
+export function recipName(input) { return { type: SET_RECIP_NAME, input: input } };
+export function recipPic(input) { return { type: SET_RECIP_PIC, input: input } };
+export function senderID(input) { return { type: SET_SENDER_ID, input: input } };
+export function senderName(input) { return { type: SET_SENDER_NAME, input: input } };
+export function senderPic(input) { return { type: SET_SENDER_PIC, input: input } };
+export function type(input) { return { type: SET_TYPE, input: input } };
+export function token(input) { return { type: SET_TOKEN, input: input } };
+export function confirmed(input) { return { type: SET_CONFIRMED, input: input } };
 
 /**
   *   Reducer
@@ -62,54 +54,54 @@ export function setCompletedPayments(input) {
   *   tree based on that action and returns full state tree.
   *
 **/
-export default function CreateAccountReducer(state = initialState, action = {}) {
+export default function PaymentReducer(state = initialState, action = {}) {
   switch (action.type) {
-    case SET_FROM:
-      var payment = state.get('payment');
-      payment.from = action.input;
-      var newState = state.set('payment', payment);
+    case SET_AMOUNT:
+      var newState = state.set('amount', action.input);
       return newState;
       break;
-    case SET_TO:
-      var payment = state.get('payment');
-      payment.to = action.input;
-      var newState = state.set('payment', payment);
+    case SET_PURPOSE:
+      var newState = state.set('purpose', action.input);
       return newState;
       break;
-    case SET_MEMO:
-      var payment = state.get('payment');
-      payment.memo = action.input;
-      var newState = state.set('payment', payment);
+    case SET_PAYMENTS:
+      var newState = state.set('payments', action.input);
       return newState;
       break;
-    case SET_FREQUENCY:
-      var payment = state.get('payment');
-      payment.frequency = action.input;
-      var newState = state.set('payment', payment);
+    case SET_RECIP_ID:
+      var newState = state.set('recip_id', action.input);
       return newState;
       break;
-    case SET_TOTAL_COST:
-      var payment = state.get('payment');
-      payment.totalCost = action.input;
-      var newState = state.set('payment', payment);
+    case SET_RECIP_NAME:
+      var newState = state.set('recip_name', action.input);
       return newState;
       break;
-    case SET_SINGLE_COST:
-      var payment = state.get('payment');
-      payment.singleCost = action.input;
-      var newState = state.set('payment', payment);
+    case SET_RECIP_PIC:
+      var newState = state.set('recip_pic', action.input);
       return newState;
       break;
-    case SET_TOTAL_PAYMENTS:
-      var payment = state.get('payment');
-      payment.totalPayments = action.input;
-      var newState = state.set('payment', payment);
+    case SET_SENDER_ID:
+      var newState = state.set('sender_id', action.input);
       return newState;
       break;
-    case SET_COMPLETED_PAYMENTS:
-      var payment = state.get('payment');
-      payment.completedPayments = action.input;
-      var newState = state.set('payment', payment);
+    case SET_SENDER_NAME:
+      var newState = state.set('sender_name', action.input);
+      return newState;
+      break;
+    case SET_SENDER_PIC:
+      var newState = state.set('sender_pic', action.input);
+      return newState;
+      break;
+    case SET_TYPE:
+      var newState = state.set('type', action.input);
+      return newState;
+      break;
+    case SET_TOKEN:
+      var newState = state.set('token', action.input);
+      return newState;
+      break;
+    case SET_CONFIRMED:
+      var newState = state.set('confirmed', action.input);
       return newState;
       break;
   }
