@@ -1,18 +1,29 @@
 import {connect} from 'react-redux';
-import * as dispatchFunctions from  './LandingScreenState';
+import * as dispatchFunctions from  '../../modules/CreateAccount/CreateAccountState';
+import * as selfDispatchFunctions from './LandingScreenState';
 import LandingScreenView from './LandingScreenView';
 import Validators from '../../helpers/validators';
 import * as Firebase from '../../services/Firebase';
+
+
 
 /**
   *   Connect function for LandingScreenView.js
 **/
 export default connect(
   state => ({
-
+    //Provider information
+    provider: state.getIn(['landingScreen', 'provider']),
+    token: state.getIn(['landingScreen'], 'token')
   }),
   dispatch => ({
-    // Handles pagination
+    //Update provider (How the account view container was reached)
+    dispatchSetProvider(input){
+      dispatch(dispatchFunctions.setProvider(input));
+    },
+    dispatchSetToken(input){
+      dispatch(selfDispatchFunctions.setToken(input));
+    }
 
   })
 )(LandingScreenView);

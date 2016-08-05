@@ -1,39 +1,19 @@
-/**
-  *     TODO DURING IMPLEMENTATION
-  *     --------------------------
-**/
-
-
-
-
 // Dependencies
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Image} from "react-native";
-import Button from "react-native-button";
-import Entypo from "react-native-vector-icons/Entypo";
+import {View, Text, TextInput, StyleSheet, Image} from 'react-native';
+import Button from 'react-native-button';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 
-// Header styles
+// Arrow nav styles
 const styles = StyleSheet.create({
-  // // Container for header elements
-  // headerWrap: {
-  //   position: "absolute",
-  //   top: 0,
-  //   left: 0,
-  //   right: 0,
-  //   // backgroundColor: "#593F62",
-  //   backgroundColor: "transparent",
-  //   paddingTop: 30,
-  //   paddingBottom: 10,
-  //   flexDirection: "row"
-  // },
 
   // Container for arrow buttons
   arrowWrap: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
   },
 
   // Inline icon positioning
@@ -52,13 +32,19 @@ const styles = StyleSheet.create({
   iconArrow: {
     margin: 30,
     width: 50,
-    height: 50
+    height: 50,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   iconCheck: {
     marginLeft: 15,
     marginRight: 15,
     width: 50,
-    height: 50
+    height: 50,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
 
@@ -66,7 +52,7 @@ const styles = StyleSheet.create({
 // Return a right arrow button
 function getRightArrow(callback, dark) {
   return(
-    <Button style={{borderColor: "red", borderWidth: 10}} onPress={() => {callback()}}>
+    <Button style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderColor: "red", borderWidth: 10}} onPress={() => {callback()}}>
       <Entypo style={styles.iconArrow} name="chevron-thin-right" size={36} color={(dark) ? "black" : "white"} />
     </Button>
   );
@@ -93,26 +79,12 @@ function getCheck(callback) {
 
 /**
   *   Toolbar for the create account onboarding process
-  *
-  *   TODO: implement pagination functionality by passing props and stuff
-  *         (for now, the third page is always filled in)
 **/
 class ArrowNav extends React.Component {
   constructor(props) {
     super(props);
-
-    // Callback functions to be passed to getArrow()
-    // this.onPressLeft = function() { console.log("-----  Pressed left arrow  -----") };
-    // this.onPressRight = function() { console.log("-----  Pressed right arrow  -----") };
-
-    // For testing, these will typically be passed as props
-    // this.arrowNavProps = {
-    //   leftArrow: true,
-    //   rightArrow: true
-    // };
-    // this.arrowNavProps = this.props.arrowNavProps;
-    // END For testing, these will typically be passed as props
   }
+
   render() {
     return(
       <View style={styles.arrowWrap}>

@@ -9,12 +9,15 @@ import * as Firebase from '../../services/Firebase';
 **/
 export default connect(
   state => ({
-    // Tracks pagination
-    //currentPage: state.getIn(['createAccount', 'currentPage']),
-
-    //Tracks whether or not iav has been started
+    /*Bank Onboarding State Variables*/
     startIav: state.getIn(['bankOnboarding', 'startIav']),
     firebase_token: state.getIn(['bankOnboarding', 'firebase_token']),
+    dwollaCustomer: state.getIn(['bankOnboarding', 'dwollaCustomer']),
+    // Tracks pagination
+    currentPagex: state.getIn(['bankOnboarding', 'currentPagex']),
+
+    /*Create Account State Variables*/
+    currentUser: state.getIn(['createAccount', 'currentUser'])
 
   }),
   dispatch => ({
@@ -22,50 +25,44 @@ export default connect(
       dispatchSetIav(input){
         dispatch(dispatchFunctions.setIav(input));
       },
-
       dispatchSetFirebaseToken(input){
         dispatch(dispatchFunctions.setFirebaseToken(input));
-      }
+      },
+      dispatchSetFirstName(input){
+        dispatch(dispatchFunctions.setFirstName(input));
+      },
+      dispatchSetLastName(input){
+        dispatch(dispatchFunctions.setLastName(input));
+      },
+      dispatchSetEmail(input){
+        dispatch(dispatchFunctions.setEmail(input));
+      },
+      dispatchSetPhone(input){
+        dispatch(dispatchFunctions.setPhone(input));
+      },
+      dispatchSetAddress(input){
+        dispatch(dispatchFunctions.setAddress(input));
+      },
+      dispatchSetCity(input){
+        dispatch(dispatchFunctions.setCity(input));
+      },
+      dispatchSetZip(input){
+        dispatch(dispatchFunctions.setZip(input));
+      },
+      dispatchSetState(input){
+        dispatch(dispatchFunctions.setState(input));
+      },
+      dispatchSetDob(input){
+        dispatch(dispatchFunctions.setDob(input));
+      },
+      dispatchSetSSN(input){
+        dispatch(dispatchFunctions.setSSN(input));
+      },
 
-
-    // Handles pagination
-    // Handles pagination
-    /*dispatchSetPage(index, direction, validations, input) {
-      if (direction == "forward") {
-        var currentPage = index - 1;
-        // console.log("input: " + input);
-        // console.log("index: " + index);
-        // console.log("direction: " + direction);
-        // console.log("validations: " + JSON.stringify(validations));
-        if (validations.valid) {
-          switch (currentPage) {
-            //
-            case 0:
-              //dispatch(dispatchFunctions.setEmail(input));
-              break;
-            //
-            case 1:
-              //dispatch(dispatchFunctions.setPassword(input));
-              break;
-            //
-            case 2:
-              //dispatch(dispatchFunctions.setFirstName(input));
-              break;
-            //
-            case 3:
-              //dispatch(dispatchFunctions.setLastName(input));
-              break;
-            //
-            case 4:
-              //dispatch(dispatchFunctions.setPhoneNumber(input));
-              break;
-          }
-          dispatch(dispatchFunctions.setPage(index));
-        }
-      }else {
-        dispatch(dispatchFunctions.setPage(index));
+      // Handles pagination
+      dispatchSetPageX(index, direction) {
+        dispatch(dispatchFunctions.setPageX(index));
       }
-    } //End of dispatchSetPage */
   })
 )(BankOnboardingView);
 /* END Connect function for TrackingScreen.js */

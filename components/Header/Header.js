@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
   // Flow tab wrapper
   flowTabWrap: {
     height: 30,
-    width: 100,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -113,6 +112,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 14,
     color: colors.white,
+    paddingLeft: 4,
+    paddingRight: 4,
+    paddingTop: 1,
+    paddingBottom: 1,
   },
 
   // Active tab styles
@@ -182,7 +185,7 @@ function getFlowTabs(activeTab, callbackIn, callbackOut) {
         style={[styles.flowTabIn, (activeTab == 'in') ? styles.activeTab : null]}
         onPress={() => callbackIn()}>
         <Text style={[styles.flowTabText, (activeTab == 'in') ? styles.activeTabText : null]}>
-          In
+          Incoming
         </Text>
       </TouchableHighlight>
 
@@ -193,7 +196,7 @@ function getFlowTabs(activeTab, callbackIn, callbackOut) {
         style={[styles.flowTabOut, (activeTab == 'out') ? styles.activeTab : null]}
         onPress={() => callbackOut()}>
         <Text style={[styles.flowTabText, (activeTab == 'out') ? styles.activeTabText : null]}>
-          Out
+          Outgoing
         </Text>
       </TouchableHighlight>
     </View>
@@ -217,7 +220,7 @@ class Header extends React.Component {
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
           { this.props.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
-          { this.props.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings, this.props.numNotifications) : null }
+          { this.props.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings, this.props.numUnseenNotifications) : null }
         </View>
 
         { /* Contains 'CircleIcons' or 'PaymentIcons' if specified */ }
@@ -225,7 +228,7 @@ class Header extends React.Component {
           { this.props.headerProps.title ? <Text style={{fontFamily: 'Roboto', fontSize: 16, color: colors.white, paddingTop: 5}}>{ this.props.headerProps.title }</Text> : null }
           { this.props.headerProps.types.paymentIcons ? getPaymentIcons(this.props.index) : null }
           { this.props.headerProps.types.circleIcons ? getCircleIcons(this.props.headerProps.numCircles, this.props.headerProps.index) : null }
-          { this.props.headerProps.types.flowTabs ? getFlowTabs(this.state.active, () => {this.setState({active: 'in'}); this.props.callbackIn()}, () => {this.setState({active: 'out'}); this.props.callbackOut()}) : null }
+          { this.props.headerProps.types.flowTabs ? getFlowTabs(this.state.active, () => {this.setState({active: 'in'}); this.props.headerProps.callbackIn()}, () => {this.setState({active: 'out'}); this.props.headerProps.callbackOut()}) : null }
         </View>
 
         { /* Filler */ }

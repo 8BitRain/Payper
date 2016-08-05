@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 60,
     flexDirection: 'row',
+    backgroundColor: colors.white,
   },
 
   // Wrap for the image portion of the preview
@@ -19,8 +20,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-
-    backgroundColor: colors.white,
   },
 
   // Wrap for the text portion of the preview
@@ -29,8 +28,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     paddingLeft: 15,
-
-    backgroundColor: colors.white,
   },
 
   // User's picture

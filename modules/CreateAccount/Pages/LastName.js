@@ -85,7 +85,7 @@ class LastName extends React.Component {
            : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Not capitalized</Text> }
          { this.props.lastNameValidations.format ? null
            : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Invalid character (. and - are allowed)</Text> }
-         { this.props.lastName.valid ? <Text style={[typography.validationSuccess, typography.fontSizeError, typography.marginSides]}>Good to go!</Text>
+         { this.props.lastNameValidations.valid ? <Text style={[typography.validationSuccess, typography.fontSizeError, typography.marginSides]}>Good to go!</Text>
            : null }
        </View>
 

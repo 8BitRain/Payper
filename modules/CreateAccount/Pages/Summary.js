@@ -51,7 +51,10 @@ class Summary extends React.Component {
 
    // Callback functions to be passed to the arrow nav
    this.onPressLeft = function() { this.props.dispatchSetPage(4, null, null, null) };
-   this.onPressCheck = function() { Init.createUser(this.props.currentUser) };
+   this.onPressCheck = function() {
+     Init.createUser(this.props.currentUser);
+     Actions.BankOnboardingContainer();
+   };
  }
  componentDidMount() {
    Animations.fadeIn(this.animationProps);
@@ -71,7 +74,7 @@ class Summary extends React.Component {
          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.password}</Text>
          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.firstName}</Text>
          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.lastName}</Text>
-         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.phoneNumber}</Text>
+         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.phone}</Text>
        </View>
 
        { /* Arrow nav buttons */ }

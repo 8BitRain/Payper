@@ -22,13 +22,12 @@ class Settings extends React.Component {
 
     this.state = {
       dataSource: ds.cloneWithRows([
-        {rowTitle: "Home", iconName: "home", destination: () => this.props.changePage("")},
+        {rowTitle: "Home", iconName: "home", destination: () => this.props.changePage("payments")},
         {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
         {rowTitle: "Payment History", iconName: "line-graph", destination: Actions.CreateAccountViewContainer},
         {rowTitle: "FAQ", iconName: "help-with-circle", destination: Actions.CreateAccountViewContainer},
         {rowTitle: "Sign Out", iconName: "moon", destination: Init.signOut},
       ]),
-      user: {},
     }
   }
 
@@ -65,13 +64,6 @@ class Settings extends React.Component {
   }
 
 
-  componentDidMount() {
-    Async.get('user', (user) => {
-      this.setState({user: JSON.parse(user)});
-    });
-  }
-
-
   render() {
     return (
       <View style={{flex: 1, backgroundColor: colors.darkGrey}}>
@@ -84,10 +76,10 @@ class Settings extends React.Component {
           style={{borderBottomWidth: 1, borderBottomColor: colors.icyBlue}}>
 
           <View style={{height: 70, marginTop: 30, paddingBottom: 12.5, paddingLeft: 20, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: colors.icyBlue}}>
-            { Partials.getUserPic(this.state.user.profile_pic, this.state.user.full_name) }
+            { Partials.getUserPic(this.props.currentUser.profile_pic, this.props.currentUser.first_name + " " + this.props.currentUser.last_name) }
 
             <View style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
-              <Text style={[styles.rowTitle, {fontSize: 18, paddingLeft: 0}]}>{ this.state.user.full_name }</Text>
+              <Text style={[styles.rowTitle, {fontSize: 18, paddingLeft: 0}]}>{ this.props.currentUser.first_name + " " + this.props.currentUser.last_name }</Text>
               <Text style={[styles.rowTitle, {fontSize: 12, color: colors.icyBlue, paddingLeft: 0}]}>Edit profile</Text>
             </View>
           </View>

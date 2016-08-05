@@ -12,33 +12,39 @@ var Mixpanel = require('react-native-mixpanel');
 **/
 export default connect(
   state => ({
+
     // Account setup variables
     firstName: state.getIn(['createAccount', 'currentUser']).firstName,
     lastName: state.getIn(['createAccount', 'currentUser']).lastName,
     email: state.getIn(['createAccount', 'currentUser']).email,
     password: state.getIn(['createAccount', 'currentUser']).password,
-    phoneNumber: state.getIn(['createAccount', 'currentUser']).phoneNumber,
+    phone: state.getIn(['createAccount', 'currentUser']).phone,
     currentUser: state.getIn(['createAccount', 'currentUser']),
+
+    //Token Information
+    token: state.getIn(['landingScreen', 'token']),
+
+    //Provider information
+    provider: state.getIn(['createAccount', 'provider']),
 
     // Tracks pagination
     currentPage: state.getIn(['createAccount', 'currentPage']),
+
+    // Tracks IAV Initiation
+    startIav: state.getIn(['createAccount', 'startIav']),
 
     // Input validation booleans
     emailValidations: state.getIn(['createAccount', 'emailValidations']),
     passwordValidations: state.getIn(['createAccount', 'passwordValidations']),
     firstNameValidations: state.getIn(['createAccount', 'firstNameValidations']),
     lastNameValidations: state.getIn(['createAccount', 'lastNameValidations']),
-    phoneNumberValidations: state.getIn(['createAccount', 'phoneNumberValidations'])
+    phoneValidations: state.getIn(['createAccount', 'phoneValidations'])
   }),
   dispatch => ({
     // Handles pagination
     dispatchSetPage(index, direction, validations, input) {
       if (direction == "forward") {
         var currentPage = index - 1;
-        // console.log("input: " + input);
-        // console.log("index: " + index);
-        // console.log("direction: " + direction);
-        // console.log("validations: " + JSON.stringify(validations));
         if (validations.valid) {
           switch (currentPage) {
             // Email
@@ -59,28 +65,33 @@ export default connect(
               break;
             // Phone number
             case 4:
-              dispatch(dispatchFunctions.setPhoneNumber(input));
+              dispatch(dispatchFunctions.setPhone(input));
               break;
           }
           dispatch(dispatchFunctions.setPage(index));
-        } else{
-
-            console.log("hit");
-            if(validations.valid==false){
-              for (var temp in validations) {
-            if(!validations[temp]&&temp!='valid'){
-            Mixpanel.track(temp);
-            }
-
+        } else {
+          if (validations.valid==false) {
+            for (var temp in validations) {
+              if (!validations[temp]&&temp!='valid') Mixpanel.track(temp);
             }
           }
         }
-
-      }else {
+      } else {
         dispatch(dispatchFunctions.setPage(index));
       }
     },
 
+    //Update provider (How the account view container was reached)
+    dispatchSetProvider(input){
+      dispatch(dispatchFunctions.setProvider(input));
+    },
+    dispatchSetPhone(input){
+      console.log(input);
+      dispatch(dispatchFunctions.setPhone(input));
+    },
+    dispatchSetIav(input){
+      dispatch(dispatchFunctions.setIav(input));
+    },
     // Updates validation booleans
     dispatchSetPasswordValidations(input) {
       dispatch(dispatchFunctions.setPasswordValidations(input));
@@ -94,13 +105,16 @@ export default connect(
     dispatchSetLastNameValidations(input) {
       dispatch(dispatchFunctions.setLastNameValidations(input));
     },
-    dispatchSetPhoneNumberValidations(input) {
-      dispatch(dispatchFunctions.setPhoneNumberValidations(input));
+    dispatchSetPhoneValidations(input) {
+      dispatch(dispatchFunctions.setPhoneValidations(input));
+    },
+    dispatchSetToken(input){
+      dispatch(dispatchFunctions.setToken(input));
     },
     dispatchCreateAccount(user) {
       // Create account
       Init.createUser(user);
-    }
+    },
   })
 )(CreateAccountView);
 /* END Connect function for CreateAccountView.js */

@@ -25,11 +25,13 @@ class UserPreview extends React.Component {
         <TouchableHighlight onPress={() => { this.props.callback(); }}>
           <View style={[styles.userWrap, {width: this.props.width}]}>
             <View style={styles.picWrap}>
-              { Partials.getUserPic(this.props.user.profile_pic, this.props.user.name) }
+              { Partials.getUserPic(this.props.user.profile_pic, this.props.user.first_name + " " + this.props.user.last_name) }
             </View>
             <View ref={"textWrap"} style={styles.textWrap}>
               <Text style={styles.fullnameText}>{ this.props.user.first_name + " " + this.props.user.last_name }</Text>
-              <Text style={styles.usernameText}>{ this.props.user.username }</Text>
+              <Text style={[styles.usernameText], {color: (this.props.user.phone) ? colors.alertGreen : colors.icyBlue}}>
+                { this.props.user.username || "+" + this.props.user.phone }
+              </Text>
             </View>
           </View>
         </TouchableHighlight>

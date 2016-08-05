@@ -11,11 +11,12 @@
   *     💣  Get user:          'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get'
   *     💣  Accept payment:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
   *     💣  Read notification: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
+  *     💣  Direct invite:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct'
+  *     💣  Payment invite:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
   *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
   *
 **/
-
 
 /**
   *   Get user object for specified session token, returning it via callback
@@ -54,6 +55,7 @@ export function createUser(user, callback) {
       if (!responseData.errorMessage) {
         console.log("Create user Lambda response", responseData);
         //Note responseData can come with additional fields so has a +1 level of encapsulation
+
         if (typeof callback == 'function') callback(responseData.user);
       } else {
         console.log("Error getting user with token", responseData.errorMessage);
@@ -76,20 +78,8 @@ export function createFBUser(user, callback) {
     .then((responseData) => {
       if (!responseData.errorMessage) {
         console.log("Create user Lambda response", responseData);
-        //Note responseData can come with additional fields so has a +1 level of encapsulation
-        /* responseData.account_status can either be created or exists*/
-        console.log("User Creation Stats: " + responseData.account_status);
-        if(responseData.account_status == "exists"){
-          //Set a flag in Firebase to assist with actions that require an account to already
-          //be in the exist state.
-        }
-        if(responseData.account_status == "created"){
-          //Set a flag
-          //Set Phone Numbers
-          //Set a flag in Firebase to assist with actions that require an account to already
-          //be in the created state.
-        }
-        if (typeof callback == 'function') callback(responseData.user);
+        console.log("USER ACCOUNT STATUS: " +  responseData.account_status);
+        if (typeof callback == 'function') callback(responseData.user, responseData.account_status);
       } else {
         console.log("Error getting FBuser with token", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
@@ -193,6 +183,52 @@ export function cancelPayment(options) {
   }
 };
 
+/**
+  *   Create a DwollaCustomer
+**/
+export function createCustomer(data, callback){
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/create", {method: "POST", body: JSON.stringify(data)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("CreateCustomerResponse:", responseData);
+        //if (typeof callback == 'function') callback(true);
+        callback(true);
+      } else {
+        console.log("Error:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+/**
+  *   Update Phone Number
+**/
+export function updatePhone(data, callback){
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneNumber", {method: "POST", body: JSON.stringify(data)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Update Phone response:", responseData);
+        //if (typeof callback == 'function') callback(true);
+        callback(true);
+      } else {
+        console.log("Error:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 
 /**
   *   Given timestamp, and session_token, mark a notification as read
@@ -230,6 +266,50 @@ export function updatePhoneContacts(options, callback) {
         if (typeof callback == 'function') callback(responseData);
       } else {
         console.log("Error updating phone contacts:", responseData.errorMessage);
+      }
+    }
+  }
+};
+
+
+/**
+  *   Given session_token and phone number, invite a user to join the app
+  *   Alert caller of success
+**/
+export function inviteDirect(options) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Invite direct Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error inviting direcly:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given payment info, session_token, and phone number, create payment and
+  *   invite other party to join the app.
+**/
+export function inviteViaPayment(options) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Invite via payment Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error inviting via payment:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
       }
     })
