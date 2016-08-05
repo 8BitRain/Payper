@@ -128,6 +128,7 @@ export function orderContacts(contacts) {
 
   for (var c in contacts) {
     curr = contacts[c];
+    curr.uid = c;
 
     // Limted number of contacts
     // if (curr.type == "facebook") {

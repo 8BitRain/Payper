@@ -1,6 +1,9 @@
 // Dependencies
 import { connect } from 'react-redux';
 
+// Helpers
+import * as StringMaster5000 from '../../helpers/StringMaster5000';
+
 // Dispatch functions
 import * as set from './CreatePaymentState';
 
@@ -31,7 +34,24 @@ function mapStateToProps(state) {
     token: state.getIn(['payment', 'token']),
     confirmed: state.getIn(['payment', 'confirmed']),
 
-    paymentInfo: state.get('payment').toString(),
+    paymentInfo: {
+      amount: state.getIn(['payment', 'amount']),
+      purpose: state.getIn(['payment', 'purpose']),
+      payments: state.getIn(['payment', 'payments']),
+      recip_id: state.getIn(['payment', 'recip_id']),
+      recip_name: state.getIn(['payment', 'recip_name']),
+      recip_pic: state.getIn(['payment', 'recip_pic']),
+      sender_id: state.getIn(['payment', 'sender_id']),
+      sender_name: state.getIn(['payment', 'sender_name']),
+      sender_pic: state.getIn(['payment', 'sender_pic']),
+      type: state.getIn(['payment', 'type']),
+      token: state.getIn(['payment', 'token']),
+      confirmed: state.getIn(['payment', 'confirmed']),
+      invite: state.getIn(['payment', 'invite']),
+      info: state.getIn(['payment', 'info']),
+    },
+
+    payment: state.getIn(['payment', 'info']),
 
   }
 }
@@ -65,6 +85,58 @@ function mapDispatchToProps(dispatch) {
 
     setAll: (input) => {
       dispatch(set.all(input));
+    },
+
+    setPayment: (options, callback) => {
+      var recip,
+          sender,
+          payment = {
+            amount: options.payment.amount,
+            purpose: options.payment.purpose,
+            payments: options.payment.payments,
+            recip_id: null,
+            recip_name: null,
+            recip_pic: null,
+            sender_id: null,
+            sender_name: null,
+            sender_pic: null,
+            type: options.type,
+            token: options.currentUser.token,
+            confirmed: false,
+            invite: null,
+            invitee: null,
+            phoneNumber: null,
+          };
+
+      // Determine flow of money
+      if (options.type == "pay") {
+        recip = options.otherUser;
+        sender = options.currentUser;
+      } else {
+        recip = options.currentUser;
+        sender = options.otherUser;
+      }
+
+      // Is this an invite?
+      if (options.type == "pay" && !recip.username || options.type == "request" && !sender.username) {
+        payment.invite = true;
+        payment.invitee = (payment.type == "pay") ? "recip" : "sender";
+        payment.phoneNumber = StringMaster5000.formatPhoneNumber(options.otherUser.phone);
+      } else {
+        payment.invite = false;
+      }
+
+      // Recipient info
+      payment.recip_name = recip.first_name + " " + recip.last_name;
+      payment.recip_id = recip.uid;
+      payment.recip_pic = recip.profile_pic;
+
+      // Sender info
+      payment.sender_name = sender.first_name + " " + sender.last_name;
+      payment.sender_id = sender.uid;
+      payment.sender_pic = sender.profile_pic;
+
+      dispatch(set.info(payment), () => callback());
     },
 
   }

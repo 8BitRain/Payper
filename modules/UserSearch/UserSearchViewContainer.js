@@ -8,6 +8,7 @@ import * as StringMaster5000 from '../../helpers/StringMaster5000';
 
 // Dispatch functions
 import * as set from './UserSearchState';
+import * as setPayment from '../CreatePayment/CreatePaymentState';
 
 // Base view
 import UserSearchView from './UserSearchView';
@@ -41,6 +42,9 @@ function mapDispatchToProps(dispatch) {
     listen: (endpoints, options) => {
       Firebase.listenTo(endpoints, (response) => {
         var contacts = StringMaster5000.orderContacts(response.value);
+
+        console.log("%cPayper contact UID:", "color:orange;font-weight:900;");
+        console.log(contacts[0].uid);
 
         console.log("%cReceived Payper contacts from Firebase:", "color:orange;font-weight:900;");
         console.log(contacts);

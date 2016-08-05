@@ -29,7 +29,6 @@ function genUserPreview(user, options) {
       key={user.username}
       user={user}
       width={dimensions.width}
-      callback={() => { this.setState({query: user.username, user: user}); }}
       touchable={options.touchable} />
   );
 }
@@ -91,8 +90,36 @@ class Purpose extends React.Component {
         { /* Arrow nav buttons */ }
         <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
           <PayRequestNav
-            payCallback={() => { this.props.createPayment(this.props.paymentInfo) }}
-            requestCallback={() => { this.props.createRequest(this.props.paymentInfo) }} />
+            payCallback={() => {
+              this.props.setPayment({
+                payment: {
+                  amount: this.props.amount,
+                  purpose: this.props.purpose,
+                  payments: this.props.payments,
+                },
+                currentUser: this.props.currentUser,
+                otherUser: this.props.selectedContact,
+                type: "pay"
+              }, () => {
+                console.log("%cPayment info in callback:", "color:green;font-weight:900;");
+                console.log(this.props.payment);
+              });
+            }}
+            requestCallback={() => {
+              this.props.setPayment({
+                payment: {
+                  amount: this.props.amount,
+                  purpose: this.props.purpose,
+                  payments: this.props.payments,
+                },
+                currentUser: this.props.currentUser,
+                otherUser: this.props.selectedContact,
+                type: "request"
+              }, () => {
+                console.log("%cRequest info in callback:", "color:green;font-weight:900;");
+                console.log(this.props.payment);
+              });
+            }} />
         </Animated.View>
       </View>
     );
@@ -221,6 +248,10 @@ class CreatePaymentView extends React.Component {
       inputting: "user",
       header: Headers.createPaymentHeader(),
     };
+  }
+
+  componentWillMount() {
+    this.props.setToken(this.props.currentUser.token);
   }
 
   _setPageIndex(i) {

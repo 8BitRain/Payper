@@ -2,7 +2,6 @@
 import { Map } from 'immutable';
 import { loop, Effects } from 'redux-loop';
 
-
 // Initialize state
 const initialState = Map({
   amount: null,
@@ -16,7 +15,10 @@ const initialState = Map({
   sender_pic: null,
   type: null,
   token: null,
-  confirmed: null
+  confirmed: false,
+  invite: null,
+  phoneNumber: null,
+  info: {},
 });
 
 // Action types
@@ -31,7 +33,10 @@ var SET_AMOUNT = 'SET_AMOUNT',
     SET_SENDER_PIC = 'SET_SENDER_PIC',
     SET_TYPE = 'SET_TYPE',
     SET_TOKEN = 'SET_TOKEN',
-    SET_CONFIRMED = 'SET_CONFIRMED';
+    SET_CONFIRMED = 'SET_CONFIRMED',
+    SET_INVITE = 'SET_INVITE',
+    SET_PHONE_NUMBER = 'SET_PHONE_NUMBER',
+    SET_INFO = 'SET_INFO';
 
 // Action creators
 export function amount(input) { return { type: SET_AMOUNT, input: input } };
@@ -46,21 +51,26 @@ export function senderPic(input) { return { type: SET_SENDER_PIC, input: input }
 export function type(input) { return { type: SET_TYPE, input: input } };
 export function token(input) { return { type: SET_TOKEN, input: input } };
 export function confirmed(input) { return { type: SET_CONFIRMED, input: input } };
+export function invite(input) { return { type: SET_INVITE, input: input } };
+export function phoneNumber(input) { return { type: SET_PHONE_NUMBER, input: input } };
+export function info(input) { return { type: SET_INFO, input: input } };
 
 // Set all values
-export function all(input) {
-  amount(input);
-  purpose(input);
-  payments(input);
-  recipID(input);
-  recipName(input);
-  recipPic(input);
-  senderID(input);
-  senderName(input);
-  senderPic(input);
-  type(input);
-  token(input);
-  confirmed(input);
+export function all(payment) {
+  amount(payment.amount);
+  purpose(payment.purpose);
+  payments(payment.payments);
+  recipID(payment.recipID);
+  recipName(payment.recipName);
+  recipPic(payment.recipPic);
+  senderID(payment.senderID);
+  senderName(payment.senderName);
+  senderPic(payment.senderPic);
+  type(payment.type);
+  token(payment.token);
+  confirmed(payment.confirmed);
+  invite(payment.invite);
+  phoneNumber(payment.phoneNumber);
 };
 
 /**
@@ -118,6 +128,18 @@ export default function PaymentReducer(state = initialState, action = {}) {
       break;
     case SET_CONFIRMED:
       var newState = state.set('confirmed', action.input);
+      return newState;
+      break;
+    case SET_INVITE:
+      var newState = state.set('invite', action.input);
+      return newState;
+      break;
+    case SET_PHONE_NUMBER:
+      var newState = state.set('phoneNumber', action.input);
+      return newState;
+      break;
+    case SET_INFO:
+      var newState = state.set('info', action.input);
       return newState;
       break;
   }
