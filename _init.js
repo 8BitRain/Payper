@@ -21,61 +21,10 @@ import { Actions } from 'react-native-router-flux';
 
 
 /**
-<<<<<<< HEAD
-  *   Log user's object, session_token, payment_flow, and a global user list
-  *   to AsyncStorage.
-**/
-function initializeAppState(user) {
-  user.full_name = user.first_name + " " + user.last_name;
-
-  // Log user object and session token to AsyncStorage
-  Async.set('user', JSON.stringify(user));
-  Async.set('session_token', user.token);
-
-  // Log global user list to AsyncStorage
-  Firebase.getUsers((users) => {
-    Async.set('users', JSON.stringify(users));
-  });
-
-  Contacts.getAll((err, contacts) => {
-    if (err && err.type === 'permissionDenied') {
-      console.error("Error getting contacts:\n", err);
-    } else {
-      var phoneNumbers = [];
-
-      // Extract phone numbers
-      for (var c in contacts) {
-        var numbers = contacts[c].phoneNumbers;
-        for (var n in numbers) {
-          phoneNumbers.push(numbers[n].number.replace(/\D/g,''));
-        }
-      }
-
-      Lambda.updatePhoneContacts({token: user.token, phoneNumbers: phoneNumbers});
-    }
-  });
-
-  // Log number of unseen notifications to AsyncStorage
-  Firebase.getNumNotifications(user.uid, (num) => {
-    Async.set('num_notifications', num.toString());
-  });
-
-  // Log user's payment flow to AsyncStorage
-  Firebase.getPaymentFlow(user, (flow) => {
-    Async.set('payment_flow', JSON.stringify(flow), () => {
-      //Actions.MainViewContainer();
-    });
-  });
-};
-
-
-/**
-=======
->>>>>>> origin/create-payment-refactor
   *   Sign in with session token. Upon success, initialize app
 **/
 export function signInWithToken(callback) {
-  /*try {
+  try {
     Async.get('session_token', (val) => {
       if (val) {
         Lambda.getUserWithToken(val, (user) => {
@@ -103,9 +52,7 @@ export function signInWithToken(callback) {
     });
   } catch (err) {
     console.log(err);
-  }*/
-  //Commented to make debugging easier
-  Actions.LandingScreenContainer();
+  }
 };
 
 
@@ -264,8 +211,7 @@ export function createPayment(data, callback) {
     callback(res);
   });
 };
-<<<<<<< HEAD
-=======
+
 
 /**
   * Update phone number
@@ -318,4 +264,3 @@ export function initializeUsers(options, callback) {
     });
   } else console.log("Received null uid.");
 };
->>>>>>> eric_brady_merge
