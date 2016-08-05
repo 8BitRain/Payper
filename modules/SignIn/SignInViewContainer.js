@@ -26,6 +26,7 @@ class SignInView extends React.Component {
       password: "",
       loading: false,
       doneLoading: false,
+      signInSuccess: false,
     }
 
     this.arrowNavProps = {
@@ -36,10 +37,10 @@ class SignInView extends React.Component {
 
 
   signInWithEmail() {
-    var _this = this;
+    const _this = this;
     this.setState({loading: true});
     Init.signInWithEmail({email: this.state.email, password: this.state.password}, function(signedIn) {
-      _this.setState({doneLoading: true});
+      _this.setState({doneLoading: true, signInSuccess: signedIn});
     });
   }
 
@@ -49,10 +50,12 @@ class SignInView extends React.Component {
       return(
         <Loading
           complete={this.state.doneLoading}
+          success={this.state.signInSuccess}
           msgSuccess={"Welcome!"}
           msgError={"Sign in failed"}
-          msgLoading={"One sec..."}
-          destination={() => Actions.MainViewContainer()} />
+          msgLoading={"Signing in"}
+          successDestination={() => Actions.MainViewContainer()}
+          errorDestination={() => { this.setState({loading: false}) }} />
       );
     } else {
       return (

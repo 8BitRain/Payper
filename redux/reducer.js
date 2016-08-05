@@ -8,7 +8,10 @@ import CreateAccountReducer from '../modules/CreateAccount/CreateAccountState';
 import BankOnboardingReducer from '../modules/BankOnboarding/BankOnboardingState';
 import FirebaseBindingReducer from '../modules/FirebaseBinding/FirebaseBindingState';
 import LandingScreenReducer from '../modules/LandingScreen/LandingScreenState';
-//import MainReducer from '../modules/Main/MainState';
+import UserSearchReducer from '../modules/UserSearch/UserSearchState';
+import MainReducer from '../modules/Main/MainState';
+import PaymentsReducer from '../modules/Payments/PaymentsState';
+import PaymentReducer from '../modules/CreatePayment/CreatePaymentState';
 
 
 const reducers = {
@@ -24,10 +27,14 @@ const reducers = {
 
   session: SessionStateReducer*/
 
+  main: MainReducer,
   createAccount: CreateAccountReducer,
   bankOnboarding: BankOnboardingReducer,
   firebaseBinding: FirebaseBindingReducer,
   landingScreen: LandingScreenReducer,
+  userSearch: UserSearchReducer,
+  payments: PaymentsReducer,
+  payment: PaymentReducer,
 
 };
 

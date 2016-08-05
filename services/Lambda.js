@@ -11,11 +11,12 @@
   *     💣  Get user:          'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get'
   *     💣  Accept payment:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
   *     💣  Read notification: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
+  *     💣  Direct invite:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct'
+  *     💣  Payment invite:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
   *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
   *
 **/
-
 
 /**
   *   Get user object for specified session token, returning it via callback
@@ -242,6 +243,54 @@ export function seeNotification(options) {
         if (typeof callback == 'function') callback(responseData);
       } else {
         console.log("Error seeing notification:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given session_token and phone number, invite a user to join the app
+  *   Alert caller of success
+**/
+export function inviteDirect(options) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Invite direct Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error inviting direcly:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given payment info, session_token, and phone number, create payment and
+  *   invite other party to join the app.
+**/
+export function inviteViaPayment(options) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Invite via payment Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error inviting via payment:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
       }
     })

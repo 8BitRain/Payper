@@ -61,6 +61,7 @@ class LandingScreenDisplay extends React.Component {
       fbPhone: false,
       provider: "",
       doneLoading: false,
+      signInSuccess: false,
       fbAcessToken: "Test Value",
       fbUser: {}
     }
@@ -121,19 +122,21 @@ class LandingScreenDisplay extends React.Component {
   }
 
 
-
   /*
   * Sign In With Facebook
   */
-  signInWithFacebook(FBToken, result){
+  signInWithFacebook(FBToken, result) {
 
-    var picture ='';
-    if(result.picture.data.is_silhouette){
-      picture = '';
-    } else {
-      picture = result.picture.data.url;
-    }
 
+    // Extend scope
+    const _this = this;
+
+    // Get profile picture
+    var picture;
+    if (result.picture.data.is_silhouette) picture = '';
+    else picture = result.picture.data.url;
+
+    // Set up user object
     var data = {
       FBToken: FBToken,
       user: {
@@ -141,16 +144,20 @@ class LandingScreenDisplay extends React.Component {
         last_name: result.last_name,
         email: result.email,
         profile_pic: picture,
+        phone: '',
         gender: result.gender,
         friends: result.friends.data,
         facebook_id: result.id,
         token: ''
       }
     };
-    const _this = this;
+
+
     //Critical line causing loading issues.
     _this.setState({provider: "facebook"});
+      // Start loading
     _this.setState({loading: true});
+    // Push user object to Lambda function
     Init.signInWithFacebook(data, function(signedIn, user, token) {
         console.log("TOKEN: " + token);
         console.log("USER: " + JSON.stringify(user));
@@ -160,8 +167,9 @@ class LandingScreenDisplay extends React.Component {
         }
         _this.setState({fbPhone: user.phone});
         //_this.setState({provider: user.provider});
-        _this.setState({doneLoading: true});
+        _this.setState({doneLoading: true, signInSuccess: signedIn});
     });
+
   }
 
 
@@ -175,8 +183,10 @@ class LandingScreenDisplay extends React.Component {
             complete={this.state.doneLoading}
             msgSuccess={"Welcome!"}
             msgError={"Sign in failed"}
-            msgLoading={"One sec..."}
-            destination={() => Actions.MainViewContainer()} />
+            msgLoading={"Signing In"}
+            success={this.state.signInSuccess}
+            successDestination={() => Actions.MainViewContainer()}
+            errorDestination={() => Actions.LandingScreenView()} />
         );
       }
 
@@ -189,8 +199,10 @@ class LandingScreenDisplay extends React.Component {
               complete={this.state.doneLoading}
               msgSuccess={"Welcome!"}
               msgError={"Sign in failed"}
-              msgLoading={"One sec..."}
-              destination={() => Actions.MainViewContainer()} />
+              msgLoading={"Signing in"}
+              success={this.state.signInSuccess}
+              successDestination={() => Actions.MainViewContainer()}
+              errorDestination={() => Actions.LandingScreenView()} />
           );
         }
         //Facebook Account Newly Created
@@ -201,11 +213,14 @@ class LandingScreenDisplay extends React.Component {
               complete={this.state.doneLoading}
               msgSuccess={"Welcome!"}
               msgError={"Sign in failed"}
-              msgLoading={"One sec..."}
-              destination={() => Actions.CreateAccountViewContainer()} />
+              msgLoading={"Signing in"}
+              success={this.state.signInSuccess}
+              successDestination={() => Actions.CreateAccountViewContainer()}
+              errorDestination={() => Actions.LandingScreenView()} />
           );
         }
       }
+
     } else {
       return (
         <Animated.View style={[container.main, background.main, {opacity: this.animationProps.fadeAnim}]}>

@@ -287,12 +287,10 @@ export function listenToUsers(callback) {
   *   Listen to each of the specified routes
 **/
 export function listenTo(endpoints, callback) {
-  var endpoint;
-
   for (var e in endpoints) {
-    endpoint = endpoints[e];
-    firebase.database().ref('/' + endpoints[e]).on('value', (snapshot) => {
-      if (typeof callback == 'function') callback({ name: snapshot.key, value: snapshot.val() });
+    const endpoint = endpoints[e];
+    firebase.database().ref('/' + endpoint).on('value', (snapshot) => {
+      if (typeof callback == 'function') callback({ endpoint: endpoint, key: snapshot.key, value: snapshot.val() });
       else console.log("Callback is not a function");
     });
   }

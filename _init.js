@@ -14,7 +14,6 @@
 
 
 // Dependencies
-const Contacts = require('react-native-contacts');
 import * as Firebase from './services/Firebase';
 import * as Lambda from './services/Lambda';
 import * as Async from './helpers/Async';
@@ -22,6 +21,7 @@ import { Actions } from 'react-native-router-flux';
 
 
 /**
+<<<<<<< HEAD
   *   Log user's object, session_token, payment_flow, and a global user list
   *   to AsyncStorage.
 **/
@@ -56,6 +56,8 @@ function initializeAppState(user) {
 
 
 /**
+=======
+>>>>>>> origin/create-payment-refactor
   *   Sign in with session token. Upon success, initialize app
 **/
 export function signInWithToken(callback) {
@@ -64,14 +66,25 @@ export function signInWithToken(callback) {
       if (val) {
         Lambda.getUserWithToken(val, (user) => {
           if (user) {
-            initializeAppState(user);
-            if (typeof callback == 'function') callback(true);
+
+            console.log("%cSuccessfully retrieved user object:", "color:green;font-weight:900;");
+            console.log(user);
+
+            // Sign in succeeded. Log the user to Async storage and take them
+            // to the app.
+            Async.set('user', JSON.stringify(user), () => {
+              if (typeof callback == 'function') callback(true);
+              else console.log("Callback is not a function.");
+            });
+
           } else {
-            Actions.LandingScreenView();
+            if (typeof callback == 'function') callback(false);
+            else console.log("Callback is not a function.");
           }
         });
       } else {
-        Actions.LandingScreenView();
+        if (typeof callback == 'function') callback(false);
+        else console.log("Callback is not a function.");
       }
     });
   } catch (err) {
@@ -88,23 +101,36 @@ export function signInWithToken(callback) {
 export function signInWithEmail(data, callback) {
   if (data.email && data.password) {
     Firebase.authWithEmail(data, (success) => {
-      if (!success) {
-        callback(false);
-      } else {
+      if (success) {
         Firebase.getSessionToken((token) => {
           if (token) {
-            Lambda.getUserWithToken(token, (userData) => {
-              if (userData) {
-                initializeAppState(userData);
-                if (typeof callback == 'function') callback(true);
+            Lambda.getUserWithToken(token, (user) => {
+              if (user) {
+                console.log("%cSuccessfully retrieved user object:", "color:green;font-weight:900;");
+                console.log(user);
+                // Sign in succeeded. Log the user to Async storage and take them
+                // to the app.
+                Async.set('user', JSON.stringify(user), () => {
+                  if (typeof callback == 'function') callback(true);
+                  else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+                });
               }
             });
+          } else {
+            console.log("%cFailed to get session token from Firebase", "color:orange;font-weight:900;");
+            if (typeof callback == 'function') callback(false);
+            else console.log("%cCallback is not a function", "color:red;font-weight:900;");
           }
         });
+      } else {
+        if (typeof callback == 'function') callback(false);
+        else console.log("%cCallback is not a function", "color:red;font-weight:900;");
       }
     });
   } else {
-    console.log("Invalid email and password input (both must be strings)");
+    console.log("%cInvalid email and password input (both must be strings)", "color:red;font-weight:900;");
+    if (typeof callback == 'function') callback(false);
+    else console.log("%cCallback is not a function", "color:red;font-weight:900;");
   }
 };
 
@@ -116,37 +142,49 @@ export function signInWithFacebook(data, callback) {
   if (data.FBToken) Firebase.authWithFacebook(data.FBToken, (success) => {
     if (success) {
       Firebase.getSessionToken((token) => {
-        console.log("Token Retrieved from Firebase.getSessionToken"
-        + "\n" + "====================================="
-        + "\n" + token);
+
         data.user.token = token;
-        Lambda.createFBUser(data.user, (user, account_status) => {
-          if (user && account_status) {
-            console.log("Init(signInWithFacebook) user: " + JSON.stringify(user));
+        Lambda.createFBUser(data.user, (user) => {
+          if (user) {
+            console.log("%cSuccessfully retrieved user object:", "color:green;font-weight:900;");
+            console.log(user);
 
-            //Create Flags for the new user
-            Firebase.createAppFlags(user, account_status);
-            //Note send the account_status back in initializeAppState or callback.
-            initializeAppState(user);
-            callback(true, user, data.user.token);
+            // Sign in succeeded. Log the user to AsyncStorage
+            Async.set('user', JSON.stringify(user), () => {
 
-          }
-          else {
-            console.log("Received null user");
-            callback(false);
+              // Log session_token to Async storage for next sign in
+              Async.set('session_token', user.token, () => {
+                console.log("%cSuccessfully logged session_token to AsyncStorage", "color:green;font-weight:900;");
+                Async.get('session_token', (token) => {
+                  console.log("TOKEN:", token);
+                });
+              });
+
+              // Alert caller of success
+              if (typeof callback == 'function') callback(true, user, user.token );
+              else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+            });
+          } else {
+            console.log("%cReceived null user.", "color:blue;font-weight:900;");
+            if (typeof callback == 'function') callback(false, user, user.token);
+            else console.log("%cCallback is not a function", "color:red;font-weight:900;");
           }
         });
       });
     }
   });
-  else console.log("Access Token cannot be null");
+  else console.log("%cAccess Token cannot be null", "color:red;font-weight:900;");
 };
 
 
 /**
   *   1) Create Firebase user
   *   2) Get a token for the user and attach it to the user's object
+<<<<<<< HEAD
   * 2.5) Set initial flags for user
+=======
+  *   2.5) Set initial flags for user
+>>>>>>> origin/create-payment-refactor
   *   3) POST user's object to Lambda endpoint
   *   4) Initialize the app
 **/
@@ -159,7 +197,18 @@ export function createUser(input) {
         input.token = token;
         console.log("%cFirebaseToken: " + token, "color:purple;font-weight:700;");
         Lambda.createUser(input, (user) => {
-          if (user) initializeAppState(user);
+          if (user) {
+            // Creation succeeded. Log the user to Async storage and take them
+            // to the app.
+            Async.set('user', JSON.stringify(user), () => {
+              if (typeof callback == 'function') callback(true);
+              else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+            });
+          } else {
+            console.log("%cReceived null user.", "color:blue;font-weight:900;");
+            if (typeof callback == 'function') callback(false);
+            else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+          }
         });
       });
     }
@@ -182,11 +231,9 @@ export function createCustomer(data, callback){
 **/
 export function signOut() {
   Firebase.signOut(() => {
-    Async.set('user', '');
-    Async.set('payment_flow', '');
-    Async.set('session_token', '');
-    Async.set('users', '');
-    Actions.LandingScreenView();
+    Async.set('user', '', () => {
+      Actions.LandingScreenView();
+    });
   });
 };
 
@@ -233,6 +280,8 @@ export function initializeUsers(options, callback) {
       if (err && err.type === 'permissionDenied') {
         console.error("Error getting contacts:\n", err);
       } else {
+        console.log("%cSuccessfully got native contacts:", "color:green;font-weight:900;");
+        console.log(contacts);
         Lambda.updateContacts({token: options.token, })
       }
     });

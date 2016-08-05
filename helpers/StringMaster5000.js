@@ -19,7 +19,6 @@ import moment from 'moment';
 import * as Timestamp from './Timestamp';
 import colors from '../styles/colors';
 
-
 /**
   *   Given a notification object, return ready-to-render strings
 **/
@@ -83,9 +82,117 @@ export function formatPurpose(purpose) {
 
 
 /**
+  *   Formats array of native cell phone contacts and returns them to be rendered
+  *   Format:
+  *     {
+  *       first_name: "John",
+  *       last_name: "Doe",
+  *       phone: 2623508312,
+  *       pic: "...",
+  *     }
+**/
+export function formatNativeContacts(contacts) {
+  var arr = [],
+      curr;
+
+  for (var contact in contacts) {
+    curr = contacts[contact];
+    if (!curr.phoneNumbers[0]) continue;
+
+    var c = {
+      first_name: curr.givenName,
+      last_name: curr.familyName,
+      phone: curr.phoneNumbers[0].number,
+      pic: curr.thumbnailPath,
+      type: 'phone',
+    }
+
+    arr.push(c);
+  }
+
+  console.log("%cSuccessfully formatted native contacts:", "color:green;font-weight:900;");
+  console.log(arr);
+
+  return arr;
+};
+
+/**
+  *   Orders array of contacts with Payper contacts having higher priority than
+  *   native phone contacts
+**/
+export function orderContacts(contacts) {
+  var arr = [],
+      numFacebook = 0,
+      numPhone = 0,
+      curr;
+
+  for (var c in contacts) {
+    curr = contacts[c];
+
+    // Limted number of contacts
+    // if (curr.type == "facebook") {
+    //   if (numFacebook < 3) arr.push(contacts[c]);
+    //   numFacebook++;
+    // } else if (curr.type == "phone") {
+    //   if (numPhone < 3) arr.push(contacts[c]);
+    //   numPhone++;
+    // } else {
+    //   arr.push(contacts[c]);
+    // }
+
+    // Unlimited number of contacts
+    arr.push(contacts[c]);
+
+  }
+
+  arr.sort((a, b) => {
+    if (a.type == "facebook" && b.type == "phone") return -1;
+    else return 1;
+  });
+
+  return arr;
+};
+
+
+/**
+  *   Filters array of contacts lexicographically given a set and a query string
+**/
+export function filterContacts(contacts, query) {
+  // Don't run the set through our regex if there's no query
+  if (query === '') return contacts;
+
+  // If user's first or last name contains the regex, add them to the filtered set
+  const regex = new RegExp(query + '.+$', 'i');
+  return contacts.filter(c => c.first_name.search(regex) >= 0 || c.last_name.search(regex) >= 0);
+};
+
+
+/**
   *   Formats timestamps with Moment.js
 **/
 export function formatTimestamp(ts) {
   ts = parseInt(ts);
   return moment(ts).calendar();;
 };
+
+
+/**
+  *   Format phone number
+**/
+export function formatPhoneNumber(num) {
+  return num.replace(/\D/g,'');
+};
+
+
+/**
+  *   String checker:
+  *     Empty:
+  *     💣 string is not null
+  *     💣 string is not ""
+  *     💣 string is not full of white space
+**/
+export function checkIf(query) {
+  return {
+    isEmpty: query != null && query != "" && query.replace(/\s/g, '').length > 0,
+  };
+}
