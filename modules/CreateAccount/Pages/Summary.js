@@ -51,7 +51,10 @@ class Summary extends React.Component {
 
    // Callback functions to be passed to the arrow nav
    this.onPressLeft = function() { this.props.dispatchSetPage(4, null, null, null) };
-   this.onPressCheck = function() { Init.createUser(this.props.currentUser) };
+   this.onPressCheck = function() {
+     Init.createUser(this.props.currentUser);
+     Actions.BankOnboardingContainer();
+   };
  }
  componentDidMount() {
    Animations.fadeIn(this.animationProps);

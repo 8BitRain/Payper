@@ -185,7 +185,7 @@ export function cancelPayment(options) {
 /**
   *   Create a DwollaCustomer
 **/
-export function createCustoemr(data, callback){
+export function createCustomer(data, callback){
   try {
     fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/create", {method: "POST", body: JSON.stringify(data)})
     .then((response) => response.json())

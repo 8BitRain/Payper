@@ -33,7 +33,7 @@ class PhoneNumber extends React.Component {
    };
 
    // Props for temporary input storage
-   this.phoneNumberInput = this.props.currentUser.phone;
+   this.phoneNumberInput = this.props.phone;
 
    // Props to be passed to the header
    this.headerProps = {

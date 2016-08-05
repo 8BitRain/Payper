@@ -19,6 +19,8 @@ import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
 
+//Init
+import * as Init from '../../../_init';
 
 class SSN extends React.Component {
    constructor(props) {
@@ -64,10 +66,24 @@ class SSN extends React.Component {
      };
 
      // Callback functions to be passed to the arrow nav
-     this.onPressRight = function() { this.props.dispatchSetPage(4, "forward") };
-     this.onPressLeft = function() { this.props.dispatchSetPage(3, "backward") };
+     this.onPressRight = function() { this.props.dispatchSetPageX(4, "forward") };
+     this.onPressLeft = function() { this.props.dispatchSetPageX(3, "backward") };
      this.onPressCheck = function(){
-       createCustomer(this.props.dwollaCustomer);
+       var data = {
+         "firstName": this.props.dwollaCustomer.firstName,
+         "lastName": this.props.dwollaCustomer.lastName,
+         "email": this.props.dwollaCustomer.email,
+         "phone": this.props.dwollaCustomer.phone,
+         "address": this.props.dwollaCustomer.address,
+         "city": this.props.dwollaCustomer.city,
+         "state": this.props.dwollaCustomer.state,
+         "zip": this.props.dwollaCustomer.zip,
+         "dob": this.props.dwollaCustomer.dob,
+         "ssn": this.props.dwollaCustomer.ssn,
+         "token": this.props.firebase_token
+       }
+       this.createCustomer(data);
+
      }
    }
    componentDidMount() {
@@ -76,6 +92,9 @@ class SSN extends React.Component {
    }
 
    createCustomer(data){
+     //data.token = {this.props.firebase_token};
+     console.log("FirebaseToken: " + this.props.firebase_token);
+     //console.log("DataToken: " + data.token);
      Init.createCustomer(data, function(customerCreated){
        console.log("CustomerCreated?: " + customerCreated);
      });
@@ -88,7 +107,7 @@ class SSN extends React.Component {
 
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>SSN</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"123456780"} keyboardType="phone-pad" />
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"5240"} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"123456780"} keyboardType="phone-pad" />
          </View>
 
            { /* Arrow nav buttons */ }

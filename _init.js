@@ -157,6 +157,7 @@ export function createUser(input) {
       console.log("SETTING INITIAL USER FLAGS")
       Firebase.getSessionToken((token) => {
         input.token = token;
+        console.log("%cFirebaseToken: " + token, "color:purple;font-weight:700;");
         Lambda.createUser(input, (user) => {
           if (user) initializeAppState(user);
         });

@@ -286,7 +286,8 @@ class OnBoardingSummaryTest extends React.Component {
 const BankOnboardingView = React.createClass({
   render() {
     if(this.props.startIav == ''){
-        switch(this.props.currentPage){
+        this.props.dispatchSetFirebaseToken("eyJhbGciOiJSUzI1NiIsImtpZCI6ImI2MjVmZTczN2YwMTJmZTNmZDgzMjYyZjIxOGE1NTI1MjVmNTExNWYifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmlyZWJhc2UtY29pbmNhc3QiLCJhdWQiOiJmaXJlYmFzZS1jb2luY2FzdCIsImF1dGhfdGltZSI6MTQ3MDM0MDk4NiwidXNlcl9pZCI6Im4zb3puRFJ2bUJib3Z0N1ZpbVdOcHRaUlhScTEiLCJzdWIiOiJuM296bkRSdm1CYm92dDdWaW1XTnB0WlJYUnExIiwiaWF0IjoxNDcwMzQwOTg3LCJleHAiOjE0NzAzNDQ1ODcsImVtYWlsIjoidGVzdGVyM0B3aXNjLmVkdSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJ0ZXN0ZXIzQHdpc2MuZWR1IiwidGVzdGVyM0B3aXNjLmVkdSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.luyfhUg6wCx0g8T4jcHeU-LhJsoH_jlU5vvoKzfUVZyZm9C8gT2LxXD_MJjwGkGHzWa7kiVTt7FV0-BLX4t884XSJHPjBummJNnwWINgvbOROj7wkIMK15ZfQe149iGcXDQTJls3JEqfc9u_Iy87IX79Nm5SEnhe8UhS-UR0XP5wbXVygIfKPj4q3Ssp5ap-cs78b0p1M1-f49mUg1bcG3Lzc4wg5PVMGyxhQeu6KCiD_Aj3uyBYlW5bRCSXIHkGOUJCKxSAjYedroxC4xsFwMPEqjN1s49mnT3XZvetRUO4piShDSXYbtd_JKJrFdo-Bs9NyzLOHO56MNGQndhplw");
+        switch(this.props.currentPagex){
           case 0:
             return(
               <BasicInfo
@@ -295,7 +296,7 @@ const BankOnboardingView = React.createClass({
                 dispatchSetLastName={this.props.dispatchSetLastName}
                 dispatchSetEmail={this.props.dispatchSetEmail}
                 dispatchSetPhone={this.props.dispatchSetPhone}
-                dispatchSetPage={this.props.dispatchSetPage}
+                dispatchSetPageX={this.props.dispatchSetPageX}
                 callbackClose={Actions.landingView}
               />
             )
@@ -307,7 +308,7 @@ const BankOnboardingView = React.createClass({
                 dispatchSetCity={this.props.dispatchSetCity}
                 dispatchSetState={this.props.dispatchSetState}
                 dispatchSetZip={this.props.dispatchSetZip}
-                dispatchSetPage={this.props.dispatchSetPage}
+                dispatchSetPageX={this.props.dispatchSetPageX}
                 callbackClose={Actions.landingView}
               />
             )
@@ -316,7 +317,7 @@ const BankOnboardingView = React.createClass({
             return(
               <Dob
                 dispatchSetDob={this.props.dispatchSetDob}
-                dispatchSetPage={this.props.dispatchSetPage}
+                dispatchSetPageX={this.props.dispatchSetPageX}
                 callbackClose={Actions.landingView}
               />
             )
@@ -325,8 +326,10 @@ const BankOnboardingView = React.createClass({
             return(
               <SSN
                 dispatchSetSSN={this.props.dispatchSetSSN}
-                dispatchSetPage={this.props.dispatchSetPage}
+                dispatchSetPageX={this.props.dispatchSetPageX}
                 callbackClose={Actions.landingView}
+                dwollaCustomer={this.props.dwollaCustomer}
+                firebase_token={this.props.firebase_token}
               />
             )
             break;

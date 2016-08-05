@@ -14,7 +14,7 @@ export default connect(
     firebase_token: state.getIn(['bankOnboarding', 'firebase_token']),
     dwollaCustomer: state.getIn(['bankOnboarding', 'dwollaCustomer']),
     // Tracks pagination
-    currentPage: state.getIn(['bankOnboarding', 'currentPage']),
+    currentPagex: state.getIn(['bankOnboarding', 'currentPagex']),
 
     /*Create Account State Variables*/
     currentUser: state.getIn(['createAccount', 'currentUser'])
@@ -60,8 +60,8 @@ export default connect(
       },
 
       // Handles pagination
-      dispatchSetPage(index, direction) {
-        dispatch(dispatchFunctions.setPage(index));
+      dispatchSetPageX(index, direction) {
+        dispatch(dispatchFunctions.setPageX(index));
       }
   })
 )(BankOnboardingView);
