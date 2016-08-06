@@ -42,6 +42,7 @@
 - [ ] "Severe Error, duplicates recorded in Firebase, with no auth information. To reproduce
       delete an id but not a users and Facebook id, or switch this around until you can get duplicate users through Facebook sign in or regular user sign in." https://github.com/facebook/react-native/issues/6682
 - [ ] User filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
+- [ ] @Eric Sign in with Facebook throws `Cannot read property dispatchSetProvider of undefined` (LandingScreenView.js ln 164)
 
 ## **Installation**
 ```

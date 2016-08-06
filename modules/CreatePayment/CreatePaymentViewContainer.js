@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 // Helpers
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
+import * as Lambda from '../../services/Lambda';
 
 // Dispatch functions
 import * as set from './CreatePaymentState';
@@ -87,7 +88,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(set.all(input));
     },
 
-    setPayment: (options, callback) => {
+    setPaymentInfo: (options, callback) => {
       var recip,
           sender,
           payment = {
@@ -136,7 +137,19 @@ function mapDispatchToProps(dispatch) {
       payment.sender_id = sender.uid;
       payment.sender_pic = sender.profile_pic;
 
-      dispatch(set.info(payment), () => callback());
+      dispatch(set.info(payment));
+    },
+
+    sendPayment: (payment, callback) => {
+      if (payment.invite) {
+        Lambda.createPayment(payment, (success) => {
+          callback(success);
+        });
+      } else {
+        Lambda.inviteViaPayment(payment, (success) => {
+          callback(success);
+        });
+      }
     },
 
   }

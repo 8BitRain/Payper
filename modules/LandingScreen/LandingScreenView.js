@@ -127,10 +127,6 @@ class LandingScreenDisplay extends React.Component {
   */
   signInWithFacebook(FBToken, result) {
 
-
-    // Extend scope
-    const _this = this;
-
     // Get profile picture
     var picture;
     if (result.picture.data.is_silhouette) picture = '';
@@ -153,21 +149,23 @@ class LandingScreenDisplay extends React.Component {
     };
 
 
-    //Critical line causing loading issues.
-    _this.setState({provider: "facebook"});
-      // Start loading
-    _this.setState({loading: true});
+    // Critical line causing loading issues.
+    this.setState({provider: "facebook"});
+
+    // Start loading
+    this.setState({loading: true});
+
     // Push user object to Lambda function
     Init.signInWithFacebook(data, function(signedIn, user, token) {
         console.log("TOKEN: " + token);
         console.log("USER: " + JSON.stringify(user));
-        if(!user.phone){
-          _this.props.dispatchSetProvider(_this.state.provider);
-          _this.props.dispatchSetToken(token);
+        if (!user.phone) {
+          this.props.dispatchSetProvider(this.state.provider);
+          this.props.dispatchSetToken(token);
         }
-        _this.setState({fbPhone: user.phone});
+        this.setState({fbPhone: user.phone});
         //_this.setState({provider: user.provider});
-        _this.setState({doneLoading: true, signInSuccess: signedIn});
+        this.setState({doneLoading: true, signInSuccess: signedIn});
     });
 
   }

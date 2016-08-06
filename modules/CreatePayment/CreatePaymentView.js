@@ -37,6 +37,9 @@ class Purpose extends React.Component {
   constructor(props) {
     super(props);
     this.kbOffset = new Animated.Value(0);
+    this.state = {
+      awaitingConfirmationOn: false,
+    }
   }
 
   _keyboardWillShow(e) {
@@ -61,6 +64,48 @@ class Purpose extends React.Component {
   componentWillUnmount() {
     _keyboardWillShowSubscription.remove();
     _keyboardWillHideSubscription.remove();
+  }
+
+  _getPayRequestNav() {
+    if (this.state.awaitingConfirmationOn) {
+      return(
+        <PayRequestNav
+          confirmCallback={() => {
+            alert("Confirmed " + this.state.awaitingConfirmationOn);
+          }}
+          confirming={this.state.awaitingConfirmationOn} />
+      );
+    } else {
+      return(
+        <PayRequestNav
+          payCallback={() => {
+            this.setState({ awaitingConfirmation: true });
+            this.props.setPaymentInfo({
+              payment: {
+                amount: this.props.amount,
+                purpose: this.props.purpose,
+                payments: this.props.payments,
+              },
+              currentUser: this.props.currentUser,
+              otherUser: this.props.selectedContact,
+              type: "pay"
+            });
+          }}
+          requestCallback={() => {
+            this.setState({ awaitingConfirmation: true });
+            this.props.setPaymentInfo({
+              payment: {
+                amount: this.props.amount,
+                purpose: this.props.purpose,
+                payments: this.props.payments,
+              },
+              currentUser: this.props.currentUser,
+              otherUser: this.props.selectedContact,
+              type: "request"
+            });
+          }} />
+      );
+    }
   }
 
   render() {
@@ -89,37 +134,7 @@ class Purpose extends React.Component {
 
         { /* Arrow nav buttons */ }
         <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
-          <PayRequestNav
-            payCallback={() => {
-              this.props.setPayment({
-                payment: {
-                  amount: this.props.amount,
-                  purpose: this.props.purpose,
-                  payments: this.props.payments,
-                },
-                currentUser: this.props.currentUser,
-                otherUser: this.props.selectedContact,
-                type: "pay"
-              }, () => {
-                console.log("%cPayment info in callback:", "color:green;font-weight:900;");
-                console.log(this.props.payment);
-              });
-            }}
-            requestCallback={() => {
-              this.props.setPayment({
-                payment: {
-                  amount: this.props.amount,
-                  purpose: this.props.purpose,
-                  payments: this.props.payments,
-                },
-                currentUser: this.props.currentUser,
-                otherUser: this.props.selectedContact,
-                type: "request"
-              }, () => {
-                console.log("%cRequest info in callback:", "color:green;font-weight:900;");
-                console.log(this.props.payment);
-              });
-            }} />
+          { this._getPayRequestNav() }
         </Animated.View>
       </View>
     );

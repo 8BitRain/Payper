@@ -102,10 +102,10 @@ export function createPayment(data, callback) {
     .then((responseData) => {
       if (!responseData.errorMessage) {
         console.log("Create payment Lambda response:", responseData);
-        if (typeof callback == 'function') callback(responseData);
+        if (typeof callback == 'function') callback(true);
       } else {
         console.log("Error creating payment:", responseData.errorMessage);
-        if (typeof callback == 'function') callback("error");
+        if (typeof callback == 'function') callback(false);
       }
     })
     .done();
@@ -281,14 +281,14 @@ export function inviteDirect(options) {
   *   Given payment info, session_token, and phone number, create payment and
   *   invite other party to join the app.
 **/
-export function inviteViaPayment(options) {
+export function inviteViaPayment(payment, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment", {method: "POST", body: JSON.stringify(payment)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
         console.log("Invite via payment Lambda response:", responseData);
-        if (typeof callback == 'function') callback(responseData);
+        if (typeof callback == 'function') callback(true);
       } else {
         console.log("Error inviting via payment:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
