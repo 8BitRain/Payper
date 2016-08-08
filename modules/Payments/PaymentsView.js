@@ -29,8 +29,6 @@ class Payments extends React.Component {
     this.props.stopListening(this.props.activeFirebaseListeners);
   }
 
-
-  // TODO: Eric, do your thing here!
   _renderEmptyState() {
     return(
       <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
@@ -56,7 +54,7 @@ class Payments extends React.Component {
         <View style={{flex: 1.0}}>
           <ListView
             dataSource={ds}
-            renderRow={this._renderRow}
+            renderRow={this._renderRow.bind(this)}
             renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
             enableEmptySections />
         </View>
@@ -72,6 +70,7 @@ class Payments extends React.Component {
     return(
       <Transaction
         payment={payment}
+        out={this.props.activeFilter == "outgoing"}
         callbackCancel={() => console.log("Cancelling payment")}
         callbackConfirm={() => console.log("Confirming payment")}
         callbackReject={() => console.log("Rejecting payment")} />
@@ -84,7 +83,7 @@ class Payments extends React.Component {
 
         { /* List of payments or empty state */ }
         <View style={{flex: 0.9}}>
-          { this._renderEmptyState() }
+          { this._renderPaymentList() }
         </View>
 
         { /* Footer */ }

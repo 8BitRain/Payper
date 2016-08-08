@@ -9,7 +9,7 @@ const initialState = Map({
   currentUser: {},
   flags: "",
   notifications: [],
-  numUnseenNotifications: -1,
+  numUnseenNotifications: 0,
   header: {
     types: {
       "paymentIcons": false,
