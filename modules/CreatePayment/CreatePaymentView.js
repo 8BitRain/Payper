@@ -72,7 +72,11 @@ class Purpose extends React.Component {
         <PayRequestNav
           awaitingConfirmationOn={this.state.awaitingConfirmationOn}
           confirmCallback={() => {
-            alert("Confirmed " + this.state.awaitingConfirmationOn);
+            this.setState({});
+            this.props.sendPayment(this.props.payment, (success) => {
+              if (success) Actions.MainViewContainer();
+              else alert("Payment failed");
+            });
           }} />
       );
     } else {

@@ -94,6 +94,7 @@ function mapDispatchToProps(dispatch) {
           payment = {
             amount: options.payment.amount,
             purpose: options.payment.purpose,
+            paymentsMade: 0,
             payments: options.payment.payments,
             recip_id: null,
             recip_name: null,
@@ -111,6 +112,7 @@ function mapDispatchToProps(dispatch) {
 
       // Determine flow of money
       if (options.type == "pay") {
+        payment.confirmed = true;
         recip = options.otherUser;
         sender = options.currentUser;
       } else {
@@ -142,12 +144,14 @@ function mapDispatchToProps(dispatch) {
 
     sendPayment: (payment, callback) => {
       if (payment.invite) {
-        Lambda.createPayment(payment, (success) => {
-          callback(success);
+        Lambda.inviteViaPayment(payment, (success) => {
+          if (typeof callback == "function") callback(success);
+          else console.log("%cCallback is not a function.", "color:red;font-weight;");
         });
       } else {
-        Lambda.inviteViaPayment(payment, (success) => {
-          callback(success);
+        Lambda.createPayment(payment, (success) => {
+          if (typeof callback == "function") callback(success);
+          else console.log("%cCallback is not a function.", "color:red;font-weight;");
         });
       }
     },
