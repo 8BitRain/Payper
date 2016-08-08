@@ -180,8 +180,8 @@ function getFlowTabs(activeTab, callbackIn, callbackOut) {
     <View style={styles.flowTabWrap}>
       { /* 'In' tab */ }
       <TouchableHighlight
-        activeOpacity={0.7}
-        underlayColor={'transparent'}
+        activeOpacity={(activeTab == 'in') ? 1.0 : 0.7}
+        underlayColor={(activeTab != 'in') ? 'transparent' : colors.white}
         style={[styles.flowTabIn, (activeTab == 'in') ? styles.activeTab : null]}
         onPress={() => callbackIn()}>
         <Text style={[styles.flowTabText, (activeTab == 'in') ? styles.activeTabText : null]}>
@@ -191,8 +191,8 @@ function getFlowTabs(activeTab, callbackIn, callbackOut) {
 
       { /* 'Out' tab */ }
       <TouchableHighlight
-        activeOpacity={0.7}
-        underlayColor={'transparent'}
+        activeOpacity={(activeTab == 'out') ? 1.0 : 0.7}
+        underlayColor={(activeTab != 'out') ? 'transparent' : colors.white}
         style={[styles.flowTabOut, (activeTab == 'out') ? styles.activeTab : null]}
         onPress={() => callbackOut()}>
         <Text style={[styles.flowTabText, (activeTab == 'out') ? styles.activeTabText : null]}>
