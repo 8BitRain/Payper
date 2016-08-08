@@ -1,6 +1,6 @@
 // Dependencies
 import { connect } from 'react-redux';
-var Contacts = require('react-native-contacts'); 
+var Contacts = require('react-native-contacts');
 
 // Helper functions
 import * as Firebase from '../../services/Firebase';

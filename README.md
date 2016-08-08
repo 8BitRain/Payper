@@ -47,6 +47,7 @@
 ### Brady
 - [ ] Implement action sheets
 - [ ] Styles payment invites
+- [ ] Add global user list to UserSearch
 
 ## **Installation**
 ```

@@ -93,7 +93,7 @@ export function getSessionToken(callback) {
 **/
 
 export function getAppFlags(user_id){
-  //Needs to pull data
+  // Needs to pull data
   appFlagsRef.child(user_id).once('value', function(snap){
     var flags = snap.val();
     return(flags);
