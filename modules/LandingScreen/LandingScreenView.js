@@ -155,6 +155,7 @@ class LandingScreenDisplay extends React.Component {
     // Start loading
     this.setState({loading: true});
 
+    var _this = this;
     // Push user object to Lambda function
     Init.signInWithFacebook(data, function(signedIn, user, token) {
         console.log("TOKEN: " + token);
@@ -163,9 +164,9 @@ class LandingScreenDisplay extends React.Component {
           this.props.dispatchSetProvider(this.state.provider);
           this.props.dispatchSetToken(token);
         }
-        this.setState({fbPhone: user.phone});
-        //_this.setState({provider: user.provider});
-        this.setState({doneLoading: true, signInSuccess: signedIn});
+        _this.setState({fbPhone: user.phone});
+        _this.setState({provider: user.provider});
+        _this.setState({doneLoading: true, signInSuccess: signedIn});
     });
 
   }
