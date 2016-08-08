@@ -32,7 +32,7 @@
 ### Architecture
 **Refactor the following to fit new Firebase/Redux model:**
 - [x] Main
-- [ ] Payment creation
+- [x] Payment creation
 - [x] Splash page
 
 ### Bugs
@@ -45,7 +45,8 @@
 - [ ] `@Eric` Sign in with Facebook throws `Cannot read property dispatchSetProvider of undefined` (LandingScreenView.js ln 164)
 
 ### Brady
-
+- [ ] Implement action sheets
+- [ ] Styles payment invites
 
 ## **Installation**
 ```
