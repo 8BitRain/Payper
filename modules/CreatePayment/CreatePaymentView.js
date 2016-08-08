@@ -38,7 +38,7 @@ class Purpose extends React.Component {
     super(props);
     this.kbOffset = new Animated.Value(0);
     this.state = {
-      awaitingConfirmationOn: false,
+      awaitingConfirmationOn: "",
     }
   }
 
@@ -70,16 +70,17 @@ class Purpose extends React.Component {
     if (this.state.awaitingConfirmationOn) {
       return(
         <PayRequestNav
+          awaitingConfirmationOn={this.state.awaitingConfirmationOn}
           confirmCallback={() => {
             alert("Confirmed " + this.state.awaitingConfirmationOn);
-          }}
-          confirming={this.state.awaitingConfirmationOn} />
+          }} />
       );
     } else {
       return(
         <PayRequestNav
+          awaitingConfirmationOn={this.state.awaitingConfirmationOn}
           payCallback={() => {
-            this.setState({ awaitingConfirmation: true });
+            this.setState({ awaitingConfirmationOn: "pay" });
             this.props.setPaymentInfo({
               payment: {
                 amount: this.props.amount,
@@ -92,7 +93,7 @@ class Purpose extends React.Component {
             });
           }}
           requestCallback={() => {
-            this.setState({ awaitingConfirmation: true });
+            this.setState({ awaitingConfirmationOn: "request" });
             this.props.setPaymentInfo({
               payment: {
                 amount: this.props.amount,
@@ -108,9 +109,25 @@ class Purpose extends React.Component {
     }
   }
 
+  _logTouchEvent(e, type) {
+    // if (!this.logEvents) return;
+    console.log("%cTouch event: " + type, "color:blue;font-weight:900;");
+    console.log(e.nativeEvent);
+    console.log("%c--------------------------------------------------", "color:blue;font-weight:900;")
+
+    if (this.state.awaitingConfirmationOn.length > 0)
+      this.setState({awaitingConfirmationOn: ""});
+  }
+
+  _handleStart(e) {
+    this._logTouchEvent(e, "start");
+  }
+
   render() {
     return(
-      <View style={{flex: 1.0, backgroundColor: colors.white}}>
+      <View
+        onStartShouldSetResponder={(e) => this._handleStart(e)}
+        style={{flex: 1.0, backgroundColor: colors.white}}>
         { /* User preview for the user we are paying or requesting  */ }
         <View style={{flex: 0.2}}>
           { genUserPreview(this.props.selectedContact, {touchable: false}) }
@@ -120,7 +137,8 @@ class Purpose extends React.Component {
         </View>
 
         { /* Input */ }
-        <View style={{flex: 0.8}}>
+        <View
+          style={{flex: 0.8}}>
           <Text style={[typography.costInput, typography.marginLeft, {fontSize: 20, padding: 15, color: colors.darkGrey}]}>
             What for?
           </Text>

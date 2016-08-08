@@ -197,3 +197,11 @@ export function checkIf(query) {
     isEmpty: query != null && query != "" && query.replace(/\s/g, '').length > 0,
   };
 }
+
+
+/**
+  *   Capitalize the first letter in a string
+**/
+export function capFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
