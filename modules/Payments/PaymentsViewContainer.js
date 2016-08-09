@@ -104,7 +104,7 @@ function mapDispatchToProps(dispatch) {
       console.log(ds);
 
       dispatch(set.outgoingPayments(ds));
-      Lambda.cancelPayment({pay_id: options.pid, session_token: options.token});
+      Lambda.cancelPayment({payment_id: options.pid, token: options.token});
     },
 
     confirmPayment: (pid) => {

@@ -161,7 +161,7 @@ export function rejectPayment(options) {
 
 
 /**
-  *   Given pay_id and session_token, cancel a payment
+  *   Given payment_id and token, cancel a payment
 **/
 export function cancelPayment(options) {
   try {
