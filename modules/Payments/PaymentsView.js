@@ -76,9 +76,6 @@ class Payments extends React.Component {
         payment={payment}
         out={this.props.activeFilter == "outgoing"}
         callbackCancel={() => {
-          // console.log("%cCurrent data source:", "color:blue;font-weight:900;");
-          // console.log(this.props.incomingPayments._dataBlob.s1);
-
           // Define strings to be displayed in alert
           var firstName = payment.recip_name.split(" ")[0],
               purpose = StringMaster5000.formatPurpose(payment.purpose),
@@ -95,10 +92,30 @@ class Payments extends React.Component {
             cancelMessage: "Nevermind",
             confirmMessage: "Yes please",
             cancel: () => console.log("Nevermind"),
-            confirm: () => this.props.cancelPayment({pid: payment.pid, ds: this.props.outgoingPayments, token: this.props.currentUser.token}),
+            confirm: () => this.props.cancelPayment({
+              pid: payment.pid,
+              ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
+              token: this.props.currentUser.token}),
           });
         }}
-        callbackConfirm={() => console.log("Confirming payment")}
+        callbackConfirm={() => {
+          console.log("Confirming payment");
+          var firstName = payment.sender_name.split(" ")[0],
+              purpose = StringMaster5000.formatPurpose(payment.purpose);
+
+          // Alert the user
+          Alert.confirmation({
+            title: "Start paying " + firstName + " " + purpose,
+            message: "You may cancel this payment at any time. Would you like to continue?",
+            cancelMessage: "Nevermind",
+            confirmMessage: "Yes please",
+            cancel: () => console.log("Nevermind"),
+            confirm: () => this.props.cancelPayment({
+              pid: payment.pid,
+              ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
+              token: this.props.currentUser.token}),        
+          });
+        }}
         callbackReject={() => console.log("Rejecting payment")} />
     );
   }

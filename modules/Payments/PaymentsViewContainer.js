@@ -108,7 +108,18 @@ function mapDispatchToProps(dispatch) {
     },
 
     confirmPayment: (pid) => {
-      console.log("Confirming payment", pid);
+      console.log("%cConfirming payment " + options.pid, "color:red;font-weight:900;");
+      console.log("%cCurrent data source:", "color:blue;font-weight:900;");
+      console.log(options.ds._dataBlob.s1);
+
+      var ds = options.ds._dataBlob.s1;
+      for (var p in ds) if (p == options.pid) console.log("Row to edit: " + ds[p]);
+
+      console.log("%cNew data source:", "color:green;font-weight:900;");
+      console.log(ds);
+
+      // dispatch(set.outgoingPayments(ds));
+      Lambda.confirmPayment({payment_id: options.pid, token: options.token});
     },
 
     rejectPayment: (pid) => {
