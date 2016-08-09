@@ -45,9 +45,11 @@
 - [ ] `@Eric` Sign in with Facebook throws `Cannot read property dispatchSetProvider of undefined` (LandingScreenView.js ln 164)
 
 ### Brady (MVP)
-- [ ] Styles payment invites
+- [ ] Style payment invites
 - [ ] Add global user list to UserSearch
-- [ ] Add confirmation message to cancel payment button
+- [x] Add confirmation message to cancel payment button
+- [x] Add instant updating for payment cancellation
+- [ ] Add instant updating for payment confirmation and rejection
 - [ ] Fix user search regex bug
 
 ### Brady (post-MVP)
