@@ -2,6 +2,10 @@ import React from 'react';
 import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
+// Helpers
+import * as Alert from '../../helpers/Alert';
+import * as StringMaster5000 from '../../helpers/StringMaster5000';
+
 // Partial components
 import Footer from '../../components/Footer/Footer';
 import Transaction from '../../components/Previews/Transaction/Transaction';
@@ -71,7 +75,29 @@ class Payments extends React.Component {
       <Transaction
         payment={payment}
         out={this.props.activeFilter == "outgoing"}
-        callbackCancel={() => console.log("Cancelling payment")}
+        callbackCancel={() => {
+          // console.log("%cCurrent data source:", "color:blue;font-weight:900;");
+          // console.log(this.props.incomingPayments._dataBlob.s1);
+
+          // Define strings to be displayed in alert
+          var firstName = payment.recip_name.split(" ")[0],
+              purpose = StringMaster5000.formatPurpose(payment.purpose),
+              title;
+
+          // Concatenate strings depending on payment flow direction
+          if (this.props.currentUser.uid == payment.sender_id) title = "Stop paying " + firstName + " " + purpose;
+          else title = firstName + " will stop paying you " + purpose;
+
+          // Alert the user
+          Alert.confirmation({
+            title: title,
+            message: "Are you sure you'd like to cancel this payment?",
+            cancelMessage: "Nevermind",
+            confirmMessage: "Yes please",
+            cancel: () => console.log("Nevermind"),
+            confirm: () => this.props.cancelPayment({pid: payment.pid, ds: this.props.outgoingPayments, token: this.props.currentUser.token}),
+          });
+        }}
         callbackConfirm={() => console.log("Confirming payment")}
         callbackReject={() => console.log("Rejecting payment")} />
     );

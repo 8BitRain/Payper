@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 // Helper functions
 import * as Firebase from '../../services/Firebase';
+import * as Lambda from '../../services/Lambda';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
 import * as Async from '../../helpers/Async';
 import * as Headers from '../../helpers/Headers';
@@ -39,13 +40,18 @@ function mapDispatchToProps(dispatch) {
     listen: (endpoints) => {
       Firebase.listenTo(endpoints, (response) => {
         switch (response.key) {
-
           case "in":
+            // Tack payment ID on as prop of each payment object
+            for (var p in response.value) response.value[p].pid = p;
+
             if (response.value) dispatch(set.incomingPayments(response.value));
             else console.log("%cIncoming payments are null.", "color:red;font-weight:700;");
           break;
 
           case "out":
+            // Tack payment ID on as prop of each payment object
+            for (var p in response.value) response.value[p].pid = p;
+
             if (response.value) dispatch(set.outgoingPayments(response.value));
             else console.log("%cOutgoing payments are null.", "color:red;font-weight:700;");
           break;
@@ -86,8 +92,19 @@ function mapDispatchToProps(dispatch) {
 
     // 1) Remove payment from DataSource
     // 2) Remove payment from DB via Lambda endpoint
-    cancelPayment: (pid) => {
-      console.log("Cancelling payment", pid);
+    cancelPayment: (options) => {
+      console.log("%cCancelling payment " + options.pid, "color:red;font-weight:900;");
+      console.log("%cCurrent data source:", "color:blue;font-weight:900;");
+      console.log(options.ds._dataBlob.s1);
+
+      var ds = options.ds._dataBlob.s1;
+      for (var p in ds) if (p == options.pid) delete ds[p];
+
+      console.log("%cNew data source:", "color:green;font-weight:900;");
+      console.log(ds);
+
+      dispatch(set.outgoingPayments(ds));
+      Lambda.cancelPayment({pay_id: options.pid, session_token: options.token});
     },
 
     confirmPayment: (pid) => {
