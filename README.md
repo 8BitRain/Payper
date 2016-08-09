@@ -55,9 +55,6 @@
 ### Brady (post-MVP)
 - [ ] Implement action sheets
 
-### Android & iOS Separation
-- [ ] Add Android functionality for alerts
-
 ## **Installation**
 ```
 $  git clone https://github.com/8BitRain/GetCoincast.git
