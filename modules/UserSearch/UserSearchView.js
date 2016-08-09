@@ -134,8 +134,10 @@ class UserSearch extends React.Component {
 
   _setSelectedContact(data) {
     this.props.setSelectedContact(data);
-    this._setInputBackgroundColor(data.username || data.first_name + " " + data.last_name);
-    this.setState({query: data.username || data.first_name + " " + data.last_name});
+    this.setState({
+      query: data.username || data.first_name + " " + data.last_name,
+      inputBackgroundColor: colors.alertGreen,
+    });
   }
 
 
