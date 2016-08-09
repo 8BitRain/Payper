@@ -196,6 +196,7 @@ export function createCustomer(data, callback){
 **/
 export function signOut() {
   Firebase.signOut(() => {
+    Async.set('session_token', '');
     Async.set('user', '', () => {
       Actions.LandingScreenView();
     });

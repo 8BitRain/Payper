@@ -41,7 +41,7 @@ function mapDispatchToProps(dispatch) {
 
     listen: (endpoints, options) => {
       Firebase.listenTo(endpoints, (response) => {
-        if (response) {
+        if (response.value) {
           var contacts = StringMaster5000.orderContacts(response.value);
 
           console.log("%cPayper contact UID:", "color:orange;font-weight:900;");

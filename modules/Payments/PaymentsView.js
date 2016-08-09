@@ -94,8 +94,8 @@ class Payments extends React.Component {
             cancel: () => console.log("Nevermind"),
             confirm: () => this.props.cancelPayment({
               pid: payment.pid,
-              ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
               token: this.props.currentUser.token}),
+              ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
           });
         }}
         callbackConfirm={() => {
@@ -112,8 +112,8 @@ class Payments extends React.Component {
             cancel: () => console.log("Nevermind"),
             confirm: () => this.props.cancelPayment({
               pid: payment.pid,
+              token: this.props.currentUser.token}),
               ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-              token: this.props.currentUser.token}),        
           });
         }}
         callbackReject={() => console.log("Rejecting payment")} />
