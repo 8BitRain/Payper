@@ -73,6 +73,7 @@ class PhoneNumber extends React.Component {
      //this.props.phone = this.phoneNumberInput;
      console.log(this.phoneNumberInput);
      this.props.dispatchSetPhone(this.phoneNumberInput);
+     this.props.dispatchSetToken(this.props.token);
      console.log(this.props.currentUser.phone);
      console.log("Token: " + this.props.token);
      var data = {
@@ -116,7 +117,7 @@ class PhoneNumber extends React.Component {
        { /* Filler */ }
        <View style={[containers.sixTenths, backgrounds.email]}></View>
        { /* Header */ }
-       <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+       <Header callbackClose={() => {Actions.landingView}} headerProps={this.headerProps} />
     </Animated.View>
    );
  }

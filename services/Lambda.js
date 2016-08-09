@@ -176,6 +176,7 @@ export function getIavToken(data, callback){
         console.log("IAV TOKEN" + JSON.stringify(responseData));
         callback(true, responseData);
       } else {
+        console.log(JSON.stringify(responseData));
         callback(false, "");
       }
     })

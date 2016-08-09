@@ -90,7 +90,7 @@ class LastName extends React.Component {
        </View>
 
        { /* Header */ }
-       <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+       <Header callbackClose={() => {Actions.landingView}} headerProps={this.headerProps} />
        </Animated.View>
      </View>
    );
