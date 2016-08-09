@@ -44,10 +44,17 @@
 - [ ] User filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
 - [ ] `@Eric` Sign in with Facebook throws `Cannot read property dispatchSetProvider of undefined` (LandingScreenView.js ln 164)
 
-### Brady
-- [ ] Implement action sheets
+### Brady (MVP)
 - [ ] Styles payment invites
 - [ ] Add global user list to UserSearch
+- [ ] Add confirmation message to cancel payment button
+- [ ] Fix user search regex bug
+
+### Brady (post-MVP)
+- [ ] Implement action sheets
+
+### Android & iOS Separation
+- [ ] Add Android functionality for alerts
 
 ## **Installation**
 ```
