@@ -11,7 +11,7 @@ export default connect(
   state => ({
     /*Bank Onboarding State Variables*/
     startIav: state.getIn(['bankOnboarding', 'startIav']),
-    firebase_token: state.getIn(['bankOnboarding', 'firebase_token']),
+    firebase_token: state.getIn(['createAccount', 'token']),
     dwollaCustomer: state.getIn(['bankOnboarding', 'dwollaCustomer']),
     // Tracks pagination
     currentPagex: state.getIn(['bankOnboarding', 'currentPagex']),

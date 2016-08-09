@@ -160,6 +160,30 @@ export function rejectPayment(options) {
   }
 };
 
+/*Grab IAV token for specic customer*/
+ //Ping the server with firebase token
+   //Server will respond with iav_token
+ //Inject token into webview
+ //Process
+ //On Callback handle what occurs in webview
+
+export function getIavToken(data, callback){
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/utils/getIAV", {method: "POST", body: JSON.stringify(data)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("IAV TOKEN" + JSON.stringify(responseData));
+        callback(true, responseData);
+      } else {
+        callback(false, "");
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 /**
   *   Given pay_id and session_token, cancel a payment

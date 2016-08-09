@@ -52,13 +52,21 @@ class Summary extends React.Component {
    // Callback functions to be passed to the arrow nav
    this.onPressLeft = function() { this.props.dispatchSetPage(4, null, null, null) };
    this.onPressCheck = function() {
-     Init.createUser(this.props.currentUser);
-     Actions.BankOnboardingContainer();
+     var _this = this;
+     Init.createUser(this.props.currentUser, function(userCreated, token){
+       if(userCreated){
+         console.log("USER TOKEN: " + token);
+         _this.props.dispatchSetToken(token);
+         console.log(_this.props.currentUser.token);
+         Actions.BankOnboardingContainer();
+       }
+     });
    };
  }
  componentDidMount() {
    Animations.fadeIn(this.animationProps);
    Mixpanel.track("Phone# page Finished");
+
  }
  render() {
    return (

@@ -98,6 +98,7 @@ const CreateAccountView = React.createClass({
               createAccount={this.props.dispatchCreateAccount}
               currentUser={this.props.currentUser}
               dispatchSetPage={this.props.dispatchSetPage}
+              dispatchSetToken={this.props.dispatchSetToken}
             />
           )
           break;

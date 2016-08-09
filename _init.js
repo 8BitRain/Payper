@@ -153,13 +153,14 @@ export function signInWithFacebook(data, callback) {
   *   3) POST user's object to Lambda endpoint
   *   4) Initialize the app
 **/
-export function createUser(input) {
+export function createUser(input, _callback) {
   Firebase.createUser(input, (success) => {
     if (success) {
       //Set initial flags for the user created
       console.log("SETTING INITIAL USER FLAGS")
       Firebase.getSessionToken((token) => {
         input.token = token;
+        _callback(true, token);
         console.log("%cFirebaseToken: " + token, "color:purple;font-weight:700;");
         Lambda.createUser(input, (user) => {
           if (user) {
@@ -176,6 +177,8 @@ export function createUser(input) {
           }
         });
       });
+    } else{
+      _callback(false, null);
     }
   });
 };
@@ -190,6 +193,21 @@ export function createCustomer(data, callback){
   });
 }
 
+/*Grab IAV token for specic customer*/
+ //Ping the server with firebase token
+   //Server will respond with iav_token
+ //Inject token into webview
+ //Process
+ //On Callback handle what occurs in webview
+
+export function getIavToken(data, callback){
+  Lambda.getIavToken(data, (iavTokenRecieved, iavToken) => {
+    if(iavTokenRecieved){
+      console.log("INIT IAVTOKEN: " + JSON.stringify(iavToken));
+      callback(true, iavToken);
+    }
+  });
+ }
 /**
   *   1) Sign user out of Firebase
   *   2) Redirect user to landing page
