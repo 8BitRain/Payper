@@ -100,9 +100,10 @@ export function formatNativeContacts(contacts) {
     if (!curr.phoneNumbers[0]) continue;
 
     var c = {
-      first_name: curr.givenName,
-      last_name: curr.familyName,
-      phone: curr.phoneNumbers[0].number,
+      first_name: (curr.givenName) ? curr.givenName : "",
+      last_name: (curr.familyName) ? curr.familyName : "",
+      phone: formatPhoneNumber(curr.phoneNumbers[0].number),
+      stylizedPhone: stylizePhoneNumber(curr.phoneNumbers[0].number),
       pic: curr.thumbnailPath,
       type: 'phone',
     }
@@ -164,7 +165,7 @@ export function filterContacts(contacts, query) {
 
   // If user's first or last name contains the regex, add them to the filtered set
   const regex = new RegExp(query + '.+$', 'i');
-  return contacts.filter(c => c.first_name.search(regex) >= 0 || c.last_name.search(regex) >= 0);
+  return contacts.filter(c => c.first_name && c.first_name.search(regex) >= 0 || c.last_name && c.last_name.search(regex) >= 0);
 };
 
 
@@ -184,6 +185,25 @@ export function formatPhoneNumber(num) {
   return num.replace(/\D/g,'');
 };
 
+
+/**
+  *   Stylize phone numbers like this: +(262)-305-8038
+**/
+export function stylizePhoneNumber(num) {
+  num = formatPhoneNumber(num);
+  if (num.length < 10 || num.length > 11) return num;
+  if (num.length == 10) {
+    var areaCode = num.substring(0, 3),
+        firstThree = num.substring(3, 6),
+        lastFour = num.substring(6, 10);
+    return "+" + "(" + areaCode + ")-" + firstThree + "-" + lastFour;
+  } else if (num.length == 11) {
+    var areaCode = num.substring(1, 4),
+        firstThree = num.substring(4, 7),
+        lastFour = num.substring(7, 11);
+    return "+" + "(" + areaCode + ")-" + firstThree + "-" + lastFour;
+  }
+}
 
 /**
   *   String checker:

@@ -29,6 +29,7 @@ function mapStateToProps(state) {
     numUnseenNotifications: state.getIn(['main', 'numUnseenNotifications']),
     header: state.getIn(['main', 'header']),
     sideMenuIsOpen: state.getIn(['main', 'sideMenuIsOpen']),
+    initialized: state.getIn(['main', 'initialized']),
 
   }
 }
@@ -57,6 +58,7 @@ function mapDispatchToProps(dispatch) {
           // Sign in succeeded
           dispatch(set.currentUser(JSON.parse(user)));
           dispatch(set.signedIn(true));
+          dispatch(set.initialized(true));
 
           // Get user's native phone contacts
           Contacts.getAll((err, contacts) => {

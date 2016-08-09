@@ -55,22 +55,26 @@ class Main extends React.Component {
   }
 
   componentWillMount() {
-    // Initialize the app
-    this.props.initialize((success) => {
-      if (success) {
-        var uid = this.props.currentUser.uid,
-            notifications = "notifications/" + uid,
-            appFlags = "appFlags/" + uid;
+    if (!this.props.initialized) {
+      console.log("%cInitializing MainView", "color:blue;font-weight:900;");
 
-        // Initialize Firebase listeners
-        this.props.listen([appFlags, notifications]);
+      // Initialize the app
+      this.props.initialize((success) => {
+        if (success) {
+          var uid = this.props.currentUser.uid,
+              notifications = "notifications/" + uid,
+              appFlags = "appFlags/" + uid;
 
-        console.log("%cInitialization succeeded. Current user object:", "color:green;font-weight:900;");
-        console.log(this.props.currentUser);
-      } else {
-        console.log("%cInitialization failed.", "color:red;font-weight:900;");
-      }
-    });
+          // Initialize Firebase listeners
+          this.props.listen([appFlags, notifications]);
+
+          console.log("%cInitialization succeeded. Current user:", "color:green;font-weight:900;");
+          console.log(this.props.currentUser);
+        } else {
+          console.log("%cInitialization failed.", "color:red;font-weight:900;");
+        }
+      });
+    }
   }
 
 

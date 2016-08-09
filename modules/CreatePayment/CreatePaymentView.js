@@ -72,7 +72,6 @@ class Purpose extends React.Component {
         <PayRequestNav
           awaitingConfirmationOn={this.state.awaitingConfirmationOn}
           confirmCallback={() => {
-            this.setState({});
             this.props.sendPayment(this.props.payment, (success) => {
               if (success) Actions.MainViewContainer();
               else alert("Payment failed");
@@ -288,6 +287,7 @@ class CreatePaymentView extends React.Component {
   }
 
   componentWillMount() {
+    console.log("MOUNTING CREATEPAYMENTVIEW.JS");
     this.props.setToken(this.props.currentUser.token);
   }
 

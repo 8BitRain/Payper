@@ -89,6 +89,10 @@ function mapDispatchToProps(dispatch) {
     },
 
     setPaymentInfo: (options, callback) => {
+
+      console.log("options.currentUser:\n" + JSON.stringify(options.currentUser));
+      console.log("options.otherUser:\n" + JSON.stringify(options.otherUser));
+
       var recip,
           sender,
           payment = {
@@ -145,6 +149,7 @@ function mapDispatchToProps(dispatch) {
     sendPayment: (payment, callback) => {
       if (payment.invite) {
         Lambda.inviteViaPayment(payment, (success) => {
+          console.log("Reached inviteViaPayment callback...");
           if (typeof callback == "function") callback(success);
           else console.log("%cCallback is not a function.", "color:red;font-weight;");
         });
