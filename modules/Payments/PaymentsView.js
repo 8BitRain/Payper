@@ -94,14 +94,18 @@ class Payments extends React.Component {
             cancel: () => console.log("Nevermind"),
             confirm: () => this.props.cancelPayment({
               pid: payment.pid,
-              token: this.props.currentUser.token}),
+              token: this.props.currentUser.token,
               ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
+            })
           });
         }}
         callbackConfirm={() => {
           console.log("Confirming payment");
           var firstName = payment.sender_name.split(" ")[0],
               purpose = StringMaster5000.formatPurpose(payment.purpose);
+
+          // Determine which DataSource to pass to confirm function for instant re-render
+          var ds = (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments;
 
           // Alert the user
           Alert.confirmation({
@@ -112,8 +116,9 @@ class Payments extends React.Component {
             cancel: () => console.log("Nevermind"),
             confirm: () => this.props.cancelPayment({
               pid: payment.pid,
-              token: this.props.currentUser.token}),
+              token: this.props.currentUser.token,
               ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
+            })
           });
         }}
         callbackReject={() => console.log("Rejecting payment")} />

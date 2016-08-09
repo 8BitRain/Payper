@@ -107,7 +107,7 @@ function mapDispatchToProps(dispatch) {
       Lambda.cancelPayment({payment_id: options.pid, token: options.token});
     },
 
-    confirmPayment: (pid) => {
+    confirmPayment: (options) => {
       console.log("%cConfirming payment " + options.pid, "color:red;font-weight:900;");
       console.log("%cCurrent data source:", "color:blue;font-weight:900;");
       console.log(options.ds._dataBlob.s1);
