@@ -24,7 +24,7 @@ class SplashView extends React.Component {
       } else {
         console.log("%cSigned in: " + signedIn, "color:red;font-weight:900;");
         setTimeout(function() {
-          Actions.LandingScreenView();
+          Actions.LandingScreenContainer();
         }, 1500);
       }
     });

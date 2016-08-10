@@ -22,7 +22,7 @@
 - [X] CreatePaymentView.js predictive search: limit predictions to 4
 - [X] CreatePaymentView.js predictive search: don't show signed in user in predictions
 - [ ] Pass numNotifications to menu in sidebar and render preview indicator next to notifications lightbulb
-- [ ] Apply fade animation to inner content during create account onboarding, not entire view
+- [X] Apply fade animation to inner content during create account onboarding, not entire view
 - [ ] App-wide padding (look into pixel density for screen size detection)
 - [ ] Redesign footer (action button for new payment)
 - [ ] Fix loading for IAV
@@ -51,6 +51,10 @@
 - [x] Add instant updating for payment cancellation
 - [ ] Add instant updating for payment confirmation and rejection
 - [ ] Fix user search regex bug
+- [ ] All pay and request invites are sent to "Incoming" tab (talk to Vash)
+- [ ] Fix opacity header icons in CreatePaymentView
+- [ ] Fix issue where Payper contact list sometimes doesn't populate above phone contacts in UserSearchView (is Firebase listener receiving empty contacts and concatenating an empty array with native contacts?)
+- [ ] Fix header padding on small phones
 
 ### Brady (post-MVP)
 - [ ] Implement action sheets

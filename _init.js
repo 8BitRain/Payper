@@ -116,13 +116,10 @@ export function signInWithFacebook(data, callback) {
               // Log session_token to Async storage for next sign in
               Async.set('session_token', user.token, () => {
                 console.log("%cSuccessfully logged session_token to AsyncStorage", "color:green;font-weight:900;");
-                Async.get('session_token', (token) => {
-                  console.log("TOKEN:", token);
-                });
               });
 
               // Alert caller of success
-              if (typeof callback == 'function') callback(true, user, user.token );
+              if (typeof callback == 'function') callback(true, user, user.token);
               else console.log("%cCallback is not a function", "color:red;font-weight:900;");
             });
           } else {
@@ -198,7 +195,7 @@ export function signOut() {
   Firebase.signOut(() => {
     Async.set('session_token', '');
     Async.set('user', '', () => {
-      Actions.LandingScreenView();
+      Actions.LandingScreenContainer();
     });
   });
 };

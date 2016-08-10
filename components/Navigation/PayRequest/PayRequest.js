@@ -82,8 +82,6 @@ class PayRequest extends React.Component {
     console.log("Released touch.");
     console.log("sliderLeftX:", this.state.sliderLeftX);
     console.log("sliderRightX:", this.state.sliderRightX);
-
-    this.setState
   }
 
   _getConfirmationButton() {
@@ -94,17 +92,19 @@ class PayRequest extends React.Component {
         underlayColor={colors.lightAlertGreen}
         activeOpacity={1.0}>
 
-      {/*
-      <View
-        onStartShouldSetResponder={(e) => this._handleStart(e)}
-        onResponderGrant={(e) => this._handleResponderGrant(e)}
-        onResponderMove={(e) => this._handleMove(e)}
-        onResponderRelease={(e) => this._handleRelease(e)}
-        style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.alertGreen}} >
-        */}
+        { /*
+        <View
+          onStartShouldSetResponder={(e) => this._handleStart(e)}
+          onResponderGrant={(e) => this._handleResponderGrant(e)}
+          onResponderMove={(e) => this._handleMove(e)}
+          onResponderRelease={(e) => this._handleRelease(e)}
+          style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.alertGreen}}>
+        */ }
 
         <Text style={{fontSize: 16, fontWeight: '600', color: colors.white}}>
-          { StringMaster5000.capFirstLetter(this.props.awaitingConfirmationOn) }
+          { (this.props.loading)
+              ? "Sending..."
+              : StringMaster5000.capFirstLetter(this.props.awaitingConfirmationOn) }
         </Text>
 
         { /*

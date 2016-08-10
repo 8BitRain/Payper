@@ -127,6 +127,9 @@ class LandingScreenDisplay extends React.Component {
   */
   signInWithFacebook(FBToken, result) {
 
+    // Extend scope
+    const _this = this;
+
     // Get profile picture
     var picture;
     if (result.picture.data.is_silhouette) picture = '';
@@ -160,12 +163,12 @@ class LandingScreenDisplay extends React.Component {
         console.log("TOKEN: " + token);
         console.log("USER: " + JSON.stringify(user));
         if (!user.phone) {
-          this.props.dispatchSetProvider(this.state.provider);
-          this.props.dispatchSetToken(token);
+          _this.props.dispatchSetProvider(_this.state.provider);
+          _this.props.dispatchSetToken(token);
         }
-        this.setState({fbPhone: user.phone});
+        _this.setState({fbPhone: user.phone});
         //_this.setState({provider: user.provider});
-        this.setState({doneLoading: true, signInSuccess: signedIn});
+        _this.setState({doneLoading: true, signInSuccess: signedIn});
     });
 
   }
@@ -264,11 +267,10 @@ class LandingScreenDisplay extends React.Component {
   }
 }
 
-const LandingScreenView= React.createClass({
-
+const LandingScreenView = React.createClass({
   render() {
     return(
-      <LandingScreenDisplay  dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetToken={this.props.dispatchSetToken}/>
+      <LandingScreenDisplay dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetToken={this.props.dispatchSetToken}/>
     );
   }
 });

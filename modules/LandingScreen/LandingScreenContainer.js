@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import * as dispatchFunctions from  '../../modules/CreateAccount/CreateAccountState';
+import * as dispatchFunctions from  '../CreateAccount/CreateAccountState';
 import * as selfDispatchFunctions from './LandingScreenState';
 import LandingScreenView from './LandingScreenView';
 import Validators from '../../helpers/validators';

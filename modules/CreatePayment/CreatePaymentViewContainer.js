@@ -143,6 +143,9 @@ function mapDispatchToProps(dispatch) {
       payment.sender_id = sender.uid;
       payment.sender_pic = sender.profile_pic;
 
+      console.log("%cPayment:", "color:blue;font-weight:900;");
+      console.log(payment);
+
       dispatch(set.info(payment));
     },
 

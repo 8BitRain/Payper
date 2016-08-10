@@ -39,7 +39,9 @@ class Purpose extends React.Component {
     this.kbOffset = new Animated.Value(0);
     this.state = {
       awaitingConfirmationOn: "",
-    }
+      loading: false,
+      success: null,
+    };
   }
 
   _keyboardWillShow(e) {
@@ -71,7 +73,9 @@ class Purpose extends React.Component {
       return(
         <PayRequestNav
           awaitingConfirmationOn={this.state.awaitingConfirmationOn}
+          loading={this.props.loading}
           confirmCallback={() => {
+            this.setState({ loading: true });
             this.props.sendPayment(this.props.payment, (success) => {
               if (success) Actions.MainViewContainer();
               else alert("Payment failed");
@@ -82,6 +86,7 @@ class Purpose extends React.Component {
       return(
         <PayRequestNav
           awaitingConfirmationOn={this.state.awaitingConfirmationOn}
+          loading={this.props.loading}
           payCallback={() => {
             this.setState({ awaitingConfirmationOn: "pay" });
             this.props.setPaymentInfo({

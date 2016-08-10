@@ -6,7 +6,6 @@ import Error from './components/Error';
 import * as Async from './helpers/Async';
 
 // Modules
-import LandingScreenView from './modules/LandingScreen/LandingScreenView';
 import SplashView from './modules/Splash/SplashView';
 import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer';
 import CreatePaymentViewContainer from './modules/CreatePayment/CreatePaymentViewContainer';
@@ -64,7 +63,6 @@ export default class Coincast extends React.Component {
 
             { /* Main app flow */ }
             <Scene key="SplashView" component={SplashView} title="SplashView" initial />
-            <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />
             <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" />
