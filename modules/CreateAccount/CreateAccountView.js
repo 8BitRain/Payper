@@ -30,6 +30,7 @@ const CreateAccountView = React.createClass({
         dispatchSetPhone={this.props.dispatchSetPhone}
         dispatchSetPage={this.props.dispatchSetPage}
         dispatchSetToken={this.props.dispatchSetToken}
+        dispatchSetProvider={this.props.dispatchSetProvider}
         provider={this.props.provider}
         token= {this.props.token}
       />

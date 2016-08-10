@@ -64,7 +64,6 @@ export default class Coincast extends React.Component {
 
             { /* Main app flow */ }
             <Scene key="SplashView" component={SplashView} title="SplashView"  />
-            <Scene key="LandingScreenView" component={LandingScreenView} title="LandingScreenView" />
             <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
             <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" />

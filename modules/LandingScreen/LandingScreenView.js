@@ -156,13 +156,19 @@ class LandingScreenDisplay extends React.Component {
     this.setState({loading: true});
 
     var _this = this;
+
+    console.log("PROPS: " + this);
     // Push user object to Lambda function
     Init.signInWithFacebook(data, function(signedIn, user, token) {
         console.log("TOKEN: " + token);
         console.log("USER: " + JSON.stringify(user));
         if (!user.phone) {
-          this.props.dispatchSetProvider(this.state.provider);
-          this.props.dispatchSetToken(token);
+          console.log("LANDING VIEW: There is no phone number available");
+          console.log("LANDING VIEW: Provider: " + _this.state.provider);
+          //console.log("LANDING VIEW: Provider: " + this.state.provider);
+          console.log("_this PROPS: " + JSON.stringify(_this.props));
+          _this.props.dispatchSetProvider(_this.state.provider);
+          _this.props.dispatchSetToken(token);
         }
         _this.setState({fbPhone: user.phone});
         _this.setState({provider: user.provider});
@@ -185,7 +191,7 @@ class LandingScreenDisplay extends React.Component {
             msgLoading={"Signing In"}
             success={this.state.signInSuccess}
             successDestination={() => Actions.MainViewContainer()}
-            errorDestination={() => Actions.LandingScreenView()} />
+            errorDestination={() => Actions.LandingScreenContainer()} />
         );
       }
 
@@ -201,7 +207,7 @@ class LandingScreenDisplay extends React.Component {
               msgLoading={"Signing in"}
               success={this.state.signInSuccess}
               successDestination={() => Actions.MainViewContainer()}
-              errorDestination={() => Actions.LandingScreenView()} />
+              errorDestination={() => Actions.LandingScreenContainer()} />
           );
         }
         //Facebook Account Newly Created
@@ -215,7 +221,7 @@ class LandingScreenDisplay extends React.Component {
               msgLoading={"Signing in"}
               success={this.state.signInSuccess}
               successDestination={() => Actions.CreateAccountViewContainer()}
-              errorDestination={() => Actions.LandingScreenView()} />
+              errorDestination={() => Actions.LandingScreenContainer()} />
           );
         }
       }
