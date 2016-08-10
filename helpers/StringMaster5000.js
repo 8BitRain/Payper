@@ -18,6 +18,7 @@
 import moment from 'moment';
 import * as Timestamp from './Timestamp';
 import colors from '../styles/colors';
+import * as _ from 'lodash';
 
 /**
   *   Given a notification object, return ready-to-render strings
@@ -93,27 +94,29 @@ export function formatPurpose(purpose) {
 **/
 export function formatNativeContacts(contacts) {
   var arr = [],
-      curr;
+      nums = [],
+      curr,
+      last = {stylizedPhone: -1};
 
   for (var contact in contacts) {
     curr = contacts[contact];
     if (!curr.phoneNumbers[0]) continue;
 
     var c = {
-      first_name: (curr.givenName) ? curr.givenName : "",
-      last_name: (curr.familyName) ? curr.familyName : "",
+      first_name: firstName = (curr.givenName) ? curr.givenName : "",
+      last_name: lastName = (curr.familyName) ? curr.familyName : "",
       phone: formatPhoneNumber(curr.phoneNumbers[0].number),
       stylizedPhone: stylizePhoneNumber(curr.phoneNumbers[0].number),
       pic: curr.thumbnailPath,
       type: 'phone',
     }
 
-    arr.push(c);
+    if (!_.includes(nums, c.phone)) arr.push(c);
+    nums.push(c.phone);
   }
 
   console.log("%cSuccessfully formatted native contacts:", "color:green;font-weight:900;");
   console.log(arr);
-
   return arr;
 };
 
@@ -122,35 +125,13 @@ export function formatNativeContacts(contacts) {
   *   native phone contacts
 **/
 export function orderContacts(contacts) {
-  var arr = [],
-      numFacebook = 0,
-      numPhone = 0,
-      curr;
+  var arr = [], curr;
 
   for (var c in contacts) {
     curr = contacts[c];
     curr.uid = c;
-
-    // Limted number of contacts
-    // if (curr.type == "facebook") {
-    //   if (numFacebook < 3) arr.push(contacts[c]);
-    //   numFacebook++;
-    // } else if (curr.type == "phone") {
-    //   if (numPhone < 3) arr.push(contacts[c]);
-    //   numPhone++;
-    // } else {
-    //   arr.push(contacts[c]);
-    // }
-
-    // Unlimited number of contacts
-    arr.push(contacts[c]);
-
+    arr.push(curr);
   }
-
-  arr.sort((a, b) => {
-    if (a.type == "facebook" && b.type == "phone") return -1;
-    else return 1;
-  });
 
   return arr;
 };
