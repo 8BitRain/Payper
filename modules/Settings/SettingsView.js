@@ -51,7 +51,7 @@ class Settings extends React.Component {
           { (options.rowTitle == "Notifications")
               ? (this.props.numUnseenNotifications == 0)
                 ? null
-                : <View style={[notificationStyles.numNotificationsWrap, {bottom: 6}]}>
+                : <View style={[notificationStyles.numNotificationsWrap, { bottom: 6 }]}>
                     <Text style={notificationStyles.numNotificationsText}>{ this.props.numUnseenNotifications }</Text>
                   </View>
               : null }
