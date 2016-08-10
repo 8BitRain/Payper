@@ -14,7 +14,12 @@
 // Dependencies
 import { Alert } from 'react-native';
 
-
+export function message(options) {
+  Alert.alert(
+    options.title,
+    options.message
+  );
+}
 export function confirmation(options) {
   Alert.alert(
    options.title,

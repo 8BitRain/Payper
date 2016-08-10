@@ -83,7 +83,7 @@ function mapDispatchToProps(dispatch) {
 
     },
 
-    listen: (endpoints) => {
+    listen: (endpoints, callback) => {
       Firebase.listenTo(endpoints, (response) => {
         switch (response.endpoint.split("/")[0]) {
 
@@ -96,6 +96,9 @@ function mapDispatchToProps(dispatch) {
             }
             dispatch(set.numUnseenNotifications(numUnseen));
             dispatch(set.notifications(notifications));
+
+            if (typeof callback == 'function') callback();
+            else console.log("%cCallback is not a function.", "color:red;font-weight:900;");
           break;
 
           case "appFlags":

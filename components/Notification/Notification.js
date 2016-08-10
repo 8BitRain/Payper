@@ -12,6 +12,7 @@ import styles from '../../styles/Notifications/Notification';
 import * as Init from '../../_init';
 import * as Partials from '../../helpers/Partials';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
+import * as Alert from '../../helpers/Alert';
 
 class Notification extends React.Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class Notification extends React.Component {
 
     return(
       <TouchableHighlight
-        onPress={ () => Actions.MainViewContainer({page: ""}) }
+        onPress={ () => Alert.message({title: n.name, message: n.info})}
         underlayColor={'transparent'}
         opacity={0.7}>
         <View style={[styles.notificationWrap, {borderLeftWidth: 5, borderLeftColor: n.iconColor}]} onPress={() => options.callback()}>

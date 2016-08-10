@@ -36,6 +36,11 @@ class Settings extends React.Component {
   }
 
 
+  componentDidMount() {
+    console.log("Props received by SettingsView:", this.props);
+  }
+
+
   /**
     *   Return a list of ready to render rows
   **/

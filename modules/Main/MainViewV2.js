@@ -6,7 +6,7 @@ import SideMenu from 'react-native-side-menu';
 
 // Components
 import Header from '../../components/Header/Header';
-import Settings from '../../modules/Settings/SettingsViewContainer';
+import Settings from '../../modules/Settings/SettingsView';
 import Notifications from '../../modules/Notifications/NotificationsViewContainer';
 import Payments from '../../modules/Payments/PaymentsViewContainer';
 
@@ -52,6 +52,9 @@ class InnerContent extends React.Component {
 class Main extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      renderTrigger: Math.random(),
+    };
   }
 
   componentWillMount() {
@@ -66,7 +69,11 @@ class Main extends React.Component {
               appFlags = "appFlags/" + uid;
 
           // Initialize Firebase listeners
-          this.props.listen([appFlags, notifications]);
+          this.props.listen([appFlags, notifications], (numUnseenNotifications) => {
+            // Must explicitly trigger a re-render, otherwise side menu's
+            // notification indicator will not update
+            this.setState({renderTrigger: Math.random()});
+          });
 
           console.log("%cInitialization succeeded. Current user:", "color:green;font-weight:900;");
           console.log(this.props.currentUser);
@@ -97,14 +104,17 @@ class Main extends React.Component {
 
 
   render() {
+    // Must explicitly trigger a re-render, otherwise side menu's
+    // notification indicator will not update
     if (this.props.signedIn) {
       return (
         <SideMenu
-          menu={ <Settings numUnseenNotifications={ 1 } changePage={(newPage) => { this.changePage(newPage); this.toggle(); }} /> }
+          key={this.state.renderTrigger}
+          menu={ <Settings {...this.props} changePage={(newPage) => { this.changePage(newPage); this.toggle(); }} /> }
           bounceBackOnOverdraw={false}
           isOpen={this.props.sideMenuIsOpen}
           onChange={(isOpen) => this.props.setSideMenuIsOpen(isOpen)}
-          disableGestures={true}>
+          disableGestures={false}>
 
           { /* Lighten status bar text */ }
           <StatusBar barStyle="light-content" />

@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import  {View, Text, ListView, RecyclerViewBackedScrollView } from 'react-native';
+import { View, Text, ListView, RecyclerViewBackedScrollView } from 'react-native';
 
 // Helper functions
 import * as Lambda from "../../services/Lambda";
@@ -47,8 +47,8 @@ class Notifications extends React.Component {
       return parseFloat(b.ts) - parseFloat(a.ts);
     });
 
-    // Set state, triggering re-rerender of list
-    this.setState({ empty: false, dataSource: this.state.dataSource.cloneWithRows(notifications) });
+    // Set state, triggering re-rerender of list, then mark unseen notifications as seen
+    this.setState({ empty: false, dataSource: this.state.dataSource.cloneWithRows(notifications) }, () => this._seeNotifications());
   }
 
 
@@ -94,7 +94,7 @@ class Notifications extends React.Component {
       var row = this.state.dataSource.getRowData(0, i)
       if (!row.seen) {
         row.seen = true;
-        Lambda.seeNotification({timestamp: row.ts, token: this.props.currentUser.uid}, (response) => {
+        Lambda.seeNotification({timestamp: row.ts, token: this.props.currentUser.token}, (response) => {
           console.log("Lambda.seeNotification() response:", response);
         });
       }

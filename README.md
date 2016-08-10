@@ -49,9 +49,9 @@
 - [ ] Add global user list to UserSearch
 - [x] Add confirmation message to cancel payment button
 - [x] Add instant updating for payment cancellation
-- [ ] Fix user search regex bug
+- [ ] Fix bug where user search regex treats exact matches like empty strings
 - [X] All pay and request invites are sent to "Incoming" tab (talk to Vash)
-- [ ] Fix opacity header icons in CreatePaymentView
+- [ ] Fix opacity of header icons in CreatePaymentView
 - [ ] Fix issue where Payper contact list sometimes doesn't populate above phone contacts in UserSearchView (is Firebase listener receiving empty contacts and concatenating an empty array with native contacts?)
 - [ ] Fix header padding on small phones
 - [ ] Add invitee's phone number to second page of CreatePaymentView where a username would typically be rendered
