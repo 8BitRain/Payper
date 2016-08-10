@@ -74,11 +74,11 @@ class PhoneNumber extends React.Component {
      console.log(this.phoneNumberInput);
      this.props.dispatchSetPhone(this.phoneNumberInput);
      this.props.dispatchSetToken(this.props.token);
-     console.log(this.props.currentUser.phone);
+     console.log(this.props.newUser.phone);
      console.log("Token: " + this.props.token);
      var data = {
        token: this.props.token,
-       phone: this.props.currentUser.phone
+       phone: this.props.newUser.phone
      };
      console.log("Data: " + JSON.stringify(data));
      this.updatePhone(data);

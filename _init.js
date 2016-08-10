@@ -160,10 +160,17 @@ export function createUser(input, _callback) {
       //Set initial flags for the user created
       console.log("SETTING INITIAL USER FLAGS")
       Firebase.getSessionToken((token) => {
-        input.token = token;
+        //input.token = token;
+        var data = {
+          email: input.email,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          phone: input.phone,
+          token: token
+        }
         _callback(true, token);
         console.log("%cFirebaseToken: " + token, "color:purple;font-weight:700;");
-        Lambda.createUser(input, (user) => {
+        Lambda.createUser(data, (user) => {
           if (user) {
             // Creation succeeded. Log the user to Async storage and take them
             // to the app.

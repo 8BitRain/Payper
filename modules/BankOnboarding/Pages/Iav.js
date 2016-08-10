@@ -18,7 +18,7 @@ var Mixpanel = require('react-native-mixpanel');
 class Iav extends React.Component {
   constructor(props) {
     super(props);
-    this.firebase_token =  this.props.currentUser.token;
+    this.firebase_token =  this.props.newUser.token;
     if(this.firebase_token == ''){
       console.log("Async Error: Make sure Firebase token is properly being stored and retrieved via dispatch");
     }

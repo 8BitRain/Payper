@@ -53,12 +53,14 @@ class Summary extends React.Component {
    this.onPressLeft = function() { this.props.dispatchSetPage(4, null, null, null) };
    this.onPressCheck = function() {
      var _this = this;
-     Init.createUser(this.props.currentUser, function(userCreated, token){
+     Init.createUser(this.props.newUser, function(userCreated, token){
        if(userCreated){
-         console.log("USER TOKEN: " + token);
+         console.log("SUMMARY SCREEN: TOKEN (Standalone from USERTOKEN): " + _this.props.token)
+         console.log("SUMMARY SCREEN: USER TOKEN BEFORE DISPATCH: " + _this.props.newUser.token);
+         console.log("SUMMARY SCREEN: USER TOKEN: " + token);
          _this.props.dispatchSetToken(token);
-         console.log(_this.props.currentUser.token);
-         Actions.BankOnboardingContainer();
+         console.log("SUMMARY SCREEN: USER TOKEN AFTER DISPATCH" + _this.props.newUser.token);
+         //Actions.BankOnboardingContainer();
        }
      });
    };
@@ -78,11 +80,11 @@ class Summary extends React.Component {
        <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.summary]}>
          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Does this look right?</Text>
 
-         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.email}</Text>
-         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.password}</Text>
-         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.firstName}</Text>
-         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.lastName}</Text>
-         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.phone}</Text>
+         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.email}</Text>
+         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.password}</Text>
+         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.firstName}</Text>
+         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.lastName}</Text>
+         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.phone}</Text>
        </View>
 
        { /* Arrow nav buttons */ }

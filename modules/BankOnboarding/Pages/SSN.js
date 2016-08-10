@@ -80,7 +80,7 @@ class SSN extends React.Component {
          "zip": this.props.dwollaCustomer.zip,
          "dob": this.props.dwollaCustomer.dob,
          "ssn": this.props.dwollaCustomer.ssn,
-         "token": this.props.currentUser.token
+         "token": this.props.newUser.token
        }
        this.createCustomer(data);
 
@@ -93,12 +93,12 @@ class SSN extends React.Component {
 
    createCustomer(data){
      //data.token = {this.props.firebase_token};
-     console.log("FirebaseToken: " + this.props.currentUser.token);
+     console.log("FirebaseToken: " + this.props.newUser.token);
      //console.log("DataToken: " + data.token);
      var _this = this;
      Init.createCustomer(data, function(customerCreated){
        console.log("CustomerCreated?: " + customerCreated);
-       _this.initiateIAV(_this.props.currentUser.token, _this);
+       _this.initiateIAV(_this.props.newUser.token, _this);
      });
    }
 

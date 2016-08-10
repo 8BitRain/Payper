@@ -17,7 +17,7 @@ export default connect(
     currentPagex: state.getIn(['bankOnboarding', 'currentPagex']),
 
     /*Create Account State Variables*/
-    currentUser: state.getIn(['createAccount', 'currentUser'])
+    newUser: state.getIn(['createAccount', 'newUser'])
 
   }),
   dispatch => ({

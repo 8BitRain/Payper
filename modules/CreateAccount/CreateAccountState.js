@@ -1,14 +1,15 @@
 import {Map} from 'immutable';
 import {loop, Effects} from 'redux-loop';
 
-// Initialize currentUser vars
-var currentUser = {
+// Initialize newUser vars
+var newUser = {
     email: "",
     password: "",
     firstName: "",
     lastName: "",
     phone: "",
     numNotifications: 0,
+    token: "",
   },
   passwordValidations = {
     length: false,
@@ -40,7 +41,7 @@ var currentUser = {
 
 // Initialize state
 const initialState = Map({
-  currentUser,
+  newUser,
   currentPage: 0,
   provider: '',
   token: '',
@@ -171,33 +172,33 @@ export default function CreateAccountReducer(state = initialState, action = {}) 
       return newState;
       break;
     case SET_EMAIL:
-      var currUser = state.get('currentUser');
+      var currUser = state.get('newUser');
       currUser.email = action.input;
-      var newState = state.set('currentUser', currUser);
+      var newState = state.set('newUser', currUser);
       return newState;
       break;
     case SET_PASSWORD:
-      var currUser = state.get('currentUser');
+      var currUser = state.get('newUser');
       currUser.password = action.input;
-      var newState = state.set('currentUser', currUser);
+      var newState = state.set('newUser', currUser);
       return newState;
       break;
     case SET_FIRST_NAME:
-      var currUser = state.get('currentUser');
+      var currUser = state.get('newUser');
       currUser.firstName = action.input;
-      var newState = state.set('currentUser', currUser);
+      var newState = state.set('newUser', currUser);
       return newState;
       break;
     case SET_LAST_NAME:
-      var currUser = state.get('currentUser');
+      var currUser = state.get('newUser');
       currUser.lastName = action.input;
-      var newState = state.set('currentUser', currUser);
+      var newState = state.set('newUser', currUser);
       return newState;
       break;
     case SET_PHONE:
-      var currUser = state.get('currentUser');
+      var currUser = state.get('newUser');
       currUser.phone = action.input;
-      var newState = state.set('currentUser', currUser);
+      var newState = state.set('newUser', currUser);
       return newState;
       break;
   }

@@ -24,7 +24,7 @@ const CreateAccountView = React.createClass({
       return(
       <PhoneNumber
         callbackClose={Actions.landingView}
-        currentUser={this.props.currentUser}
+        newUser={this.props.newUser}
         phoneValidations={this.props.phoneValidations}
         dispatchSetPhoneValidations={(text) => this.props.dispatchSetPhoneValidations(text)}
         dispatchSetPhone={this.props.dispatchSetPhone}
@@ -98,7 +98,8 @@ const CreateAccountView = React.createClass({
             <Summary
               callbackClose={Actions.landingView}
               createAccount={this.props.dispatchCreateAccount}
-              currentUser={this.props.currentUser}
+              newUser={this.props.newUser}
+              token={this.props.token}
               dispatchSetPage={this.props.dispatchSetPage}
               dispatchSetToken={this.props.dispatchSetToken}
             />

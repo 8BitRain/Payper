@@ -1,8 +1,6 @@
 import {Map} from 'immutable';
 import {loop, Effects} from 'redux-loop';
 
-// Initialize currentUser vars
-
 
 // Initialize state
 const initialState = Map({
