@@ -29,7 +29,7 @@ const CreateAccountView = React.createClass({
         dispatchSetPhoneValidations={(text) => this.props.dispatchSetPhoneValidations(text)}
         dispatchSetPhone={this.props.dispatchSetPhone}
         dispatchSetPage={this.props.dispatchSetPage}
-        dispatchSetToken={this.props.dispatchSetToken}
+        dispatchSetNewUserToken={this.props.dispatchSetNewUserToken}
         dispatchSetProvider={this.props.dispatchSetProvider}
         provider={this.props.provider}
         token= {this.props.token}
@@ -101,7 +101,7 @@ const CreateAccountView = React.createClass({
               newUser={this.props.newUser}
               token={this.props.token}
               dispatchSetPage={this.props.dispatchSetPage}
-              dispatchSetToken={this.props.dispatchSetToken}
+              dispatchSetNewUserToken={this.props.dispatchSetNewUserToken}
             />
           )
           break;

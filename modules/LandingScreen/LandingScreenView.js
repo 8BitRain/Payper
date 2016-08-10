@@ -164,7 +164,7 @@ class LandingScreenDisplay extends React.Component {
         console.log("USER: " + JSON.stringify(user));
         if (!user.phone) {
           _this.props.dispatchSetProvider(_this.state.provider);
-          _this.props.dispatchSetToken(token);
+          _this.props.dispatchSetNewUserToken(token);
         }
         _this.setState({fbPhone: user.phone});
         _this.setState({provider: user.provider});
@@ -271,7 +271,7 @@ const LandingScreenView= React.createClass({
 
   render() {
     return(
-      <LandingScreenDisplay  dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetToken={this.props.dispatchSetToken}/>
+      <LandingScreenDisplay  dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetNewUserToken={this.props.dispatchSetNewUserToken}/>
     );
   }
 });

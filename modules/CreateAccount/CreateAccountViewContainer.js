@@ -22,7 +22,7 @@ export default connect(
     newUser: state.getIn(['createAccount', 'newUser']),
 
     //Token Information
-    token: state.getIn(['landingScreen', 'token']),
+    //token: state.getIn(['landingScreen', 'token']),
 
     //Provider information
     provider: state.getIn(['createAccount', 'provider']),
@@ -108,8 +108,8 @@ export default connect(
     dispatchSetPhoneValidations(input) {
       dispatch(dispatchFunctions.setPhoneValidations(input));
     },
-    dispatchSetToken(input){
-      dispatch(dispatchFunctions.setToken(input));
+    dispatchSetNewUserToken(input){
+      dispatch(dispatchFunctions.setNewUserToken(input));
     },
     dispatchCreateAccount(user) {
       // Create account

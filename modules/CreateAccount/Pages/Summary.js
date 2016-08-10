@@ -58,9 +58,9 @@ class Summary extends React.Component {
          console.log("SUMMARY SCREEN: TOKEN (Standalone from USERTOKEN): " + _this.props.token)
          console.log("SUMMARY SCREEN: USER TOKEN BEFORE DISPATCH: " + _this.props.newUser.token);
          console.log("SUMMARY SCREEN: USER TOKEN: " + token);
-         _this.props.dispatchSetToken(token);
+         _this.props.dispatchSetNewUserToken(token);
          console.log("SUMMARY SCREEN: USER TOKEN AFTER DISPATCH" + _this.props.newUser.token);
-         //Actions.BankOnboardingContainer();
+         Actions.BankOnboardingContainer();
        }
      });
    };

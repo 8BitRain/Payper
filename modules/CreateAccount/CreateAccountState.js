@@ -9,7 +9,7 @@ var newUser = {
     lastName: "",
     phone: "",
     numNotifications: 0,
-    token: "",
+    token: ""
   },
   passwordValidations = {
     length: false,
@@ -44,7 +44,6 @@ const initialState = Map({
   newUser,
   currentPage: 0,
   provider: '',
-  token: '',
   startIav: '',
   passwordValidations,
   emailValidations,
@@ -66,7 +65,7 @@ const SET_PAGE = 'SET_PAGE',
       SET_PASSWORD = 'SET_PASSWORD',
       SET_FIRST_NAME = 'SET_FIRST_NAME',
       SET_LAST_NAME = 'SET_LAST_NAME',
-      SET_TOKEN = 'SET_TOKEN',
+      SET_NEWUSER_TOKEN = 'SET_NEWUSER_TOKEN',
       SET_PHONE = 'SET_PHONE';
 
 // Action creators
@@ -74,8 +73,8 @@ export function setPage(index) {
   return { type: SET_PAGE, index: index };
 };
 
-export function setToken(index) {
-  return { type: SET_TOKEN, index: index };
+export function setNewUserToken(input) {
+  return { type: SET_NEWUSER_TOKEN, input: input };
 };
 
 export function setIav(index){
@@ -167,8 +166,10 @@ export default function CreateAccountReducer(state = initialState, action = {}) 
       var newState = state.set('provider', action.input);
       return newState;
       break;
-    case SET_TOKEN:
-      var newState = state.set('token', action.input);
+    case SET_NEWUSER_TOKEN:
+      var currUser = state.get('newUser');
+      currUser.token = action.input;
+      var newState = state.set('newUser', currUser);
       return newState;
       break;
     case SET_EMAIL:

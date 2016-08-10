@@ -14,15 +14,15 @@ export default connect(
   state => ({
     //Provider information
     provider: state.getIn(['landingScreen', 'provider']),
-    token: state.getIn(['landingScreen'], 'token')
+    newUser: state.getIn(['createAccount', 'newUser'])
   }),
   dispatch => ({
     //Update provider (How the account view container was reached)
     dispatchSetProvider(input){
       dispatch(dispatchFunctions.setProvider(input));
     },
-    dispatchSetToken(input){
-      dispatch(selfDispatchFunctions.setToken(input));
+    dispatchSetNewUserToken(input){
+      dispatch(dispatchFunctions.setNewUserToken(input));
     }
 
   })
