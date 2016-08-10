@@ -88,7 +88,8 @@ class PhoneNumber extends React.Component {
   updatePhone(data){
     Init.updatePhone(data, function(updatedPhone){
       if(updatedPhone){
-        Actions.MainViewContainer();
+        //Actions.MainViewContainer();
+        Actions.BankOnboardingContainer();
       }
     });
   }

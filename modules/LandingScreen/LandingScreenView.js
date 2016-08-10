@@ -163,10 +163,6 @@ class LandingScreenDisplay extends React.Component {
         console.log("TOKEN: " + token);
         console.log("USER: " + JSON.stringify(user));
         if (!user.phone) {
-          console.log("LANDING VIEW: There is no phone number available");
-          console.log("LANDING VIEW: Provider: " + _this.state.provider);
-          //console.log("LANDING VIEW: Provider: " + this.state.provider);
-          console.log("_this PROPS: " + JSON.stringify(_this.props));
           _this.props.dispatchSetProvider(_this.state.provider);
           _this.props.dispatchSetToken(token);
         }
