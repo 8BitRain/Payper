@@ -73,12 +73,19 @@ class Purpose extends React.Component {
       return(
         <PayRequestNav
           awaitingConfirmationOn={this.state.awaitingConfirmationOn}
-          loading={this.props.loading}
+          loading={this.state.loading}
           confirmCallback={() => {
             this.setState({ loading: true });
             this.props.sendPayment(this.props.payment, (success) => {
-              if (success) Actions.MainViewContainer();
-              else alert("Payment failed");
+              if (success) {
+                this.setState({ awaitingConfirmationOn: "", loading: false });
+                this.props.reset();
+                Actions.MainViewContainer();
+              }
+              else {
+                this.setState({ awaitingConfirmationOn: "", loading: false });
+                alert("Payment failed");
+              }
             });
           }} />
       );
@@ -86,7 +93,7 @@ class Purpose extends React.Component {
       return(
         <PayRequestNav
           awaitingConfirmationOn={this.state.awaitingConfirmationOn}
-          loading={this.props.loading}
+          loading={this.state.loading}
           payCallback={() => {
             this.setState({ awaitingConfirmationOn: "pay" });
             this.props.setPaymentInfo({
@@ -97,7 +104,7 @@ class Purpose extends React.Component {
               },
               currentUser: this.props.currentUser,
               otherUser: this.props.selectedContact,
-              type: "pay"
+              type: "payment"
             });
           }}
           requestCallback={() => {
@@ -292,7 +299,6 @@ class CreatePaymentView extends React.Component {
   }
 
   componentWillMount() {
-    console.log("MOUNTING CREATEPAYMENTVIEW.JS");
     this.props.setToken(this.props.currentUser.token);
   }
 

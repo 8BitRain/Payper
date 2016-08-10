@@ -7,6 +7,7 @@ import * as Lambda from '../../services/Lambda';
 
 // Dispatch functions
 import * as set from './CreatePaymentState';
+import * as setUserSearch from '../UserSearch/UserSearchState';
 
 // Base view
 import CreatePaymentView from './CreatePaymentView';
@@ -90,9 +91,6 @@ function mapDispatchToProps(dispatch) {
 
     setPaymentInfo: (options, callback) => {
 
-      console.log("options.currentUser:\n" + JSON.stringify(options.currentUser));
-      console.log("options.otherUser:\n" + JSON.stringify(options.otherUser));
-
       var recip,
           sender,
           payment = {
@@ -115,7 +113,7 @@ function mapDispatchToProps(dispatch) {
           };
 
       // Determine flow of money
-      if (options.type == "pay") {
+      if (options.type == "payment") {
         payment.confirmed = true;
         recip = options.otherUser;
         sender = options.currentUser;
@@ -124,11 +122,15 @@ function mapDispatchToProps(dispatch) {
         sender = options.otherUser;
       }
 
+      console.log("Recipient:", recip);
+      console.log("Sender:", sender);
+      console.log("Payment:", payment);
+
       // Is this an invite?
-      if (options.type == "pay" && !recip.username || options.type == "request" && !sender.username) {
+      if (payment.type == "payment" && !recip.username || payment.type == "request" && !sender.username) {
         payment.invite = true;
-        payment.invitee = (payment.type == "pay") ? "recip" : "sender";
-        payment.phoneNumber = StringMaster5000.formatPhoneNumber(options.otherUser.phone);
+        payment.invitee = (payment.type == "payment") ? "recip" : "sender";
+        payment.phoneNumber = options.otherUser.phone;
       } else {
         payment.invite = false;
       }
@@ -143,25 +145,33 @@ function mapDispatchToProps(dispatch) {
       payment.sender_id = sender.uid;
       payment.sender_pic = sender.profile_pic;
 
-      console.log("%cPayment:", "color:blue;font-weight:900;");
-      console.log(payment);
+      // console.log("%cPayment:", "color:blue;font-weight:900;");
+      // console.log(payment);
 
       dispatch(set.info(payment));
     },
 
     sendPayment: (payment, callback) => {
+      console.log("Payment in sendPayment():", payment);
       if (payment.invite) {
+        console.log("----- Invite -----");
         Lambda.inviteViaPayment(payment, (success) => {
           console.log("Reached inviteViaPayment callback...");
           if (typeof callback == "function") callback(success);
           else console.log("%cCallback is not a function.", "color:red;font-weight;");
         });
       } else {
+        console.log("----- Generic -----");
         Lambda.createPayment(payment, (success) => {
           if (typeof callback == "function") callback(success);
           else console.log("%cCallback is not a function.", "color:red;font-weight;");
         });
       }
+    },
+
+    reset: () => {
+      dispatch(set.info({}));
+      dispatch(setUserSearch.selectedContact({ username: "", first_name: "", last_name: "", profile_pic: "", type: "" }));
     },
 
   }

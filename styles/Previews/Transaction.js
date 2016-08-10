@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.alertRed,
     borderRadius: 4,
     padding: 10,
-    height: 30,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -171,6 +170,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 12,
     color: colors.white,
+    textAlign: 'center',
   },
 
 });

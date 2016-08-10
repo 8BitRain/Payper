@@ -6,6 +6,7 @@ import Entypo from "react-native-vector-icons/Entypo"
 
 // Helper functions
 import * as Timestamp from "../../../helpers/Timestamp";
+import * as StringMaster5000 from "../../../helpers/StringMaster5000";
 
 // Custom styles
 import styles from '../../../styles/Previews/Transaction';
@@ -99,11 +100,29 @@ function getProgressBar(payment) {
 /**
   *   Return a 'Pending confirmation' alert to render in place of the progress bar
 **/
-function getPendingAlert() {
+function getPendingConfirmationAlert() {
   return(
     <View style={styles.bottom}>
       <View style={styles.alert}>
         <Text style={styles.confirmText}>Pending Confirmation</Text>
+      </View>
+    </View>
+  );
+};
+
+
+/**
+  *   Return a 'Pending invitation' alert to render in place of the progress bar
+**/
+function getPendingInvitationAlert(options) {
+  return(
+    <View style={styles.bottom}>
+      <View style={[styles.alert, { width: dimensions.width * 0.9, padding: 10 }]}>
+        <Text style={styles.confirmText}>
+          { (options.incoming)
+              ? "We invited " + options.name + " to join Payper. Payments will commence after they set up their account and confirm your request."
+              : "We invited " + options.name + " to join Payper. Payments will commence after they set up their account." }
+        </Text>
       </View>
     </View>
   );
@@ -121,10 +140,60 @@ class PaymentPreview extends React.Component {
   render() {
 
     /**
+      *   Payment invites
+    **/
+    if (this.props.payment.invite) {
+      return(
+        <View style={styles.wrap}>
+          { /* Top chunk (pic, name, payment info) */ }
+          <View style={styles.top}>
+
+            { /* Profile picture */ }
+            <View style={styles.picWrap}>
+              { (this.props.payment.invitee == "recip")
+                  ? getUserPic("", this.props.payment.recip_name)
+                  : getUserPic("", this.props.payment.sender_name) }
+            </View>
+
+            { /* Name and payment info */ }
+            <View style={styles.textWrap}>
+              <Text style={styles.name}>{ (this.props.out) ? this.props.payment.recip_name : this.props.payment.sender_name }</Text>
+              <Text style={styles.text}>${ this.props.payment.amount } per month for {this.props.payment.payments} months { StringMaster5000.formatPurpose(this.props.payment.purpose) }</Text>
+            </View>
+
+            { /* Payment settings button */ }
+            <TouchableHighlight
+              activeOpacity={0.7}
+              underlayColor={'transparent'}
+              onPress={() => console.log("TRANSACTION DOTS PRESSED")}
+              style={styles.dots}>
+              <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.icyBlue}/>
+            </TouchableHighlight>
+
+            { /* Cancel payment button */ }
+            <TouchableHighlight
+              activeOpacity={0.7}
+              underlayColor={'transparent'}
+              onPress={() => this.props.callbackCancel(this.props.payment.pid)}
+              style={[styles.dots, styles.cancel]}>
+              <Entypo style={styles.iconSettings} name="block" size={17.5} color={colors.alertRed}/>
+            </TouchableHighlight>
+          </View>
+
+          { /* Get bottom half contents */ }
+          { (this.props.payment.invitee == "recip")
+              ? getPendingInvitationAlert({incoming: false, name: this.props.payment.recip_name.split(" ")[0]})
+              : getPendingInvitationAlert({incoming: true, name: this.props.payment.sender_name.split(" ")[0]}) }
+
+        </View>
+      );
+    }
+
+    /**
       *   Confirmed payements
       *   (handle incoming vs. outgoing conditionals inline)
     **/
-    if (this.props.payment.confirmed) {
+    else if (this.props.payment.confirmed) {
       return(
         <View style={styles.wrap}>
           { /* Top chunk (pic, name, payment info) */ }
@@ -224,7 +293,7 @@ class PaymentPreview extends React.Component {
           </View>
 
           { /* Get bottom half contents */ }
-          { (this.props.out) ? getConfirmButtons(this.props.callbackConfirm, this.props.callbackReject) : getPendingAlert() }
+          { (this.props.out) ? getConfirmButtons(this.props.callbackConfirm, this.props.callbackReject) : getPendingConfirmationAlert() }
 
         </View>
       );

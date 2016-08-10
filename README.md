@@ -45,19 +45,21 @@
 - [ ] `@Eric` Sign in with Facebook throws `Cannot read property dispatchSetProvider of undefined` (LandingScreenView.js ln 164)
 
 ### Brady (MVP)
-- [ ] Style payment invites
+- [X] Style payment invites
 - [ ] Add global user list to UserSearch
 - [x] Add confirmation message to cancel payment button
 - [x] Add instant updating for payment cancellation
-- [ ] Add instant updating for payment confirmation and rejection
 - [ ] Fix user search regex bug
-- [ ] All pay and request invites are sent to "Incoming" tab (talk to Vash)
+- [X] All pay and request invites are sent to "Incoming" tab (talk to Vash)
 - [ ] Fix opacity header icons in CreatePaymentView
 - [ ] Fix issue where Payper contact list sometimes doesn't populate above phone contacts in UserSearchView (is Firebase listener receiving empty contacts and concatenating an empty array with native contacts?)
 - [ ] Fix header padding on small phones
+- [ ] Add invitee's phone number to second page of CreatePaymentView where a username would typically be rendered
 
-### Brady (post-MVP)
+### Not MVP
 - [ ] Implement action sheets
+- [ ] Add recent users list to UserSearchView
+- [ ] Add instant updating for payment confirmation and rejection
 
 ## **Installation**
 ```

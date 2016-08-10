@@ -75,10 +75,14 @@ export function formatNotification(n) {
   *            "for world domination" => "for world domination"
 **/
 export function formatPurpose(purpose) {
-  var arr = purpose.split(" ");
-  arr[0] = arr[0].toLowerCase();
-  if (arr[0] != "for") arr.unshift("for");
-  return arr.join(" ");
+  if (purpose) {
+    var arr = purpose.split(" ");
+    arr[0] = arr[0].toLowerCase();
+    if (arr[0] != "for") arr.unshift("for");
+    return arr.join(" ");
+  }
+
+  return purpose;
 };
 
 

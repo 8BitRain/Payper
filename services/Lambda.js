@@ -19,6 +19,14 @@
 **/
 
 /**
+  *   Curls
+**/
+// Direct invite
+// curl -X POST -d @vash_hitta.txt https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct --header "Content-Type:application/json"
+// Payment creation
+// curl -X POST -d @vash_hitta.txt https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create --header "Content-Type:application/json"
+
+/**
   *   Get user object for specified session token, returning it via callback
   *   function
 **/
