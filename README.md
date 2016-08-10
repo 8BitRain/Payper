@@ -7,7 +7,7 @@
 - [x] Sidebar
 - [x] In-app notifications
 - [ ] Push notifications
-- [ ] Edit profile panel (Eric)
+- [ ] Edit profile panel
 - [x] Facebook auth
 - [x] Facebook friend synchronization
 - [x] Contact synchronization
@@ -21,7 +21,7 @@
 ### Polish
 - [X] CreatePaymentView.js predictive search: limit predictions to 4
 - [X] CreatePaymentView.js predictive search: don't show signed in user in predictions
-- [ ] Pass numNotifications to menu in sidebar and render preview indicator next to notifications lightbulb
+- [X] Pass numNotifications to menu in sidebar and render preview indicator next to notifications lightbulb
 - [X] Apply fade animation to inner content during create account onboarding, not entire view
 - [ ] App-wide padding (look into pixel density for screen size detection)
 - [ ] Redesign footer (action button for new payment)
