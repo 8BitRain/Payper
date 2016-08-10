@@ -33,28 +33,22 @@ class Notifications extends React.Component {
 
   // Generate rows for the list view
   _genRows() {
-    if (notifications) {
-      var notifications = this.props.notifications;
+    if (!this.props.notifications || this.props.notifications.length == 0) return;
 
-      // Check for empty state
-      if (notifications.length == 0) {
-        this.setState({empty: true});
-        return;
-      }
-
-      // Attach timestamp to notification object
-      for (var ts in notifications) {
-        notifications[ts].ts = ts;
-      }
-
-      // Sort notifications by timestamp
-      notifications.sort(function(a, b) {
-        return parseFloat(b.ts) - parseFloat(a.ts);
-      });
-
-      // Set state, triggering re-rerender of list
-      this.setState({dataSource: this.state.dataSource.cloneWithRows(notifications)});  
+    // Put notifications in array format, tacking on timestamp as a key/value pair for sorting
+    var notifications = [];
+    for (var timestamp in this.props.notifications) {
+      this.props.notifications[timestamp].ts = timestamp;
+      notifications.push(this.props.notifications[timestamp]);
     }
+
+    // Sort notifications by timestamp
+    notifications.sort(function(a, b) {
+      return parseFloat(b.ts) - parseFloat(a.ts);
+    });
+
+    // Set state, triggering re-rerender of list
+    this.setState({ empty: false, dataSource: this.state.dataSource.cloneWithRows(notifications) });
   }
 
 

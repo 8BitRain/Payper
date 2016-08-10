@@ -100,7 +100,7 @@ class Main extends React.Component {
     if (this.props.signedIn) {
       return (
         <SideMenu
-          menu={ <Settings changePage={(newPage) => { this.changePage(newPage); this.toggle(); }} /> }
+          menu={ <Settings numUnseenNotifications={ 1 } changePage={(newPage) => { this.changePage(newPage); this.toggle(); }} /> }
           bounceBackOnOverdraw={false}
           isOpen={this.props.sideMenuIsOpen}
           onChange={(isOpen) => this.props.setSideMenuIsOpen(isOpen)}

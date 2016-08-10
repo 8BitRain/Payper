@@ -13,7 +13,6 @@ function mapStateToProps(state) {
 
     // main
     currentUser: state.getIn(['main', 'currentUser']),
-    numUnseenNotifications: state.getIn(['main', 'numUnseenNotifications']),
 
   }
 }

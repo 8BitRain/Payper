@@ -10,6 +10,7 @@ import * as Init from '../../_init';
 // Custom stylesheets
 import colors from "../../styles/colors";
 import styles from "../../styles/Settings/Settings";
+import notificationStyles from '../../styles/Notifications/Preview';
 
 // Iconography
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -17,6 +18,9 @@ import Entypo from 'react-native-vector-icons/Entypo';
 class Settings extends React.Component {
   constructor(props) {
     super(props);
+
+    console.log("%cProps received by settings:", "color:blue;font-weight:900;");
+    console.log(this.props);
 
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -44,6 +48,13 @@ class Settings extends React.Component {
         <View style={styles.row}>
           <Entypo style={styles.icon} name={options.iconName} size={20} color={colors.icyBlue} />
           <Text style={styles.rowTitle}>{ options.rowTitle }</Text>
+          { (options.rowTitle == "Notifications")
+              ? (this.props.numUnseenNotifications == 0)
+                ? null
+                : <View style={[notificationStyles.numNotificationsWrap, {bottom: 6}]}>
+                    <Text style={notificationStyles.numNotificationsText}>{ this.props.numUnseenNotifications }</Text>
+                  </View>
+              : null }
         </View>
       </TouchableHighlight>
     );
