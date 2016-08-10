@@ -124,7 +124,7 @@ export function formatNativeContacts(contacts) {
   *   Orders array of contacts with Payper contacts having higher priority than
   *   native phone contacts
 **/
-export function orderContacts(contacts) {
+export function contactsToArray(contacts) {
   var arr = [], curr;
 
   for (var c in contacts) {

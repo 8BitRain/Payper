@@ -42,16 +42,7 @@ function mapDispatchToProps(dispatch) {
     listen: (endpoints, options) => {
       Firebase.listenTo(endpoints, (response) => {
         if (response.value) {
-          var contacts = StringMaster5000.orderContacts(response.value);
-
-          console.log("%cPayper contact UID:", "color:orange;font-weight:900;");
-          console.log(contacts[0].uid);
-
-          console.log("%cReceived Payper contacts from Firebase:", "color:orange;font-weight:900;");
-          console.log(contacts);
-
-          console.log("%cNative contacts were passed in:", "color:green;font-weight:900;")
-          console.log(options.nativeContacts);
+          var contacts = StringMaster5000.contactsToArray(response.value);
 
           console.log("%cConcatenated Payper and native contacts:", "color:green;font-weight:900;")
           contacts = contacts.concat(options.nativeContacts);
