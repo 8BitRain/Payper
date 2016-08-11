@@ -44,10 +44,12 @@
 - [ ] `@Eric` Sign in with Facebook throws `Cannot read property dispatchSetProvider of undefined` (LandingScreenView.js ln 164)
 
 ### Brady (MVP)
+- [ ] `*Important*` Go over each case for paying and requesting (incoming payments go to outgoing sometimes, etc.)
 - [X] Style payment invites
 - [ ] Add global user list to UserSearch
 - [x] Add confirmation message to cancel payment button
 - [x] Add instant updating for payment cancellation
+- [x] Fix bug where 'Confirm' and 'Reject' buttons aren't working properly
 - [ ] Fix bug where user search regex treats exact matches like empty strings
 - [X] All pay and request invites are sent to "Incoming" tab (talk to Vash)
 - [X] Fix opacity of header icons in CreatePaymentView
@@ -56,6 +58,17 @@
 - [ ] Add invitee's phone number to second page of CreatePaymentView where a username would typically be rendered
 - [ ] Fix bug where incoming payment appears in outgoing tab at first until you tab away
 - [ ] Fix bug where user filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
+- [ ] Fix bug where payment cancellation confirmation name syntax is backwards
+
+### Dwolla Requirements
+- [ ] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
+- [ ] Request permission for automatic monthly transactions
+- [ ] Display funding source before payment creation
+- [ ] Post initiation transfer time
+- [ ] Delete account button
+- [ ] FAQ
+- [ ] Support
+- [ ] Dispute Resolution
 
 ### Not MVP
 - [ ] Implement action sheets

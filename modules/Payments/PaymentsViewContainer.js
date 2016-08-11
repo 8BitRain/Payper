@@ -15,6 +15,9 @@ import * as setMain from '../Main/MainState';
 // Base view
 import PaymentsView from './PaymentsView';
 
+// Toggle console logs from this script
+const enableLogs = true;
+
 // Decide which chunk of Redux global state our component will receive as props
 function mapStateToProps(state) {
   return {
@@ -93,37 +96,66 @@ function mapDispatchToProps(dispatch) {
     // 1) Remove payment from DataSource
     // 2) Remove payment from DB via Lambda endpoint
     cancelPayment: (options) => {
-      console.log("%cCancelling payment " + options.pid, "color:red;font-weight:900;");
-      console.log("%cCurrent data source:", "color:blue;font-weight:900;");
-      console.log(options.ds._dataBlob.s1);
+      if (enableLogs) {
+        console.log("%cCancelling payment " + options.pid, "color:red;font-weight:900;");
+        console.log("%cCurrent data source:", "color:blue;font-weight:900;");
+        console.log(options.ds._dataBlob.s1);
+      }
 
       var ds = options.ds._dataBlob.s1;
       for (var p in ds) if (p == options.pid) delete ds[p];
 
-      console.log("%cNew data source:", "color:green;font-weight:900;");
-      console.log(ds);
+      if (enableLogs) {
+        console.log("%cNew data source:", "color:blue;font-weight:900;");
+        console.log(ds);
+      }
 
       dispatch(set.outgoingPayments(ds));
       Lambda.cancelPayment({payment_id: options.pid, token: options.token});
     },
 
     confirmPayment: (options) => {
-      console.log("%cConfirming payment " + options.pid, "color:red;font-weight:900;");
-      console.log("%cCurrent data source:", "color:blue;font-weight:900;");
-      console.log(options.ds._dataBlob.s1);
+      if (enableLogs) {
+        console.log("%cConfirming payment " + options.pid, "color:green;font-weight:900;");
+        console.log("%cCurrent data source:", "color:blue;font-weight:900;");
+        console.log(options.ds._dataBlob.s1);
+      }
 
       var ds = options.ds._dataBlob.s1;
-      for (var p in ds) if (p == options.pid) console.log("Row to edit: " + ds[p]);
+      for (var p in ds) if (p == options.pid) {
+        if (enableLogs) console.log("Row to edit: " + (ds[p]));
+        ds[p].confirmed = true;
+      };
 
-      console.log("%cNew data source:", "color:green;font-weight:900;");
-      console.log(ds);
+      if (enableLogs) {
+        console.log("%cNew data source:", "color:blue;font-weight:900;");
+        console.log(ds);
+      }
 
-      // dispatch(set.outgoingPayments(ds));
+      dispatch(set.outgoingPayments(ds));
       Lambda.confirmPayment({payment_id: options.pid, token: options.token});
     },
 
     rejectPayment: (pid) => {
-      console.log("Rejecting payment", pid);
+      if (enableLogs) {
+        console.log("%cRejecting payment " + options.pid, "color:red;font-weight:900;");
+        console.log("%cCurrent data source:", "color:blue;font-weight:900;");
+        console.log(options.ds._dataBlob.s1);
+      }
+
+      var ds = options.ds._dataBlob.s1;
+      for (var p in ds) if (p == options.pid) {
+        if (enableLogs) console.log("Row to edit: " + (ds[p]));
+        delete ds[p];
+      };
+
+      if (enableLogs) {
+        console.log("%cNew data source:", "color:blue;font-weight:900;");
+        console.log(ds);
+      }
+
+      dispatch(set.outgoingPayments(ds));
+      Lambda.rejectPayment({payment_id: options.pid, token: options.token});
     },
   }
 }

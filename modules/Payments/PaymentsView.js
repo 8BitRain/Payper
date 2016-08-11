@@ -103,24 +103,22 @@ class Payments extends React.Component {
         }}
         callbackConfirm={() => {
           console.log("Confirming payment");
+
           var firstName = payment.sender_name.split(" ")[0],
               purpose = StringMaster5000.formatPurpose(payment.purpose);
 
-          // Determine which DataSource to pass to confirm function for instant re-render
-          var ds = (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments;
-
           // Alert the user
           Alert.confirmation({
-            title: "Start paying " + firstName + " " + purpose,
-            message: "You may cancel this payment at any time. Would you like to continue?",
+            title: "Would you like pay " + firstName + "?",
+            message: "You can cancel the payments at any time.",
             cancelMessage: "Nevermind",
-            confirmMessage: "Yes please",
+            confirmMessage: "Yes",
             cancel: () => console.log("Nevermind"),
-            confirm: () => this.props.cancelPayment({
+            confirm: () => this.props.confirmPayment({
               pid: payment.pid,
               token: this.props.currentUser.token,
               ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-            })
+            }),
           });
         }}
         callbackReject={() => console.log("Rejecting payment")} />
