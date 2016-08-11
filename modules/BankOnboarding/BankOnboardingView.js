@@ -115,6 +115,9 @@ const BankOnboardingView = React.createClass({
                 dwollaCustomer={this.props.dwollaCustomer}
                 newUser={this.props.newUser}
                 dispatchSetIav={this.props.dispatchSetIav}
+                listen={this.props.listen}
+                stopListening={this.props.stopListening}
+                activeFirebaseListeners={this.props.activeFirebaseListeners}
               />
             )
             break;

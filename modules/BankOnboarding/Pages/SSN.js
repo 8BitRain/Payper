@@ -9,6 +9,9 @@ var Mixpanel = require('react-native-mixpanel');
 import * as Animations from "../../../helpers/animations";
 import * as Validators from "../../../helpers/validators";
 import * as Async from '../../../helpers/Async';
+import * as Firebase from '../../../services/Firebase';
+
+
 var Mixpanel = require('react-native-mixpanel');
 
 // Custom components
@@ -43,6 +46,7 @@ class SSN extends React.Component {
 
      // Props for temporary input storage
      this.SSNInput = "";
+     this.uid = "";
 
      // Props to be passed to the header
      this.headerProps = {
@@ -101,7 +105,12 @@ class SSN extends React.Component {
        console.log("CustomerCreated?: " + customerCreated);
        //Grab UId
        Async.get('user', (val) => {
-         console.log("User: " + val.uid);
+           console.log("User: " + val);
+           console.log("User: " + JSON.parse(val).uid);
+         var iav = "IAV/" + JSON.parse(val).uid;
+         //Enable FirebaseListeners
+         _this.props.listen([iav]);
+         //dispatch will be called from container
        });
       // _this.initiateIAV(_this.props.newUser.token, _this);
      });
@@ -120,6 +129,15 @@ class SSN extends React.Component {
           _this.props.dispatchSetIav(iavToken.token);
         }
       });
+   }
+
+   componentWillMount() {
+     // Initialize the app
+   }
+
+   componentWillUnmount() {
+     // Disable Firebase listeners
+     this.props.stopListening(this.props.activeFirebaseListeners);
    }
 
    render() {
