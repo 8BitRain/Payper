@@ -24,8 +24,16 @@ export default connect(
   dispatch => ({
       listen(endpoints) {
         Firebase.listenTo(endpoints, (response) => {
-        console.log("%cFirebase listener received:", "color:orange;font-weight:900;");
-        console.log(response);
+          console.log("%cFirebase listener received:", "color:orange;font-weight:900;");
+          console.log(response);
+          switch (response.endpoint.split("/")[0]) {
+            case "IAV":
+              if(response.value != null){
+                console.log(response.value.iav);
+                dispatch(dispatchFunctions.setIav(response.value.iav));
+                break;
+              }
+          }
         });
           dispatch(dispatchFunctions.activeFirebaseListeners(endpoints));
         },
