@@ -73,11 +73,12 @@ class PhoneNumber extends React.Component {
      //this.props.phone = this.phoneNumberInput;
      console.log(this.phoneNumberInput);
      this.props.dispatchSetPhone(this.phoneNumberInput);
-     console.log(this.props.currentUser.phone);
-     console.log("Token: " + this.props.token);
+     //this.props.dispatchSetNewUserToken(this.props.newUser.token);
+     console.log(this.props.newUser.phone);
+     console.log("Token: " + this.props.newUser.token);
      var data = {
-       token: this.props.token,
-       phone: this.props.currentUser.phone
+       token: this.props.newUser.token,
+       phone: this.props.newUser.phone
      };
      console.log("Data: " + JSON.stringify(data));
      this.updatePhone(data);
@@ -87,7 +88,8 @@ class PhoneNumber extends React.Component {
   updatePhone(data){
     Init.updatePhone(data, function(updatedPhone){
       if(updatedPhone){
-        Actions.MainViewContainer();
+        //Actions.MainViewContainer();
+        Actions.BankOnboardingContainer();
       }
     });
   }
@@ -116,7 +118,7 @@ class PhoneNumber extends React.Component {
        { /* Filler */ }
        <View style={[containers.sixTenths, backgrounds.email]}></View>
        { /* Header */ }
-       <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+       <Header callbackClose={() => {Actions.landingView}} headerProps={this.headerProps} />
     </Animated.View>
    );
  }

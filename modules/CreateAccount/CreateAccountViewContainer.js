@@ -14,15 +14,15 @@ export default connect(
   state => ({
 
     // Account setup variables
-    firstName: state.getIn(['createAccount', 'currentUser']).firstName,
-    lastName: state.getIn(['createAccount', 'currentUser']).lastName,
-    email: state.getIn(['createAccount', 'currentUser']).email,
-    password: state.getIn(['createAccount', 'currentUser']).password,
-    phone: state.getIn(['createAccount', 'currentUser']).phone,
-    currentUser: state.getIn(['createAccount', 'currentUser']),
+    firstName: state.getIn(['createAccount', 'newUser']).firstName,
+    lastName: state.getIn(['createAccount', 'newUser']).lastName,
+    email: state.getIn(['createAccount', 'newUser']).email,
+    password: state.getIn(['createAccount', 'newUser']).password,
+    phone: state.getIn(['createAccount', 'newUser']).phone,
+    newUser: state.getIn(['createAccount', 'newUser']),
 
     //Token Information
-    token: state.getIn(['landingScreen', 'token']),
+    //token: state.getIn(['landingScreen', 'token']),
 
     //Provider information
     provider: state.getIn(['createAccount', 'provider']),
@@ -108,8 +108,8 @@ export default connect(
     dispatchSetPhoneValidations(input) {
       dispatch(dispatchFunctions.setPhoneValidations(input));
     },
-    dispatchSetToken(input){
-      dispatch(dispatchFunctions.setToken(input));
+    dispatchSetNewUserToken(input){
+      dispatch(dispatchFunctions.setNewUserToken(input));
     },
     dispatchCreateAccount(user) {
       // Create account

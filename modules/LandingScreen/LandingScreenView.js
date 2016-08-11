@@ -158,16 +158,19 @@ class LandingScreenDisplay extends React.Component {
     // Start loading
     this.setState({loading: true});
 
+    //var _this = this;
+
+    console.log("PROPS: " + this);
     // Push user object to Lambda function
     Init.signInWithFacebook(data, function(signedIn, user, token) {
         console.log("TOKEN: " + token);
         console.log("USER: " + JSON.stringify(user));
         if (!user.phone) {
           _this.props.dispatchSetProvider(_this.state.provider);
-          _this.props.dispatchSetToken(token);
+          _this.props.dispatchSetNewUserToken(token);
         }
         _this.setState({fbPhone: user.phone});
-        //_this.setState({provider: user.provider});
+        _this.setState({provider: user.provider});
         _this.setState({doneLoading: true, signInSuccess: signedIn});
     });
 
@@ -187,7 +190,7 @@ class LandingScreenDisplay extends React.Component {
             msgLoading={"Signing In"}
             success={this.state.signInSuccess}
             successDestination={() => Actions.MainViewContainer()}
-            errorDestination={() => Actions.LandingScreenView()} />
+            errorDestination={() => Actions.LandingScreenContainer()} />
         );
       }
 
@@ -203,7 +206,7 @@ class LandingScreenDisplay extends React.Component {
               msgLoading={"Signing in"}
               success={this.state.signInSuccess}
               successDestination={() => Actions.MainViewContainer()}
-              errorDestination={() => Actions.LandingScreenView()} />
+              errorDestination={() => Actions.LandingScreenContainer()} />
           );
         }
         //Facebook Account Newly Created
@@ -217,7 +220,7 @@ class LandingScreenDisplay extends React.Component {
               msgLoading={"Signing in"}
               success={this.state.signInSuccess}
               successDestination={() => Actions.CreateAccountViewContainer()}
-              errorDestination={() => Actions.LandingScreenView()} />
+              errorDestination={() => Actions.LandingScreenContainer()} />
           );
         }
       }
@@ -270,7 +273,7 @@ class LandingScreenDisplay extends React.Component {
 const LandingScreenView = React.createClass({
   render() {
     return(
-      <LandingScreenDisplay dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetToken={this.props.dispatchSetToken}/>
+      <LandingScreenDisplay  dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetNewUserToken={this.props.dispatchSetNewUserToken}/>
     );
   }
 });

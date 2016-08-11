@@ -52,13 +52,23 @@ class Summary extends React.Component {
    // Callback functions to be passed to the arrow nav
    this.onPressLeft = function() { this.props.dispatchSetPage(4, null, null, null) };
    this.onPressCheck = function() {
-     Init.createUser(this.props.currentUser);
-     Actions.BankOnboardingContainer();
+     var _this = this;
+     Init.createUser(this.props.newUser, function(userCreated, token){
+       if(userCreated){
+         console.log("SUMMARY SCREEN: TOKEN (Standalone from USERTOKEN): " + _this.props.token)
+         console.log("SUMMARY SCREEN: USER TOKEN BEFORE DISPATCH: " + _this.props.newUser.token);
+         console.log("SUMMARY SCREEN: USER TOKEN: " + token);
+         _this.props.dispatchSetNewUserToken(token);
+         console.log("SUMMARY SCREEN: USER TOKEN AFTER DISPATCH" + _this.props.newUser.token);
+         Actions.BankOnboardingContainer();
+       }
+     });
    };
  }
  componentDidMount() {
    Animations.fadeIn(this.animationProps);
    Mixpanel.track("Phone# page Finished");
+
  }
  render() {
    return (
@@ -70,18 +80,18 @@ class Summary extends React.Component {
        <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.summary]}>
          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Does this look right?</Text>
 
-         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.email}</Text>
-         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.password}</Text>
-         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.firstName}</Text>
-         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.lastName}</Text>
-         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.currentUser.phone}</Text>
+         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.email}</Text>
+         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.password}</Text>
+         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.firstName}</Text>
+         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.lastName}</Text>
+         <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.phone}</Text>
        </View>
 
        { /* Arrow nav buttons */ }
        <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackCheck={() => {this.onPressCheck()}} />
 
        { /* Header */ }
-       <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+       <Header callbackClose={() => {Actions.landingView}} headerProps={this.headerProps} />
      </Animated.View>
    );
  }

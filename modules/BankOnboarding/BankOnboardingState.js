@@ -18,6 +18,7 @@ var dwollaCustomer = {
 
 // Initialize state
 const initialState = Map({
+    activeFirebaseListeners: [],
     dwollaCustomer,
     currentPagex: 0,
     startIav: '',
@@ -37,7 +38,8 @@ const SET_PAGEX = 'SET_PAGEX',
       SET_STATE = 'SET_STATE',
       SET_CITY = 'SET_CITY',
       SET_DOB = 'SET_DOB',
-      SET_SSN = 'SET_SSN'
+      SET_SSN = 'SET_SSN',
+      SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS'
 
 
 // Action creators
@@ -91,7 +93,11 @@ export function setSSN(index){
 
 export function setFirebaseToken(index){
   return { type: SET_FIREBASETOKEN, index: index}
-}
+};
+
+export function activeFirebaseListeners(input) { return {type: SET_ACTIVE_FIREBASE_LISTENERS, input: input} };
+
+
 
 
 /**
@@ -103,6 +109,10 @@ export function setFirebaseToken(index){
 **/
 export default function BankOnboardingReducer(state = initialState, action = {}) {
   switch (action.type) {
+    case SET_ACTIVE_FIREBASE_LISTENERS:
+      var newState = state.set('activeFirebaseListeners', action.input);
+      return newState;
+      break;
     case SET_PAGEX:
       var newState = state.set('currentPagex', action.index);
       return newState;

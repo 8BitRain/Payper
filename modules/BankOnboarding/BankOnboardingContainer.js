@@ -10,17 +10,38 @@ import * as Firebase from '../../services/Firebase';
 export default connect(
   state => ({
     /*Bank Onboarding State Variables*/
+    activeFirebaseListeners: state.getIn(['bankOnboarding', 'activeFirebaseListeners']),
     startIav: state.getIn(['bankOnboarding', 'startIav']),
-    firebase_token: state.getIn(['bankOnboarding', 'firebase_token']),
+    firebase_token: state.getIn(['createAccount', 'token']),
     dwollaCustomer: state.getIn(['bankOnboarding', 'dwollaCustomer']),
     // Tracks pagination
     currentPagex: state.getIn(['bankOnboarding', 'currentPagex']),
 
     /*Create Account State Variables*/
-    currentUser: state.getIn(['createAccount', 'currentUser'])
+    newUser: state.getIn(['createAccount', 'newUser'])
 
   }),
   dispatch => ({
+      listen(endpoints) {
+        Firebase.listenTo(endpoints, (response) => {
+          console.log("%cFirebase listener received:", "color:orange;font-weight:900;");
+          console.log(response);
+          switch (response.endpoint.split("/")[0]) {
+            case "IAV":
+              if(response.value != null){
+                console.log(response.value.iav);
+                dispatch(dispatchFunctions.setIav(response.value.iav));
+                break;
+              }
+          }
+        });
+          dispatch(dispatchFunctions.activeFirebaseListeners(endpoints));
+        },
+
+      stopListening(endpoints) {
+        Firebase.stopListeningTo(endpoints);
+        dispatch(dispatchFunctions.activeFirebaseListeners([]));
+      },
 
       dispatchSetIav(input){
         dispatch(dispatchFunctions.setIav(input));
@@ -58,6 +79,7 @@ export default connect(
       dispatchSetSSN(input){
         dispatch(dispatchFunctions.setSSN(input));
       },
+
 
       // Handles pagination
       dispatchSetPageX(index, direction) {

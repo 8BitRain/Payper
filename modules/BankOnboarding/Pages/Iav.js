@@ -2,20 +2,14 @@ import React from 'react';
 import {View, Text, TextInput, StyleSheet, Animated, Image, WebView} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
-import * as Animations from "../../helpers/animations";
-import * as Validators from "../../helpers/validators";
-import * as Firebase from "../../services/Firebase";
-import * as Async from "../../helpers/Async";
 import Entypo from 'react-native-vector-icons/Entypo';
-import Header from '../../components/Header/Header.js';
-
 
 
 //styles
-import backgrounds from "./styles/backgrounds";
-import containers from "./styles/containers";
-import typography from "./styles/typography";
-import colors from '../../styles/colors';
+import backgrounds from "../styles/backgrounds";
+import containers from "../styles/containers";
+import typography from "../styles/typography";
+import colors from '../../../styles/colors';
 
 
 
@@ -24,7 +18,7 @@ var Mixpanel = require('react-native-mixpanel');
 class Iav extends React.Component {
   constructor(props) {
     super(props);
-    this.firebase_token =  this.props.firebase_token;
+    this.firebase_token =  this.props.newUser.token;
     if(this.firebase_token == ''){
       console.log("Async Error: Make sure Firebase token is properly being stored and retrieved via dispatch");
     }
@@ -59,7 +53,7 @@ class Iav extends React.Component {
   render() {
     return(
       <WebView
-       source={{uri: /*'http://localhost:8000'*/ /*'http://localhost:5000/iav'*/ 'https://www.getcoincast.com/iav'}} injectedJavaScript={this.injectedJS}
+       source={{uri: /*'http://localhost:8000'*/ /*'http://localhost:5000/iav'*/ 'http://www.getpayper.io/iav'}} injectedJavaScript={this.injectedJS}
        style={{marginTop: 20}}
        startInLoadingState={false}
      />
