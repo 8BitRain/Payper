@@ -41,7 +41,6 @@
 - [X] "Runtime is not ready for debugging" randomly appears.  **This went away when I downgraded from Node 6.2.0 to 5.5.0**
 - [ ] "Severe Error, duplicates recorded in Firebase, with no auth information. To reproduce
       delete an id but not a users and Facebook id, or switch this around until you can get duplicate users through Facebook sign in or regular user sign in." https://github.com/facebook/react-native/issues/6682
-- [ ] User filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
 - [ ] `@Eric` Sign in with Facebook throws `Cannot read property dispatchSetProvider of undefined` (LandingScreenView.js ln 164)
 
 ### Brady (MVP)
@@ -51,11 +50,12 @@
 - [x] Add instant updating for payment cancellation
 - [ ] Fix bug where user search regex treats exact matches like empty strings
 - [X] All pay and request invites are sent to "Incoming" tab (talk to Vash)
-- [ ] Fix opacity of header icons in CreatePaymentView
+- [X] Fix opacity of header icons in CreatePaymentView
 - [ ] Fix issue where Payper contact list sometimes doesn't populate above phone contacts in UserSearchView (is Firebase listener receiving empty contacts and concatenating an empty array with native contacts?)
 - [ ] Fix header padding on small phones
 - [ ] Add invitee's phone number to second page of CreatePaymentView where a username would typically be rendered
 - [ ] Fix bug where incoming payment appears in outgoing tab at first until you tab away
+- [ ] Fix bug where user filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
 
 ### Not MVP
 - [ ] Implement action sheets
