@@ -1,8 +1,8 @@
 // Dependencies
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Image, TouchableHighlight} from "react-native";
-import Button from "react-native-button";
-import Entypo from "react-native-vector-icons/Entypo"
+import {View, Text, TextInput, StyleSheet, Image, TouchableHighlight} from 'react-native';
+import Button from 'react-native-button';
+import Entypo from 'react-native-vector-icons/Entypo'
 
 // Styles
 import colors from '../../styles/colors';
@@ -226,7 +226,7 @@ class Header extends React.Component {
         { /* Contains 'CircleIcons' or 'PaymentIcons' if specified */ }
         <View style={styles.chunkHalf}>
           { this.props.headerProps.title ? <Text style={{fontFamily: 'Roboto', fontSize: 16, color: colors.white, paddingTop: 5}}>{ this.props.headerProps.title }</Text> : null }
-          { this.props.headerProps.types.paymentIcons ? getPaymentIcons(this.props.index) : null }
+          { this.props.headerProps.types.paymentIcons ? getPaymentIcons(this.props.headerProps.index) : null }
           { this.props.headerProps.types.circleIcons ? getCircleIcons(this.props.headerProps.numCircles, this.props.headerProps.index) : null }
           { this.props.headerProps.types.flowTabs ? getFlowTabs(this.state.active, () => {this.setState({active: 'in'}); this.props.headerProps.callbackIn()}, () => {this.setState({active: 'out'}); this.props.headerProps.callbackOut()}) : null }
         </View>
