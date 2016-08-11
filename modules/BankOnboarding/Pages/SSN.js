@@ -8,6 +8,7 @@ var Mixpanel = require('react-native-mixpanel');
 // Custom helper functions
 import * as Animations from "../../../helpers/animations";
 import * as Validators from "../../../helpers/validators";
+import * as Async from '../../../helpers/Async';
 var Mixpanel = require('react-native-mixpanel');
 
 // Custom components
@@ -98,7 +99,11 @@ class SSN extends React.Component {
      var _this = this;
      Init.createCustomer(data, function(customerCreated){
        console.log("CustomerCreated?: " + customerCreated);
-       _this.initiateIAV(_this.props.newUser.token, _this);
+       //Grab UId
+       Async.get('user', (val) => {
+         console.log("User: " + val.uid);
+       });
+      // _this.initiateIAV(_this.props.newUser.token, _this);
      });
    }
 
