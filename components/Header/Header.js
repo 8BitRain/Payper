@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: colors.icyBlue,
+    backgroundColor: colors.richBlack,
     paddingTop: 30,
     paddingBottom: 10,
     flexDirection: "row",
@@ -76,35 +76,35 @@ const styles = StyleSheet.create({
   // Left (in) flow tab
   flowTabIn: {
     flex: 0.5,
-    borderColor: colors.white,
+    borderColor: colors.orangeYellow,
     backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderRightWidth: 1,
-    borderTopLeftRadius: 5,
-    borderBottomLeftRadius: 5,
+    borderWidth: 1,
+    borderRightWidth: 0.5,
+    borderTopLeftRadius: 3.5,
+    borderBottomLeftRadius: 3.5,
 
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
 
-    padding: 2.5,
+    padding: 5,
   },
 
   // Right (out) flow tab
   flowTabOut: {
     flex: 0.5,
-    borderColor: colors.white,
+    borderColor: colors.orangeYellow,
     backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderLeftWidth: 1,
-    borderTopRightRadius: 5,
-    borderBottomRightRadius: 5,
+    borderWidth: 1,
+    borderLeftWidth: 0.5,
+    borderTopRightRadius: 3.5,
+    borderBottomRightRadius: 3.5,
 
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
 
-    padding: 2.5,
+    padding: 5,
   },
 
   // Flow tab inner text
@@ -119,8 +119,8 @@ const styles = StyleSheet.create({
   },
 
   // Active tab styles
-  activeTab: { backgroundColor: colors.white },
-  activeTabText: { color: colors.icyBlue },
+  activeTab: { backgroundColor: colors.orangeYellow },
+  activeTabText: { color: colors.white },
 
 });
 
@@ -154,9 +154,9 @@ function getSettingsIcon(callback, numNotifications) {
 function getPaymentIcons(index) {
   return(
     <View style={styles.iconWrap}>
-      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 0) ? styles.iconActive : null]} name="user" size={20} color={colors.white}/>
-      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 1) ? styles.iconActive : null]} name="credit" size={20} color={colors.white}/>
-      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 2) ? styles.iconActive : null]} name="new-message" size={20} color={colors.white}/>
+      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 0) ? styles.iconActive : null]} name="user" size={20} color={(index == 0) ? colors.orangeYellow : colors.white}/>
+      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 1) ? styles.iconActive : null]} name="credit" size={20} color={(index == 1) ? colors.orangeYellow : colors.white}/>
+      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 2) ? styles.iconActive : null]} name="new-message" size={20} color={(index == 2) ? colors.orangeYellow : colors.white}/>
     </View>
   );
 };
@@ -226,7 +226,7 @@ class Header extends React.Component {
         { /* Contains 'CircleIcons' or 'PaymentIcons' if specified */ }
         <View style={styles.chunkHalf}>
           { this.props.headerProps.title ? <Text style={{fontFamily: 'Roboto', fontSize: 16, color: colors.white, paddingTop: 5}}>{ this.props.headerProps.title }</Text> : null }
-          { this.props.headerProps.types.paymentIcons ? getPaymentIcons(this.props.index) : null }
+          { this.props.headerProps.types.paymentIcons ? getPaymentIcons(this.props.headerProps.index) : null }
           { this.props.headerProps.types.circleIcons ? getCircleIcons(this.props.headerProps.numCircles, this.props.headerProps.index) : null }
           { this.props.headerProps.types.flowTabs ? getFlowTabs(this.state.active, () => {this.setState({active: 'in'}); this.props.headerProps.callbackIn()}, () => {this.setState({active: 'out'}); this.props.headerProps.callbackOut()}) : null }
         </View>

@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    borderColor: colors.icyBlue,
+    borderColor: colors.orangeYellow,
     borderWidth: 1,
   },
 
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   // Username text
   usernameText: {
     fontSize: 12,
-    color: colors.icyBlue,
+    color: colors.orangeYellow,
   },
 
 });

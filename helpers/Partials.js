@@ -33,7 +33,7 @@ export function getUserPic(pic, name) {
     : initials = name[0].substring(0, 1);
     return(
       <View style={[userStyles.pic, userStyles.initials]}>
-        <Text style={{fontFamily: 'Roboto', fontSize: 18, color: colors.icyBlue}}>{ initials }</Text>
+        <Text style={{fontFamily: 'Roboto', fontSize: 18, color: colors.orangeYellow}}>{ initials }</Text>
       </View>
     );
   };
@@ -59,12 +59,12 @@ class UserPic extends React.Component {
       return(
         <View style={{width: dimensions.width, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
           <View style={[userStyles.pic, userStyles.initials, {width: this.props.width, height: this.props.height, borderRadius: this.props.width / 2}]}>
-            <Text style={{fontFamily: 'Roboto', fontSize: 18, color: colors.icyBlue}}>{ initials }</Text>
+            <Text style={{fontFamily: 'Roboto', fontSize: 18, color: colors.orangeYellow}}>{ initials }</Text>
           </View>
         </View>
       );
     } else {
-      return <Image style={{borderWidth: 1, borderColor: colors.icyBlue, width: this.props.width, height: this.props.height, borderRadius: this.props.height / 2}} source={{uri: this.props.pic}} />;
+      return <Image style={{borderWidth: 1, borderColor: colors.orangeYellow, width: this.props.width, height: this.props.height, borderRadius: this.props.height / 2}} source={{uri: this.props.pic}} />;
     }
   }
 };

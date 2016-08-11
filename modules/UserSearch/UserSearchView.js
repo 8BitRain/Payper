@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   confirmationUsername: {
     fontFamily: 'Roboto',
     fontSize: 14,
-    color: colors.icyBlue,
+    color: colors.orangeYellow,
     paddingTop: 10,
   },
 
@@ -191,7 +191,7 @@ class UserSearch extends React.Component {
         { /* Username or phone number */ }
         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
           {(this.props.selectedContact.username)
-            ? <Entypo style={{paddingTop: 10}} name="facebook" size={25} color={colors.icyBlue}/>
+            ? <Entypo style={{paddingTop: 10}} name="facebook" size={25} color={colors.orangeYellow}/>
             : <Entypo style={{paddingTop: 10}} name="phone" size={25} color={colors.alertGreen}/> }
           <Text style={[{paddingLeft: 10}, (this.props.selectedContact.username) ? styles.confirmationUsername : styles.confirmationPhone]}>
             { (this.props.selectedContact.username)
@@ -217,7 +217,7 @@ class UserSearch extends React.Component {
 
   render() {
     return(
-      <View style={{flex: 1.0, justifyContent: 'center', backgroundColor: colors.icyBlue}}>
+      <View style={{flex: 1.0, justifyContent: 'center', backgroundColor: colors.orangeYellow}}>
         { /* Query and ListView or Confirmation, depending on if a user is selected */ }
         <TextInput
           style={[styles.textInput, {backgroundColor: this.state.inputBackgroundColor}]}
