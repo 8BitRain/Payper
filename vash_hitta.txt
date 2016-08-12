@@ -1,16 +1,17 @@
 {
-  "amount": "",
-  "purpose": "",
-  "payments": "",
+  "amount": "100",
+  "purpose": "test u kno",
+  "payments": "12",
   "recip_id": "",
-  "recip_name": "",
+  "recip_name": "DRIZZY DRAKE",
   "recip_pic": "",
-  "sender_id": "",
-  "sender_name": "",
+  "sender_id": "o5pMqE0UsBUGNXvkAksHCqyxSZh1",
+  "sender_name": "Brady Sheridan",
   "sender_pic": "",
-  "type": "",
-  "confirmed": "",
-  "invite": "",
+  "type": "payment",
+  "confirmed": "false",
+  "invite": "true",
+  "invitee": "recip",
   "phoneNumber": "2623058038",
-  "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjJmZWQ2MGNhOGZmODE4YmZkM2VjZTliYTY0MDY1ZWFjMGU4NjA3MTUifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmlyZWJhc2UtY29pbmNhc3QiLCJuYW1lIjoiVmFzaCBNYXJhZGEiLCJwaWN0dXJlIjoiaHR0cHM6Ly9zY29udGVudC54eC5mYmNkbi5uZXQvdi90MS4wLTEvcDEwMHgxMDAvMTMxMTkwODVfNDkyMzAxMzE0MzAyMjYzXzE5MTg3NTMzODc2NDkyOTU2NV9uLmpwZz9vaD1lZGE5NDc0NDY5YjcwYTRiMjQwMzc0YWNkMzMzNjYyZiZvZT01ODUwQjI2OSIsImF1ZCI6ImZpcmViYXNlLWNvaW5jYXN0IiwiYXV0aF90aW1lIjoxNDcxMDI3NjkyLCJ1c2VyX2lkIjoiRnlBM0hQdFNaRllmS0ZFTHk5Sm5Bd0xTeXN1MiIsInN1YiI6IkZ5QTNIUHRTWkZZZktGRUx5OUpuQXdMU3lzdTIiLCJpYXQiOjE0NzEwMjc2OTMsImV4cCI6MTQ3MTAzMTI5MywiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJmYWNlYm9vay5jb20iOlsiNTIyNjM2MjU0NjAyMTAyIl19LCJzaWduX2luX3Byb3ZpZGVyIjoiZmFjZWJvb2suY29tIn19.KHQ2qoHGOaYLtkmaaqA_ejvyWxI1qJQYCA4X2RXwehdBUHIBC8KFw4NRHALMzwkzlFzshcxQcUr4aY94R8MwGjqSXgAVa0SMiH1O1el5WZG8BffbzF49c3PyzBc02XDtTkXbRYcQYU5X64vQDeQUqxrghmvnF9CxPEfCWbrqr7yB5KVaD4N5a5Cr0TRnZMHi9A9AlxHVjclxSO1DrCNlrTK3heVLxp2zwmJrklZa1gNzXwLVBwOswNqH3zZ9wR6_xDzhLxWuh0lGEEW-yTLwuwq4ErT6ydOf8eiY9w_PAvrI4-soC6Ily8iyG5BEheSVmXFiJgU7syxkUwIxFvoTZw"
+  "token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjJmZWQ2MGNhOGZmODE4YmZkM2VjZTliYTY0MDY1ZWFjMGU4NjA3MTUifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmlyZWJhc2UtY29pbmNhc3QiLCJuYW1lIjoiVmFzaCBNYXJhZGEiLCJwaWN0dXJlIjoiaHR0cHM6Ly9zY29udGVudC54eC5mYmNkbi5uZXQvdi90MS4wLTEvcDEwMHgxMDAvMTMxMTkwODVfNDkyMzAxMzE0MzAyMjYzXzE5MTg3NTMzODc2NDkyOTU2NV9uLmpwZz9vaD1lZGE5NDc0NDY5YjcwYTRiMjQwMzc0YWNkMzMzNjYyZiZvZT01ODUwQjI2OSIsImF1ZCI6ImZpcmViYXNlLWNvaW5jYXN0IiwiYXV0aF90aW1lIjoxNDcxMDMyNDA1LCJ1c2VyX2lkIjoiRnlBM0hQdFNaRllmS0ZFTHk5Sm5Bd0xTeXN1MiIsInN1YiI6IkZ5QTNIUHRTWkZZZktGRUx5OUpuQXdMU3lzdTIiLCJpYXQiOjE0NzEwMzI0MDYsImV4cCI6MTQ3MTAzNjAwNiwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJmYWNlYm9vay5jb20iOlsiNTIyNjM2MjU0NjAyMTAyIl19LCJzaWduX2luX3Byb3ZpZGVyIjoiZmFjZWJvb2suY29tIn19.D5UfWf3pw2mqJCBD6d0oNQOGC9J4N_aN29WoEyzjBi06Z3X8L8MHa2hxNimTWOwHdPqXW01WOwUX-58fMMgCqpwnaBlR52RGxvUFqZMmkRDZdfV4n-TNA4VYONgLgWwnPpvYNJQ2RxRTuZeGpVEwL4ZZYfBNFdN3gyLgi8hMk8Bnu7aZ9uaydSPjLdwBzOZ5FiJXpy5WuftX-SL91iPl5BTJ8EfDEU_GKPujuvRimTTA6y30R615bpxPR3gUkvP1znvkAOOgteHyAxvrJr_sN0CGRrM6mkeNvWRl6J-FjgaiD_FQ0VETwsU3RhSJQTuQ7oUAOu6XBFnbQuF2LbaIFw"
 }

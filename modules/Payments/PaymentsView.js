@@ -79,18 +79,18 @@ class Payments extends React.Component {
         out={this.props.activeFilter == "outgoing"}
         callbackCancel={() => {
           // Define strings to be displayed in alert
-          var firstName = payment.recip_name.split(" ")[0],
+          var firstName = (this.props.activeFilter == "outgoing") ? payment.recip_name.split(" ")[0] : payment.sender_name.split(" ")[0],
               purpose = StringMaster5000.formatPurpose(payment.purpose),
-              title;
+              message;
 
           // Concatenate strings depending on payment flow direction
-          if (this.props.currentUser.uid == payment.sender_id) title = "Stop paying " + firstName + " " + purpose;
-          else title = firstName + " will stop paying you " + purpose;
+          if (this.props.currentUser.uid == payment.sender_id) message = "You'll stop paying " + firstName + " " + purpose + ".";
+          else message = firstName + " will stop paying you " + purpose + ".";
 
           // Alert the user
           Alert.confirmation({
-            title: title,
-            message: "Are you sure you'd like to cancel this payment?",
+            title: "Are you sure you'd like to cancel this payment?",
+            message: message,
             cancelMessage: "Nevermind",
             confirmMessage: "Yes please",
             cancel: () => console.log("Nevermind"),
