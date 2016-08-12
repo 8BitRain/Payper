@@ -83,14 +83,14 @@ class Settings extends React.Component {
 
   render() {
     return (
-      <View style={{flex: 1, borderWidth: 1, borderColor: 'red', width: dimensions.width * 0.6666, backgroundColor: colors.darkGrey}}>
+      <View style={{flex: 1.0, backgroundColor: colors.darkGrey}}>
 
         { /* Header */ }
         <TouchableHighlight
           activeOpacity={0.7}
           underlayColor={'transparent'}
           onPress={() => console.log("EDIT PROFILE")}
-          style={{borderWidth: 1, borderColor: 'blue', borderBottomWidth: 0.5, borderBottomColor: colors.icyBlue}}>
+          style={{borderBottomWidth: 0.5, borderBottomColor: colors.icyBlue}}>
 
           <View style={{height: 70, marginTop: 30, paddingBottom: 12.5, paddingLeft: 20, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: colors.icyBlue}}>
             { Partials.getUserPic(this.props.currentUser.profile_pic, this.props.currentUser.first_name + " " + this.props.currentUser.last_name) }
