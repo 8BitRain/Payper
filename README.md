@@ -48,7 +48,8 @@
 - [X] Style payment invites
 - [ ] Add global user list to UserSearch
 - [x] Add confirmation message to cancel payment button
-- [x] Add instant updating for payment cancellation
+- [x] Add instant re-render for 'Cancel Payment' action
+- [X] Add instant re-render for 'Accept' and 'Reject' actions
 - [x] Fix bug where 'Confirm' and 'Reject' buttons aren't working properly
 - [ ] Fix bug where user search regex treats exact matches like empty strings
 - [X] All pay and request invites are sent to "Incoming" tab (talk to Vash)
