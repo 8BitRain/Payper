@@ -22,7 +22,7 @@
   *   Curls
 **/
 // Direct invite
-// curl -X POST -d @vash_hitta.txt https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment --header "Content-Type:application/json"
+// curl -X POST -d @vash_hitta.txt https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/viaPayment --header "Content-Type:application/json"
 // Payment creation
 // curl -X POST -d @vash_hitta.txt https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create --header "Content-Type:application/json"
 

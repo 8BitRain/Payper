@@ -104,7 +104,7 @@ class Payments extends React.Component {
         callbackConfirm={() => {
           console.log("Confirming payment");
 
-          var firstName = payment.sender_name.split(" ")[0],
+          var firstName = payment.recip_name.split(" ")[0],
               purpose = StringMaster5000.formatPurpose(payment.purpose);
 
           // Alert the user
@@ -121,7 +121,26 @@ class Payments extends React.Component {
             }),
           });
         }}
-        callbackReject={() => console.log("Rejecting payment")} />
+        callbackReject={() => {
+          console.log("Rejecting payment");
+
+          var firstName = payment.recip_name.split(" ")[0],
+              purpose = StringMaster5000.formatPurpose(payment.purpose);
+
+          // Alert the user
+          Alert.confirmation({
+            title: "Would you like reject the request from " + firstName + "?",
+            message: "You can cancel the payments at any time.",
+            cancelMessage: "Nevermind",
+            confirmMessage: "Yes",
+            cancel: () => console.log("Nevermind"),
+            confirm: () => this.props.rejectPayment({
+              pid: payment.pid,
+              token: this.props.currentUser.token,
+              ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
+            }),
+          });
+        }} />
     );
   }
 

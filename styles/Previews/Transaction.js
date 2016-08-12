@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     flex: 0.65,
     backgroundColor: colors.white,
     flexDirection: 'row',
+    paddingRight: 5,
   },
 
   // Wrap for bottom half (progress bar)

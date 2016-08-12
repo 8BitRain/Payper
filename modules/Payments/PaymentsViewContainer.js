@@ -136,7 +136,7 @@ function mapDispatchToProps(dispatch) {
       Lambda.confirmPayment({payment_id: options.pid, token: options.token});
     },
 
-    rejectPayment: (pid) => {
+    rejectPayment: (options) => {
       if (enableLogs) {
         console.log("%cRejecting payment " + options.pid, "color:red;font-weight:900;");
         console.log("%cCurrent data source:", "color:blue;font-weight:900;");
