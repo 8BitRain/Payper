@@ -1,16 +1,17 @@
 import React from 'react';
-import {View, Text, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, TouchableHighlight} from "react-native";
-import {Actions} from 'react-native-router-flux';
+import { View, Text, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 // Helper functions
-import * as Async from "../../helpers/Async";
+import * as Async from '../../helpers/Async';
 import * as Partials from '../../helpers/Partials';
 import * as Init from '../../_init';
 
 // Custom stylesheets
-import colors from "../../styles/colors";
-import styles from "../../styles/Settings/Settings";
+import colors from '../../styles/colors';
+import styles from '../../styles/Settings/Settings';
 import notificationStyles from '../../styles/Notifications/Preview';
+const dimensions = Dimensions.get('window');
 
 // Iconography
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -82,19 +83,19 @@ class Settings extends React.Component {
 
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: colors.darkGrey}}>
+      <View style={{flex: 1, borderWidth: 1, borderColor: 'red', width: dimensions.width * 0.6666, backgroundColor: colors.darkGrey}}>
 
         { /* Header */ }
         <TouchableHighlight
           activeOpacity={0.7}
           underlayColor={'transparent'}
           onPress={() => console.log("EDIT PROFILE")}
-          style={{borderBottomWidth: 1, borderBottomColor: colors.icyBlue}}>
+          style={{borderWidth: 1, borderColor: 'blue', borderBottomWidth: 0.5, borderBottomColor: colors.icyBlue}}>
 
           <View style={{height: 70, marginTop: 30, paddingBottom: 12.5, paddingLeft: 20, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: colors.icyBlue}}>
             { Partials.getUserPic(this.props.currentUser.profile_pic, this.props.currentUser.first_name + " " + this.props.currentUser.last_name) }
 
-            <View style={{flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+            <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
               <Text style={[styles.rowTitle, {fontSize: 18, paddingLeft: 0}]}>{ this.props.currentUser.first_name + " " + this.props.currentUser.last_name }</Text>
               <Text style={[styles.rowTitle, {fontSize: 12, color: colors.icyBlue, paddingLeft: 0}]}>Edit profile</Text>
             </View>

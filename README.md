@@ -61,6 +61,7 @@
 - [ ] Fix bug where user filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
 - [ ] Fix bug where payment cancellation confirmation name syntax is backwards for incoming payments
 - [ ] Fix bug where selecting a new page in the side menu results in rough animation
+- [x] Fix issue where text does not wrap in the side menu
 
 ### Dwolla Requirements
 - [ ] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
