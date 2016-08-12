@@ -49,8 +49,6 @@ function mapDispatchToProps(dispatch) {
           console.log(contacts);
 
           dispatch(set.allContacts(contacts));
-        } else {
-          dispatch(set.allContacts(options.nativeContacts));
         }
       });
 
