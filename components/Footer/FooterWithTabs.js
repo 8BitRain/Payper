@@ -25,7 +25,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: colors.white,
+    borderTopWidth: 1,
+    borderColor: colors.lightGrey,
   },
 
   text: {
@@ -79,10 +81,10 @@ function getPayButton(callback) {
       underlayColor={'transparent'}
       style={[styles.button]}
       onPress={() => callback()}>
-        <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-          <Entypo style={[styles.iconSettings]} name="credit" size={20} color={colors.green} />
-          <Text style={[styles.text]}>New Payment</Text>
-        </View>
+    <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+      <Entypo style={[styles.iconSettings]} name="credit" size={20} color={colors.green} />
+      <Text style={[styles.text]}>New Payment</Text>
+    </View>
     </TouchableHighlight>
   );
 };
@@ -97,28 +99,11 @@ class Footer extends React.Component {
   }
   render() {
     return(
-      <TouchableHighlight
-        activeOpacity={1.0}
-        underlayColor={colors.alertGreen}
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: 65,
-          height: 65,
-          borderRadius: 32.5,
-          borderWidth: 1.0,
-          borderColor: colors.white,
-          backgroundColor: colors.lightAlertGreen,
-          shadowColor: colors.lightGrey,
-          shadowOffset: {width: 0, height: 0},
-          shadowOpacity: 0.45,
-          shadowRadius: 3.0
-        }}
-        onPress={() => this.props.callbackPay()}>
-
-        <Entypo style={[styles.iconSettings, {marginLeft: 3.5}]} name="credit" size={30} color={colors.white} />
-
-      </TouchableHighlight>
+      <View style={[styles.footerWrap]}>
+        { getFeedButton(this, this.props.callbackFeed) }
+        { getPayButton(this.props.callbackPay) }
+        { getTrackingButton(this, this.props.callbackTracking) }
+      </View>
     );
   }
 };

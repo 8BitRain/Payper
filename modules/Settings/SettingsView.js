@@ -96,7 +96,7 @@ class Settings extends React.Component {
             { Partials.getUserPic(this.props.currentUser.profile_pic, this.props.currentUser.first_name + " " + this.props.currentUser.last_name) }
 
             <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
-              <Text style={[styles.rowTitle, {fontSize: 18, paddingLeft: 0}]}>{ this.props.currentUser.first_name + " " + this.props.currentUser.last_name }</Text>
+              <Text style={[styles.rowTitle, {fontSize: 18, paddingLeft: 0, paddingRight: 12}]}>{ this.props.currentUser.first_name + " " + this.props.currentUser.last_name }</Text>
               <Text style={[styles.rowTitle, {fontSize: 12, color: colors.icyBlue, paddingLeft: 0}]}>Edit profile</Text>
             </View>
           </View>

@@ -57,11 +57,12 @@
 - [X] Fix issue where Payper contact list sometimes doesn't populate above phone contacts in UserSearchView (is Firebase listener receiving empty contacts and concatenating an empty array with native contacts?)
 - [x] Fix header padding on small phones
 - [ ] Add invitee's phone number to second page of CreatePaymentView where a username would typically be rendered
-- [ ] Fix bug where incoming payment appears in outgoing tab at first until you tab away
+- [ ] Fix bug where incoming payment appears in outgoing tab at first until you tab away (tough to recreate)
 - [ ] Fix bug where user filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
 - [x] Fix bug where payment cancellation confirmation name syntax is backwards for incoming payments
 - [x] Fix bug where selecting a new page in the side menu results in rough animation (this just went away 🤔)
 - [x] Fix issue where text does not wrap in the side menu
+- [x] Redesign footer to be tabless
 
 ### Dwolla Requirements
 - [ ] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
@@ -77,6 +78,7 @@
 - [ ] Implement action sheets
 - [ ] Add recent users list to UserSearchView
 - [ ] Add instant updating for payment confirmation and rejection
+- [ ] Add section headers to user search list view
 
 ## **Installation**
 ```

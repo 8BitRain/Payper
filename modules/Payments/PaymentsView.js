@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView } from 'react-native';
+import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 // Helpers
@@ -12,6 +12,7 @@ import Transaction from '../../components/Previews/Transaction/Transaction';
 
 // Stylesheets
 import colors from '../../styles/colors';
+const dimensions = Dimensions.get('window');
 
 class Payments extends React.Component {
   constructor(props) {
@@ -84,8 +85,8 @@ class Payments extends React.Component {
               message;
 
           // Concatenate strings depending on payment flow direction
-          if (this.props.currentUser.uid == payment.sender_id) message = "You'll stop paying " + firstName + " " + purpose + ".";
-          else message = firstName + " will stop paying you " + purpose + ".";
+          if (this.props.currentUser.uid == payment.sender_id) message = "You'll stop paying " + firstName + " " + purpose;
+          else message = firstName + " will stop paying you " + purpose;
 
           // Alert the user
           Alert.confirmation({
@@ -140,7 +141,39 @@ class Payments extends React.Component {
               ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
             }),
           });
-        }} />
+        }}
+        callbackMenu={() => {
+          ActionSheetIOS.showActionSheetWithOptions({
+            options: ['Cancel Payment Series', 'Nevermind'],
+            cancelButtonIndex: 1
+          },
+          (buttonIndex) => {
+            if (buttonIndex == 0) {
+              // Define strings to be displayed in alert
+              var firstName = (this.props.activeFilter == "outgoing") ? payment.recip_name.split(" ")[0] : payment.sender_name.split(" ")[0],
+                  purpose = StringMaster5000.formatPurpose(payment.purpose),
+                  message;
+
+              // Concatenate strings depending on payment flow direction
+              if (this.props.currentUser.uid == payment.sender_id) message = "You'll stop paying " + firstName + " " + purpose;
+              else message = firstName + " will stop paying you " + purpose;
+
+              // Alert the user
+              Alert.confirmation({
+                title: "Are you sure you'd like to cancel this payment?",
+                message: message,
+                cancelMessage: "Nevermind",
+                confirmMessage: "Yes please",
+                cancel: () => console.log("Nevermind"),
+                confirm: () => this.props.cancelPayment({
+                  pid: payment.pid,
+                  token: this.props.currentUser.token,
+                  ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
+                })
+              });
+            }
+          });
+        }}/>
     );
   }
 
@@ -149,12 +182,14 @@ class Payments extends React.Component {
       <View style={{flex: 1.0, backgroundColor: colors.white}}>
 
         { /* List of payments or empty state */ }
-        <View style={{flex: 0.9}}>
+        <View style={{flex: 1.0}}>
           { this._renderPaymentList() }
         </View>
 
         { /* Footer */ }
-        <View style={{flex: 0.1}}>
+        <View
+          pointerEvents="box-none"
+          style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, left: 0, right: 0, height: dimensions.height * 0.2}}>
           <Footer
             callbackFeed={() => this.props.setActiveTab('global')}
             callbackTracking={() => this.props.setActiveTab('tracking')}

@@ -13,7 +13,6 @@ import * as set from './MainState';
 
 // Base view
 import MainView from './MainView';
-import MainViewV2 from './MainViewV2';
 
 // Decide which chunk of Redux global state our component will receive as props
 function mapStateToProps(state) {
@@ -136,4 +135,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect( mapStateToProps, mapDispatchToProps )( MainViewV2 );
+export default connect( mapStateToProps, mapDispatchToProps )( MainView );

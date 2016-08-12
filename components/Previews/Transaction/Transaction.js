@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import {View, Text, StyleSheet, Image, Dimensions, TouchableHighlight} from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, TouchableHighlight, Platform } from 'react-native';
 import Button from 'react-native-button';
 import Entypo from "react-native-vector-icons/Entypo"
 
@@ -165,19 +165,22 @@ class PaymentPreview extends React.Component {
             <TouchableHighlight
               activeOpacity={0.7}
               underlayColor={'transparent'}
-              onPress={() => console.log("TRANSACTION DOTS PRESSED")}
+              onPress={() => this.props.callbackMenu()}
               style={styles.dots}>
               <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.icyBlue}/>
             </TouchableHighlight>
 
-            { /* Cancel payment button */ }
-            <TouchableHighlight
-              activeOpacity={0.7}
-              underlayColor={'transparent'}
-              onPress={() => this.props.callbackCancel(this.props.payment.pid)}
-              style={[styles.dots, styles.cancel]}>
-              <Entypo style={styles.iconSettings} name="block" size={17.5} color={colors.alertRed}/>
-            </TouchableHighlight>
+            { /* Cancel payment button */
+              (Platform.OS !== 'ios')
+                ? <TouchableHighlight
+                    activeOpacity={0.7}
+                    underlayColor={'transparent'}
+                    onPress={() => this.props.callbackCancel(this.props.payment.pid)}
+                    style={[styles.dots, styles.cancel]}>
+                    <Entypo style={styles.iconSettings} name="block" size={17.5} color={colors.alertRed}/>
+                  </TouchableHighlight>
+                : null
+            }
           </View>
 
           { /* Get bottom half contents */ }
@@ -219,19 +222,22 @@ class PaymentPreview extends React.Component {
             <TouchableHighlight
               activeOpacity={0.7}
               underlayColor={'transparent'}
-              onPress={() => console.log("TRANSACTION DOTS PRESSED")}
+              onPress={() => this.props.callbackMenu()}
               style={styles.dots}>
               <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.icyBlue}/>
             </TouchableHighlight>
 
-            { /* Cancel payment button */ }
-            <TouchableHighlight
-              activeOpacity={0.7}
-              underlayColor={'transparent'}
-              onPress={() => this.props.callbackCancel(this.props.payment.pid)}
-              style={[styles.dots, styles.cancel]}>
-              <Entypo style={styles.iconSettings} name="block" size={17.5} color={colors.alertRed}/>
-            </TouchableHighlight>
+            { /* Cancel payment button */
+              (Platform.OS !== 'ios')
+                ? <TouchableHighlight
+                    activeOpacity={0.7}
+                    underlayColor={'transparent'}
+                    onPress={() => this.props.callbackCancel(this.props.payment.pid)}
+                    style={[styles.dots, styles.cancel]}>
+                    <Entypo style={styles.iconSettings} name="block" size={17.5} color={colors.alertRed}/>
+                  </TouchableHighlight>
+                : null
+            }
           </View>
 
           { /* Bottom chunk (progress bar) */ }
@@ -286,7 +292,7 @@ class PaymentPreview extends React.Component {
             <TouchableHighlight
               activeOpacity={0.7}
               underlayColor={'transparent'}
-              onPress={() => console.log("TRANSACTION DOTS PRESSED")}
+              onPress={() => this.props.callbackMenu()}
               style={styles.dots}>
               <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.icyBlue}/>
             </TouchableHighlight>
