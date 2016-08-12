@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TextInput, StatusBar } from 'react-native';
+import { View, Text, TextInput, StatusBar, Dimensions } from 'react-native';
 import Actions from 'react-native-router-flux';
 import SideMenu from 'react-native-side-menu';
 
@@ -9,6 +9,8 @@ import Header from '../../components/Header/Header';
 import Settings from '../../modules/Settings/SettingsView';
 import Notifications from '../../modules/Notifications/NotificationsViewContainer';
 import Payments from '../../modules/Payments/PaymentsViewContainer';
+
+const dimensions = Dimensions.get('window');
 
 class InnerContent extends React.Component {
   constructor(props) {
@@ -122,7 +124,7 @@ class Main extends React.Component {
           { /* Main page content wrap */ }
           <View style={{flex: 1.0}}>
             { /* Header */ }
-            <View style={{flex: 0.1}}>
+            <View style={{ flex: (dimensions.height < 1334) ? 0.12 : 0.1 }}>
               <Header
                 callbackSettings={ () => this.toggle() }
                 numUnseenNotifications={ this.props.numUnseenNotifications }
@@ -130,7 +132,7 @@ class Main extends React.Component {
             </View>
 
             { /* Inner content */ }
-            <View style={{flex: 0.9}}>
+            <View style={{ flex: (dimensions.height < 1334) ? 0.88 : 0.9 }}>
               <InnerContent { ...this.props } />
             </View>
           </View>

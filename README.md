@@ -52,10 +52,10 @@
 - [X] Add instant re-render for 'Accept' and 'Reject' actions
 - [x] Fix bug where 'Confirm' and 'Reject' buttons aren't working properly
 - [ ] Fix bug where user search regex treats exact matches like empty strings
-- [X] All pay and request invites are sent to "Incoming" tab (talk to Vash)
+- [X] Fix issue where all pay and request invites are sent to "Incoming" tab (talk to Vash)
 - [X] Fix opacity of header icons in CreatePaymentView
 - [X] Fix issue where Payper contact list sometimes doesn't populate above phone contacts in UserSearchView (is Firebase listener receiving empty contacts and concatenating an empty array with native contacts?)
-- [ ] Fix header padding on small phones
+- [x] Fix header padding on small phones
 - [ ] Add invitee's phone number to second page of CreatePaymentView where a username would typically be rendered
 - [ ] Fix bug where incoming payment appears in outgoing tab at first until you tab away
 - [ ] Fix bug where user filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
