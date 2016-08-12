@@ -60,7 +60,7 @@
 - [ ] Fix bug where incoming payment appears in outgoing tab at first until you tab away
 - [ ] Fix bug where user filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
 - [ ] Fix bug where payment cancellation confirmation name syntax is backwards for incoming payments
-- [ ] Fix bug where selecting a new page in the side menu results in rough animation
+- [x] Fix bug where selecting a new page in the side menu results in rough animation (this just went away 🤔)
 - [x] Fix issue where text does not wrap in the side menu
 
 ### Dwolla Requirements
