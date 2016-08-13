@@ -125,7 +125,7 @@ class Main extends React.Component {
           { /* Main page content wrap */ }
           <View style={{flex: 1.0}}>
             { /* Header */ }
-            <View style={{ flex: (dimensions.height < 1334) ? 0.12 : 0.1 }}>
+            <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
               <Header
                 callbackSettings={ () => this.toggle() }
                 numUnseenNotifications={ this.props.numUnseenNotifications }
@@ -133,7 +133,7 @@ class Main extends React.Component {
             </View>
 
             { /* Inner content */ }
-            <View style={{ flex: (dimensions.height < 1334) ? 0.88 : 0.9 }}>
+            <View style={{ flex: (dimensions.height < 667) ? 0.88 : 0.9 }}>
               <InnerContent { ...this.props } />
             </View>
           </View>
