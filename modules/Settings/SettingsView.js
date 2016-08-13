@@ -35,7 +35,7 @@ class Settings extends React.Component {
         {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
         {rowTitle: "Payment History", iconName: "line-graph", destination: Actions.CreateAccountViewContainer},
         {rowTitle: "FAQ", iconName: "help-with-circle", destination: Actions.CreateAccountViewContainer},
-        {rowTitle: "Sign Out", iconName: "moon", destination: () => Init.signOut},
+        {rowTitle: "Sign Out", iconName: "moon", destination: Init.signOut},
       ]),
     }
   }
@@ -55,7 +55,7 @@ class Settings extends React.Component {
     if (options.rowTitle == "Sign Out" && this.props.currentUser.provider == "facebook") {
       return(
         <LoginButton
-          style={[styles.row, {marginLeft: 15, marginRight: 15}]}
+          style={[styles.row, {marginLeft: 15, marginRight: 15, height: 40}]}
           onLogoutFinished={() => Init.signOut()} />
       );
     } else {
