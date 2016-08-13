@@ -26,7 +26,7 @@
 - [ ] App-wide padding (look into pixel density for screen size detection)
 - [ ] Redesign footer (action button for new payment)
 - [ ] Fix loading for IAV
-- [ ] Style 'Continue with Facebook' button
+- [X] Style 'Continue with Facebook' button
 - [ ] Implement section headers in predictive user search module's ListView
 
 ### Architecture
