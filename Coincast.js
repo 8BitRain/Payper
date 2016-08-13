@@ -63,16 +63,16 @@ export default class Coincast extends React.Component {
 
             { /* Main app flow */ }
             <Scene key="SplashView" component={SplashView} title="SplashView" initial />
-            <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" />
-            <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" />
-            <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" />
-            <Scene key="LandingScreenContainer" component={LandingScreenContainer} title="LandingScreenContainer" />
+            <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" panHandlers={null} />
+            <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" panHandlers={null} />
+            <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" panHandlers={null} />
+            <Scene key="LandingScreenContainer" component={LandingScreenContainer} title="LandingScreenContainer" panHandlers={null} />
             <Scene key="MainViewContainer" component={MainViewContainer} title="MainViewContainer" panHandlers={null} />
             <Scene key="CreatePaymentViewContainer" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" direction="vertical" panHandlers={null} />
 
             { /* Testing */ }
-            <Scene key="LandingView" component={LandingView} title="LandingView" />
-            <Scene key="FirebaseBindingViewContainer" component={FirebaseBindingViewContainer} title="FirebaseBindingViewContainer" />
+            <Scene key="LandingView" component={LandingView} title="LandingView" panHandlers={null} />
+            <Scene key="FirebaseBindingViewContainer" component={FirebaseBindingViewContainer} title="FirebaseBindingViewContainer" panHandlers={null} />
 
           </Scene>
           <Scene key="error" component={Error}/>

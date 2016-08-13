@@ -16,7 +16,7 @@
 - [ ] App-wide validations (Bank Onboarding, Payper Account Creation, Pay & Request)
 - [ ] App-wide empty states (Tracking Page, Notifications, Payment History)
 - [x] Revamp loading screen component
-- [ ] Bind Facebook sign out to our custom sign out button in the side menu
+- [x] Bind Facebook sign out to our custom sign out button in the side menu
 
 ### Polish
 - [X] CreatePaymentView.js predictive search: limit predictions to 4

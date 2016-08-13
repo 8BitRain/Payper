@@ -1,6 +1,10 @@
 import React from 'react';
 import { View, Text, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+const FBSDK = require('react-native-fbsdk');
+const {
+  LoginButton
+} = FBSDK;
 
 // Helper functions
 import * as Async from '../../helpers/Async';
@@ -31,7 +35,7 @@ class Settings extends React.Component {
         {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
         {rowTitle: "Payment History", iconName: "line-graph", destination: Actions.CreateAccountViewContainer},
         {rowTitle: "FAQ", iconName: "help-with-circle", destination: Actions.CreateAccountViewContainer},
-        {rowTitle: "Sign Out", iconName: "moon", destination: Init.signOut},
+        {rowTitle: "Sign Out", iconName: "moon", destination: () => Init.signOut},
       ]),
     }
   }
@@ -46,24 +50,38 @@ class Settings extends React.Component {
     *   Return a list of ready to render rows
   **/
   _renderRow(options) {
-    return(
-      <TouchableHighlight
-        activeOpacity={0.7}
-        underlayColor={'transparent'}
-        onPress={() => options.destination()}>
-        <View style={styles.row}>
-          <Entypo style={styles.icon} name={options.iconName} size={20} color={colors.icyBlue} />
-          <Text style={styles.rowTitle}>{ options.rowTitle }</Text>
-          { (options.rowTitle == "Notifications")
-              ? (this.props.numUnseenNotifications == 0)
-                ? null
-                : <View style={[notificationStyles.numNotificationsWrap, { bottom: 6 }]}>
-                    <Text style={notificationStyles.numNotificationsText}>{ this.props.numUnseenNotifications }</Text>
-                  </View>
-              : null }
-        </View>
-      </TouchableHighlight>
-    );
+
+    { /* If user is signed in with Facebook, display Facebook sign out button */ }
+    if (options.rowTitle == "Sign Out" && this.props.currentUser.provider == "facebook") {
+      return(
+        <LoginButton
+          style={[styles.row, {marginLeft: 15, marginRight: 15}]}
+          onLogoutFinished={() => Init.signOut()} />
+      );
+    } else {
+      return(
+        <TouchableHighlight
+          activeOpacity={0.7}
+          underlayColor={'transparent'}
+          onPress={() => options.destination()}>
+          <View style={styles.row}>
+
+            <Entypo style={styles.icon} name={options.iconName} size={20} color={colors.icyBlue} />
+            <Text style={styles.rowTitle}>{ options.rowTitle }</Text>
+
+            { /* Render unseen notifications indicator */ }
+            { (options.rowTitle == "Notifications")
+                ? (this.props.numUnseenNotifications == 0)
+                  ? null
+                  : <View style={[notificationStyles.numNotificationsWrap, { bottom: 6 }]}>
+                      <Text style={notificationStyles.numNotificationsText}>{ this.props.numUnseenNotifications }</Text>
+                    </View>
+                : null }
+
+          </View>
+        </TouchableHighlight>
+      );
+    }
   }
 
 
