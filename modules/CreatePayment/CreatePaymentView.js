@@ -20,7 +20,7 @@ import typography from '../../styles/typography';
 import colors from '../../styles/colors';
 
 // Used to size user previews
-var dimensions = Dimensions.get('window');
+const dimensions = Dimensions.get('window');
 
 function genUserPreview(user, options) {
   user.name = user.first_name + " " + user.last_name;
@@ -317,7 +317,7 @@ class CreatePaymentView extends React.Component {
         <StatusBar barStyle="light-content" />
 
         { /* Header */ }
-        <View style={{flex: 0.1}}>
+        <View style={{ flex: (dimensions.height < 1334) ? 0.12 : 0.1 }}>
           <Header
             callbackClose={ () => Actions.MainViewContainer() }
             numUnseenNotifications={ this.props.numUnseenNotifications }
@@ -325,7 +325,7 @@ class CreatePaymentView extends React.Component {
         </View>
 
         { /* Inner content */ }
-        <View style={{flex: 0.9}}>
+        <View style={{ flex: (dimensions.height < 1334) ? 0.88 : 0.9 }}>
           <InnerContent
             { ...this.props }
             inputting={ this.state.inputting }
