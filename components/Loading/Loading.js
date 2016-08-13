@@ -18,14 +18,14 @@ class Loading extends React.Component {
       if (this.props.success) {
         setTimeout(() => {
           this.props.successDestination();
-        }, 2000);
+        }, 1000);
       }
 
       // Failure
       else if (!this.props.success) {
         setTimeout(() => {
           this.props.errorDestination();
-        }, 2000);
+        }, 1000);
       }
 
       // Render success or error messages
