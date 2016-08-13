@@ -24,7 +24,7 @@
 - [X] Pass numNotifications to menu in sidebar and render preview indicator next to notifications lightbulb
 - [X] Apply fade animation to inner content during create account onboarding, not entire view
 - [ ] App-wide padding (look into pixel density for screen size detection)
-- [ ] Redesign footer (action button for new payment)
+- [X] Redesign footer (action button for new payment)
 - [ ] Fix loading for IAV
 - [X] Style 'Continue with Facebook' button
 - [ ] Implement section headers in predictive user search module's ListView
