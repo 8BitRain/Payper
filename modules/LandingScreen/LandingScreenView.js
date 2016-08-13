@@ -1,12 +1,12 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, Dimensions} from "react-native";
-import Button from "react-native-button";
+import {View, Text, TextInput, StyleSheet, Animated, Image, Dimensions, StatusBar} from 'react-native';
+import Button from 'react-native-button';
 import {Reducer, Router, Actions} from 'react-native-router-flux';
-import * as Animations from "../../helpers/animations";
-import FacebookLogin from "../../components/FacebookLogin";
-import GenericSignUp from "../../components/GenericSignUp";
-import GenericSignIn from "../../components/GenericSignIn";
-import Loading from "../../components/Loading/Loading";
+import * as Animations from '../../helpers/animations';
+import FacebookLogin from '../../components/FacebookLogin';
+import GenericSignUp from '../../components/GenericSignUp';
+import GenericSignIn from '../../components/GenericSignIn';
+import Loading from '../../components/Loading/Loading';
 const FBSDK = require('react-native-fbsdk');
 const {
   LoginButton,
@@ -20,10 +20,11 @@ const {
 import * as Init from '../../_init';
 
 // Stylesheets
-import container from "./styles/container";
-import background from "./styles/background";
-import typography from "./styles/typography";
-import carousel from "./styles/carousel";
+import colors from '../../styles/colors';
+import container from './styles/container';
+import background from './styles/background';
+import typography from './styles/typography';
+import carousel from './styles/carousel';
 var Mixpanel = require('react-native-mixpanel');
 
 // Carousel component for image sliding
@@ -227,28 +228,29 @@ class LandingScreenDisplay extends React.Component {
 
     } else {
       return (
-        <Animated.View style={[container.main, background.main, {opacity: this.animationProps.fadeAnim}]}>
+        <Animated.View style={{flex: 1.0, backgroundColor: colors.darkGrey, opacity: this.animationProps.fadeAnim}}>
 
-          <View style={[container.third, container.image]}>
-            <Text style={[typography.main, typography.fontSizeTitle]}>Coincast</Text>
+          { /* Darken status bar text */ }
+          <StatusBar barStyle="default" />
+
+          <View style={[{flex: 0.2}, container.image]}>
+            <Text style={[typography.main, typography.fontSizeTitle, {paddingTop: 45, color: colors.icyBlue}]}>Payper</Text>
           </View>
 
-          <View style={[container.quo, container.image]}>
+          <View style={[container.image, {flex: 0.4}]}>
             <ImageCarousel />
           </View>
 
-          <View style={[container.third]}>
-            <GenericSignIn destination={Actions.SignInViewContainer}/>
-            <GenericSignUp destination={Actions.CreateAccountViewContainer}/>
-            {/*TODO Add a Login to Facebook options that covers what is going on with Facebook*/}
+          <View style={{flex: 0.4, justifyContent: 'flex-start', alignItems: 'center'}}>
             <LoginButton
+              style={{width: dimensions.width - 50, height: 53, marginBottom: 10}}
               readPermissions={["email","public_profile", "user_friends"]}
               onLoginFinished={
                 (error, result) => {
                   if (error) {
                     alert("login has error: " + result.error);
                   } else if (result.isCancelled) {
-                    alert("login is cancelled.");
+                    // alert("login is cancelled.");
                   } else {
                     AccessToken.getCurrentAccessToken().then(
                       (data) => {
@@ -262,7 +264,9 @@ class LandingScreenDisplay extends React.Component {
                   }
                 }
               }
-              onLogoutFinished={() => alert("logout.")}/>
+              onLogoutFinished={() => { /* alert("logout.") */ }} />
+            <GenericSignIn destination={Actions.SignInViewContainer}/>
+            <GenericSignUp destination={Actions.CreateAccountViewContainer}/>
           </View>
         </Animated.View>
       );
