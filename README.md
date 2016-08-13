@@ -23,11 +23,8 @@
 - [X] CreatePaymentView.js predictive search: don't show signed in user in predictions
 - [X] Pass numNotifications to menu in sidebar and render preview indicator next to notifications lightbulb
 - [X] Apply fade animation to inner content during create account onboarding, not entire view
-- [ ] App-wide padding (look into pixel density for screen size detection)
-- [X] Redesign footer (action button for new payment)
 - [ ] Fix loading for IAV
 - [X] Style 'Continue with Facebook' button
-- [ ] Implement section headers in predictive user search module's ListView
 
 ### Architecture
 **Refactor the following to fit new Firebase/Redux model:**
@@ -51,7 +48,6 @@
 - [x] Add instant re-render for 'Cancel Payment' action
 - [X] Add instant re-render for 'Accept' and 'Reject' actions
 - [x] Fix bug where 'Confirm' and 'Reject' buttons aren't working properly
-- [ ] Fix bug where user search regex treats exact matches like empty strings
 - [X] Fix issue where all pay and request invites are sent to "Incoming" tab (talk to Vash)
 - [X] Fix opacity of header icons in CreatePaymentView
 - [X] Fix issue where Payper contact list sometimes doesn't populate above phone contacts in UserSearchView (is Firebase listener receiving empty contacts and concatenating an empty array with native contacts?)
@@ -62,7 +58,8 @@
 - [x] Fix bug where payment cancellation confirmation name syntax is backwards for incoming payments
 - [x] Fix bug where selecting a new page in the side menu results in rough animation (this just went away 🤔)
 - [x] Fix issue where text does not wrap in the side menu
-- [x] Redesign footer to be tabless
+- [x] Redesign footer to be tab-less
+- [ ] Add validations to Create Payment flow
 
 ### Dwolla Requirements
 - [ ] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
@@ -77,7 +74,6 @@
 ### Not MVP
 - [ ] Implement action sheets
 - [ ] Add recent users list to UserSearchView
-- [ ] Add instant updating for payment confirmation and rejection
 - [ ] Add section headers to user search list view
 
 ## **Installation**

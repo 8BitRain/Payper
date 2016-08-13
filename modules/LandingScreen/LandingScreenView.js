@@ -55,6 +55,7 @@ class ImageCarousel extends React.Component {
 class LandingScreenDisplay extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       email: "",
       password: "",
@@ -100,9 +101,12 @@ class LandingScreenDisplay extends React.Component {
   * Query the FB Graph
   */
   fbAPIRequest() {
-    var _this = this;
+    const _this = this;
+
+    // '...&type=square' specifies the image type we're retrieving
+    // (other types include small, medium, large, and thumbnail)
     const infoRequest = new GraphRequest(
-      '/me/?fields=email,age_range,first_name,last_name,gender,picture,friends',
+      '/me/?fields=email,age_range,first_name,last_name,gender,picture,friends&type=square',
       null,
       _this.responseInfoCallback.bind(this),
     );
@@ -152,16 +156,14 @@ class LandingScreenDisplay extends React.Component {
       }
     };
 
-
     // Critical line causing loading issues.
     this.setState({provider: "facebook"});
 
     // Start loading
     this.setState({loading: true});
 
-    //var _this = this;
-
     console.log("PROPS: " + this);
+
     // Push user object to Lambda function
     Init.signInWithFacebook(data, function(signedIn, user, token) {
         console.log("TOKEN: " + token);
