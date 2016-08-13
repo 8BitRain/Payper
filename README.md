@@ -56,7 +56,7 @@
 - [X] Fix opacity of header icons in CreatePaymentView
 - [X] Fix issue where Payper contact list sometimes doesn't populate above phone contacts in UserSearchView (is Firebase listener receiving empty contacts and concatenating an empty array with native contacts?)
 - [x] Fix header padding on small phones
-- [ ] Add invitee's phone number to second page of CreatePaymentView where a username would typically be rendered
+- [x] Add invitee's phone number to second page of CreatePaymentView where a username would typically be rendered
 - [ ] Fix bug where incoming payment appears in outgoing tab at first until you tab away (tough to recreate)
 - [ ] Fix bug where user filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
 - [x] Fix bug where payment cancellation confirmation name syntax is backwards for incoming payments
