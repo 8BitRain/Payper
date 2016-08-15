@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 
 const colors = {
+
   white: "#fefeff",
   offWhite: "#ededed",
   icyBlue: "#59B5F2",
@@ -16,8 +17,15 @@ const colors = {
   alertRed: "#FB3640",
   alertYellow: "#f7ca2a",
   alertGreen: "#10bf5a",
-
   lightAlertGreen: "rgba(16, 191, 90, 0.73)",
+
+  // Main colors
+  accent: "#20BF55",
+  richBlack: "#2A2D34",
+
+  // Potential main colors
+  malachite: "#20BF55",
+
 }
 
 export default colors;

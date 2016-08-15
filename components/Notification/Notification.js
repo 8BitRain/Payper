@@ -40,7 +40,7 @@ class Notification extends React.Component {
 
           { /* Notification text */ }
           <View style={styles.textWrap}>
-            <Text style={[styles.text, {color: colors.icyBlue}]}>{ n.ts }</Text>
+            <Text style={[styles.text, {color: colors.accent}]}>{ n.ts }</Text>
             <Text style={styles.text}>{ n.info }</Text>
           </View>
         </View>

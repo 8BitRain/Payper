@@ -275,7 +275,7 @@ class CreatePaymentView extends React.Component {
 
         return(
 
-          <View style={[containers.container, {backgroundColor: colors.darkGrey}]}>
+          <View style={[containers.container, {backgroundColor: colors.richBlack}]}>
             <View style={containers.padHeader}>
               { /* Input */ }
               <View>
@@ -327,31 +327,31 @@ class CreatePaymentView extends React.Component {
               { /* Input */ }
               <View style={[{flex: 1, alignItems: "center", paddingTop: 45}]}>
                 <View style={[{flexDirection: "row", justifyContent: "center"}]}>
-                  <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.darkGrey}]}>
+                  <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.richBlack}]}>
                     $
                   </Text>
                   <TextInput
-                    style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center', color: colors.darkGrey}]}
+                    style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center', color: colors.richBlack}]}
                     placeholder={"5.00"}
                     defaultValue={this.state.eachCost}
                     onChangeText={(num) => { this.setState({eachCost: num}); }}
                     keyboardType={"decimal-pad"}
                     autoFocus={true} />
-                  <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.darkGrey}]}>
+                  <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.richBlack}]}>
                     per month
                   </Text>
                 </View>
                 <View style={[{flexDirection: "row", justifyContent: "center"}]}>
-                  <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.darkGrey}]}>
+                  <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.richBlack}]}>
                     for
                   </Text>
                   <TextInput
-                    style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center', color: colors.darkGrey}]}
+                    style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center', color: colors.richBlack}]}
                     placeholder={"12"}
                     defaultValue={this.state.totalPayments}
                     onChangeText={(num) => { this.setState({totalPayments: num}); }}
                     keyboardType={"number-pad"} />
-                  <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.darkGrey}]}>
+                  <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.richBlack}]}>
                     months.
                   </Text>
                 </View>
@@ -395,18 +395,18 @@ class CreatePaymentView extends React.Component {
 
                 { /* User preview for the user we are paying or requesting  */ }
                 { this._genUserPreview(this.state.user, {touchable: false}) }
-                <Text style={[typography.textInput, {fontSize: 16.5, textAlign: 'center', padding: 15, color: colors.darkGrey}]}>
+                <Text style={[typography.textInput, {fontSize: 16.5, textAlign: 'center', padding: 15, color: colors.richBlack}]}>
                   ${this.state.eachCost} per month for the next {this.state.totalPayments} months.
                 </Text>
 
                 { /* Input */ }
                 <View style={[{flex: 1, alignItems: "center", paddingTop: 0}]}>
                   <View style={[{flexDirection: "column", justifyContent: "center"}]}>
-                    <Text style={[typography.costInput, typography.marginLeft, {fontSize: 20, padding: 15, color: colors.darkGrey}]}>
+                    <Text style={[typography.costInput, typography.marginLeft, {fontSize: 20, padding: 15, color: colors.richBlack}]}>
                       What for?
                     </Text>
                     <TextInput
-                      style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15}]}
+                      style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.richBlack, paddingLeft: 15}]}
                       placeholder={"Toilet paper"}
                       autoFocus={true}
                       defaultValue={this.state.memo}

@@ -37,7 +37,7 @@ class Payments extends React.Component {
   _renderEmptyState() {
     return(
       <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
-        <Text style={{fontSize: 18, color: colors.darkGrey}}>
+        <Text style={{fontSize: 18, color: colors.richBlack}}>
           No active{ (this.props.activeTab == "tracking") ? " " + this.props.activeFilter + " " : " " }payments.
         </Text>
       </View>
@@ -60,6 +60,7 @@ class Payments extends React.Component {
           <ListView
             dataSource={ds}
             renderRow={this._renderRow.bind(this)}
+            renderFooter={this._renderFooter.bind(this)}
             renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
             enableEmptySections />
         </View>
@@ -69,6 +70,12 @@ class Payments extends React.Component {
     else {
       return this._renderEmptyState();
     }
+  }
+
+  _renderFooter() {
+    return(
+      <View style={{ flex: 1.0, height: 130, backgroundColor: colors.alertGreen }} />
+    );
   }
 
   _renderRow(payment) {

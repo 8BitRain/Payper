@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    borderColor: colors.icyBlue,
+    borderColor: colors.accent,
     borderWidth: 1,
   },
 
@@ -49,13 +49,13 @@ const styles = StyleSheet.create({
   fullnameText: {
     fontSize: 20,
     fontWeight: '600',
-    color: colors.darkGrey,
+    color: colors.richBlack,
   },
 
   // Username text
   usernameText: {
     fontSize: 12,
-    color: colors.icyBlue,
+    color: colors.accent,
   },
 
 });

@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Roboto',
     fontSize: 14,
-    color: colors.darkGrey,
+    color: colors.richBlack,
   },
 
   // Notification chunks
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     height: 22,
     borderRadius: 11,
     borderWidth: 0.8,
-    borderColor: colors.icyBlue,
+    borderColor: colors.accent,
     paddingLeft: 1,
     paddingTop: 1,
   },

@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Roboto',
     fontSize: 12,
-    color: colors.darkGrey,
+    color: colors.richBlack,
   },
 
   payButton: {
@@ -48,8 +48,8 @@ function getFeedButton(_this, callback) {
       style={[styles.button]}
       onPress={() => { _this.setState({active: 'feed'}); callback(); }}>
       <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-        <Entypo style={styles.iconSettings} name="globe" size={20} color={(_this.state.active == "feed") ? colors.icyBlue : colors.darkGrey} />
-        <Text style={[styles.text, {color: (_this.state.active == "feed") ? colors.icyBlue : colors.darkGrey}]}>Feed</Text>
+        <Entypo style={styles.iconSettings} name="globe" size={20} color={(_this.state.active == "feed") ? colors.accent : colors.richBlack} />
+        <Text style={[styles.text, {color: (_this.state.active == "feed") ? colors.accent : colors.richBlack}]}>Feed</Text>
       </View>
     </TouchableHighlight>
   );
@@ -64,8 +64,8 @@ function getTrackingButton(_this, callback) {
       style={[styles.button]}
       onPress={() => { _this.setState({active: 'myPayments'}); callback(); }}>
       <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-        <Entypo style={styles.iconSettings} name="user" size={20} color={(_this.state.active == "myPayments") ? colors.icyBlue : colors.darkGrey} />
-        <Text style={[styles.text, {color: (_this.state.active == "myPayments") ? colors.icyBlue : colors.darkGrey}]}>My Payments</Text>
+        <Entypo style={styles.iconSettings} name="user" size={20} color={(_this.state.active == "myPayments") ? colors.accent : colors.richBlack} />
+        <Text style={[styles.text, {color: (_this.state.active == "myPayments") ? colors.accent : colors.richBlack}]}>My Payments</Text>
       </View>
     </TouchableHighlight>
   );

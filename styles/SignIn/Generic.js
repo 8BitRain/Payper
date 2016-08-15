@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: '300',
     textAlign: 'center',
-    color: colors.darkGrey,
+    color: colors.richBlack,
   },
 
   input: {
@@ -17,8 +17,8 @@ const styles = StyleSheet.create({
     width: (dimensions.width * 0.9),
     marginLeft: (dimensions.width * 0.05),
     backgroundColor: 'transparent',
-    color: colors.darkGrey,
-    borderColor: colors.darkGrey,
+    color: colors.richBlack,
+    borderColor: colors.richBlack,
     borderWidth: 1,
     borderRadius: 4,
     paddingLeft: 15,

@@ -248,8 +248,8 @@
 //             <RefreshControl
 //               refreshing={this.state.refreshing}
 //               onRefresh={this._onRefresh.bind(this)}
-//               colors={[colors.darkGrey]}
-//               tintColor={colors.darkGrey}
+//               colors={[colors.richBlack]}
+//               tintColor={colors.richBlack}
 //             />
 //           }
 //           dataSource={(this.state.flowFilter == "out") ? this.state.dataSourceOut : this.state.dataSourceIn }
@@ -268,7 +268,7 @@
 //     console.log("Returning Empty State");
 //     return(
 //       <View style={{flex: 0.8, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
-//         <Text style={{fontSize: 18, color: colors.darkGrey}}>Empty state baby!</Text>
+//         <Text style={{fontSize: 18, color: colors.richBlack}}>Empty state baby!</Text>
 //       </View>
 //     );
 //   }

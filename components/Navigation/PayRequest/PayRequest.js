@@ -131,20 +131,20 @@ class PayRequest extends React.Component {
       <View style={{flex: 1.0, flexDirection: 'row'}}>
         <TouchableHighlight
           onPress={() => this.props.requestCallback()}
-          style={{flex: 0.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.darkGrey, borderRightColor: colors.icyBlue, borderRightWidth: 0.5}}
-          underlayColor={colors.darkGrey}
+          style={{flex: 0.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.richBlack, borderRightColor: colors.accent, borderRightWidth: 0.5}}
+          underlayColor={colors.richBlack}
           activeOpacity={0.7}>
           <View>
-            <Text style={{fontSize: 16, fontWeight: '600', color: colors.icyBlue}}>Request</Text>
+            <Text style={{fontSize: 16, fontWeight: '600', color: colors.accent}}>Request</Text>
           </View>
         </TouchableHighlight>
         <TouchableHighlight
           onPress={() => this.props.payCallback()}
-          style={{flex: 0.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.darkGrey, borderLeftColor: colors.icyBlue, borderLeftWidth: 0.5}}
-          underlayColor={colors.darkGrey}
+          style={{flex: 0.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.richBlack, borderLeftColor: colors.accent, borderLeftWidth: 0.5}}
+          underlayColor={colors.richBlack}
           activeOpacity={0.7}>
           <View>
-            <Text style={{fontSize: 16, fontWeight: '600', color: colors.icyBlue}}>Pay</Text>
+            <Text style={{fontSize: 16, fontWeight: '600', color: colors.accent}}>Pay</Text>
           </View>
         </TouchableHighlight>
       </View>
@@ -153,7 +153,7 @@ class PayRequest extends React.Component {
 
   render() {
     return(
-      <View style={{flexDirection: 'row', height: 60, borderTopColor: colors.darkGrey, borderTopWidth: 1}}>
+      <View style={{flexDirection: 'row', height: 60, borderTopColor: colors.richBlack, borderTopWidth: 1}}>
         {(this.props.awaitingConfirmationOn.length > 0) ? this._getConfirmationButton() : this._getPayRequestButtons()}
       </View>
     );

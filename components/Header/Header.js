@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: colors.icyBlue,
+    backgroundColor: colors.richBlack,
     paddingTop: 30,
     paddingBottom: 10,
     flexDirection: "row",
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
 
   // Active tab styles
   activeTab: { backgroundColor: colors.white },
-  activeTabText: { color: colors.icyBlue },
+  activeTabText: { color: colors.accent },
 
 });
 
@@ -216,7 +216,7 @@ class Header extends React.Component {
 
   render() {
     return(
-      <View style={[styles.headerWrap, (this.props.dark) ? {backgroundColor: colors.darkGrey} : null ]}>
+      <View style={[styles.headerWrap, (this.props.dark) ? {backgroundColor: colors.richBlack} : null ]}>
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
           { this.props.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }

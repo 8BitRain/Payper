@@ -84,7 +84,7 @@ class TrackingEmpty extends React.Component {
    render() {
      return (
 
-       <Animated.View style={[containers.contentContainer, {opacity: this.animationProps.fadeAnim, backgroundColor: colors.darkGrey}]}>
+       <Animated.View style={[containers.contentContainer, {opacity: this.animationProps.fadeAnim, backgroundColor: colors.richBlack}]}>
 
        <Header headerProps={this.headerProps}>
        </Header>

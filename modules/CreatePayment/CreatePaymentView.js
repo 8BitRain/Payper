@@ -147,7 +147,7 @@ class Purpose extends React.Component {
         { /* User preview for the user we are paying or requesting  */ }
         <View style={{flex: 0.2}}>
           { genUserPreview(this.props.selectedContact, {touchable: false}) }
-          <Text style={[typography.textInput, {fontSize: 16.5, textAlign: 'center', padding: 15, color: colors.darkGrey}]}>
+          <Text style={[typography.textInput, {fontSize: 16.5, textAlign: 'center', padding: 15, color: colors.richBlack}]}>
             ${this.props.amount} per month for the next {this.props.payments} months.
           </Text>
         </View>
@@ -155,11 +155,11 @@ class Purpose extends React.Component {
         { /* Input */ }
         <View
           style={{flex: 0.8}}>
-          <Text style={[typography.costInput, typography.marginLeft, {fontSize: 20, padding: 15, color: colors.darkGrey}]}>
+          <Text style={[typography.costInput, typography.marginLeft, {fontSize: 20, padding: 15, color: colors.richBlack}]}>
             What for?
           </Text>
           <TextInput
-            style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.darkGrey, paddingLeft: 15}]}
+            style={[typography.textInput, typography.marginSides, {width: (dimensions.width * 0.9), backgroundColor: colors.white, color: colors.richBlack, paddingLeft: 15}]}
             placeholder={"Toilet paper"}
             autoFocus={true}
             defaultValue={this.props.purpose}
@@ -221,31 +221,31 @@ class Amount extends React.Component {
         { /* Input */ }
         <View style={{flex: 0.8}}>
           <View style={[{flexDirection: "row", justifyContent: "center"}]}>
-            <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.darkGrey}]}>
+            <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.richBlack}]}>
               $
             </Text>
             <TextInput
-              style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center', color: colors.darkGrey}]}
+              style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center', color: colors.richBlack}]}
               placeholder={"5.00"}
               defaultValue={this.props.amount}
               onChangeText={(num) => this.props.setAmount(num)}
               keyboardType={"decimal-pad"}
               autoFocus={true} />
-            <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.darkGrey}]}>
+            <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.richBlack}]}>
               per month
             </Text>
           </View>
           <View style={[{flexDirection: "row", justifyContent: "center"}]}>
-            <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.darkGrey}]}>
+            <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.richBlack}]}>
               for
             </Text>
             <TextInput
-              style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center', color: colors.darkGrey}]}
+              style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center', color: colors.richBlack}]}
               placeholder={"12"}
               defaultValue={this.props.payments}
               onChangeText={(num) => this.props.setPayments(num)}
               keyboardType={"number-pad"} />
-            <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.darkGrey}]}>
+            <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.richBlack}]}>
               months.
             </Text>
           </View>

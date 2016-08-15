@@ -29,7 +29,7 @@ class UserPreview extends React.Component {
             </View>
             <View ref={"textWrap"} style={styles.textWrap}>
               <Text style={styles.fullnameText}>{ this.props.user.first_name + " " + this.props.user.last_name }</Text>
-              <Text style={[styles.usernameText], {color: (this.props.user.phone) ? colors.alertGreen : colors.icyBlue}}>
+              <Text style={[styles.usernameText], {color: (this.props.user.phone) ? colors.alertGreen : colors.accent}}>
                 { this.props.user.username || this.props.user.stylizedPhone }
               </Text>
             </View>
@@ -44,7 +44,7 @@ class UserPreview extends React.Component {
           </View>
           <View ref={"textWrap"} style={styles.textWrap}>
             <Text style={styles.fullnameText}>{ this.props.user.first_name + " " + this.props.user.last_name }</Text>
-            <Text style={[styles.usernameText], {color: (this.props.user.phone) ? colors.alertGreen : colors.icyBlue}}>
+            <Text style={[styles.usernameText], {color: (this.props.user.phone) ? colors.alertGreen : colors.accent}}>
               { this.props.user.username || this.props.user.stylizedPhone }
             </Text>
           </View>

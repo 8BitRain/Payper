@@ -42,14 +42,14 @@ const styles = StyleSheet.create({
     marginLeft: 35,
     marginRight: 35,
     borderRadius: 15,
-    borderColor: colors.icyBlue,
+    borderColor: colors.accent,
     borderWidth: 1.5,
     backgroundColor: 'transparent',
   },
 
   bar: {
     borderRadius: 10,
-    backgroundColor: colors.icyBlue,
+    backgroundColor: colors.accent,
   },
 
   progressText: {
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: 4.0,
     fontFamily: 'Roboto',
-    color: colors.darkGrey,
+    color: colors.richBlack,
     fontSize: 10,
     backgroundColor: 'transparent',
   },
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     width: 55,
     height: 55,
     borderRadius: 27.5,
-    borderColor: colors.icyBlue,
+    borderColor: colors.accent,
     borderWidth: 1,
   },
 
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   // Generic text styles
   text: {
     fontFamily: 'Roboto',
-    color: colors.darkGrey,
+    color: colors.richBlack,
     fontSize: 12,
   },
 
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: 'Roboto',
     fontSize: 16,
-    color: colors.icyBlue,
+    color: colors.accent,
   },
 
   // Dot TouchableHighlight wrap

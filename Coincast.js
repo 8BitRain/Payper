@@ -32,7 +32,7 @@ import colors from './styles/colors';
 const getSceneStyle = function (props, computedProps) {
   const style = {
     flex: 1,
-    backgroundColor: colors.icyBlue,
+    backgroundColor: colors.accent,
     shadowColor: null,
     shadowOffset: null,
     shadowOpacity: null,

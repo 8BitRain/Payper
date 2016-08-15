@@ -66,7 +66,7 @@ class Settings extends React.Component {
           onPress={() => options.destination()}>
           <View style={styles.row}>
 
-            <Entypo style={styles.icon} name={options.iconName} size={20} color={colors.icyBlue} />
+            <Entypo style={styles.icon} name={options.iconName} size={20} color={colors.accent} />
             <Text style={styles.rowTitle}>{ options.rowTitle }</Text>
 
             { /* Render unseen notifications indicator */ }
@@ -101,21 +101,21 @@ class Settings extends React.Component {
 
   render() {
     return (
-      <View style={{flex: 1.0, backgroundColor: colors.darkGrey}}>
+      <View style={{flex: 1.0, backgroundColor: colors.richBlack}}>
 
         { /* Header */ }
         <TouchableHighlight
           activeOpacity={0.7}
           underlayColor={'transparent'}
           onPress={() => console.log("EDIT PROFILE")}
-          style={{borderBottomWidth: 0.5, borderBottomColor: colors.icyBlue}}>
+          style={{borderBottomWidth: 0.5, borderBottomColor: colors.accent}}>
 
-          <View style={{height: 70, marginTop: 30, paddingBottom: 12.5, paddingLeft: 20, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: colors.icyBlue}}>
+          <View style={{height: 70, marginTop: 30, paddingBottom: 12.5, paddingLeft: 20, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: colors.accent}}>
             { Partials.getUserPic(this.props.currentUser.profile_pic, this.props.currentUser.first_name + " " + this.props.currentUser.last_name) }
 
             <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
               <Text style={[styles.rowTitle, {fontSize: 18, paddingLeft: 0, paddingRight: 12}]}>{ this.props.currentUser.first_name + " " + this.props.currentUser.last_name }</Text>
-              <Text style={[styles.rowTitle, {fontSize: 12, color: colors.icyBlue, paddingLeft: 0}]}>Edit profile</Text>
+              <Text style={[styles.rowTitle, {fontSize: 12, color: colors.accent, paddingLeft: 0}]}>Edit profile</Text>
             </View>
           </View>
         </TouchableHighlight>

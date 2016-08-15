@@ -28,7 +28,7 @@ function getUserPic(pic, name) {
     : initials = name[0].substring(0, 1);
     return(
       <View style={[styles.pic, styles.initials]}>
-        <Text style={{fontFamily: 'Roboto', fontSize: 18, color: colors.icyBlue}}>{ initials }</Text>
+        <Text style={{fontFamily: 'Roboto', fontSize: 18, color: colors.accent}}>{ initials }</Text>
       </View>
     );
   };
@@ -167,7 +167,7 @@ class PaymentPreview extends React.Component {
               underlayColor={'transparent'}
               onPress={() => this.props.callbackMenu()}
               style={styles.dots}>
-              <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.icyBlue}/>
+              <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.accent}/>
             </TouchableHighlight>
 
             { /* Cancel payment button */
@@ -224,7 +224,7 @@ class PaymentPreview extends React.Component {
               underlayColor={'transparent'}
               onPress={() => this.props.callbackMenu()}
               style={styles.dots}>
-              <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.icyBlue}/>
+              <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.accent}/>
             </TouchableHighlight>
 
             { /* Cancel payment button */
@@ -294,7 +294,7 @@ class PaymentPreview extends React.Component {
               underlayColor={'transparent'}
               onPress={() => this.props.callbackMenu()}
               style={styles.dots}>
-              <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.icyBlue}/>
+              <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.accent}/>
             </TouchableHighlight>
           </View>
 

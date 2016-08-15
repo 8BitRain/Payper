@@ -230,13 +230,13 @@ class LandingScreenDisplay extends React.Component {
 
     } else {
       return (
-        <Animated.View style={{flex: 1.0, backgroundColor: colors.darkGrey, opacity: this.animationProps.fadeAnim}}>
+        <Animated.View style={{flex: 1.0, backgroundColor: colors.richBlack, opacity: this.animationProps.fadeAnim}}>
 
           { /* Darken status bar text */ }
           <StatusBar barStyle="default" />
 
           <View style={[{flex: 0.2}, container.image]}>
-            <Text style={[typography.main, typography.fontSizeTitle, {paddingTop: 45, color: colors.icyBlue}]}>Payper</Text>
+            <Text style={[typography.main, typography.fontSizeTitle, {paddingTop: 45, color: colors.accent}]}>Payper</Text>
           </View>
 
           <View style={[container.image, {flex: 0.4}]}>
