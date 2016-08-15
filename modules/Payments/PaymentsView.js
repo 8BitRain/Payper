@@ -74,7 +74,7 @@ class Payments extends React.Component {
 
   _renderFooter() {
     return(
-      <View style={{ flex: 1.0, height: 130, backgroundColor: colors.alertGreen }} />
+      <View style={{ flex: 1.0, height: 130, backgroundColor: 'transparent' }} />
     );
   }
 
