@@ -1,12 +1,15 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, Dimensions, StatusBar} from 'react-native';
-import Button from 'react-native-button';
+
+import {View, Text, TextInput, StyleSheet, Animated, Image, Dimensions, Linking, StatusBar} from "react-native";
+import Button from "react-native-button";
 import {Reducer, Router, Actions} from 'react-native-router-flux';
-import * as Animations from '../../helpers/animations';
-import FacebookLogin from '../../components/FacebookLogin';
-import GenericSignUp from '../../components/GenericSignUp';
-import GenericSignIn from '../../components/GenericSignIn';
-import Loading from '../../components/Loading/Loading';
+import Hyperlink from 'react-native-hyperlink';
+import * as Animations from "../../helpers/animations";
+import FacebookLogin from "../../components/FacebookLogin";
+import GenericSignUp from "../../components/GenericSignUp";
+import GenericSignIn from "../../components/GenericSignIn";
+import Loading from "../../components/Loading/Loading";
+
 const FBSDK = require('react-native-fbsdk');
 const {
   LoginButton,
@@ -179,6 +182,10 @@ class LandingScreenDisplay extends React.Component {
 
   }
 
+  handleUrlClick = (url) =>{
+    Linking.openURL(url).catch(err => console.error('An error occurred', err));
+  }
+
 
   render() {
     if (this.state.loading) {
@@ -269,6 +276,13 @@ class LandingScreenDisplay extends React.Component {
               onLogoutFinished={() => { /* alert("logout.") */ }} />
             <GenericSignIn destination={Actions.SignInViewContainer}/>
             <GenericSignUp destination={Actions.CreateAccountViewContainer}/>
+          </View>
+          {/*TOS*/}
+          <View style={{alignItems: "center"}}>
+            <Hyperlink onPress={(url) => this.handleUrlClick(url) } linkStyle={{color:'#2980b9', fontSize:14}}
+                       linkText={(url) =>{return url === 'https://www.getpayper.io/terms' ? 'Payper\'s Terms of Service' : url}}>
+             <Text style={[typography.main]}>By creating an account, signing up, or logging into facebook you agree to https://www.getpayper.io/terms. </Text>
+            </Hyperlink>
           </View>
         </Animated.View>
       );
