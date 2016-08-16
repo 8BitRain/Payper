@@ -83,7 +83,10 @@ class SignInView extends React.Component {
 
       // Otherwise, sign the user in
       else {
-        // TODO: Sign in
+        this.setState({ loading: true });
+        Init.signInWithEmail({ email: this.state.email, password: this.state.password }, (success) => {
+          this.setState({ doneLoading: true, signInSuccess: success });
+        });
       }
 
     });
