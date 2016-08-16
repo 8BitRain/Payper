@@ -7,8 +7,9 @@ import SideMenu from 'react-native-side-menu';
 // Components
 import Header from '../../components/Header/Header';
 import Settings from '../../modules/Settings/SettingsView';
-import Notifications from '../../modules/Notifications/NotificationsViewContainer';
 import Payments from '../../modules/Payments/PaymentsViewContainer';
+import Notifications from '../../modules/Notifications/NotificationsViewContainer';
+import FundingSources from '../../modules/FundingSources/FundingSourcesView';
 
 // Used to determine header size
 const dimensions = Dimensions.get('window');
@@ -30,12 +31,16 @@ class InnerContent extends React.Component {
     else if (this.props.signedIn) {
       switch (this.props.currentPage) {
 
+        case "payments":
+          return <Payments />;
+          break;
+
         case "notifications":
           return <Notifications />;
           break;
 
-        case "payments":
-          return <Payments />;
+        case "fundingSources":
+          return <FundingSources />;
           break;
 
         default:

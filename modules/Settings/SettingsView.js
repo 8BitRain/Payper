@@ -33,7 +33,7 @@ class Settings extends React.Component {
       dataSource: ds.cloneWithRows([
         {rowTitle: "Home", iconName: "home", destination: () => this.props.changePage("payments")},
         {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
-        {rowTitle: "Payment History", iconName: "line-graph", destination: Actions.CreateAccountViewContainer},
+        {rowTitle: "Funding Sources", iconName: "line-graph", destination: () => this.props.changePage("fundingSources")},
         {rowTitle: "FAQ", iconName: "help-with-circle", destination: Actions.CreateAccountViewContainer},
         {rowTitle: "Sign Out", iconName: "moon", destination: Init.signOut},
       ]),

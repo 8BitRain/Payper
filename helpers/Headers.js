@@ -35,6 +35,27 @@ export function notificationsHeader() {
 };
 
 
+// Header props for Notifications page
+export function fundingSourcesHeader() {
+  var props = {
+    types: {
+      "paymentIcons": false,
+      "circleIcons": false,
+      "settingsIcon": true,
+      "closeIcon": false,
+      "flowTabs": false,
+    },
+    index: null,
+    numCircles: null,
+    title: "Funding Sources",
+    callbackIn: null,
+    callbackOut: null,
+  };
+
+  return props;
+};
+
+
 // Header props for Tracking Payments tab
 export function trackingHeader(options) {
   var props = {

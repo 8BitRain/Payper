@@ -196,7 +196,7 @@ class UserSearch extends React.Component {
           <Text style={[{paddingLeft: 10}, (this.props.selectedContact.username) ? styles.confirmationUsername : styles.confirmationPhone]}>
             { (this.props.selectedContact.username)
                 ? this.props.selectedContact.username
-                : "+" + this.props.selectedContact.phone }
+                : this.props.selectedContact.stylizedPhone }
           </Text>
         </View>
 

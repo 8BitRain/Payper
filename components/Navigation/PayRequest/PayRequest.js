@@ -101,12 +101,19 @@ class PayRequest extends React.Component {
           style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.alertGreen}}>
         */ }
 
-        <Text style={{fontSize: 16, fontWeight: '600', color: colors.white}}>
-          { (this.props.loading)
-              ? "Sending..."
-              : StringMaster5000.capFirstLetter(this.props.awaitingConfirmationOn) }
-        </Text>
-
+        <View>
+          <Text style={{fontSize: 16, fontWeight: '600', color: colors.white, textAlign: 'center'}}>
+            { (this.props.loading)
+                ? "Sending..."
+                : StringMaster5000.capFirstLetter(this.props.awaitingConfirmationOn) }
+          </Text>
+          { (!this.props.loading)
+              ? <Text style={{fontSize: 13, fontWeight: '300', color: colors.white, textAlign: 'center'}}>
+                  (UWCU *3812)
+                </Text>
+              : null
+          }
+        </View>
         { /*
         <View style={{
           position: 'absolute',
@@ -124,7 +131,6 @@ class PayRequest extends React.Component {
       </TouchableHighlight>
     );
   }
-
 
   _getPayRequestButtons() {
     return(
