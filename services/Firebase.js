@@ -224,64 +224,8 @@ export function signOut(callback) {
 
 
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
-//                                 Listeners
+//                      Listeners
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
-
-
-/**
-  *   Listen for changes in the specified user's payment flow
-**/
-export function listenToPaymentFlow(uid, callback) {
-  firebase.database().ref('/paymentFlow/' + uid + "/in").on('value', (snapshot) => {
-    callback("in", snapshot.val());
-  });
-  firebase.database().ref('/paymentFlow/' + uid + "/out").on('value', (snapshot) => {
-    callback("out", snapshot.val());
-  });
-};
-
-
-/**
-  *   Listen for changes in the specified user's notifications, pass new
-**/
-export function listenToNotifications(uid, callback) {
-  firebase.database().ref('/notifications/' + uid).on('value', (snapshot) => {
-    callback(snapshot.val());
-  });
-};
-
-
-/**
-  *   Listen for changes in the specified user's contact list, pass mutated
-  *   list to caller on change
-**/
-export function listenToContacts(uid, callback) {
-  firebase.database().ref('/contactList/' + uid).on('value', (snapshot) => {
-    callback(snapshot.val());
-  });
-};
-
-export function listenToTest(callback) {
-  firebase.database().ref('/FirebaseBindingTest').on('value', (snapshot) => {
-    callback(snapshot.val());
-  });
-};
-
-/**
-  *   Listen for changes in Firebase user list, returns event type and snapshot
-**/
-export function listenToUsers(callback) {
-  usernamesRef.on('child_added', (childSnapshot, prevChildKey) => {
-    callback('child_added', childSnapshot);
-  });
-  usernamesRef.on('child_removed', (oldChildSnapshot) => {
-    callback('child_removed', oldChildSnapshot);
-  });
-  usernamesRef.on('child_changed', (childSnapshot, prevChildKey) => {
-    callback('child_changed', childSnapshot);
-  });
-};
-
 
 /**
   *   Listen to each of the specified routes
@@ -307,4 +251,23 @@ export function stopListeningTo(endpoints, callback) {
       else console.log("Callback is not a function");
     });
   }
+};
+
+
+//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
+//                    Email senders
+//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
+
+/**
+  *   Send the specified email a password reset link
+**/
+export function sendPasswordResetEmail(email, callback) {
+  firebase.auth().sendPasswordResetEmail(email).then(function() {
+    if (typeof callback == 'function') callback(true);
+    else console.log("Callback is not a function");
+  }, function(error) {
+    console.log("%cError sending password reset email: " + error, "color:red;font-weight:900;");
+    if (typeof callback == 'function') callback(false);
+    else console.log("Callback is not a function");
+  });
 };
