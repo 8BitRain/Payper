@@ -89,6 +89,7 @@ export function signInWithEmail(data, callback) {
       }
     });
   } else {
+    //Add code in to handle brute force attacking
     console.log("%cInvalid email and password input (both must be strings)", "color:red;font-weight:900;");
     if (typeof callback == 'function') callback(false);
     else console.log("%cCallback is not a function", "color:red;font-weight:900;");
