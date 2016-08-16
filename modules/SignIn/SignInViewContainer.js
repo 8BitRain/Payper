@@ -21,12 +21,17 @@ class SignInView extends React.Component {
   constructor(props) {
     super(props);
 
+    this.MAX_ATTEMPTS = 7;
+
     this.state = {
       email: "",
       password: "",
       loading: false,
       doneLoading: false,
       signInSuccess: false,
+      attempts: [],
+      attemptLimitReached: false,
+      remainingAttempts: this.MAX_ATTEMPTS,
     }
 
     this.arrowNavProps = {
@@ -38,10 +43,39 @@ class SignInView extends React.Component {
 
   signInWithEmail() {
     const _this = this;
-    this.setState({loading: true});
-    Init.signInWithEmail({email: this.state.email, password: this.state.password}, function(signedIn) {
-      _this.setState({doneLoading: true, signInSuccess: signedIn});
-    });
+
+    // Increment sign-in attempt count for this email
+    if (typeof this.state.attempts[this.state.email] != 'number') this.state.attempts[this.state.email] = 1;
+    else this.state.attempts[this.state.email]++;
+
+    // Update remainingAttempts count
+    // this.setState({ remainingAttempts: this.MAX_ATTEMPTS - this.state.attempts[this.state.email] });
+
+    console.log("Sign in attempts:", this.state.attempts);
+    console.log("Remaining attempts:", this.MAX_ATTEMPTS - this.state.attempts[this.state.email]);
+
+    if (this.MAX_ATTEMPTS - this.state.attempts[this.state.email] == 0) {
+      console.log("%cToo many sign in attempts.", "color:red;font-weight:900;");
+      this.setState({ attemptLimitReached: true });
+    }
+  }
+
+
+  _getAttemptLimitReachedMessage() {
+    return(
+      <Text>
+        { "You have reached your sign in attempt limit. We sent a password reset email to " + this.state.email + "." }
+      </Text>
+    );
+  }
+
+
+  _getRemainingAttemptsMessage() {
+    return(
+      <Text>
+        { "You have " + this.state.remainingAttempts + " sign in attempts remaining." }
+      </Text>
+    );
   }
 
 
@@ -73,6 +107,7 @@ class SignInView extends React.Component {
             <TextInput
               style={styles.input}
               placeholder={"Email"}
+              defaultValue={this.state.email}
               autoFocus={true}
               autoCapitalize="none"
               autoCorrect={false}
@@ -87,6 +122,14 @@ class SignInView extends React.Component {
               secureTextEntry
               onChangeText={(text) => this.setState({password: text}) }
               onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.signInWithEmail() }} />
+
+            { /* If sign in attempt limit has been reached, prompt user to reset password */
+              (this.state.attemptLimitReached)
+                ? this._getAttemptLimitReachedMessage()
+                : (this.state.remainingAttempts <= 3)
+                  ? this._getRemainingAttemptsMessage()
+                  : null
+            }
 
             { /* Arrow nav buttons */ }
             <View>

@@ -320,7 +320,7 @@ class CreatePaymentView extends React.Component {
         { /* Header */ }
         <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
           <Header
-            callbackClose={ () => Actions.MainViewContainer() }
+            callbackClose={ () => Actions.MainViewContainer({direction: "vertical"}) }
             numUnseenNotifications={ this.props.numUnseenNotifications }
             headerProps={ this.state.header } />
         </View>

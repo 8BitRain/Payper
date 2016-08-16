@@ -44,24 +44,25 @@
 - [ ] `*Important*` Go over each case for paying and requesting (incoming payments go to outgoing sometimes, etc.)
 - [X] Style payment invites
 - [ ] Add global user list to UserSearch
-- [x] Add confirmation message to cancel payment button
-- [x] Add instant re-render for 'Cancel Payment' action
+- [X] Add confirmation message to cancel payment button
+- [X] Add instant re-render for 'Cancel Payment' action
 - [X] Add instant re-render for 'Accept' and 'Reject' actions
-- [x] Fix bug where 'Confirm' and 'Reject' buttons aren't working properly
+- [X] Fix bug where 'Confirm' and 'Reject' buttons aren't working properly
 - [X] Fix issue where all pay and request invites are sent to "Incoming" tab (talk to Vash)
 - [X] Fix opacity of header icons in CreatePaymentView
 - [X] Fix issue where Payper contact list sometimes doesn't populate above phone contacts in UserSearchView (is Firebase listener receiving empty contacts and concatenating an empty array with native contacts?)
-- [x] Fix header padding on small phones
-- [x] Add invitee's phone number to second page of CreatePaymentView where a username would typically be rendered
+- [X] Fix header padding on small phones
+- [X] Add invitee's phone number to second page of CreatePaymentView where a username would typically be rendered
 - [ ] Fix bug where incoming payment appears in outgoing tab at first until you tab away (tough to recreate)
 - [ ] Fix bug where user filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
-- [x] Fix bug where payment cancellation confirmation name syntax is backwards for incoming payments
-- [x] Fix bug where selecting a new page in the side menu results in rough animation (this just went away 🤔)
-- [x] Fix issue where text does not wrap in the side menu
-- [x] Redesign footer to be tab-less
+- [X] Fix bug where payment cancellation confirmation name syntax is backwards for incoming payments
+- [X] Fix bug where selecting a new page in the side menu results in rough animation (this just went away 🤔)
+- [X] Fix issue where text does not wrap in the side menu
+- [X] Redesign footer to be tab-less
 - [ ] Add validations to Create Payment flow
 - [ ] Add brute force attack protection for log in
-- [ ] Add funding sources page
+- [ ] Set up reset password page
+- [X] Add funding sources page
 
 ### Dwolla Requirements
 - [ ] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)

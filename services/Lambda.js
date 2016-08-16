@@ -5,14 +5,15 @@
   *   💣  Lambda.js  💣
   *
   *   Lambda endpoints:
-  *     💣  Base:              'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev'
-  *     💣  Create user:       'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create'
-  *     💣  Create payment:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create'
-  *     💣  Get user:          'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get'
-  *     💣  Accept payment:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
-  *     💣  Read notification: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
-  *     💣  Direct invite:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct'
-  *     💣  Payment invite:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
+  *     💣  Base:               'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev'
+  *     💣  Create user:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create'
+  *     💣  Create payment:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create'
+  *     💣  Get user:           'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get'
+  *     💣  Accept payment:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
+  *     💣  Read notification:  'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
+  *     💣  Direct invite:      'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct'
+  *     💣  Payment invite:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
+  *     💣  GET Funding source: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource'
   *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
   *
@@ -319,6 +320,29 @@ export function inviteDirect(options) {
 export function inviteViaPayment(payment, callback) {
   try {
     fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/viaPayment", {method: "POST", body: JSON.stringify(payment)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Invite via payment Lambda response:", responseData);
+        if (typeof callback == 'function') callback(true);
+      } else {
+        console.log("Error inviting via payment:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given session_token, get user's funding source
+**/
+export function getFundingSource(options, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {

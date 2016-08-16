@@ -40,7 +40,7 @@ class InnerContent extends React.Component {
           break;
 
         case "fundingSources":
-          return <FundingSources />;
+          return <FundingSources {...this.props} />;
           break;
 
         default:
