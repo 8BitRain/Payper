@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, Linking} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 
@@ -12,11 +12,15 @@ import * as Init from "../../../_init";
 import Header from "../../../components/Header/Header";
 import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 var Mixpanel = require('react-native-mixpanel');
+import Hyperlink from 'react-native-hyperlink';
+
 
 // Stylesheets
 import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
+import Entypo from "react-native-vector-icons/Entypo";
+import Material from "react-native-vector-icons/MaterialIcons"
 
 class Summary extends React.Component {
  constructor(props) {
@@ -39,6 +43,13 @@ class Summary extends React.Component {
      numCircles: 6
    };
 
+   this.state = {
+     isChecked: false,
+     isRadioSelected: true,
+   };
+
+
+
    // Callback functions to be passed to the header
    this.callbackClose = function() { this.props.callbackClose() };
 
@@ -46,7 +57,7 @@ class Summary extends React.Component {
    this.arrowNavProps = {
      left: true,
      right: false,
-     check: true
+     check: false
    };
 
    // Callback functions to be passed to the arrow nav
@@ -65,6 +76,29 @@ class Summary extends React.Component {
      });
    };
  }
+
+ handlePressCheckedBox = (checked) => {
+   this.setState({
+     isChecked: checked,
+   });
+   var _this = this;
+   Init.createUser(this.props.newUser, function(userCreated, token){
+     if(userCreated){
+       console.log("SUMMARY SCREEN: TOKEN (Standalone from USERTOKEN): " + _this.props.token)
+       console.log("SUMMARY SCREEN: USER TOKEN BEFORE DISPATCH: " + _this.props.newUser.token);
+       console.log("SUMMARY SCREEN: USER TOKEN: " + token);
+       _this.props.dispatchSetNewUserToken(token);
+       console.log("SUMMARY SCREEN: USER TOKEN AFTER DISPATCH" + _this.props.newUser.token);
+       Actions.BankOnboardingContainer();
+     }
+   });
+}
+
+  handleUrlClick = (url) =>{
+    Linking.openURL(url).catch(err => console.error('An error occurred', err));
+
+  }
+
  componentDidMount() {
    Animations.fadeIn(this.animationProps);
    Mixpanel.track("Phone# page Finished");
@@ -79,16 +113,31 @@ class Summary extends React.Component {
        { /* Prompt and submit button */ }
        <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.summary]}>
          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Does this look right?</Text>
-
          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.email}</Text>
          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.password}</Text>
          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.firstName}</Text>
          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.lastName}</Text>
          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.phone}</Text>
+
+        { /* Prompt and Checkbox*/}
+         <View style={{alignItems: "center"}}>
+           <Hyperlink onPress={(url) => this.handleUrlClick(url) } linkStyle={{color:'#2980b9', fontSize:14}}
+                      linkText={(url) =>{return url === 'https://www.dwolla.com/legal/tos?whitelabel' ? 'Dwolla\'s Terms of Service' : url}}>
+            <Text style={[typography.general]}>Our trusted partner Dwolla handles secure bank to bank payments. By clicking the box below you accept https://www.dwolla.com/legal/tos?whitelabel. </Text>
+           </Hyperlink>
+         </View>
+
+         <View style={{alignItems: "center"}}>
+           <Button style={{alignSelf: "center"}} onPress={()=> {this.handlePressCheckedBox(true)}}>
+            {this.state.isChecked ? <Material name="check-box" size={32} color="white"/> : <Material name="check-box-outline-blank" size={20}/>}
+           </Button>
+         </View>
+
        </View>
 
        { /* Arrow nav buttons */ }
-       <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackCheck={() => {this.onPressCheck()}} />
+
+       <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}}/>
 
        { /* Header */ }
        <Header callbackClose={() => {Actions.landingView}} headerProps={this.headerProps} />
