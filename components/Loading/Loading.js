@@ -17,6 +17,7 @@ class Loading extends React.Component {
       // Success
       if (this.props.success) {
         setTimeout(() => {
+          console.log("SUCESS DESTINATION FIRED");
           this.props.successDestination();
         }, 1000);
       }
