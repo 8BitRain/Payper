@@ -198,7 +198,7 @@ class PaymentPreview extends React.Component {
     **/
     else if (this.props.payment.confirmed) {
       return(
-        <View style={styles.wrap}>
+        <View style={[styles.wrap, {borderBottomWidth: (this.props.dummy) ? 0 : 0.8}]}>
           { /* Top chunk (pic, name, payment info) */ }
           <View style={styles.top}>
 
@@ -214,8 +214,8 @@ class PaymentPreview extends React.Component {
             { /* Name and payment info */ }
             <View style={styles.textWrap}>
               <Text style={styles.name}>{ (this.props.out) ? this.props.payment.recip_name : this.props.payment.sender_name }</Text>
-              <Text style={styles.text}>${ this.props.payment.amount } per month - { this.props.payment.purpose }</Text>
-              <Text style={styles.text}>Next payment: { (this.props.payment.nextPayment) ? Timestamp.calendarize(this.props.payment.nextPayment) : "Unbeknownst to thee!" }</Text>
+              <Text style={[styles.text, { color: (this.props.dummy) ? colors.white : colors.richBlack }]}>${ this.props.payment.amount } per month - { this.props.payment.purpose }</Text>
+              <Text style={[styles.text, { color: (this.props.dummy) ? colors.white : colors.richBlack }]}>Next payment: { (this.props.payment.nextPayment) ? Timestamp.calendarize(this.props.payment.nextPayment) : "Unbeknownst to thee!" }</Text>
             </View>
 
             { /* Payment settings button */ }
@@ -241,11 +241,11 @@ class PaymentPreview extends React.Component {
           </View>
 
           { /* Bottom chunk (progress bar) */ }
-          <View style={styles.bottom}>
+          <View style={[styles.bottom]}>
             <View style={styles.barWrap}>
               <View style={[styles.bar, {flex: this.props.payment.paymentsMade / this.props.payment.payments}]}></View>
               <View style={{flex: 1 - this.props.payment.paymentsMade / this.props.payment.payments}}></View>
-              <Text style={styles.progressText}>{ this.props.payment.paymentsMade } of { this.props.payment.payments }</Text>
+              <Text style={[styles.progressText, { color: (this.props.dummy) ? colors.white : colors.darkGrey }]}>{ this.props.payment.paymentsMade } of { this.props.payment.payments }</Text>
             </View>
           </View>
         </View>

@@ -18,9 +18,10 @@ const styles = StyleSheet.create({
   top: {
     marginTop: 15,
     flex: 0.65,
-    backgroundColor: colors.white,
+    backgroundColor: 'transparent',
     flexDirection: 'row',
-    paddingRight: 5,
+    paddingRight: 15,
+    paddingLeft: 20,
   },
 
   // Wrap for bottom half (progress bar)
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
   dots: {
     position: 'absolute',
     top: -5,
-    right: 5,
+    right: 22.5,
     width: 50,
     height: 50,
     flexDirection: 'column',
