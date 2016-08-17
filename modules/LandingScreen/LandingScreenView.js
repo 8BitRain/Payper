@@ -277,11 +277,28 @@ class LandingScreenDisplay extends React.Component {
             <GenericSignIn destination={Actions.SignInViewContainer}/>
             <GenericSignUp destination={Actions.CreateAccountViewContainer}/>
           </View>
-          {/*TOS*/}
+
+          { /* TOS */ }
           <View style={{alignItems: "center"}}>
-            <Hyperlink onPress={(url) => this.handleUrlClick(url) } linkStyle={{color:'#2980b9', fontSize:14}}
-                       linkText={(url) =>{return url === 'https://www.getpayper.io/terms' ? 'Payper\'s Terms of Service' : url}}>
-             <Text style={[typography.main]}>By creating an account, signing up, or logging into facebook you agree to https://www.getpayper.io/terms. </Text>
+            <Hyperlink
+              onPress={(url) => this.handleUrlClick(url) } linkStyle={{color:'#2980b9', fontSize:14}}
+              linkText={ (url) => {
+                if (url === 'https://www.getpayper.io/terms') {
+                  return 'Terms of Service';
+                } else if (url === 'https://www.getpayper.io/privacy') {
+                  return 'Privacy Policy';
+                }
+              }}>
+              <Text
+                style={{
+                  fontFamily: 'Roboto',
+                  fontSize: 14,
+                  color: colors.white,
+                  fontWeight: '100',
+                  padding: 20,
+                }}>
+                { "By creating an account, signing up, or logging into facebook you agree to Payper's https://www.getpayper.io/terms and https://www.getpayper.io/privacy." }
+              </Text>
             </Hyperlink>
           </View>
         </Animated.View>

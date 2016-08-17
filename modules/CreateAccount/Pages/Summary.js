@@ -1,26 +1,26 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, Linking} from "react-native";
-import Button from "react-native-button";
+import {View, Text, TextInput, StyleSheet, Animated, Image, Linking} from 'react-native';
+import Button from 'react-native-button';
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 
 // Custom helper functions
-import * as Animations from "../../../helpers/animations";
-import * as Validators from "../../../helpers/validators";
-import * as Init from "../../../_init";
+import * as Animations from '../../../helpers/animations';
+import * as Validators from '../../../helpers/validators';
+import * as Init from '../../../_init';
 
 // Custom components
-import Header from "../../../components/Header/Header";
-import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
+import Header from '../../../components/Header/Header';
+import ArrowNav from '../../../components/Navigation/Arrows/ArrowDouble';
 var Mixpanel = require('react-native-mixpanel');
 import Hyperlink from 'react-native-hyperlink';
 
-
 // Stylesheets
-import backgrounds from "../styles/backgrounds";
-import containers from "../styles/containers";
-import typography from "../styles/typography";
-import Entypo from "react-native-vector-icons/Entypo";
-import Material from "react-native-vector-icons/MaterialIcons"
+import colors from '../../../styles/colors';
+import backgrounds from '../styles/backgrounds';
+import containers from '../styles/containers';
+import typography from '../styles/typography';
+import Entypo from 'react-native-vector-icons/Entypo';
+import Material from 'react-native-vector-icons/MaterialIcons'
 
 class Summary extends React.Component {
  constructor(props) {
@@ -121,9 +121,25 @@ class Summary extends React.Component {
 
         { /* Prompt and Checkbox*/}
          <View style={{alignItems: "center"}}>
-           <Hyperlink onPress={(url) => this.handleUrlClick(url) } linkStyle={{color:'#2980b9', fontSize:14}}
-                      linkText={(url) =>{return url === 'https://www.dwolla.com/legal/tos?whitelabel' ? 'Dwolla\'s Terms of Service' : url}}>
-            <Text style={[typography.general]}>Our trusted partner Dwolla handles secure bank to bank payments. By clicking the box below you accept https://www.dwolla.com/legal/tos?whitelabel. </Text>
+           <Hyperlink
+             onPress={(url) => this.handleUrlClick(url) } linkStyle={{color:'#2980b9', fontSize:14}}
+             linkText={ (url) => {
+               if (url === 'https://www.dwolla.com/legal/tos') {
+                 return 'Terms of Service';
+               } else if (url === 'https://www.dwolla.com/legal/privacy') {
+                 return 'Privacy Policy';
+               }
+             }}>
+             <Text
+               style={{
+                 fontFamily: 'Roboto',
+                 fontSize: 14,
+                 color: colors.white,
+                 fontWeight: '100',
+                 padding: 20,
+               }}>
+               { "Our trusted partner Dwolla handles secure bank to bank payments. By clicking the box below you accept Dwolla's https://www.dwolla.com/legal/tos and https://www.dwolla.com/legal/privacy." }
+             </Text>
            </Hyperlink>
          </View>
 
