@@ -120,7 +120,7 @@ class Summary extends React.Component {
          <Text style={[typography.general, typography.fontSizeNote, typography.marginSides, typography.marginBottom]}>{this.props.newUser.phone}</Text>
 
         { /* Prompt and Checkbox*/}
-         <View style={{alignItems: "center"}}>
+        <View style={{padding: 20, alignItems: "center"}}>
            <Hyperlink
              onPress={(url) => this.handleUrlClick(url) } linkStyle={{color:'#2980b9', fontSize:14}}
              linkText={ (url) => {
@@ -136,7 +136,6 @@ class Summary extends React.Component {
                  fontSize: 14,
                  color: colors.white,
                  fontWeight: '100',
-                 padding: 20,
                }}>
                { "Our trusted partner Dwolla handles secure bank to bank payments. By clicking the box below you accept Dwolla's https://www.dwolla.com/legal/tos and https://www.dwolla.com/legal/privacy." }
              </Text>

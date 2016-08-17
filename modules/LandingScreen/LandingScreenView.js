@@ -279,10 +279,11 @@ class LandingScreenDisplay extends React.Component {
           </View>
 
           { /* TOS */ }
-          <View style={{alignItems: "center"}}>
+          <View style={{padding: 20, alignItems: "center"}}>
             <Hyperlink
-              onPress={(url) => this.handleUrlClick(url) } linkStyle={{color:'#2980b9', fontSize:14}}
-              linkText={ (url) => {
+              onPress={(url) => this.handleUrlClick(url)}
+              linkStyle={{color:'#2980b9', fontSize:14}}
+              linkText={(url) => {
                 if (url === 'https://www.getpayper.io/terms') {
                   return 'Terms of Service';
                 } else if (url === 'https://www.getpayper.io/privacy') {
@@ -295,9 +296,8 @@ class LandingScreenDisplay extends React.Component {
                   fontSize: 14,
                   color: colors.white,
                   fontWeight: '100',
-                  padding: 20,
                 }}>
-                { "By creating an account, signing up, or logging into facebook you agree to Payper's https://www.getpayper.io/terms and https://www.getpayper.io/privacy." }
+                By creating an account, signing up, or logging into facebook you agree to Paypers https://www.getpayper.io/terms and https://www.getpayper.io/privacy.
               </Text>
             </Hyperlink>
           </View>
