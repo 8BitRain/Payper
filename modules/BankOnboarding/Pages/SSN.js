@@ -71,8 +71,7 @@ class SSN extends React.Component {
      };
 
      // Callback functions to be passed to the arrow nav
-     this.onPressRight = function() { this.props.dispatchSetPageX(4, "forward") };
-     this.onPressLeft = function() { this.props.dispatchSetPageX(3, "backward") };
+     this.onPressLeft = function() { this.props.dispatchSetPageX(2, "backward") };
      this.onPressCheck = function(){
        var data = {
          "firstName": this.props.dwollaCustomer.firstName,
@@ -151,7 +150,7 @@ class SSN extends React.Component {
          </View>
 
            { /* Arrow nav buttons */ }
-           <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} callbackCheck={() => {this.onPressCheck()}} />
+           <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackCheck={() => {this.onPressCheck()}} />
 
            { /* Header */ }
            <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
