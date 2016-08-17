@@ -226,6 +226,8 @@ export function getIavToken(data, callback){
     }
   });
  }
+
+
 /**
   *   1) Sign user out of Firebase
   *   2) Redirect user to landing page
@@ -236,6 +238,18 @@ export function signOut() {
     Async.set('user', '', () => {
       Actions.LandingScreenContainer();
     });
+  });
+};
+
+
+/**
+  *   Delete the specified user
+**/
+export function deleteUser(options, callback) {
+  Lambda.deleteUser(options, (success) => {
+    console.log("%cDelete user success: " + success, "color:blue;font-weight:900;");
+    if (typeof callback == 'function') callback(success);
+    else console.log("%cCallback is not a function.", "color:red;font-weight:900;");
   });
 };
 

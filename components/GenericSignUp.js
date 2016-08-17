@@ -15,7 +15,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    backgroundColor: colors.accent,
+    backgroundColor: colors.icyBlue,
     width: dimensions.width - 50,
     height: 50,
     paddingTop: 14.5,

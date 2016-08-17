@@ -14,6 +14,7 @@
   *     💣  Direct invite:      'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct'
   *     💣  Payment invite:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
   *     💣  GET Funding source: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource'
+  *     💣  Delete user:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/delete'
   *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
   *
@@ -346,10 +347,33 @@ export function getFundingSource(options, callback) {
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
-        console.log("Invite via payment Lambda response:", responseData);
+        console.log("Get funding source Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error getting funding source:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given session_token and uid, delete the specified user
+**/
+export function deleteUser(options, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/delete", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Delete user Lambda response:", responseData);
         if (typeof callback == 'function') callback(true);
       } else {
-        console.log("Error inviting via payment:", responseData.errorMessage);
+        console.log("Error deleting user:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
       }
     })

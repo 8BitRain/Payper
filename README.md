@@ -60,12 +60,14 @@
 - [X] Fix issue where text does not wrap in the side menu
 - [X] Redesign footer to be tab-less
 - [ ] Add validations to Create Payment flow
-- [ ] Add brute force attack protection for log in
-- [ ] Set up reset password page
+- [X] Add brute force attack protection for log in
+- [X] Set up reset password email sending
 - [X] Add funding sources page
+- [ ] Add delete user button
+- [ ] Add edit profile page
 
 ### Dwolla Requirements
-- [ ] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
+- [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
 - [ ] Request permission for automatic monthly transactions
 - [ ] Display funding source before payment creation (Groundwork is laid, just plug in data)
 - [ ] Post initiation transfer time
