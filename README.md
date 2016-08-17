@@ -64,6 +64,7 @@
 - [X] Set up reset password email sending
 - [X] Add funding sources page
 - [ ] Add delete user button
+- [ ] Add edit profile page
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)

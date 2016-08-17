@@ -30,29 +30,35 @@ class Settings extends React.Component {
 
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-    this.state = {
-      dataSource: ds.cloneWithRows([
-        {rowTitle: "Home", iconName: "home", destination: () => this.props.changePage("payments")},
-        {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
-        {rowTitle: "Funding Sources", iconName: "line-graph", destination: () => this.props.changePage("fundingSources")},
-        {rowTitle: "FAQ", iconName: "help-with-circle", destination: Actions.CreateAccountViewContainer},
+    var sideMenuButtons = [
+      {rowTitle: "Home", iconName: "home", destination: () => this.props.changePage("payments")},
+      {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
+      {rowTitle: "Funding Sources", iconName: "line-graph", destination: () => this.props.changePage("fundingSources")},
+      {rowTitle: "FAQ", iconName: "help-with-circle", destination: Actions.CreateAccountViewContainer},
+    ];
+
+    if (this.props.currentUser.provider != "facebook") {
+      sideMenuButtons.push(
         {rowTitle: "Delete Account", iconName: "trash", destination: () => {
-          console.log("options:");
-          console.log({ token: this.props.currentUser.token, uid: this.props.currentUser.uid });
-          Alert.confirmation({
-            title: "Delete Account",
-            message: "Are you sure you'd like to delete your account? This CANNOT be undone!",
-            cancelMessage: "Nevermind",
-            confirmMessage: "Yes, delete my account",
-            cancel: () => console.log("Nevermind"),
-            confirm: () => Init.deleteUser({ token: this.props.currentUser.token, uid: this.props.currentUser.uid }),
-          });
-        }},
-        {rowTitle: "Sign Out", iconName: "moon", destination: Init.signOut},
-      ]),
+            Alert.confirmation({
+              title: "Delete Account",
+              message: "Are you sure you'd like to delete your account? This CANNOT be undone!",
+              cancelMessage: "Nevermind",
+              confirmMessage: "Yes, delete my account",
+              cancel: () => console.log("Nevermind"),
+              confirm: () => { Init.signOut(); Init.deleteUser({ token: this.props.currentUser.token, uid: this.props.currentUser.uid }) },
+            });
+        }}
+      );
+      sideMenuButtons.push({rowTitle: "Sign Out", iconName: "moon", destination: Init.signOut});
+    } else {
+      sideMenuButtons.push({rowTitle: "Sign Out", iconName: "moon", destination: Init.signOut});
+    }
+
+    this.state = {
+      dataSource: ds.cloneWithRows(sideMenuButtons),
     }
   }
-
 
   componentDidMount() {
     console.log("Props received by SettingsView:", this.props);
