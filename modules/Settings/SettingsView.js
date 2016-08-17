@@ -9,6 +9,7 @@ const {
 // Helper functions
 import * as Async from '../../helpers/Async';
 import * as Partials from '../../helpers/Partials';
+import * as Alert from '../../helpers/Alert';
 import * as Init from '../../_init';
 
 // Custom stylesheets
@@ -35,6 +36,18 @@ class Settings extends React.Component {
         {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
         {rowTitle: "Funding Sources", iconName: "line-graph", destination: () => this.props.changePage("fundingSources")},
         {rowTitle: "FAQ", iconName: "help-with-circle", destination: Actions.CreateAccountViewContainer},
+        {rowTitle: "Delete Account", iconName: "trash", destination: () => {
+          console.log("options:");
+          console.log({ token: this.props.currentUser.token, uid: this.props.currentUser.uid });
+          Alert.confirmation({
+            title: "Delete Account",
+            message: "Are you sure you'd like to delete your account? This CANNOT be undone!",
+            cancelMessage: "Nevermind",
+            confirmMessage: "Yes, delete my account",
+            cancel: () => console.log("Nevermind"),
+            confirm: () => Init.deleteUser({ token: this.props.currentUser.token, uid: this.props.currentUser.uid }),
+          });
+        }},
         {rowTitle: "Sign Out", iconName: "moon", destination: Init.signOut},
       ]),
     }
@@ -66,11 +79,11 @@ class Settings extends React.Component {
           onPress={() => options.destination()}>
           <View style={styles.row}>
 
-            <Entypo style={styles.icon} name={options.iconName} size={20} color={colors.accent} />
+            <Entypo style={styles.icon} name={options.iconName} size={20} color={(options.rowTitle == "Delete Account") ? colors.alertRed : colors.accent} />
             <Text style={styles.rowTitle}>{ options.rowTitle }</Text>
 
-            { /* Render unseen notifications indicator */ }
-            { (options.rowTitle == "Notifications")
+            { /* Render unseen notifications indicator */
+              (options.rowTitle == "Notifications")
                 ? (this.props.numUnseenNotifications == 0)
                   ? null
                   : <View style={[notificationStyles.numNotificationsWrap, { bottom: 6 }]}>

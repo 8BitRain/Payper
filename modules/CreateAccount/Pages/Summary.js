@@ -151,7 +151,6 @@ class Summary extends React.Component {
        </View>
 
        { /* Arrow nav buttons */ }
-
        <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}}/>
 
        { /* Header */ }

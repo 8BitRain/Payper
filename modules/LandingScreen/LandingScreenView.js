@@ -39,7 +39,7 @@ class ImageCarousel extends React.Component {
     var imgWidth = dimensions.width - 50;
     var imgHeight = 165 / 350;
         imgHeight *= imgWidth;
-    return (
+    return(
       <Carousel hideIndicators={true} animate={true} delay={2750} width={dimensions.width}>
         <View style={[carousel.container, container.image]}>
           <Image style={{width: imgWidth, height: imgHeight}} source={require('./assets/Eric.png')} />
@@ -297,7 +297,7 @@ class LandingScreenDisplay extends React.Component {
                   color: colors.white,
                   fontWeight: '100',
                 }}>
-                By creating an account, signing up, or logging into facebook you agree to Paypers https://www.getpayper.io/terms and https://www.getpayper.io/privacy.
+                By creating an account, signing up, or logging into Facebook you agree to Payper{"'s"} https://www.getpayper.io/terms and https://www.getpayper.io/privacy.
               </Text>
             </Hyperlink>
           </View>

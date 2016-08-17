@@ -38,7 +38,7 @@ class SignInView extends React.Component {
     }
 
     this.arrowNavProps = {
-      left: false,
+      left: true,
       right: true,
     }
 
@@ -203,6 +203,7 @@ class SignInView extends React.Component {
               <ArrowNav
                 dark
                 arrowNavProps={this.arrowNavProps}
+                callbackLeft={() => { Actions.LandingScreenContainer(); }}
                 callbackRight={() => { this.signInWithEmail() }} />
             </View>
           </View>

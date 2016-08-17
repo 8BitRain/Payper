@@ -20,6 +20,7 @@ export function message(options) {
     options.message
   );
 }
+
 export function confirmation(options) {
   Alert.alert(
    options.title,

@@ -63,9 +63,10 @@
 - [X] Add brute force attack protection for log in
 - [X] Set up reset password email sending
 - [X] Add funding sources page
+- [ ] Add delete user button
 
 ### Dwolla Requirements
-- [ ] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
+- [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
 - [ ] Request permission for automatic monthly transactions
 - [ ] Display funding source before payment creation (Groundwork is laid, just plug in data)
 - [ ] Post initiation transfer time
