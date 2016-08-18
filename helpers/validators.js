@@ -64,9 +64,15 @@ export function validateName(input) {
   return validations;
 };
 
+// Checks that cost is formatted like:
+//    10.00 or 10 or 0.10 or 1.10
+export function validateCost(input) {
+  var regexNumeric = /^((\d+(\.\d*)?)|(\.\d+))$/;
+  return regexNumeric.test(input);
+};
+
 // Checks if any of the values in the provided hash are false
 export function getValidated(input) {
-  console.log("getValidated test. input: " + input);
   for (var index in input) {
     if (index == "valid") continue;
     if (!input[index]) return false;

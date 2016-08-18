@@ -59,12 +59,13 @@
 - [X] Fix bug where selecting a new page in the side menu results in rough animation (this just went away 🤔)
 - [X] Fix issue where text does not wrap in the side menu
 - [X] Redesign footer to be tab-less
-- [ ] Add validations to Create Payment flow
+- [ ] Add validations to CreatePayment flow
 - [X] Add brute force attack protection for log in
 - [X] Set up reset password email sending
 - [X] Add funding sources page
 - [ ] Add delete user button
 - [ ] Add edit profile page
+- [ ] Fix bug where on on UserSearch page of CreatePaymentView a single space is treated as a name
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)

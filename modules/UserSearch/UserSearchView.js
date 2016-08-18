@@ -41,7 +41,8 @@ const styles = StyleSheet.create({
     paddingRight: 25,
     paddingTop: 10,
     paddingBottom: 10,
-    color: colors.white,
+    borderBottomColor: colors.richBlack,
+    borderBottomWidth: 0.8,
   },
 
   // Confirmation
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
   confirmationPhone: {
     fontFamily: 'Roboto',
     fontSize: 14,
-    color: colors.alertGreen,
+    color: colors.icyBlue,
     paddingTop: 10,
   },
 
@@ -97,7 +98,8 @@ class UserSearch extends React.Component {
 
     this.state = {
       user: {},
-      inputBackgroundColor: 'transparent',
+      inputBackgroundColor: colors.white,
+      inputTextColor: colors.richBlack,
       query: "",
     };
   }
@@ -132,29 +134,44 @@ class UserSearch extends React.Component {
   }
 
 
-  _setSelectedContact(data) {
-    this.props.setSelectedContact(data);
-    this.setState({
-      query: data.username || data.first_name + " " + data.last_name,
-      inputBackgroundColor: colors.alertGreen,
-    });
-  }
-
-
   _filterContacts(query) {
     var filtered = StringMaster5000.filterContacts(this.props.allContacts._dataBlob.s1, query);
     this.props.setFilteredContacts(filtered);
   }
 
 
-  _setInputBackgroundColor(query) {
-    var notEmpty = StringMaster5000.checkIf(query).isEmpty;
+  _setSelectedContact(data) {
 
-    if (notEmpty) {
-      if (query == this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name || query == this.props.selectedContact.username)
-        this.setState({inputBackgroundColor: colors.alertGreen});
-      else if (this.state.inputBackgroundColor != 'transparent')
-        this.setState({inputBackgroundColor: 'transparent'});
+    // Set selected contact in state
+    this.props.setSelectedContact(data);
+
+    // Determine and set new input colors
+    var query = data.username || data.first_name + " " + data.last_name,
+        queryType = (query[0] == "@") ? "username" : "phone";
+    this._setInputColors(queryType);
+
+    // Set query in state, triggering re-render of contact list or confirmation prompt
+    this.setState({query: query});
+
+  }
+
+
+  _setInputColors(type) {
+    if (type == "username") {
+      this.setState({
+        inputBackgroundColor: colors.accent,
+        inputTextColor: colors.white,
+      });
+    } else if (type == "phone") {
+      this.setState({
+        inputBackgroundColor: colors.icyBlue,
+        inputTextColor: colors.white,
+      });
+    } else if (type == "noMatch") {
+      this.setState({
+        inputBackgroundColor: colors.white,
+        inputTextColor: colors.richBlack,
+      });
     }
   }
 
@@ -192,7 +209,7 @@ class UserSearch extends React.Component {
         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
           {(this.props.selectedContact.username)
             ? <Entypo style={{paddingTop: 10}} name="facebook" size={25} color={colors.accent}/>
-            : <Entypo style={{paddingTop: 10}} name="phone" size={25} color={colors.alertGreen}/> }
+            : <Entypo style={{paddingTop: 10}} name="phone" size={25} color={colors.icyBlue}/> }
           <Text style={[{paddingLeft: 10}, (this.props.selectedContact.username) ? styles.confirmationUsername : styles.confirmationPhone]}>
             { (this.props.selectedContact.username)
                 ? this.props.selectedContact.username
@@ -220,11 +237,20 @@ class UserSearch extends React.Component {
       <View style={{flex: 1.0, justifyContent: 'center', backgroundColor: colors.accent}}>
         { /* Query and ListView or Confirmation, depending on if a user is selected */ }
         <TextInput
-          style={[styles.textInput, {backgroundColor: this.state.inputBackgroundColor}]}
+          style={[styles.textInput, {backgroundColor: this.state.inputBackgroundColor, color: this.state.inputTextColor}]}
           placeholder={"Who are you splitting with?"}
-          selectionColor={colors.white}
+          selectionColor={this.state.textInputColor}
           onChangeText={(query) => {
-            this.setState({query: query}); this._filterContacts(query); this._setInputBackgroundColor(query);
+            this.setState({query: query});
+            this._filterContacts(query);
+
+            console.log("query: " + query + "\nselectedContact: " + this.props.selectedContact);
+
+            if (this.props.selectedContact && query == this.props.selectedContact.username)
+              this._setInputColors("username");
+            else if (this.props.selectedContact && query == this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name)
+              this._setInputColors("phone");
+            else this._setInputColors("noMatch");
           }}
           autoFocus={true}
           enablesReturnKeyAutomatically={true}
@@ -238,9 +264,14 @@ class UserSearch extends React.Component {
           }
           />
 
-        { (this.state.query != "" && this.state.query == this.props.selectedContact.username || this.state.query == this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name  )
-          ? this._getConfirmation()
-          : this._getContactList() }
+
+        { /* Render either confirmation page or */
+          (!StringMaster5000.checkIf(this.state.query).isEmpty )
+            ? (this.state.query == this.props.selectedContact.username || this.state.query == this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name)
+              ? this._getConfirmation()
+              : this._getContactList()
+            : this._getContactList() }
+
       </View>
     );
   }

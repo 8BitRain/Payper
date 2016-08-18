@@ -24,7 +24,6 @@ const dimensions = Dimensions.get('window');
 
 function genUserPreview(user, options) {
   user.name = user.first_name + " " + user.last_name;
-  console.log("+\n+\n+\n+\n+\n", user);
   return(
     <UserPreview
       key={(user.username) ? user.username : user.phone}

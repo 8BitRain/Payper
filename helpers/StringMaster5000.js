@@ -199,7 +199,7 @@ export function stylizePhoneNumber(num) {
 **/
 export function checkIf(query) {
   return {
-    isEmpty: query != null && query != "" && query.replace(/\s/g, '').length > 0,
+    isEmpty: query == null || query.replace(/\s/g, '').length == 0,
   };
 }
 
