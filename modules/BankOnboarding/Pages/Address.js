@@ -71,7 +71,7 @@ class Address extends React.Component {
 
      // Callback functions to be passed to the arrow nav
      this.onPressRight = function() { this.props.dispatchSetPageX(2, "forward") };
-     this.onPressLeft = function() { this.props.dispatchSetPageX(1, "backward") };
+     this.onPressLeft = function() { this.props.dispatchSetPageX(0, "backward") };
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
@@ -95,7 +95,7 @@ class Address extends React.Component {
          </View>
 
            { /* Arrow nav buttons */ }
-           <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} />
+           <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} callbackLeft={() => {this.onPressLeft()}} />
 
 
            { /* Header */ }

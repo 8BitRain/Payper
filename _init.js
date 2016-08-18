@@ -206,6 +206,7 @@ export function createUser(input, _callback) {
 **/
 export function createCustomer(data, callback){
   Lambda.createCustomer(data, (response) => {
+    console.log("_init.js Create Customer Resposne: " + response);
     callback(response);
   });
 }

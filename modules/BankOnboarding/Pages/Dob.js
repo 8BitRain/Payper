@@ -55,7 +55,7 @@ class Dob extends React.Component {
 
      // Callback functions to be passed to the arrow nav
      this.onPressRight = function() { this.props.dispatchSetPageX(3, "forward") };
-     this.onPressLeft = function() { this.props.dispatchSetPageX(2, "backward") };
+     this.onPressLeft = function() { this.props.dispatchSetPageX(1, "backward") };
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
@@ -73,7 +73,7 @@ class Dob extends React.Component {
          </View>
 
            { /* Arrow nav buttons */ }
-           <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}}  />
+           <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} callbackLeft={() => {this.onPressLeft()}}  />
 
 
            { /* Header */ }

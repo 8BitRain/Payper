@@ -5,6 +5,8 @@ import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 're
 import Entypo from 'react-native-vector-icons/Entypo';
 
 
+import * as Async from '../../../helpers/Async';
+
 //styles
 import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
@@ -50,14 +52,31 @@ class Iav extends React.Component {
   errorRender(){
     console.log("There was an error :()");
   }
+
+  componentWillMount() {
+    // Initialize the app
+    var _this = this;
+    Async.get('user', (val) => {
+      console.log("User: " + val);
+      console.log("User: " + JSON.parse(val).uid);
+      var fundingSourceAdded = "IAV/" + JSON.parse(val).uid;
+      _this.props.listen([fundingSourceAdded]);
+    });
+  }
+
+  componentWillUnmount() {
+    // Disable Firebase listeners
+    this.props.stopListening(this.props.activeFirebaseListeners);
+  }
+
   render() {
-    return(
-      <WebView
-       source={{uri: /*'http://localhost:8000'*/ /*'http://localhost:5000/iav'*/ 'http://www.getpayper.io/iav'}} injectedJavaScript={this.injectedJS}
-       style={{marginTop: 20}}
-       startInLoadingState={false}
-     />
-    );
+      return(
+        <WebView
+         source={{uri: /*'http://localhost:8000'*/ /*'http://localhost:5000/iav'*/ 'http://www.getpayper.io/iav'}} injectedJavaScript={this.injectedJS}
+         style={{marginTop: 20}}
+         startInLoadingState={false}
+       />
+      );
   }
 }
 
