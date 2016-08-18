@@ -208,8 +208,8 @@ class UserSearch extends React.Component {
         { /* Username or phone number */ }
         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
           {(this.props.selectedContact.username)
-            ? <Entypo style={{paddingTop: 10}} name="facebook" size={25} color={colors.accent}/>
-            : <Entypo style={{paddingTop: 10}} name="phone" size={25} color={colors.icyBlue}/> }
+            ? <Entypo style={{paddingTop: 10}} name="facebook" size={25} color={colors.accent} />
+            : <Entypo style={{paddingTop: 10}} name="phone" size={25} color={colors.icyBlue} /> }
           <Text style={[{paddingLeft: 10}, (this.props.selectedContact.username) ? styles.confirmationUsername : styles.confirmationPhone]}>
             { (this.props.selectedContact.username)
                 ? this.props.selectedContact.username
@@ -234,7 +234,7 @@ class UserSearch extends React.Component {
 
   render() {
     return(
-      <View style={{flex: 1.0, justifyContent: 'center', backgroundColor: colors.accent}}>
+      <View style={{flex: 1.0, justifyContent: 'center', backgroundColor: colors.white}}>
         { /* Query and ListView or Confirmation, depending on if a user is selected */ }
         <TextInput
           style={[styles.textInput, {backgroundColor: this.state.inputBackgroundColor, color: this.state.inputTextColor}]}

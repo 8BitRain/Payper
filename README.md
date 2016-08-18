@@ -41,9 +41,7 @@
 - [ ] `@Eric` Sign in with Facebook throws `Cannot read property dispatchSetProvider of undefined` (LandingScreenView.js ln 164)
 
 ### Brady (MVP)
-- [ ] `*Important*` Go over each case for paying and requesting (incoming payments go to outgoing sometimes, etc.)
 - [X] Style payment invites
-- [ ] Add global user list to UserSearch
 - [X] Add confirmation message to cancel payment button
 - [X] Add instant re-render for 'Cancel Payment' action
 - [X] Add instant re-render for 'Accept' and 'Reject' actions
@@ -53,19 +51,21 @@
 - [X] Fix issue where Payper contact list sometimes doesn't populate above phone contacts in UserSearchView (is Firebase listener receiving empty contacts and concatenating an empty array with native contacts?)
 - [X] Fix header padding on small phones
 - [X] Add invitee's phone number to second page of CreatePaymentView where a username would typically be rendered
-- [ ] Fix bug where incoming payment appears in outgoing tab at first until you tab away (tough to recreate)
-- [ ] Fix bug where user filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
 - [X] Fix bug where payment cancellation confirmation name syntax is backwards for incoming payments
 - [X] Fix bug where selecting a new page in the side menu results in rough animation (this just went away 🤔)
 - [X] Fix issue where text does not wrap in the side menu
 - [X] Redesign footer to be tab-less
-- [ ] Add validations to CreatePayment flow
 - [X] Add brute force attack protection for log in
 - [X] Set up reset password email sending
 - [X] Add funding sources page
-- [ ] Add delete user button
+- [X] Add delete user button
+- [X] Fix bug where on on UserSearch page of CreatePaymentView a single space is treated as a name
+- [ ] `*Important*` Go over each case for paying and requesting (incoming payments go to outgoing sometimes, etc.)
+- [ ] Add global user list to UserSearch
 - [ ] Add edit profile page
-- [ ] Fix bug where on on UserSearch page of CreatePaymentView a single space is treated as a name
+- [ ] Fix bug where incoming payment appears in outgoing tab at first until you tab away (tough to recreate)
+- [ ] Fix bug where user filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
+- [ ] Add validations to CreatePayment flow
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)

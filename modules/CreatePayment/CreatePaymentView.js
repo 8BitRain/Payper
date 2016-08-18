@@ -95,30 +95,40 @@ class Purpose extends React.Component {
           awaitingConfirmationOn={this.state.awaitingConfirmationOn}
           loading={this.state.loading}
           payCallback={() => {
-            this.setState({ awaitingConfirmationOn: "pay" });
-            this.props.setPaymentInfo({
-              payment: {
-                amount: this.props.amount,
-                purpose: this.props.purpose,
-                payments: this.props.payments,
-              },
-              currentUser: this.props.currentUser,
-              otherUser: this.props.selectedContact,
-              type: "payment"
-            });
+            if (this.props.purpose) {
+              this.setState({ awaitingConfirmationOn: "pay" });
+              this.props.setPaymentInfo({
+                payment: {
+                  amount: this.props.amount,
+                  purpose: this.props.purpose,
+                  payments: this.props.payments,
+                },
+                currentUser: this.props.currentUser,
+                otherUser: this.props.selectedContact,
+                type: "payment"
+              });
+            } else {
+              // Prompt the user to enter the purpose memo information
+              alert("Please enter the purpose of the payment");
+            }
           }}
           requestCallback={() => {
-            this.setState({ awaitingConfirmationOn: "request" });
-            this.props.setPaymentInfo({
-              payment: {
-                amount: this.props.amount,
-                purpose: this.props.purpose,
-                payments: this.props.payments,
-              },
-              currentUser: this.props.currentUser,
-              otherUser: this.props.selectedContact,
-              type: "request"
-            });
+            if (this.props.purpose) {
+              this.setState({ awaitingConfirmationOn: "request" });
+              this.props.setPaymentInfo({
+                payment: {
+                  amount: this.props.amount,
+                  purpose: this.props.purpose,
+                  payments: this.props.payments,
+                },
+                currentUser: this.props.currentUser,
+                otherUser: this.props.selectedContact,
+                type: "request"
+              });
+            } else {
+              // Prompt the user to enter the purpose memo information
+              alert("Please enter the purpose of the payment");
+            }
           }} />
       );
     }
@@ -256,7 +266,16 @@ class Amount extends React.Component {
             dark
             arrowNavProps={{left: true, right: true}}
             callbackLeft={() => this.props.setPageIndex(0)}
-            callbackRight={() => this.props.setPageIndex(2)} />
+            callbackRight={() => {
+              if (this.props.amount && this.props.payments) {
+                this.props.setPageIndex(2);
+              } else {
+                // Prompt the user to enter the missing payment information
+                if (!this.props.amount && !this.props.payments) alert("Please specify the the payment amount and the length of the payment series.");
+                else if (!this.props.amount && this.props.payments) alert("Please specify the the payment amount.");
+                else if (this.props.amount && !this.props.payments) alert("Please specify the length of the payment series.");
+              }
+            }} />
         </Animated.View>
       </View>
     );

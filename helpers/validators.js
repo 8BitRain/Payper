@@ -64,9 +64,9 @@ export function validateName(input) {
   return validations;
 };
 
-// Checks that cost is formatted like:
-//    10.00 or 10 or 0.10 or 1.10
-export function validateCost(input) {
+// Checks that input is a valid decimal or non-decimal number
+//    ex. 1.0, 0.1, .1, 1, 1.
+export function validateDecimal(input) {
   var regexNumeric = /^((\d+(\.\d*)?)|(\.\d+))$/;
   return regexNumeric.test(input);
 };
