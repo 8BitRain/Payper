@@ -171,11 +171,9 @@ class UserSearch extends React.Component {
 
         { /* Profile picture or initials */ }
         <UserPic
-          pic={this.props.selectedContact.profile_pic}
-          name={this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name}
-          width={ 60 }
-          height={ 60 }
-          />
+          user={this.props.selectedContact}
+          width={50}
+          height={50} />
 
         { /* Full name */ }
         <Text style={styles.confirmationName}>

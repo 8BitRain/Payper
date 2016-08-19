@@ -22,17 +22,6 @@ import colors from '../../styles/colors';
 // Used to size user previews
 const dimensions = Dimensions.get('window');
 
-function genUserPreview(user, options) {
-  user.name = user.first_name + " " + user.last_name;
-  return(
-    <UserPreview
-      key={(user.username) ? user.username : user.phone}
-      user={user}
-      width={dimensions.width}
-      touchable={options.touchable} />
-  );
-}
-
 class Purpose extends React.Component {
   constructor(props) {
     super(props);
@@ -155,7 +144,11 @@ class Purpose extends React.Component {
         style={{flex: 1.0, backgroundColor: colors.white}}>
         { /* User preview for the user we are paying or requesting  */ }
         <View style={{flex: 0.2}}>
-          { genUserPreview(this.props.selectedContact, {touchable: false}) }
+          <UserPreview
+            key={this.props.selectedContact.username || this.props.selectedContact.phone}
+            user={this.props.selectedContact}
+            width={dimensions.width}
+            touchable={false} />
           <Text style={[typography.textInput, {fontSize: 16.5, textAlign: 'center', padding: 15, color: colors.richBlack}]}>
             ${this.props.amount} per month for the next {this.props.payments} months.
           </Text>
@@ -224,7 +217,11 @@ class Amount extends React.Component {
       <View style={{flex: 1.0, backgroundColor: colors.white}}>
         { /* User preview for the user we are paying or requesting  */ }
         <View style={{flex: 0.15}}>
-          { genUserPreview(this.props.selectedContact, {touchable: false}) }
+          <UserPreview
+            key={this.props.selectedContact.username || this.props.selectedContact.phone}
+            user={this.props.selectedContact}
+            width={dimensions.width}
+            touchable={false} />
         </View>
 
         { /* Input */ }
@@ -285,8 +282,6 @@ class Amount extends React.Component {
 class InnerContent extends React.Component {
   constructor(props) {
     super(props);
-    console.log("+++ Selected contact in InnerContent.constructor()", this.props.selectedContact);
-    console.log("+++ Payment info in InnerContent.constructor()", this.props.paymentInfo);
   }
 
   render() {

@@ -65,7 +65,6 @@
 - [ ] `*Important*` Go over each case for paying and requesting (incoming payments go to outgoing sometimes, etc.)
 - [ ] Add global user list to UserSearch
 - [ ] Add edit profile page
-- [ ] Fix bug where incoming payment appears in outgoing tab at first until you tab away (tough to recreate)
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
