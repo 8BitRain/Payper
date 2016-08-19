@@ -223,12 +223,12 @@ class Amount extends React.Component {
     return(
       <View style={{flex: 1.0, backgroundColor: colors.white}}>
         { /* User preview for the user we are paying or requesting  */ }
-        <View style={{flex: 0.2}}>
+        <View style={{flex: 0.15}}>
           { genUserPreview(this.props.selectedContact, {touchable: false}) }
         </View>
 
         { /* Input */ }
-        <View style={{flex: 0.8}}>
+        <View style={{flex: 0.85}}>
           <View style={[{flexDirection: "row", justifyContent: "center"}]}>
             <Text style={[typography.costInput, {padding: 0, height: 40, color: colors.richBlack}]}>
               $

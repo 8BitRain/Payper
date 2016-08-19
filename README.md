@@ -61,11 +61,11 @@
 - [X] Add delete user button
 - [X] Fix bug where on on UserSearch page of CreatePaymentView a single space is treated as a name
 - [X] Add validations to CreatePayment flow
+- [X] Fix bug where user filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
 - [ ] `*Important*` Go over each case for paying and requesting (incoming payments go to outgoing sometimes, etc.)
 - [ ] Add global user list to UserSearch
 - [ ] Add edit profile page
 - [ ] Fix bug where incoming payment appears in outgoing tab at first until you tab away (tough to recreate)
-- [ ] Fix bug where user filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)

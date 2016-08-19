@@ -108,8 +108,10 @@ class UserSearch extends React.Component {
       <UserPreview
         user={data}
         touchable
-        callback={() => this._setSelectedContact(data)}
-        />
+        callback={() => {
+          this._setSelectedContact(data);
+          this.setState({query: data.username || data.first_name + " " + data.last_name});
+        }} />
     );
   }
 
@@ -121,7 +123,6 @@ class UserSearch extends React.Component {
 
 
   _setSelectedContact(data) {
-
     // Set selected contact in state
     this.props.setSelectedContact(data);
 
@@ -129,10 +130,6 @@ class UserSearch extends React.Component {
     var query = data.username || data.first_name + " " + data.last_name,
         queryType = (query[0] == "@") ? "username" : "phone";
     this._setInputColors(queryType);
-
-    // Set query in state, triggering re-render of contact list or confirmation prompt
-    this.setState({query: query});
-
   }
 
 
