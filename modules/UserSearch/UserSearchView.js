@@ -16,24 +16,6 @@ import ArrowNav from '../../components/Navigation/Arrows/ArrowDouble';
 // Styles
 import colors from '../../styles/colors';
 const dimensions = Dimensions.get('window');
-const rowStyles = StyleSheet.create({
-  wrap: {
-    height: 100,
-    width: dimensions.width,
-    padding: 15,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#bf3636',
-    borderBottomWidth: 1,
-    borderBottomColor: '#FFF',
-  },
-  text: {
-    fontFamily: 'Roboto',
-    fontSize: 16,
-    color: '#FFF',
-  },
-});
 const styles = StyleSheet.create({
   textInput: {
     height: 60,
@@ -41,8 +23,6 @@ const styles = StyleSheet.create({
     paddingRight: 25,
     paddingTop: 10,
     paddingBottom: 10,
-    borderBottomColor: colors.richBlack,
-    borderBottomWidth: 0.8,
   },
 
   // Confirmation
@@ -243,16 +223,19 @@ class UserSearch extends React.Component {
           onChangeText={(query) => {
             this.setState({query: query});
             this._filterContacts(query);
-
-            console.log("query: " + query + "\nselectedContact: " + this.props.selectedContact);
-
-            if (this.props.selectedContact && query == this.props.selectedContact.username)
+            if (this.props.selectedContact && query == this.props.selectedContact.username && query != "") {
+              console.log("Setting username colors");
               this._setInputColors("username");
-            else if (this.props.selectedContact && query == this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name)
+            } else if (this.props.selectedContact && query == this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name && query != " ") {
+              console.log("Setting phone colors");
               this._setInputColors("phone");
-            else this._setInputColors("noMatch");
+            } else {
+              console.log("Setting noMatch colors");
+              this._setInputColors("noMatch");
+            }
           }}
           autoFocus={true}
+          autoCorrect={false}
           enablesReturnKeyAutomatically={true}
           returnKeyType={"next"}
           defaultValue={

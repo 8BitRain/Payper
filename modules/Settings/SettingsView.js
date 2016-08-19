@@ -34,20 +34,20 @@ class Settings extends React.Component {
       {rowTitle: "Home", iconName: "home", destination: () => this.props.changePage("payments")},
       {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
       {rowTitle: "Funding Sources", iconName: "line-graph", destination: () => this.props.changePage("fundingSources")},
-      {rowTitle: "FAQ", iconName: "help-with-circle", destination: Actions.CreateAccountViewContainer},
+      {rowTitle: "FAQ", iconName: "help-with-circle", destination: () => console.log("Pressed 'FAQ'")},
     ];
 
     if (this.props.currentUser.provider != "facebook") {
       sideMenuButtons.push(
         {rowTitle: "Delete Account", iconName: "trash", destination: () => {
-            Alert.confirmation({
-              title: "Delete Account",
-              message: "Are you sure you'd like to delete your account? This CANNOT be undone!",
-              cancelMessage: "Nevermind",
-              confirmMessage: "Yes, delete my account",
-              cancel: () => console.log("Nevermind"),
-              confirm: () => { Init.signOut(); Init.deleteUser({ token: this.props.currentUser.token, uid: this.props.currentUser.uid }) },
-            });
+          Alert.confirmation({
+            title: "Delete Account",
+            message: "Are you sure you'd like to delete your account? This CANNOT be undone!",
+            cancelMessage: "Nevermind",
+            confirmMessage: "Yes, delete my account",
+            cancel: () => console.log("Nevermind"),
+            confirm: () => { Init.signOut(); Init.deleteUser({ token: this.props.currentUser.token, uid: this.props.currentUser.uid }) },
+          });
         }}
       );
       sideMenuButtons.push({rowTitle: "Sign Out", iconName: "moon", destination: Init.signOut});
