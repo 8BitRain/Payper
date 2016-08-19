@@ -229,11 +229,12 @@ export function createCustomer(data, callback){
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
-        console.log("CreateCustomerResponse:", responseData);
+        console.log("CreateCustomerResponse:" +  JSON.stringify(responseData));
         //if (typeof callback == 'function') callback(true);
         callback(true);
       } else {
-        console.log("Error:", responseData.errorMessage);
+        //var responsePrint = responseData[0];
+        console.log("Errorx:" +  responsePrint);
         if (typeof callback == 'function') callback(false);
       }
     })

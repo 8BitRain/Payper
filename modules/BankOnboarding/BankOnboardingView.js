@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, WebView} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, WebView, Linking} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import * as Animations from "../../helpers/animations";
@@ -104,6 +104,8 @@ const BankOnboardingView = React.createClass({
                 dispatchSetEmail={this.props.dispatchSetEmail}
                 dispatchSetPhone={this.props.dispatchSetPhone}
                 dispatchSetPageX={this.props.dispatchSetPageX}
+                dispatchSetPhoneValidations={(text) => this.props.dispatchSetPhoneValidations(Validators.validatePhone(text))}
+                phoneValidations={this.props.phoneValidations}
                 callbackClose={Actions.landingView}
               />
             )

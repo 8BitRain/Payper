@@ -20,7 +20,14 @@ export default connect(
     currentPagex: state.getIn(['bankOnboarding', 'currentPagex']),
 
     /*Create Account State Variables*/
-    newUser: state.getIn(['createAccount', 'newUser'])
+    newUser: state.getIn(['createAccount', 'newUser']),
+
+    /*Validations*/
+    phoneValidations: state.getIn(['bankOnboarding', 'phoneValidations']),
+    emailValidations: state.getIn(['bankOnboarding', 'emailValidations']),
+    firstNameValidations: state.getIn(['bankOnboarding', 'firstNameValidations']),
+    lastNameValidations: state.getIn(['bankOnboarding', 'lastNameValidations']),
+    basicInfoValidations: state.getIn(['bankOnboarding', 'basicInfoValidations'])
 
   }),
   dispatch => ({
@@ -107,10 +114,31 @@ export default connect(
         dispatch(dispatchFunctions.setSSN(input));
       },
 
+      dispatchSetPhoneValidations(input){
+        dispatch(dispatchFunctions.setPhoneValidations(input));
+      },
+      dispatchSetEmailValidations(input){
+        dispatch(dispatchFunctions.setEmailValidations(input));
+      },
+      dispatchSetFirstNameValidations(input){
+        dispatch(dispatchFunctions.setFirstNameValidations(input));
+      },
+      dispatchSetLastNameValidations(input){
+        dispatch(dispatchFunctions.setLastNameValidations(input));
+      },
+      dispatchSetBasicInfoValidations(input){
+        dispatch(dispatchFunctions.setBasicInfoValidations(input));
+      },
+
 
       // Handles pagination
-      dispatchSetPageX(index, direction) {
-        dispatch(dispatchFunctions.setPageX(index));
+      dispatchSetPageX(index, direction, validations) {
+        if(validations){
+          dispatch(dispatchFunctions.setPageX(index));
+        } else if (direction == "backward"){
+          dispatch(dispatchFunctions.setPageX(index));
+        }
+
       }
   })
 )(BankOnboardingView);
