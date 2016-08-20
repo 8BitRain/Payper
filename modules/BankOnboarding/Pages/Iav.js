@@ -17,6 +17,7 @@ import colors from '../../../styles/colors';
 
 var Mixpanel = require('react-native-mixpanel');
 
+
 class Iav extends React.Component {
   constructor(props) {
     super(props);
@@ -38,7 +39,7 @@ class Iav extends React.Component {
     */
     //Attempt that causes looping of code in webview
     this.injectedJS = 'var firebase_token = ' + "'" + this.firebase_token + "'" + ';' + ' var iav_token = ' + "'" + this.props.startIav + "'" + ';' + ' $( document ).ready(function() { generateIAVToken()});';
-    
+
     console.log(this.injectedJS);
   }
 
@@ -55,14 +56,19 @@ class Iav extends React.Component {
 
   componentWillMount() {
     // Initialize the app
-    var url = 'http://www.getpayper.io/iav' + '?iav_token=' + this.props.startIav + '&firebase_token=' + this.firebase_token;
-    Linking.openURL(url).catch(err => console.error('An error occurred', err));
+    //var url = 'http://www.getpayper.io/iav' + '?iav_token=' + this.props.startIav + '&firebase_token=' + this.firebase_token;
+    //Linking.openURL(url).catch(err => console.error('An error occurred', err));
     var _this = this;
     Async.get('user', (val) => {
       console.log("User: " + val);
       console.log("User: " + JSON.parse(val).uid);
+      //Listen for microdeposits first
+      var micro_deposit_flow = "APP_FLAGS/" + JSON.parse(val).uid;
+
+      //Need to listen to fundingSourceAdded and IAV so
+
       var fundingSourceAdded = "IAV/" + JSON.parse(val).uid;
-      _this.props.listen([fundingSourceAdded]);
+      _this.props.listen([fundingSourceAdded, micro_deposit_flow]);
     });
   }
 
@@ -71,18 +77,13 @@ class Iav extends React.Component {
     this.props.stopListening(this.props.activeFirebaseListeners);
   }
 
-  /*render() {
+  render() {
       return(
         <WebView
          source={{uri: 'http://www.getpayper.io/iav'}} injectedJavaScript={this.injectedJS}
          style={{marginTop: 20}}
          startInLoadingState={false}
        />
-      );
-  }*/
-  render() {
-      return(
-        <View/>
       );
   }
 }

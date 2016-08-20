@@ -16,6 +16,7 @@ import Address from "./Pages/Address";
 import Dob from "./Pages/Dob";
 import SSN from "./Pages/SSN";
 import Iav from "./Pages/Iav";
+import VerifyMicrodeposit from "./Pages/VerifyMicrodeposit";
 
 //styles
 import backgrounds from "./styles/backgrounds";
@@ -25,6 +26,7 @@ import colors from '../../styles/colors';
 
 
 import Loading from "../../components/Loading/Loading";
+import
 var Mixpanel = require('react-native-mixpanel');
 
 
@@ -164,6 +166,12 @@ const BankOnboardingView = React.createClass({
       return(
         <LoadingView />
       )
+    } else if (this.props.micro_deposit_flow == true){
+      return{
+          <VerifyMicrodeposit
+          newUser={this.props.newUser}
+          />
+      }
     }
   }
 });

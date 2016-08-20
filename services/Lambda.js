@@ -234,7 +234,33 @@ export function createCustomer(data, callback){
         callback(true);
       } else {
         //var responsePrint = responseData[0];
-        console.log("Errorx:" +  responsePrint);
+        //responsePrint = responseData.JSON.stringify(errorMessage);
+        //console.log("Error: " + responsePrint );
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+/**
+  *   sendMicrodeposits
+**/
+export function sendMicrodeposits(data, callback){
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/verifyMicroDeposits", {method: "POST", body: JSON.stringify(data)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("verifyMicroDeposits:" +  JSON.stringify(responseData));
+        //if (typeof callback == 'function') callback(true);
+        callback(true);
+      } else {
+        //var responsePrint = responseData[0];
+        //responsePrint = responseData.JSON.stringify(errorMessage);
+        //console.log("Error: " + responsePrint );
         if (typeof callback == 'function') callback(false);
       }
     })

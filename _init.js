@@ -211,6 +211,16 @@ export function createCustomer(data, callback){
   });
 }
 
+/**
+  *   sendMicrodeposits Verification
+**/
+export function sendMicrodeposits(data, callback){
+  Lambda.sendMicrodeposits(data, (response) => {
+    console.log("sendMicrodeposits: " + response);
+    callback(response);
+  });
+}
+
 /*Grab IAV token for specic customer*/
  //Ping the server with firebase token
    //Server will respond with iav_token
