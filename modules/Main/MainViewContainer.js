@@ -65,7 +65,7 @@ function mapDispatchToProps(dispatch) {
           // Get decrypted phone number and email address
           Lambda.getDecryptedUser({ token: parsedUser.token, uid: parsedUser.uid }, (res) => {
             console.log("getDecryptedUser callback response:\n", res);
-            
+
             parsedUser.decryptedPhone = res.phone;
             parsedUser.decryptedEmail = res.email;
 
@@ -96,6 +96,7 @@ function mapDispatchToProps(dispatch) {
 
     listen: (endpoints, callback) => {
       Firebase.listenTo(endpoints, (response) => {
+        console.log("FIREBASE RESPONSE:\n\n", response);
         switch (response.endpoint.split("/")[0]) {
 
           case "notifications":
@@ -113,6 +114,8 @@ function mapDispatchToProps(dispatch) {
           break;
 
           case "appFlags":
+            console.log("Got app flags");
+            console.log(response);
             dispatch(set.flags(response.value));
           break;
 

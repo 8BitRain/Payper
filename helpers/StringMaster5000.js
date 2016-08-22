@@ -190,6 +190,8 @@ export function formatPhoneNumber(num) {
   *   Stylize phone numbers like this: +(262)-305-8038
 **/
 export function stylizePhoneNumber(num) {
+  if (!num) return "None added";
+
   num = formatPhoneNumber(num);
   if (num.length < 10 || num.length > 11) return num;
   if (num.length == 10) {

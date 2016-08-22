@@ -66,6 +66,10 @@
 - [ ] `*Important*` Go over each case for paying and requesting (incoming payments go to outgoing sometimes, etc.)
 - [ ] Add global user list to UserSearch
 - [ ] Add edit pages for certain properties of profile
+- [ ] Add micro deposit validation to CreatePaymentFlow if user has not yet verified their bank account
+- [ ] Fix bug where seeNotifications results in ugly re-renders of sidebar
+- [ ] Fix bug where seeNotifications happen rapidly after one another instead of all at once
+- [ ] Fix bug where notifications indicator is not rendered as a perfect circle on smaller devices
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
