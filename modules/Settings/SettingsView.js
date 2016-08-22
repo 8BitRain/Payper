@@ -2,9 +2,7 @@ import React from 'react';
 import { View, Text, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 const FBSDK = require('react-native-fbsdk');
-const {
-  LoginButton
-} = FBSDK;
+const { LoginButton } = FBSDK;
 
 // Helper functions
 import * as Async from '../../helpers/Async';
@@ -134,7 +132,7 @@ class Settings extends React.Component {
 
             <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
               <Text style={[styles.rowTitle, {fontSize: 18, paddingLeft: 0, paddingRight: 12}]}>{ this.props.currentUser.first_name + " " + this.props.currentUser.last_name }</Text>
-              <Text style={[styles.rowTitle, {fontSize: 12, color: colors.accent, paddingLeft: 0}]}>Edit profile</Text>
+              <Text style={[styles.rowTitle, {fontSize: 12, color: colors.accent, paddingLeft: 0}]}>My Profile</Text>
             </View>
           </View>
         </TouchableHighlight>

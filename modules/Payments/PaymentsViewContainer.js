@@ -94,7 +94,7 @@ function mapDispatchToProps(dispatch) {
     },
 
     // 1) Remove payment from DataSource
-    // 2) Remove payment from DB via Lambda endpoint
+    // 2) Hit cancelPayment Lambda endpoint
     cancelPayment: (options) => {
       if (enableLogs) {
         console.log("%cCancelling payment " + options.pid, "color:red;font-weight:900;");
@@ -111,7 +111,7 @@ function mapDispatchToProps(dispatch) {
       }
 
       dispatch(set.outgoingPayments(ds));
-      Lambda.cancelPayment({payment_id: options.pid, token: options.token});
+      Lambda.cancelPayment({type: options.type, payment_id: options.pid, token: options.token});
     },
 
     confirmPayment: (options) => {

@@ -106,12 +106,11 @@ class Payments extends React.Component {
               pid: payment.pid,
               token: this.props.currentUser.token,
               ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
+              type: (payment.confirmed) ? "active" : (payment.invite) ? "invite" : "pending",
             })
           });
         }}
         callbackConfirm={() => {
-          console.log("Confirming payment");
-
           var firstName = payment.recip_name.split(" ")[0],
               purpose = StringMaster5000.formatPurpose(payment.purpose);
 

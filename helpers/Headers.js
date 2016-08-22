@@ -47,7 +47,7 @@ export function fundingSourcesHeader() {
     },
     index: null,
     numCircles: null,
-    title: "Funding Sources",
+    title: "Bank Accounts",
     callbackIn: null,
     callbackOut: null,
   };
@@ -133,6 +133,28 @@ export function createPaymentHeader() {
     title: null,
     callbackIn: null,
     callbackOut: null,
+  };
+
+  return props;
+};
+
+
+// Header props for Create Payment flow
+export function profileHeader() {
+  var props = {
+    types: {
+      "paymentIcons": false,
+      "circleIcons": false,
+      "settingsIcon": true,
+      "closeIcon": false,
+      "flowTabs": false,
+    },
+    index: 0,
+    numCircles: null,
+    title: "My Profile",
+    callbackIn: null,
+    callbackOut: null,
+    accent: true,
   };
 
   return props;

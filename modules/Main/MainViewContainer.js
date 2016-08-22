@@ -76,7 +76,6 @@ function mapDispatchToProps(dispatch) {
 
           if (typeof callback == 'function') callback(true);
           else console.log("Callback is not a function.");
-
         }
       });
 
@@ -130,7 +129,8 @@ function mapDispatchToProps(dispatch) {
 
     setCurrentPage: (page) => {
       if (page == "notifications") dispatch(set.header(Headers.notificationsHeader()));
-      if (page == "fundingSources") dispatch(set.header(Headers.fundingSourcesHeader()));
+      else if (page == "fundingSources") dispatch(set.header(Headers.fundingSourcesHeader()));
+      else if (page == "profile") dispatch(set.header(Headers.profileHeader()));
       dispatch(set.currentPage(page));
     },
   }

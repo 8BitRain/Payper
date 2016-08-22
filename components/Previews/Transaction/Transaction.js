@@ -117,7 +117,7 @@ function getPendingConfirmationAlert() {
 function getPendingInvitationAlert(options) {
   return(
     <View style={styles.bottom}>
-      <View style={[styles.alert, { width: dimensions.width * 0.9, padding: 10 }]}>
+      <View style={[styles.alert, { width: dimensions.width * 0.9, padding: 10, backgroundColor: colors.accent }]}>
         <Text style={styles.confirmText}>
           { (options.incoming)
               ? "We invited " + options.name + " to join Payper. Payments will commence after they set up their account and confirm your request."
