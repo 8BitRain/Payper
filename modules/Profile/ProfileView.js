@@ -2,15 +2,12 @@
 import React from 'react';
 import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Button } from 'react-native';
 
-// Iconography
-import Entypo from 'react-native-vector-icons/Entypo';
-
 // Helper functions
 import * as Lambda from '../../services/Lambda';
 import * as Timestamp from '../../helpers/Timestamp';
 
 // Partial components
-import UserPic from '../../helpers/Partials';
+import UserPicWithCallback from '../../components/Previews/UserPic/UserPicWithCallback';
 
 // Custom stylesheets
 import colors from '../../styles/colors';
@@ -107,29 +104,13 @@ class Profile extends React.Component {
 
           { /* User profile picture */ }
           <View style={{position: 'absolute', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', top: 0, left: 0, right: 0, bottom: 0}}>
-            { /* Profile picture or initials */ }
-            <View>
-
-              <UserPic
-                accent
-                user={this.props.currentUser}
-                width={110}
-                height={110} />
-
-              { /* Change profile picture button */ }
-              <TouchableHighlight
-                style={{position: 'absolute', width: 110, left: 0, right: 0, bottom: 10, backgroundColor: 'transparent'}}
-                onPress={() => console.log("Change profile picture")}>
-
-                <View style={{flex: 1.0, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                  <View style={{backgroundColor: colors.lightAlertGreen, borderRadius: 3, paddingLeft: 5, paddingRight: 5}}>
-                    <Entypo size={20} name="camera" color={colors.white} />
-                  </View>
-                </View>
-
-              </TouchableHighlight>
-
-            </View>
+            { /* Profile picture & change picture button */ }
+            <UserPicWithCallback
+              callback={() => console.log("Change image")}
+              accent
+              user={this.props.currentUser}
+              width={110}
+              height={110} />
           </View>
         </View>
 

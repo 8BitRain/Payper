@@ -47,7 +47,7 @@ export function fundingSourcesHeader() {
     },
     index: null,
     numCircles: null,
-    title: "Funding Sources",
+    title: "Bank Accounts",
     callbackIn: null,
     callbackOut: null,
   };
