@@ -97,6 +97,26 @@ export function globalHeader(options) {
   return props;
 };
 
+// Header props for BankOnboarding tab
+export function BankOnboardingTab(options) {
+  var props = {
+    types: {
+      "paymentIcons": false,
+      "circleIcons": false,
+      "settingsIcon": true,
+      "closeIcon": false,
+      "flowTabs": false,
+    },
+    index: null,
+    numCircles: null,
+    title: "Global Payments",
+    callbackIn: null,
+    callbackOut: null,
+  };
+
+  return props;
+};
+
 
 // Header props for Create Payment flow
 export function createPaymentHeader() {
