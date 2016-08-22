@@ -144,7 +144,7 @@ class Summary extends React.Component {
 
          <View style={{alignItems: "center"}}>
            <Button style={{alignSelf: "center"}} onPress={()=> {this.handlePressCheckedBox(true)}}>
-            {this.state.isChecked ? <Material name="check-box" size={32} color="white"/> : <Material name="check-box-outline-blank" size={20}/>}
+            {this.state.isChecked ? <Material name="check-box" size={32} color={colors.white} /> : <Material name="check-box-outline-blank" size={32} color={colors.white} />}
            </Button>
          </View>
 

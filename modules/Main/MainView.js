@@ -8,6 +8,7 @@ import SideMenu from 'react-native-side-menu';
 import Header from '../../components/Header/Header';
 import Settings from '../../modules/Settings/SettingsView';
 import Payments from '../../modules/Payments/PaymentsViewContainer';
+import Profile from '../../modules/Profile/ProfileView';
 import Notifications from '../../modules/Notifications/NotificationsViewContainer';
 import FundingSources from '../../modules/FundingSources/FundingSourcesView';
 
@@ -33,6 +34,10 @@ class InnerContent extends React.Component {
 
         case "payments":
           return <Payments />;
+          break;
+
+        case "profile":
+          return <Profile {...this.props} />;
           break;
 
         case "notifications":

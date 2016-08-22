@@ -33,7 +33,7 @@ class Settings extends React.Component {
     var sideMenuButtons = [
       {rowTitle: "Home", iconName: "home", destination: () => this.props.changePage("payments")},
       {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
-      {rowTitle: "Funding Sources", iconName: "line-graph", destination: () => this.props.changePage("fundingSources")},
+      {rowTitle: "Bank Accounts", iconName: "wallet", destination: () => this.props.changePage("fundingSources")},
       {rowTitle: "FAQ", iconName: "help-with-circle", destination: () => console.log("Pressed 'FAQ'")},
     ];
 
@@ -126,7 +126,7 @@ class Settings extends React.Component {
         <TouchableHighlight
           activeOpacity={0.7}
           underlayColor={'transparent'}
-          onPress={() => console.log("EDIT PROFILE")}
+          onPress={() => this.props.changePage("profile")}
           style={{borderBottomWidth: 0.5, borderBottomColor: colors.accent}}>
 
           <View style={{height: 70, marginTop: 30, paddingBottom: 12.5, paddingLeft: 20, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: colors.accent}}>

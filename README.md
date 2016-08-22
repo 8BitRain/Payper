@@ -38,7 +38,6 @@
 - [X] "Runtime is not ready for debugging" randomly appears.  **This went away when I downgraded from Node 6.2.0 to 5.5.0**
 - [ ] "Severe Error, duplicates recorded in Firebase, with no auth information. To reproduce
       delete an id but not a users and Facebook id, or switch this around until you can get duplicate users through Facebook sign in or regular user sign in." https://github.com/facebook/react-native/issues/6682
-- [ ] `@Eric` Sign in with Facebook throws `Cannot read property dispatchSetProvider of undefined` (LandingScreenView.js ln 164)
 
 ### Brady (MVP)
 - [X] Style payment invites

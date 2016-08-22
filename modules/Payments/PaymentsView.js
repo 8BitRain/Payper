@@ -150,6 +150,7 @@ class Payments extends React.Component {
           });
         }}
         callbackMenu={() => {
+          console.log("payment:", payment);
           ActionSheetIOS.showActionSheetWithOptions({
             options: ['Cancel Payment Series', 'Nevermind'],
             cancelButtonIndex: 1
