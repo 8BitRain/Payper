@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 
 // Dispatch functions
-import * as setMain from '../EditProfile/EditProfileState';
+import * as setMain from '../Profile/ProfileState';
 
 // Base view
 import NotificationsView from './NotificationsView';
