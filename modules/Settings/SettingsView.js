@@ -2,9 +2,7 @@ import React from 'react';
 import { View, Text, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 const FBSDK = require('react-native-fbsdk');
-const {
-  LoginButton
-} = FBSDK;
+const { LoginButton } = FBSDK;
 
 // Helper functions
 import * as Async from '../../helpers/Async';

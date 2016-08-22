@@ -61,9 +61,10 @@
 - [X] Fix bug where on on UserSearch page of CreatePaymentView a single space is treated as a name
 - [X] Add validations to CreatePayment flow
 - [X] Fix bug where user filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
+- [X] Add profile page
 - [ ] `*Important*` Go over each case for paying and requesting (incoming payments go to outgoing sometimes, etc.)
 - [ ] Add global user list to UserSearch
-- [ ] Add edit profile page
+- [ ] Add edit pages for certain properties of profile
 - [ ] Decrypt and append phone number and email address to user object on load
 
 ### Dwolla Requirements

@@ -76,7 +76,6 @@ function mapDispatchToProps(dispatch) {
 
           if (typeof callback == 'function') callback(true);
           else console.log("Callback is not a function.");
-
         }
       });
 
