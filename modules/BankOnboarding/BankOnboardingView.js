@@ -26,7 +26,6 @@ import colors from '../../styles/colors';
 
 
 import Loading from "../../components/Loading/Loading";
-import
 var Mixpanel = require('react-native-mixpanel');
 
 
@@ -150,7 +149,7 @@ const BankOnboardingView = React.createClass({
             break;
         }
         //<OnBoardingSummaryTest  firebase_token = {this.props.firebase_token} startIav={this.props.startIav} dispatchSetIav={this.props.dispatchSetIav} dispatchSetFirebaseToken={this.props.dispatchSetFirebaseToken}/>
-    } else if (this.props.startIav != "" && this.props.startMain == false){
+    } else if (this.props.startIav != "" && this.props.startMain == false && this.props.startVerifyMicroDeposit == false){
       console.log("IAV: " + this.props.startIav);
       return(
         <Iav
@@ -166,12 +165,12 @@ const BankOnboardingView = React.createClass({
       return(
         <LoadingView />
       )
-    } else if (this.props.micro_deposit_flow == true){
-      return{
+    } else if (this.props.startVerifyMicroDeposit == true){
+      return(
           <VerifyMicrodeposit
           newUser={this.props.newUser}
           />
-      }
+      )
     }
   }
 });

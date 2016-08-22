@@ -6,6 +6,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 
 
 import * as Async from '../../../helpers/Async';
+import * as Init from '../../../_init';
 
 //styles
 import backgrounds from "../styles/backgrounds";
@@ -40,25 +41,26 @@ class VerifyMicrodeposit extends React.Component {
     data = {
       amount1: this.amount1,
       amount2: this.amount2,
-      token: this.props.newUser.token;
+      token: this.props.newUser.token
     };
     Init.sendMicrodeposits(data, function(microdeposits_sent){
       console.log("microdeposits_sent?: " + microdeposits_sent);
+      //Go to main screen
+      Actions.MainViewContainer();
       });
-    });
   }
 
   render() {
       return(
-        <View>
-        <Text>Verify Microdeposits </Text>
-        <Text>Dwolla  has posted Microdeposits to your bank account. Enter the two amounts to start sending money with Payper</Text>
-        <Text> Amount 1 </Text>
-        <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} onChangeText={(text) => {this.amount1 = text;}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto"   />
-        <Text> Amount 2 </Text>
-        <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} onChangeText={(text) => {this.amount2 = text;}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto"   />
-        <View>
-        <Button onPress={()=> {this.submit()}}>Submit</Button>
+        <View style={[containers.container, backgrounds.email]}>
+          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 40}]}>Verify Microdeposits </Text>
+          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Dwolla  has posted Microdeposits to your bank account. Enter the two amounts to start sending money with Payper</Text>
+          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}> Amount 1 </Text>
+          <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} onChangeText={(text) => {this.amount1 = text;}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto"   />
+          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}> Amount 2 </Text>
+          <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} onChangeText={(text) => {this.amount2 = text;}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto"   />
+          <Button onPress={()=> {this.submit()}}><Text style={[typography.textInput, typography.marginSides, typography.marginBottom]}>Submit</Text></Button>
+        </View>
       );
   }
 }

@@ -49,6 +49,7 @@ const initialState = Map({
     currentPagex: 0,
     startIav: '',
     startMain: false,
+    startVerifyMicroDeposit: false,
     firebase_token: '',
     phoneValidations,
     emailValidations,
@@ -60,6 +61,7 @@ const initialState = Map({
 const SET_PAGEX = 'SET_PAGEX',
       SET_IAV = 'SET_IAV',
       SET_START_MAIN = 'SET_START_MAIN',
+      SET_VERIFY_MICRODEPOSIT = 'SET_VERIFY_MICRODEPOSIT',
       SET_FIREBASETOKEN = "SET_FIREBASETOKEN",
       SET_FIRST_NAME = 'SET_FIRST_NAME',
       SET_LAST_NAME = 'SET_LAST_NAME',
@@ -110,6 +112,10 @@ export function setIav(index){
 
 export function setMain(index){
   return { type: SET_START_MAIN, index: index};
+};
+
+export function setVerifyMicroDeposit(index){
+  return { type: SET_VERIFY_MICRODEPOSIT, index: index};
 };
 
 export function setFirstName(index){
@@ -202,6 +208,10 @@ export default function BankOnboardingReducer(state = initialState, action = {})
 
     case SET_START_MAIN:
       var newState = state.set('startMain', action.index);
+      return newState;
+      break;
+    case SET_VERIFY_MICRODEPOSIT:
+      var newState = state.set('startVerifyMicroDeposit', action.index);
       return newState;
       break;
     case SET_PHONE_VALIDATIONS:

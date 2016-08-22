@@ -236,6 +236,8 @@ export function createCustomer(data, callback){
         //var responsePrint = responseData[0];
         //responsePrint = responseData.JSON.stringify(errorMessage);
         //console.log("Error: " + responsePrint );
+        console.log("Error: " + JSON.stringify(responseData.errorMessage));
+        alert(JSON.stringify(JSON.parse(responseData.errorMessage)));
         if (typeof callback == 'function') callback(false);
       }
     })

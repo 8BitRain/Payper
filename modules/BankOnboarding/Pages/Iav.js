@@ -63,7 +63,7 @@ class Iav extends React.Component {
       console.log("User: " + val);
       console.log("User: " + JSON.parse(val).uid);
       //Listen for microdeposits first
-      var micro_deposit_flow = "APP_FLAGS/" + JSON.parse(val).uid;
+      var micro_deposit_flow = "appFlags/" + JSON.parse(val).uid;
 
       //Need to listen to fundingSourceAdded and IAV so
 
