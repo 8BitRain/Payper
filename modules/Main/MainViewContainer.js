@@ -4,6 +4,7 @@ var Contacts = require('react-native-contacts');
 
 // Helper functions
 import * as Firebase from '../../services/Firebase';
+import * as Lambda from '../../services/Lambda';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
 import * as Async from '../../helpers/Async';
 import * as Headers from '../../helpers/Headers';
@@ -54,10 +55,22 @@ function mapDispatchToProps(dispatch) {
 
         } else {
 
+          var parsedUser = JSON.parse(user);
+
           // Sign in succeeded
-          dispatch(set.currentUser(JSON.parse(user)));
+          dispatch(set.currentUser(parsedUser));
           dispatch(set.signedIn(true));
           dispatch(set.initialized(true));
+
+          // Get decrypted phone number and email address
+          Lambda.getDecryptedUser({ token: parsedUser.token, uid: parsedUser.uid }, (res) => {
+            console.log("getDecryptedUser callback response:\n", res);
+            
+            parsedUser.decryptedPhone = res.phone;
+            parsedUser.decryptedEmail = res.email;
+
+            dispatch(set.currentUser(parsedUser));
+          });
 
           // Get user's native phone contacts
           Contacts.getAll((err, contacts) => {

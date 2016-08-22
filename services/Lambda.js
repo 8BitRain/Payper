@@ -15,6 +15,7 @@
   *     💣  Payment invite:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
   *     💣  GET Funding source: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource'
   *     💣  Delete user:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/delete'
+  *     💣  GET decrypted user: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/getPersonal'
   *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
   *
@@ -404,6 +405,30 @@ export function deleteUser(options, callback) {
       } else {
         console.log("Error deleting user:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given session_token and uid, get decrypted phone and email number for
+  *   the specified user
+**/
+export function getDecryptedUser(options, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/getPersonal", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Get decrypted user Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error getting decrypted user:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(responseData);
       }
     })
     .done();

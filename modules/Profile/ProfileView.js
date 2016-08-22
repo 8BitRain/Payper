@@ -5,6 +5,7 @@ import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ListView, DataS
 // Helper functions
 import * as Lambda from '../../services/Lambda';
 import * as Timestamp from '../../helpers/Timestamp';
+import * as StringMaster5000 from '../../helpers/StringMaster5000';
 
 // Partial components
 import UserPicWithCallback from '../../components/Previews/UserPic/UserPicWithCallback';
@@ -43,10 +44,10 @@ class Profile extends React.Component {
         rowContent: this.props.currentUser.username,
         destination: () => console.log("Username:", this.props.currentUser.username) },
       { rowTitle: "Phone Number",
-        rowContent: this.props.currentUser.phone,
+        rowContent: StringMaster5000.stylizePhoneNumber(this.props.currentUser.decryptedPhone),
         destination: () => console.log("Phone Number:", this.props.currentUser.phone)},
       { rowTitle: "Email",
-        rowContent: this.props.currentUser.email,
+        rowContent: this.props.currentUser.decryptedEmail,
         destination: () => console.log("Email:", this.props.currentUser.email)},
     ];
 
