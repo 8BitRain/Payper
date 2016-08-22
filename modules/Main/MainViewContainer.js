@@ -130,7 +130,8 @@ function mapDispatchToProps(dispatch) {
 
     setCurrentPage: (page) => {
       if (page == "notifications") dispatch(set.header(Headers.notificationsHeader()));
-      if (page == "fundingSources") dispatch(set.header(Headers.fundingSourcesHeader()));
+      else if (page == "fundingSources") dispatch(set.header(Headers.fundingSourcesHeader()));
+      else if (page == "profile") dispatch(set.header(Headers.profileHeader()));
       dispatch(set.currentPage(page));
     },
   }

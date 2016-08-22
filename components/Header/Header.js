@@ -216,7 +216,7 @@ class Header extends React.Component {
 
   render() {
     return(
-      <View style={[styles.headerWrap, (this.props.dark) ? {backgroundColor: colors.richBlack} : null ]}>
+      <View style={[styles.headerWrap, {backgroundColor: (this.props.headerProps.accent) ? colors.accent : colors.richBlack}]}>
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
           { this.props.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }

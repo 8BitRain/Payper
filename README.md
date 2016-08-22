@@ -64,6 +64,7 @@
 - [ ] `*Important*` Go over each case for paying and requesting (incoming payments go to outgoing sometimes, etc.)
 - [ ] Add global user list to UserSearch
 - [ ] Add edit profile page
+- [ ] Decrypt and append phone number and email address to user object on load
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
