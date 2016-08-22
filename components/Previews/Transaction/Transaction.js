@@ -158,7 +158,8 @@ class PaymentPreview extends React.Component {
             { /* Name and payment info */ }
             <View style={styles.textWrap}>
               <Text style={styles.name}>{ (this.props.out) ? this.props.payment.recip_name : this.props.payment.sender_name }</Text>
-              <Text style={styles.text}>${ this.props.payment.amount } per month for {this.props.payment.payments} months { StringMaster5000.formatPurpose(this.props.payment.purpose) }</Text>
+              <Text style={styles.text}>${ this.props.payment.amount } per month for {this.props.payment.payments} months</Text>
+              <Text style={styles.text}>{ StringMaster5000.formatPurpose(this.props.payment.purpose) }</Text>
             </View>
 
             { /* Payment settings button */ }

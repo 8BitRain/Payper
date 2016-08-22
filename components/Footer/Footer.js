@@ -1,8 +1,8 @@
 // Dependencies
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Image, TouchableHighlight} from "react-native";
-import Button from "react-native-button";
-import Entypo from "react-native-vector-icons/Entypo"
+import {View, Text, TextInput, StyleSheet, Image, TouchableHighlight} from 'react-native';
+import Button from 'react-native-button';
+import Entypo from 'react-native-vector-icons/Entypo'
 
 import colors from '../../styles/colors';
 
@@ -10,14 +10,14 @@ import colors from '../../styles/colors';
 const styles = StyleSheet.create({
   // Container for footer elements
   footerWrap: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
     top: 0,
 
     flex: 1,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
 
   button: {
@@ -98,8 +98,8 @@ class Footer extends React.Component {
   render() {
     return(
       <TouchableHighlight
-        activeOpacity={1.0}
-        underlayColor={colors.alertGreen}
+        activeOpacity={0.8}
+        underlayColor={colors.accent}
         style={{
           justifyContent: 'center',
           alignItems: 'center',
@@ -108,7 +108,7 @@ class Footer extends React.Component {
           borderRadius: 32.5,
           borderWidth: 1.0,
           borderColor: colors.white,
-          backgroundColor: colors.lightAlertGreen,
+          backgroundColor: colors.accent,
           shadowColor: colors.lightGrey,
           shadowOffset: {width: 0, height: 0},
           shadowOpacity: 0.45,
