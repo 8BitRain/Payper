@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, WebView} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, WebView, Linking} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -16,6 +16,7 @@ import colors from '../../../styles/colors';
 
 
 var Mixpanel = require('react-native-mixpanel');
+
 
 class Iav extends React.Component {
   constructor(props) {
@@ -55,12 +56,19 @@ class Iav extends React.Component {
 
   componentWillMount() {
     // Initialize the app
+    //var url = 'http://www.getpayper.io/iav' + '?iav_token=' + this.props.startIav + '&firebase_token=' + this.firebase_token;
+    //Linking.openURL(url).catch(err => console.error('An error occurred', err));
     var _this = this;
     Async.get('user', (val) => {
       console.log("User: " + val);
       console.log("User: " + JSON.parse(val).uid);
+      //Listen for microdeposits first
+      var micro_deposit_flow = "appFlags/" + JSON.parse(val).uid;
+
+      //Need to listen to fundingSourceAdded and IAV so
+
       var fundingSourceAdded = "IAV/" + JSON.parse(val).uid;
-      _this.props.listen([fundingSourceAdded]);
+      _this.props.listen([fundingSourceAdded, micro_deposit_flow]);
     });
   }
 
@@ -72,7 +80,7 @@ class Iav extends React.Component {
   render() {
       return(
         <WebView
-         source={{uri: /*'http://localhost:8000'*/ /*'http://localhost:5000/iav'*/ 'http://www.getpayper.io/iav'}} injectedJavaScript={this.injectedJS}
+         source={{uri: 'http://www.getpayper.io/iav'}} injectedJavaScript={this.injectedJS}
          style={{marginTop: 20}}
          startInLoadingState={false}
        />

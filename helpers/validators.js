@@ -49,6 +49,60 @@ export function validateLowerCase(input) { return /[a-z]/.test(input) };
 export function validateNumber(input) { return /[0-9]/.test(input) };
 export function validateSymbol(input) { return /[!”#$%&’()*+`\-./:;<=>?@\]\[\\^_’{|}~]/.test(input) };
 
+export function validateBasicInfo(firstName, lastName, email, phone){
+    var validations = {
+      firstName: firstName.valid,
+      lastName: lastName.valid,
+      email: email.valid,
+      phone: phone.valid,
+      valid: false
+    }
+
+    validations.valid = getValidated(validations);
+    return validations;
+};
+
+export function validatePhone(input){
+  //Enforces digit and length
+  var regexLength = /^\d{10}$/.test(input);
+
+  var validations = {
+    length: regexLength,
+    valid: false
+  };
+
+  validations.valid = getValidated(validations);
+  return validations;
+};
+
+export function validatePostalCode(input){
+  //Enforces digit and length
+  var regexLength = /^\d{5}$/.test(input);
+
+  var validations = {
+    length: regexLength,
+    valid: false
+  };
+
+  validations.valid = getValidated(validations);
+  return validations;
+};
+
+export function validateDOB(input){
+  //Enforces digit and length
+  var regexDate = /[0-9]{4}[/.-](?:1[0-2]|0?[1-9])[/.-](?:3[01]|[12][0-9]|0?[1-9])/.test(input);
+
+  var validations = {
+    date: regexDate,
+    valid: false
+  };
+
+  validations.valid = getValidated(validations);
+  return validations;
+};
+
+
+
 // Checks that the first character is capitalized
 export function validateName(input) {
   var regexCapitalized = /^[A-Z]/.test(input);

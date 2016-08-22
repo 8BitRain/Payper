@@ -65,13 +65,13 @@ class Address extends React.Component {
 
      // Props to be passed to the arrow nav
      this.arrowNavProps = {
-       left: false,
+       left: true,
        right: true
      };
 
      // Callback functions to be passed to the arrow nav
-     this.onPressRight = function() { this.props.dispatchSetPageX(2, "forward") };
-     this.onPressLeft = function() { this.props.dispatchSetPageX(0, "backward") };
+     this.onPressRight = function() { this.props.dispatchSetPageX(2, "forward", true) };
+     this.onPressLeft = function() { this.props.dispatchSetPageX(0, "backward", null) };
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);

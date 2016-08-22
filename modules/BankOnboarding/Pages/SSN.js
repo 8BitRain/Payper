@@ -71,7 +71,7 @@ class SSN extends React.Component {
      };
 
      // Callback functions to be passed to the arrow nav
-     this.onPressLeft = function() { this.props.dispatchSetPageX(2, "backward") };
+     this.onPressLeft = function() { this.props.dispatchSetPageX(2, "backward", null) };
      this.onPressCheck = function(){
        var data = {
          "firstName": this.props.dwollaCustomer.firstName,

@@ -15,6 +15,32 @@ var dwollaCustomer = {
   ssn: ""
 };
 
+var phoneValidations = {
+  length: false,
+  valid: false
+};
+
+var emailValidations = {
+  length: false,
+  valid: false
+};
+
+var firstNameValidations = {
+  valid: true
+};
+
+var lastNameValidations = {
+  valid: true
+};
+
+var basicInfoValidations = {
+  phoneValidations: false,
+  emailValidations: false,
+  firstNameValidations: true,
+  lastNameValidations: true,
+  valid: false
+};
+
 
 // Initialize state
 const initialState = Map({
@@ -23,13 +49,19 @@ const initialState = Map({
     currentPagex: 0,
     startIav: '',
     startMain: false,
+    startVerifyMicroDeposit: false,
     firebase_token: '',
+    phoneValidations,
+    emailValidations,
+    firstNameValidations,
+    lastNameValidations
 });
 
 // Action types
 const SET_PAGEX = 'SET_PAGEX',
       SET_IAV = 'SET_IAV',
       SET_START_MAIN = 'SET_START_MAIN',
+      SET_VERIFY_MICRODEPOSIT = 'SET_VERIFY_MICRODEPOSIT',
       SET_FIREBASETOKEN = "SET_FIREBASETOKEN",
       SET_FIRST_NAME = 'SET_FIRST_NAME',
       SET_LAST_NAME = 'SET_LAST_NAME',
@@ -41,12 +73,37 @@ const SET_PAGEX = 'SET_PAGEX',
       SET_CITY = 'SET_CITY',
       SET_DOB = 'SET_DOB',
       SET_SSN = 'SET_SSN',
-      SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS'
+      SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
+      SET_PHONE_VALIDATIONS = 'SET_PHONE_VALIDATIONS',
+      SET_FIRST_NAME_VALIDATIONS = 'SET_FIRST_NAME_VALIDATIONS',
+      SET_LAST_NAME_VALIDATIONS = 'SET_LAST_NAME_VALIDATIONS',
+      SET_BASIC_INFO_VALIDATIONS = 'SET_BASIC_INFO_VALIDATIONS',
+      SET_EMAIL_VALIDATIONS = 'SET_EMAIL_VALIDATION';
 
 
 // Action creators
 export function setPageX(index) {
   return { type: SET_PAGEX, index: index };
+};
+
+export function setPhoneValidations(index){
+  return {type: SET_PHONE_VALIDATIONS, index: index};
+};
+
+export function setEmailValidations(index){
+  return {type: SET_EMAIL_VALIDATIONS, index: index};
+};
+
+export function setBasicInfoValidations(index){
+  return {type: SET_BASIC_INFO_VALIDATIONS, index: index};
+};
+
+export function setFirstNameValidations(index){
+  return {type: SET_FIRST_NAME_VALIDATIONS, index: index};
+};
+
+export function setLastNameValidations(index){
+  return {type: SET_LAST_NAME_VALIDATIONS, index: index};
 };
 
 export function setIav(index){
@@ -57,6 +114,10 @@ export function setMain(index){
   return { type: SET_START_MAIN, index: index};
 };
 
+export function setVerifyMicroDeposit(index){
+  return { type: SET_VERIFY_MICRODEPOSIT, index: index};
+};
+
 export function setFirstName(index){
   return { type: SET_FIRST_NAME, index: index};
 };
@@ -64,6 +125,7 @@ export function setFirstName(index){
 export function setLastName(index){
   return { type: SET_LAST_NAME, index: index};
 };
+
 
 export function setEmail(index){
   return { type: SET_EMAIL, index: index};
@@ -127,8 +189,33 @@ export default function BankOnboardingReducer(state = initialState, action = {})
       var newState = state.set('startIav', action.index);
       return newState;
       break;
+      case SET_FIRST_NAME_VALIDATIONS:
+        var newState = state.set('firstNameValidations', action.index);
+        return newState;
+        break;
+        case SET_LAST_NAME_VALIDATIONS:
+          var newState = state.set('lastNameValidations', action.index);
+          return newState;
+          break;
+          case SET_EMAIL_VALIDATIONS:
+            var newState = state.set('emailValidations', action.index);
+            return newState;
+            break;
+            case SET_BASIC_INFO_VALIDATIONS:
+              var newState = state.set('basicInfoValidations', action.index);
+              return newState;
+              break;
+
     case SET_START_MAIN:
       var newState = state.set('startMain', action.index);
+      return newState;
+      break;
+    case SET_VERIFY_MICRODEPOSIT:
+      var newState = state.set('startVerifyMicroDeposit', action.index);
+      return newState;
+      break;
+    case SET_PHONE_VALIDATIONS:
+      var newState = state.set('phoneValidations', action.index);
       return newState;
       break;
     case SET_FIREBASETOKEN:

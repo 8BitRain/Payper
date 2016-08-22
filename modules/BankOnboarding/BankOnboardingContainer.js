@@ -14,13 +14,21 @@ export default connect(
     activeFirebaseListeners: state.getIn(['bankOnboarding', 'activeFirebaseListeners']),
     startIav: state.getIn(['bankOnboarding', 'startIav']),
     startMain: state.getIn(['bankOnboarding', 'startMain']),
+    startVerifyMicroDeposit: state.getIn(['bankOnboarding', 'startVerifyMicroDeposit']),
     firebase_token: state.getIn(['createAccount', 'token']),
     dwollaCustomer: state.getIn(['bankOnboarding', 'dwollaCustomer']),
     // Tracks pagination
     currentPagex: state.getIn(['bankOnboarding', 'currentPagex']),
 
     /*Create Account State Variables*/
-    newUser: state.getIn(['createAccount', 'newUser'])
+    newUser: state.getIn(['createAccount', 'newUser']),
+
+    /*Validations*/
+    phoneValidations: state.getIn(['bankOnboarding', 'phoneValidations']),
+    emailValidations: state.getIn(['bankOnboarding', 'emailValidations']),
+    firstNameValidations: state.getIn(['bankOnboarding', 'firstNameValidations']),
+    lastNameValidations: state.getIn(['bankOnboarding', 'lastNameValidations']),
+    basicInfoValidations: state.getIn(['bankOnboarding', 'basicInfoValidations'])
 
   }),
   dispatch => ({
@@ -31,19 +39,39 @@ export default connect(
           console.log("Response Value: " + response.value);
 
           var fundingSourceAdded = false;
-          if(response.value != null){
-            if(response.value.iav != ""){
-              console.log("Starts IAV");
-              dispatch(dispatchFunctions.setIav(response.value.iav));
-              //break;
-            }
-            if(response.value.fundingSourceAdded != "undefined"){
-              if(response.value.fundingSourceAdded == true){
-                dispatch(dispatchFunctions.setMain(response.value.fundingSourceAdded));
-                //break;
+          //Go From (Bank Onboarding Container)SSN submit page to IAV
+          console.log("Response endpoint: " + JSON.stringify(endpoints));
+          switch(response.endpoint.split("/")[0]){
+            //Next try removing IAV case
+            case "IAV":
+              if(response.value != null){
+                if(response.value.iav != ""){
+                  console.log("Starts IAV");
+                  dispatch(dispatchFunctions.setIav(response.value.iav));
+                  //break;
+                }
+                //Go From IAV to MainViewContainer
+                /*if(response.value.fundingSourceAdded != "undefined"){
+                  if(response.value.fundingSourceAdded == true){
+                    dispatch(dispatchFunctions.setMain(response.value.fundingSourceAdded));
+                    //break;
+                  }
+                }*/
               }
-            }
+              break;
+            case "appFlags":
+              if(response.value != null){
+                if(response.value.micro_deposit_flow == true){
+                  console.log("Microdeposits flow is true");
+                  dispatch(dispatchFunctions.setVerifyMicroDeposit(true));
+                } else{
+                  //dispatch(dispatchFunctions.setMic(response.value.fundingSourceAdded));
+                  console.log("Microdeposits flow is false");
+                }
+              }
+              break;
           }
+
           /*switch (response.value.value ) {
             case "IAV":
             if(response.value != "null"){
@@ -72,6 +100,9 @@ export default connect(
       },
       dispatchSetMain(input){
         dispatch(dispatchFunctions.setMain(input));
+      },
+      dispatchSetVerifyMicroDeposit(input){
+        dispatch(dispatchFunctions.setVerifyMicroDeposit(input));
       },
       dispatchSetFirebaseToken(input){
         dispatch(dispatchFunctions.setFirebaseToken(input));
@@ -107,10 +138,31 @@ export default connect(
         dispatch(dispatchFunctions.setSSN(input));
       },
 
+      dispatchSetPhoneValidations(input){
+        dispatch(dispatchFunctions.setPhoneValidations(input));
+      },
+      dispatchSetEmailValidations(input){
+        dispatch(dispatchFunctions.setEmailValidations(input));
+      },
+      dispatchSetFirstNameValidations(input){
+        dispatch(dispatchFunctions.setFirstNameValidations(input));
+      },
+      dispatchSetLastNameValidations(input){
+        dispatch(dispatchFunctions.setLastNameValidations(input));
+      },
+      dispatchSetBasicInfoValidations(input){
+        dispatch(dispatchFunctions.setBasicInfoValidations(input));
+      },
+
 
       // Handles pagination
-      dispatchSetPageX(index, direction) {
-        dispatch(dispatchFunctions.setPageX(index));
+      dispatchSetPageX(index, direction, validations) {
+        if(validations){
+          dispatch(dispatchFunctions.setPageX(index));
+        } else if (direction == "backward"){
+          dispatch(dispatchFunctions.setPageX(index));
+        }
+
       }
   })
 )(BankOnboardingView);

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, WebView} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, WebView, Linking} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import * as Animations from "../../helpers/animations";
@@ -16,6 +16,7 @@ import Address from "./Pages/Address";
 import Dob from "./Pages/Dob";
 import SSN from "./Pages/SSN";
 import Iav from "./Pages/Iav";
+import VerifyMicrodeposit from "./Pages/VerifyMicrodeposit";
 
 //styles
 import backgrounds from "./styles/backgrounds";
@@ -104,6 +105,8 @@ const BankOnboardingView = React.createClass({
                 dispatchSetEmail={this.props.dispatchSetEmail}
                 dispatchSetPhone={this.props.dispatchSetPhone}
                 dispatchSetPageX={this.props.dispatchSetPageX}
+                dispatchSetPhoneValidations={(text) => this.props.dispatchSetPhoneValidations(Validators.validatePhone(text))}
+                phoneValidations={this.props.phoneValidations}
                 callbackClose={Actions.landingView}
               />
             )
@@ -146,7 +149,7 @@ const BankOnboardingView = React.createClass({
             break;
         }
         //<OnBoardingSummaryTest  firebase_token = {this.props.firebase_token} startIav={this.props.startIav} dispatchSetIav={this.props.dispatchSetIav} dispatchSetFirebaseToken={this.props.dispatchSetFirebaseToken}/>
-    } else if (this.props.startIav != "" && this.props.startMain == false){
+    } else if (this.props.startIav != "" && this.props.startMain == false && this.props.startVerifyMicroDeposit == false){
       console.log("IAV: " + this.props.startIav);
       return(
         <Iav
@@ -161,6 +164,12 @@ const BankOnboardingView = React.createClass({
     } else if(this.props.startMain == true){
       return(
         <LoadingView />
+      )
+    } else if (this.props.startVerifyMicroDeposit == true){
+      return(
+          <VerifyMicrodeposit
+          newUser={this.props.newUser}
+          />
       )
     }
   }
