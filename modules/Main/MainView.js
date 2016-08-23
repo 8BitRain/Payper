@@ -82,7 +82,7 @@ class Main extends React.Component {
               appFlags = "appFlags/" + uid;
 
           // Initialize Firebase listeners
-          this.props.listen([appFlags, notifications], (numUnseenNotifications) => {
+          this.props.listen([notifications, appFlags], (numUnseenNotifications) => {
             // Must explicitly trigger a re-render, otherwise side menu's
             // notification indicator will not update
             this.setState({renderTrigger: Math.random()});
