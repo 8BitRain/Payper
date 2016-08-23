@@ -63,8 +63,8 @@
 - [X] Fix bug where user filter regex treats an exact match as a non-match ( StringMaster5000.filterContacts() )
 - [X] Add profile page
 - [X] Decrypt and append phone number and email address to user object on load
+- [X] Add section headers to user ListView in UserSearch
 - [ ] Add global user list to UserSearch
-- [ ] Add section headers to user ListView in UserSearch
 - [ ] Add edit pages for certain properties of profile
 - [ ] Add micro deposit validation to CreatePaymentFlow if user has not yet verified their bank account
 - [ ] (Vash) Modify markAsSeen endpoint to take an array of notification ID's and mark them all as seen at once
