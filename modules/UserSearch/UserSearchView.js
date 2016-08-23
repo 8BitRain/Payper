@@ -6,11 +6,11 @@ import Entypo from 'react-native-vector-icons/Entypo';
 // Helpers
 import * as Async from '../../helpers/Async';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
-import * as Partials from '../../helpers/Partials';
+import * as SetMaster5000 from '../../helpers/SetMaster5000';
 
 // Partial components
 import UserPreview from '../../components/Previews/User/User';
-import UserPic from '../../helpers/Partials';
+import UserPic from '../../components/Previews/UserPic/UserPic';
 import ArrowNav from '../../components/Navigation/Arrows/ArrowDouble';
 
 // Styles
@@ -116,9 +116,18 @@ class UserSearch extends React.Component {
   }
 
 
+  _renderSectionHeader(sectionData, sectionTitle) {
+    return(
+      <View style={{height: 30, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', padding: 10, paddingLeft: 20, backgroundColor: colors.offWhite}}>
+        <Text>{ sectionTitle }</Text>
+      </View>
+    );
+  }
+
+
   _filterContacts(query) {
-    var filtered = StringMaster5000.filterContacts(this.props.allContacts._dataBlob.s1, query);
-    this.props.setFilteredContacts(filtered);
+    var filtered = SetMaster5000.filterContacts(this.props.allContactsArray, query);
+    this.props.setFilteredContacts(SetMaster5000.arrayToMap(filtered));
   }
 
 
@@ -156,13 +165,22 @@ class UserSearch extends React.Component {
   _getContactList() {
     return(
       <ListView
-        dataSource={(this.props.filteredContacts._dataBlob.s1.length > 0) ? this.props.filteredContacts : this.props.allContacts}
+        dataSource={(this.props.filteredContactsMap.getRowCount() > 0) ? this.props.filteredContactsMap : this.props.allContactsMap}
         renderRow={this._renderRow.bind(this)}
+        renderSectionHeader={this._renderSectionHeader}
         renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
         enableEmptySections
         />
     );
   }
+
+
+  // <ListView
+  //   dataSource={EMPTY_DATA_SOURCE.cloneWithRowsAndSections(SetMaster5000.arrayToMap(this.options))}
+  //   renderRow={this._renderRow.bind(this)}
+  //   renderSectionHeader={this._renderSectionHeader}
+  //   renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+  //   enableEmptySections />
 
 
   _getConfirmation() {

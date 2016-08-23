@@ -6,6 +6,7 @@ var Contacts = require('react-native-contacts');
 import * as Firebase from '../../services/Firebase';
 import * as Lambda from '../../services/Lambda';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
+import * as SetMaster5000 from '../../helpers/SetMaster5000';
 import * as Async from '../../helpers/Async';
 import * as Headers from '../../helpers/Headers';
 
@@ -81,7 +82,7 @@ function mapDispatchToProps(dispatch) {
               console.log("%cSuccessfully got native contacts:", "color:green;font-weight:900;");
               console.log(contacts);
               // Format contacts then log them to AsyncStorage
-              var c = StringMaster5000.formatNativeContacts(contacts);
+              var c = SetMaster5000.formatNativeContacts(contacts);
               dispatch(set.nativeContacts(c));
               Async.set('native_contacts', JSON.stringify(c));
             }
