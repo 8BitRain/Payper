@@ -276,12 +276,12 @@ class LandingScreenDisplay extends React.Component {
         if (!user.phone) {
           _this.props.dispatchSetProvider(_this.state.provider);
           _this.props.dispatchSetNewUserToken(token);
+
         }
         _this.setState({fbPhone: user.phone});
         _this.setState({provider: user.provider});
         _this.setState({doneLoading: true, signInSuccess: signedIn});
     });
-
   }
 
   handleUrlClick = (url) =>{

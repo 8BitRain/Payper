@@ -28,44 +28,6 @@ import colors from '../../styles/colors';
 import Loading from "../../components/Loading/Loading";
 var Mixpanel = require('react-native-mixpanel');
 
-
-
-    /*submitFundingSource(){
-      var data = {
-        routingNumber: this.routing,
-        accountNumber: this.account,
-        accountType: this.type,
-        accountName: this.name,
-        token: this.token
-      }
-
-
-      console.log(data);
-      var url = 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/addFundingSource';
-      fetch(url, {method: "POST", body: JSON.stringify(data)})
-      .then((response) => response.json())
-      .then((responseData) => {
-        //AsyncStorage.setItem("@Store:session_key", token);
-        console.log(responseData);
-      })
-      .done();
-
-    }
-
-    removeFundingSource(){
-      var data = {
-        token: this.token1
-      };
-
-      var url = 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/removeFundingSource';
-      fetch(url, {method: "POST", body: JSON.stringify(data)})
-      .then((response) => response.json())
-      .then((responseData) => {
-        //AsyncStorage.setItem("@Store:session_key", token);
-        console.log(responseData);
-      })
-      .done();
-    }*/
 class LoadingView extends React.Component {
   constructor(props) {
     super(props);
@@ -82,7 +44,7 @@ class LoadingView extends React.Component {
       <Loading
         complete={true}
         msgSuccess={"Welcome!"}
-        msgError={"Sign in failed"}
+        msgError={""}
         msgLoading={"Signing In"}
         success={true}
         successDestination={() => Actions.MainViewContainer()}
@@ -91,8 +53,22 @@ class LoadingView extends React.Component {
   }
 }
 const BankOnboardingView = React.createClass({
+
+
   render() {
-    if(this.props.startIav == '' && this.props.startMain == false){
+    if(this.props.loading){
+      return(
+        <Loading
+          complete={this.props.doneLoading}
+          msgSuccess={""}
+          msgError={"You seem lost"}
+          msgLoading={"One moment..."}
+          success={false}
+          successDestination={() => {console.log("SucessfullLoading")}}
+          errorDestination={() => {console.log("temp loading screen")}} />
+      );
+    }
+    else if(this.props.startIav == '' && this.props.startMain == false){
         console.log("BankOnboardingView: token: " + this.props.newUser.token);
         //this.props.dispatchSetFirebaseToken("eyJhbGciOiJSUzI1NiIsImtpZCI6ImI2MjVmZTczN2YwMTJmZTNmZDgzMjYyZjIxOGE1NTI1MjVmNTExNWYifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmlyZWJhc2UtY29pbmNhc3QiLCJhdWQiOiJmaXJlYmFzZS1jb2luY2FzdCIsImF1dGhfdGltZSI6MTQ3MDM0MDk4NiwidXNlcl9pZCI6Im4zb3puRFJ2bUJib3Z0N1ZpbVdOcHRaUlhScTEiLCJzdWIiOiJuM296bkRSdm1CYm92dDdWaW1XTnB0WlJYUnExIiwiaWF0IjoxNDcwMzQwOTg3LCJleHAiOjE0NzAzNDQ1ODcsImVtYWlsIjoidGVzdGVyM0B3aXNjLmVkdSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJ0ZXN0ZXIzQHdpc2MuZWR1IiwidGVzdGVyM0B3aXNjLmVkdSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.luyfhUg6wCx0g8T4jcHeU-LhJsoH_jlU5vvoKzfUVZyZm9C8gT2LxXD_MJjwGkGHzWa7kiVTt7FV0-BLX4t884XSJHPjBummJNnwWINgvbOROj7wkIMK15ZfQe149iGcXDQTJls3JEqfc9u_Iy87IX79Nm5SEnhe8UhS-UR0XP5wbXVygIfKPj4q3Ssp5ap-cs78b0p1M1-f49mUg1bcG3Lzc4wg5PVMGyxhQeu6KCiD_Aj3uyBYlW5bRCSXIHkGOUJCKxSAjYedroxC4xsFwMPEqjN1s49mnT3XZvetRUO4piShDSXYbtd_JKJrFdo-Bs9NyzLOHO56MNGQndhplw");
         switch(this.props.currentPagex){
@@ -106,6 +82,12 @@ const BankOnboardingView = React.createClass({
                 dispatchSetPhone={this.props.dispatchSetPhone}
                 dispatchSetPageX={this.props.dispatchSetPageX}
                 dispatchSetPhoneValidations={(text) => this.props.dispatchSetPhoneValidations(Validators.validatePhone(text))}
+                dispatchSetEmailValidations={(text) => this.props.dispatchSetEmailValidations(Validators.validateEmail(text))}
+                dispatchSetCFirstNameValidations={(text) => this.props.dispatchSetCFirstNameValidations(Validators.validateName(text))}
+                dispatchSetCLastNameValidations={(text) => this.props.dispatchSetCLastNameValidations(Validators.validateName(text))}
+                emailValidations={this.props.emailValidations}
+                cfirstNameValidations={this.props.cfirstNameValidations}
+                clastNameValidations={this.props.clastNameValidations}
                 phoneValidations={this.props.phoneValidations}
                 callbackClose={Actions.landingView}
               />
@@ -151,6 +133,7 @@ const BankOnboardingView = React.createClass({
         //<OnBoardingSummaryTest  firebase_token = {this.props.firebase_token} startIav={this.props.startIav} dispatchSetIav={this.props.dispatchSetIav} dispatchSetFirebaseToken={this.props.dispatchSetFirebaseToken}/>
     } else if (this.props.startIav != "" && this.props.startMain == false && this.props.startVerifyMicroDeposit == false){
       console.log("IAV: " + this.props.startIav);
+
       return(
         <Iav
           listen={this.props.listen}
@@ -159,6 +142,7 @@ const BankOnboardingView = React.createClass({
           newUser={this.props.newUser}
           startIav={this.props.startIav}
           startMain={this.props.startMain}
+          dispatchSetLoading={this.props.dispatchSetLoading}
           />
       )
     } else if(this.props.startMain == true){

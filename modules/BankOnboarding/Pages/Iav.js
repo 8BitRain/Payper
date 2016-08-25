@@ -58,6 +58,7 @@ class Iav extends React.Component {
     // Initialize the app
     //var url = 'http://www.getpayper.io/iav' + '?iav_token=' + this.props.startIav + '&firebase_token=' + this.firebase_token;
     //Linking.openURL(url).catch(err => console.error('An error occurred', err));
+    this.props.dispatchSetLoading(false);
     var _this = this;
     Async.get('user', (val) => {
       console.log("User: " + val);

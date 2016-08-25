@@ -22,6 +22,15 @@ const typography = StyleSheet.create({
     color: "#99ECFB"
   },
 
+  stateInput: {
+    height: 100,
+    padding: 10,
+    paddingLeft: 0,
+    color: "#99ECFB",
+    fontSize: 20
+  },
+
+
   // Helper styles
   marginLeft: { marginLeft: 20 },
   marginBottom: { marginBottom: 10 },

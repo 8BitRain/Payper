@@ -15,6 +15,8 @@ export default connect(
     startIav: state.getIn(['bankOnboarding', 'startIav']),
     startMain: state.getIn(['bankOnboarding', 'startMain']),
     startVerifyMicroDeposit: state.getIn(['bankOnboarding', 'startVerifyMicroDeposit']),
+    loading: state.getIn(['bankOnboarding', 'loading']),
+    done_loading: state.getIn(['bankOnboarding', 'loading']),
     firebase_token: state.getIn(['createAccount', 'token']),
     dwollaCustomer: state.getIn(['bankOnboarding', 'dwollaCustomer']),
     // Tracks pagination
@@ -26,8 +28,8 @@ export default connect(
     /*Validations*/
     phoneValidations: state.getIn(['bankOnboarding', 'phoneValidations']),
     emailValidations: state.getIn(['bankOnboarding', 'emailValidations']),
-    firstNameValidations: state.getIn(['bankOnboarding', 'firstNameValidations']),
-    lastNameValidations: state.getIn(['bankOnboarding', 'lastNameValidations']),
+    cfirstNameValidations: state.getIn(['bankOnboarding', 'cfirstNameValidations']),
+    clastNameValidations: state.getIn(['bankOnboarding', 'clastNameValidations']),
     basicInfoValidations: state.getIn(['bankOnboarding', 'basicInfoValidations'])
 
   }),
@@ -113,6 +115,12 @@ export default connect(
       dispatchSetLastName(input){
         dispatch(dispatchFunctions.setLastName(input));
       },
+      dispatchSetLoading(input){
+        dispatch(dispatchFunctions.setLoading(input));
+      },
+      dispatchSetDoneLoading(input){
+        dispatch(dispatchFunctions.setDoneLoading(input));
+      },
       dispatchSetEmail(input){
         dispatch(dispatchFunctions.setEmail(input));
       },
@@ -144,11 +152,11 @@ export default connect(
       dispatchSetEmailValidations(input){
         dispatch(dispatchFunctions.setEmailValidations(input));
       },
-      dispatchSetFirstNameValidations(input){
-        dispatch(dispatchFunctions.setFirstNameValidations(input));
+      dispatchSetCFirstNameValidations(input){
+        dispatch(dispatchFunctions.setCFirstNameValidations(input));
       },
-      dispatchSetLastNameValidations(input){
-        dispatch(dispatchFunctions.setLastNameValidations(input));
+      dispatchSetCLastNameValidations(input){
+        dispatch(dispatchFunctions.setCLastNameValidations(input));
       },
       dispatchSetBasicInfoValidations(input){
         dispatch(dispatchFunctions.setBasicInfoValidations(input));

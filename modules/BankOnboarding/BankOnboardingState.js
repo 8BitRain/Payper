@@ -25,19 +25,23 @@ var emailValidations = {
   valid: false
 };
 
-var firstNameValidations = {
-  valid: true
+var cfirstNameValidations = {
+  capitalized: false,
+  format: false,
+  valid: false
 };
 
-var lastNameValidations = {
-  valid: true
+var clastNameValidations = {
+  capitalized: false,
+  format: false,
+  valid: false
 };
 
 var basicInfoValidations = {
   phoneValidations: false,
   emailValidations: false,
-  firstNameValidations: true,
-  lastNameValidations: true,
+  cfirstNameValidations: true,
+  clastNameValidations: true,
   valid: false
 };
 
@@ -53,8 +57,10 @@ const initialState = Map({
     firebase_token: '',
     phoneValidations,
     emailValidations,
-    firstNameValidations,
-    lastNameValidations
+    cfirstNameValidations,
+    clastNameValidations,
+    loading: false,
+    doneLoading: false
 });
 
 // Action types
@@ -78,7 +84,9 @@ const SET_PAGEX = 'SET_PAGEX',
       SET_FIRST_NAME_VALIDATIONS = 'SET_FIRST_NAME_VALIDATIONS',
       SET_LAST_NAME_VALIDATIONS = 'SET_LAST_NAME_VALIDATIONS',
       SET_BASIC_INFO_VALIDATIONS = 'SET_BASIC_INFO_VALIDATIONS',
-      SET_EMAIL_VALIDATIONS = 'SET_EMAIL_VALIDATION';
+      SET_EMAIL_VALIDATIONS = 'SET_EMAIL_VALIDATION',
+      SET_LOADING = 'SET_LOADING',
+      SET_DONE_LOADING = 'SET_DONE_LOADING';
 
 
 // Action creators
@@ -98,11 +106,11 @@ export function setBasicInfoValidations(index){
   return {type: SET_BASIC_INFO_VALIDATIONS, index: index};
 };
 
-export function setFirstNameValidations(index){
+export function setCFirstNameValidations(index){
   return {type: SET_FIRST_NAME_VALIDATIONS, index: index};
 };
 
-export function setLastNameValidations(index){
+export function setCLastNameValidations(index){
   return {type: SET_LAST_NAME_VALIDATIONS, index: index};
 };
 
@@ -163,6 +171,13 @@ export function setFirebaseToken(index){
   return { type: SET_FIREBASETOKEN, index: index}
 };
 
+export function setLoading(index){
+  return { type: SET_LOADING, index: index}
+};
+
+export function setDoneLoading(index){
+  return { type: SET_DONE_LOADING, index: index}
+};
 export function activeFirebaseListeners(input) { return {type: SET_ACTIVE_FIREBASE_LISTENERS, input: input} };
 
 
@@ -189,23 +204,22 @@ export default function BankOnboardingReducer(state = initialState, action = {})
       var newState = state.set('startIav', action.index);
       return newState;
       break;
-      case SET_FIRST_NAME_VALIDATIONS:
-        var newState = state.set('firstNameValidations', action.index);
-        return newState;
-        break;
-        case SET_LAST_NAME_VALIDATIONS:
-          var newState = state.set('lastNameValidations', action.index);
-          return newState;
-          break;
-          case SET_EMAIL_VALIDATIONS:
-            var newState = state.set('emailValidations', action.index);
-            return newState;
-            break;
-            case SET_BASIC_INFO_VALIDATIONS:
-              var newState = state.set('basicInfoValidations', action.index);
-              return newState;
-              break;
-
+    case SET_FIRST_NAME_VALIDATIONS:
+      var newState = state.set('cfirstNameValidations', action.index);
+      return newState;
+      break;
+    case SET_LAST_NAME_VALIDATIONS:
+      var newState = state.set('clastNameValidations', action.index);
+      return newState;
+      break;
+    case SET_EMAIL_VALIDATIONS:
+      var newState = state.set('emailValidations', action.index);
+      return newState;
+      break;
+    case SET_BASIC_INFO_VALIDATIONS:
+      var newState = state.set('basicInfoValidations', action.index);
+      return newState;
+      break;
     case SET_START_MAIN:
       var newState = state.set('startMain', action.index);
       return newState;
@@ -220,6 +234,14 @@ export default function BankOnboardingReducer(state = initialState, action = {})
       break;
     case SET_FIREBASETOKEN:
       var newState = state.set('firebase_token', action.index);
+      return newState;
+      break;
+    case SET_LOADING:
+      var newState = state.set('loading', action.index);
+      return newState;
+      break;
+    case SET_DONE_LOADING:
+      var newState = state.set('done_loading', action.index);
       return newState;
       break;
     case SET_EMAIL:
@@ -240,49 +262,48 @@ export default function BankOnboardingReducer(state = initialState, action = {})
       var newState = state.set('dwollaCustomer', customer);
       return newState;
       break;
-          case SET_PHONE:
-            var customer = state.get('dwollaCustomer');
-            customer.phone = action.index;
-            var newState = state.set('dwollaCustomer', customer);
-            return newState;
-            break;
-            case SET_ADDRESS:
-              var customer = state.get('dwollaCustomer');
-              customer.address = action.index;
-              var newState = state.set('dwollaCustomer', customer);
-              return newState;
-              break;
-              case SET_CITY:
-                var customer = state.get('dwollaCustomer');
-                customer.city = action.index;
-                var newState = state.set('dwollaCustomer', customer);
-                return newState;
-                break;
-                case SET_STATE:
-                  var customer = state.get('dwollaCustomer');
-                  customer.state = action.index;
-                  var newState = state.set('dwollaCustomer', customer);
-                  return newState;
-                  break;
-                  case SET_ZIP:
-                    var customer = state.get('dwollaCustomer');
-                    customer.zip = action.index;
-                    var newState = state.set('dwollaCustomer', customer);
-                    return newState;
-                    break;
-                    case SET_DOB:
-                      var customer = state.get('dwollaCustomer');
-                      customer.dob = action.index;
-                      var newState = state.set('dwollaCustomer', customer);
-                      return newState;
-                      break;
-                      case SET_SSN:
-                        var customer = state.get('dwollaCustomer');
-                        customer.ssn = action.index;
-                        var newState = state.set('dwollaCustomer', customer);
-                        return newState;
-                        break;
-
+    case SET_PHONE:
+      var customer = state.get('dwollaCustomer');
+      customer.phone = action.index;
+      var newState = state.set('dwollaCustomer', customer);
+      return newState;
+      break;
+    case SET_ADDRESS:
+      var customer = state.get('dwollaCustomer');
+      customer.address = action.index;
+      var newState = state.set('dwollaCustomer', customer);
+      return newState;
+      break;
+    case SET_CITY:
+      var customer = state.get('dwollaCustomer');
+      customer.city = action.index;
+      var newState = state.set('dwollaCustomer', customer);
+      return newState;
+      break;
+    case SET_STATE:
+      var customer = state.get('dwollaCustomer');
+      customer.state = action.index;
+      var newState = state.set('dwollaCustomer', customer);
+      return newState;
+      break;
+    case SET_ZIP:
+      var customer = state.get('dwollaCustomer');
+      customer.zip = action.index;
+      var newState = state.set('dwollaCustomer', customer);
+      return newState;
+      break;
+    case SET_DOB:
+      var customer = state.get('dwollaCustomer');
+      customer.dob = action.index;
+      var newState = state.set('dwollaCustomer', customer);
+      return newState;
+      break;
+    case SET_SSN:
+      var customer = state.get('dwollaCustomer');
+      customer.ssn = action.index;
+      var newState = state.set('dwollaCustomer', customer);
+      return newState;
+      break;
   }
 
   return state;

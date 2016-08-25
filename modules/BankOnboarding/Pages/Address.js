@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, Picker} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import Entypo from "react-native-vector-icons/Entypo";
@@ -24,10 +24,71 @@ class Address extends React.Component {
    constructor(props) {
      super(props);
 
+
      // Props for animation
      this.animationProps = {
        fadeAnim: new Animated.Value(0) // init opacity 0
      };
+
+     this.state_list = {
+       ALABAMA:	'AL',
+       ALASKA:	'AK',
+       ARIZONA:	'AZ',
+       ARKANSAS:	'AR',
+       CALIFORNIA:	'CA',
+       COLORADO:	'CO',
+       CONNECTICUT:	'CT',
+       DELAWARE:	'DE',
+       FLORIDA:	'FL',
+       GEORGIA:	'GA',
+       HAWAII:	'HI',
+       IDAHO:	'ID',
+       ILLINOIS:	'IL',
+       INDIANA:	'IN',
+       IOWA:	'IA',
+       KANSAS:	'KS',
+       KENTUCKY:	'KY',
+       LOUISIANA:	'LA',
+       MAINE:	'ME',
+       MARYLAND:	'MD',
+       MASSACHUSETTS:	'MA',
+       MICHIGAN:	'MI',
+       MINNESOTA:	'MN',
+       MISSISSIPPI:	'MS',
+       MISSOURI:	'MO',
+       MONTANA:	'MT',
+       NEBRASKA:	'NE',
+       NEVADA:	'NV',
+       NEW_HAMPSHIRE:	'NH',
+       NEW_JERSEY:	'NJ',
+       NEW_MEXICO:	'NM',
+       NEW_YORK:	'NY',
+       NORTH_CAROLINA:	'NC',
+       NORTH_DAKOTA:	'ND',
+       OHIO: 'OH',
+       OKLAHOMA:	'OK',
+       OREGON:	'OR',
+       PENNSYLVANIA:	'PA',
+       RHODE_ISLAND:	'RI',
+       SOUTH_CAROLINA:	'SC',
+       SOUTH_DAKOTA:	'SD',
+       TENNESSEE:	'TN',
+       TEXAS:	'TX',
+       UTAH:	'UT',
+       VERMONT:	'VT',
+       VIRGINIA:	'VA',
+       WASHINGTON:	'WA',
+       WEST_VIRGINIA:	'WV',
+       WISCONSIN:	'WI',
+       WYOMING: 'WY'
+     }
+
+     this.state = {
+       /*states: {
+
+      },*/
+      state_index: 0
+     }
 
 
      /*if(this.firebase_token == ''){
@@ -44,6 +105,7 @@ class Address extends React.Component {
      this.addressInput = "";
      this.cityInput ="";
      this.stateInput = "";
+     this.stateIndex = 0
      this.zipInput = "";
 
 
@@ -75,8 +137,22 @@ class Address extends React.Component {
    }
    componentDidMount() {
      Animations.fadeIn(this.animationProps);
+     console.log(Object.keys(this.state_list));
      //Mixpanel.timeEvent("Email page Finished");
    }
+
+
+
+
+   onValueChange( value: string) {
+     const newState = {};
+     newState['state_index'] = value;
+     this.setState(newState);
+     //Dispatch the state code for states
+     this.props.dispatchSetState(Object.values(this.state_list)[value]);
+   }
+
+
    render() {
      return (
        <View style={[containers.container, backgrounds.email]}>
@@ -85,13 +161,28 @@ class Address extends React.Component {
          { /* Prompt and input field */ }
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Address</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"411 Oshun Dr"} onChangeText={(text) => {this.addressInput = text; this.props.dispatchSetAddress(this.addressInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"411 Oshun St"} keyboardType="email-address" />
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.addressInput = text; this.props.dispatchSetAddress(this.addressInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>City</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"Madison"} onChangeText={(text) => {this.cityInput = text; this.props.dispatchSetCity(this.cityInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.cityInput = text; this.props.dispatchSetCity(this.cityInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>State</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"WI"} onChangeText={(text) => {this.stateInput = text; this.props.dispatchSetState(this.stateInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />
+           {/*TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"WI"} onChangeText={(text) => {this.stateInput = text; this.props.dispatchSetState(this.stateInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />*/}
+           <Picker
+            style={[typography.marginSides, typography.marginBottom]}
+            selectedValue={this.state.state_index}
+            itemStyle={[typography.stateInput]}
+            onValueChange={(text) => { this.onValueChange(text); console.log("State Index: " + this.state.state_index); console.log(Object.keys(this.state_list)[text]); }}>
+
+            {
+              Object.keys(this.state_list).map(function(key, value){
+                return(
+                  <Picker.Item key={key} label={key} value={value}/>
+                )
+              })
+            }
+
+          </Picker>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>PostalCode(ZIP)</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"53703"} onChangeText={(text) => {this.zipInput = text; this.props.dispatchSetZip(this.zipInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="phone-pad" />
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.zipInput = text; this.props.dispatchSetZip(this.zipInput)}} autoCorrect={false}  autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="phone-pad" />
          </View>
 
            { /* Arrow nav buttons */ }
