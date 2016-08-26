@@ -300,7 +300,7 @@ export function updatePhone(data, callback){
 /**
   *   Given timestamp, and session_token, mark a notification as read
 **/
-export function seeNotification(options) {
+export function seeNotifications(options) {
   try {
     fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/notifications/markSeen", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())

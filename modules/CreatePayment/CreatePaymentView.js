@@ -70,8 +70,7 @@ class Purpose extends React.Component {
                 this.setState({ awaitingConfirmationOn: "", loading: false });
                 this.props.reset();
                 Actions.MainViewContainer();
-              }
-              else {
+              } else {
                 this.setState({ awaitingConfirmationOn: "", loading: false });
                 alert("Payment failed");
               }

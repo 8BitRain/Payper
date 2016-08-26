@@ -91,7 +91,7 @@ class Main extends React.Component {
           console.log("%cInitialization succeeded. Current user:", "color:green;font-weight:900;");
           console.log(this.props.currentUser);
           console.log("%cCurrent appFlags:", "color:green;font-weight:900;");
-          console.log(this.props);
+          console.log(this.props.flags);
         } else {
           console.log("%cInitialization failed.", "color:red;font-weight:900;");
         }

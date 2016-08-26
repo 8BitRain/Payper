@@ -64,11 +64,22 @@
 - [X] Add profile page
 - [X] Decrypt and append phone number and email address to user object on load
 - [X] Add section headers to user ListView in UserSearch
+- [X] (Vash) Modify markAsSeen endpoint to take an array of notification ID's and mark them all as seen at once
+- [X] Fix bug where notifications indicator is not rendered as a perfect circle on smaller devices
 - [ ] Add global user list to UserSearch
 - [ ] Add edit pages for certain properties of profile
 - [ ] Add micro deposit validation to CreatePaymentFlow if user has not yet verified their bank account
-- [ ] (Vash) Modify markAsSeen endpoint to take an array of notification ID's and mark them all as seen at once
-- [ ] Fix bug where notifications indicator is not rendered as a perfect circle on smaller devices
+
+### MVP Bugs (Brady)
+- [X] Fix bug where app crashes if an incoming payment is cancelled
+- [ ] Fix bug where user state is not properly reset upon signing out and signing in with another account
+- [ ] Fix bug where sign in sometimes fails
+- [ ] Fix bug where payment creation sometimes fails (talk to Vash)
+- [ ] Fix bug where user is returned to the incorrect tab after payment creation, resulting in Outgoing payments being rendered even though the Incoming tab is selected, and vice versa
+- [ ] Fix bug where payment state is not reset after creating a payment
+
+- [ ] Fix bug where cancel payment endpoint is not receiving a type
+- [ ] Implement token refreshing
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)

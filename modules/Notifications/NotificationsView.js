@@ -90,15 +90,9 @@ class Notifications extends React.Component {
     *   Mark unseen notifications as seen
   **/
   _seeNotifications() {
-    for (var i = 0; i < this.state.dataSource.getRowCount(); i++) {
-      var row = this.state.dataSource.getRowData(0, i)
-      if (!row.seen) {
-        row.seen = true;
-        Lambda.seeNotification({timestamp: row.ts, token: this.props.currentUser.token}, (response) => {
-          console.log("Lambda.seeNotification() response:", response);
-        });
-      }
-    }
+    Lambda.seeNotifications({ token: this.props.currentUser.token }, (res) => {
+      console.log("Lambda.seeNotifications() response:", response);
+    });
   }
 
 
