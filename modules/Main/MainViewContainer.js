@@ -153,6 +153,7 @@ function mapDispatchToProps(dispatch) {
       else if (page == "profile") dispatch(set.header(Headers.profileHeader()));
       dispatch(set.currentPage(page));
     },
+
   }
 }
 

@@ -70,7 +70,12 @@
 - [ ] Add edit pages for certain properties of profile
 - [ ] Add micro deposit validation to CreatePaymentFlow if user has not yet verified their bank account
 
-### MVP Bugs (Brady)
+### MVP Usability Bugs (Brady)
+- [X] Adjust CreatePayment flow so that after payment creation: payment creation => outgoing tab of payments view, request creating => incoming tab of payments view
+- [ ] Add back button to final page of CreatePaymentView
+- [ ] Change placeholder numbers for cost and number of payments to "$0" and "0 months," respectively
+
+### MVP Logic Bugs (Brady)
 - [X] Fix bug where app crashes if an incoming payment is cancelled
 - [X] Fix bug where Incoming/Outgoing filter state is not saved during payment creation, resulting in Outgoing payments being rendered even though the Incoming tab is selected, and vice versa
 - [ ] Fix bug where user state is not properly reset upon signing out and signing in with another account

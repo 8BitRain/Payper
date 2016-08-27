@@ -8,6 +8,7 @@ import * as Lambda from '../../services/Lambda';
 // Dispatch functions
 import * as set from './CreatePaymentState';
 import * as setUserSearch from '../UserSearch/UserSearchState';
+import * as setPayments from '../Payments/PaymentsState';
 
 // Base view
 import CreatePaymentView from './CreatePaymentView';
@@ -172,6 +173,10 @@ function mapDispatchToProps(dispatch) {
     reset: () => {
       dispatch(set.info({}));
       dispatch(setUserSearch.selectedContact({ username: "", first_name: "", last_name: "", profile_pic: "", type: "" }));
+    },
+
+    setActiveFilter: (f) => {
+      dispatch(setPayments.activeFilter(f));
     },
 
   }
