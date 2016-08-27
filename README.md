@@ -72,10 +72,10 @@
 
 ### MVP Bugs (Brady)
 - [X] Fix bug where app crashes if an incoming payment is cancelled
+- [X] Fix bug where Incoming/Outgoing filter state is not saved during payment creation, resulting in Outgoing payments being rendered even though the Incoming tab is selected, and vice versa
 - [ ] Fix bug where user state is not properly reset upon signing out and signing in with another account
 - [ ] Fix bug where sign in sometimes fails
 - [ ] Fix bug where payment creation sometimes fails (talk to Vash)
-- [ ] Fix bug where user is returned to the incorrect tab after payment creation, resulting in Outgoing payments being rendered even though the Incoming tab is selected, and vice versa
 - [ ] Fix bug where payment state is not reset after creating a payment
 
 - [ ] Fix bug where cancel payment endpoint is not receiving a type

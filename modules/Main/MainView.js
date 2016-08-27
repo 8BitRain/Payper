@@ -141,7 +141,8 @@ class Main extends React.Component {
               <Header
                 callbackSettings={ () => this.toggle() }
                 numUnseenNotifications={ this.props.numUnseenNotifications }
-                headerProps={ this.props.header } />
+                headerProps={ this.props.header }
+                activeFilter={ this.props.activeFilter } />
             </View>
 
             { /* Inner content */ }

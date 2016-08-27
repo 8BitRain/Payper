@@ -14,7 +14,7 @@ const initialState = Map({
   globalPayments: EMPTY_DATA_SOURCE.cloneWithRows([]),
   isEmpty: true,
   activeTab: "tracking",
-  activeFilter: "outgoing",
+  activeFilter: "incoming",
 });
 
 // Action types

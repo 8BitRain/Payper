@@ -180,22 +180,22 @@ function getFlowTabs(activeTab, callbackIn, callbackOut) {
     <View style={styles.flowTabWrap}>
       { /* 'In' tab */ }
       <TouchableHighlight
-        activeOpacity={(activeTab == 'in') ? 1.0 : 0.7}
-        underlayColor={(activeTab != 'in') ? 'transparent' : colors.white}
-        style={[styles.flowTabIn, (activeTab == 'in') ? styles.activeTab : null]}
+        activeOpacity={(activeTab == 'incoming') ? 1.0 : 0.7}
+        underlayColor={(activeTab != 'incoming') ? 'transparent' : colors.white}
+        style={[styles.flowTabIn, (activeTab == 'incoming') ? styles.activeTab : null]}
         onPress={() => callbackIn()}>
-        <Text style={[styles.flowTabText, (activeTab == 'in') ? styles.activeTabText : null]}>
+        <Text style={[styles.flowTabText, (activeTab == 'incoming') ? styles.activeTabText : null]}>
           Incoming
         </Text>
       </TouchableHighlight>
 
       { /* 'Out' tab */ }
       <TouchableHighlight
-        activeOpacity={(activeTab == 'out') ? 1.0 : 0.7}
-        underlayColor={(activeTab != 'out') ? 'transparent' : colors.white}
-        style={[styles.flowTabOut, (activeTab == 'out') ? styles.activeTab : null]}
+        activeOpacity={(activeTab == 'outgoing') ? 1.0 : 0.7}
+        underlayColor={(activeTab != 'outgoing') ? 'transparent' : colors.white}
+        style={[styles.flowTabOut, (activeTab == 'outgoing') ? styles.activeTab : null]}
         onPress={() => callbackOut()}>
-        <Text style={[styles.flowTabText, (activeTab == 'out') ? styles.activeTabText : null]}>
+        <Text style={[styles.flowTabText, (activeTab == 'outgoing') ? styles.activeTabText : null]}>
           Outgoing
         </Text>
       </TouchableHighlight>
@@ -209,7 +209,7 @@ class Header extends React.Component {
     super(props);
 
     this.state = {
-      active: 'out',
+      active: this.props.activeFilter,
       index: 0,
     }
   }
@@ -228,7 +228,7 @@ class Header extends React.Component {
           { this.props.headerProps.title ? <Text style={{fontFamily: 'Roboto', fontSize: 16, color: colors.white, paddingTop: 5}}>{ this.props.headerProps.title }</Text> : null }
           { this.props.headerProps.types.paymentIcons ? getPaymentIcons(this.props.headerProps.index) : null }
           { this.props.headerProps.types.circleIcons ? getCircleIcons(this.props.headerProps.numCircles, this.props.headerProps.index) : null }
-          { this.props.headerProps.types.flowTabs ? getFlowTabs(this.state.active, () => {this.setState({active: 'in'}); this.props.headerProps.callbackIn()}, () => {this.setState({active: 'out'}); this.props.headerProps.callbackOut()}) : null }
+          { this.props.headerProps.types.flowTabs ? getFlowTabs(this.state.active, () => {this.setState({active: 'incoming'}); this.props.headerProps.callbackIn()}, () => {this.setState({active: 'outgoing'}); this.props.headerProps.callbackOut()}) : null }
         </View>
 
         { /* Filler */ }

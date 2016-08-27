@@ -32,6 +32,9 @@ function mapStateToProps(state) {
     sideMenuIsOpen: state.getIn(['main', 'sideMenuIsOpen']),
     initialized: state.getIn(['main', 'initialized']),
 
+    // payments
+    activeFilter: state.getIn(['payments', 'activeFilter']),
+
   }
 }
 
