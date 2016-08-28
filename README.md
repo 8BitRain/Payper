@@ -73,7 +73,7 @@
 ### MVP Usability Bugs (Brady)
 - [X] Adjust CreatePayment flow so that after payment creation: payment creation => outgoing tab of payments view, request creating => incoming tab of payments view
 - [X] Add back button to final page of CreatePaymentView
-- [ ] Change placeholder numbers for cost and number of payments to "$0" and "0 months," respectively
+- [X] Change placeholder numbers for cost and number of payments to 0
 
 ### MVP Logic Bugs (Brady)
 - [ ] (May be fixed, come back to this if issue occurs again) Fix bug where user state is not properly reset upon signing out and signing in with another account

@@ -240,7 +240,7 @@ class Amount extends React.Component {
             </Text>
             <TextInput
               style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center', color: colors.richBlack}]}
-              placeholder={"5.00"}
+              placeholder={"0.00"}
               defaultValue={this.props.amount}
               onChangeText={(num) => this.props.setAmount(num)}
               keyboardType={"decimal-pad"}
@@ -255,7 +255,7 @@ class Amount extends React.Component {
             </Text>
             <TextInput
               style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center', color: colors.richBlack}]}
-              placeholder={"12"}
+              placeholder={"0"}
               defaultValue={this.props.payments}
               onChangeText={(num) => this.props.setPayments(num)}
               keyboardType={"number-pad"} />
