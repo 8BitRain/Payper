@@ -78,7 +78,7 @@ class Purpose extends React.Component {
 
                 // Return to home page
                 Actions.MainViewContainer();
-                
+
               } else {
                 this.setState({ awaitingConfirmationOn: "", loading: false });
                 alert("Payment failed");
@@ -327,6 +327,9 @@ class CreatePaymentView extends React.Component {
   _setPageIndex(i) {
     if (i != this.state.header.index) {
       var h = this.state.header;
+      if (i == 2) h = Headers.createPaymentPurposeHeader({
+        callbackBack: () => this._setPageIndex(1),
+      });
       h.index = i;
       this.setState({ header: h, inputting: this.pages[i] });
     }

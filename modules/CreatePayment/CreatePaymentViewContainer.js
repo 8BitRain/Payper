@@ -7,6 +7,7 @@ import * as Lambda from '../../services/Lambda';
 
 // Dispatch functions
 import * as set from './CreatePaymentState';
+import * as setMain from '../Main/MainState';
 import * as setUserSearch from '../UserSearch/UserSearchState';
 import * as setPayments from '../Payments/PaymentsState';
 
@@ -123,15 +124,12 @@ function mapDispatchToProps(dispatch) {
         sender = options.otherUser;
       }
 
-      console.log("Recipient:", recip);
-      console.log("Sender:", sender);
-      console.log("Payment:", payment);
-
       // Is this an invite?
       if (payment.type == "payment" && !recip.username || payment.type == "request" && !sender.username) {
         payment.invite = true;
         payment.invitee = (payment.type == "payment") ? "recip" : "sender";
         payment.phoneNumber = options.otherUser.phone;
+        payment.type = "invite";
       } else {
         payment.invite = false;
       }
@@ -155,14 +153,11 @@ function mapDispatchToProps(dispatch) {
     sendPayment: (payment, callback) => {
       console.log("Payment in sendPayment():", payment);
       if (payment.invite) {
-        console.log("----- Invite -----");
         Lambda.inviteViaPayment(payment, (success) => {
-          console.log("Reached inviteViaPayment callback...");
           if (typeof callback == "function") callback(success);
           else console.log("%cCallback is not a function.", "color:red;font-weight;");
         });
       } else {
-        console.log("----- Generic -----");
         Lambda.createPayment(payment, (success) => {
           if (typeof callback == "function") callback(success);
           else console.log("%cCallback is not a function.", "color:red;font-weight;");
@@ -171,12 +166,26 @@ function mapDispatchToProps(dispatch) {
     },
 
     reset: () => {
-      dispatch(set.info({}));
       dispatch(setUserSearch.selectedContact({ username: "", first_name: "", last_name: "", profile_pic: "", type: "" }));
+      dispatch(set.info({}));
+      dispatch(set.amount(""));
+      dispatch(set.purpose(""));
+      dispatch(set.payments(""));
+      dispatch(set.recipID(""));
+      dispatch(set.recipName(""));
+      dispatch(set.recipPic(""));
+      dispatch(set.senderID(""));
+      dispatch(set.senderName(""));
+      dispatch(set.senderPic(""));
+      dispatch(set.type(""));
+      dispatch(set.token(""));
+      dispatch(set.confirmed(""));
+      dispatch(set.invite(""));
+      dispatch(set.phoneNumber(""));
     },
 
-    setActiveFilter: (f) => {
-      dispatch(setPayments.activeFilter(f));
+    setActiveFilter: (options) => {
+      dispatch(setPayments.activeFilter(options));
     },
 
   }

@@ -243,12 +243,15 @@ export function getIavToken(data, callback){
   *   2) Redirect user to landing page
 **/
 export function signOut() {
+
+  // Log out of Firebase
   Firebase.signOut(() => {
     Async.set('session_token', '');
     Async.set('user', '', () => {
       Actions.LandingScreenContainer();
     });
   });
+
 };
 
 

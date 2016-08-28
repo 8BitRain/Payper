@@ -2,6 +2,8 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+var FBLoginManager = require('NativeModules').FBLoginManager;
+
 
 // Helper functions
 import * as Init from '../../_init';
@@ -23,9 +25,14 @@ class SplashView extends React.Component {
         Actions.MainViewContainer();
       } else {
         console.log("%cSigned in: " + signedIn, "color:red;font-weight:900;");
-        setTimeout(function() {
-          Actions.LandingScreenContainer();
-        }, 1500);
+
+        // Log out of Facebook auth if logged in
+        FBLoginManager.logout(function(err, data) {
+          if (err) console.log(err, data);
+          else console.log("%cLogged out of Facebook", "color:green;font-weight:900;");
+        });
+
+        Actions.LandingScreenContainer();
       }
     });
   }

@@ -138,9 +138,6 @@ class PaymentPreview extends React.Component {
   }
 
   render() {
-
-    console.log("<Transaction /> props:", this.props);
-
     /**
       *   Payment invites
     **/

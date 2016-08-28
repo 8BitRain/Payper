@@ -139,6 +139,30 @@ export function createPaymentHeader() {
 };
 
 
+// Header props for last page in the Create Payment flow
+export function createPaymentPurposeHeader(options) {
+  var props = {
+    types: {
+      "paymentIcons": true,
+      "circleIcons": false,
+      "settingsIcon": false,
+      "closeIcon": false,
+      "closeIconTopRight": true,
+      "backIcon": true,
+      "flowTabs": false,
+    },
+    index: 0,
+    numCircles: null,
+    title: null,
+    callbackIn: null,
+    callbackOut: null,
+    callbackBack: () => options.callbackBack(),
+  };
+
+  return props;
+};
+
+
 // Header props for Create Payment flow
 export function profileHeader() {
   var props = {

@@ -127,6 +127,15 @@ const styles = StyleSheet.create({
 // Styles for unread notifications indicator
 import notificationStyles from '../../styles/Notifications/Preview';
 
+// Return a back icon
+function getBackIcon(callback) {
+  return(
+    <Button onPress={() => callback()}>
+      <Entypo style={styles.iconClose} name="chevron-small-left" size={28} color={colors.white}/>
+    </Button>
+  );
+};
+
 // Return a close modal icon
 function getCloseIcon(callback) {
   return(
@@ -221,6 +230,7 @@ class Header extends React.Component {
         <View style={styles.chunkQuo}>
           { this.props.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
           { this.props.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings, this.props.numUnseenNotifications) : null }
+          { this.props.headerProps.types.backIcon ? getBackIcon(this.props.callbackBack) : null }
         </View>
 
         { /* Contains 'CircleIcons' or 'PaymentIcons' if specified */ }
@@ -232,7 +242,9 @@ class Header extends React.Component {
         </View>
 
         { /* Filler */ }
-        <View style={styles.chunkQuo}></View>
+        <View style={styles.chunkQuo}>
+          { this.props.headerProps.types.closeIconTopRight ? getCloseIcon(this.props.callbackClose) : null }
+        </View>
       </View>
     );
   }

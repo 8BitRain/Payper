@@ -112,6 +112,7 @@ function mapDispatchToProps(dispatch) {
 
       if (options.flow == "out") dispatch(set.outgoingPayments(ds));
       else if (options.flow == "in") dispatch(set.incomingPayments(ds));
+
       Lambda.cancelPayment({type: options.type, payment_id: options.pid, token: options.token});
     },
 
