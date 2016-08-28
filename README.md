@@ -64,11 +64,10 @@
 - [X] Add profile page
 - [X] Decrypt and append phone number and email address to user object on load
 - [X] Add section headers to user ListView in UserSearch
-- [X] (Vash) Modify markAsSeen endpoint to take an array of notification ID's and mark them all as seen at once
 - [X] Fix bug where notifications indicator is not rendered as a perfect circle on smaller devices
 - [ ] Add global user list to UserSearch
 - [ ] Add edit pages for certain properties of profile
-- [ ] Add micro deposit validation to CreatePaymentFlow if user has not yet verified their bank account
+- [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
 
 ### MVP Usability Bugs (Brady)
 - [X] Adjust CreatePayment flow so that after payment creation: payment creation => outgoing tab of payments view, request creating => incoming tab of payments view
@@ -76,8 +75,8 @@
 - [X] Change placeholder numbers for cost and number of payments to 0
 
 ### MVP Logic Bugs (Brady)
-- [ ] (May be fixed, come back to this if issue occurs again) Fix bug where user state is not properly reset upon signing out and signing in with another account
-- [ ] (Have Vash check if he's attaching type to newly created payments) Fix bug where payment creation endpoint was not receiving a payment type (payment, request, or invite)
+- [ ] Fix bug where user state is not properly reset upon signing out and signing in with another account May be fixed, come back to this if issue occurs again)
+- [ ] Fix bug where payment creation endpoint was not receiving a payment type (payment, request, or invite) (Have Vash check if he's attaching type to newly created payments)
 - [X] Fix bug where app crashes if an incoming payment is cancelled
 - [X] Fix bug where Incoming/Outgoing filter state is not saved during payment creation, resulting in Outgoing payments being rendered even though the Incoming tab is selected, and vice versa
 - [X] Fix bug where payment state is not reset after creating a payment

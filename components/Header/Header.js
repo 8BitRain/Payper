@@ -242,7 +242,7 @@ class Header extends React.Component {
         </View>
 
         { /* Filler */ }
-        <View style={styles.chunkQuo}>
+        <View style={[styles.chunkQuo, { alignItems: 'center' }]}>
           { this.props.headerProps.types.closeIconTopRight ? getCloseIcon(this.props.callbackClose) : null }
         </View>
       </View>
