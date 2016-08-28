@@ -32,7 +32,7 @@ class Settings extends React.Component {
       {rowTitle: "Home", iconName: "home", destination: () => this.props.changePage("payments")},
       {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
       {rowTitle: "Bank Accounts", iconName: "wallet", destination: () => this.props.changePage("fundingSources")},
-      {rowTitle: "FAQ", iconName: "help-with-circle", destination: () => console.log("Pressed 'FAQ'")},
+      // {rowTitle: "FAQ", iconName: "help-with-circle", destination: () => console.log("Pressed 'FAQ'")},
     ];
 
     if (this.props.currentUser.provider != "facebook") {
