@@ -45,14 +45,6 @@ const getSceneStyle = function (props, computedProps) {
   return style;
 };
 
-
-
-// TODO
-// Async.set('session_token', "");
-// require('firebase').auth().signOut();
-
-
-console.log('test');
 export default class Coincast extends React.Component {
 
   render() {
