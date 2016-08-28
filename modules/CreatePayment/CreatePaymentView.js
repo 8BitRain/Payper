@@ -327,9 +327,8 @@ class CreatePaymentView extends React.Component {
   _setPageIndex(i) {
     if (i != this.state.header.index) {
       var h = this.state.header;
-      if (i == 2) h = Headers.createPaymentPurposeHeader({
-        callbackBack: () => this._setPageIndex(1),
-      });
+      if (i == 2) h = Headers.createPaymentPurposeHeader({ callbackBack: () => this._setPageIndex(1) });
+      else h = Headers.createPaymentHeader();
       h.index = i;
       this.setState({ header: h, inputting: this.pages[i] });
     }
@@ -344,7 +343,8 @@ class CreatePaymentView extends React.Component {
         { /* Header */ }
         <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
           <Header
-            callbackClose={ () => Actions.MainViewContainer({direction: "vertical"}) }
+            callbackClose={ () => { this.props.reset(); Actions.MainViewContainer({direction: "vertical"}); }}
+            callbackBack={ () => this._setPageIndex(1) }
             numUnseenNotifications={ this.props.numUnseenNotifications }
             headerProps={ this.state.header } />
         </View>
