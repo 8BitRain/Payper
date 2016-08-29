@@ -348,11 +348,11 @@ class LandingScreenDisplay extends React.Component {
             <Text style={[typography.main, typography.fontSizeTitle, {paddingTop: 45, color: colors.accent}]}>Payper</Text>
           </View>
 
-          <View style={[container.image, {flex: 0.4}]}>
+          <View style={[container.image, {flex: 0.6}]}>
             <ImageCarousel />
           </View>
 
-          <View style={{flex: 0.4, justifyContent: 'flex-start', alignItems: 'center'}}>
+          <View style={{flex: 0.2, justifyContent: 'flex-start', alignItems: 'center'}}>
             <LoginButton
               style={{width: dimensions.width - 50, height: 53, marginBottom: 10}}
               readPermissions={["email", "public_profile", "user_friends"]}
@@ -374,8 +374,8 @@ class LandingScreenDisplay extends React.Component {
                 }
               }
               onLogoutFinished={() => { /* alert("logout.") */ }} />
+
             <GenericSignIn destination={Actions.SignInViewContainer} />
-            <GenericSignUp destination={Actions.CreateAccountViewContainer} />
           </View>
 
           { /* TOS */ }

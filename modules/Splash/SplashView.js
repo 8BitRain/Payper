@@ -25,13 +25,6 @@ class SplashView extends React.Component {
         Actions.MainViewContainer();
       } else {
         console.log("%cSigned in: " + signedIn, "color:red;font-weight:900;");
-
-        // Log out of Facebook auth if logged in
-        // FBLoginManager.logout(function(err, data) {
-        //   if (err) console.log(err, data);
-        //   else console.log("%cLogged out of Facebook", "color:green;font-weight:900;");
-        // });
-
         Actions.LandingScreenContainer();
       }
     });

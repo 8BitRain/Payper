@@ -73,6 +73,7 @@
 - [X] Adjust CreatePayment flow so that after payment creation: payment creation => outgoing tab of payments view, request creating => incoming tab of payments view
 - [X] Add back button to final page of CreatePaymentView
 - [X] Change placeholder numbers for cost and number of payments to 0
+- [X] Change landing page options to just "Continue with Facebook" and "Continue without Facebook"
 
 ### MVP Logic Bugs (Brady)
 - [ ] Fix bug where user state is not properly reset upon signing out and signing in with another account May be fixed, come back to this if issue occurs again)

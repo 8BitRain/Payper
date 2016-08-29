@@ -9,17 +9,19 @@ var dimensions = Dimensions.get('window');
 
 var styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
+    // marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
   button: {
-    backgroundColor: colors.green,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    marginTop: 13,
     width: dimensions.width - 50,
-    height: 50,
-    paddingTop: 14.5,
+    height: 30,
     borderRadius: 4,
-    color: colors.white,
   }
 });
 
@@ -32,7 +34,11 @@ class GenericSignIn extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Button style={styles.button} onPress={this.props.destination}>Sign In</Button>
+        <Button style={styles.button} onPress={this.props.destination}>
+          <Text style={{fontFamily: 'Roboto', color: colors.white, fontSize: 16, fontWeight: '100'}}>
+            Continue without Facebook
+          </Text>
+        </Button>
       </View>
     );
   }
