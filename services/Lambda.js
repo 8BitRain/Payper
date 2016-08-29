@@ -62,7 +62,7 @@ export function getUserWithToken(sessionToken, callback) {
 **/
 export function createUser(user, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create", {method: "POST", body: JSON.stringify(user)})
+      fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create", {method: "POST", body: JSON.stringify(user)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -90,8 +90,9 @@ export function createFBUser(user, callback) {
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
-        console.log("Create user Lambda response", responseData);
-        console.log("USER ACCOUNT STATUS: " +  responseData.account_status);
+        //console.log("Create user Lambda response", responseData);
+        console.log("LAMBDA => USER ACCOUNT STATUS: " +  responseData.account_status);
+        console.log("LAMBDA => LAMBDA RESPONSE DATA: " + JSON.stringify(responseData));
         if (typeof callback == 'function') callback(responseData.user, responseData.account_status);
       } else {
         console.log("Error getting FBuser with token", responseData.errorMessage);
