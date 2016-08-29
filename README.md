@@ -77,13 +77,19 @@
 
 ### MVP Logic Bugs (Brady)
 - [ ] Fix bug where user state is not properly reset upon signing out and signing in with another account May be fixed, come back to this if issue occurs again)
-- [ ] Fix bug where payment cancellation endpoint was not receiving a payment type (payment, request, or invite) (Have Vash check if he's attaching type to newly created payments)
 - [X] Fix bug where app crashes if an incoming payment is cancelled
 - [X] Fix bug where Incoming/Outgoing filter state is not saved during payment creation, resulting in Outgoing payments being rendered even though the Incoming tab is selected, and vice versa
 - [X] Fix bug where payment state is not reset after creating a payment
 - [ ] Fix bug where sign in sometimes fails
-- [ ] Fix bug where payment creation sometimes fails (talk to Vash)
-- [ ] Implement token on splash page if active token has expired
+- [ ] Fix bug where, upon Facebook sign in, user's session token is undefined on the add phone number screen
+- [ ] Fix bug where the invite via payment endpoint receives incorrect sender/recip traits
+
+### Vash Thingz
+- [ ] Fix bug where payment creation sometimes fails
+- [ ] Fix bug where inviting via payment exits before completing request
+- [ ] Create Lambda endpoint that returns a decrypted phoneNumber:uid list
+- [ ] Attach "type" to Firebase payment object when creating a new payment
+- [ ] Discuss backend logic for token refresh (Option 1: Create an endpoint called updateSessionToken that takes a new session token and an old session token, cycles the old token out, and returns a user object. Option 2: Completely handle refresh in the backend. Option 1 > Option 2, probably)
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)

@@ -27,6 +27,10 @@ export function signInWithToken(callback) {
   try {
     Async.get('session_token', (val) => {
       if (val) {
+
+        console.log("%cSuccessfully retrieved user object:", "color:orange;font-weight:900;");
+        console.log(val);
+
         Lambda.getUserWithToken(val, (user) => {
           if (user) {
 
@@ -41,8 +45,11 @@ export function signInWithToken(callback) {
             });
 
           } else {
-            if (typeof callback == 'function') callback(false);
+
+            // Token has expired. Alert caller
+            if (typeof callback == 'function') callback("expired_token");
             else console.log("Callback is not a function.");
+            
           }
         });
       } else {
@@ -50,6 +57,36 @@ export function signInWithToken(callback) {
         else console.log("Callback is not a function.");
       }
     });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Return new session token
+**/
+export function signInWithRefreshToken(callback) {
+  try {
+
+    Firebase.getSessionToken((token) => {
+
+      // Failed to refresh token. User must sign in manually
+      if (token == null) callback(false);
+
+      // Token refresh succeeded
+      else {
+        // Log token to AsyncStorage
+        Async.set('session_token', token, () => {
+          // Attempt sign in
+          signInWithToken(function(signedIn) {
+            if (typeof callback == 'function') callback(signedIn);
+            else console.log("%cCallback is not a function", "color:red;font-weight:900");
+          });
+        });
+      }
+    });
+
   } catch (err) {
     console.log(err);
   }

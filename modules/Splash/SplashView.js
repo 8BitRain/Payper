@@ -16,17 +16,39 @@ class SplashView extends React.Component {
     super(props);
   }
 
+  _handleSignInSuccess() {
+    console.log("%cSigned in: true", "color:green;font-weight:900;");
+    Actions.MainViewContainer();
+  }
+
+  _handleSignInFailure() {
+    console.log("%cSigned in: false", "color:red;font-weight:900;");
+    Actions.LandingScreenContainer();
+  }
+
   // Try to sign in with session token. If none is present, take the user to
   // the landing screen.
   componentWillMount() {
+
+    // Extend scope
+    const _this = this;
+
     Init.signInWithToken(function(signedIn) {
-      if (signedIn) {
-        console.log("%cSigned in: " + signedIn, "color:green;font-weight:900;");
-        Actions.MainViewContainer();
-      } else {
-        console.log("%cSigned in: " + signedIn, "color:red;font-weight:900;");
-        Actions.LandingScreenContainer();
-      }
+
+      // Session token was valid. Sign in succeeded
+      if (signedIn) _this._handleSignInSuccess();
+
+      // Session token has expired. Refresh the token and try again
+      // else if (signedIn = "token_expired") {
+      //   console.log("%cSession token has expired. Refreshing...", "color:orange;font-weight:900;");
+      //   Init.signInWithRefreshToken(function(signedIn) {
+      //     if (signedIn) this._handleSignInSuccess();
+      //     else this._handleSignInFailure();
+      //   });
+      // }
+
+      // No session token was found. User must sign in manually
+      else _this._handleSignInFailure();
     });
   }
 

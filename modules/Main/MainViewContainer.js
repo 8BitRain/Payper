@@ -91,6 +91,9 @@ function mapDispatchToProps(dispatch) {
             }
           });
 
+          // Get decrypted phoneNumber:uid list
+          
+
           if (typeof callback == 'function') callback(true);
           else console.log("Callback is not a function.");
         }

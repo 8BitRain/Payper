@@ -43,15 +43,18 @@ export function arrayToMap(arr) {
   *   Formats native cell phone contacts and returns them as an array
   *   Contact format: { first_name: "John", last_name: "Doe", phone: 2623508312, pic: "..." }
 **/
-export function formatNativeContacts(contacts) {
+export function formatNativeContacts(contacts, phoneNumbers) {
   var arr = [],
       nums = [],
       curr;
 
   for (var contact in contacts) {
     curr = contacts[contact];
+
+    // If this contact doesn't have a phone number, skip over it
     if (!curr.phoneNumbers[0]) continue;
 
+    // Format contact
     var c = {
       first_name: firstName = (curr.givenName) ? curr.givenName : "",
       last_name: lastName = (curr.familyName) ? curr.familyName : "",
@@ -62,6 +65,7 @@ export function formatNativeContacts(contacts) {
       sectionTitle: "Phone Contacts",
     }
 
+    //
     if (!_.includes(nums, c.phone)) arr.push(c);
     nums.push(c.phone);
   }
