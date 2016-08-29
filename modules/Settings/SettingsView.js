@@ -39,7 +39,7 @@ class Settings extends React.Component {
           cancelMessage: "Nevermind",
           confirmMessage: "Yes",
           cancel: () => console.log("Nevermind"),
-          confirm: () => Linking.openURL("https://getpayper.io/faq").catch(err => console.error('An error occurred', err)),
+          confirm: () => Linking.openURL("https://www.getpayper.io/faq").catch(err => console.error('An error occurred', err)),
         });
       }},
     ];
