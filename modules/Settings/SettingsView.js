@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions } from 'react-native';
+import { View, Text, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions, Linking } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 const FBSDK = require('react-native-fbsdk');
 const { LoginButton } = FBSDK;
@@ -32,7 +32,16 @@ class Settings extends React.Component {
       {rowTitle: "Home", iconName: "home", destination: () => this.props.changePage("payments")},
       {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
       {rowTitle: "Bank Accounts", iconName: "wallet", destination: () => this.props.changePage("fundingSources")},
-      // {rowTitle: "FAQ", iconName: "help-with-circle", destination: () => console.log("Pressed 'FAQ'")},
+      {rowTitle: "FAQ", iconName: "help-with-circle", destination: () => {
+        Alert.confirmation({
+          title: "Alert",
+          message: "Payper would like to open Safari. Is that OK?",
+          cancelMessage: "Nevermind",
+          confirmMessage: "Yes",
+          cancel: () => console.log("Nevermind"),
+          confirm: () => Linking.openURL("https://getpayper.io/faq").catch(err => console.error('An error occurred', err)),
+        });
+      }},
     ];
 
     if (this.props.currentUser.provider != "facebook") {
