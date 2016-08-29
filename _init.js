@@ -49,7 +49,7 @@ export function signInWithToken(callback) {
             // Token has expired. Alert caller
             if (typeof callback == 'function') callback("expired_token");
             else console.log("Callback is not a function.");
-            
+
           }
         });
       } else {
@@ -188,15 +188,6 @@ export function signInWithFacebook(data, callback) {
 /**
   *   1) Create Firebase user
   *   2) Get a token for the user and attach it to the user's object
-<<<<<<< HEAD
-  * 2.5) Set initial flags for user
-=======
-<<<<<<< HEAD
-  * 2.5) Set initial flags for user
-=======
-  *   2.5) Set initial flags for user
->>>>>>> origin/create-payment-refactor
->>>>>>> eric_brady_merge
   *   3) POST user's object to Lambda endpoint
   *   4) Initialize the app
 **/

@@ -25,6 +25,10 @@
 - [X] Apply fade animation to inner content during create account onboarding, not entire view
 - [ ] Fix loading for IAV
 - [X] Style 'Continue with Facebook' button
+- [ ] Increase padding on "Continue without Facebook" text (difficult to press rn)
+- [ ] Revamp loading screens
+- [ ] Get rid of ugly refresh on notifications indicator
+- [ ] Find a sleeker, more modern icon set
 
 ### Architecture
 **Refactor the following to fit new Firebase/Redux model:**
@@ -36,8 +40,7 @@
 - [X] Header only displays notifications on Notifications page (probably an
   issue with how numNotifications is passed to <Content />)
 - [X] "Runtime is not ready for debugging" randomly appears.  **This went away when I downgraded from Node 6.2.0 to 5.5.0**
-- [ ] "Severe Error, duplicates recorded in Firebase, with no auth information. To reproduce
-      delete an id but not a users and Facebook id, or switch this around until you can get duplicate users through Facebook sign in or regular user sign in." https://github.com/facebook/react-native/issues/6682
+- [ ] "Severe Error, duplicates recorded in Firebase, with no auth information. To reproduce delete an id but not a users and Facebook id, or switch this around until you can get duplicate users through Facebook sign in or regular user sign in." https://github.com/facebook/react-native/issues/6682
 
 ### Brady (MVP)
 - [X] Style payment invites
@@ -66,8 +69,12 @@
 - [X] Add section headers to user ListView in UserSearch
 - [X] Fix bug where notifications indicator is not rendered as a perfect circle on smaller devices
 - [ ] Add global user list to UserSearch
-- [ ] Add edit pages for certain properties of profile
+- [ ] Add edit pages for profile attributes
+- [ ] Add photo uploading capabilities
 - [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
+- [ ] Add an onPress destination to notifications
+- [ ] Create a PaymentSeries module, containing detailed information about the payment series, and the option to skip/reschedule payments
+- [ ] Redesign BankAccountsView
 
 ### MVP Usability Bugs (Brady)
 - [X] Adjust CreatePayment flow so that after payment creation: payment creation => outgoing tab of payments view, request creating => incoming tab of payments view
@@ -84,7 +91,7 @@
 - [ ] Fix bug where, upon Facebook sign in, user's session token is undefined on the add phone number screen
 - [ ] Fix bug where the invite via payment endpoint receives incorrect sender/recip traits
 
-### Vash Thingz
+### Things I Need Vash For Lol (Brady)
 - [ ] Fix bug where payment creation sometimes fails
 - [ ] Fix bug where inviting via payment exits before completing request
 - [ ] Create Lambda endpoint that returns a decrypted phoneNumber:uid list
