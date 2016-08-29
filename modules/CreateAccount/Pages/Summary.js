@@ -154,7 +154,7 @@ class Summary extends React.Component {
        <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}}/>
 
        { /* Header */ }
-       <Header callbackClose={() => {Actions.landingView}} headerProps={this.headerProps} />
+       <Header callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
      </Animated.View>
    );
  }

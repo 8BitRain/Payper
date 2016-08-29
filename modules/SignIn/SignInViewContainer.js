@@ -24,7 +24,7 @@ var buttonStyles = StyleSheet.create({
   button: {
     backgroundColor: colors.richBlack,
     width: dimensions.width - 50,
-    height: 50,
+    // height: 50,
     borderRadius: 4,
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4,
@@ -229,7 +229,7 @@ class SignInView extends React.Component {
               <TouchableHighlight
                 style={{flex: 1.0}}
                 onPress={() => Actions.CreateAccountViewContainer()}>
-                <Text style={{textAlign: 'center', fontFamily: 'Roboto', color: colors.accent, fontSize: 17, fontWeight: '100', paddingTop: 13.5}}>
+                <Text style={{textAlign: 'center', fontFamily: 'Roboto', color: colors.accent, fontSize: 17, fontWeight: '100', padding: 10}}>
                   Don{"'"}t have an account? Sign up here.
                 </Text>
               </TouchableHighlight>
