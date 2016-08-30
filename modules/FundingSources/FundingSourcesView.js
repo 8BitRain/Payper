@@ -1,6 +1,7 @@
 // Dependencies
 import React from 'react';
-import { View, Text, ListView, RecyclerViewBackedScrollView } from 'react-native';
+import { View, Text, TouchableHighlight, ListView, RecyclerViewBackedScrollView } from 'react-native';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 // Helper functions
 import * as Lambda from "../../services/Lambda";
@@ -93,6 +94,17 @@ class FundingSources extends React.Component {
   render() {
     return (
       <View style={{flex: 1, backgroundColor: colors.richBlack}}>
+        <TouchableHighlight
+          underlayColor={colors.richBlack}
+          activeOpacity={0.7}
+          onPress={() => console.log("Pressed 'Add a new bank account'")}>
+          <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: colors.richBlack}}>
+            <Entypo name="plus" size={30} color={colors.accent} />
+            <Text style={{fontFamily: 'Roboto', fontWeight: '100', fontSize: 16, paddingLeft: 10, color: colors.accent}}>
+              Add a new bank acount
+            </Text>
+          </View>
+        </TouchableHighlight>
         { /* Render list of notifications or empty state */  }
         {(this.state.empty) ? this._getEmptyState() : this._getFundingSourceList() }
       </View>

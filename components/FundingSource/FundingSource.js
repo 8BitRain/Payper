@@ -57,7 +57,7 @@ class FundingSource extends React.Component {
   constructor(props) {
     super(props);
 
-    this.actionSheetOptions = ['Set as Active Bank Account', 'Edit Bank Account', 'Delete Bank Account', 'Nevermind'];
+    this.actionSheetOptions = ['Set Active', 'Edit', 'Delete', 'Nevermind'];
   }
 
   _handleMenuPress() {
