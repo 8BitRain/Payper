@@ -38,7 +38,6 @@ class FundingSources extends React.Component {
       ]),
     };
 
-
     Lambda.getFundingSource({ token: this.props.currentUser.token });
   }
 
@@ -68,7 +67,7 @@ class FundingSources extends React.Component {
   // Returns a ready-to-render notification ListView
   _getFundingSourceList() {
     return(
-      <View style={{flex: 0.9, paddingTop: 0, backgroundColor: colors.white}}>
+      <View style={{flex: 0.9, paddingTop: 0, backgroundColor: colors.richBlack}}>
         <ListView
           dataSource={this.state.fundingSources}
           renderRow={this._renderRow.bind(this)}
@@ -84,7 +83,7 @@ class FundingSources extends React.Component {
   **/
   _getEmptyState() {
     return(
-      <View style={{flex: 0.9, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
+      <View style={{flex: 0.9, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.richBlack}}>
         <Text style={{fontSize: 18, color: colors.richBlack}}>No funding sources. Add one now!</Text>
       </View>
     );
@@ -93,7 +92,7 @@ class FundingSources extends React.Component {
 
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: colors.white}}>
+      <View style={{flex: 1, backgroundColor: colors.richBlack}}>
         { /* Render list of notifications or empty state */  }
         {(this.state.empty) ? this._getEmptyState() : this._getFundingSourceList() }
       </View>

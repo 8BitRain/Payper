@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, TouchableHighlight, Text } from 'react-native';
+import { View, TouchableHighlight, Text, StyleSheet, ActionSheetIOS } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { Actions } from 'react-native-router-flux';
 
@@ -9,43 +9,115 @@ import * as Lambda from '../../services/Lambda';
 
 // Stylesheets
 import colors from '../../styles/colors';
+const styles = StyleSheet.create({
 
-const height = 80;
+  // Row wrap
+  wrap: {
+    flex: 1.0,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    backgroundColor: colors.richBlack,
+    padding: 15,
+  },
+
+  // Bank account name text
+  name: {
+    fontFamily: 'Roboto',
+    fontSize: 20,
+    color: colors.accent,
+    fontWeight: '100',
+    padding: 5,
+  },
+
+  // Informational text
+  text: {
+    fontFamily: 'Roboto',
+    fontSize: 14,
+    color: colors.white,
+    padding: 5,
+  },
+
+  // Menu icon wrap
+  dots: {
+    position: 'absolute',
+    top: 22.5,
+    right: 22.5,
+    width: 50,
+    height: 50,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+
+});
+
 
 class FundingSource extends React.Component {
   constructor(props) {
     super(props);
+
+    this.actionSheetOptions = ['Set as Active Bank Account', 'Edit Bank Account', 'Delete Bank Account', 'Nevermind'];
+  }
+
+  _handleMenuPress() {
+    console.log("Pressed menu");
+
+    ActionSheetIOS.showActionSheetWithOptions({
+      options: this.actionSheetOptions,
+      cancelButtonIndex: 3
+    },
+    (buttonIndex) => {
+      console.log(this.actionSheetOptions[buttonIndex]);
+    });
   }
 
   render() {
     return(
       <TouchableHighlight
-        onPress={() => console.log("Pressed funding source.")}
+        onPress={() => this._handleMenuPress()}
         underlayColor={'transparent'}
-        opacity={0.7}>
-        <View style={{height: height, flex: 1.0, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', backgroundColor: 'transparent'}} onPress={() => options.callback()}>
+        activeOpacity={0.7}
+        style={{borderTopWidth: 1.0, borderTopColor: colors.accent}}>
 
-          { /* Active? */ }
+        <View style={styles.wrap}>
+
+          { /* Name */
+            (this.props.fundingSource.active)
+              ? <Text style={styles.name}>
+                  <Text>
+                    { this.props.fundingSource.name }
+                    { " " }
+                    <Entypo name="star" size={18} color={colors.alertYellow} />
+                    { " " }
+                  </Text>
+                  <Text style={[styles.text, {color: colors.alertYellow, fontWeight: '400'}]}>
+                    (Active)
+                  </Text>
+                </Text>
+              : <Text style={styles.name}>{ this.props.fundingSource.name }</Text>
+          }
+
+          { /* Bank Name */ }
+          <Text style={styles.text}>
+            { this.props.fundingSource.bank }
+          </Text>
+
+          { /* Account number (hidden) */ }
+          <Text style={styles.text}>
+            Account Number: { this.props.fundingSource.accountNumber }
+          </Text>
+
+          { /* Menu icon */ }
           <TouchableHighlight
-            style={{height: height, flex: 0.17}}
+            activeOpacity={0.7}
             underlayColor={'transparent'}
-            onPress={() => alert('yo')}
-            activeOpacity={0.7}>
+            onPress={() => this._handleMenuPress()}
+            style={styles.dots}>
 
-            <View style={{flex: 1.0, backgroundColor: (this.props.fundingSource.active) ? colors.alertYellow : colors.white, justifyContent: 'center', alignItems: 'center'}}>
-              <Entypo name={(this.props.fundingSource.active) ? "star" : "star-outlined" } size={22.5} color={(this.props.fundingSource.active) ? colors.white : colors.alertYellow} />
-              { (this.props.fundingSource.active) ? <Text style={{color: (this.props.fundingSource.active) ? colors.white : colors.alertYellow}}>Active</Text> : null }
-            </View>
+            <Entypo style={styles.iconSettings} name="dots-three-horizontal" size={20} color={colors.accent}/>
 
           </TouchableHighlight>
-
-          { /* Info */ }
-          <View style={{height: height, flex: 0.73, backgroundColor: colors.darkGrey, justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 15, paddingRight: 15, borderBottomWidth: 0.5, borderBottomColor: colors.accent}}>
-            <Text style={{color: colors.accent, fontSize: 16, padding: 0.5}}>{ this.props.fundingSource.name }</Text>
-            <Text style={{color: colors.white, fontSize: 14, padding: 0.5}}>Bank: { this.props.fundingSource.bank }</Text>
-            <Text style={{color: colors.white, fontSize: 14, padding: 0.5}}>Account Number: { this.props.fundingSource.accountNumber }</Text>
-          </View>
-
         </View>
       </TouchableHighlight>
     );

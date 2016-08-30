@@ -70,7 +70,6 @@
 - [X] Fix bug where notifications indicator is not rendered as a perfect circle on smaller devices
 - [ ] Add global user list to UserSearch
 - [ ] Add edit pages for profile attributes
-- [ ] Add photo uploading capabilities
 - [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
 - [ ] Add an onPress destination to notifications
 - [ ] Create a PaymentSeries module, containing detailed information about the payment series, and the option to skip/reschedule payments
@@ -83,7 +82,7 @@
 - [X] Change landing page options to just "Continue with Facebook" and "Continue without Facebook"
 
 ### MVP Logic Bugs (Brady)
-- [ ] Fix bug where user state is not properly reset upon signing out and signing in with another account May be fixed, come back to this if issue occurs again)
+- [ ] Fix bug where user state is not properly reset upon signing out and signing in with another account (May be fixed, come back to this if issue occurs again)
 - [X] Fix bug where app crashes if an incoming payment is cancelled
 - [X] Fix bug where Incoming/Outgoing filter state is not saved during payment creation, resulting in Outgoing payments being rendered even though the Incoming tab is selected, and vice versa
 - [X] Fix bug where payment state is not reset after creating a payment
@@ -91,12 +90,15 @@
 - [ ] Fix bug where, upon Facebook sign in, user's session token is undefined on the add phone number screen
 - [ ] Fix bug where the invite via payment endpoint receives incorrect sender/recip traits
 
-### Things I Need Vash For Lol (Brady)
+### Things I Need Vash For (Brady)
 - [ ] Fix bug where payment creation sometimes fails
 - [ ] Fix bug where inviting via payment exits before completing request
 - [ ] Create Lambda endpoint that returns a decrypted phoneNumber:uid list
 - [ ] Attach "type" to Firebase payment object when creating a new payment
 - [ ] Discuss backend logic for token refresh (Option 1: Create an endpoint called updateSessionToken that takes a new session token and an old session token, cycles the old token out, and returns a user object. Option 2: Completely handle refresh in the backend. Option 1 > Option 2, probably)
+
+### Back-burner
+- [ ] Design photo selector for profile picture upload
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
