@@ -56,13 +56,10 @@ const styles = StyleSheet.create({
 class FundingSource extends React.Component {
   constructor(props) {
     super(props);
-
     this.actionSheetOptions = ['Set Active', 'Edit', 'Delete', 'Nevermind'];
   }
 
   _handleMenuPress() {
-    console.log("Pressed menu");
-
     ActionSheetIOS.showActionSheetWithOptions({
       options: this.actionSheetOptions,
       cancelButtonIndex: 3
