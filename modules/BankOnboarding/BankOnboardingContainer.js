@@ -16,7 +16,7 @@ export default connect(
     startMain: state.getIn(['bankOnboarding', 'startMain']),
     startVerifyMicroDeposit: state.getIn(['bankOnboarding', 'startVerifyMicroDeposit']),
     loading: state.getIn(['bankOnboarding', 'loading']),
-    done_loading: state.getIn(['bankOnboarding', 'loading']),
+    done_loading: state.getIn(['bankOnboarding', 'done_loading']),
     firebase_token: state.getIn(['createAccount', 'token']),
     dwollaCustomer: state.getIn(['bankOnboarding', 'dwollaCustomer']),
     // Tracks pagination
@@ -26,10 +26,14 @@ export default connect(
     newUser: state.getIn(['createAccount', 'newUser']),
 
     /*Validations*/
-    phoneValidations: state.getIn(['bankOnboarding', 'phoneValidations']),
-    emailValidations: state.getIn(['bankOnboarding', 'emailValidations']),
+    cphoneValidations: state.getIn(['bankOnboarding', 'cphoneValidations']),
+    cemailValidations: state.getIn(['bankOnboarding', 'cemailValidations']),
     cfirstNameValidations: state.getIn(['bankOnboarding', 'cfirstNameValidations']),
     clastNameValidations: state.getIn(['bankOnboarding', 'clastNameValidations']),
+    addressValidations: state.getIn(['bankOnboarding', 'addressValidations']),
+    zipValidations: state.getIn(['bankOnboarding', 'zipValidations']),
+    cityValidations: state.getIn(['bankOnboarding', 'cityValidations']),
+    ssnValidations: state.getIn(['bankOnboarding', 'ssnValidations']),
     basicInfoValidations: state.getIn(['bankOnboarding', 'basicInfoValidations'])
 
   }),
@@ -146,11 +150,11 @@ export default connect(
         dispatch(dispatchFunctions.setSSN(input));
       },
 
-      dispatchSetPhoneValidations(input){
-        dispatch(dispatchFunctions.setPhoneValidations(input));
+      dispatchSetCPhoneValidations(input){
+        dispatch(dispatchFunctions.setCPhoneValidations(input));
       },
-      dispatchSetEmailValidations(input){
-        dispatch(dispatchFunctions.setEmailValidations(input));
+      dispatchSetCEmailValidations(input){
+        dispatch(dispatchFunctions.setCEmailValidations(input));
       },
       dispatchSetCFirstNameValidations(input){
         dispatch(dispatchFunctions.setCFirstNameValidations(input));
@@ -158,6 +162,20 @@ export default connect(
       dispatchSetCLastNameValidations(input){
         dispatch(dispatchFunctions.setCLastNameValidations(input));
       },
+      dispatchSetAddressValidations(input){
+        dispatch(dispatchFunctions.setAddressValidations(input));
+      },
+      dispatchSetCityValidations(input){
+        dispatch(dispatchFunctions.setCityValidations(input));
+      },
+      dispatchSetZipValidations(input){
+        dispatch(dispatchFunctions.setZipValidations(input));
+      },
+      dispatchSetSSNValidations(input){
+        dispatch(dispatchFunctions.setSSNValidations(input));
+      },
+
+
       dispatchSetBasicInfoValidations(input){
         dispatch(dispatchFunctions.setBasicInfoValidations(input));
       },

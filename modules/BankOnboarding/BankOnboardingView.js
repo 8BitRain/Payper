@@ -81,14 +81,17 @@ const BankOnboardingView = React.createClass({
                 dispatchSetEmail={this.props.dispatchSetEmail}
                 dispatchSetPhone={this.props.dispatchSetPhone}
                 dispatchSetPageX={this.props.dispatchSetPageX}
-                dispatchSetPhoneValidations={(text) => this.props.dispatchSetPhoneValidations(Validators.validatePhone(text))}
-                dispatchSetEmailValidations={(text) => this.props.dispatchSetEmailValidations(Validators.validateEmail(text))}
+                dispatchSetCPhoneValidations={(text) => this.props.dispatchSetCPhoneValidations(Validators.validatePhone(text))}
+                dispatchSetCEmailValidations={(text) => this.props.dispatchSetCEmailValidations(Validators.validateEmail(text))}
                 dispatchSetCFirstNameValidations={(text) => this.props.dispatchSetCFirstNameValidations(Validators.validateName(text))}
                 dispatchSetCLastNameValidations={(text) => this.props.dispatchSetCLastNameValidations(Validators.validateName(text))}
-                emailValidations={this.props.emailValidations}
+                dispatchSetBasicInfoValidations={(firstName, lastName, email, phone) => this.props.dispatchSetBasicInfoValidations(Validators.validateBasicInfo(firstName, lastName, email, phone))}
+                basicInfoValidations={this.props.basicInfoValidations}
+                cemailValidations={this.props.cemailValidations}
                 cfirstNameValidations={this.props.cfirstNameValidations}
                 clastNameValidations={this.props.clastNameValidations}
-                phoneValidations={this.props.phoneValidations}
+                cphoneValidations={this.props.cphoneValidations}
+
                 callbackClose={Actions.landingView}
               />
             )
@@ -102,6 +105,12 @@ const BankOnboardingView = React.createClass({
                 dispatchSetZip={this.props.dispatchSetZip}
                 dispatchSetPageX={this.props.dispatchSetPageX}
                 callbackClose={Actions.landingView}
+                dispatchSetAddressValidations={(text) => this.props.dispatchSetAddressValidations(Validators.validateAddress(text))}
+                dispatchSetCityValidations={(text) => this.props.dispatchSetCityValidations(Validators.validateCity(text))}
+                dispatchSetZipValidations={(text) => this.props.dispatchSetZipValidations(Validators.validatePostalCode(text))}
+                addressValidations = {this.props.addressValidations}
+                cityValidations = {this.props.cityValidations}
+                zipValidations = {this.props.zipValidations}
               />
             )
             break;
@@ -119,6 +128,7 @@ const BankOnboardingView = React.createClass({
               <SSN
                 dispatchSetSSN={this.props.dispatchSetSSN}
                 dispatchSetPageX={this.props.dispatchSetPageX}
+                dispatchSetSSNValidations={(text) => this.props.dispatchSetSSNValidations(Validators.validateSSN(text))}
                 callbackClose={Actions.landingView}
                 dwollaCustomer={this.props.dwollaCustomer}
                 newUser={this.props.newUser}

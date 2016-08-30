@@ -15,12 +15,12 @@ var dwollaCustomer = {
   ssn: ""
 };
 
-var phoneValidations = {
+var cphoneValidations = {
   length: false,
   valid: false
 };
 
-var emailValidations = {
+var cemailValidations = {
   length: false,
   valid: false
 };
@@ -37,11 +37,32 @@ var clastNameValidations = {
   valid: false
 };
 
+var addressValidations = {
+  non_null: false,
+  valid: false
+};
+
+var zipValidations = {
+  length: false,
+  valid: false
+};
+
+var ssnValidations = {
+  length: false,
+  valid: false
+};
+
+var cityValidations = {
+  non_null: false,
+  valid: false
+};
+
+
 var basicInfoValidations = {
-  phoneValidations: false,
-  emailValidations: false,
-  cfirstNameValidations: true,
-  clastNameValidations: true,
+  cphoneValidations: false,
+  cemailValidations: false,
+  cfirstNameValidations: false,
+  clastNameValidations: false,
   valid: false
 };
 
@@ -55,12 +76,17 @@ const initialState = Map({
     startMain: false,
     startVerifyMicroDeposit: false,
     firebase_token: '',
-    phoneValidations,
-    emailValidations,
+    cphoneValidations,
+    cemailValidations,
     cfirstNameValidations,
     clastNameValidations,
+    basicInfoValidations,
+    ssnValidations,
+    addressValidations,
+    zipValidations,
+    cityValidations,
     loading: false,
-    doneLoading: false
+    done_loading: false
 });
 
 // Action types
@@ -80,11 +106,15 @@ const SET_PAGEX = 'SET_PAGEX',
       SET_DOB = 'SET_DOB',
       SET_SSN = 'SET_SSN',
       SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
-      SET_PHONE_VALIDATIONS = 'SET_PHONE_VALIDATIONS',
-      SET_FIRST_NAME_VALIDATIONS = 'SET_FIRST_NAME_VALIDATIONS',
-      SET_LAST_NAME_VALIDATIONS = 'SET_LAST_NAME_VALIDATIONS',
+      SET_CPHONE_VALIDATIONS = 'SET_CPHONE_VALIDATIONS',
+      SET_CFIRST_NAME_VALIDATIONS = 'SET_CFIRST_NAME_VALIDATIONS',
+      SET_CLAST_NAME_VALIDATIONS = 'SET_CLAST_NAME_VALIDATIONS',
       SET_BASIC_INFO_VALIDATIONS = 'SET_BASIC_INFO_VALIDATIONS',
-      SET_EMAIL_VALIDATIONS = 'SET_EMAIL_VALIDATION',
+      SET_CEMAIL_VALIDATIONS = 'SET_CEMAIL_VALIDATIONS',
+      SET_CITY_VALIDATIONS = 'SET_CITY_VALIDATIONS',
+      SET_ADDRESS_VALIDATIONS = 'SET_ADDRESS_VALIDATIONS',
+      SET_ZIP_VALIDATIONS = 'SET_ZIP_VALIDATIONS',
+      SET_SSN_VALIDATIONS = 'SET_SSN_VALIDATIONS',
       SET_LOADING = 'SET_LOADING',
       SET_DONE_LOADING = 'SET_DONE_LOADING';
 
@@ -94,12 +124,12 @@ export function setPageX(index) {
   return { type: SET_PAGEX, index: index };
 };
 
-export function setPhoneValidations(index){
-  return {type: SET_PHONE_VALIDATIONS, index: index};
+export function setCPhoneValidations(index){
+  return {type: SET_CPHONE_VALIDATIONS, index: index};
 };
 
-export function setEmailValidations(index){
-  return {type: SET_EMAIL_VALIDATIONS, index: index};
+export function setCEmailValidations(index){
+  return {type: SET_CEMAIL_VALIDATIONS, index: index};
 };
 
 export function setBasicInfoValidations(index){
@@ -107,11 +137,27 @@ export function setBasicInfoValidations(index){
 };
 
 export function setCFirstNameValidations(index){
-  return {type: SET_FIRST_NAME_VALIDATIONS, index: index};
+  return {type: SET_CFIRST_NAME_VALIDATIONS, index: index};
 };
 
 export function setCLastNameValidations(index){
-  return {type: SET_LAST_NAME_VALIDATIONS, index: index};
+  return {type: SET_CLAST_NAME_VALIDATIONS, index: index};
+};
+
+export function setAddressValidations(index){
+  return {type: SET_ADDRESS_VALIDATIONS, index: index};
+};
+
+export function setCityValidations(index){
+  return {type: SET_CITY_VALIDATIONS, index: index};
+};
+
+export function setZipValidations(index){
+  return {type: SET_ZIP_VALIDATIONS, index: index};
+};
+
+export function setSSNValidations(index){
+  return {type: SET_SSN_VALIDATIONS, index: index};
 };
 
 export function setIav(index){
@@ -204,21 +250,37 @@ export default function BankOnboardingReducer(state = initialState, action = {})
       var newState = state.set('startIav', action.index);
       return newState;
       break;
-    case SET_FIRST_NAME_VALIDATIONS:
+    case SET_CFIRST_NAME_VALIDATIONS:
       var newState = state.set('cfirstNameValidations', action.index);
       return newState;
       break;
-    case SET_LAST_NAME_VALIDATIONS:
+    case SET_CLAST_NAME_VALIDATIONS:
       var newState = state.set('clastNameValidations', action.index);
       return newState;
       break;
-    case SET_EMAIL_VALIDATIONS:
-      var newState = state.set('emailValidations', action.index);
+    case SET_CEMAIL_VALIDATIONS:
+      var newState = state.set('cemailValidations', action.index);
       return newState;
       break;
     case SET_BASIC_INFO_VALIDATIONS:
       var newState = state.set('basicInfoValidations', action.index);
       return newState;
+      break;
+    case SET_ZIP_VALIDATIONS:
+      var newState = state.set('zipValidations', action.index);
+      return newState;
+      break;
+    case SET_ADDRESS_VALIDATIONS:
+      var newState = state.set('addressValidations', action.index);
+      return newState;
+      break;
+    case SET_CITY_VALIDATIONS:
+      var newState = state.set('cityValidations', action.index);
+      return newState;
+      break;
+    case SET_SSN_VALIDATIONS:
+      var nesState = state.set("ssnValidations", action.index);
+      return newStatel
       break;
     case SET_START_MAIN:
       var newState = state.set('startMain', action.index);
@@ -228,8 +290,8 @@ export default function BankOnboardingReducer(state = initialState, action = {})
       var newState = state.set('startVerifyMicroDeposit', action.index);
       return newState;
       break;
-    case SET_PHONE_VALIDATIONS:
-      var newState = state.set('phoneValidations', action.index);
+    case SET_CPHONE_VALIDATIONS:
+      var newState = state.set('cphoneValidations', action.index);
       return newState;
       break;
     case SET_FIREBASETOKEN:
