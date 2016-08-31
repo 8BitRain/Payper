@@ -404,7 +404,7 @@ class LandingScreenDisplay extends React.Component {
 class LandingScreenView extends React.Component{
   render() {
     return(
-      <LandingScreenDisplay  dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetNewUserToken={this.props.dispatchSetNewUserToken}/>
+      <LandingScreenDisplay dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetNewUserToken={this.props.dispatchSetNewUserToken}/>
     );
   }
 };

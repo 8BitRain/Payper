@@ -1,5 +1,6 @@
 // Dependencies
 import { connect } from 'react-redux';
+import { ListView, DataSource } from 'react-native';
 var Contacts = require('react-native-contacts');
 
 // Helper functions
@@ -10,8 +11,12 @@ import * as SetMaster5000 from '../../helpers/SetMaster5000';
 import * as Async from '../../helpers/Async';
 import * as Headers from '../../helpers/Headers';
 
+// Clone for state updates
+const EMPTY_DATA_SOURCE = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
 // Dispatch functions
 import * as set from './MainState';
+import * as setPayments from '../Payments/PaymentsState';
 
 // Base view
 import MainView from './MainView';
@@ -43,9 +48,9 @@ function mapDispatchToProps(dispatch) {
   return {
 
     /**
-      *   1) Set logged in user's user object
+      *   1) Set signed in user's user object
       *   2) Set session token
-      *   3) Set loggedIn to true
+      *   3) Set signedIn to true
     **/
     initialize: (callback) => {
 
@@ -92,7 +97,7 @@ function mapDispatchToProps(dispatch) {
           });
 
           // Get decrypted phoneNumber:uid list
-          
+
 
           if (typeof callback == 'function') callback(true);
           else console.log("Callback is not a function.");
@@ -134,6 +139,45 @@ function mapDispatchToProps(dispatch) {
     stopListening: (endpoints) => {
       Firebase.stopListeningTo(endpoints);
       dispatch(set.activeFirebaseListeners([]));
+    },
+
+    reset: () => {
+
+      // Reset main store
+      dispatch(set.activeFirebaseListeners([]));
+      // dispatch(set.signedIn(false));
+      dispatch(set.currentUser({}));
+      dispatch(set.flags(""));
+      dispatch(set.notifications([]));
+      dispatch(set.numUnseenNotifications(0));
+      dispatch(set.header({
+        types: {
+          "paymentIcons": false,
+          "circleIcons": false,
+          "settingsIcon": false,
+          "closeIcon": false,
+          "flowTabs": false,
+        },
+        index: null,
+        numCircles: null,
+        title: null,
+        callbackIn: null,
+        callbackOut: null,
+      }));
+      dispatch(set.sideMenuIsOpen(false));
+      dispatch(set.currentPage("payments"));
+      dispatch(set.nativeContacts([]));
+      dispatch(set.initialized(false));
+
+      // Reset payments store
+      dispatch(setPayments.activeFirebaseListeners([]));
+      dispatch(setPayments.incomingPayments([]));
+      dispatch(setPayments.outgoingPayments([]));
+      dispatch(setPayments.globalPayments([]));
+      dispatch(setPayments.isEmpty(true));
+      dispatch(setPayments.activeTab("tracking"));
+      dispatch(setPayments.activeFilter("incoming"));
+
     },
 
     inviteDirect: (options, callback) => {

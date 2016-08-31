@@ -53,13 +53,13 @@ class Settings extends React.Component {
             cancelMessage: "Nevermind",
             confirmMessage: "Yes, delete my account",
             cancel: () => console.log("Nevermind"),
-            confirm: () => { Init.signOut(); Init.deleteUser({ token: this.props.currentUser.token, uid: this.props.currentUser.uid }) },
+            confirm: () => { this.props.signout(); Init.deleteUser({ token: this.props.currentUser.token, uid: this.props.currentUser.uid }) },
           });
         }}
       );
-      sideMenuButtons.push({rowTitle: "Sign Out", iconName: "moon", destination: Init.signOut});
+      sideMenuButtons.push({rowTitle: "Sign Out", iconName: "moon", destination: this.props.signout});
     } else {
-      sideMenuButtons.push({rowTitle: "Sign Out", iconName: "moon", destination: Init.signOut});
+      sideMenuButtons.push({rowTitle: "Sign Out", iconName: "moon", destination: this.props.signout});
     }
 
     this.state = {
@@ -82,7 +82,7 @@ class Settings extends React.Component {
       return(
         <LoginButton
           style={[styles.row, {marginLeft: 15, marginRight: 15, height: 40}]}
-          onLogoutFinished={() => Init.signOut()} />
+          onLogoutFinished={() => this.props.signout()} />
       );
     } else {
       return(

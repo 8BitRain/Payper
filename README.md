@@ -75,11 +75,12 @@
 - [ ] Create a PaymentSeries module, containing detailed information about the payment series, and the option to skip/reschedule payments
 - [ ] Redesign BankAccountsView
 
-### MVP Usability Bugs (Brady)
+### MVP Usability and Design Bugs (Brady)
 - [X] Adjust CreatePayment flow so that after payment creation: payment creation => outgoing tab of payments view, request creating => incoming tab of payments view
 - [X] Add back button to final page of CreatePaymentView
 - [X] Change placeholder numbers for cost and number of payments to 0
 - [X] Change landing page options to just "Continue with Facebook" and "Continue without Facebook"
+- [ ] Fix profile pic preview for non-Facebook accounts on 'Profile'
 
 ### MVP Logic Bugs (Brady)
 - [ ] Fix bug where user state is not properly reset upon signing out and signing in with another account (May be fixed, come back to this if issue occurs again)
@@ -96,6 +97,7 @@
 - [ ] Create Lambda endpoint that returns a decrypted phoneNumber:uid list
 - [ ] Attach "type" to Firebase payment object when creating a new payment
 - [ ] Discuss backend logic for token refresh (Option 1: Create an endpoint called updateSessionToken that takes a new session token and an old session token, cycles the old token out, and returns a user object. Option 2: Completely handle refresh in the backend. Option 1 > Option 2, probably)
+- [ ] Discuss "Interaction Ledger"
 
 ### Back-burner
 - [ ] Design photo selector for profile picture upload

@@ -270,7 +270,7 @@ export function getIavToken(data, callback){
   *   1) Sign user out of Firebase
   *   2) Redirect user to landing page
 **/
-export function signOut() {
+export function signout() {
 
   // Log out of Firebase
   Firebase.signOut(() => {

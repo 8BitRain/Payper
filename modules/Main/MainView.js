@@ -4,6 +4,9 @@ import { View, Text, TextInput, StatusBar, Dimensions } from 'react-native';
 import Actions from 'react-native-router-flux';
 import SideMenu from 'react-native-side-menu';
 
+// Helpers
+import * as Init from '../../_init';
+
 // Components
 import Header from '../../components/Header/Header';
 import Settings from '../../modules/Settings/SettingsView';
@@ -11,6 +14,7 @@ import Payments from '../../modules/Payments/PaymentsViewContainer';
 import Profile from '../../modules/Profile/ProfileView';
 import Notifications from '../../modules/Notifications/NotificationsViewContainer';
 import FundingSources from '../../modules/FundingSources/FundingSourcesView';
+import SignIn from '../../modules/SignIn/SignInViewContainer';
 
 // Used to determine header size
 const dimensions = Dimensions.get('window');
@@ -26,37 +30,34 @@ class InnerContent extends React.Component {
     console.log(this.props)
 
     // Show sign in screen if user is not signed in
-    if (!this.props.signedIn) return <SignIn />;
 
     // Otherwise, take the user to the app
-    else if (this.props.signedIn) {
-      switch (this.props.currentPage) {
+    switch (this.props.currentPage) {
 
-        case "payments":
-          return <Payments />;
-          break;
+      case "payments":
+        return <Payments />;
+        break;
 
-        case "profile":
-          return <Profile {...this.props} />;
-          break;
+      case "profile":
+        return <Profile {...this.props} />;
+        break;
 
-        case "notifications":
-          return <Notifications />;
-          break;
+      case "notifications":
+        return <Notifications />;
+        break;
 
-        case "fundingSources":
-          return <FundingSources {...this.props} />;
-          break;
+      case "fundingSources":
+        return <FundingSources {...this.props} />;
+        break;
 
-        default:
-          return(
-            <View style={{flex: 1.0, backgroundColor: "#000", justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{fontSize: 16, color: '#FFF'}}>
-                { "Failed to render a page.\nCheck InnerContent's render\nfunction in MainViewV2.js" }
-              </Text>
-            </View>
-          );
-      }
+      default:
+        return(
+          <View style={{flex: 1.0, backgroundColor: "#000", justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{fontSize: 16, color: '#FFF'}}>
+              { "Failed to render a page.\nCheck InnerContent's render\nfunction in MainViewV2.js" }
+            </Text>
+          </View>
+        );
     }
   }
 }
@@ -118,14 +119,28 @@ class Main extends React.Component {
   }
 
 
+  //  Wipe Redux store, then sign out of Firebase from _init.js
+  _handleSignOut() {
+
+    // Wipe Redux store
+    this.props.reset();
+
+    // Sign out of Firebase and wipe AsyncStorage
+    Init.signout();
+
+  }
+
+
   render() {
     // Must explicitly trigger a re-render, otherwise side menu's
     // notification indicator will not update
-    if (this.props.signedIn) {
+    console.log("Signed in:", JSON.stringify(this.props.signedIn));
+
+    // if (this.props.signedIn) {
       return (
         <SideMenu
           key={this.state.renderTrigger}
-          menu={ <Settings {...this.props} changePage={(newPage) => { this.changePage(newPage); this.toggle(); }} /> }
+          menu={ <Settings {...this.props} changePage={(newPage) => { this.changePage(newPage); this.toggle(); }} signout={ () => this._handleSignOut() } /> }
           bounceBackOnOverdraw={false}
           isOpen={this.props.sideMenuIsOpen}
           onChange={(isOpen) => this.props.setSideMenuIsOpen(isOpen)}
@@ -153,13 +168,13 @@ class Main extends React.Component {
 
         </SideMenu>
       );
-    } else {
-      return(
-        <View style={{flex: 1.0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red'}}>
-          <Text style={{fontSize: 20, color: 'white'}}>Not signed in</Text>
-        </View>
-      );
-    }
+    // } else {
+    //   return(
+    //     <View style={{flex: 1.0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red'}}>
+    //       <Text style={{fontSize: 20, color: 'white'}}>Not signed in</Text>
+    //     </View>
+    //   );
+    // }
   }
 }
 

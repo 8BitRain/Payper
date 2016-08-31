@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.accent,
     fontWeight: '100',
-    padding: 5,
+    padding: 1.5,
   },
 
   // Informational text
@@ -35,13 +35,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 14,
     color: colors.white,
-    padding: 5,
+    padding: 1.5,
   },
 
   // Menu icon wrap
   dots: {
     position: 'absolute',
-    top: 22.5,
+    top: 20,
     right: 22.5,
     width: 50,
     height: 50,
@@ -61,6 +61,7 @@ class FundingSource extends React.Component {
 
   _handleMenuPress() {
     ActionSheetIOS.showActionSheetWithOptions({
+      title: this.props.fundingSource.name + " (" + this.props.fundingSource.accountNumber + ")",
       options: this.actionSheetOptions,
       cancelButtonIndex: 3
     },
@@ -75,7 +76,7 @@ class FundingSource extends React.Component {
         onPress={() => this._handleMenuPress()}
         underlayColor={'transparent'}
         activeOpacity={0.7}
-        style={{borderTopWidth: 1.0, borderTopColor: colors.accent}}>
+        style={{borderBottomWidth: 1.0, borderBottomColor: colors.accent}}>
 
         <View style={styles.wrap}>
 
