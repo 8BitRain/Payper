@@ -83,7 +83,7 @@
 - [ ] Fix profile pic preview for non-Facebook accounts on 'Profile'
 
 ### MVP Logic Bugs (Brady)
-- [ ] Fix bug where user state is not properly reset upon signing out and signing in with another account (May be fixed, come back to this if issue occurs again)
+- [X] Fix bug where user state is not properly reset upon signing out and signing in with another account
 - [X] Fix bug where app crashes if an incoming payment is cancelled
 - [X] Fix bug where Incoming/Outgoing filter state is not saved during payment creation, resulting in Outgoing payments being rendered even though the Incoming tab is selected, and vice versa
 - [X] Fix bug where payment state is not reset after creating a payment
