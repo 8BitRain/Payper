@@ -55,9 +55,11 @@ function mapDispatchToProps(dispatch) {
     initialize: (callback) => {
 
       Async.get('user', (user) => {
-        if (user == "") {
+        if (!user) {
 
           // Sign in failed
+          console.log("=-=-=-=-= Sign in failed =-=-=-=-=");
+          
           dispatch(set.signedIn(false));
           if (typeof callback == 'function') callback(false);
           else console.log("Callback is not a function.");
@@ -107,6 +109,9 @@ function mapDispatchToProps(dispatch) {
     },
 
     listen: (endpoints, callback) => {
+
+      console.log("\n\n\n\n\n\n\n\n\n\nGonna listen to:", endpoints);
+
       Firebase.listenTo(endpoints, (response) => {
         console.log("FIREBASE RESPONSE:\n\n", response);
         switch (response.endpoint.split("/")[0]) {
@@ -145,7 +150,7 @@ function mapDispatchToProps(dispatch) {
 
       // Reset main store
       dispatch(set.activeFirebaseListeners([]));
-      // dispatch(set.signedIn(false));
+      dispatch(set.signedIn(false));
       dispatch(set.currentUser({}));
       dispatch(set.flags(""));
       dispatch(set.notifications([]));

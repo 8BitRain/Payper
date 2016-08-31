@@ -23,7 +23,7 @@ function mapStateToProps(state) {
   return {
 
     // main
-    currentUser: state.getIn(['main', 'currentUser']),
+    // currentUser: state.getIn(['main', 'currentUser']),
     header: state.getIn(['main', 'header']),
 
     // payments
@@ -42,6 +42,9 @@ function mapDispatchToProps(dispatch) {
   return {
     listen: (endpoints) => {
       Firebase.listenTo(endpoints, (response) => {
+
+        console.log("\n\n\n\n\n\n\n\n\n\nGonna listen to:", endpoints);
+
         switch (response.key) {
           case "in":
             // Tack payment ID on as prop of each payment object

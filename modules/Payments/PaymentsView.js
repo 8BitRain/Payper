@@ -17,14 +17,12 @@ const dimensions = Dimensions.get('window');
 class Payments extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      uid: "",
+    }
   }
 
   componentDidMount() {
-    // Enable listeners
-    var incomingPayments = "paymentFlow/" + this.props.currentUser.uid + "/in/",
-        outgoingPayments = "paymentFlow/" + this.props.currentUser.uid + "/out/";
-    this.props.listen([incomingPayments, outgoingPayments]);
-
     // Initialize header
     this.props.setActiveTab(this.props.activeTab);
   }
@@ -32,6 +30,17 @@ class Payments extends React.Component {
   componentWillUnmount() {
     // Disable listeners
     this.props.stopListening(this.props.activeFirebaseListeners);
+  }
+
+  componentWillReceiveProps(newProps) {
+    // If UID has changed, start listening to the user's payment flow
+    if (newProps.currentUser.uid && newProps.currentUser.uid != this.state.uid) {
+      this.setState({ uid: newProps.currentUser.uid }, () => {
+        var incomingPayments = "paymentFlow/" + this.state.uid + "/in/",
+            outgoingPayments = "paymentFlow/" + this.state.uid + "/out/";
+        this.props.listen([incomingPayments, outgoingPayments]);
+      });
+    }
   }
 
   _renderEmptyState() {

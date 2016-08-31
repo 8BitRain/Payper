@@ -272,12 +272,10 @@ export function getIavToken(data, callback){
 **/
 export function signout() {
 
-  // Log out of Firebase
+  // Sign out of Firebase
   Firebase.signOut(() => {
     Async.set('session_token', '');
-    Async.set('user', '', () => {
-      Actions.LandingScreenContainer();
-    });
+    Async.set('user', '');
   });
 
 };
