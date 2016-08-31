@@ -42,9 +42,6 @@ function mapDispatchToProps(dispatch) {
   return {
     listen: (endpoints) => {
       Firebase.listenTo(endpoints, (response) => {
-
-        console.log("\n\n\n\n\n\n\n\n\n\nGonna listen to:", endpoints);
-
         switch (response.key) {
           case "in":
             // Tack payment ID on as prop of each payment object

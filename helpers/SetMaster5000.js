@@ -95,6 +95,25 @@ export function contactsToArray(contacts) {
 
 
 /**
+  *   Converts Payper user JSON to array
+**/
+export function globalUserListToArray(options) {
+  var arr = [], curr;
+
+  console.log("ALL CONTACTS:", options.allContacts);
+
+  for (var u in options.users) {
+    curr = options.users[u];
+    curr.uid = u;
+    curr.sectionTitle = "Other Payper Users";
+    arr.push(curr);
+  }
+
+  return arr;
+};
+
+
+/**
   *   Filters array of contacts lexicographically given a set and a query string
 **/
 export function filterContacts(contacts, query) {

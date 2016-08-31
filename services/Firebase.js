@@ -234,7 +234,6 @@ export function signOut(callback) {
 export function listenTo(endpoints, callback) {
   for (var e in endpoints) {
     const endpoint = endpoints[e];
-    console.log("\n\n\n\n\n\n\n\nStarted listening to:", endpoint);
     firebase.database().ref('/' + endpoint).on('value', (snapshot) => {
       if (typeof callback == 'function') callback({ endpoint: endpoint, key: snapshot.key, value: snapshot.val() });
       else console.log("Callback is not a function");

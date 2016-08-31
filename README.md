@@ -68,7 +68,7 @@
 - [X] Decrypt and append phone number and email address to user object on load
 - [X] Add section headers to user ListView in UserSearch
 - [X] Fix bug where notifications indicator is not rendered as a perfect circle on smaller devices
-- [ ] Add global user list to UserSearch
+- [X] Add global user list to UserSearch (naive approach)
 - [ ] Add edit pages for profile attributes
 - [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
 - [ ] Add an onPress destination to notifications

@@ -62,9 +62,6 @@ class Payments extends React.Component {
       ds = this.props.globalPayments;
     }
 
-    console.log("%cData source: " + JSON.stringify(ds), "color:blue;font-weight:900;");
-    console.log("%cRow count: " + ds.getRowCount(), "color:blue;font-weight:900;");
-
     // If our data source is not null and has contents, use it to populate the payment list view
     if (ds && ds.getRowCount() > 0 && ds._cachedRowCount != 0) {
       return(

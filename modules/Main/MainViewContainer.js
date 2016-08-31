@@ -59,7 +59,7 @@ function mapDispatchToProps(dispatch) {
 
           // Sign in failed
           console.log("=-=-=-=-= Sign in failed =-=-=-=-=");
-          
+
           dispatch(set.signedIn(false));
           if (typeof callback == 'function') callback(false);
           else console.log("Callback is not a function.");
