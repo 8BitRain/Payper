@@ -21,13 +21,13 @@ class UserPic extends React.Component {
         : initials = name[0].substring(0, 1).toUpperCase();
       return(
         <View style={{width: dimensions.width, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          <View style={[userStyles.pic, userStyles.initials, {width: this.props.width, height: this.props.height, borderColor: (this.props.user.phone) ? colors.icyBlue : colors.accent, borderRadius: this.props.width / 2}]}>
-            <Text style={{fontFamily: 'Roboto', fontSize: 18, color: (this.props.user.phone) ? colors.icyBlue : colors.accent}}>{ initials }</Text>
+          <View style={[userStyles.pic, userStyles.initials, {width: this.props.width, height: this.props.height, borderColor: (this.props.user.provider || this.props.user.username || this.props.accent) ? colors.accent : colors.icyBlue, borderRadius: this.props.width / 2}]}>
+            <Text style={{fontFamily: 'Roboto', fontSize: 18, color: (this.props.user.provider || this.props.user.username) ? colors.accent : colors.icyBlue}}>{ initials }</Text>
           </View>
         </View>
       );
     } else {
-      return <Image style={{borderWidth: 1, borderColor: (this.props.user.phone && !this.props.accent) ? colors.icyBlue : colors.accent, width: this.props.width, height: this.props.height, borderRadius: this.props.height / 2}} source={{uri: this.props.user.profile_pic}} />;
+      return <Image style={{borderWidth: 1, borderColor: (this.props.user.provider || this.props.user.username || this.props.accent) ? colors.accent : colors.icyBlue, width: this.props.width, height: this.props.height, borderRadius: this.props.height / 2}} source={{uri: this.props.user.profile_pic}} />;
     }
   }
 };
