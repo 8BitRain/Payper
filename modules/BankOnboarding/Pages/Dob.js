@@ -13,6 +13,7 @@ var Mixpanel = require('react-native-mixpanel');
 // Custom components
 import Header from "../../../components/Header/Header";
 import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
+import DatePicker from "react-native-datepicker";
 
 // Stylesheets
 import backgrounds from "../styles/backgrounds";
@@ -31,6 +32,10 @@ class Dob extends React.Component {
 
      // Props for temporary input storage
      this.dobInput = "";
+
+     this.state = {
+       date:"1992-09-09"
+     };
 
      // Props to be passed to the header
      this.headerProps = {
@@ -70,6 +75,29 @@ class Dob extends React.Component {
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Dob</Text>
            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"1994-09-09"} onChangeText={(text) => {this.dobInput = text; this.props.dispatchSetDob(this.dobInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"YYYY-MM-DD"} keyboardType="email-address" />
+           <DatePicker
+              style={{width: 200}}
+              date={this.state.date}
+              mode="date"
+              placeholder="select date"
+              format="YYYY-MM-DD"
+              minDate="2016-05-01"
+              maxDate="2016-06-01"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0
+                },
+                dateInput: {
+                  marginLeft: 36
+                }
+              }}
+              onDateChange={(date) => {this.setState({date: date})}}
+            />
          </View>
 
            { /* Arrow nav buttons */ }

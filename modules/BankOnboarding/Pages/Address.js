@@ -15,6 +15,7 @@ var Mixpanel = require('react-native-mixpanel');
 import Header from "../../../components/Header/Header";
 import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 
+
 // Stylesheets
 import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";

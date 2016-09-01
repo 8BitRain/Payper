@@ -113,12 +113,13 @@ class BasicInfo extends React.Component {
             <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>
              {this.props.cemailValidations.valid ? <EvilIcons  style={{ position: "absolute", bottom: .5, left: 5}} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", bottom: .5, left: 5}} name="check" size={40} color={'grey'} />}
              <Text style={[typography.general, typography.fontSizeTitle, typography.marginBottom, {marginLeft: 65}]}>Email</Text>
+
             </View>
+            <TextInput style={[typography.textInput, typography.marginSides, {}]}  defaultValue={this.props.newUser.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmail(this.emailInput); this.props.dispatchSetCEmailValidations(this.emailInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"TEST"} keyboardType="email-address" />
           { /*Email TextInput*/}
-            <TextInput style={[typography.textInput, typography.marginSides, {marginLeft: 65}]}  defaultValue={this.props.newUser.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmail(this.emailInput); this.props.dispatchSetCEmailValidations(this.emailInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />
+            {/*<TextInput style={[typography.textInput, typography.marginSides, {marginLeft: 65}]}  defaultValue={this.props.newUser.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmail(this.emailInput); this.props.dispatchSetCEmailValidations(this.emailInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />}
           {/*TextInput Underline*/}
-            <View style={{borderBottomWidth: 1, borderBottomColor: "#F4F4F9", marginLeft: 65, width: 250  , marginBottom: 10, position: "absolute", bottom: 230 }}>
-            </View>
+
 
              { /*FirstName*/}
             <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>

@@ -129,6 +129,7 @@ const BankOnboardingView = React.createClass({
                 dispatchSetSSN={this.props.dispatchSetSSN}
                 dispatchSetPageX={this.props.dispatchSetPageX}
                 dispatchSetSSNValidations={(text) => this.props.dispatchSetSSNValidations(Validators.validateSSN(text))}
+                ssnValidations = {this.props.ssnValidations}
                 callbackClose={Actions.landingView}
                 dwollaCustomer={this.props.dwollaCustomer}
                 newUser={this.props.newUser}

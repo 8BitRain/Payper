@@ -146,7 +146,8 @@ class SSN extends React.Component {
 
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>SSN</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"5240"} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"123456780"} keyboardType="phone-pad" />
+           {this.props.ssnValidations.valid ? <EvilIcons  style={{}} name="check" size={40} color={'green'} /> : <EvilIcons style={{}} name="check" size={40} color={'grey'} />}
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput); this.props.dispatchSetSSNValidations(this.SSNInput);}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="numeric"/>
          </View>
 
            { /* Arrow nav buttons */ }
