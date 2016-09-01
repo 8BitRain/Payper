@@ -126,7 +126,8 @@ class Profile extends React.Component {
               accent
               user={this.props.currentUser}
               width={110}
-              height={110} />
+              height={110}
+              style={{backgroundColor: 'red'}} />
           </View>
         </View>
 

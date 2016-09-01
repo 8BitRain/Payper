@@ -6,25 +6,25 @@
 ### Frontend
 - [x] Sidebar
 - [x] In-app notifications
-- [ ] Push notifications
-- [ ] Edit profile panel
 - [x] Facebook auth
 - [x] Facebook friend synchronization
 - [x] Contact synchronization
-- [ ] Invites (direct)
 - [x] Invites (via payment)
-- [ ] App-wide validations (Bank Onboarding, Payper Account Creation, Pay & Request)
-- [ ] App-wide empty states (Tracking Page, Notifications, Payment History)
 - [x] Revamp loading screen component
 - [x] Bind Facebook sign out to our custom sign out button in the side menu
+- [ ] Push notifications
+- [ ] Edit profile panel
+- [ ] Invites (direct)
+- [ ] App-wide validations (Bank Onboarding, Payper Account Creation, Pay & Request)
+- [ ] App-wide empty states (Tracking Page, Notifications, Payment History)
 
 ### Polish
 - [X] CreatePaymentView.js predictive search: limit predictions to 4
 - [X] CreatePaymentView.js predictive search: don't show signed in user in predictions
 - [X] Pass numNotifications to menu in sidebar and render preview indicator next to notifications lightbulb
 - [X] Apply fade animation to inner content during create account onboarding, not entire view
-- [ ] Fix loading for IAV
 - [X] Style 'Continue with Facebook' button
+- [ ] Fix loading for IAV
 - [ ] Increase padding on "Continue without Facebook" text (difficult to press rn)
 - [ ] Revamp loading screens
 - [ ] Get rid of ugly refresh on notifications indicator
@@ -80,7 +80,7 @@
 - [X] Add back button to final page of CreatePaymentView
 - [X] Change placeholder numbers for cost and number of payments to 0
 - [X] Change landing page options to just "Continue with Facebook" and "Continue without Facebook"
-- [ ] Fix profile pic preview for non-Facebook accounts on 'Profile'
+- [X] Fix profile pic preview for non-Facebook accounts on 'Profile'
 
 ### MVP Logic Bugs (Brady)
 - [X] Fix bug where user state is not properly reset upon signing out and signing in with another account
