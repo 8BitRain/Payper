@@ -118,7 +118,7 @@ class PhoneNumber extends React.Component {
        { /* Filler */ }
        <View style={[containers.sixTenths, backgrounds.email]}></View>
        { /* Header */ }
-       <Header callbackClose={() => {Actions.landingView}} headerProps={this.headerProps} />
+       <Header callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
     </Animated.View>
    );
  }

@@ -93,7 +93,7 @@ class Email extends React.Component {
            </View>
 
            { /* Header */ }
-           <Header callbackClose={() => {Actions.landingView; console.log("close")}} headerProps={this.headerProps} />
+           <Header callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
 
          </Animated.View>
        </View>

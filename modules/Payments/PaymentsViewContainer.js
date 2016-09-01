@@ -23,7 +23,7 @@ function mapStateToProps(state) {
   return {
 
     // main
-    currentUser: state.getIn(['main', 'currentUser']),
+    // currentUser: state.getIn(['main', 'currentUser']),
     header: state.getIn(['main', 'header']),
 
     // payments

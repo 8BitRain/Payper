@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Button } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, Modal, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Button } from 'react-native';
 
 // Helper functions
 import * as Lambda from '../../services/Lambda';
@@ -10,6 +10,7 @@ import * as SetMaster5000 from '../../helpers/SetMaster5000';
 
 // Partial components
 import UserPicWithCallback from '../../components/Previews/UserPic/UserPicWithCallback';
+import Edit from './Edit';
 
 // Custom stylesheets
 import colors from '../../styles/colors';
@@ -40,24 +41,48 @@ const EMPTY_DATA_SOURCE = new ListView.DataSource({
 class Profile extends React.Component {
   constructor(props) {
     super(props);
+
     this.options = [
       { rowTitle: "Display Name",
         rowContent: this.props.currentUser.first_name + " " + this.props.currentUser.last_name,
         sectionTitle: "My Profile",
-        destination: () => console.log("Display Name:", this.props.currentUser.first_name + " " + this.props.currentUser.last_name) },
+        destination: () => this._toggleModal({
+          title: "Display Name",
+          content: this.props.currentUser.first_name + " " + this.props.currentUser.last_name,
+          info: "This is this name you go by in app."
+        })},
       { rowTitle: "Username",
         rowContent: this.props.currentUser.username,
         sectionTitle: "My Profile",
-        destination: () => console.log("Username:", this.props.currentUser.username) },
+        destination: () => this._toggleModal({
+          title: "Username",
+          content: this.props.currentUser.username,
+          info: "This is your Payper handle. This is not currently editable."
+        })},
       { rowTitle: "Phone Number",
         rowContent: StringMaster5000.stylizePhoneNumber(this.props.currentUser.decryptedPhone),
         sectionTitle: "My Profile",
-        destination: () => console.log("Phone Number:", this.props.currentUser.phone)},
+        destination: () => this._toggleModal({
+          title: "Phone Number",
+          content: this.props.currentUser.decryptedPhone,
+          info: "Other Payper users will be able to find you by your phone number. We will not give your phone number away."
+        })},
       { rowTitle: "Email",
         rowContent: this.props.currentUser.decryptedEmail,
         sectionTitle: "My Profile",
-        destination: () => console.log("Email:", this.props.currentUser.email)},
+        destination: () => this._toggleModal({
+          title: "Email",
+          content: this.props.currentUser.decryptedEmail,
+          info: "Your email address is used for password recovery. Nobody but you can see this address, and we will not send you spam."
+        })},
     ];
+
+    this.state = {
+      modalVisible: false,
+      modalTitle: "",
+      modalContent: "",
+      modalInfo: "",
+    };
   }
 
 
@@ -108,6 +133,16 @@ class Profile extends React.Component {
   }
 
 
+  _toggleModal(options) {
+    this.setState({
+      modalVisible: !this.state.modalVisible,
+      modalTitle: (options) ? options.title : "",
+      modalContent: (options) ? options.content : "",
+      modalInfo: (options) ? options.info : "",
+    });
+  }
+
+
   render() {
     return (
       <View style={{flex: 1.0, backgroundColor: colors.white, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
@@ -126,7 +161,8 @@ class Profile extends React.Component {
               accent
               user={this.props.currentUser}
               width={110}
-              height={110} />
+              height={110}
+              style={{backgroundColor: 'red'}} />
           </View>
         </View>
 
@@ -134,6 +170,31 @@ class Profile extends React.Component {
         <View style={{flex: 0.77, width: dimensions.width, backgroundColor: colors.white}}>
           { this._renderOptionsList() }
         </View>
+
+
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {alert("Modal has been closed.")}}>
+
+          <Edit editing={this.state} toggleModal={() => this._toggleModal()} />
+
+          { /*
+          <View style={{marginTop: 22}}>
+            <View>
+              <Text>
+                { "Title: " + this.state.modalTitle + "\nContent: " + this.state.modalContent + "\nInfo: " + this.state.modalInfo }
+              </Text>
+              <TouchableHighlight onPress={() => this._toggleModal()}>
+                <Text>Hide Modal</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+          */ }
+
+        </Modal>
+
       </View>
     );
   }

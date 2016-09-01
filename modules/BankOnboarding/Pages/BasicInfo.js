@@ -53,14 +53,14 @@ class BasicInfo extends React.Component {
          "paymentIcons": false,
          "circleIcons": true,
          "settingsIcon": false,
-         "closeIcon": true
+         "closeIcon": false
        },
        index: 0,
        numCircles: 4
      };
 
      // Callback functions to be passed to the header
-     this.callbackClose = function() { this.props.callbackClose() };
+     //this.callbackClose = function() { this.props.callbackClose() };
 
      // Props to be passed to the arrow nav
      this.arrowNavProps = {
@@ -137,7 +137,7 @@ class BasicInfo extends React.Component {
            <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} />
 
            { /* Header */ }
-           <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+           <Header headerProps={this.headerProps} />
 
          </Animated.View>
        </View>

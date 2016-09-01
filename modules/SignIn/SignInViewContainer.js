@@ -19,6 +19,21 @@ import Loading from "../../components/Loading/Loading";
 // Iconography
 import Entypo from 'react-native-vector-icons/Entypo';
 
+// Stylesheets
+var buttonStyles = StyleSheet.create({
+  button: {
+    backgroundColor: colors.richBlack,
+    width: dimensions.width - 50,
+    // height: 50,
+    borderRadius: 4,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
+    overflow: 'hidden',
+  }
+});
+
 class SignInView extends React.Component {
   constructor(props) {
     super(props);
@@ -175,7 +190,7 @@ class SignInView extends React.Component {
               style={styles.input}
               placeholder={"Email"}
               defaultValue={this.state.email}
-              autoFocus={true}
+              autoFocus={false}
               autoCapitalize="none"
               autoCorrect={false}
               keyboardType={"email-address"}
@@ -209,7 +224,17 @@ class SignInView extends React.Component {
           </View>
 
           { /* Filler */ }
-          <View style={{flex:0.18}}></View>
+          <View style={{flex: 0.18, justifyContent: 'center', alignItems: 'center'}}>
+            <View style={buttonStyles.button}>
+              <TouchableHighlight
+                style={{flex: 1.0}}
+                onPress={() => Actions.CreateAccountViewContainer()}>
+                <Text style={{textAlign: 'center', fontFamily: 'Roboto', color: colors.accent, fontSize: 17, fontWeight: '100', padding: 10}}>
+                  Don{"'"}t have an account? Sign up here.
+                </Text>
+              </TouchableHighlight>
+            </View>
+          </View>
         </View>
       );
     }

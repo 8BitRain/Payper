@@ -43,15 +43,18 @@ export function arrayToMap(arr) {
   *   Formats native cell phone contacts and returns them as an array
   *   Contact format: { first_name: "John", last_name: "Doe", phone: 2623508312, pic: "..." }
 **/
-export function formatNativeContacts(contacts) {
+export function formatNativeContacts(contacts, phoneNumbers) {
   var arr = [],
       nums = [],
       curr;
 
   for (var contact in contacts) {
     curr = contacts[contact];
+
+    // If this contact doesn't have a phone number, skip over it
     if (!curr.phoneNumbers[0]) continue;
 
+    // Format contact
     var c = {
       first_name: firstName = (curr.givenName) ? curr.givenName : "",
       last_name: lastName = (curr.familyName) ? curr.familyName : "",
@@ -62,6 +65,7 @@ export function formatNativeContacts(contacts) {
       sectionTitle: "Phone Contacts",
     }
 
+    //
     if (!_.includes(nums, c.phone)) arr.push(c);
     nums.push(c.phone);
   }
@@ -83,6 +87,25 @@ export function contactsToArray(contacts) {
     curr = contacts[c];
     curr.uid = c;
     curr.sectionTitle = "Facebook Friends";
+    arr.push(curr);
+  }
+
+  return arr;
+};
+
+
+/**
+  *   Converts Payper user JSON to array
+**/
+export function globalUserListToArray(options) {
+  var arr = [], curr;
+
+  console.log("ALL CONTACTS:", options.allContacts);
+
+  for (var u in options.users) {
+    curr = options.users[u];
+    curr.uid = u;
+    curr.sectionTitle = "Other Payper Users";
     arr.push(curr);
   }
 

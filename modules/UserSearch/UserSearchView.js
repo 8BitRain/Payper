@@ -90,8 +90,17 @@ class UserSearch extends React.Component {
   **/
   componentWillMount() {
     this.props.initialize(this.props.nativeContacts);
-    var contactList = "contactList/" + this.props.currentUser.uid;
-    this.props.listen([contactList], { nativeContacts: this.props.nativeContacts });
+    var contactList = "contactList/" + this.props.currentUser.uid,
+        globalUserList = "users";
+    this.props.listen([contactList], { nativeContacts: this.props.nativeContacts }, () => {
+
+      console.log("=-=-=-=\n\nCallback reached\n\n=-=-=-=");
+
+      // Start listening to global user list AFTER we've received user's contact list so that
+      // we have something to concatenate with
+      this.props.listen([globalUserList], { allContactsArray: this.props.allContactsArray });
+
+    });
   }
 
 

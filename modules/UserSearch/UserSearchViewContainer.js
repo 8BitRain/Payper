@@ -42,14 +42,35 @@ function mapDispatchToProps(dispatch) {
       dispatch(set.allContactsArray(nativeContacts));
     },
 
-    listen: (endpoints, options) => {
+    listen: (endpoints, options, callback) => {
       Firebase.listenTo(endpoints, (response) => {
         if (response.value) {
-          var payperContactsArray = SetMaster5000.contactsToArray(response.value);
-          var allContactsArray = payperContactsArray.concat(options.nativeContacts);
-          var allContactsMap = SetMaster5000.arrayToMap(allContactsArray);
-          dispatch(set.allContactsMap(allContactsMap));
-          dispatch(set.allContactsArray(allContactsArray))
+
+          switch (response.endpoint.split("/")[0]) {
+            case "contactList":
+
+              var payperContactsArray = SetMaster5000.contactsToArray(response.value);
+              var allContactsArray = payperContactsArray.concat(options.nativeContacts);
+              var allContactsMap = SetMaster5000.arrayToMap(allContactsArray);
+              dispatch(set.allContactsMap(allContactsMap));
+              dispatch(set.allContactsArray(allContactsArray));
+
+              if (typeof callback == 'function') callback();
+              else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+
+            break;
+            case "users":
+
+              console.log("%cSuccessfully received global user list", "color:green;font-weight:900;");
+
+              var globalUserListArray = SetMaster5000.globalUserListToArray({ users: response.value });
+              var allContactsArray = options.allContactsArray.concat(globalUserListArray);
+              var allContactsMap = SetMaster5000.arrayToMap(allContactsArray);
+              dispatch(set.allContactsMap(allContactsMap));
+              dispatch(set.allContactsArray(allContactsArray));
+
+            break;
+          }
         }
       });
 

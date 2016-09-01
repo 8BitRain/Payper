@@ -5,7 +5,7 @@ import { loop, Effects } from 'redux-loop';
 // Initialize state
 const initialState = Map({
   activeFirebaseListeners: [],
-  loggedIn: false,
+  signedIn: false,
   currentUser: {},
   flags: "",
   notifications: [],
@@ -33,6 +33,7 @@ const initialState = Map({
 
 // Action types
 const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
+      SET_SIGNED_IN = 'SET_SIGNED_IN',
       SET_CURRENT_USER = 'SET_CURRENT_USER',
       SET_FLAGS = 'SET_FLAGS'
       SET_NOTIFICATIONS = 'SET_NOTIFICATIONS',
@@ -47,6 +48,7 @@ const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
 
 // Action creators
 export function activeFirebaseListeners(input) { return {type: SET_ACTIVE_FIREBASE_LISTENERS, input: input} };
+export function signedIn(input) { return {type: SET_SIGNED_IN, input: input} };
 export function currentUser(input) { return {type: SET_CURRENT_USER, input: input} };
 export function flags(input) { return {type: SET_FLAGS, input: input} };
 export function signedIn(input) { return {type: SET_SIGNED_IN, input: input} };

@@ -46,10 +46,9 @@ const getSceneStyle = function (props, computedProps) {
 };
 
 export default class Coincast extends React.Component {
-
   render() {
     return (
-      <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
+      <Router key={Math.random()} createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 
