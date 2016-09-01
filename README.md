@@ -101,6 +101,13 @@
 
 ### Back-burner
 - [ ] Design photo selector for profile picture upload
+- [ ] Transfer create payment flow to modal instead of separate scene
+
+### 8/31 Hackathon
+- [ ] 1 Research and resolve token refresh issue
+- [ ] 2 Fix Incoming/Outgoing tab touchability
+- [ ] 3 Finish edit profile component
+- [ ] 4 Fix ugly notification indicators
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
