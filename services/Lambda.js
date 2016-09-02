@@ -52,7 +52,7 @@ export function getUserWithToken(sessionToken, callback) {
 **/
 export function createUser(user, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create", {method: "POST", body: JSON.stringify(user)})
+      fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create", {method: "POST", body: JSON.stringify(user)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -80,8 +80,9 @@ export function createFBUser(user, callback) {
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
-        console.log("Create user Lambda response", responseData);
-        console.log("USER ACCOUNT STATUS: " +  responseData.account_status);
+        //console.log("Create user Lambda response", responseData);
+        console.log("LAMBDA => USER ACCOUNT STATUS: " +  responseData.account_status);
+        console.log("LAMBDA => LAMBDA RESPONSE DATA: " + JSON.stringify(responseData));
         if (typeof callback == 'function') callback(responseData.user, responseData.account_status);
       } else {
         console.log("Error getting FBuser with token", responseData.errorMessage);
@@ -417,6 +418,30 @@ export function getDecryptedUser(options, callback) {
         if (typeof callback == 'function') callback(responseData);
       } else {
         console.log("Error getting decrypted user:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(responseData);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given list of phone numbers (phoneNumbers) and session token (token),
+  *   update a user's phone contacts
+**/
+export function updatePhoneContacts(options, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneContacts", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Update phone contacts Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error updating phone contacts:", responseData.errorMessage);
         if (typeof callback == 'function') callback(responseData);
       }
     })

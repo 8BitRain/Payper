@@ -99,6 +99,7 @@
 - [ ] Fix bug where payment creation sometimes fails
 - [ ] Create Lambda endpoint that returns a decrypted phoneNumber:uid list
 - [ ] Discuss backend logic for token refresh (Option 1: Create an endpoint called updateSessionToken that takes a new session token and an old session token, cycles the old token out, and returns a user object. Option 2: Completely handle refresh in the backend. Option 1 > Option 2, probably)
+- [ ] Hit Lambda.updatePhoneContacts() on load
 
 ### Back-burner
 - [ ] Design photo selector for profile picture upload
@@ -111,7 +112,6 @@
 - [ ] Fix ugly notification indicators
 - [ ] Fix duplicate user bug in global user search list
 - [ ] Sign-in success on second attempt looks whack
-
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)

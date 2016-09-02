@@ -38,7 +38,7 @@ class Dob extends React.Component {
          "paymentIcons": false,
          "circleIcons": true,
          "settingsIcon": false,
-         "closeIcon": true
+         "closeIcon": false
        },
        index: 2,
        numCircles: 4

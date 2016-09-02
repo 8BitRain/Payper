@@ -54,7 +54,7 @@ class SSN extends React.Component {
          "paymentIcons": false,
          "circleIcons": true,
          "settingsIcon": false,
-         "closeIcon": true
+         "closeIcon": false
        },
        index: 3,
        numCircles: 4
