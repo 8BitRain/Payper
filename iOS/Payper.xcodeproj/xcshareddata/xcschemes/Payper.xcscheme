@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Coincast.app"
+               BuildableName = "Payper.app"
                BlueprintName = "Payper"
                ReferencedContainer = "container:Payper.xcodeproj">
             </BuildableReference>
@@ -29,7 +29,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "Payper.xctest"
+               BuildableName = "Coincast.xctest"
                BlueprintName = "PayperTests"
                ReferencedContainer = "container:Payper.xcodeproj">
             </BuildableReference>
@@ -47,7 +47,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "Payper.xctest"
+               BuildableName = "Coincast.xctest"
                BlueprintName = "PayperTests"
                ReferencedContainer = "container:Payper.xcodeproj">
             </BuildableReference>
@@ -57,7 +57,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Coincast.app"
+            BuildableName = "Payper.app"
             BlueprintName = "Payper"
             ReferencedContainer = "container:Payper.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Coincast.app"
+            BuildableName = "Payper.app"
             BlueprintName = "Payper"
             ReferencedContainer = "container:Payper.xcodeproj">
          </BuildableReference>
@@ -99,7 +99,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Coincast.app"
+            BuildableName = "Payper.app"
             BlueprintName = "Payper"
             ReferencedContainer = "container:Payper.xcodeproj">
          </BuildableReference>
