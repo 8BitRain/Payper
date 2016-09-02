@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
                BuildableName = "Coincast.app"
-               BlueprintName = "Coincast"
-               ReferencedContainer = "container:Coincast.xcodeproj">
+               BlueprintName = "Payper"
+               ReferencedContainer = "container:Payper.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "CoincastTests.xctest"
-               BlueprintName = "CoincastTests"
-               ReferencedContainer = "container:Coincast.xcodeproj">
+               BuildableName = "Payper.xctest"
+               BlueprintName = "PayperTests"
+               ReferencedContainer = "container:Payper.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,9 +47,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "CoincastTests.xctest"
-               BlueprintName = "CoincastTests"
-               ReferencedContainer = "container:Coincast.xcodeproj">
+               BuildableName = "Payper.xctest"
+               BlueprintName = "PayperTests"
+               ReferencedContainer = "container:Payper.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -58,15 +58,15 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "Coincast.app"
-            BlueprintName = "Coincast"
-            ReferencedContainer = "container:Coincast.xcodeproj">
+            BlueprintName = "Payper"
+            ReferencedContainer = "container:Payper.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -81,8 +81,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "Coincast.app"
-            BlueprintName = "Coincast"
-            ReferencedContainer = "container:Coincast.xcodeproj">
+            BlueprintName = "Payper"
+            ReferencedContainer = "container:Payper.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -100,8 +100,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "Coincast.app"
-            BlueprintName = "Coincast"
-            ReferencedContainer = "container:Coincast.xcodeproj">
+            BlueprintName = "Payper"
+            ReferencedContainer = "container:Payper.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
