@@ -57,7 +57,7 @@ class Profile extends React.Component {
         destination: () => this._toggleModal({
           title: "Username",
           content: this.props.currentUser.username,
-          info: "This is your Payper handle. This is not currently editable."
+          info: "This is not currently editable."
         })},
       { rowTitle: "Phone Number",
         rowContent: StringMaster5000.stylizePhoneNumber(this.props.currentUser.decryptedPhone),
@@ -73,15 +73,17 @@ class Profile extends React.Component {
         destination: () => this._toggleModal({
           title: "Email",
           content: this.props.currentUser.decryptedEmail,
-          info: "Your email address is used for password recovery. Nobody but you can see this address, and we will not send you spam."
+          info: "Your email address is used for password recovery and identity verification. Nobody can see this address but you."
         })},
     ];
 
     this.state = {
       modalVisible: false,
-      modalTitle: "",
-      modalContent: "",
-      modalInfo: "",
+      modalProps: {
+        title: "",
+        value: "",
+        info: "",
+      },
     };
   }
 
@@ -135,10 +137,12 @@ class Profile extends React.Component {
 
   _toggleModal(options) {
     this.setState({
+      modalProps: {
+        title: (options) ? options.title : "",
+        value: (options) ? options.content : "",
+        info: (options) ? options.info : "",
+      },
       modalVisible: !this.state.modalVisible,
-      modalTitle: (options) ? options.title : "",
-      modalContent: (options) ? options.content : "",
-      modalInfo: (options) ? options.info : "",
     });
   }
 
@@ -171,27 +175,14 @@ class Profile extends React.Component {
           { this._renderOptionsList() }
         </View>
 
-
+        { /* Modal containing edit panel */ }
         <Modal
           animationType={"slide"}
-          transparent={false}
+          transparent={true}
           visible={this.state.modalVisible}
           onRequestClose={() => {alert("Modal has been closed.")}}>
 
-          <Edit editing={this.state} toggleModal={() => this._toggleModal()} />
-
-          { /*
-          <View style={{marginTop: 22}}>
-            <View>
-              <Text>
-                { "Title: " + this.state.modalTitle + "\nContent: " + this.state.modalContent + "\nInfo: " + this.state.modalInfo }
-              </Text>
-              <TouchableHighlight onPress={() => this._toggleModal()}>
-                <Text>Hide Modal</Text>
-              </TouchableHighlight>
-            </View>
-          </View>
-          */ }
+          <Edit {...this.props} modalProps={this.state.modalProps} toggleModal={() => this._toggleModal()} />
 
         </Modal>
 

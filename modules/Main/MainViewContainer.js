@@ -206,6 +206,10 @@ function mapDispatchToProps(dispatch) {
       dispatch(set.currentPage(page));
     },
 
+    setCurrentUser: (user) => {
+      dispatch(set.currentUser(user));
+    },
+
   }
 }
 

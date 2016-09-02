@@ -17,6 +17,7 @@ import ArrowNav from '../../components/Navigation/Arrows/ArrowDouble';
 import colors from '../../styles/colors';
 const dimensions = Dimensions.get('window');
 const styles = StyleSheet.create({
+
   textInput: {
     height: 60,
     paddingLeft: 25,

@@ -4,6 +4,12 @@ import { View, Text, TextInput, Dimensions, StyleSheet, TouchableHighlight, Moda
 
 // Helper functions
 import * as Lambda from '../../services/Lambda';
+import * as Validators from '../../helpers/validators';
+import * as Alert from '../../helpers/Alert';
+import * as StringMaster5000 from '../../helpers/StringMaster5000';
+
+// Partial components
+import ArrowNav from '../../components/Navigation/Arrows/ArrowDouble';
 
 // Iconography
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -26,7 +32,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 16,
     color: colors.richBlack,
-    paddingBottom: 12,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 20,
+    paddingRight: 20,
     textAlign: 'center',
   },
 
@@ -38,6 +47,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     paddingLeft: 20,
     paddingRight: 20,
+    marginTop: 30,
     width: dimensions.width,
     height: 50,
     backgroundColor: colors.richBlack,
@@ -52,9 +62,97 @@ class Edit extends React.Component {
     super(props);
 
     this.state = {
-      input: "",
+      title: this.props.modalProps.title,
+      value: this.props.modalProps.value,
+      info: this.props.modalProps.info,
+    };
+
+    this.input = "";
+  }
+
+
+  _getPhoneNumberKeyboard() {
+    return(
+      <TextInput
+        style={styles.input}
+        onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
+        onChangeText={(input) => { this.input = input; }}
+        autoCorrect={false} autoFocus
+        placeholderFontFamily="Roboto"
+        placeholderTextColor={colors.lightGrey}
+        placeholder={"262-305-8038"}
+        maxLength={10}
+        keyboardType="phone-pad" />
+    );
+  }
+
+
+  _getDisplayNameKeyboard() {
+    return(
+      <TextInput
+        style={styles.input}
+        onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
+        placeholderFontFamily={"Roboto"}
+        placeholderTextColor={colors.lightGrey}
+        placeholder={"Enter your new " + this.state.title.toLowerCase()}
+        autoCorrect={false} autoFocus
+        autoCapitalize={"words"}
+        onChangeText={(input) => { this.input = input }} />
+    );
+  }
+
+
+  _getEmailKeyboard() {
+    return(
+      <TextInput
+        style={styles.input}
+        onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
+        placeholderFontFamily={"Roboto"}
+        placeholderTextColor={colors.lightGrey}
+        placeholder={"Enter your new " + this.state.title.toLowerCase()}
+        autoCorrect={false} autoFocus
+        autoCapitalize={"none"}
+        onChangeText={(input) => { this.input = input }} />
+    );
+  }
+
+
+  _handleSubmit() {
+
+    // Extend scope
+    const _this = this;
+    var valid;
+
+    switch (this.props.modalProps.title) {
+      case "Display Name":
+        valid = Validators.validateName(this.input);
+        console.log("Valid:", valid);
+      break;
+      case "Phone Number":
+        valid = Validators.validatePhone(this.input);
+        if (valid.valid) {
+          Lambda.updatePhone({ phone: this.input, token: this.props.currentUser.token }, (success) => {
+            console.log("Updating phone number was a success:", success);
+            if (success) {
+              var currentUser = this.props.currentUser;
+              currentUser.decryptedPhone = this.input;
+              this.props.setCurrentUser(currentUser);
+            }
+          });
+        } else {
+          Alert.message({
+            title: "Hey!",
+            message: "Please enter a valid phone number. (e.g. 2623058038)",
+          });
+        }
+      break;
+      case "Email":
+        valid = Validators.validateEmail(this.input);
+        console.log("Valid:", valid);
+      break;
     }
   }
+
 
   render() {
     return (
@@ -66,43 +164,43 @@ class Edit extends React.Component {
           { /* Header */ }
           <View style={{justifyContent: 'center', alignItems: 'center', width: dimensions.width, backgroundColor: colors.richBlack, padding: 40}}>
             <Text style={styles.title}>
-              { this.props.editing.modalTitle }
+              { this.state.title }
             </Text>
           </View>
 
-          { /* Current */
-            (this.props.editing.modalContent)
-              ? <View style={{justifyContent: 'center', alignItems: 'center', width: dimensions.width, backgroundColor: colors.richBlack}}>
+          { /* Current value */
+            (this.state.value)
+              ? <View style={{justifyContent: 'center', alignItems: 'center', width: dimensions.width}}>
                   <Text style={[styles.info, {color: colors.white, fontWeight: '200'}]}>
-                    Current { this.props.editing.modalTitle.toLowerCase() }: { this.props.editing.modalContent }
+                    Current { this.state.title.toLowerCase() }: { (this.props.modalProps.title == "Phone Number") ? StringMaster5000.stylizePhoneNumber(this.state.value) : this.state.value }
                   </Text>
                   <Text style={[styles.info, {color: colors.white, fontWeight: '200'}]}>
-                    ({this.props.editing.modalInfo})
-                  </Text>
-                </View>
-              : <View style={{justifyContent: 'center', alignItems: 'center', width: dimensions.width, backgroundColor: colors.richBlack}}>
-                  <Text style={[styles.info, {color: colors.white, fontWeight: '200'}]}>
-                    ({this.props.editing.modalInfo})
+                    ({this.state.info})
                   </Text>
                 </View>
-          }
+              : <View style={{justifyContent: 'center', alignItems: 'center', width: dimensions.width}}>
+                  <Text style={[styles.info, {color: colors.white, fontWeight: '200'}]}>
+                    ({this.state.info})
+                  </Text>
+                </View> }
 
 
           { /* Text input */ }
-          <View style={{justifyContent: 'center', alignItems: 'center', width: dimensions.width, backgroundColor: colors.white}}>
-
+          <View style={{justifyContent: 'center', alignItems: 'center', width: dimensions.width}}>
             <View >
-              <TextInput
-                style={styles.input}
-                placeholderTextColor={colors.accent}
-                placeholder={"Enter your new " + this.props.editing.modalTitle.toLowerCase()}
-                autoCorrect={false}
-                autoCapitalize={(this.props.editing.modalTitle = "Display Name") ? true : false}
-                autofocus
-                onChangeText={(input) => this.setState({ input: input })} />
+              { /* Text inputs will differ based on what user is inputting */ }
+              { (this.props.modalProps.title == "Display Name") ? this._getDisplayNameKeyboard() : null }
+              { (this.props.modalProps.title == "Phone Number") ? this._getPhoneNumberKeyboard() : null }
+              { (this.props.modalProps.title == "Email") ? this._getEmailKeyboard() : null }
             </View>
-
           </View>
+
+          { /* Submit button */
+            (this.props.modalProps.title != "Username")
+              ? <ArrowNav
+                  arrowNavProps={{left: false, right: true}}
+                  callbackRight={() => this._handleSubmit()} />
+              : null }
 
         </View>
 

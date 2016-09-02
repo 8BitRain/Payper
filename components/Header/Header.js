@@ -87,7 +87,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
-    padding: 2.5,
+    padding: 5,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
 
   // Right (out) flow tab
@@ -104,7 +106,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
-    padding: 2.5,
+    padding: 5,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
 
   // Flow tab inner text
@@ -186,7 +190,7 @@ function getCircleIcons(numCircles, index) {
 // Return tabs for switching between tracking flows
 function getFlowTabs(activeTab, callbackIn, callbackOut) {
   return(
-    <View style={styles.flowTabWrap}>
+    <View style={[styles.flowTabWrap]}>
       { /* 'In' tab */ }
       <TouchableHighlight
         activeOpacity={(activeTab == 'incoming') ? 1.0 : 0.7}

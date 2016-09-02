@@ -149,9 +149,9 @@ class PaymentPreview extends React.Component {
 
             { /* Profile picture */ }
             <View style={styles.picWrap}>
-              { (this.props.payment.invitee == "recip")
-                  ? getUserPic("", this.props.payment.recip_name)
-                  : getUserPic("", this.props.payment.sender_name) }
+              { (this.props.payment.recip_id)
+                  ? getUserPic("", this.props.payment.sender_name)
+                  : getUserPic("", this.props.payment.recip_name) }
             </View>
 
             { /* Name and payment info */ }
@@ -204,11 +204,9 @@ class PaymentPreview extends React.Component {
 
             { /* Profile picture */ }
             <View style={styles.picWrap}>
-              {
-                (this.props.out)
-                ? getUserPic(this.props.payment.recip_pic, this.props.payment.recip_name)
-                : getUserPic(this.props.payment.sender_pic, this.props.payment.sender_name)
-              }
+              { (this.props.out)
+                  ? getUserPic(this.props.payment.recip_pic, this.props.payment.recip_name)
+                  : getUserPic(this.props.payment.sender_pic, this.props.payment.sender_name) }
             </View>
 
             { /* Name and payment info */ }

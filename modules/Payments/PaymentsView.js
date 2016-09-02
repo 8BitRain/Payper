@@ -88,8 +88,8 @@ class Payments extends React.Component {
   }
 
   _renderRow(payment) {
-    // console.log("%cRendering payment:", "color:green;font-weight:900;");
-    // console.log(payment);
+    console.log("%cRendering payment:", "color:green;font-weight:900;");
+    console.log(payment);
     return(
       <Transaction
         payment={payment}
@@ -115,7 +115,7 @@ class Payments extends React.Component {
               pid: payment.pid,
               token: this.props.currentUser.token,
               ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-              type: (payment.confirmed) ? "active" : (payment.invite) ? "invite" : "pending",
+              type: payment.type,
               flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
             })
           });
@@ -186,7 +186,10 @@ class Payments extends React.Component {
                   pid: payment.pid,
                   token: this.props.currentUser.token,
                   ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-                })
+                  type: payment.type,
+                  flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
+                  invite: (payment.type == "invite") ? true : false,
+                }),
               });
             }
           });

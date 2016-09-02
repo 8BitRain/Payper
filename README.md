@@ -90,24 +90,28 @@
 - [ ] Fix bug where sign in sometimes fails
 - [ ] Fix bug where, upon Facebook sign in, user's session token is undefined on the add phone number screen
 - [ ] Fix bug where the invite via payment endpoint receives incorrect sender/recip traits
+- [ ] Make sure payments are deleting properly (sometimes throws this.props.invite is undefined)
+- [ ] Fix bug where you can still press create payment confirmation button while it's sending and create multiple payments
 
 ### Things I Need Vash For (Brady)
+- [X] Fix bug where inviting via payment exits before completing request
+- [X] Attach "type" to Firebase payment object when creating a new payment
 - [ ] Fix bug where payment creation sometimes fails
-- [ ] Fix bug where inviting via payment exits before completing request
 - [ ] Create Lambda endpoint that returns a decrypted phoneNumber:uid list
-- [ ] Attach "type" to Firebase payment object when creating a new payment
 - [ ] Discuss backend logic for token refresh (Option 1: Create an endpoint called updateSessionToken that takes a new session token and an old session token, cycles the old token out, and returns a user object. Option 2: Completely handle refresh in the backend. Option 1 > Option 2, probably)
-- [ ] Discuss "Interaction Ledger"
 
 ### Back-burner
 - [ ] Design photo selector for profile picture upload
 - [ ] Transfer create payment flow to modal instead of separate scene
 
 ### 8/31 Hackathon
-- [ ] 1 Research and resolve token refresh issue
-- [ ] 2 Fix Incoming/Outgoing tab touchability
-- [ ] 3 Finish edit profile component
-- [ ] 4 Fix ugly notification indicators
+- [X] Research and resolve token refresh issue
+- [X] Fix Incoming/Outgoing tab padding (need to be easier to press)
+- [ ] Finish edit profile component
+- [ ] Fix ugly notification indicators
+- [ ] Fix duplicate user bug in global user search list
+- [ ] Sign-in success on second attempt looks whack
+
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
