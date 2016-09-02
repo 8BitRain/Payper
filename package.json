@@ -14,6 +14,7 @@
     "react": "15.0.2",
     "react-native": "0.26.x",
     "react-native-autocomplete-input": "^1.1.0",
+    "react-native-blur": "^1.0.1",
     "react-native-button": "github:ide/react-native-button",
     "react-native-carousel": "^0.10.0",
     "react-native-contacts": "^0.3.0",

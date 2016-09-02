@@ -61,7 +61,7 @@ const BankOnboardingView = React.createClass({
         <Loading
           complete={this.props.doneLoading}
           msgSuccess={""}
-          msgError={"You seem lost"}
+          msgError={"There was an error on our end. Sorry about that ^_^;"}
           msgLoading={"One moment..."}
           success={false}
           successDestination={() => {console.log("SucessfullLoading")}}
