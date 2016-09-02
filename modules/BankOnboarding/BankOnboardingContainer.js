@@ -53,7 +53,9 @@ export default connect(
               if(response.value != null){
                 if(response.value.iav != ""){
                   console.log("Starts IAV");
-                  dispatch(dispatchFunctions.setIav(response.value.iav));
+                  dispatch(dispatchFunctions.setLoading(true));
+                  //dispatch(dispatchFunctions.setIav(response.value.iav));
+
                   //break;
                 }
                 //Go From IAV to MainViewContainer

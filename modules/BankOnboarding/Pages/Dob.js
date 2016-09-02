@@ -75,7 +75,7 @@ class Dob extends React.Component {
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Dob</Text>
            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"1994-09-09"} onChangeText={(text) => {this.dobInput = text; this.props.dispatchSetDob(this.dobInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"YYYY-MM-DD"} keyboardType="email-address" />
-           <DatePicker
+           {/*<DatePicker
               style={{width: 200}}
               date={this.state.date}
               mode="date"
@@ -97,7 +97,7 @@ class Dob extends React.Component {
                 }
               }}
               onDateChange={(date) => {this.setState({date: date})}}
-            />
+            />*/}
          </View>
 
            { /* Arrow nav buttons */ }

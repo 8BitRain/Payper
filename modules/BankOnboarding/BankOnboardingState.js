@@ -280,7 +280,7 @@ export default function BankOnboardingReducer(state = initialState, action = {})
       break;
     case SET_SSN_VALIDATIONS:
       var nesState = state.set("ssnValidations", action.index);
-      return newStatel
+      return newState;
       break;
     case SET_START_MAIN:
       var newState = state.set('startMain', action.index);

@@ -17,6 +17,7 @@ var Mixpanel = require('react-native-mixpanel');
 // Custom components
 import Header from "../../../components/Header/Header";
 import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
+import EvilIcons from "react-native-vector-icons/EvilIcons";
 
 // Stylesheets
 import backgrounds from "../styles/backgrounds";
@@ -146,8 +147,7 @@ class SSN extends React.Component {
 
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>SSN</Text>
-           {this.props.ssnValidations.valid ? <EvilIcons  style={{}} name="check" size={40} color={'green'} /> : <EvilIcons style={{}} name="check" size={40} color={'grey'} />}
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput); this.props.dispatchSetSSNValidations(this.SSNInput);}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="numeric"/>
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
          </View>
 
            { /* Arrow nav buttons */ }
