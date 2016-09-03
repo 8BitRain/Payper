@@ -70,6 +70,7 @@
 - [X] Add section headers to user ListView in UserSearch
 - [X] Fix bug where notifications indicator is not rendered as a perfect circle on smaller devices
 - [X] Add global user list to UserSearch (naive approach)
+- [X] Hit `Lambda.updatePhoneContacts()` on load, updating user's contactList
 - [ ] Add edit pages for profile attributes
 - [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
 - [ ] Add an onPress destination to notifications
@@ -90,7 +91,6 @@
 - [X] Fix bug where payment state is not reset after creating a payment
 - [X] Fix bug where, upon Facebook sign in, user's session token is undefined on the add phone number screen (Eric fixed)
 - [X] Fix bug where token doesn't refresh on launch, resulting in failed endpoint hits
-- [X] Hit `Lambda.updatePhoneContacts()` on load, updating user's contactList
 - [ ] Fix bug where sign in sometimes fails (tough to recreate, may be a non-issue)
 - [ ] Fix bug where the invite via payment endpoint receives incorrect sender/recip traits
 - [ ] Make sure payments are deleting properly (sometimes throws this.props.invite is undefined)
