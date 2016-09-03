@@ -65,15 +65,19 @@ class Edit extends React.Component {
       title: this.props.modalProps.title,
       value: this.props.modalProps.value,
       info: this.props.modalProps.info,
+      loading: false,
+      loadingMessage: "",
     };
 
     this.input = "";
+    this._clearText = this._clearText.bind(this);
   }
 
 
   _getPhoneNumberKeyboard() {
     return(
       <TextInput
+        ref={(component) => this._textInput = component}
         style={styles.input}
         onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
         onChangeText={(input) => { this.input = input; }}
@@ -90,6 +94,7 @@ class Edit extends React.Component {
   _getDisplayNameKeyboard() {
     return(
       <TextInput
+        ref={(component) => this._textInput = component}
         style={styles.input}
         onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
         placeholderFontFamily={"Roboto"}
@@ -105,6 +110,7 @@ class Edit extends React.Component {
   _getEmailKeyboard() {
     return(
       <TextInput
+        ref={(component) => this._textInput = component}
         style={styles.input}
         onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
         placeholderFontFamily={"Roboto"}
@@ -114,6 +120,11 @@ class Edit extends React.Component {
         autoCapitalize={"none"}
         onChangeText={(input) => { this.input = input }} />
     );
+  }
+
+
+  _clearText() {
+    this._textInput.setNativeProps({text: ''});
   }
 
 
@@ -131,14 +142,41 @@ class Edit extends React.Component {
       case "Phone Number":
         valid = Validators.validatePhone(this.input);
         if (valid.valid) {
+
+          // Activate loading indicator
+          this.setState({ loading: true, loadingMessage: "Sending..." });
+
+          // Hit Lambda with new phone number
           Lambda.updatePhone({ phone: this.input, token: this.props.currentUser.token }, (success) => {
             console.log("Updating phone number was a success:", success);
             if (success) {
+
+              // Clear text input
+              this._clearText();
+
+              // Report success and deactive loading indicator
+              this.setState({ loadingMessage: "Success!" });
+              setTimeout(function() {
+                _this.setState({ loading: false, loadingMessages: "" });
+              }, 750);
+
+              // Update user's phone number in Redux store
               var currentUser = this.props.currentUser;
               currentUser.decryptedPhone = this.input;
               this.props.setCurrentUser(currentUser);
+
+            } else {
+
+              // Report failure and deactive loading indicator
+              this.setState({ loadingMessage: "Failed to update" });
+              setTimeout(function() {
+                _this.setState({ loading: false, loadingMessages: "" });
+              }, 750);
+
             }
+
           });
+
         } else {
           Alert.message({
             title: "Hey!",
@@ -195,12 +233,18 @@ class Edit extends React.Component {
             </View>
           </View>
 
+          <View style={{height: 100, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dimensions.width}}>
           { /* Submit button */
             (this.props.modalProps.title != "Username")
-              ? <ArrowNav
-                  arrowNavProps={{left: false, right: true}}
-                  callbackRight={() => this._handleSubmit()} />
+              ? (this.state.loading)
+                  ? <Text style={[styles.info, { color: colors.white, fontSize: 20 }]}>
+                      { this.state.loadingMessage }
+                    </Text>
+                  : <ArrowNav
+                      arrowNavProps={{left: false, right: true}}
+                      callbackRight={() => this._handleSubmit()} />
               : null }
+          </View>
 
         </View>
 

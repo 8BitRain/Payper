@@ -5,17 +5,19 @@
   *   💣  Lambda.js  💣
   *
   *   Lambda endpoints:
-  *     💣  Base:               'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev'
-  *     💣  Create user:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create'
-  *     💣  Create payment:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create'
-  *     💣  Get user:           'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get'
-  *     💣  Accept payment:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
-  *     💣  Read notification:  'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
-  *     💣  Direct invite:      'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct'
-  *     💣  Payment invite:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
-  *     💣  GET Funding source: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource'
-  *     💣  Delete user:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/delete'
-  *     💣  GET decrypted user: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/getPersonal'
+  *     💣  Base:                  'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev'
+  *     💣  Get user:              'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get'
+  *     💣  Get decrypted user:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/getPersonal'
+  *     💣  Get funding source:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource'
+  *     💣  Create user:           'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create'
+  *     💣  Create payment:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create'
+  *     💣  Accept payment:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
+  *     💣  Reject payment:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/reject'
+  *     💣  Read notification:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/notifications/markSeen'
+  *     💣  Direct invite:         'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct'
+  *     💣  Payment invite:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
+  *     💣  Delete user:           'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/delete'
+  *     💣  Update phone contacts: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneContacts'
   *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
   *

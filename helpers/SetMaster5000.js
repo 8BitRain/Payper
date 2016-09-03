@@ -78,7 +78,7 @@ export function formatNativeContacts(contacts, phoneNumbers) {
 
 
 /**
-  *   Converts Payper contact JSON to array
+  *   Converts Firebase contactListen JSON to array of objects
 **/
 export function contactsToArray(contacts) {
   var arr = [], curr;
@@ -86,8 +86,23 @@ export function contactsToArray(contacts) {
   for (var c in contacts) {
     curr = contacts[c];
     curr.uid = c;
-    curr.sectionTitle = "Facebook Friends";
+    curr.sectionTitle = (curr.type == "facebook") ? "Facebook Friends" : "Phone Contacts Who User Payper";
     arr.push(curr);
+  }
+
+  return arr;
+};
+
+
+/**
+  *   Converts an array of contact objects to an array of just phone numbers
+**/
+export function contactsArrayToNumbersArray(contacts) {
+  var arr = [], curr;
+
+  for (var c in contacts) {
+    curr = contacts[c];
+    arr.push(curr.phone);
   }
 
   return arr;

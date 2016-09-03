@@ -91,10 +91,14 @@ function mapDispatchToProps(dispatch) {
             } else {
               console.log("%cSuccessfully got native contacts:", "color:green;font-weight:900;");
               console.log(contacts);
+
               // Format contacts then log them to AsyncStorage
               var c = SetMaster5000.formatNativeContacts(contacts);
               dispatch(set.nativeContacts(c));
-              Async.set('native_contacts', JSON.stringify(c));
+
+              // Extract just the phone numbers, then update user's contactList
+              var numbers = SetMaster5000.contactsArrayToNumbersArray(c);
+              Lambda.updatePhoneContacts({ phoneNumbers: numbers, token: parsedUser.token });
             }
           });
 

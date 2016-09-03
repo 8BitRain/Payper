@@ -24,11 +24,12 @@
 - [X] Pass numNotifications to menu in sidebar and render preview indicator next to notifications lightbulb
 - [X] Apply fade animation to inner content during create account onboarding, not entire view
 - [X] Style 'Continue with Facebook' button
+- [X] Increase padding on "Continue without Facebook" text (difficult to press rn)
 - [ ] Fix loading for IAV
-- [ ] Increase padding on "Continue without Facebook" text (difficult to press rn)
 - [ ] Revamp loading screens
 - [ ] Get rid of ugly refresh on notifications indicator
 - [ ] Find a sleeker, more modern icon set
+- [ ] Fix issue where single ArrowNav's are slightly off-center
 
 ### Architecture
 **Refactor the following to fit new Firebase/Redux model:**
@@ -87,19 +88,19 @@
 - [X] Fix bug where app crashes if an incoming payment is cancelled
 - [X] Fix bug where Incoming/Outgoing filter state is not saved during payment creation, resulting in Outgoing payments being rendered even though the Incoming tab is selected, and vice versa
 - [X] Fix bug where payment state is not reset after creating a payment
-- [ ] Fix bug where sign in sometimes fails
-- [ ] Fix bug where, upon Facebook sign in, user's session token is undefined on the add phone number screen
+- [X] Fix bug where, upon Facebook sign in, user's session token is undefined on the add phone number screen (Eric fixed)
+- [X] Fix bug where token doesn't refresh on launch, resulting in failed endpoint hits
+- [X] Hit `Lambda.updatePhoneContacts()` on load, updating user's contactList
+- [ ] Fix bug where sign in sometimes fails (tough to recreate, may be a non-issue)
 - [ ] Fix bug where the invite via payment endpoint receives incorrect sender/recip traits
 - [ ] Make sure payments are deleting properly (sometimes throws this.props.invite is undefined)
 - [ ] Fix bug where you can still press create payment confirmation button while it's sending and create multiple payments
+- [ ] Listen to appFlags > numUnseenNotifications for notification indicator instead of counting them up in the front-end
 
 ### Things I Need Vash For (Brady)
 - [X] Fix bug where inviting via payment exits before completing request
 - [X] Attach "type" to Firebase payment object when creating a new payment
-- [ ] Fix bug where payment creation sometimes fails
-- [ ] Create Lambda endpoint that returns a decrypted phoneNumber:uid list
-- [ ] Discuss backend logic for token refresh (Option 1: Create an endpoint called updateSessionToken that takes a new session token and an old session token, cycles the old token out, and returns a user object. Option 2: Completely handle refresh in the backend. Option 1 > Option 2, probably)
-- [ ] Hit Lambda.updatePhoneContacts() on load
+- [X] Fix bug where payment creation sometimes fails
 
 ### Back-burner
 - [ ] Design photo selector for profile picture upload
