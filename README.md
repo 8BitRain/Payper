@@ -92,7 +92,7 @@
 - [X] Fix bug where, upon Facebook sign in, user's session token is undefined on the add phone number screen (Eric fixed)
 - [X] Fix bug where token doesn't refresh on launch, resulting in failed endpoint hits
 - [X] Fix bug where the invite via payment endpoint receives incorrect sender/recip traits
-- [X] Fix bug where users multiply in global user area of userSearch (in listener, don't concatenate entire contactList with the current array, just new children)
+- [X] Fix bug where users multiply in global user area of UserSearch (in listener, don't concatenate entire contactList with the current array, just new children)
 - [ ] Fix bug where sign in sometimes fails (tough to recreate, may be a non-issue)
 - [ ] Make sure payments are deleting properly (sometimes throws this.props.invite is undefined)
 - [ ] Fix bug where you can still press create payment confirmation button while it's sending and create multiple payments

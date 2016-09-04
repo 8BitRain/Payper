@@ -157,7 +157,6 @@ export function filterContacts(contacts, query) {
   *   Merges two arrays wih
 **/
 export function mergeArrays(arr1, arr2) {
-
   // Combine arrays
   var a = arr1.concat(arr2);
 
@@ -169,5 +168,4 @@ export function mergeArrays(arr1, arr2) {
   }
 
   return a;
-
 };
