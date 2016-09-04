@@ -49,25 +49,42 @@ function mapDispatchToProps(dispatch) {
           switch (response.endpoint.split("/")[0]) {
             case "contactList":
 
-              var payperContactsArray = SetMaster5000.contactsToArray(response.value);
-              var allContactsArray = payperContactsArray.concat(options.nativeContacts);
-              var allContactsMap = SetMaster5000.arrayToMap(allContactsArray);
-              dispatch(set.allContactsMap(allContactsMap));
-              dispatch(set.allContactsArray(allContactsArray));
+              console.log("%cSuccessfully received global user list:", "color:green;font-weight:900;");
+              console.log(response.value);
 
-              if (typeof callback == 'function') callback();
-              else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+              // Convert Firebase JSON to array of user objects, tacking on section titles along the way
+              var contactListArray = SetMaster5000.contactListToArray({ contacts: response.value }),
+                  newAllContactsArray;
+
+              // Concatenate with currently rendered contact list
+              newAllContactsArray = contactListArray.concat(options.nativeContacts);
+
+              // Convert contact array to map for ListView rendering
+              var newAllContactsMap = SetMaster5000.arrayToMap(newAllContactsArray);
+
+              // Set user lists in Redux store, triggering re-render of UserSearch ListView
+              dispatch(set.allContactsMap(newAllContactsMap));
+              dispatch(set.allContactsArray(newAllContactsArray));
 
             break;
             case "users":
 
-              console.log("%cSuccessfully received global user list", "color:green;font-weight:900;");
+              console.log("%cSuccessfully received global user list:", "color:green;font-weight:900;");
+              console.log(response.value);
 
-              var globalUserListArray = SetMaster5000.globalUserListToArray({ users: response.value });
-              var allContactsArray = options.allContactsArray.concat(globalUserListArray);
-              var allContactsMap = SetMaster5000.arrayToMap(allContactsArray);
-              dispatch(set.allContactsMap(allContactsMap));
-              dispatch(set.allContactsArray(allContactsArray));
+              // Convert Firebase JSON to array of user objects, tacking on section titles along the way
+              var globalUserListArray = SetMaster5000.globalUserListToArray({ users: response.value }),
+                  newAllContactsArray;
+
+              // Concatenate with currently rendered contact list
+              newAllContactsArray = globalUserListArray.concat(options.nativeContacts);
+
+              // Convert contact array to map for ListView rendering
+              var newAllContactsMap = SetMaster5000.arrayToMap(newAllContactsArray);
+
+              // Set user lists in Redux store, triggering re-render of UserSearch ListView
+              dispatch(set.allContactsMap(newAllContactsMap));
+              dispatch(set.allContactsArray(newAllContactsArray));
 
             break;
           }

@@ -36,6 +36,7 @@ function mapStateToProps(state) {
     header: state.getIn(['main', 'header']),
     sideMenuIsOpen: state.getIn(['main', 'sideMenuIsOpen']),
     initialized: state.getIn(['main', 'initialized']),
+    nativeContacts: state.getIn(['main', 'nativeContacts']),
 
     // payments
     activeFilter: state.getIn(['payments', 'activeFilter']),

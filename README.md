@@ -96,6 +96,9 @@
 - [ ] Make sure payments are deleting properly (sometimes throws this.props.invite is undefined)
 - [ ] Fix bug where you can still press create payment confirmation button while it's sending and create multiple payments
 - [ ] Listen to appFlags > numUnseenNotifications for notification indicator instead of counting them up in the front-end
+- [ ] Fix bug where users multiple in global user area of userSearch (in listener, don't concatenate entire contactList with the current array, just new children)
+- [ ] Fix bug where session token sign in does not work for non-Facebook users (must manually sign in each launch)
+- [ ] Don't show Facebook icon for non-Facebook users in UserSearchView confirmation
 
 ### Things I Need Vash For (Brady)
 - [X] Fix bug where inviting via payment exits before completing request
@@ -109,9 +112,9 @@
 ### 8/31 Hackathon
 - [X] Research and resolve token refresh issue
 - [X] Fix Incoming/Outgoing tab padding (need to be easier to press)
+- [X] Fix duplicate user bug in global user search list
 - [ ] Finish edit profile component
 - [ ] Fix ugly notification indicators
-- [ ] Fix duplicate user bug in global user search list
 - [ ] Sign-in success on second attempt looks whack
 
 ### Dwolla Requirements

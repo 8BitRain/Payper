@@ -12,7 +12,7 @@ const EMPTY_DATA_SOURCE = new ListView.DataSource({
 // Initialize state
 const initialState = Map({
   activeFirebaseListeners: [],
-  allContactsArray: {},
+  allContactsArray: [],
   allContactsMap: EMPTY_DATA_SOURCE.cloneWithRowsAndSections([]),
   filteredContactsMap: EMPTY_DATA_SOURCE.cloneWithRowsAndSections([]),
   selectedContact: {
