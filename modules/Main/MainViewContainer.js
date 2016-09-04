@@ -99,12 +99,9 @@ function mapDispatchToProps(dispatch) {
 
               // Extract just the phone numbers, then update user's contactList
               var numbers = SetMaster5000.contactsArrayToNumbersArray(c);
-              Lambda.updatePhoneContacts({ phoneNumbers: numbers, token: parsedUser.token });
+              Lambda.updateContacts({ phoneNumbers: numbers, token: parsedUser.token });
             }
           });
-
-          // Get decrypted phoneNumber:uid list
-
 
           if (typeof callback == 'function') callback(true);
           else console.log("Callback is not a function.");

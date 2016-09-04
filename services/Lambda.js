@@ -434,9 +434,9 @@ export function getDecryptedUser(options, callback) {
   *   Given list of phone numbers (phoneNumbers) and session token (token),
   *   update a user's phone contacts
 **/
-export function updatePhoneContacts(options, callback) {
+export function updateContacts(options, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneContacts", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/triggerContactScan", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {

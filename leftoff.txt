@@ -1,8 +1,7 @@
 where'd you leave off?
-
-
-
+-------------------------------------------------------------------------------
 you just refactored the UserSearch listener to fix the duplicate user bug,
 now you need to have some people sign in with Facebook and test it
 
-- 9.3.2016
+9.3.2016
+-------------------------------------------------------------------------------
