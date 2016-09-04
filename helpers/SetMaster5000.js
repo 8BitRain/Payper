@@ -63,10 +63,9 @@ export function formatNativeContacts(contacts, phoneNumbers) {
       stylizedPhone: StringMaster5000.stylizePhoneNumber(curr.phoneNumbers[0].number),
       pic: curr.thumbnailPath,
       type: "phone",
-      sectionTitle: "Phone Contacts",
+      sectionTitle: "Invite a Contact to Use Payper",
     }
 
-    //
     if (!_.includes(nums, c.phone)) arr.push(c);
     nums.push(c.phone);
   }
@@ -87,7 +86,7 @@ export function contactListToArray(options) {
   for (var c in options.contacts) {
     curr = options.contacts[c];
     curr.uid = c;
-    curr.sectionTitle = (curr.type == "facebook") ? "Facebook Friends" : "Phone Contacts Who User Payper";
+    curr.sectionTitle = (curr.type == "facebook") ? "Facebook Friends" : "Contacts";
     arr.push(curr);
   }
 
@@ -132,15 +131,14 @@ export function globalUserListToArray(options) {
 **/
 export function filterContacts(contacts, query) {
 
-  console.log("Filter contacts:\nContacts: " + contacts + "\nQuery: " + query);
-
   // Don't run the set through our regex if there's no query
   if (query === '') return contacts;
 
+  // Delete any trailing or leading whitespace
   query = query.toLowerCase().trim();
 
   // If user's first or last name contains the regex, add them to the filtered set
-  // (i flag ignores case)
+  //   - (i flag ignores case)
   const regex = new RegExp(query + '.+$', 'i');
   return contacts.filter(c =>
     c.first_name && c.first_name.search(regex) >= 0

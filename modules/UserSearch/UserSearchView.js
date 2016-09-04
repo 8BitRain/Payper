@@ -90,10 +90,12 @@ class UserSearch extends React.Component {
     *   Start listening to Firebase
   **/
   componentWillMount() {
-    this.props.initialize(this.props.nativeContacts);
-    var contactList = "contactList/" + this.props.currentUser.uid,
-        globalUserList = "users";
-    this.props.listen([contactList, globalUserList], { nativeContacts: this.props.nativeContacts, allContactsArray: this.props.allContactsArray });
+    if (!this.props.startedListening) {
+      this.props.initialize(this.props.nativeContacts);
+      var contactList = "contactList/" + this.props.currentUser.uid,
+          globalUserList = "users";
+      this.props.listen([contactList, globalUserList], { nativeContacts: this.props.nativeContacts, allContactsArray: this.props.allContactsArray });
+    }
   }
 
 

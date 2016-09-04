@@ -22,6 +22,7 @@ const initialState = Map({
     profile_pic: "",
     type: "",
   },
+  startedListening: false,
 });
 
 // Action types
@@ -29,7 +30,8 @@ const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
       SET_ALL_CONTACTS_ARRAY = 'SET_ALL_CONTACTS_ARRAY',
       SET_ALL_CONTACTS_MAP = 'SET_ALL_CONTACTS_MAP',
       SET_FILTERED_CONTACTS_MAP = 'SET_FILTERED_CONTACTS',
-      SET_SELECTED_CONTACT = 'SET_SELECTED_CONTACT';
+      SET_SELECTED_CONTACT = 'SET_SELECTED_CONTACT',
+      SET_STARTED_LISTENING = 'SET_STARTED_LISTENING';
 
 // Action creators
 export function activeFirebaseListeners(input) { return {type: SET_ACTIVE_FIREBASE_LISTENERS, input: input} };
@@ -37,6 +39,7 @@ export function allContactsArray(input) { return {type: SET_ALL_CONTACTS_ARRAY, 
 export function allContactsMap(input) { return {type: SET_ALL_CONTACTS_MAP, input: input} };
 export function filteredContactsMap(input) { return {type: SET_FILTERED_CONTACTS_MAP, input: input} };
 export function selectedContact(input) { return {type: SET_SELECTED_CONTACT, input: input} };
+export function startedListening(input) { return {type: SET_STARTED_LISTENING, input: input} };
 
 /**
   *   Reducer
@@ -67,6 +70,10 @@ export default function UserSearch(state = initialState, action = {}) {
       var newState = state.set('selectedContact', action.input);
       return newState;
       break;
+    case SET_STARTED_LISTENING:
+      var newState = state.set('startedListening', action.input);
+      return newState;
+      break;  
   }
   return state;
 }

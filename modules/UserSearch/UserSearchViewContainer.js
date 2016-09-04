@@ -10,6 +10,7 @@ import * as SetMaster5000 from '../../helpers/SetMaster5000';
 // Dispatch functions
 import * as set from './UserSearchState';
 import * as setPayment from '../CreatePayment/CreatePaymentState';
+import * as setMain from '../Main/MainState';
 
 // Base view
 import UserSearchView from './UserSearchView';
@@ -25,6 +26,7 @@ function mapStateToProps(state) {
     filteredContactsMap: state.getIn(['userSearch', 'filteredContactsMap']),
     selectedContact: state.getIn(['userSearch', 'selectedContact']),
     empty: state.getIn(['userSearch', 'empty']),
+    startedListening: state.getIn(['userSearch', 'startedListening']),
 
     // main
     currentUser: state.getIn(['main', 'currentUser']),
@@ -32,6 +34,8 @@ function mapStateToProps(state) {
 
   }
 }
+
+var allContactsArray;
 
 // Decide which action creators our component will receive as props
 function mapDispatchToProps(dispatch) {
@@ -43,28 +47,32 @@ function mapDispatchToProps(dispatch) {
     },
 
     listen: (endpoints, options, callback) => {
+
+      dispatch(set.startedListening(true));
+
       Firebase.listenTo(endpoints, (response) => {
         if (response.value) {
 
           switch (response.endpoint.split("/")[0]) {
             case "contactList":
 
-              console.log("%cSuccessfully received global user list:", "color:green;font-weight:900;");
+              console.log("%cSuccessfully received contact list:", "color:green;font-weight:900;");
               console.log(response.value);
 
               // Convert Firebase JSON to array of user objects, tacking on section titles along the way
               var contactListArray = SetMaster5000.contactListToArray({ contacts: response.value }),
                   newAllContactsArray;
 
-              // Concatenate with currently rendered contact list
-              newAllContactsArray = contactListArray.concat(options.nativeContacts);
+              // Concatenate with native phone contact list
+              newAllContactsArray = (allContactsArray) ? SetMaster5000.mergeArrays(contactListArray, allContactsArray) : contactListArray.concat(options.nativeContacts);
+              allContactsArray = newAllContactsArray;
 
               // Convert contact array to map for ListView rendering
               var newAllContactsMap = SetMaster5000.arrayToMap(newAllContactsArray);
 
               // Set user lists in Redux store, triggering re-render of UserSearch ListView
               dispatch(set.allContactsMap(newAllContactsMap));
-              dispatch(set.allContactsArray(newAllContactsArray));
+              // dispatch(set.allContactsArray(newAllContactsArray));
 
             break;
             case "users":
@@ -77,14 +85,15 @@ function mapDispatchToProps(dispatch) {
                   newAllContactsArray;
 
               // Concatenate with currently rendered contact list
-              newAllContactsArray = globalUserListArray.concat(options.nativeContacts);
+              newAllContactsArray = (allContactsArray) ? SetMaster5000.mergeArrays(globalUserListArray, allContactsArray) : globalUserListArray.concat(options.nativeContacts);
+              allContactsArray = newAllContactsArray;
 
               // Convert contact array to map for ListView rendering
               var newAllContactsMap = SetMaster5000.arrayToMap(newAllContactsArray);
 
               // Set user lists in Redux store, triggering re-render of UserSearch ListView
               dispatch(set.allContactsMap(newAllContactsMap));
-              dispatch(set.allContactsArray(newAllContactsArray));
+              // dispatch(set.allContactsArray(newAllContactsArray));
 
             break;
           }
@@ -95,6 +104,10 @@ function mapDispatchToProps(dispatch) {
     },
 
     stopListening: (endpoints) => {
+
+
+      console.log("\n\n\n\n\nSTOPPED LISTENING\n\n\n\n");
+
       Firebase.stopListeningTo(endpoints);
       dispatch(set.activeFirebaseListeners([]));
     },
