@@ -93,9 +93,9 @@
 - [X] Fix bug where token doesn't refresh on launch, resulting in failed endpoint hits
 - [X] Fix bug where the invite via payment endpoint receives incorrect sender/recip traits
 - [X] Fix bug where users multiply in global user area of UserSearch (in listener, don't concatenate entire contactList with the current array, just new children)
+- [X] Fix bug where you can still press create payment confirmation button while it's sending and create multiple payments
 - [ ] Fix bug where sign in sometimes fails (tough to recreate, may be a non-issue)
 - [ ] Make sure payments are deleting properly (sometimes throws this.props.invite is undefined)
-- [ ] Fix bug where you can still press create payment confirmation button while it's sending and create multiple payments
 - [ ] Listen to appFlags > numUnseenNotifications for notification indicator instead of counting them up in the front-end
 - [ ] Fix bug where session token sign in does not work for non-Facebook users (must manually sign in each launch)
 - [ ] Don't show Facebook icon for non-Facebook users in UserSearchView confirmation
