@@ -92,9 +92,15 @@ class UserSearch extends React.Component {
   componentWillMount() {
     if (!this.props.startedListening) {
       this.props.initialize(this.props.nativeContacts);
+
       var contactList = "contactList/" + this.props.currentUser.uid,
           globalUserList = "users";
-      this.props.listen([contactList, globalUserList], { nativeContacts: this.props.nativeContacts, allContactsArray: this.props.allContactsArray });
+
+      this.props.listen([contactList, globalUserList], {
+        nativeContacts: this.props.nativeContacts,
+        allContactsArray: this.props.allContactsArray,
+        uid: this.props.currentUser.uid,
+      });
     }
   }
 
@@ -167,6 +173,8 @@ class UserSearch extends React.Component {
 
 
   _getContactList() {
+    console.log("Data source for all contacts:");
+    console.log(this.props.allContactsMap);
     return(
       <ListView
         dataSource={(this.props.filteredContactsMap.getRowCount() > 0) ? this.props.filteredContactsMap : this.props.allContactsMap}
@@ -177,15 +185,6 @@ class UserSearch extends React.Component {
         />
     );
   }
-
-
-  // <ListView
-  //   dataSource={EMPTY_DATA_SOURCE.cloneWithRowsAndSections(SetMaster5000.arrayToMap(this.options))}
-  //   renderRow={this._renderRow.bind(this)}
-  //   renderSectionHeader={this._renderSectionHeader}
-  //   renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-  //   enableEmptySections />
-
 
   _getConfirmation() {
     return(

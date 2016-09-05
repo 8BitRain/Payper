@@ -115,11 +115,13 @@ export function contactsArrayToNumbersArray(contacts) {
 export function globalUserListToArray(options) {
   var arr = [], curr;
 
-  for (var u in options.users) {
-    curr = options.users[u];
-    curr.uid = u;
-    curr.sectionTitle = "Other Payper Users";
-    arr.push(curr);
+  for (var uid in options.users) {
+    if (uid != options.uid) {
+      curr = options.users[uid];
+      curr.uid = uid;
+      curr.sectionTitle = "Other Payper Users";
+      arr.push(curr);
+    }
   }
 
   return arr;

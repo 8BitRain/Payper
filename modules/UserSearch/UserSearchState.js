@@ -73,7 +73,7 @@ export default function UserSearch(state = initialState, action = {}) {
     case SET_STARTED_LISTENING:
       var newState = state.set('startedListening', action.input);
       return newState;
-      break;  
+      break;
   }
   return state;
 }

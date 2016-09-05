@@ -48,6 +48,7 @@ function mapDispatchToProps(dispatch) {
 
     listen: (endpoints, options, callback) => {
 
+      // Ensure that we don't initialize more than one listener
       dispatch(set.startedListening(true));
 
       Firebase.listenTo(endpoints, (response) => {
@@ -64,7 +65,7 @@ function mapDispatchToProps(dispatch) {
                   newAllContactsArray;
 
               // Concatenate with native phone contact list
-              newAllContactsArray = (allContactsArray) ? SetMaster5000.mergeArrays(contactListArray, allContactsArray) : contactListArray.concat(options.nativeContacts);
+              newAllContactsArray = (allContactsArray) ? SetMaster5000.mergeArrays(allContactsArray, contactListArray) : contactListArray.concat(options.nativeContacts);
               allContactsArray = newAllContactsArray;
 
               // Convert contact array to map for ListView rendering
@@ -72,7 +73,7 @@ function mapDispatchToProps(dispatch) {
 
               // Set user lists in Redux store, triggering re-render of UserSearch ListView
               dispatch(set.allContactsMap(newAllContactsMap));
-              // dispatch(set.allContactsArray(newAllContactsArray));
+              dispatch(set.allContactsArray(newAllContactsArray));
 
             break;
             case "users":
@@ -81,11 +82,11 @@ function mapDispatchToProps(dispatch) {
               console.log(response.value);
 
               // Convert Firebase JSON to array of user objects, tacking on section titles along the way
-              var globalUserListArray = SetMaster5000.globalUserListToArray({ users: response.value }),
+              var globalUserListArray = SetMaster5000.globalUserListToArray({ users: response.value, uid: options.uid }),
                   newAllContactsArray;
 
               // Concatenate with currently rendered contact list
-              newAllContactsArray = (allContactsArray) ? SetMaster5000.mergeArrays(globalUserListArray, allContactsArray) : globalUserListArray.concat(options.nativeContacts);
+              newAllContactsArray = (allContactsArray) ? SetMaster5000.mergeArrays(allContactsArray, globalUserListArray) : globalUserListArray.concat(options.nativeContacts);
               allContactsArray = newAllContactsArray;
 
               // Convert contact array to map for ListView rendering
@@ -93,7 +94,7 @@ function mapDispatchToProps(dispatch) {
 
               // Set user lists in Redux store, triggering re-render of UserSearch ListView
               dispatch(set.allContactsMap(newAllContactsMap));
-              // dispatch(set.allContactsArray(newAllContactsArray));
+              dispatch(set.allContactsArray(newAllContactsArray));
 
             break;
           }

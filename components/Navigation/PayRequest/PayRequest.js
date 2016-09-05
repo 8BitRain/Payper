@@ -87,7 +87,7 @@ class PayRequest extends React.Component {
   _getConfirmationButton() {
     return(
       <TouchableHighlight
-        onPress={(this.props.loading) ? () => console.log("NAHHH") : () => this.props.confirmCallback()}
+        onPress={(this.props.loading) ? () => console.log("Already sending...") : () => this.props.confirmCallback()}
         style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.alertGreen}}
         underlayColor={colors.lightAlertGreen}
         activeOpacity={1.0}>
