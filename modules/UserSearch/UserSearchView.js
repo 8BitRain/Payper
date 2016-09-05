@@ -203,9 +203,13 @@ class UserSearch extends React.Component {
 
         { /* Username or phone number */ }
         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          {(this.props.selectedContact.username)
-            ? <Entypo style={{paddingTop: 10}} name="facebook" size={25} color={colors.accent} />
-            : <Entypo style={{paddingTop: 10}} name="phone" size={25} color={colors.icyBlue} /> }
+          { (this.props.selectedContact.type == "facebook" || this.props.selectedContact.type == "phone")
+              ? <Entypo
+                  style={{paddingTop: 10}}
+                  name={ (this.props.selectedContact.type == "facebook") ? "facebook" : (this.props.selectedContact.type == "phone") ? "phone" : null }
+                  color={ (this.props.selectedContact.uid) ? colors.accent : colors.icyBlue }
+                  size={25} />
+              : null }
           <Text style={[{paddingLeft: 10}, (this.props.selectedContact.username) ? styles.confirmationUsername : styles.confirmationPhone]}>
             { (this.props.selectedContact.username)
                 ? this.props.selectedContact.username
