@@ -114,7 +114,7 @@ class Edit extends React.Component {
             autoCorrect={false} autoFocus
             autoCapitalize={"words"}
             onChangeText={(input) => { this.input = input }}
-            onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this._refs["lastName"].focus() }} />
+            onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._refs["lastName"].focus() }} />
         </View>
 
         { /* Last name */ }
