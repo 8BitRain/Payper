@@ -162,16 +162,36 @@ class Address extends React.Component {
 
          { /* Prompt and input field */ }
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
+           {/*ADDRESS*/}
+           <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Address</Text>
-           {this.props.addressValidations.valid ? <EvilIcons  style={{}} name="check" size={40} color={'green'} /> : <EvilIcons style={{}} name="check" size={40} color={'grey'} />}
+           {this.props.addressValidations.valid ? <EvilIcons  style={{alignSelf: "flex-end"}} name="check" size={40} color={'green'} /> : <EvilIcons style={{alignSelf: "flex-end"}} name="check" size={40} color={'grey'} />}
+           </View>
            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.addressInput = text; this.props.dispatchSetAddress(this.addressInput); this.props.dispatchSetAddressValidations(this.addressInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>City</Text>
-           {this.props.cityValidations.valid ? <EvilIcons  style={{}} name="check" size={40} color={'green'} /> : <EvilIcons style={{}} name="check" size={40} color={'grey'} />}
+           {/*<View style={{borderBottomWidth: 2, borderBottomColor: "#F4F4F9", marginLeft: 20, width: 275  , marginBottom: 10, position: "absolute", bottom: 395 }}>
+           </View>*/}
+           {<View style={{borderBottomWidth: 2, borderBottomColor: "#F4F4F9", marginLeft: 20, width: 275  , marginBottom: 10, position: "absolute", bottom: 355 }}>
+           </View>}
+
+
+           {/*CITY*/}
+           <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>
+             <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>City</Text>
+             {this.props.cityValidations.valid ? <EvilIcons  style={{}} name="check" size={40} color={'green'} /> : <EvilIcons style={{}} name="check" size={40} color={'grey'} />}
+
+           </View>
            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.cityInput = text; this.props.dispatchSetCity(this.cityInput); this.props.dispatchSetCityValidations(this.cityInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
+
+           {/*Has an interesting effect investigate or try using with circles*/}
+
+           <View style={{borderBottomWidth: 2, borderBottomColor: "#F4F4F9", marginLeft: 20, width: 275  , marginBottom: 10, position: "absolute", bottom: 275 }}>
+           </View>
+
+           {/*STATE*/}
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>State</Text>
            {/*TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"WI"} onChangeText={(text) => {this.stateInput = text; this.props.dispatchSetState(this.stateInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />*/}
            <Picker
-            style={[typography.marginSides, typography.marginBottom]}
+            style={[typography.marginBottom, {backgroundColor: "#d8d8d8", color: "black", marginLeft: 50, marginRight: 50, borderRadius: 50}]}
             selectedValue={this.state.state_index}
             itemStyle={[typography.stateInput]}
             onValueChange={(text) => { this.onValueChange(text); console.log("State Index: " + this.state.state_index); console.log(Object.keys(this.state_list)[text]); }}>
@@ -185,6 +205,8 @@ class Address extends React.Component {
             }
 
           </Picker>
+
+           {/*POSTAL CODE (ZIP)*/}
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>PostalCode(ZIP)</Text>
             {this.props.zipValidations.valid ? <EvilIcons  style={{}} name="check" size={40} color={'green'} /> : <EvilIcons style={{}} name="check" size={40} color={'grey'} />}
            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.zipInput = text; this.props.dispatchSetZip(this.zipInput); this.props.dispatchSetZipValidations(this.zipInput)}} autoCorrect={false}  autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="phone-pad" />

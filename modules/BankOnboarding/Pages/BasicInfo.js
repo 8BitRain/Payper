@@ -113,12 +113,14 @@ class BasicInfo extends React.Component {
             <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>
              {this.props.cemailValidations.valid ? <EvilIcons  style={{ position: "absolute", bottom: .5, left: 5}} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", bottom: .5, left: 5}} name="check" size={40} color={'grey'} />}
              <Text style={[typography.general, typography.fontSizeTitle, typography.marginBottom, {marginLeft: 65}]}>Email</Text>
-
             </View>
-            <TextInput style={[typography.textInput, typography.marginSides, {}]}  defaultValue={this.props.newUser.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmail(this.emailInput); this.props.dispatchSetCEmailValidations(this.emailInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"TEST"} keyboardType="email-address" />
+            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom, {marginLeft: 65}]}  defaultValue={this.props.newUser.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmail(this.emailInput); this.props.dispatchSetCEmailValidations(this.emailInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"TEST"} keyboardType="email-address" />
           { /*Email TextInput*/}
             {/*<TextInput style={[typography.textInput, typography.marginSides, {marginLeft: 65}]}  defaultValue={this.props.newUser.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmail(this.emailInput); this.props.dispatchSetCEmailValidations(this.emailInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />}
           {/*TextInput Underline*/}
+          {/*<View style={{borderBottomWidth: 2, borderBottomColor: "#F4F4F9", marginLeft: 65, width: 250  , marginBottom: 10, position: "absolute", bottom: 230 }}>
+          </View>*/}
+
 
 
              { /*FirstName*/}
@@ -129,8 +131,7 @@ class BasicInfo extends React.Component {
             {/*FirstName TextInput*/}
             <TextInput style={[typography.textInput, typography.marginSides, {marginLeft: 65}]}  defaultValue={this.props.newUser.firstName} onChangeText={(text) => {this.firstNameInput = text; this.props.dispatchSetFirstName(this.firstNameInput); this.props.dispatchSetCFirstNameValidations(this.firstNameInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
             {/*TextInput Underline*/}
-            <View style={{borderBottomWidth: 1, borderBottomColor: "#F4F4F9", marginLeft: 65, width: 250  , marginBottom: 10, position: "absolute", bottom: 155}}>
-            </View>
+        
 
              { /*LastName*/}
              <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>
@@ -138,8 +139,7 @@ class BasicInfo extends React.Component {
               <Text style={[typography.general, typography.fontSizeTitle, typography.marginBottom, {marginLeft: 65}]}>Last Name</Text>
              </View>
              <TextInput style={[typography.textInput, typography.marginSides, {marginLeft: 65}]}  defaultValue={this.props.newUser.lastName} onChangeText={(text) => {this.lastNameInput = text; this.props.dispatchSetLastName(this.lastNameInput); this.props.dispatchSetCLastNameValidations(this.lastNameInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
-             <View style={{borderBottomWidth: 1, borderBottomColor: "#F4F4F9", marginLeft: 65, width: 250  , marginBottom: 10, position: "absolute", bottom: 80 }}>
-             </View>
+
 
               { /*PhoneNumber*/}
              <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>
@@ -149,8 +149,7 @@ class BasicInfo extends React.Component {
                <Text style={[typography.general, typography.fontSizeTitle, typography.marginBottom, {marginLeft: 65}]}>Phone</Text>
              </View>
              <TextInput style={[typography.textInput, typography.marginSides, {marginLeft: 65}]}  defaultValue={this.props.newUser.phone} onChangeText={(text) => {this.phoneInput = text; this.props.dispatchSetPhone(this.phoneInput); this.props.dispatchSetCPhoneValidations(this.phoneInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="phone-pad" />
-             <View style={{borderBottomWidth: 2, borderBottomColor: "#F4F4F9", marginLeft: 65, width: 250  , marginBottom: 10, position: "absolute", bottom: 5 }}>
-             </View>
+
 
            </View>
 

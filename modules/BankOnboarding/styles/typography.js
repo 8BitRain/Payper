@@ -16,18 +16,17 @@ const typography = StyleSheet.create({
 
   textInput: {
     height: 40,
-    backgroundColor: "transparent",
+    backgroundColor: "#D8D8D8",
     padding: 10,
-    paddingLeft: 0,
-    color: "#99ECFB"
+    color: "#53585E",
+    borderRadius: 20,
+    borderWidth: 2
   },
 
   stateInput: {
-    height: 100,
-    padding: 10,
-    paddingLeft: 0,
-    color: "#99ECFB",
-    fontSize: 20
+    height: 60,
+    color: "black",
+    fontSize: 16
   },
 
 
