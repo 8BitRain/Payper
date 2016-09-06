@@ -18,6 +18,7 @@
   *     💣  Payment invite:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
   *     💣  Delete user:           'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/delete'
   *     💣  Update phone contacts: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneContacts'
+  *     💣  Update user info:      'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/update'
   *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
   *
@@ -444,6 +445,30 @@ export function updateContacts(options, callback) {
         if (typeof callback == 'function') callback(responseData);
       } else {
         console.log("Error updating phone contacts:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(responseData);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given a user object (user) and session token (token),
+  *   update a user's information
+**/
+export function updateUser(options, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/update", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Update user Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error updating user:", responseData.errorMessage);
         if (typeof callback == 'function') callback(responseData);
       }
     })

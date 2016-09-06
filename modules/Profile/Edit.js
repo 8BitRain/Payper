@@ -51,7 +51,14 @@ const styles = StyleSheet.create({
     width: dimensions.width,
     height: 50,
     backgroundColor: colors.richBlack,
-    textAlign: 'center',
+    textAlign: 'left',
+  },
+
+  // Display name input
+  nameInputWrap: {
+    borderBottomWidth: 0.8,
+    borderBottomColor: colors.white,
+    width: dimensions.width * 0.8,
   },
 
 });
@@ -71,13 +78,14 @@ class Edit extends React.Component {
 
     this.input = "";
     this._clearText = this._clearText.bind(this);
+    this._refs = [];
   }
 
 
   _getPhoneNumberKeyboard() {
     return(
       <TextInput
-        ref={(component) => this._textInput = component}
+        ref={(component) => this._refs["phone"] = component}
         style={styles.input}
         onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
         onChangeText={(input) => { this.input = input; }}
@@ -93,16 +101,36 @@ class Edit extends React.Component {
 
   _getDisplayNameKeyboard() {
     return(
-      <TextInput
-        ref={(component) => this._textInput = component}
-        style={styles.input}
-        onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
-        placeholderFontFamily={"Roboto"}
-        placeholderTextColor={colors.lightGrey}
-        placeholder={"Enter your new " + this.state.title.toLowerCase()}
-        autoCorrect={false} autoFocus
-        autoCapitalize={"words"}
-        onChangeText={(input) => { this.input = input }} />
+      <View>
+        { /* First name */ }
+        <View style={styles.nameInputWrap}>
+          <TextInput
+            ref={(component) => this._refs["firstName"] = component}
+            style={[styles.input, { paddingLeft: 10, paddingRight: 10 }]}
+            onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
+            placeholderFontFamily={"Roboto"}
+            placeholderTextColor={colors.lightGrey}
+            placeholder={"First name"}
+            autoCorrect={false} autoFocus
+            autoCapitalize={"words"}
+            onChangeText={(input) => { this.input = input }}
+            onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this._refs["lastName"].focus() }} />
+        </View>
+
+        { /* Last name */ }
+        <View style={styles.nameInputWrap}>
+          <TextInput
+            ref={(component) => this._refs["lastName"] = component}
+            style={[styles.input, { paddingLeft: 10, paddingRight: 10 }]}
+            onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
+            placeholderFontFamily={"Roboto"}
+            placeholderTextColor={colors.lightGrey}
+            placeholder={"Last name"}
+            autoCorrect={false}
+            autoCapitalize={"words"}
+            onChangeText={(input) => { this.input = input }} />
+        </View>
+      </View>
     );
   }
 
@@ -110,7 +138,7 @@ class Edit extends React.Component {
   _getEmailKeyboard() {
     return(
       <TextInput
-        ref={(component) => this._textInput = component}
+        ref={(component) => this._refs["phone"] = component}
         style={styles.input}
         onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
         placeholderFontFamily={"Roboto"}
@@ -123,8 +151,9 @@ class Edit extends React.Component {
   }
 
 
-  _clearText() {
-    this._textInput.setNativeProps({text: ''});
+  _clearText(refs) {
+    if (Array.isArray(refs)) for (var r in refs) this._refs[refs[r]].setNativeProps({ text: "" });
+    else this._refs[refs].setNativeProps({ text: "" });
   }
 
 
@@ -138,6 +167,8 @@ class Edit extends React.Component {
       case "Display Name":
         valid = Validators.validateName(this.input);
         console.log("Valid:", valid);
+        this._clearText(["firstName", "lastName"]);
+        this._refs["firstName"].focus();
       break;
       case "Phone Number":
         valid = Validators.validatePhone(this.input);
@@ -152,18 +183,21 @@ class Edit extends React.Component {
             if (success) {
 
               // Clear text input
-              this._clearText();
+              this._clearText("phone");
 
               // Report success and deactive loading indicator
               this.setState({ loadingMessage: "Success!" });
               setTimeout(function() {
-                _this.setState({ loading: false, loadingMessages: "" });
+                _this.setState({ loading: false, loadingMessage: "" });
               }, 750);
 
               // Update user's phone number in Redux store
               var currentUser = this.props.currentUser;
               currentUser.decryptedPhone = this.input;
               this.props.setCurrentUser(currentUser);
+
+              // Trigger re-render of options list
+              this.props.updateOptionsDataSource();
 
             } else {
 
@@ -174,9 +208,7 @@ class Edit extends React.Component {
               }, 750);
 
             }
-
           });
-
         } else {
           Alert.message({
             title: "Hey!",
@@ -187,6 +219,52 @@ class Edit extends React.Component {
       case "Email":
         valid = Validators.validateEmail(this.input);
         console.log("Valid:", valid);
+
+        if (valid.valid) {
+
+          // Activate loading indicator
+          this.setState({ loading: true, loadingMessage: "Sending..." });
+
+          // Update user's phone number in Redux user JSON
+          var currentUser = this.props.currentUser;
+          currentUser.decryptedEmail = this.input;
+
+          // Hit Lambda with new phone number
+          Lambda.updateUser({ user: currentUser, token: currentUser.token }, (success) => {
+            console.log("Updating email was a success:", success);
+            if (success) {
+
+              // Clear text input
+              this._clearText("email");
+
+              // Report success and deactive loading indicator
+              this.setState({ loadingMessage: "Success!" });
+              setTimeout(function() {
+                _this.setState({ loading: false, loadingMessage: "" });
+              }, 750);
+
+              // Update user's phone number in Redux store
+              this.props.setCurrentUser(currentUser);
+
+              // Trigger re-render of options list
+              this.props.updateOptionsDataSource();
+
+            } else {
+
+              // Report failure and deactive loading indicator
+              this.setState({ loadingMessage: "Failed to update" });
+              setTimeout(function() {
+                _this.setState({ loading: false, loadingMessages: "" });
+              }, 750);
+
+            }
+          });
+        } else {
+          Alert.message({
+            title: "Hey!",
+            message: "Please enter a valid email. (e.g. johndoe@example.com)",
+          });
+        }
       break;
     }
   }
@@ -210,7 +288,13 @@ class Edit extends React.Component {
             (this.state.value)
               ? <View style={{justifyContent: 'center', alignItems: 'center', width: dimensions.width}}>
                   <Text style={[styles.info, {color: colors.white, fontWeight: '200'}]}>
-                    Current { this.state.title.toLowerCase() }: { (this.props.modalProps.title == "Phone Number") ? StringMaster5000.stylizePhoneNumber(this.state.value) : this.state.value }
+                    Current { this.state.title.toLowerCase() + " :" }
+                    { /* Bind value directly to user Redux object so it updates in realtime */
+                      (this.props.modalProps.title == "Phone Number")
+                        ? StringMaster5000.stylizePhoneNumber(this.props.currentUser.decryptedPhone)
+                        : (this.props.modalProps.title == "Email")
+                          ? this.props.currentUser.decryptedEmail
+                          : this.props.modalProps.value }
                   </Text>
                   <Text style={[styles.info, {color: colors.white, fontWeight: '200'}]}>
                     ({this.state.info})

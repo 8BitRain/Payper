@@ -78,6 +78,7 @@ class Profile extends React.Component {
     ];
 
     this.state = {
+      optionsDataSource: EMPTY_DATA_SOURCE.cloneWithRowsAndSections(SetMaster5000.arrayToMap(this.options)),
       modalVisible: false,
       modalProps: {
         title: "",
@@ -88,11 +89,57 @@ class Profile extends React.Component {
   }
 
 
+  /**
+    *   Must explicitly trigger a re-render of the options screen to detect
+    *   changes to the Redux user object
+  **/
+  _updateOptionsDataSource() {
+    // Instantiate new options list
+    var newOptions = [
+      { rowTitle: "Display Name",
+        rowContent: this.props.currentUser.first_name + " " + this.props.currentUser.last_name,
+        sectionTitle: "My Profile",
+        destination: () => this._toggleModal({
+          title: "Display Name",
+          content: this.props.currentUser.first_name + " " + this.props.currentUser.last_name,
+          info: "This is this name you go by in app."
+        })},
+      { rowTitle: "Username",
+        rowContent: this.props.currentUser.username,
+        sectionTitle: "My Profile",
+        destination: () => this._toggleModal({
+          title: "Username",
+          content: this.props.currentUser.username,
+          info: "This is not currently editable."
+        })},
+      { rowTitle: "Phone Number",
+        rowContent: StringMaster5000.stylizePhoneNumber(this.props.currentUser.decryptedPhone),
+        sectionTitle: "My Profile",
+        destination: () => this._toggleModal({
+          title: "Phone Number",
+          content: this.props.currentUser.decryptedPhone,
+          info: "Other Payper users will be able to find you by your phone number. We will not give your phone number away."
+        })},
+      { rowTitle: "Email",
+        rowContent: this.props.currentUser.decryptedEmail,
+        sectionTitle: "My Profile",
+        destination: () => this._toggleModal({
+          title: "Email",
+          content: this.props.currentUser.decryptedEmail,
+          info: "Your email address is used for password recovery and identity verification. Nobody can see this address but you."
+        })},
+    ];
+
+    // Change options in state, triggering re-render of ListView
+    this.setState({ optionsDataSource: EMPTY_DATA_SOURCE.cloneWithRowsAndSections(SetMaster5000.arrayToMap(newOptions)) });
+  }
+
+
   _renderOptionsList() {
     return(
       <View style={{flex: 1.0}}>
         <ListView
-          dataSource={EMPTY_DATA_SOURCE.cloneWithRowsAndSections(SetMaster5000.arrayToMap(this.options))}
+          dataSource={this.state.optionsDataSource}
           renderRow={this._renderRow.bind(this)}
           renderSectionHeader={this._renderSectionHeader}
           renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
@@ -180,9 +227,14 @@ class Profile extends React.Component {
           animationType={"slide"}
           transparent={true}
           visible={this.state.modalVisible}
-          onRequestClose={() => {alert("Modal has been closed.")}}>
+          onRequestClose={ () => alert("Modal has been closed.") }>
 
-          <Edit {...this.props} modalProps={this.state.modalProps} toggleModal={() => this._toggleModal()} />
+          { /* Edit panel */ }
+          <Edit
+            { ...this.props }
+            modalProps={this.state.modalProps}
+            toggleModal={() => this._toggleModal()}
+            updateOptionsDataSource={() => this._updateOptionsDataSource()} />
 
         </Modal>
 
