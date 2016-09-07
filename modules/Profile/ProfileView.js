@@ -1,14 +1,16 @@
 // Dependencies
 import React from 'react';
-import { View, Text, Dimensions, StyleSheet, Modal, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Button } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, Modal, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Button, StatusBar } from 'react-native';
 
 // Helper functions
 import * as Lambda from '../../services/Lambda';
 import * as Timestamp from '../../helpers/Timestamp';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
 import * as SetMaster5000 from '../../helpers/SetMaster5000';
+import * as Headers from '../../helpers/Headers';
 
 // Partial components
+import Header from '../../components/Header/Header';
 import UserPicWithCallback from '../../components/Previews/UserPic/UserPicWithCallback';
 import Edit from './Edit';
 
@@ -229,15 +231,27 @@ class Profile extends React.Component {
           visible={this.state.modalVisible}
           onRequestClose={ () => alert("Closed modal") }>
 
-          { /* Edit panel */ }
-          <Edit
-            {...this.props}
-            modalProps={this.state.modalProps}
-            toggleModal={() => this._toggleModal()}
-            updateOptionsDataSource={() => this._updateOptionsDataSource()} />
+          { /* Lighten status bar text */ }
+          <StatusBar barStyle="light-content" />
 
+          <View style={{flex: 1.0}}>
+
+            { /* Header */ }
+            <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
+              <Header
+                callbackClose={ () => this._toggleModal() }
+                headerProps={ Headers.editProfileHeader({ title: this.state.modalProps.title }) } />
+            </View>
+
+            { /* Edit panel */ }
+            <View style={{ flex: (dimensions.height < 667) ? 0.88 : 0.9 }}>
+              <Edit
+                {...this.props}
+                modalProps={this.state.modalProps}
+                updateOptionsDataSource={() => this._updateOptionsDataSource()} />
+            </View>
+          </View>
         </Modal>
-
       </View>
     );
   }

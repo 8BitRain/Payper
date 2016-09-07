@@ -17,6 +17,7 @@
 - [ ] Invites (direct)
 - [ ] App-wide validations (Bank Onboarding, Payper Account Creation, Pay & Request)
 - [ ] App-wide empty states (Tracking Page, Notifications, Payment History)
+- [ ] Design photo selector for profile picture upload
 
 ### Polish
 - [X] CreatePaymentView.js predictive search: limit predictions to 4
@@ -73,6 +74,7 @@
 - [X] Hit `Lambda.updateContacts()` on load, updating user's contactList
 - [X] Add edit pages for profile attributes
 - [X] Redesign BankAccountsView
+- [X] Finish edit profile component
 - [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
 - [ ] Add an onPress destination to notifications
 - [ ] Create a PaymentSeries module, containing detailed information about the payment series, and the option to skip/reschedule payments
@@ -83,7 +85,10 @@
 - [X] Change placeholder numbers for cost and number of payments to 0
 - [X] Change landing page options to just "Continue with Facebook" and "Continue without Facebook"
 - [X] Fix profile pic preview for non-Facebook accounts on 'Profile'
-- [ ] Fix keyboard spacing on edit profile pages for small phones
+- [X] Fix Incoming/Outgoing tab padding (need to be easier to press)
+- [X] Fix keyboard spacing on edit profile pages for small phones (add real header component to the modal)
+- [ ] Fix ugly notification indicators
+- [ ] Transfer create payment flow to modal instead of separate scene
 
 ### MVP Logic Bugs (Brady)
 - [X] Fix bug where user state is not properly reset upon signing out and signing in with another account
@@ -100,35 +105,26 @@
 - [X] Fix bug where sign in sometimes fails (tough to recreate, may be a non-issue)
 - [X] Make sure payments are deleting properly (sometimes throws this.props.invite is undefined)
 - [X] Listen to appFlags > numUnseenNotifications for notification indicator instead of counting them up in the front-end
+- [X] Research and resolve token refresh issue
+- [X] Fix duplicate user bug in global user search list
 - [ ] Don't render existing users in "Invite a Contact to Use Payper" section of UserSearch
 - [ ] Fix bug where session token sign in does not work for non-Facebook users (must manually sign in each launch
 - [ ] Fix bug where "Purpose" text input does not save if the user has already pressed "Pay" or "Request" and is changing something before pressing "Confirm" (just don't update payment info until user presses confirm)
 - [ ] Fix duplicate user bug in UserSearch
+- [ ] Sign-in success on second attempt looks whack
 
 ### Things I Need Vash For (Brady)
 - [X] Fix bug where inviting via payment exits before completing request
 - [X] Attach "type" to Firebase payment object when creating a new payment
 - [X] Fix bug where payment creation sometimes fails
 
-### Back-burner
-- [ ] Design photo selector for profile picture upload
-- [ ] Transfer create payment flow to modal instead of separate scene
-
-### 8/31 Hackathon
-- [X] Research and resolve token refresh issue
-- [X] Fix Incoming/Outgoing tab padding (need to be easier to press)
-- [X] Fix duplicate user bug in global user search list
-- [X] Finish edit profile component
-- [ ] Fix ugly notification indicators
-- [ ] Sign-in success on second attempt looks whack
-
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
+- [X] Display funding source before payment creation (Groundwork is laid, just plug in data)
+- [X] FAQ
+- [X] Delete account button
 - [ ] Request permission for automatic monthly transactions
-- [ ] Display funding source before payment creation (Groundwork is laid, just plug in data)
 - [ ] Post initiation transfer time
-- [ ] Delete account button
-- [ ] FAQ
 - [ ] Support
 - [ ] Dispute Resolution
 

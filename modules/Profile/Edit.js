@@ -127,7 +127,7 @@ class Edit extends React.Component {
           autoCorrect={false} autoFocus
           placeholderFontFamily={"Roboto"}
           placeholderTextColor={colors.lightGrey}
-          placeholder={"262-305-8038"}
+          placeholder={"Enter your new phone number"}
           maxLength={10}
           keyboardType="phone-pad" />
       </Animated.View>
@@ -358,14 +358,7 @@ class Edit extends React.Component {
       <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.richBlack}}>
 
         { /* Title */ }
-        <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', width: dimensions.width}}>
-
-          { /* Header */ }
-          <View style={{justifyContent: 'center', alignItems: 'center', width: dimensions.width, backgroundColor: colors.richBlack, padding: 40}}>
-            <Text style={styles.title}>
-              { this.state.title }
-            </Text>
-          </View>
+        <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', width: dimensions.width, paddingTop: 20}}>
 
           { /* Current value */
             (this.state.value)
@@ -389,7 +382,6 @@ class Edit extends React.Component {
                   </Text>
                 </View> }
 
-
           { /* Text input */ }
           <View style={{justifyContent: 'center', alignItems: 'center', width: dimensions.width}}>
             <View >
@@ -401,29 +393,18 @@ class Edit extends React.Component {
           </View>
 
           <View style={{height: 100, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dimensions.width}}>
-          { /* Submit button */
-            (this.props.modalProps.title != "Username" && this.props.modalProps.title != "Display Name")
-              ? (this.state.loading)
-                  ? <Text style={[styles.info, { color: colors.white, fontSize: 20 }]}>
-                      { this.state.loadingMessage }
-                    </Text>
-                  : <ArrowNav
-                      arrowNavProps={{left: false, right: true}}
-                      callbackRight={() => this._handleSubmit()} />
-              : null }
+            { /* Submit button */
+              (this.props.modalProps.title != "Username" && this.props.modalProps.title != "Display Name")
+                ? (this.state.loading)
+                    ? <Text style={[styles.info, { color: colors.white, fontSize: 20 }]}>
+                        { this.state.loadingMessage }
+                      </Text>
+                    : <ArrowNav
+                        arrowNavProps={{left: false, right: true}}
+                        callbackRight={() => this._handleSubmit()} />
+                : null }
           </View>
         </View>
-
-        { /* Close modal button */ }
-        <TouchableHighlight
-          underlayColor={'transparent'}
-          activeOpacity={0.7}
-          onPress={() => this.props.toggleModal()}
-          style={{position: 'absolute', top: 0, left: 0, padding: 40, backgroundColor: 'transparent'}}>
-
-          <Entypo name="cross" size={25} color={colors.white} />
-
-        </TouchableHighlight>
       </View>
     );
   }

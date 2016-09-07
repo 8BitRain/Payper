@@ -183,3 +183,25 @@ export function profileHeader() {
 
   return props;
 };
+
+
+// Header props for Edit Profile modal
+export function editProfileHeader(options) {
+  var props = {
+    types: {
+      "paymentIcons": false,
+      "circleIcons": false,
+      "settingsIcon": false,
+      "closeIcon": true,
+      "flowTabs": false,
+    },
+    index: 0,
+    numCircles: null,
+    title: options.title,
+    callbackIn: null,
+    callbackOut: null,
+    accent: true,
+  };
+
+  return props;
+};
