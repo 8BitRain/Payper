@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image, Picker} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image, Picker, Modal} from "react-native";
 import Button from "react-native-button";
-import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
+import {Scene, Reducer, Router, Switch, TabBar, Schema, Actions} from 'react-native-router-flux';
 import Entypo from "react-native-vector-icons/Entypo";
 var Mixpanel = require('react-native-mixpanel');
 
@@ -10,6 +10,7 @@ import * as Animations from "../../../helpers/animations";
 import * as Validators from "../../../helpers/validators";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 var Mixpanel = require('react-native-mixpanel');
+//import SimplePicker from "react-native-simple-picker";
 
 // Custom components
 import Header from "../../../components/Header/Header";
@@ -20,6 +21,9 @@ import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
+import { Dimensions } from 'react-native';
+
+
 
 
 class Address extends React.Component {
@@ -31,6 +35,66 @@ class Address extends React.Component {
      this.animationProps = {
        fadeAnim: new Animated.Value(0) // init opacity 0
      };
+
+     this.state_list_options = [
+       "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA",
+"KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH",
+"NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX",
+"UT", "VT", "VA", "WA", "WV", "WI", "WY"
+     ];
+
+     this.state_list_labels = [
+       "ALABAMA",
+       "ALASKA",
+       "ARIZONA",
+       "ARKANSAS",
+       "CALIFORNIA",
+       "COLORADO",
+       "CONNECTICUT",
+       "DELAWARE",
+       "FLORIDA",
+       "GEORGIA",
+       "HAWAII",
+       "IDAHO",
+       "ILLINOIS",
+       "INDIANA",
+       "IOWA",
+       "KANSAS",
+       "KENTUCKY",
+       "LOUISIANA",
+       "MAINE",
+       "MARYLAND",
+       "MASSACHUSETTS",
+       "MICHIGAN",
+       "MINNESOTA",
+       "MISSISSIPPI",
+       "MISSOURI",
+       "MONTANA",
+       "NEBRASKA",
+       "NEVADA",
+       "NEW_HAMPSHIRE",
+       "NEW_JERSEY",
+       "NEW_MEXICO",
+       "NEW_YORK",
+       "NORTH_CAROLINA",
+       "NORTH_DAKOTA",
+       "OHIO",
+       "OKLAHOMA",
+       "OREGON",
+       "PENNSYLVANIA",
+       "RHODE_ISLAND",
+       "SOUTH_CAROLINA",
+       "SOUTH_DAKOTA",
+       "TENNESSEE",
+       "TEXAS",
+       "UTAH",
+       "VERMONT",
+       "VIRGINIA",
+       "WASHINGTON",
+       "WEST_VIRGINIA",
+       "WISCONSIN",
+       "WYOMING",
+       ];
 
      this.state_list = {
        ALABAMA:	'AL',
@@ -86,25 +150,11 @@ class Address extends React.Component {
      }
 
      this.state = {
-       /*states: {
-
-      },*/
-      state_index: 0
+      state_index: 0,
+      modalVisible: true
      }
 
     this.kbOffset = new Animated.Value(0);
-
-
-     /*if(this.firebase_token == ''){
-       Async.get('session_token', (token) => {
-         this.token = token;
-         //dispatchSetFirebaseToken
-         console.log("Token: " + token);
-         this.props.dispatchSetFirebaseToken(this.token);
-       });
-     }*/
-
-     // Props for temporary input storage
      //Address, City, State, Zio
      this.addressInput = "";
      this.cityInput ="";
@@ -166,9 +216,6 @@ class Address extends React.Component {
      _keyboardWillHideSubscription.remove();
    }
 
-
-
-
    onValueChange( value: string) {
      const newState = {};
      newState['state_index'] = value;
@@ -191,7 +238,7 @@ class Address extends React.Component {
            </View>
 
            <View>
-             <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.addressInput = text; this.props.dispatchSetAddress(this.addressInput); this.props.dispatchSetAddressValidations(this.addressInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
+             <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => { this.addressInput = text; this.props.dispatchSetAddress(this.addressInput); this.props.dispatchSetAddressValidations(this.addressInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
              {this.props.addressValidations.valid ? <EvilIcons  style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"  }} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'grey'} />}
            </View>
 
@@ -208,8 +255,9 @@ class Address extends React.Component {
 
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>State</Text>
            <View>
-            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"WI"} onChangeText={(text) => {this.stateInput = text; this.props.dispatchSetState(this.stateInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />
+            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"WI"} onChangeText={(text) => {this.refs.picker.show(); this.stateInput = text; this.props.dispatchSetState(this.stateInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />
            </View>
+
            {/*<Picker
             style={[typography.marginBottom, {backgroundColor: "#d8d8d8", color: "black", marginLeft: 50, marginRight: 50, borderRadius: 50}]}
             selectedValue={this.state.state_index}
@@ -246,6 +294,32 @@ class Address extends React.Component {
              callbackRight={() => {this.onPressRight()}}
              callbackLeft={() => {this.onPressLeft()}}/>
          </Animated.View>
+         <View style={{marginBottom: 0}}>
+           <Modal
+              animationType={"slide"}
+              transparent={true}
+              visible={this.state.modalVisible}
+              style={{marginTop: 0}}
+            >
+
+            <Picker
+             style={[typography.marginBottom, {backgroundColor: "#d8d8d8", color: "black", marginLeft: 50, marginRight: 50, borderRadius: 50}]}
+             selectedValue={this.state.state_index}
+             itemStyle={[typography.stateInput]}
+             onValueChange={(text) => { this.onValueChange(text); console.log("State Index: " + this.state.state_index); console.log(Object.keys(this.state_list)[text]); }}>
+
+             {
+               Object.keys(this.state_list).map(function(key, value){
+                 return(
+                   <Picker.Item key={key} label={key} value={value}/>
+                 )
+               })
+             }
+
+            </Picker>
+            </Modal>
+          </View>
+
        </View>
      );
    }

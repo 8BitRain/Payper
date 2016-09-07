@@ -1,5 +1,8 @@
 import {StyleSheet} from 'react-native';
+import { Dimensions } from 'react-native';
 
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
 const containers = StyleSheet.create({
   container: {
     flex: 1
@@ -17,6 +20,16 @@ const containers = StyleSheet.create({
   padHeaderSubSize_1: {
     paddingTop: 80
   },
+
+  modalContainer: {
+   width: SCREEN_WIDTH,
+   justifyContent: 'center',
+   alignItems: 'center',
+   padding: 0,
+   backgroundColor: '#F5FCFF',
+ },
+
+
 
   //
   whole: { flex: 1.0 },
