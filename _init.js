@@ -100,9 +100,11 @@ export function signInWithEmail(data, callback) {
                 console.log(user);
                 // Sign in succeeded. Log the user to Async storage and take them
                 // to the app.
-                Async.set('user', JSON.stringify(user), () => {
-                  if (typeof callback == 'function') callback(true);
-                  else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+                Async.set('session_token', token, () => {
+                  Async.set('user', JSON.stringify(user), () => {
+                    if (typeof callback == 'function') callback(true);
+                    else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+                  });
                 });
               }
             });
