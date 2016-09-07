@@ -65,51 +65,6 @@ class Purpose extends React.Component {
           loading={this.state.loading}
           confirmCallback={() => {
             this.setState({ loading: true });
-            this.props.sendPayment(this.props.payment, (success) => {
-              if (success) {
-
-                // Set active filter tab in payment view
-                if (this.props.payment.sender_id == this.props.currentUser.uid) this.props.setActiveFilter("outgoing");
-                else this.props.setActiveFilter("incoming");
-
-                // Reset the create payment state
-                this.setState({ awaitingConfirmationOn: "", loading: false });
-                this.props.reset();
-
-                // Close the modal
-                this.props.toggleModal();
-
-              } else {
-                this.setState({ awaitingConfirmationOn: "", loading: false });
-                alert("Payment failed");
-              }
-            });
-          }} />
-      );
-    } else {
-      return(
-        <PayRequestNav
-          awaitingConfirmationOn={this.state.awaitingConfirmationOn}
-          loading={this.state.loading}
-          payCallback={() => {
-            if (this.props.purpose) {
-              this.setState({ awaitingConfirmationOn: "pay" });
-              this.props.setPaymentInfo({
-                payment: {
-                  amount: this.props.amount,
-                  purpose: this.props.purpose,
-                  payments: this.props.payments,
-                },
-                currentUser: this.props.currentUser,
-                otherUser: this.props.selectedContact,
-                type: "payment"
-              });
-            } else {
-              // Prompt the user to enter the purpose memo information
-              alert("Please enter the purpose of the payment");
-            }
-          }}
-          requestCallback={() => {
             if (this.props.purpose) {
               this.setState({ awaitingConfirmationOn: "request" });
               this.props.setPaymentInfo({
@@ -120,13 +75,37 @@ class Purpose extends React.Component {
                 },
                 currentUser: this.props.currentUser,
                 otherUser: this.props.selectedContact,
-                type: "request"
+                type: this.state.paymentType,
+              }, (payment) => {
+                this.props.sendPayment(payment, (success) => {
+                  if (success) {
+
+                    // Reset the create payment state
+                    this.setState({ awaitingConfirmationOn: "", loading: false });
+                    this.props.reset();
+
+                    // Close the modal and set the active filter to appropriate one
+                    this.props.toggleModal({ activeFilter: (payment.sender_id == this.props.currentUser.uid) ? "outgoing" : "incoming" });
+
+                  } else {
+                    this.setState({ awaitingConfirmationOn: "", loading: false });
+                    alert("Payment failed");
+                  }
+                });
               });
             } else {
               // Prompt the user to enter the purpose memo information
               alert("Please enter the purpose of the payment");
             }
           }} />
+      );
+    } else {
+      return(
+        <PayRequestNav
+          awaitingConfirmationOn={this.state.awaitingConfirmationOn}
+          loading={this.state.loading}
+          payCallback={() => this.setState({ awaitingConfirmationOn: "pay", paymentType: "payment" })}
+          requestCallback={() => this.setState({ awaitingConfirmationOn: "request", paymentType: "request" })} />
       );
     }
   }

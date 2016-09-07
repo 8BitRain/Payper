@@ -112,6 +112,7 @@
 - [ ] Fix bug where "Purpose" text input does not save if the user has already pressed "Pay" or "Request" and is changing something before pressing "Confirm" (just don't update payment info until user presses confirm)
 - [ ] Fix duplicate user bug in UserSearch
 - [ ] Sign-in success on second attempt looks whack
+- [ ] Fix bug where active filter highlighting does not change accordingly after a payment is created
 
 ### Things I Need Vash For (Brady)
 - [X] Fix bug where inviting via payment exits before completing request

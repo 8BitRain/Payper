@@ -93,6 +93,10 @@ function mapDispatchToProps(dispatch) {
       dispatch(set.activeTab(tab));
     },
 
+    setActiveFilter: (filter) => {
+      dispatch(set.activeFilter(filter));
+    },
+
     // 1) Remove payment from DataSource
     // 2) Hit cancelPayment Lambda endpoint
     cancelPayment: (options) => {

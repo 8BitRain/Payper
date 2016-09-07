@@ -46,6 +46,8 @@ class Payments extends React.Component {
   }
 
   _toggleModal(options) {
+    console.log("Toggled modal with options:", options);
+    if (options && options.activeFilter) this.props.setActiveFilter(options.activeFilter);
     this.setState({ modalVisible: !this.state.modalVisible });
   }
 
@@ -235,7 +237,7 @@ class Payments extends React.Component {
           <View style={{flex: 1.0}}>
             <CreatePayment
               {...this.props}
-              toggleModal={() => this._toggleModal()} />
+              toggleModal={(options) => this._toggleModal(options)} />
           </View>
         </Modal>
 

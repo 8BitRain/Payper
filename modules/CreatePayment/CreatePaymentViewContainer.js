@@ -147,7 +147,8 @@ function mapDispatchToProps(dispatch) {
       console.log("%cPayment:", "color:blue;font-weight:900;");
       console.log(payment);
 
-      dispatch(set.info(payment));
+      if (typeof callback == 'function') callback(payment);
+      else console.log("%cCallback is not a function.", "color:red;font-weight:900;");
     },
 
     sendPayment: (payment, callback) => {
