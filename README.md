@@ -87,8 +87,8 @@
 - [X] Fix profile pic preview for non-Facebook accounts on 'Profile'
 - [X] Fix Incoming/Outgoing tab padding (need to be easier to press)
 - [X] Fix keyboard spacing on edit profile pages for small phones (add real header component to the modal)
+- [X] Transfer create payment flow to modal instead of separate scene
 - [ ] Fix ugly notification indicators
-- [ ] Transfer create payment flow to modal instead of separate scene
 
 ### MVP Logic Bugs (Brady)
 - [X] Fix bug where user state is not properly reset upon signing out and signing in with another account

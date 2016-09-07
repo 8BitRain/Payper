@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS } from 'react-native';
+import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 // Helpers
@@ -9,6 +9,7 @@ import * as StringMaster5000 from '../../helpers/StringMaster5000';
 // Partial components
 import Footer from '../../components/Footer/Footer';
 import Transaction from '../../components/Previews/Transaction/Transaction';
+import CreatePayment from '../../modules/CreatePayment/CreatePaymentViewContainer';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -19,6 +20,7 @@ class Payments extends React.Component {
     super(props);
     this.state = {
       uid: "",
+      modalVisible: false,
     }
   }
 
@@ -41,6 +43,10 @@ class Payments extends React.Component {
         this.props.listen([incomingPayments, outgoingPayments]);
       });
     }
+  }
+
+  _toggleModal(options) {
+    this.setState({ modalVisible: !this.state.modalVisible });
   }
 
   _renderEmptyState() {
@@ -213,8 +219,25 @@ class Payments extends React.Component {
           <Footer
             callbackFeed={() => this.props.setActiveTab('global')}
             callbackTracking={() => this.props.setActiveTab('tracking')}
-            callbackPay={() => Actions.CreatePaymentViewContainer()} />
+            callbackPay={() => this._toggleModal()} />
         </View>
+
+        { /* Modal containing create payment panel */ }
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={ () => alert("Closed modal") }>
+
+          { /* Lighten status bar text */ }
+          <StatusBar barStyle="light-content" />
+
+          <View style={{flex: 1.0}}>
+            <CreatePayment
+              {...this.props}
+              toggleModal={() => this._toggleModal()} />
+          </View>
+        </Modal>
 
       </View>
     );

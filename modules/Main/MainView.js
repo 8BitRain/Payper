@@ -92,9 +92,8 @@ class Main extends React.Component {
     }
   }
 
-
+  // Disable Firebase listeners
   componentWillUnmount() {
-    // Disable Firebase listeners
     this.props.stopListening(this.props.activeFirebaseListeners);
   }
 

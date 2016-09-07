@@ -76,8 +76,8 @@ class Purpose extends React.Component {
                 this.setState({ awaitingConfirmationOn: "", loading: false });
                 this.props.reset();
 
-                // Return to home page
-                Actions.MainViewContainer();
+                // Close the modal
+                this.props.toggleModal();
 
               } else {
                 this.setState({ awaitingConfirmationOn: "", loading: false });
@@ -343,7 +343,7 @@ class CreatePaymentView extends React.Component {
         { /* Header */ }
         <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
           <Header
-            callbackClose={ () => { this.props.reset(); Actions.MainViewContainer({direction: "vertical"}); }}
+            callbackClose={ () => { this.props.reset(); this.props.toggleModal(); }}
             callbackBack={ () => this._setPageIndex(1) }
             numUnseenNotifications={ this.props.numUnseenNotifications }
             headerProps={ this.state.header } />
