@@ -10,6 +10,9 @@ import * as StringMaster5000 from '../../helpers/StringMaster5000';
 import Footer from '../../components/Footer/Footer';
 import Transaction from '../../components/Previews/Transaction/Transaction';
 
+//Init
+import * as Init from '../../_init';
+
 // Stylesheets
 import colors from '../../styles/colors';
 const dimensions = Dimensions.get('window');
@@ -38,7 +41,10 @@ class Payments extends React.Component {
       this.setState({ uid: newProps.currentUser.uid }, () => {
         var incomingPayments = "paymentFlow/" + this.state.uid + "/in/",
             outgoingPayments = "paymentFlow/" + this.state.uid + "/out/";
-        this.props.listen([incomingPayments, outgoingPayments]);
+        var uid = this.state.uid;
+        var appFlags = "appFlags/" + uid;
+
+        this.props.listen([incomingPayments, outgoingPayments, appFlags]);
       });
     }
   }
@@ -194,6 +200,39 @@ class Payments extends React.Component {
     );
   }
 
+  _verifyOnboardingStatus(){
+    if(this.props.flags.onboarding_state == 'customer'){
+      Actions.BankOnboardingContainer();
+      console.log(this.props.currentUser.token);
+      this.props.setNewUserToken(this.props.currentUser.token);
+    }
+    if(this.props.flags.onboarding_state == 'bank'){
+      console.log("BANK STATE REACHED: " + this.props.startIav );
+      //this.props.setIav("fish");
+      //Initiate IAV
+      var data = {
+        token: this.props.currentUser.token
+      };
+      var _this = this;
+      console.log("Beginning IAV Initiation");
+      Init.getIavToken(data, function(iavTokenRecieved, iavToken){
+        if(iavTokenRecieved){
+          console.log("SSN IAVTOKEN: " + JSON.stringify(iavToken));
+          //Will cause the IAV Token Page to be loaded
+          _this.props.setIav(iavToken.token);
+          Actions.BankOnboardingContainer();
+        }
+      });
+    }
+    if(this.props.flags.onboarding_state == 'complete'){
+      Actions.CreatePaymentViewContainer();
+    }
+
+
+  }
+
+
+
   render() {
     return(
       <View style={{flex: 1.0, backgroundColor: colors.white}}>
@@ -210,7 +249,9 @@ class Payments extends React.Component {
           <Footer
             callbackFeed={() => this.props.setActiveTab('global')}
             callbackTracking={() => this.props.setActiveTab('tracking')}
-            callbackPay={() => Actions.CreatePaymentViewContainer()} />
+            callbackPay={() =>{
+              this._verifyOnboardingStatus();
+            /*Actions.CreatePaymentViewContainer()*/}} />
         </View>
 
       </View>
