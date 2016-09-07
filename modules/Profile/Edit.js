@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TextInput, Dimensions, StyleSheet, TouchableHighlight, Modal } from 'react-native';
+import { View, Text, TextInput, Dimensions, StyleSheet, TouchableHighlight, Modal, Animated } from 'react-native';
 
 // Helper functions
 import * as Lambda from '../../services/Lambda';
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '200',
     color: colors.white,
-    paddingLeft: 20,
+    paddingLeft: 5,
     paddingRight: 20,
     marginTop: 30,
     width: dimensions.width,
@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
   // Display name input
   nameInputWrap: {
     borderBottomWidth: 0.8,
-    borderBottomColor: colors.white,
     width: dimensions.width * 0.8,
   },
 
@@ -74,36 +73,84 @@ class Edit extends React.Component {
       info: this.props.modalProps.info,
       loading: false,
       loadingMessage: "",
+      colorOne: new Animated.Value(0),
+      colorTwo: new Animated.Value(0),
     };
 
     this.input = "";
+    this.firstNameInput = "";
+    this.lastNameInput = "";
     this._clearText = this._clearText.bind(this);
     this._refs = [];
   }
 
 
+  _animateUnderlineColor(options) {
+    if (options.whichColor == "one") Animated.spring(this.state.colorOne, { toValue: options.val }).start();
+    else if (options.whichColor == "two") Animated.spring(this.state.colorTwo, { toValue: options.val }).start();
+  }
+
+
+  _handleChangeText(options) {
+
+    console.log("Options:", options);
+
+    if (options.valid) {
+
+      // Set input
+      if (options.inputting == "firstName") this.firstNameInput = options.input;
+      else if (options.inputting == "lastName") this.lastNameInput = options.input;
+      else this.input = options.input;
+
+      // Set underline color
+      this._animateUnderlineColor({ whichColor: options.whichColor, val: 500 });
+
+    } else {
+      this._animateUnderlineColor({ whichColor: options.whichColor, val: 0 });
+    }
+  }
+
+
   _getPhoneNumberKeyboard() {
+    var underlineColor = this.state.colorOne.interpolate({
+      inputRange: [0, 500],
+      outputRange: ['rgba(255, 255, 255, 1)', 'rgba(33, 191, 85, 1)']
+    });
+
     return(
-      <TextInput
-        ref={(component) => this._refs["phone"] = component}
-        style={styles.input}
-        onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
-        onChangeText={(input) => { this.input = input; }}
-        autoCorrect={false} autoFocus
-        placeholderFontFamily="Roboto"
-        placeholderTextColor={colors.lightGrey}
-        placeholder={"262-305-8038"}
-        maxLength={10}
-        keyboardType="phone-pad" />
+      <Animated.View style={[styles.nameInputWrap, { borderColor: underlineColor }]}>
+        <TextInput
+          ref={(component) => this._refs["phone"] = component}
+          style={styles.input}
+          onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
+          onChangeText={(input) => this._handleChangeText({ input: input, valid: Validators.validatePhone(input).valid, whichColor: "one" })}
+          autoCorrect={false} autoFocus
+          placeholderFontFamily={"Roboto"}
+          placeholderTextColor={colors.lightGrey}
+          placeholder={"262-305-8038"}
+          maxLength={10}
+          keyboardType="phone-pad" />
+      </Animated.View>
     );
   }
 
 
   _getDisplayNameKeyboard() {
+
+    var underlineColorFirstName = this.state.colorOne.interpolate({
+      inputRange: [0, 500],
+      outputRange: ['rgba(255, 255, 255, 1)', 'rgba(33, 191, 85, 1)']
+    });
+
+    var underlineColorLastName = this.state.colorTwo.interpolate({
+      inputRange: [0, 500],
+      outputRange: ['rgba(255, 255, 255, 1)', 'rgba(33, 191, 85, 1)']
+    });
+
     return(
       <View>
         { /* First name */ }
-        <View style={styles.nameInputWrap}>
+        <Animated.View style={[styles.nameInputWrap, { borderColor: underlineColorFirstName }]}>
           <TextInput
             ref={(component) => this._refs["firstName"] = component}
             style={[styles.input, { paddingLeft: 10, paddingRight: 10 }]}
@@ -113,12 +160,12 @@ class Edit extends React.Component {
             placeholder={"First name"}
             autoCorrect={false} autoFocus
             autoCapitalize={"words"}
-            onChangeText={(input) => { this.input = input }}
+            onChangeText={(input) => this._handleChangeText({ input: input, valid: Validators.validateName(input).valid, whichColor: "one" })}
             onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._refs["lastName"].focus() }} />
-        </View>
+        </Animated.View>
 
         { /* Last name */ }
-        <View style={styles.nameInputWrap}>
+        <Animated.View style={[styles.nameInputWrap, { borderColor: underlineColorLastName }]}>
           <TextInput
             ref={(component) => this._refs["lastName"] = component}
             style={[styles.input, { paddingLeft: 10, paddingRight: 10 }]}
@@ -128,25 +175,32 @@ class Edit extends React.Component {
             placeholder={"Last name"}
             autoCorrect={false}
             autoCapitalize={"words"}
-            onChangeText={(input) => { this.input = input }} />
-        </View>
+            onChangeText={(input) => this._handleChangeText({ input: input, valid: Validators.validateName(input).valid, whichColor: "two" })} />
+        </Animated.View>
       </View>
     );
   }
 
 
   _getEmailKeyboard() {
+    var underlineColor = this.state.colorOne.interpolate({
+      inputRange: [0, 500],
+      outputRange: ['rgba(255, 255, 255, 1)', 'rgba(33, 191, 85, 1)']
+    });
+
     return(
-      <TextInput
-        ref={(component) => this._refs["phone"] = component}
-        style={styles.input}
-        onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
-        placeholderFontFamily={"Roboto"}
-        placeholderTextColor={colors.lightGrey}
-        placeholder={"Enter your new " + this.state.title.toLowerCase()}
-        autoCorrect={false} autoFocus
-        autoCapitalize={"none"}
-        onChangeText={(input) => { this.input = input }} />
+      <Animated.View style={[styles.nameInputWrap, { borderColor: underlineColor }]}>
+        <TextInput
+          ref={(component) => this._refs["email"] = component}
+          style={styles.input}
+          onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }}
+          placeholderFontFamily={"Roboto"}
+          placeholderTextColor={colors.lightGrey}
+          placeholder={"Enter your new " + this.state.title.toLowerCase()}
+          autoCorrect={false} autoFocus
+          autoCapitalize={"none"}
+          onChangeText={(input) => this._handleChangeText({ input: input, valid: Validators.validateEmail(input).valid, whichColor: "one" })} />
+      </Animated.View>
     );
   }
 
@@ -161,29 +215,52 @@ class Edit extends React.Component {
 
     // Extend scope
     const _this = this;
-    var valid;
 
     switch (this.props.modalProps.title) {
       case "Display Name":
-        valid = Validators.validateName(this.input);
-        console.log("Valid:", valid);
-        this._clearText(["firstName", "lastName"]);
-        this._refs["firstName"].focus();
+
+        var valid = Validators.validateName(this.firstNameInput).valid && Validators.validateName(this.lastNameInput).valid;
+        console.log("Valid:", Validators.validateName(this.firstNameInput).valid && Validators.validateName(this.lastNameInput).valid);
+
+        if (valid) {
+          // Clear input fields
+          this._clearText(["firstName", "lastName"]);
+
+          // Re-focus on first input field
+          this._refs["firstName"].focus();
+
+          // Reset input field underline colors
+          this._animateUnderlineColor({ whichColor: "one", val: 0 });
+          this._animateUnderlineColor({ whichColor: "two", val: 0 });
+        } else {
+          alert("Not valid!");
+        }
+
       break;
       case "Phone Number":
-        valid = Validators.validatePhone(this.input);
+        var valid = Validators.validatePhone(this.input);
         if (valid.valid) {
 
           // Activate loading indicator
           this.setState({ loading: true, loadingMessage: "Sending..." });
 
-          // Hit Lambda with new phone number
-          Lambda.updatePhone({ phone: this.input, token: this.props.currentUser.token }, (success) => {
+          // Update user's phone number in Redux user JSON
+          var currentUser = this.props.currentUser;
+          currentUser.updatedPhone = this.input;
+
+          console.log("Sending user:");
+          console.log(currentUser);
+
+          // Hit Lambda with update user object
+          Lambda.updateUser({ user: currentUser, token: currentUser.token }, (success) => {
             console.log("Updating phone number was a success:", success);
             if (success) {
 
               // Clear text input
               this._clearText("phone");
+
+              // Reset underline colors
+              this._animateUnderlineColor({ whichColor: "one", val: 0 });
 
               // Report success and deactive loading indicator
               this.setState({ loadingMessage: "Success!" });
@@ -217,7 +294,8 @@ class Edit extends React.Component {
         }
       break;
       case "Email":
-        valid = Validators.validateEmail(this.input);
+
+        var valid = Validators.validateEmail(this.input);
         console.log("Valid:", valid);
 
         if (valid.valid) {
@@ -227,9 +305,12 @@ class Edit extends React.Component {
 
           // Update user's phone number in Redux user JSON
           var currentUser = this.props.currentUser;
-          currentUser.decryptedEmail = this.input;
+          currentUser.updatedEmail = this.input;
 
-          // Hit Lambda with new phone number
+          console.log("Sending user:");
+          console.log(currentUser);
+
+          // Hit Lambda with update user object
           Lambda.updateUser({ user: currentUser, token: currentUser.token }, (success) => {
             console.log("Updating email was a success:", success);
             if (success) {
@@ -244,6 +325,8 @@ class Edit extends React.Component {
               }, 750);
 
               // Update user's phone number in Redux store
+              var currentUser = this.props.currentUser;
+              currentUser.decryptedEmail = this.input;
               this.props.setCurrentUser(currentUser);
 
               // Trigger re-render of options list
@@ -288,7 +371,7 @@ class Edit extends React.Component {
             (this.state.value)
               ? <View style={{justifyContent: 'center', alignItems: 'center', width: dimensions.width}}>
                   <Text style={[styles.info, {color: colors.white, fontWeight: '200'}]}>
-                    Current { this.state.title.toLowerCase() + " :" }
+                    Current { this.state.title.toLowerCase() + ": " }
                     { /* Bind value directly to user Redux object so it updates in realtime */
                       (this.props.modalProps.title == "Phone Number")
                         ? StringMaster5000.stylizePhoneNumber(this.props.currentUser.decryptedPhone)
@@ -311,7 +394,7 @@ class Edit extends React.Component {
           <View style={{justifyContent: 'center', alignItems: 'center', width: dimensions.width}}>
             <View >
               { /* Text inputs will differ based on what user is inputting */ }
-              { (this.props.modalProps.title == "Display Name") ? this._getDisplayNameKeyboard() : null }
+              { /* (this.props.modalProps.title == "Display Name") ? this._getDisplayNameKeyboard() : null */ }
               { (this.props.modalProps.title == "Phone Number") ? this._getPhoneNumberKeyboard() : null }
               { (this.props.modalProps.title == "Email") ? this._getEmailKeyboard() : null }
             </View>
@@ -319,7 +402,7 @@ class Edit extends React.Component {
 
           <View style={{height: 100, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dimensions.width}}>
           { /* Submit button */
-            (this.props.modalProps.title != "Username")
+            (this.props.modalProps.title != "Username" && this.props.modalProps.title != "Display Name")
               ? (this.state.loading)
                   ? <Text style={[styles.info, { color: colors.white, fontSize: 20 }]}>
                       { this.state.loadingMessage }
@@ -329,7 +412,6 @@ class Edit extends React.Component {
                       callbackRight={() => this._handleSubmit()} />
               : null }
           </View>
-
         </View>
 
         { /* Close modal button */ }
@@ -339,10 +421,9 @@ class Edit extends React.Component {
           onPress={() => this.props.toggleModal()}
           style={{position: 'absolute', top: 0, left: 0, padding: 40, backgroundColor: 'transparent'}}>
 
-          <Entypo name="cross" size={25} color={colors.accent} />
+          <Entypo name="cross" size={25} color={colors.white} />
 
         </TouchableHighlight>
-
       </View>
     );
   }

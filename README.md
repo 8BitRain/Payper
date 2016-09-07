@@ -100,7 +100,9 @@
 - [ ] Make sure payments are deleting properly (sometimes throws this.props.invite is undefined)
 - [ ] Listen to appFlags > numUnseenNotifications for notification indicator instead of counting them up in the front-end
 - [ ] Don't render existing users in "Invite a Contact to Use Payper" section of UserSearch
-- [ ] Fix bug where session token sign in does not work for non-Facebook users (must manually sign in each launch)
+- [ ] Fix bug where session token sign in does not work for non-Facebook users (must manually sign in each launch
+- [ ] Fix bug where "Purpose" text input does not save if the user has already pressed "Pay" or "Request" and is changing something before pressing "Confirm" (just don't update payment info until user presses confirm)
+- [ ] Fix duplicate user bug in UserSearch
 
 ### Things I Need Vash For (Brady)
 - [X] Fix bug where inviting via payment exits before completing request
@@ -115,7 +117,7 @@
 - [X] Research and resolve token refresh issue
 - [X] Fix Incoming/Outgoing tab padding (need to be easier to press)
 - [X] Fix duplicate user bug in global user search list
-- [ ] Finish edit profile component
+- [X] Finish edit profile component
 - [ ] Fix ugly notification indicators
 - [ ] Sign-in success on second attempt looks whack
 

@@ -49,7 +49,7 @@ class Profile extends React.Component {
         destination: () => this._toggleModal({
           title: "Display Name",
           content: this.props.currentUser.first_name + " " + this.props.currentUser.last_name,
-          info: "This is this name you go by in app."
+          info: "This is not currently editable."
         })},
       { rowTitle: "Username",
         rowContent: this.props.currentUser.username,
@@ -227,11 +227,11 @@ class Profile extends React.Component {
           animationType={"slide"}
           transparent={true}
           visible={this.state.modalVisible}
-          onRequestClose={ () => alert("Modal has been closed.") }>
+          onRequestClose={ () => alert("Closed modal") }>
 
           { /* Edit panel */ }
           <Edit
-            { ...this.props }
+            {...this.props}
             modalProps={this.state.modalProps}
             toggleModal={() => this._toggleModal()}
             updateOptionsDataSource={() => this._updateOptionsDataSource()} />
