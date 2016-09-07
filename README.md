@@ -43,7 +43,7 @@
 - [X] "Runtime is not ready for debugging" randomly appears.  **This went away when I downgraded from Node 6.2.0 to 5.5.0**
 - [ ] "Severe Error, duplicates recorded in Firebase, with no auth information. To reproduce delete an id but not a users and Facebook id, or switch this around until you can get duplicate users through Facebook sign in or regular user sign in." https://github.com/facebook/react-native/issues/6682
 
-### Brady (MVP)
+### Brady
 - [X] Style payment invites
 - [X] Add confirmation message to cancel payment button
 - [X] Add instant re-render for 'Cancel Payment' action
@@ -71,11 +71,11 @@
 - [X] Fix bug where notifications indicator is not rendered as a perfect circle on smaller devices
 - [X] Add global user list to UserSearch (naive approach)
 - [X] Hit `Lambda.updateContacts()` on load, updating user's contactList
-- [ ] Add edit pages for profile attributes
+- [X] Add edit pages for profile attributes
+- [X] Redesign BankAccountsView
 - [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
 - [ ] Add an onPress destination to notifications
 - [ ] Create a PaymentSeries module, containing detailed information about the payment series, and the option to skip/reschedule payments
-- [ ] Redesign BankAccountsView
 
 ### MVP Usability and Design Bugs (Brady)
 - [X] Adjust CreatePayment flow so that after payment creation: payment creation => outgoing tab of payments view, request creating => incoming tab of payments view
@@ -83,6 +83,7 @@
 - [X] Change placeholder numbers for cost and number of payments to 0
 - [X] Change landing page options to just "Continue with Facebook" and "Continue without Facebook"
 - [X] Fix profile pic preview for non-Facebook accounts on 'Profile'
+- [ ] Fix keyboard spacing on edit profile pages for small phones
 
 ### MVP Logic Bugs (Brady)
 - [X] Fix bug where user state is not properly reset upon signing out and signing in with another account
@@ -96,9 +97,9 @@
 - [X] Fix bug where you can still press create payment confirmation button while it's sending and create multiple payments
 - [X] Don't render current user in UserSearch
 - [X] Don't show Facebook icon for non-Facebook users in UserSearchView confirmation
-- [ ] Fix bug where sign in sometimes fails (tough to recreate, may be a non-issue)
-- [ ] Make sure payments are deleting properly (sometimes throws this.props.invite is undefined)
-- [ ] Listen to appFlags > numUnseenNotifications for notification indicator instead of counting them up in the front-end
+- [X] Fix bug where sign in sometimes fails (tough to recreate, may be a non-issue)
+- [X] Make sure payments are deleting properly (sometimes throws this.props.invite is undefined)
+- [X] Listen to appFlags > numUnseenNotifications for notification indicator instead of counting them up in the front-end
 - [ ] Don't render existing users in "Invite a Contact to Use Payper" section of UserSearch
 - [ ] Fix bug where session token sign in does not work for non-Facebook users (must manually sign in each launch
 - [ ] Fix bug where "Purpose" text input does not save if the user has already pressed "Pay" or "Request" and is changing something before pressing "Confirm" (just don't update payment info until user presses confirm)

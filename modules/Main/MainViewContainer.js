@@ -57,14 +57,11 @@ function mapDispatchToProps(dispatch) {
 
       Async.get('user', (user) => {
         if (!user) {
-
-          // Sign in failed
-          console.log("=-=-=-=-= Sign in failed =-=-=-=-=");
+          console.log("%cSign in failed.", "color:red;font-weight:900;");
 
           dispatch(set.signedIn(false));
           if (typeof callback == 'function') callback(false);
           else console.log("Callback is not a function.");
-
         } else {
 
           var parsedUser = JSON.parse(user);
@@ -112,29 +109,14 @@ function mapDispatchToProps(dispatch) {
 
     listen: (endpoints, callback) => {
 
-      console.log("\n\n\n\n\n\n\n\n\n\nGonna listen to:", endpoints);
-
       Firebase.listenTo(endpoints, (response) => {
-        console.log("FIREBASE RESPONSE:\n\n", response);
         switch (response.endpoint.split("/")[0]) {
 
           case "notifications":
-            var notifications = response.value,
-                numUnseen = 0;
-            // Count number of unseen notifications
-            for (var n in notifications) {
-              if (!notifications[n].seen) numUnseen++;
-            }
-            dispatch(set.numUnseenNotifications(numUnseen));
-            dispatch(set.notifications(notifications));
-
-            if (typeof callback == 'function') callback();
-            else console.log("%cCallback is not a function.", "color:red;font-weight:900;");
+            dispatch(set.notifications(response.value));
           break;
 
           case "appFlags":
-            console.log("Got app flags");
-            console.log(response);
             dispatch(set.flags(response.value));
           break;
 

@@ -85,8 +85,6 @@ class Main extends React.Component {
 
           console.log("%cInitialization succeeded. Current user:", "color:green;font-weight:900;");
           console.log(this.props.currentUser);
-          console.log("%cCurrent appFlags:", "color:green;font-weight:900;");
-          console.log(this.props.flags);
         } else {
           console.log("%cInitialization failed.", "color:red;font-weight:900;");
         }
@@ -145,7 +143,7 @@ class Main extends React.Component {
           <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
             <Header
               callbackSettings={ () => this.toggle() }
-              numUnseenNotifications={ this.props.numUnseenNotifications }
+              numUnseenNotifications={ this.props.flags.numUnseenNotifications }
               headerProps={ this.props.header }
               activeFilter={ this.props.activeFilter } />
           </View>
