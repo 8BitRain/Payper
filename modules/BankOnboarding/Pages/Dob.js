@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import Entypo from "react-native-vector-icons/Entypo";
@@ -24,6 +24,8 @@ import typography from "../styles/typography";
 class Dob extends React.Component {
    constructor(props) {
      super(props);
+
+     this.kbOffset = new Animated.Value(0);
 
      // Props for animation
      this.animationProps = {
@@ -62,9 +64,29 @@ class Dob extends React.Component {
      this.onPressRight = function() { this.props.dispatchSetPageX(3, "forward", true) };
      this.onPressLeft = function() { this.props.dispatchSetPageX(1, "backward", null) };
    }
+   _keyboardWillShow(e) {
+     Animated.spring(this.kbOffset, {
+       toValue: e.endCoordinates.height - 40,
+       friction: 6
+     }).start();
+   }
+
+   _keyboardWillHide(e) {
+     Animated.spring(this.kbOffset, {
+       toValue: 0,
+       friction: 6
+     }).start();
+   }
+
    componentDidMount() {
-     Animations.fadeIn(this.animationProps);
-     //Mixpanel.timeEvent("Email page Finished");
+     _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
+     _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+      Animations.fadeIn(this.animationProps);
+   }
+
+   componentWillUnmount() {
+     _keyboardWillShowSubscription.remove();
+     _keyboardWillHideSubscription.remove();
    }
    render() {
      return (
@@ -101,12 +123,18 @@ class Dob extends React.Component {
          </View>
 
            { /* Arrow nav buttons */ }
-           <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} callbackLeft={() => {this.onPressLeft()}}  />
+         {/*<ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} callbackLeft={() => {this.onPressLeft()}}  />*/}
 
 
            { /* Header */ }
            <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
 
+         </Animated.View>
+         <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
+           <ArrowNav
+             arrowNavProps={this.arrowNavProps}
+             callbackRight={() => {this.onPressRight()}}
+             callbackLeft={() => {this.onPressLeft()}} />
          </Animated.View>
        </View>
      );

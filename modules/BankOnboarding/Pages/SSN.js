@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import Entypo from "react-native-vector-icons/Entypo";
@@ -32,6 +32,8 @@ class SSN extends React.Component {
      super(props);
 
      // Props for animation
+     this.kbOffset = new Animated.Value(0);
+
      this.animationProps = {
        fadeAnim: new Animated.Value(0) // init opacity 0
      };
@@ -91,9 +93,31 @@ class SSN extends React.Component {
 
      }
    }
+
+   _keyboardWillShow(e) {
+     Animated.spring(this.kbOffset, {
+       toValue: e.endCoordinates.height - 40,
+       friction: 6
+     }).start();
+   }
+
+   _keyboardWillHide(e) {
+     Animated.spring(this.kbOffset, {
+       toValue: 0,
+       friction: 6
+     }).start();
+   }
+
    componentDidMount() {
-     Animations.fadeIn(this.animationProps);
-     //Mixpanel.timeEvent("Email page Finished");
+     _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
+     _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+      Animations.fadeIn(this.animationProps);
+   }
+
+   componentWillUnmount() {
+     _keyboardWillShowSubscription.remove();
+     _keyboardWillHideSubscription.remove();
+      this.props.stopListening(this.props.activeFirebaseListeners);
    }
 
    createCustomer(data){
@@ -135,10 +159,7 @@ class SSN extends React.Component {
      // Initialize the app
    }
 
-   componentWillUnmount() {
-     // Disable Firebase listeners
-     this.props.stopListening(this.props.activeFirebaseListeners);
-   }
+
 
    render() {
      return (
@@ -151,11 +172,17 @@ class SSN extends React.Component {
          </View>
 
            { /* Arrow nav buttons */ }
-           <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackCheck={() => {this.onPressCheck()}} />
+           {/*<ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackCheck={() => {this.onPressCheck()}} />*/}
 
            { /* Header */ }
            <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
 
+         </Animated.View>
+         <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
+           <ArrowNav
+             arrowNavProps={this.arrowNavProps}
+             callbackCheck={() => {this.onPressCheck()}}
+             callbackLeft={() => {this.onPressLeft()}} />
          </Animated.View>
        </View>
      );

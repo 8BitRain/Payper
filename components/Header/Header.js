@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: colors.richBlack,
+    backgroundColor: colors.accent ,
     paddingTop: 30,
     paddingBottom: 10,
     flexDirection: "row",

@@ -14,6 +14,9 @@ const containers = StyleSheet.create({
   padHeader: {
     paddingTop: 100
   },
+  padHeaderSubSize_1: {
+    paddingTop: 80
+  },
 
   //
   whole: { flex: 1.0 },

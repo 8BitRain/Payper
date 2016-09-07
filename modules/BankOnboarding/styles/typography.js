@@ -18,6 +18,7 @@ const typography = StyleSheet.create({
     height: 40,
     backgroundColor: "#D8D8D8",
     padding: 10,
+    paddingLeft: 10,
     color: "#53585E",
     borderRadius: 20,
     borderWidth: 2

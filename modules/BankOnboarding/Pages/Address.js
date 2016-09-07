@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, Picker} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image, Picker} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import Entypo from "react-native-vector-icons/Entypo";
@@ -92,6 +92,8 @@ class Address extends React.Component {
       state_index: 0
      }
 
+    this.kbOffset = new Animated.Value(0);
+
 
      /*if(this.firebase_token == ''){
        Async.get('session_token', (token) => {
@@ -137,10 +139,31 @@ class Address extends React.Component {
      this.onPressRight = function() { this.props.dispatchSetPageX(2, "forward", true) };
      this.onPressLeft = function() { this.props.dispatchSetPageX(0, "backward", null) };
    }
+
+   _keyboardWillShow(e) {
+     Animated.spring(this.kbOffset, {
+       toValue: e.endCoordinates.height - 40,
+       friction: 6
+     }).start();
+   }
+
+   _keyboardWillHide(e) {
+     Animated.spring(this.kbOffset, {
+       toValue: 0,
+       friction: 6
+     }).start();
+   }
+
    componentDidMount() {
-     Animations.fadeIn(this.animationProps);
-     console.log(Object.keys(this.state_list));
-     //Mixpanel.timeEvent("Email page Finished");
+     _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
+     _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+      Animations.fadeIn(this.animationProps);
+      console.log(Object.keys(this.state_list));
+   }
+
+   componentWillUnmount() {
+     _keyboardWillShowSubscription.remove();
+     _keyboardWillHideSubscription.remove();
    }
 
 
@@ -161,36 +184,33 @@ class Address extends React.Component {
          <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
 
          { /* Prompt and input field */ }
-         <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
+         <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeaderSubSize_1, backgrounds.email]}>
            {/*ADDRESS*/}
            <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Address</Text>
-           {this.props.addressValidations.valid ? <EvilIcons  style={{alignSelf: "flex-end"}} name="check" size={40} color={'green'} /> : <EvilIcons style={{alignSelf: "flex-end"}} name="check" size={40} color={'grey'} />}
+             <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Address</Text>
            </View>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.addressInput = text; this.props.dispatchSetAddress(this.addressInput); this.props.dispatchSetAddressValidations(this.addressInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
-           {/*<View style={{borderBottomWidth: 2, borderBottomColor: "#F4F4F9", marginLeft: 20, width: 275  , marginBottom: 10, position: "absolute", bottom: 395 }}>
-           </View>*/}
-           {<View style={{borderBottomWidth: 2, borderBottomColor: "#F4F4F9", marginLeft: 20, width: 275  , marginBottom: 10, position: "absolute", bottom: 355 }}>
-           </View>}
 
+           <View>
+             <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.addressInput = text; this.props.dispatchSetAddress(this.addressInput); this.props.dispatchSetAddressValidations(this.addressInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
+             {this.props.addressValidations.valid ? <EvilIcons  style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"  }} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'grey'} />}
+           </View>
 
            {/*CITY*/}
            <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>
              <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>City</Text>
-             {this.props.cityValidations.valid ? <EvilIcons  style={{}} name="check" size={40} color={'green'} /> : <EvilIcons style={{}} name="check" size={40} color={'grey'} />}
-
            </View>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.cityInput = text; this.props.dispatchSetCity(this.cityInput); this.props.dispatchSetCityValidations(this.cityInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
 
+           <View>
+             <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.cityInput = text; this.props.dispatchSetCity(this.cityInput); this.props.dispatchSetCityValidations(this.cityInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
+             {this.props.cityValidations.valid ? <EvilIcons  style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'green'} /> : <EvilIcons style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'grey'} />}
+           </View>
            {/*Has an interesting effect investigate or try using with circles*/}
 
-           <View style={{borderBottomWidth: 2, borderBottomColor: "#F4F4F9", marginLeft: 20, width: 275  , marginBottom: 10, position: "absolute", bottom: 275 }}>
-           </View>
-
-           {/*STATE*/}
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>State</Text>
-           {/*TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"WI"} onChangeText={(text) => {this.stateInput = text; this.props.dispatchSetState(this.stateInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />*/}
-           <Picker
+           <View>
+            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"WI"} onChangeText={(text) => {this.stateInput = text; this.props.dispatchSetState(this.stateInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />
+           </View>
+           {/*<Picker
             style={[typography.marginBottom, {backgroundColor: "#d8d8d8", color: "black", marginLeft: 50, marginRight: 50, borderRadius: 50}]}
             selectedValue={this.state.state_index}
             itemStyle={[typography.stateInput]}
@@ -204,21 +224,27 @@ class Address extends React.Component {
               })
             }
 
-          </Picker>
+          </Picker>*/}
 
            {/*POSTAL CODE (ZIP)*/}
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>PostalCode(ZIP)</Text>
-            {this.props.zipValidations.valid ? <EvilIcons  style={{}} name="check" size={40} color={'green'} /> : <EvilIcons style={{}} name="check" size={40} color={'grey'} />}
+         <View>
            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.zipInput = text; this.props.dispatchSetZip(this.zipInput); this.props.dispatchSetZipValidations(this.zipInput)}} autoCorrect={false}  autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="phone-pad" />
+           {this.props.zipValidations.valid ? <EvilIcons  style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'green'} /> : <EvilIcons style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'grey'} />}
+         </View>
          </View>
 
            { /* Arrow nav buttons */ }
-           <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} callbackLeft={() => {this.onPressLeft()}} />
-
-
+           {/*<ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} callbackLeft={() => {this.onPressLeft()}} />*/}
            { /* Header */ }
            <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
 
+         </Animated.View>
+         <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
+           <ArrowNav
+             arrowNavProps={this.arrowNavProps}
+             callbackRight={() => {this.onPressRight()}}
+             callbackLeft={() => {this.onPressLeft()}}/>
          </Animated.View>
        </View>
      );
