@@ -109,7 +109,7 @@
 - [X] Fix duplicate user bug in global user search list
 - [ ] Don't render existing users in "Invite a Contact to Use Payper" section of UserSearch
 - [ ] Fix bug where session token sign in does not work for non-Facebook users (must manually sign in each launch
-- [ ] Fix bug where "Purpose" text input does not save if the user has already pressed "Pay" or "Request" and is changing something before pressing "Confirm" (just don't update payment info until user presses confirm)
+- [X] Fix bug where "Purpose" text input does not save if the user has already pressed "Pay" or "Request" and is changing something before pressing "Confirm" (just don't update payment info until user presses confirm)
 - [ ] Fix duplicate user bug in UserSearch
 - [ ] Sign-in success on second attempt looks whack
 - [ ] Fix bug where active filter highlighting does not change accordingly after a payment is created
