@@ -94,6 +94,7 @@ function mapDispatchToProps(dispatch) {
     },
 
     setActiveFilter: (filter) => {
+      console.log("Setting active filter to", filter);
       dispatch(set.activeFilter(filter));
     },
 

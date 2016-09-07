@@ -242,7 +242,7 @@ class Header extends React.Component {
           { this.props.headerProps.title ? <Text style={{fontFamily: 'Roboto', fontSize: 16, color: colors.white, paddingTop: 5}}>{ this.props.headerProps.title }</Text> : null }
           { this.props.headerProps.types.paymentIcons ? getPaymentIcons(this.props.headerProps.index) : null }
           { this.props.headerProps.types.circleIcons ? getCircleIcons(this.props.headerProps.numCircles, this.props.headerProps.index) : null }
-          { this.props.headerProps.types.flowTabs ? getFlowTabs(this.state.active, () => {this.setState({active: 'incoming'}); this.props.headerProps.callbackIn()}, () => {this.setState({active: 'outgoing'}); this.props.headerProps.callbackOut()}) : null }
+          { this.props.headerProps.types.flowTabs ? getFlowTabs(this.props.activeFilter, () => {this.setState({active: 'incoming'}); this.props.headerProps.callbackIn()}, () => {this.setState({active: 'outgoing'}); this.props.headerProps.callbackOut()}) : null }
         </View>
 
         { /* Filler */ }

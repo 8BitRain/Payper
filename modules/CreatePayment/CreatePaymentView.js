@@ -80,12 +80,16 @@ class Purpose extends React.Component {
                 this.props.sendPayment(payment, (success) => {
                   if (success) {
 
+                    // Set active filter tab in payment view
+                    if (payment.sender_id == this.props.currentUser.uid) this.props.setActiveFilter("outgoing");
+                    else this.props.setActiveFilter("incoming");
+
                     // Reset the create payment state
                     this.setState({ awaitingConfirmationOn: "", loading: false });
                     this.props.reset();
 
-                    // Close the modal and set the active filter to appropriate one
-                    this.props.toggleModal({ activeFilter: (payment.sender_id == this.props.currentUser.uid) ? "outgoing" : "incoming" });
+                    // Close the modal
+                    this.props.toggleModal();
 
                   } else {
                     this.setState({ awaitingConfirmationOn: "", loading: false });
