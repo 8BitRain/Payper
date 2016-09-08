@@ -1,16 +1,20 @@
 // Dependencies
 import React from 'react';
+import { Actions } from 'react-native-router-flux';
 import { View, Text, TextInput, StatusBar, Dimensions } from 'react-native';
-import Actions from 'react-native-router-flux';
 import SideMenu from 'react-native-side-menu';
+
+// Helpers
+import * as Init from '../../_init';
 
 // Components
 import Header from '../../components/Header/Header';
 import Settings from '../../modules/Settings/SettingsView';
 import Payments from '../../modules/Payments/PaymentsViewContainer';
-//import Profile from '../../modules/Profile/ProfileView';
+import Profile from '../../modules/Profile/ProfileView';
 import Notifications from '../../modules/Notifications/NotificationsViewContainer';
 import FundingSources from '../../modules/FundingSources/FundingSourcesView';
+import SignIn from '../../modules/SignIn/SignInViewContainer';
 
 // Used to determine header size
 const dimensions = Dimensions.get('window');
@@ -23,40 +27,35 @@ class InnerContent extends React.Component {
   render() {
 
     console.log("%cGot props:", "color:purple;font-weight:900;");
-    console.log(this.props)
-
-    // Show sign in screen if user is not signed in
-    if (!this.props.signedIn) return <SignIn />;
+    console.log(this.props);
 
     // Otherwise, take the user to the app
-    else if (this.props.signedIn) {
-      switch (this.props.currentPage) {
+    switch (this.props.currentPage) {
 
-        case "payments":
-          return <Payments />;
-          break;
+      case "payments":
+        return <Payments {...this.props} />;
+        break;
 
-        case "profile":
-          return <Profile {...this.props} />;
-          break;
+      case "profile":
+        return <Profile {...this.props} />;
+        break;
 
-        case "notifications":
-          return <Notifications />;
-          break;
+      case "notifications":
+        return <Notifications />;
+        break;
 
-        case "fundingSources":
-          return <FundingSources {...this.props} />;
-          break;
+      case "fundingSources":
+        return <FundingSources {...this.props} />;
+        break;
 
-        default:
-          return(
-            <View style={{flex: 1.0, backgroundColor: "#000", justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{fontSize: 16, color: '#FFF'}}>
-                { "Failed to render a page.\nCheck InnerContent's render\nfunction in MainViewV2.js" }
-              </Text>
-            </View>
-          );
-      }
+      default:
+        return(
+          <View style={{flex: 1.0, backgroundColor: "#000", justifyContent: 'center', alignItems: 'center'}}>
+            <Text style={{fontSize: 16, color: '#FFF'}}>
+              { "Failed to render a page.\nCheck InnerContent's render\nfunction in MainViewV2.js" }
+            </Text>
+          </View>
+        );
     }
   }
 }
@@ -82,11 +81,7 @@ class Main extends React.Component {
               appFlags = "appFlags/" + uid;
 
           // Initialize Firebase listeners
-          this.props.listen([appFlags, notifications], (numUnseenNotifications) => {
-            // Must explicitly trigger a re-render, otherwise side menu's
-            // notification indicator will not update
-            this.setState({renderTrigger: Math.random()});
-          });
+          this.props.listen([notifications, appFlags]);
 
           console.log("%cInitialization succeeded. Current user:", "color:green;font-weight:900;");
           console.log(this.props.currentUser);
@@ -97,9 +92,8 @@ class Main extends React.Component {
     }
   }
 
-
+  // Disable Firebase listeners
   componentWillUnmount() {
-    // Disable Firebase listeners
     this.props.stopListening(this.props.activeFirebaseListeners);
   }
 
@@ -116,47 +110,51 @@ class Main extends React.Component {
   }
 
 
+  _handleSignOut() {
+
+    // Redirect user to landing screen
+    Actions.LandingScreenContainer();
+
+    // Wipe Redux store
+    this.props.reset();
+
+    // Sign out of Firebase and wipe AsyncStorage
+    Init.signout();
+
+  }
+
+
   render() {
-    // Must explicitly trigger a re-render, otherwise side menu's
-    // notification indicator will not update
-    if (this.props.signedIn) {
-      return (
-        <SideMenu
-          key={this.state.renderTrigger}
-          menu={ <Settings {...this.props} changePage={(newPage) => { this.changePage(newPage); this.toggle(); }} /> }
-          bounceBackOnOverdraw={false}
-          isOpen={this.props.sideMenuIsOpen}
-          onChange={(isOpen) => this.props.setSideMenuIsOpen(isOpen)}
-          disableGestures={false}>
+    return (
+      <SideMenu
+        menu={ <Settings {...this.props} changePage={(newPage) => { this.changePage(newPage); this.toggle(); }} signout={ () => this._handleSignOut() } /> }
+        bounceBackOnOverdraw={false}
+        isOpen={this.props.sideMenuIsOpen}
+        onChange={(isOpen) => this.props.setSideMenuIsOpen(isOpen)}
+        disableGestures={false}>
 
-          { /* Lighten status bar text */ }
-          <StatusBar barStyle="light-content" />
+        { /* Lighten status bar text */ }
+        <StatusBar barStyle="light-content" />
 
-          { /* Main page content wrap */ }
-          <View style={{flex: 1.0}}>
-            { /* Header */ }
-            <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
-              <Header
-                callbackSettings={ () => this.toggle() }
-                numUnseenNotifications={ this.props.numUnseenNotifications }
-                headerProps={ this.props.header } />
-            </View>
-
-            { /* Inner content */ }
-            <View style={{ flex: (dimensions.height < 667) ? 0.88 : 0.9 }}>
-              <InnerContent { ...this.props } />
-            </View>
+        { /* Main page content wrap */ }
+        <View style={{flex: 1.0}}>
+          { /* Header */ }
+          <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
+            <Header
+              callbackSettings={ () => this.toggle() }
+              numUnseenNotifications={ this.props.flags.numUnseenNotifications }
+              headerProps={ this.props.header }
+              activeFilter={ this.props.activeFilter } />
           </View>
 
-        </SideMenu>
-      );
-    } else {
-      return(
-        <View style={{flex: 1.0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red'}}>
-          <Text style={{fontSize: 20, color: 'white'}}>Not signed in</Text>
+          { /* Inner content */ }
+          <View style={{ flex: (dimensions.height < 667) ? 0.88 : 0.9 }}>
+            <InnerContent { ...this.props } />
+          </View>
         </View>
-      );
-    }
+
+      </SideMenu>
+    );
   }
 }
 

@@ -26,6 +26,8 @@ import { Actions } from 'react-native-router-flux';
 export function signInWithToken(callback) {
   try {
     Async.get('session_token', (val) => {
+      console.log("Session token:", val);
+
       if (val) {
         Lambda.getUserWithToken(val, (user) => {
           if (user) {
@@ -41,8 +43,11 @@ export function signInWithToken(callback) {
             });
 
           } else {
-            if (typeof callback == 'function') callback(false);
+
+            // Session token has expired. Alert caller
+            if (typeof callback == 'function') callback("sessionTokenExpired");
             else console.log("Callback is not a function.");
+
           }
         });
       } else {
@@ -53,6 +58,30 @@ export function signInWithToken(callback) {
   } catch (err) {
     console.log(err);
   }
+};
+
+
+/**
+  *   Return new session token
+**/
+export function signInWithRefreshedToken(callback) {
+  Firebase.getSessionToken((token) => {
+
+    // Failed to refresh token. User must sign in manually
+    if (!token) callback(false);
+
+    // Token refresh succeeded
+    else {
+      // Log token to AsyncStorage
+      Async.set('session_token', token, () => {
+        // Attempt sign in
+        signInWithToken(function(signedIn) {
+          if (typeof callback == 'function') callback(signedIn);
+          else console.log("%cCallback is not a function", "color:red;font-weight:900");
+        });
+      });
+    }
+  });
 };
 
 
@@ -71,9 +100,11 @@ export function signInWithEmail(data, callback) {
                 console.log(user);
                 // Sign in succeeded. Log the user to Async storage and take them
                 // to the app.
-                Async.set('user', JSON.stringify(user), () => {
-                  if (typeof callback == 'function') callback(true);
-                  else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+                Async.set('session_token', token, () => {
+                  Async.set('user', JSON.stringify(user), () => {
+                    if (typeof callback == 'function') callback(true);
+                    else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+                  });
                 });
               }
             });
@@ -151,15 +182,6 @@ export function signInWithFacebook(data, callback) {
 /**
   *   1) Create Firebase user
   *   2) Get a token for the user and attach it to the user's object
-<<<<<<< HEAD
-  * 2.5) Set initial flags for user
-=======
-<<<<<<< HEAD
-  * 2.5) Set initial flags for user
-=======
-  *   2.5) Set initial flags for user
->>>>>>> origin/create-payment-refactor
->>>>>>> eric_brady_merge
   *   3) POST user's object to Lambda endpoint
   *   4) Initialize the app
 **/
@@ -242,13 +264,14 @@ export function getIavToken(data, callback){
   *   1) Sign user out of Firebase
   *   2) Redirect user to landing page
 **/
-export function signOut() {
+export function signout() {
+
+  // Sign out of Firebase
   Firebase.signOut(() => {
     Async.set('session_token', '');
-    Async.set('user', '', () => {
-      Actions.LandingScreenContainer();
-    });
+    Async.set('user', '');
   });
+
 };
 
 

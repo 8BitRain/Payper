@@ -348,36 +348,34 @@ class LandingScreenDisplay extends React.Component {
             <Text style={[typography.main, typography.fontSizeTitle, {paddingTop: 45, color: colors.accent}]}>Payper</Text>
           </View>
 
-          <View style={[container.image, {flex: 0.4}]}>
+          <View style={[container.image, {flex: 0.6}]}>
             <ImageCarousel />
           </View>
 
-          <View style={{flex: 0.4, justifyContent: 'flex-start', alignItems: 'center'}}>
+          <View style={{flex: 0.2, justifyContent: 'flex-start', alignItems: 'center'}}>
             <LoginButton
               style={{width: dimensions.width - 50, height: 53, marginBottom: 10}}
-              readPermissions={["email","public_profile", "user_friends"]}
+              readPermissions={["email", "public_profile", "user_friends"]}
               onLoginFinished={
                 (error, result) => {
                   if (error) {
-                    alert("login has error: " + result.error);
+                    alert("Login has error: " + result.error);
                   } else if (result.isCancelled) {
-                    // alert("login is cancelled.");
+                    // alert("Login was cancelled");
                   } else {
                     AccessToken.getCurrentAccessToken().then(
                       (data) => {
-                        console.log("Grabbing Facebook AccesToken for User: " +
-                         "\n" + "======+++++==========++++++======="
-                         + "\n" + JSON.stringify(data));
+                        console.log("Grabbing Facebook AccessToken for User:\n", JSON.stringify(data));
                         this.state.fbAcessToken = data.accessToken;
                         this.fbAPIRequest();
                       }
-                    )
+                    );
                   }
                 }
               }
               onLogoutFinished={() => { /* alert("logout.") */ }} />
-            <GenericSignIn destination={Actions.SignInViewContainer}/>
-            <GenericSignUp destination={Actions.CreateAccountViewContainer}/>
+
+            <GenericSignIn destination={Actions.SignInViewContainer} />
           </View>
 
           { /* TOS */ }
@@ -392,14 +390,8 @@ class LandingScreenDisplay extends React.Component {
                   return 'Privacy Policy';
                 }
               }}>
-              <Text
-                style={{
-                  fontFamily: 'Roboto',
-                  fontSize: 14,
-                  color: colors.white,
-                  fontWeight: '100',
-                }}>
-                By creating an account, signing up, or logging into Facebook you agree to Payper{"'s"} https://www.getpayper.io/terms and https://www.getpayper.io/privacy.
+              <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: colors.white, fontWeight: '100' }}>
+                By creating an account or logging in, you agree to Payper{"'s"} https://www.getpayper.io/terms and https://www.getpayper.io/privacy.
               </Text>
             </Hyperlink>
           </View>
@@ -409,12 +401,12 @@ class LandingScreenDisplay extends React.Component {
   }
 }
 
-const LandingScreenView = React.createClass({
+class LandingScreenView extends React.Component{
   render() {
     return(
-      <LandingScreenDisplay  dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetNewUserToken={this.props.dispatchSetNewUserToken}/>
+      <LandingScreenDisplay dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetNewUserToken={this.props.dispatchSetNewUserToken}/>
     );
   }
-});
+};
 
 export default LandingScreenView;

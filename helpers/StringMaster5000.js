@@ -87,89 +87,6 @@ export function formatPurpose(purpose) {
 
 
 /**
-  *   Formats array of native cell phone contacts and returns them to be rendered
-  *   Format:
-  *     {
-  *       first_name: "John",
-  *       last_name: "Doe",
-  *       phone: 2623508312,
-  *       pic: "...",
-  *     }
-**/
-export function formatNativeContacts(contacts) {
-  var arr = [],
-      nums = [],
-      curr,
-      last = {stylizedPhone: -1};
-
-  for (var contact in contacts) {
-    curr = contacts[contact];
-    if (!curr.phoneNumbers[0]) continue;
-
-    var c = {
-      first_name: firstName = (curr.givenName) ? curr.givenName : "",
-      last_name: lastName = (curr.familyName) ? curr.familyName : "",
-      phone: formatPhoneNumber(curr.phoneNumbers[0].number),
-      stylizedPhone: stylizePhoneNumber(curr.phoneNumbers[0].number),
-      pic: curr.thumbnailPath,
-      type: 'phone',
-    }
-
-    if (!_.includes(nums, c.phone)) arr.push(c);
-    nums.push(c.phone);
-  }
-
-  console.log("%cSuccessfully formatted native contacts:", "color:green;font-weight:900;");
-  console.log(arr);
-  return arr;
-};
-
-/**
-  *   Orders array of contacts with Payper contacts having higher priority than
-  *   native phone contacts
-**/
-export function contactsToArray(contacts) {
-  var arr = [], curr;
-
-  for (var c in contacts) {
-    curr = contacts[c];
-    curr.uid = c;
-    arr.push(curr);
-  }
-
-  return arr;
-};
-
-
-/**
-  *   Filters array of contacts lexicographically given a set and a query string
-**/
-export function filterContacts(contacts, query) {
-  // Don't run the set through our regex if there's no query
-  if (query === '') return contacts;
-
-  query = query.toLowerCase().trim();
-
-  // If user's first or last name contains the regex, add them to the filtered set
-  // (i flag ignores case)
-  const regex = new RegExp(query + '.+$', 'i');
-  return contacts.filter(c =>
-    c.first_name && c.first_name.search(regex) >= 0
-    || c.last_name && c.last_name.search(regex) >= 0
-    || (c.first_name + " " + c.last_name) && (c.first_name + " " + c.last_name).search(regex) >= 0
-    || c.username && c.username.search(regex) >= 0
-
-    || ((c.first_name) ? c.first_name.toLowerCase() == query : false)
-    || ((c.last_name) ? c.last_name.toLowerCase() == query : false)
-    || ((c.first_name + " " + c.last_name) ? (c.first_name + " " + c.last_name).toLowerCase() == query : false)
-    || ((c.username) ? c.username.toLowerCase() == query : false)
-  );
-};
-
-
-
-
-/**
   *   Formats timestamps with Moment.js
 **/
 export function formatTimestamp(ts) {
@@ -190,6 +107,8 @@ export function formatPhoneNumber(num) {
   *   Stylize phone numbers like this: +(262)-305-8038
 **/
 export function stylizePhoneNumber(num) {
+  if (!num) return "";
+
   num = formatPhoneNumber(num);
   if (num.length < 10 || num.length > 11) return num;
   if (num.length == 10) {

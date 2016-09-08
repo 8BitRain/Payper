@@ -13,13 +13,15 @@
 
 // Dependencies
 import React from 'react';
-import { View, Image, Text, Dimensions } from 'react-native';
+import { View, Image, Text, Dimensions, TouchableHighlight } from 'react-native';
 const dimensions = Dimensions.get('window');
 
 // Stylesheets
 import colors from '../styles/colors';
 import userStyles from '../styles/Previews/User';
 
+// Iconography
+import Entypo from 'react-native-vector-icons/Entypo';
 
 // Return a profile picture with the given source image
 export function getUserPic(pic, name) {
@@ -47,11 +49,10 @@ export function getUserPic(pic, name) {
 class UserPic extends React.Component {
   constructor(props) {
     super(props);
-    console.log("USER:", this.props.user);
   }
 
   render() {
-    if (!this.props.user.pic || this.props.user.pic == "") {
+    if (!this.props.user.profile_pic || this.props.user.profile_pic == "") {
       var name = (this.props.user.first_name + " " + this.props.user.last_name).split(" ");
       var initials;
       (name.length > 1)
@@ -65,7 +66,7 @@ class UserPic extends React.Component {
         </View>
       );
     } else {
-      return <Image style={{borderWidth: 1, borderColor: (this.props.user.phone) ? colors.icyBlue : colors.accent, width: this.props.width, height: this.props.height, borderRadius: this.props.height / 2}} source={{uri: this.props.pic}} />;
+      return <Image style={{borderWidth: 1, borderColor: (this.props.user.phone && !this.props.accent) ? colors.icyBlue : colors.accent, width: this.props.width, height: this.props.height, borderRadius: this.props.height / 2}} source={{uri: this.props.user.profile_pic}} />;
     }
   }
 };

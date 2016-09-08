@@ -25,7 +25,6 @@ const firebaseConfig = {
 };
 
 
-
 firebase.initializeApp(firebaseConfig);
 
 
@@ -78,20 +77,26 @@ export function getPaymentFlow(user, callback) {
   *   callback function
 **/
 export function getSessionToken(callback) {
-  firebase.auth().currentUser.getToken(true).then((token) => {
-    if (typeof callback == 'function') callback(token);
-  }).catch((err) => {
-    console.log("Error code", err.code, "\nError message", err.message);
+  if (firebase.auth().currentUser) {
+    firebase.auth().currentUser.getToken(true).then((token) => {
+      if (typeof callback == 'function') callback(token);
+      else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+    }).catch((err) => {
+      console.log("Error code", err.code, "\nError message", err.message);
+      if (typeof callback == 'function') callback(null);
+      else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+    });
+  } else {
     if (typeof callback == 'function') callback(null);
-  });
+    else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+  }
 };
 
 
-/** NOTE This is probably unnesescary! Use the Firebase listeners instead!
+/** NOTE This is probably unnecessary! Use the Firebase listeners instead!
   *   Get a specific user's app flag
   *   Current Flags: account_status,
 **/
-
 export function getAppFlags(user_id){
   // Needs to pull data
   appFlagsRef.child(user_id).once('value', function(snap){
@@ -198,7 +203,7 @@ export function authWithFacebook(FBToken, callback) {
   var credential = firebase.auth.FacebookAuthProvider.credential(FBToken);
   // Sign in with the credential if it was sucessfully retrieved
   if (credential) firebase.auth().signInWithCredential(credential)
-  .then(() => {
+  .then((val) => {
     if (firebase.auth().currentUser) callback(true);
     else if (typeof callback == 'function') callback(false);
   })

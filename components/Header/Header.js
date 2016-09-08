@@ -87,7 +87,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
-    padding: 2.5,
+    padding: 5,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
 
   // Right (out) flow tab
@@ -104,7 +106,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
-    padding: 2.5,
+    padding: 5,
+    paddingLeft: 8,
+    paddingRight: 8,
   },
 
   // Flow tab inner text
@@ -126,6 +130,15 @@ const styles = StyleSheet.create({
 
 // Styles for unread notifications indicator
 import notificationStyles from '../../styles/Notifications/Preview';
+
+// Return a back icon
+function getBackIcon(callback) {
+  return(
+    <Button onPress={() => callback()}>
+      <Entypo style={styles.iconClose} name="chevron-small-left" size={28} color={colors.white}/>
+    </Button>
+  );
+};
 
 // Return a close modal icon
 function getCloseIcon(callback) {
@@ -177,25 +190,25 @@ function getCircleIcons(numCircles, index) {
 // Return tabs for switching between tracking flows
 function getFlowTabs(activeTab, callbackIn, callbackOut) {
   return(
-    <View style={styles.flowTabWrap}>
+    <View style={[styles.flowTabWrap]}>
       { /* 'In' tab */ }
       <TouchableHighlight
-        activeOpacity={(activeTab == 'in') ? 1.0 : 0.7}
-        underlayColor={(activeTab != 'in') ? 'transparent' : colors.white}
-        style={[styles.flowTabIn, (activeTab == 'in') ? styles.activeTab : null]}
+        activeOpacity={(activeTab == 'incoming') ? 1.0 : 0.7}
+        underlayColor={(activeTab != 'incoming') ? 'transparent' : colors.white}
+        style={[styles.flowTabIn, (activeTab == 'incoming') ? styles.activeTab : null]}
         onPress={() => callbackIn()}>
-        <Text style={[styles.flowTabText, (activeTab == 'in') ? styles.activeTabText : null]}>
+        <Text style={[styles.flowTabText, (activeTab == 'incoming') ? styles.activeTabText : null]}>
           Incoming
         </Text>
       </TouchableHighlight>
 
       { /* 'Out' tab */ }
       <TouchableHighlight
-        activeOpacity={(activeTab == 'out') ? 1.0 : 0.7}
-        underlayColor={(activeTab != 'out') ? 'transparent' : colors.white}
-        style={[styles.flowTabOut, (activeTab == 'out') ? styles.activeTab : null]}
+        activeOpacity={(activeTab == 'outgoing') ? 1.0 : 0.7}
+        underlayColor={(activeTab != 'outgoing') ? 'transparent' : colors.white}
+        style={[styles.flowTabOut, (activeTab == 'outgoing') ? styles.activeTab : null]}
         onPress={() => callbackOut()}>
-        <Text style={[styles.flowTabText, (activeTab == 'out') ? styles.activeTabText : null]}>
+        <Text style={[styles.flowTabText, (activeTab == 'outgoing') ? styles.activeTabText : null]}>
           Outgoing
         </Text>
       </TouchableHighlight>
@@ -209,18 +222,19 @@ class Header extends React.Component {
     super(props);
 
     this.state = {
-      active: 'out',
+      active: this.props.activeFilter,
       index: 0,
     }
   }
 
   render() {
     return(
-      <View style={[styles.headerWrap, (this.props.dark) ? {backgroundColor: colors.richBlack} : null ]}>
+      <View style={[styles.headerWrap, {backgroundColor: (this.props.headerProps.accent) ? colors.accent : colors.richBlack}]}>
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
           { this.props.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
           { this.props.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings, this.props.numUnseenNotifications) : null }
+          { this.props.headerProps.types.backIcon ? getBackIcon(this.props.callbackBack) : null }
         </View>
 
         { /* Contains 'CircleIcons' or 'PaymentIcons' if specified */ }
@@ -228,11 +242,13 @@ class Header extends React.Component {
           { this.props.headerProps.title ? <Text style={{fontFamily: 'Roboto', fontSize: 16, color: colors.white, paddingTop: 5}}>{ this.props.headerProps.title }</Text> : null }
           { this.props.headerProps.types.paymentIcons ? getPaymentIcons(this.props.headerProps.index) : null }
           { this.props.headerProps.types.circleIcons ? getCircleIcons(this.props.headerProps.numCircles, this.props.headerProps.index) : null }
-          { this.props.headerProps.types.flowTabs ? getFlowTabs(this.state.active, () => {this.setState({active: 'in'}); this.props.headerProps.callbackIn()}, () => {this.setState({active: 'out'}); this.props.headerProps.callbackOut()}) : null }
+          { this.props.headerProps.types.flowTabs ? getFlowTabs(this.props.activeFilter, () => {this.setState({active: 'incoming'}); this.props.headerProps.callbackIn()}, () => {this.setState({active: 'outgoing'}); this.props.headerProps.callbackOut()}) : null }
         </View>
 
         { /* Filler */ }
-        <View style={styles.chunkQuo}></View>
+        <View style={[styles.chunkQuo, { alignItems: 'center' }]}>
+          { this.props.headerProps.types.closeIconTopRight ? getCloseIcon(this.props.callbackClose) : null }
+        </View>
       </View>
     );
   }

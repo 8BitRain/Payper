@@ -56,21 +56,21 @@ export function phoneNumber(input) { return { type: SET_PHONE_NUMBER, input: inp
 export function info(input) { return { type: SET_INFO, input: input } };
 
 // Set all values
-export function all(payment) {
-  amount(payment.amount);
-  purpose(payment.purpose);
-  payments(payment.payments);
-  recipID(payment.recipID);
-  recipName(payment.recipName);
-  recipPic(payment.recipPic);
-  senderID(payment.senderID);
-  senderName(payment.senderName);
-  senderPic(payment.senderPic);
-  type(payment.type);
-  token(payment.token);
-  confirmed(payment.confirmed);
-  invite(payment.invite);
-  phoneNumber(payment.phoneNumber);
+export function all(input) {
+  amount(input);
+  purpose(input);
+  payments(input);
+  recipID(input);
+  recipName(input);
+  recipPic(input);
+  senderID(input);
+  senderName(input);
+  senderPic(input);
+  type(input);
+  token(input);
+  confirmed(input);
+  invite(input);
+  phoneNumber(input);
 };
 
 /**

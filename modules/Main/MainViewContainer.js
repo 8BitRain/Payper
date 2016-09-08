@@ -1,15 +1,22 @@
 // Dependencies
 import { connect } from 'react-redux';
+import { ListView, DataSource } from 'react-native';
 var Contacts = require('react-native-contacts');
 
 // Helper functions
 import * as Firebase from '../../services/Firebase';
+import * as Lambda from '../../services/Lambda';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
+import * as SetMaster5000 from '../../helpers/SetMaster5000';
 import * as Async from '../../helpers/Async';
 import * as Headers from '../../helpers/Headers';
 
+// Clone for state updates
+const EMPTY_DATA_SOURCE = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
 // Dispatch functions
 import * as set from './MainState';
+import * as setPayments from '../Payments/PaymentsState';
 
 // Base view
 import MainView from './MainView';
@@ -29,6 +36,10 @@ function mapStateToProps(state) {
     header: state.getIn(['main', 'header']),
     sideMenuIsOpen: state.getIn(['main', 'sideMenuIsOpen']),
     initialized: state.getIn(['main', 'initialized']),
+    nativeContacts: state.getIn(['main', 'nativeContacts']),
+
+    // payments
+    activeFilter: state.getIn(['payments', 'activeFilter']),
 
   }
 }
@@ -38,26 +49,37 @@ function mapDispatchToProps(dispatch) {
   return {
 
     /**
-      *   1) Set logged in user's user object
+      *   1) Set signed in user's user object
       *   2) Set session token
-      *   3) Set loggedIn to true
+      *   3) Set signedIn to true
     **/
     initialize: (callback) => {
 
       Async.get('user', (user) => {
-        if (user == "") {
+        if (!user) {
+          console.log("%cSign in failed.", "color:red;font-weight:900;");
 
-          // Sign in failed
           dispatch(set.signedIn(false));
           if (typeof callback == 'function') callback(false);
           else console.log("Callback is not a function.");
-
         } else {
 
+          var parsedUser = JSON.parse(user);
+
           // Sign in succeeded
-          dispatch(set.currentUser(JSON.parse(user)));
+          dispatch(set.currentUser(parsedUser));
           dispatch(set.signedIn(true));
           dispatch(set.initialized(true));
+
+          // Get decrypted phone number and email address
+          Lambda.getDecryptedUser({ token: parsedUser.token, uid: parsedUser.uid }, (res) => {
+            console.log("getDecryptedUser callback response:\n", res);
+
+            parsedUser.decryptedPhone = res.phone;
+            parsedUser.decryptedEmail = res.email;
+
+            dispatch(set.currentUser(parsedUser));
+          });
 
           // Get user's native phone contacts
           Contacts.getAll((err, contacts) => {
@@ -67,37 +89,31 @@ function mapDispatchToProps(dispatch) {
             } else {
               console.log("%cSuccessfully got native contacts:", "color:green;font-weight:900;");
               console.log(contacts);
+
               // Format contacts then log them to AsyncStorage
-              var c = StringMaster5000.formatNativeContacts(contacts);
+              var c = SetMaster5000.formatNativeContacts(contacts);
               dispatch(set.nativeContacts(c));
-              Async.set('native_contacts', JSON.stringify(c));
+
+              // Extract just the phone numbers, then update user's contactList
+              var numbers = SetMaster5000.contactsArrayToNumbersArray(c);
+              Lambda.updateContacts({ phoneNumbers: numbers, token: parsedUser.token });
             }
           });
 
           if (typeof callback == 'function') callback(true);
           else console.log("Callback is not a function.");
-
         }
       });
 
     },
 
     listen: (endpoints, callback) => {
+
       Firebase.listenTo(endpoints, (response) => {
         switch (response.endpoint.split("/")[0]) {
 
           case "notifications":
-            var notifications = response.value,
-                numUnseen = 0;
-            // Count number of unseen notifications
-            for (var n in notifications) {
-              if (!notifications[n].seen) numUnseen++;
-            }
-            dispatch(set.numUnseenNotifications(numUnseen));
-            dispatch(set.notifications(notifications));
-
-            if (typeof callback == 'function') callback();
-            else console.log("%cCallback is not a function.", "color:red;font-weight:900;");
+            dispatch(set.notifications(response.value));
           break;
 
           case "appFlags":
@@ -112,6 +128,45 @@ function mapDispatchToProps(dispatch) {
     stopListening: (endpoints) => {
       Firebase.stopListeningTo(endpoints);
       dispatch(set.activeFirebaseListeners([]));
+    },
+
+    reset: () => {
+
+      // Reset main store
+      dispatch(set.activeFirebaseListeners([]));
+      dispatch(set.signedIn(false));
+      dispatch(set.currentUser({}));
+      dispatch(set.flags(""));
+      dispatch(set.notifications([]));
+      dispatch(set.numUnseenNotifications(0));
+      dispatch(set.header({
+        types: {
+          "paymentIcons": false,
+          "circleIcons": false,
+          "settingsIcon": false,
+          "closeIcon": false,
+          "flowTabs": false,
+        },
+        index: null,
+        numCircles: null,
+        title: null,
+        callbackIn: null,
+        callbackOut: null,
+      }));
+      dispatch(set.sideMenuIsOpen(false));
+      dispatch(set.currentPage("payments"));
+      dispatch(set.nativeContacts([]));
+      dispatch(set.initialized(false));
+
+      // Reset payments store
+      dispatch(setPayments.activeFirebaseListeners([]));
+      dispatch(setPayments.incomingPayments([]));
+      dispatch(setPayments.outgoingPayments([]));
+      dispatch(setPayments.globalPayments([]));
+      dispatch(setPayments.isEmpty(true));
+      dispatch(setPayments.activeTab("tracking"));
+      dispatch(setPayments.activeFilter("incoming"));
+
     },
 
     inviteDirect: (options, callback) => {
@@ -130,9 +185,15 @@ function mapDispatchToProps(dispatch) {
 
     setCurrentPage: (page) => {
       if (page == "notifications") dispatch(set.header(Headers.notificationsHeader()));
-      if (page == "fundingSources") dispatch(set.header(Headers.fundingSourcesHeader()));
+      else if (page == "fundingSources") dispatch(set.header(Headers.fundingSourcesHeader()));
+      else if (page == "profile") dispatch(set.header(Headers.profileHeader()));
       dispatch(set.currentPage(page));
     },
+
+    setCurrentUser: (user) => {
+      dispatch(set.currentUser(user));
+    },
+
   }
 }
 

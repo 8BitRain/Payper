@@ -61,7 +61,7 @@ class BasicInfo extends React.Component {
          "paymentIcons": false,
          "circleIcons": true,
          "settingsIcon": false,
-         "closeIcon": true
+         "closeIcon": false
        },
        index: 0,
        numCircles: 4,
@@ -69,7 +69,7 @@ class BasicInfo extends React.Component {
      };
 
      // Callback functions to be passed to the header
-     this.callbackClose = function() { this.props.callbackClose() };
+     //this.callbackClose = function() { this.props.callbackClose() };
 
      // Props to be passed to the arrow nav
      this.arrowNavProps = {
@@ -167,13 +167,14 @@ class BasicInfo extends React.Component {
                <TextInput style={[typography.textInput, typography.marginSides, {marginLeft: 20}]}  defaultValue={this.props.newUser.phone} onChangeText={(text) => {this.phoneInput = text; this.props.dispatchSetPhone(this.phoneInput); this.props.dispatchSetCPhoneValidations(this.phoneInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="phone-pad" />
                {this.props.cfirstNameValidations.valid ? <EvilIcons  style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'grey'} />}
              </View>
+
            </View>
 
            { /* Arrow nav buttons */ }
            {/*<ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} />*/}
 
            { /* Header */ }
-           <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+           <Header headerProps={this.headerProps} />
 
          </Animated.View>
          <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>

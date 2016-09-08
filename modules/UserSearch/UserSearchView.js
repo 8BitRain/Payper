@@ -6,17 +6,18 @@ import Entypo from 'react-native-vector-icons/Entypo';
 // Helpers
 import * as Async from '../../helpers/Async';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
-import * as Partials from '../../helpers/Partials';
+import * as SetMaster5000 from '../../helpers/SetMaster5000';
 
 // Partial components
 import UserPreview from '../../components/Previews/User/User';
-import UserPic from '../../helpers/Partials';
+import UserPic from '../../components/Previews/UserPic/UserPic';
 import ArrowNav from '../../components/Navigation/Arrows/ArrowDouble';
 
 // Styles
 import colors from '../../styles/colors';
 const dimensions = Dimensions.get('window');
 const styles = StyleSheet.create({
+
   textInput: {
     height: 60,
     paddingLeft: 25,
@@ -89,9 +90,18 @@ class UserSearch extends React.Component {
     *   Start listening to Firebase
   **/
   componentWillMount() {
-    this.props.initialize(this.props.nativeContacts);
-    var contactList = "contactList/" + this.props.currentUser.uid;
-    this.props.listen([contactList], { nativeContacts: this.props.nativeContacts });
+    if (!this.props.startedListening) {
+      this.props.initialize(this.props.nativeContacts);
+
+      var contactList = "contactList/" + this.props.currentUser.uid,
+          globalUserList = "users";
+
+      this.props.listen([contactList, globalUserList], {
+        nativeContacts: this.props.nativeContacts,
+        allContactsArray: this.props.allContactsArray,
+        uid: this.props.currentUser.uid,
+      });
+    }
   }
 
 
@@ -116,9 +126,18 @@ class UserSearch extends React.Component {
   }
 
 
+  _renderSectionHeader(sectionData, sectionTitle) {
+    return(
+      <View style={{height: 30, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', padding: 10, paddingLeft: 20, backgroundColor: colors.offWhite}}>
+        <Text>{ sectionTitle }</Text>
+      </View>
+    );
+  }
+
+
   _filterContacts(query) {
-    var filtered = StringMaster5000.filterContacts(this.props.allContacts._dataBlob.s1, query);
-    this.props.setFilteredContacts(filtered);
+    var filtered = SetMaster5000.filterContacts(this.props.allContactsArray, query);
+    this.props.setFilteredContacts(SetMaster5000.arrayToMap(filtered));
   }
 
 
@@ -154,16 +173,18 @@ class UserSearch extends React.Component {
 
 
   _getContactList() {
+    console.log("Data source for all contacts:");
+    console.log(this.props.allContactsMap);
     return(
       <ListView
-        dataSource={(this.props.filteredContacts._dataBlob.s1.length > 0) ? this.props.filteredContacts : this.props.allContacts}
+        dataSource={(this.props.filteredContactsMap.getRowCount() > 0) ? this.props.filteredContactsMap : this.props.allContactsMap}
         renderRow={this._renderRow.bind(this)}
+        renderSectionHeader={this._renderSectionHeader}
         renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
         enableEmptySections
         />
     );
   }
-
 
   _getConfirmation() {
     return(
@@ -182,9 +203,13 @@ class UserSearch extends React.Component {
 
         { /* Username or phone number */ }
         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          {(this.props.selectedContact.username)
-            ? <Entypo style={{paddingTop: 10}} name="facebook" size={25} color={colors.accent} />
-            : <Entypo style={{paddingTop: 10}} name="phone" size={25} color={colors.icyBlue} /> }
+          { (this.props.selectedContact.type == "facebook" || this.props.selectedContact.type == "phone")
+              ? <Entypo
+                  style={{paddingTop: 10}}
+                  name={ (this.props.selectedContact.type == "facebook") ? "facebook" : (this.props.selectedContact.type == "phone") ? "phone" : null }
+                  color={ (this.props.selectedContact.uid) ? colors.accent : colors.icyBlue }
+                  size={25} />
+              : null }
           <Text style={[{paddingLeft: 10}, (this.props.selectedContact.username) ? styles.confirmationUsername : styles.confirmationPhone]}>
             { (this.props.selectedContact.username)
                 ? this.props.selectedContact.username

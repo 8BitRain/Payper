@@ -10,7 +10,7 @@ var dimensions = Dimensions.get('window');
 
 // Helper functions
 import * as Partials from '../../../helpers/Partials';
-import UserPic from '../../../helpers/Partials';
+import UserPic from '../UserPic/UserPic';
 
 /**
   *   Returns a user preview for each the user specified in 'user' prop
@@ -30,7 +30,7 @@ class UserPreview extends React.Component {
             </View>
             <View ref={"textWrap"} style={styles.textWrap}>
               <Text style={styles.fullnameText}>{ this.props.user.first_name + " " + this.props.user.last_name }</Text>
-              <Text style={[styles.usernameText], {color: (this.props.user.phone) ? colors.icyBlue : colors.accent}}>
+              <Text style={[styles.usernameText], {color: (this.props.user.provider || this.props.user.username) ? colors.accent : colors.icyBlue}}>
                 { this.props.user.username || this.props.user.stylizedPhone }
               </Text>
             </View>
@@ -45,7 +45,7 @@ class UserPreview extends React.Component {
           </View>
           <View ref={"textWrap"} style={styles.textWrap}>
             <Text style={styles.fullnameText}>{ this.props.user.first_name + " " + this.props.user.last_name }</Text>
-            <Text style={[styles.usernameText], {color: (this.props.user.phone) ? colors.icyBlue : colors.accent}}>
+            <Text style={[styles.usernameText], {color: (this.props.user.provider || this.props.user.username) ? colors.accent : colors.icyBlue}}>
               { this.props.user.username || this.props.user.stylizedPhone }
             </Text>
           </View>

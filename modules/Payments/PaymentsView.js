@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS } from 'react-native';
+import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 // Helpers
@@ -9,6 +9,10 @@ import * as StringMaster5000 from '../../helpers/StringMaster5000';
 // Partial components
 import Footer from '../../components/Footer/Footer';
 import Transaction from '../../components/Previews/Transaction/Transaction';
+import CreatePayment from '../../modules/CreatePayment/CreatePaymentViewContainer';
+
+//Init
+import * as Init from '../../_init';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -17,14 +21,13 @@ const dimensions = Dimensions.get('window');
 class Payments extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      uid: "",
+      modalVisible: false,
+    }
   }
 
   componentDidMount() {
-    // Enable listeners
-    var incomingPayments = "paymentFlow/" + this.props.currentUser.uid + "/in/",
-        outgoingPayments = "paymentFlow/" + this.props.currentUser.uid + "/out/";
-    this.props.listen([incomingPayments, outgoingPayments]);
-
     // Initialize header
     this.props.setActiveTab(this.props.activeTab);
   }
@@ -32,6 +35,53 @@ class Payments extends React.Component {
   componentWillUnmount() {
     // Disable listeners
     this.props.stopListening(this.props.activeFirebaseListeners);
+  }
+
+  componentWillReceiveProps(newProps) {
+    // If UID has changed, start listening to the user's payment flow
+    if (newProps.currentUser.uid && newProps.currentUser.uid != this.state.uid) {
+      this.setState({ uid: newProps.currentUser.uid }, () => {
+        var incomingPayments = "paymentFlow/" + this.state.uid + "/in/",
+            outgoingPayments = "paymentFlow/" + this.state.uid + "/out/";
+        var uid = this.state.uid;
+        var appFlags = "appFlags/" + uid;
+
+        this.props.listen([incomingPayments, outgoingPayments, appFlags]);
+      });
+    }
+  }
+
+  _toggleModal(options) {
+    console.log("Toggled modal with options:", options);
+    if (options && options.activeFilter) this.props.setActiveFilter(options.activeFilter);
+    this.setState({ modalVisible: !this.state.modalVisible });
+    if(this.props.flags.onboarding_state == 'customer'){
+      Actions.BankOnboardingContainer();
+      console.log(this.props.currentUser.token);
+      this.props.setNewUserToken(this.props.currentUser.token);
+    }
+    if(this.props.flags.onboarding_state == 'bank'){
+      console.log("BANK STATE REACHED: " + this.props.startIav );
+      //Initiate IAV
+      this.props.setNewUserToken(this.props.currentUser.token);
+      var data = {
+        token: this.props.currentUser.token
+      };
+      var _this = this;
+      console.log("Beginning IAV Initiation");
+      Init.getIavToken(data, function(iavTokenRecieved, iavToken){
+        if(iavTokenRecieved){
+          console.log("SSN IAVTOKEN: " + JSON.stringify(iavToken));
+          //Will cause the IAV Token Page to be loaded
+          _this.props.setIav(iavToken.token);
+          Actions.BankOnboardingContainer();
+        }
+      });
+    }
+    if(this.props.flags.onboarding_state == 'complete'){
+      Actions.CreatePaymentViewContainer();
+    }
+
   }
 
   _renderEmptyState() {
@@ -54,7 +104,7 @@ class Payments extends React.Component {
     }
 
     // If our data source is not null and has contents, use it to populate the payment list view
-    if (ds && ds.getRowCount() > 0) {
+    if (ds && ds.getRowCount() > 0 && ds._cachedRowCount != 0) {
       return(
         <View style={{flex: 1.0}}>
           <ListView
@@ -106,12 +156,12 @@ class Payments extends React.Component {
               pid: payment.pid,
               token: this.props.currentUser.token,
               ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
+              type: payment.type,
+              flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
             })
           });
         }}
         callbackConfirm={() => {
-          console.log("Confirming payment");
-
           var firstName = payment.recip_name.split(" ")[0],
               purpose = StringMaster5000.formatPurpose(payment.purpose);
 
@@ -177,13 +227,49 @@ class Payments extends React.Component {
                   pid: payment.pid,
                   token: this.props.currentUser.token,
                   ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-                })
+                  type: payment.type,
+                  flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
+                  invite: (payment.type == "invite") ? true : false,
+                }),
               });
             }
           });
         }}/>
     );
   }
+
+  _verifyOnboardingStatus(){
+    if(this.props.flags.onboarding_state == 'customer'){
+      Actions.BankOnboardingContainer();
+      console.log(this.props.currentUser.token);
+      this.props.setNewUserToken(this.props.currentUser.token);
+    }
+    if(this.props.flags.onboarding_state == 'bank'){
+      console.log("BANK STATE REACHED: " + this.props.startIav );
+      //Initiate IAV
+      this.props.setNewUserToken(this.props.currentUser.token);
+      var data = {
+        token: this.props.currentUser.token
+      };
+      var _this = this;
+      console.log("Beginning IAV Initiation");
+      Init.getIavToken(data, function(iavTokenRecieved, iavToken){
+        if(iavTokenRecieved){
+          console.log("SSN IAVTOKEN: " + JSON.stringify(iavToken));
+          //Will cause the IAV Token Page to be loaded
+          _this.props.setIav(iavToken.token);
+          Actions.BankOnboardingContainer();
+        }
+      });
+    }
+    if(this.props.flags.onboarding_state == 'complete'){
+      Actions.CreatePaymentViewContainer();
+    }
+
+
+  }
+
+
 
   render() {
     return(
@@ -201,8 +287,25 @@ class Payments extends React.Component {
           <Footer
             callbackFeed={() => this.props.setActiveTab('global')}
             callbackTracking={() => this.props.setActiveTab('tracking')}
-            callbackPay={() => Actions.CreatePaymentViewContainer()} />
+            callbackPay={() => this._verifyOnboardingStatus()} />
         </View>
+
+        { /* Modal containing create payment panel */ }
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={ () => alert("Closed modal") }>
+
+          { /* Lighten status bar text */ }
+          <StatusBar barStyle="light-content" />
+
+          <View style={{flex: 1.0}}>
+            <CreatePayment
+              {...this.props}
+              toggleModal={(options) => this._toggleModal(options)} />
+          </View>
+        </Modal>
 
       </View>
     );

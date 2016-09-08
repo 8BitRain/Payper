@@ -32,7 +32,7 @@ import colors from './styles/colors';
 const getSceneStyle = function (props, computedProps) {
   const style = {
     flex: 1,
-    backgroundColor: colors.accent,
+    backgroundColor: colors.richBlack,
     shadowColor: null,
     shadowOffset: null,
     shadowOpacity: null,
@@ -45,19 +45,10 @@ const getSceneStyle = function (props, computedProps) {
   return style;
 };
 
-
-
-// TODO
-// Async.set('session_token', "");
-// require('firebase').auth().signOut();
-
-
-console.log('test');
 export default class Coincast extends React.Component {
-
   render() {
     return (
-      <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
+      <Router key={Math.random()} createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 

@@ -65,43 +65,6 @@ class Purpose extends React.Component {
           loading={this.state.loading}
           confirmCallback={() => {
             this.setState({ loading: true });
-            this.props.sendPayment(this.props.payment, (success) => {
-              if (success) {
-                this.setState({ awaitingConfirmationOn: "", loading: false });
-                this.props.reset();
-                Actions.MainViewContainer();
-              }
-              else {
-                this.setState({ awaitingConfirmationOn: "", loading: false });
-                alert("Payment failed");
-              }
-            });
-          }} />
-      );
-    } else {
-      return(
-        <PayRequestNav
-          awaitingConfirmationOn={this.state.awaitingConfirmationOn}
-          loading={this.state.loading}
-          payCallback={() => {
-            if (this.props.purpose) {
-              this.setState({ awaitingConfirmationOn: "pay" });
-              this.props.setPaymentInfo({
-                payment: {
-                  amount: this.props.amount,
-                  purpose: this.props.purpose,
-                  payments: this.props.payments,
-                },
-                currentUser: this.props.currentUser,
-                otherUser: this.props.selectedContact,
-                type: "payment"
-              });
-            } else {
-              // Prompt the user to enter the purpose memo information
-              alert("Please enter the purpose of the payment");
-            }
-          }}
-          requestCallback={() => {
             if (this.props.purpose) {
               this.setState({ awaitingConfirmationOn: "request" });
               this.props.setPaymentInfo({
@@ -112,13 +75,41 @@ class Purpose extends React.Component {
                 },
                 currentUser: this.props.currentUser,
                 otherUser: this.props.selectedContact,
-                type: "request"
+                type: this.state.paymentType,
+              }, (payment) => {
+                this.props.sendPayment(payment, (success) => {
+                  if (success) {
+
+                    // Set active filter tab in payment view
+                    if (payment.sender_id == this.props.currentUser.uid) this.props.setActiveFilter("outgoing");
+                    else this.props.setActiveFilter("incoming");
+
+                    // Reset the create payment state
+                    this.setState({ awaitingConfirmationOn: "", loading: false });
+                    this.props.reset();
+
+                    // Close the modal
+                    this.props.toggleModal();
+
+                  } else {
+                    this.setState({ awaitingConfirmationOn: "", loading: false });
+                    alert("Payment failed");
+                  }
+                });
               });
             } else {
               // Prompt the user to enter the purpose memo information
               alert("Please enter the purpose of the payment");
             }
           }} />
+      );
+    } else {
+      return(
+        <PayRequestNav
+          awaitingConfirmationOn={this.state.awaitingConfirmationOn}
+          loading={this.state.loading}
+          payCallback={() => this.setState({ awaitingConfirmationOn: "pay", paymentType: "payment" })}
+          requestCallback={() => this.setState({ awaitingConfirmationOn: "request", paymentType: "request" })} />
       );
     }
   }
@@ -232,7 +223,7 @@ class Amount extends React.Component {
             </Text>
             <TextInput
               style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center', color: colors.richBlack}]}
-              placeholder={"5.00"}
+              placeholder={"0.00"}
               defaultValue={this.props.amount}
               onChangeText={(num) => this.props.setAmount(num)}
               keyboardType={"decimal-pad"}
@@ -247,7 +238,7 @@ class Amount extends React.Component {
             </Text>
             <TextInput
               style={[typography.costInput, {width: this.state.costInputWidth, textAlign: 'center', color: colors.richBlack}]}
-              placeholder={"12"}
+              placeholder={"0"}
               defaultValue={this.props.payments}
               onChangeText={(num) => this.props.setPayments(num)}
               keyboardType={"number-pad"} />
@@ -319,6 +310,8 @@ class CreatePaymentView extends React.Component {
   _setPageIndex(i) {
     if (i != this.state.header.index) {
       var h = this.state.header;
+      if (i == 2) h = Headers.createPaymentPurposeHeader({ callbackBack: () => this._setPageIndex(1) });
+      else h = Headers.createPaymentHeader();
       h.index = i;
       this.setState({ header: h, inputting: this.pages[i] });
     }
@@ -333,7 +326,8 @@ class CreatePaymentView extends React.Component {
         { /* Header */ }
         <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
           <Header
-            callbackClose={ () => Actions.MainViewContainer({direction: "vertical"}) }
+            callbackClose={ () => { this.props.reset(); this.props.toggleModal(); }}
+            callbackBack={ () => this._setPageIndex(1) }
             numUnseenNotifications={ this.props.numUnseenNotifications }
             headerProps={ this.state.header } />
         </View>

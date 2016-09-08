@@ -117,7 +117,7 @@ function getPendingConfirmationAlert() {
 function getPendingInvitationAlert(options) {
   return(
     <View style={styles.bottom}>
-      <View style={[styles.alert, { width: dimensions.width * 0.9, padding: 10 }]}>
+      <View style={[styles.alert, { width: dimensions.width * 0.9, padding: 10, backgroundColor: colors.accent }]}>
         <Text style={styles.confirmText}>
           { (options.incoming)
               ? "We invited " + options.name + " to join Payper. Payments will commence after they set up their account and confirm your request."
@@ -138,7 +138,6 @@ class PaymentPreview extends React.Component {
   }
 
   render() {
-
     /**
       *   Payment invites
     **/
@@ -150,15 +149,16 @@ class PaymentPreview extends React.Component {
 
             { /* Profile picture */ }
             <View style={styles.picWrap}>
-              { (this.props.payment.invitee == "recip")
-                  ? getUserPic("", this.props.payment.recip_name)
-                  : getUserPic("", this.props.payment.sender_name) }
+              { (this.props.payment.recip_id)
+                  ? getUserPic("", this.props.payment.sender_name)
+                  : getUserPic("", this.props.payment.recip_name) }
             </View>
 
             { /* Name and payment info */ }
             <View style={styles.textWrap}>
               <Text style={styles.name}>{ (this.props.out) ? this.props.payment.recip_name : this.props.payment.sender_name }</Text>
-              <Text style={styles.text}>${ this.props.payment.amount } per month for {this.props.payment.payments} months { StringMaster5000.formatPurpose(this.props.payment.purpose) }</Text>
+              <Text style={styles.text}>${ this.props.payment.amount } per month for {this.props.payment.payments} months</Text>
+              <Text style={styles.text}>{ StringMaster5000.formatPurpose(this.props.payment.purpose) }</Text>
             </View>
 
             { /* Payment settings button */ }
@@ -204,11 +204,9 @@ class PaymentPreview extends React.Component {
 
             { /* Profile picture */ }
             <View style={styles.picWrap}>
-              {
-                (this.props.out)
-                ? getUserPic(this.props.payment.recip_pic, this.props.payment.recip_name)
-                : getUserPic(this.props.payment.sender_pic, this.props.payment.sender_name)
-              }
+              { (this.props.out)
+                  ? getUserPic(this.props.payment.recip_pic, this.props.payment.recip_name)
+                  : getUserPic(this.props.payment.sender_pic, this.props.payment.sender_name) }
             </View>
 
             { /* Name and payment info */ }

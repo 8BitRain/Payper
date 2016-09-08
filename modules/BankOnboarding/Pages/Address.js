@@ -170,7 +170,7 @@ class Address extends React.Component {
          "paymentIcons": false,
          "circleIcons": true,
          "settingsIcon": false,
-         "closeIcon": true
+         "closeIcon": false
        },
        index: 1,
        numCircles: 4

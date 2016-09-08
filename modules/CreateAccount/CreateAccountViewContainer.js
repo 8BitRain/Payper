@@ -4,6 +4,7 @@ import CreateAccountView from './CreateAccountView';
 import Validators from '../../helpers/validators';
 import * as Firebase from '../../services/Firebase';
 import * as Init from '../../_init';
+import { Actions } from 'react-native-router-flux';
 
 var Mixpanel = require('react-native-mixpanel');
 

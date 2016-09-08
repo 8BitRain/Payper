@@ -5,31 +5,25 @@
   *   💣  Lambda.js  💣
   *
   *   Lambda endpoints:
-  *     💣  Base:               'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev'
-  *     💣  Create user:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create'
-  *     💣  Create payment:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create'
-  *     💣  Get user:           'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get'
-  *     💣  Accept payment:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
-  *     💣  Read notification:  'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
-  *     💣  Direct invite:      'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct'
-  *     💣  Payment invite:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
-  *     💣  GET Funding source: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource'
-  *     💣  Delete user:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/delete'
+  *     💣  Base:                  'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev'
+  *     💣  Get user:              'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get'
+  *     💣  Get decrypted user:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/getPersonal'
+  *     💣  Get funding source:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource'
+  *     💣  Create user:           'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create'
+  *     💣  Create payment:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create'
+  *     💣  Accept payment:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
+  *     💣  Reject payment:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/reject'
+  *     💣  Read notification:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/notifications/markSeen'
+  *     💣  Direct invite:         'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct'
+  *     💣  Payment invite:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
+  *     💣  Delete user:           'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/delete'
+  *     💣  Update phone contacts: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneContacts'
+  *     💣  Update user info:      'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/update'
   *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
   *
 **/
 
-/**
-  *   Curls
-**/
-// Direct invite
-// curl -X POST -d @vash_hitta.txt https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/viaPayment --header "Content-Type:application/json"
-// Payment creation
-// curl -X POST -d @vash_hitta.txt https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create --header "Content-Type:application/json"
-
-//
-// curl -X POST -d @vash_hitta.txt https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/viaPayment --header "Content-Type:application/json"
 
 /**
   *   Get user object for specified session token, returning it via callback
@@ -61,7 +55,7 @@ export function getUserWithToken(sessionToken, callback) {
 **/
 export function createUser(user, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create", {method: "POST", body: JSON.stringify(user)})
+      fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create", {method: "POST", body: JSON.stringify(user)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -89,8 +83,9 @@ export function createFBUser(user, callback) {
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
-        console.log("Create user Lambda response", responseData);
-        console.log("USER ACCOUNT STATUS: " +  responseData.account_status);
+        //console.log("Create user Lambda response", responseData);
+        console.log("LAMBDA => USER ACCOUNT STATUS: " +  responseData.account_status);
+        console.log("LAMBDA => LAMBDA RESPONSE DATA: " + JSON.stringify(responseData));
         if (typeof callback == 'function') callback(responseData.user, responseData.account_status);
       } else {
         console.log("Error getting FBuser with token", responseData.errorMessage);
@@ -282,8 +277,7 @@ export function updatePhone(data, callback){
     .then((responseData) => {
       if (!responseData.errorMessage) {
         console.log("Update Phone response:", responseData);
-        //if (typeof callback == 'function') callback(true);
-        callback(true);
+        if (typeof callback == 'function') callback(true);
       } else {
         console.log("Error:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
@@ -299,7 +293,7 @@ export function updatePhone(data, callback){
 /**
   *   Given timestamp, and session_token, mark a notification as read
 **/
-export function seeNotification(options) {
+export function seeNotifications(options) {
   try {
     fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/notifications/markSeen", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
@@ -404,6 +398,78 @@ export function deleteUser(options, callback) {
       } else {
         console.log("Error deleting user:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given session_token and uid, get decrypted phone and email number for
+  *   the specified user
+**/
+export function getDecryptedUser(options, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/getPersonal", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Get decrypted user Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error getting decrypted user:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(responseData);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given list of phone numbers (phoneNumbers) and session token (token),
+  *   update a user's phone contacts
+**/
+export function updateContacts(options, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/triggerContactScan", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Update phone contacts Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error updating phone contacts:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(responseData);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given a user object (user) and session token (token),
+  *   update a user's information
+**/
+export function updateUser(options, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/update", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Update user Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error updating user:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(responseData);
       }
     })
     .done();

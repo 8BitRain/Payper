@@ -5,10 +5,12 @@ import { connect } from 'react-redux';
 import * as Firebase from '../../services/Firebase';
 import * as Lambda from '../../services/Lambda';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
+import * as SetMaster5000 from '../../helpers/SetMaster5000';
 
 // Dispatch functions
 import * as set from './UserSearchState';
 import * as setPayment from '../CreatePayment/CreatePaymentState';
+import * as setMain from '../Main/MainState';
 
 // Base view
 import UserSearchView from './UserSearchView';
@@ -19,10 +21,12 @@ function mapStateToProps(state) {
 
     // userSearch
     activeFirebaseListeners: state.getIn(['userSearch', 'activeFirebaseListeners']),
-    allContacts: state.getIn(['userSearch', 'allContacts']),
-    filteredContacts: state.getIn(['userSearch', 'filteredContacts']),
+    allContactsArray: state.getIn(['userSearch', 'allContactsArray']),
+    allContactsMap: state.getIn(['userSearch', 'allContactsMap']),
+    filteredContactsMap: state.getIn(['userSearch', 'filteredContactsMap']),
     selectedContact: state.getIn(['userSearch', 'selectedContact']),
     empty: state.getIn(['userSearch', 'empty']),
+    startedListening: state.getIn(['userSearch', 'startedListening']),
 
     // main
     currentUser: state.getIn(['main', 'currentUser']),
@@ -31,24 +35,69 @@ function mapStateToProps(state) {
   }
 }
 
+var allContactsArray;
+
 // Decide which action creators our component will receive as props
 function mapDispatchToProps(dispatch) {
   return {
 
     initialize: (nativeContacts) => {
-      dispatch(set.allContacts(nativeContacts));
+      dispatch(set.allContactsMap(SetMaster5000.arrayToMap(nativeContacts)));
+      dispatch(set.allContactsArray(nativeContacts));
     },
 
-    listen: (endpoints, options) => {
+    listen: (endpoints, options, callback) => {
+
+      // Ensure that we don't initialize more than one listener
+      dispatch(set.startedListening(true));
+
       Firebase.listenTo(endpoints, (response) => {
         if (response.value) {
-          var contacts = StringMaster5000.contactsToArray(response.value);
 
-          console.log("%cConcatenated Payper and native contacts:", "color:green;font-weight:900;")
-          contacts = contacts.concat(options.nativeContacts);
-          console.log(contacts);
+          switch (response.endpoint.split("/")[0]) {
+            case "contactList":
 
-          dispatch(set.allContacts(contacts));
+              console.log("%cSuccessfully received contact list:", "color:green;font-weight:900;");
+              console.log(response.value);
+
+              // Convert Firebase JSON to array of user objects, tacking on section titles along the way
+              var contactListArray = SetMaster5000.contactListToArray({ contacts: response.value }),
+                  newAllContactsArray;
+
+              // Concatenate with native phone contact list
+              newAllContactsArray = (allContactsArray) ? SetMaster5000.mergeArrays(allContactsArray, contactListArray) : contactListArray.concat(options.nativeContacts);
+              allContactsArray = newAllContactsArray;
+
+              // Convert contact array to map for ListView rendering
+              var newAllContactsMap = SetMaster5000.arrayToMap(newAllContactsArray);
+
+              // Set user lists in Redux store, triggering re-render of UserSearch ListView
+              dispatch(set.allContactsMap(newAllContactsMap));
+              dispatch(set.allContactsArray(newAllContactsArray));
+
+            break;
+            case "users":
+
+              console.log("%cSuccessfully received global user list:", "color:green;font-weight:900;");
+              console.log(response.value);
+
+              // Convert Firebase JSON to array of user objects, tacking on section titles along the way
+              var globalUserListArray = SetMaster5000.globalUserListToArray({ users: response.value, uid: options.uid }),
+                  newAllContactsArray;
+
+              // Concatenate with currently rendered contact list
+              newAllContactsArray = (allContactsArray) ? SetMaster5000.mergeArrays(allContactsArray, globalUserListArray) : globalUserListArray.concat(options.nativeContacts);
+              allContactsArray = newAllContactsArray;
+
+              // Convert contact array to map for ListView rendering
+              var newAllContactsMap = SetMaster5000.arrayToMap(newAllContactsArray);
+
+              // Set user lists in Redux store, triggering re-render of UserSearch ListView
+              dispatch(set.allContactsMap(newAllContactsMap));
+              dispatch(set.allContactsArray(newAllContactsArray));
+
+            break;
+          }
         }
       });
 
@@ -56,12 +105,16 @@ function mapDispatchToProps(dispatch) {
     },
 
     stopListening: (endpoints) => {
+
+
+      console.log("\n\n\n\n\nSTOPPED LISTENING\n\n\n\n");
+
       Firebase.stopListeningTo(endpoints);
       dispatch(set.activeFirebaseListeners([]));
     },
 
     setFilteredContacts: (contacts, callback) => {
-      dispatch(set.filteredContacts(contacts))
+      dispatch(set.filteredContactsMap(contacts))
       .then(() => {
         if (typeof callback == 'function') callback();
         else console.log("Callback is not a function.");
@@ -77,19 +130,11 @@ function mapDispatchToProps(dispatch) {
     },
 
     invite: (options, callback) => {
-
       options.phoneNumber = StringMaster5000.formatPhoneNumber(options.phoneNumber);
-
-      // Lambda.inviteDirect(options, (success) => {
-      //   if (typeof callback == 'function') callback();
-      //   else console.log("Callback is not a function.");
-      // });
-
       Lambda.inviteViaPayment(options, (success) => {
         if (typeof callback == 'function') callback();
         else console.log("Callback is not a function.");
       });
-
     },
   }
 }

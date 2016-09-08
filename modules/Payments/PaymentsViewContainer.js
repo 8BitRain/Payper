@@ -23,7 +23,7 @@ function mapStateToProps(state) {
   return {
 
     // main
-    currentUser: state.getIn(['main', 'currentUser']),
+    // currentUser: state.getIn(['main', 'currentUser']),
     header: state.getIn(['main', 'header']),
 
     // payments
@@ -33,6 +33,9 @@ function mapStateToProps(state) {
     globalPayments: state.getIn(['payments', 'globalPayments']),
     activeTab: state.getIn(['payments', 'activeTab']),
     activeFilter: state.getIn(['payments', 'activeFilter']),
+    flags: state.getIn(['main', 'flags']),
+    newUser: state.getIn(['createAccount', 'newUser']),
+    startIav: state.getIn(['bankOnboarding', 'startIav'])
 
   }
 }
@@ -42,6 +45,8 @@ function mapDispatchToProps(dispatch) {
   return {
     listen: (endpoints) => {
       Firebase.listenTo(endpoints, (response) => {
+        console.log("PAYMENTS VIEW CONTAINER RESPONSE: " + JSON.stringify(response));
+        console.log("PAYMENTS VIEW CONTAINER RESPONSE: " + JSON.stringify(response.key));
         switch (response.key) {
           case "in":
             // Tack payment ID on as prop of each payment object
@@ -65,6 +70,12 @@ function mapDispatchToProps(dispatch) {
           break;
 
         }
+        switch(response.endpoint.split("/")[0]){
+          case "appFlags":
+            console.log("customerStatus: " + JSON.stringify(response.value.onboarding_state));
+            //dispatch(set.flags(response.value));
+            break;
+        }
       });
       dispatch(set.activeFirebaseListeners(endpoints));
     },
@@ -76,6 +87,14 @@ function mapDispatchToProps(dispatch) {
 
     setIsEmpty: (isEmpty) => {
       dispatch(set.isEmpty(isEmpty));
+    },
+
+    setNewUserToken: (token) => {
+      dispatch(set.setNewUserToken(token));
+    },
+
+    setIav: (token) => {
+      dispatch(set.setIav(token));
     },
 
     setActiveTab: (tab) => {
@@ -93,8 +112,13 @@ function mapDispatchToProps(dispatch) {
       dispatch(set.activeTab(tab));
     },
 
+    setActiveFilter: (filter) => {
+      console.log("Setting active filter to", filter);
+      dispatch(set.activeFilter(filter));
+    },
+
     // 1) Remove payment from DataSource
-    // 2) Remove payment from DB via Lambda endpoint
+    // 2) Hit cancelPayment Lambda endpoint
     cancelPayment: (options) => {
       if (enableLogs) {
         console.log("%cCancelling payment " + options.pid, "color:red;font-weight:900;");
@@ -110,8 +134,10 @@ function mapDispatchToProps(dispatch) {
         console.log(ds);
       }
 
-      dispatch(set.outgoingPayments(ds));
-      Lambda.cancelPayment({payment_id: options.pid, token: options.token});
+      if (options.flow == "out") dispatch(set.outgoingPayments(ds));
+      else if (options.flow == "in") dispatch(set.incomingPayments(ds));
+
+      Lambda.cancelPayment({ invite: options.invite, type: options.type, payment_id: options.pid, token: options.token });
     },
 
     confirmPayment: (options) => {
@@ -133,7 +159,7 @@ function mapDispatchToProps(dispatch) {
       }
 
       dispatch(set.outgoingPayments(ds));
-      Lambda.confirmPayment({payment_id: options.pid, token: options.token});
+      Lambda.confirmPayment({ type: options.type, payment_id: options.pid, token: options.token});
     },
 
     rejectPayment: (options) => {

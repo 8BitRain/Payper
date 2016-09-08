@@ -13,6 +13,7 @@ import * as Firebase from '../../services/Firebase';
 export default connect(
   state => ({
     //Provider information
+    /*Note it's okay to pull from other routes.*/
     provider: state.getIn(['landingScreen', 'provider']),
     newUser: state.getIn(['createAccount', 'newUser'])
   }),

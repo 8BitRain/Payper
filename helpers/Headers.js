@@ -47,7 +47,7 @@ export function fundingSourcesHeader() {
     },
     index: null,
     numCircles: null,
-    title: "Funding Sources",
+    title: "Bank Accounts",
     callbackIn: null,
     callbackOut: null,
   };
@@ -133,6 +133,74 @@ export function createPaymentHeader() {
     title: null,
     callbackIn: null,
     callbackOut: null,
+  };
+
+  return props;
+};
+
+
+// Header props for last page in the Create Payment flow
+export function createPaymentPurposeHeader(options) {
+  var props = {
+    types: {
+      "paymentIcons": true,
+      "circleIcons": false,
+      "settingsIcon": false,
+      "closeIcon": false,
+      "closeIconTopRight": true,
+      "backIcon": true,
+      "flowTabs": false,
+    },
+    index: 0,
+    numCircles: null,
+    title: null,
+    callbackIn: null,
+    callbackOut: null,
+    callbackBack: () => options.callbackBack(),
+  };
+
+  return props;
+};
+
+
+// Header props for Create Payment flow
+export function profileHeader() {
+  var props = {
+    types: {
+      "paymentIcons": false,
+      "circleIcons": false,
+      "settingsIcon": true,
+      "closeIcon": false,
+      "flowTabs": false,
+    },
+    index: 0,
+    numCircles: null,
+    title: "My Profile",
+    callbackIn: null,
+    callbackOut: null,
+    accent: true,
+  };
+
+  return props;
+};
+
+
+// Header props for Edit Profile modal
+export function editProfileHeader(options) {
+  var props = {
+    types: {
+      "paymentIcons": false,
+      "circleIcons": false,
+      "settingsIcon": false,
+      "closeIcon": true,
+      "flowTabs": false,
+    },
+    index: 0,
+    numCircles: null,
+    title: options.title,
+    callbackIn: null,
+    callbackOut: null,
+    accent: true,
   };
 
   return props;
