@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import * as Firebase from '../../services/Firebase';
 import * as Lambda from '../../services/Lambda';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
+import * as SetMaster5000 from '../../helpers/SetMaster5000';
 import * as Async from '../../helpers/Async';
 import * as Headers from '../../helpers/Headers';
 
@@ -51,6 +52,8 @@ function mapDispatchToProps(dispatch) {
           case "in":
             // Tack payment ID on as prop of each payment object
             for (var p in response.value) response.value[p].pid = p;
+
+            SetMaster5000.prioritizePayments({ payments: response.value, prioritize: ["gDNTMYEaHG"] });
 
             if (response.value) dispatch(set.incomingPayments(response.value));
             else console.log("%cIncoming payments are null.", "color:red;font-weight:700;");

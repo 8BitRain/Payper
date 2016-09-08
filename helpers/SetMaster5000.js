@@ -168,12 +168,29 @@ export function mergeArrays(arr1, arr2) {
       var bothHaveUIDs = a[i].uid && a[j].uid,
           UIDsMatch = a[i].uid === a[j].uid,
           phoneNumbersMatch = a[i].phone === a[j].phone;
-      if (bothHaveUIDs && UIDsMatch) {
-        console.log("Removing user with uid", a[i].uid);
-        a.splice(j--, 1);
-      }
+      if (bothHaveUIDs && UIDsMatch) a.splice(j--, 1);
     }
   }
 
   return a;
+};
+
+
+/**
+  *   Given a ListView.DataSource of payments and a list of payment ID's, move
+  *   the specified payments to the front of the DataSource
+**/
+export function prioritizePayments(options) {
+  var curr;
+
+  for (var p in options.payments) {
+    if (_.includes(options.prioritize, p)) {
+      curr = options.payments[p];
+      console.log("Prioritizing", p);
+      console.log("Payments before deletion", options.payments);
+      delete options.payments[p];
+      console.log("Payments after deletion", options.payments);
+      // options.payments
+    }
+  }
 };

@@ -183,7 +183,6 @@ class PaymentPreview extends React.Component {
             }
           </View>
 
-          { /* Get bottom half contents */ }
           { (this.props.payment.invitee == "recip")
               ? getPendingInvitationAlert({incoming: false, name: this.props.payment.recip_name.split(" ")[0]})
               : getPendingInvitationAlert({incoming: true, name: this.props.payment.sender_name.split(" ")[0]}) }

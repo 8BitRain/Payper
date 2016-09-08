@@ -140,6 +140,7 @@ function mapDispatchToProps(dispatch) {
         payment.invite = true;
         payment.phoneNumber = options.otherUser.phone;
         payment.confirmed = false;
+        payment.invitee = (payment.sender_id) ? "recip" : "sender";
       } else {
         payment.invite = false;
       }
