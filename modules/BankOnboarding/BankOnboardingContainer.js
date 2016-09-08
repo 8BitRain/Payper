@@ -53,8 +53,8 @@ export default connect(
               if(response.value != null){
                 if(response.value.iav != ""){
                   console.log("Starts IAV");
-                  //dispatch(dispatchFunctions.setLoading(true));
-                  dispatch(dispatchFunctions.setIav(true));
+                  ////dispatch(dispatchFunctions.setLoading(true));
+                  dispatch(dispatchFunctions.setIav(response.value.iav));
                   //break;
                 }
                 //Go From IAV to MainViewContainer
@@ -68,13 +68,20 @@ export default connect(
               break;
             case "appFlags":
               if(response.value != null){
+                console.log("onboarding_state: " + response.value.onboarding_state);
                 if(response.value.micro_deposit_flow == true){
                   console.log("Microdeposits flow is true");
                   dispatch(dispatchFunctions.setVerifyMicroDeposit(true));
                 } else{
-                  //dispatch(dispatchFunctions.setMic(response.value.fundingSourceAdded));
+
                   console.log("Microdeposits flow is false");
                 }
+
+               if(response.value.onboarding_state == "complete"){
+                console.log("Move to app");
+                dispatch(dispatchFunctions.setMain(true));
+                //Actions.MainViewContainer();
+               }
               }
               break;
           }

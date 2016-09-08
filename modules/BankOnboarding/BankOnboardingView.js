@@ -45,7 +45,7 @@ class LoadingView extends React.Component {
         complete={true}
         msgSuccess={"Welcome!"}
         msgError={""}
-        msgLoading={"Signing In"}
+        msgLoading={"Loading"}
         success={true}
         successDestination={() => Actions.MainViewContainer()}
         errorDestination={() => Actions.BankOnboardingContainer()} />
@@ -160,8 +160,10 @@ const BankOnboardingView = React.createClass({
       )
     }
      if(this.props.startMain == true){
+      Actions.MainViewContainer()
       return(
         <LoadingView />
+
       )
     }
     if (this.props.startVerifyMicroDeposit == true){
