@@ -78,6 +78,7 @@
 - [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
 - [ ] Add an onPress destination to notifications
 - [ ] Create a PaymentSeries module, containing detailed information about the payment series, and the option to skip/reschedule payments
+- [ ] When a payment completes, move it to the top of the payments list and animate it out
 
 ### MVP Usability and Design Bugs (Brady)
 - [X] Adjust CreatePayment flow so that after payment creation: payment creation => outgoing tab of payments view, request creating => incoming tab of payments view
@@ -88,7 +89,7 @@
 - [X] Fix Incoming/Outgoing tab padding (need to be easier to press)
 - [X] Fix keyboard spacing on edit profile pages for small phones (add real header component to the modal)
 - [X] Transfer create payment flow to modal instead of separate scene
-- [ ] Fix ugly notification indicators
+- [ ] Fix ugly notification indicators (double digits and beyond look bad)
 
 ### MVP Logic Bugs (Brady)
 - [X] Fix bug where user state is not properly reset upon signing out and signing in with another account
@@ -123,7 +124,7 @@
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
-- [X] Display funding source before payment creation (Groundwork is laid, just plug in data)
+- [X] Display funding source before payment creation
 - [X] FAQ
 - [X] Delete account button
 - [ ] Request permission for automatic monthly transactions
@@ -132,7 +133,6 @@
 - [ ] Dispute Resolution
 
 ### Not MVP
-- [ ] Implement action sheets
 - [ ] Add recent users list to UserSearchView
 - [ ] Add section headers to user search list view
 

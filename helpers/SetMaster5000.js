@@ -174,3 +174,23 @@ export function mergeArrays(arr1, arr2) {
 
   return a;
 };
+
+
+/**
+  *   Given a ListView.DataSource of payments and a list of payment ID's, move
+  *   the specified payments to the front of the DataSource
+**/
+export function prioritizePayments(options) {
+  var curr;
+
+  for (var p in options.payments) {
+    if (_.includes(options.prioritize, p)) {
+      curr = options.payments[p];
+      console.log("Prioritizing", p);
+      console.log("Payments before deletion", options.payments);
+      delete options.payments[p];
+      console.log("Payments after deletion", options.payments);
+      // options.payments
+    }
+  }
+};
