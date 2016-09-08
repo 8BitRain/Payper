@@ -55,33 +55,32 @@ class Payments extends React.Component {
     console.log("Toggled modal with options:", options);
     if (options && options.activeFilter) this.props.setActiveFilter(options.activeFilter);
     this.setState({ modalVisible: !this.state.modalVisible });
-    if(this.props.flags.onboarding_state == 'customer'){
-      Actions.BankOnboardingContainer();
-      console.log(this.props.currentUser.token);
-      this.props.setNewUserToken(this.props.currentUser.token);
-    }
-    if(this.props.flags.onboarding_state == 'bank'){
-      console.log("BANK STATE REACHED: " + this.props.startIav );
-      //Initiate IAV
-      this.props.setNewUserToken(this.props.currentUser.token);
-      var data = {
-        token: this.props.currentUser.token
-      };
-      var _this = this;
-      console.log("Beginning IAV Initiation");
-      Init.getIavToken(data, function(iavTokenRecieved, iavToken){
-        if(iavTokenRecieved){
-          console.log("SSN IAVTOKEN: " + JSON.stringify(iavToken));
-          //Will cause the IAV Token Page to be loaded
-          _this.props.setIav(iavToken.token);
-          Actions.BankOnboardingContainer();
-        }
-      });
-    }
-    if(this.props.flags.onboarding_state == 'complete'){
-      Actions.CreatePaymentViewContainer();
-    }
-
+    // if(this.props.flags.onboarding_state == 'customer'){
+    //   Actions.BankOnboardingContainer();
+    //   console.log(this.props.currentUser.token);
+    //   this.props.setNewUserToken(this.props.currentUser.token);
+    // }
+    // if(this.props.flags.onboarding_state == 'bank'){
+    //   console.log("BANK STATE REACHED: " + this.props.startIav );
+    //   //Initiate IAV
+    //   this.props.setNewUserToken(this.props.currentUser.token);
+    //   var data = {
+    //     token: this.props.currentUser.token
+    //   };
+    //   var _this = this;
+    //   console.log("Beginning IAV Initiation");
+    //   Init.getIavToken(data, function(iavTokenRecieved, iavToken){
+    //     if(iavTokenRecieved){
+    //       console.log("SSN IAVTOKEN: " + JSON.stringify(iavToken));
+    //       //Will cause the IAV Token Page to be loaded
+    //       _this.props.setIav(iavToken.token);
+    //       Actions.BankOnboardingContainer();
+    //     }
+    //   });
+    // }
+    // if(this.props.flags.onboarding_state == 'complete'){
+    //   Actions.CreatePaymentViewContainer();
+    // }
   }
 
   _renderEmptyState() {
