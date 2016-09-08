@@ -15,7 +15,14 @@ const initialState = Map({
   isEmpty: true,
   activeTab: "tracking",
   activeFilter: "incoming",
+  flags: "",
+  newUser:'',
+  startIav: ''
 });
+
+
+
+
 
 // Action types
 const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
@@ -24,6 +31,8 @@ const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
       SET_GLOBAL_PAYMENTS = 'SET_GLOBAL_PAYMENTS',
       SET_IS_EMPTY = 'SET_IS_EMPTY',
       SET_ACTIVE_TAB = 'SET_ACTIVE_TAB',
+      SET_IAV = 'SET_IAV',
+      SET_NEWUSER_TOKEN = 'SET_NEWUSER_TOKEN',
       SET_ACTIVE_FILTER = 'SET_ACTIVE_FILTER';
 
 // Action creators
@@ -34,6 +43,8 @@ export function globalPayments(input) { return {type: SET_GLOBAL_PAYMENTS, input
 export function isEmpty(input) { return {type: SET_IS_EMPTY, input: input} };
 export function activeTab(input) { return {type: SET_ACTIVE_TAB, input: input} };
 export function activeFilter(input) { return {type: SET_ACTIVE_FILTER, input: input} };
+export function setNewUserToken(input) { return { type: SET_NEWUSER_TOKEN, input: input } };
+export function setIav(index){ return { type: SET_IAV, index: index} };
 
 /**
   *   Reducer
@@ -70,6 +81,16 @@ export default function PaymentsReducer(state = initialState, action = {}) {
       break;
     case SET_ACTIVE_FILTER:
       var newState = state.set('activeFilter', action.input);
+      return newState;
+      break;
+    case SET_IAV:
+      var newState = state.set('startIav', action.input);
+      return newState;
+      break;
+    case SET_NEWUSER_TOKEN:
+      var currUser = state.get('newUser');
+      currUser.token = action.input;
+      var newState = state.set('newUser', currUser);
       return newState;
       break;
   }
