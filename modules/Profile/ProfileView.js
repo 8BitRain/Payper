@@ -1,14 +1,16 @@
 // Dependencies
 import React from 'react';
-import { View, Text, Dimensions, StyleSheet, Modal, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Button } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, Modal, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Button, StatusBar } from 'react-native';
 
 // Helper functions
 import * as Lambda from '../../services/Lambda';
 import * as Timestamp from '../../helpers/Timestamp';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
 import * as SetMaster5000 from '../../helpers/SetMaster5000';
+import * as Headers from '../../helpers/Headers';
 
 // Partial components
+import Header from '../../components/Header/Header';
 import UserPicWithCallback from '../../components/Previews/UserPic/UserPicWithCallback';
 import Edit from './Edit';
 
@@ -49,7 +51,7 @@ class Profile extends React.Component {
         destination: () => this._toggleModal({
           title: "Display Name",
           content: this.props.currentUser.first_name + " " + this.props.currentUser.last_name,
-          info: "This is this name you go by in app."
+          info: "This is not currently editable."
         })},
       { rowTitle: "Username",
         rowContent: this.props.currentUser.username,
@@ -57,7 +59,7 @@ class Profile extends React.Component {
         destination: () => this._toggleModal({
           title: "Username",
           content: this.props.currentUser.username,
-          info: "This is your Payper handle. This is not currently editable."
+          info: "This is not currently editable."
         })},
       { rowTitle: "Phone Number",
         rowContent: StringMaster5000.stylizePhoneNumber(this.props.currentUser.decryptedPhone),
@@ -73,16 +75,65 @@ class Profile extends React.Component {
         destination: () => this._toggleModal({
           title: "Email",
           content: this.props.currentUser.decryptedEmail,
-          info: "Your email address is used for password recovery. Nobody but you can see this address, and we will not send you spam."
+          info: "Your email address is used for password recovery and identity verification. Nobody can see this address but you."
         })},
     ];
 
     this.state = {
+      optionsDataSource: EMPTY_DATA_SOURCE.cloneWithRowsAndSections(SetMaster5000.arrayToMap(this.options)),
       modalVisible: false,
-      modalTitle: "",
-      modalContent: "",
-      modalInfo: "",
+      modalProps: {
+        title: "",
+        value: "",
+        info: "",
+      },
     };
+  }
+
+
+  /**
+    *   Must explicitly trigger a re-render of the options screen to detect
+    *   changes to the Redux user object
+  **/
+  _updateOptionsDataSource() {
+    // Instantiate new options list
+    var newOptions = [
+      { rowTitle: "Display Name",
+        rowContent: this.props.currentUser.first_name + " " + this.props.currentUser.last_name,
+        sectionTitle: "My Profile",
+        destination: () => this._toggleModal({
+          title: "Display Name",
+          content: this.props.currentUser.first_name + " " + this.props.currentUser.last_name,
+          info: "This is this name you go by in app."
+        })},
+      { rowTitle: "Username",
+        rowContent: this.props.currentUser.username,
+        sectionTitle: "My Profile",
+        destination: () => this._toggleModal({
+          title: "Username",
+          content: this.props.currentUser.username,
+          info: "This is not currently editable."
+        })},
+      { rowTitle: "Phone Number",
+        rowContent: StringMaster5000.stylizePhoneNumber(this.props.currentUser.decryptedPhone),
+        sectionTitle: "My Profile",
+        destination: () => this._toggleModal({
+          title: "Phone Number",
+          content: this.props.currentUser.decryptedPhone,
+          info: "Other Payper users will be able to find you by your phone number. We will not give your phone number away."
+        })},
+      { rowTitle: "Email",
+        rowContent: this.props.currentUser.decryptedEmail,
+        sectionTitle: "My Profile",
+        destination: () => this._toggleModal({
+          title: "Email",
+          content: this.props.currentUser.decryptedEmail,
+          info: "Your email address is used for password recovery and identity verification. Nobody can see this address but you."
+        })},
+    ];
+
+    // Change options in state, triggering re-render of ListView
+    this.setState({ optionsDataSource: EMPTY_DATA_SOURCE.cloneWithRowsAndSections(SetMaster5000.arrayToMap(newOptions)) });
   }
 
 
@@ -90,7 +141,7 @@ class Profile extends React.Component {
     return(
       <View style={{flex: 1.0}}>
         <ListView
-          dataSource={EMPTY_DATA_SOURCE.cloneWithRowsAndSections(SetMaster5000.arrayToMap(this.options))}
+          dataSource={this.state.optionsDataSource}
           renderRow={this._renderRow.bind(this)}
           renderSectionHeader={this._renderSectionHeader}
           renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
@@ -135,10 +186,12 @@ class Profile extends React.Component {
 
   _toggleModal(options) {
     this.setState({
+      modalProps: {
+        title: (options) ? options.title : "",
+        value: (options) ? options.content : "",
+        info: (options) ? options.info : "",
+      },
       modalVisible: !this.state.modalVisible,
-      modalTitle: (options) ? options.title : "",
-      modalContent: (options) ? options.content : "",
-      modalInfo: (options) ? options.info : "",
     });
   }
 
@@ -171,30 +224,34 @@ class Profile extends React.Component {
           { this._renderOptionsList() }
         </View>
 
-
+        { /* Modal containing edit panel */ }
         <Modal
           animationType={"slide"}
-          transparent={false}
+          transparent={true}
           visible={this.state.modalVisible}
-          onRequestClose={() => {alert("Modal has been closed.")}}>
+          onRequestClose={ () => alert("Closed modal") }>
 
-          <Edit editing={this.state} toggleModal={() => this._toggleModal()} />
+          { /* Lighten status bar text */ }
+          <StatusBar barStyle="light-content" />
 
-          { /*
-          <View style={{marginTop: 22}}>
-            <View>
-              <Text>
-                { "Title: " + this.state.modalTitle + "\nContent: " + this.state.modalContent + "\nInfo: " + this.state.modalInfo }
-              </Text>
-              <TouchableHighlight onPress={() => this._toggleModal()}>
-                <Text>Hide Modal</Text>
-              </TouchableHighlight>
+          <View style={{flex: 1.0}}>
+
+            { /* Header */ }
+            <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
+              <Header
+                callbackClose={ () => this._toggleModal() }
+                headerProps={ Headers.editProfileHeader({ title: this.state.modalProps.title }) } />
+            </View>
+
+            { /* Edit panel */ }
+            <View style={{ flex: (dimensions.height < 667) ? 0.88 : 0.9 }}>
+              <Edit
+                {...this.props}
+                modalProps={this.state.modalProps}
+                updateOptionsDataSource={() => this._updateOptionsDataSource()} />
             </View>
           </View>
-          */ }
-
         </Modal>
-
       </View>
     );
   }

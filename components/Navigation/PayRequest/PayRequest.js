@@ -87,7 +87,7 @@ class PayRequest extends React.Component {
   _getConfirmationButton() {
     return(
       <TouchableHighlight
-        onPress={() => this.props.confirmCallback()}
+        onPress={(this.props.loading) ? () => console.log("Already sending...") : () => this.props.confirmCallback()}
         style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.alertGreen}}
         underlayColor={colors.lightAlertGreen}
         activeOpacity={1.0}>
@@ -105,7 +105,7 @@ class PayRequest extends React.Component {
           <Text style={{fontSize: 16, fontWeight: '600', color: colors.white, textAlign: 'center'}}>
             { (this.props.loading)
                 ? "Sending..."
-                : StringMaster5000.capFirstLetter(this.props.awaitingConfirmationOn) }
+                : "Confirm " + StringMaster5000.capFirstLetter(this.props.awaitingConfirmationOn) }
           </Text>
           { (!this.props.loading)
               ? <Text style={{fontSize: 13, fontWeight: '300', color: colors.white, textAlign: 'center'}}>

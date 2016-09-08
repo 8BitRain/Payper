@@ -26,11 +26,9 @@ import { Actions } from 'react-native-router-flux';
 export function signInWithToken(callback) {
   try {
     Async.get('session_token', (val) => {
+      console.log("Session token:", val);
+
       if (val) {
-
-        console.log("%cSuccessfully retrieved user object:", "color:orange;font-weight:900;");
-        console.log(val);
-
         Lambda.getUserWithToken(val, (user) => {
           if (user) {
 
@@ -46,8 +44,8 @@ export function signInWithToken(callback) {
 
           } else {
 
-            // Token has expired. Alert caller
-            if (typeof callback == 'function') callback("expired_token");
+            // Session token has expired. Alert caller
+            if (typeof callback == 'function') callback("sessionTokenExpired");
             else console.log("Callback is not a function.");
 
           }
@@ -66,30 +64,24 @@ export function signInWithToken(callback) {
 /**
   *   Return new session token
 **/
-export function signInWithRefreshToken(callback) {
-  try {
+export function signInWithRefreshedToken(callback) {
+  Firebase.getSessionToken((token) => {
 
-    Firebase.getSessionToken((token) => {
+    // Failed to refresh token. User must sign in manually
+    if (!token) callback(false);
 
-      // Failed to refresh token. User must sign in manually
-      if (token == null) callback(false);
-
-      // Token refresh succeeded
-      else {
-        // Log token to AsyncStorage
-        Async.set('session_token', token, () => {
-          // Attempt sign in
-          signInWithToken(function(signedIn) {
-            if (typeof callback == 'function') callback(signedIn);
-            else console.log("%cCallback is not a function", "color:red;font-weight:900");
-          });
+    // Token refresh succeeded
+    else {
+      // Log token to AsyncStorage
+      Async.set('session_token', token, () => {
+        // Attempt sign in
+        signInWithToken(function(signedIn) {
+          if (typeof callback == 'function') callback(signedIn);
+          else console.log("%cCallback is not a function", "color:red;font-weight:900");
         });
-      }
-    });
-
-  } catch (err) {
-    console.log(err);
-  }
+      });
+    }
+  });
 };
 
 
@@ -108,9 +100,11 @@ export function signInWithEmail(data, callback) {
                 console.log(user);
                 // Sign in succeeded. Log the user to Async storage and take them
                 // to the app.
-                Async.set('user', JSON.stringify(user), () => {
-                  if (typeof callback == 'function') callback(true);
-                  else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+                Async.set('session_token', token, () => {
+                  Async.set('user', JSON.stringify(user), () => {
+                    if (typeof callback == 'function') callback(true);
+                    else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+                  });
                 });
               }
             });

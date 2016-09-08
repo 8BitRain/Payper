@@ -17,6 +17,7 @@ import ArrowNav from '../../components/Navigation/Arrows/ArrowDouble';
 import colors from '../../styles/colors';
 const dimensions = Dimensions.get('window');
 const styles = StyleSheet.create({
+
   textInput: {
     height: 60,
     paddingLeft: 25,
@@ -89,18 +90,18 @@ class UserSearch extends React.Component {
     *   Start listening to Firebase
   **/
   componentWillMount() {
-    this.props.initialize(this.props.nativeContacts);
-    var contactList = "contactList/" + this.props.currentUser.uid,
-        globalUserList = "users";
-    this.props.listen([contactList], { nativeContacts: this.props.nativeContacts }, () => {
+    if (!this.props.startedListening) {
+      this.props.initialize(this.props.nativeContacts);
 
-      console.log("=-=-=-=\n\nCallback reached\n\n=-=-=-=");
+      var contactList = "contactList/" + this.props.currentUser.uid,
+          globalUserList = "users";
 
-      // Start listening to global user list AFTER we've received user's contact list so that
-      // we have something to concatenate with
-      this.props.listen([globalUserList], { allContactsArray: this.props.allContactsArray });
-
-    });
+      this.props.listen([contactList, globalUserList], {
+        nativeContacts: this.props.nativeContacts,
+        allContactsArray: this.props.allContactsArray,
+        uid: this.props.currentUser.uid,
+      });
+    }
   }
 
 
@@ -172,6 +173,8 @@ class UserSearch extends React.Component {
 
 
   _getContactList() {
+    console.log("Data source for all contacts:");
+    console.log(this.props.allContactsMap);
     return(
       <ListView
         dataSource={(this.props.filteredContactsMap.getRowCount() > 0) ? this.props.filteredContactsMap : this.props.allContactsMap}
@@ -182,15 +185,6 @@ class UserSearch extends React.Component {
         />
     );
   }
-
-
-  // <ListView
-  //   dataSource={EMPTY_DATA_SOURCE.cloneWithRowsAndSections(SetMaster5000.arrayToMap(this.options))}
-  //   renderRow={this._renderRow.bind(this)}
-  //   renderSectionHeader={this._renderSectionHeader}
-  //   renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-  //   enableEmptySections />
-
 
   _getConfirmation() {
     return(
@@ -209,9 +203,13 @@ class UserSearch extends React.Component {
 
         { /* Username or phone number */ }
         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          {(this.props.selectedContact.username)
-            ? <Entypo style={{paddingTop: 10}} name="facebook" size={25} color={colors.accent} />
-            : <Entypo style={{paddingTop: 10}} name="phone" size={25} color={colors.icyBlue} /> }
+          { (this.props.selectedContact.type == "facebook" || this.props.selectedContact.type == "phone")
+              ? <Entypo
+                  style={{paddingTop: 10}}
+                  name={ (this.props.selectedContact.type == "facebook") ? "facebook" : (this.props.selectedContact.type == "phone") ? "phone" : null }
+                  color={ (this.props.selectedContact.uid) ? colors.accent : colors.icyBlue }
+                  size={25} />
+              : null }
           <Text style={[{paddingLeft: 10}, (this.props.selectedContact.username) ? styles.confirmationUsername : styles.confirmationPhone]}>
             { (this.props.selectedContact.username)
                 ? this.props.selectedContact.username

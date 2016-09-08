@@ -4,7 +4,6 @@ import { View, Text, Image } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 var FBLoginManager = require('NativeModules').FBLoginManager;
 
-
 // Helper functions
 import * as Init from '../../_init';
 
@@ -36,19 +35,20 @@ class SplashView extends React.Component {
     Init.signInWithToken(function(signedIn) {
 
       // Session token was valid. Sign in succeeded
-      if (signedIn) _this._handleSignInSuccess();
+      if (signedIn && typeof signed == 'boolean') _this._handleSignInSuccess();
 
       // Session token has expired. Refresh the token and try again
-      // else if (signedIn = "token_expired") {
-      //   console.log("%cSession token has expired. Refreshing...", "color:orange;font-weight:900;");
-      //   Init.signInWithRefreshToken(function(signedIn) {
-      //     if (signedIn) this._handleSignInSuccess();
-      //     else this._handleSignInFailure();
-      //   });
-      // }
+      else if (signedIn = "sessionTokenExpired") {
+        console.log("%cSession token has expired. Refreshing...", "color:orange;font-weight:900;");
+        Init.signInWithRefreshedToken(function(signedIn) {
+          if (signedIn) _this._handleSignInSuccess();
+          else _this._handleSignInFailure();
+        });
+      }
 
       // No session token was found. User must sign in manually
       else _this._handleSignInFailure();
+
     });
   }
 

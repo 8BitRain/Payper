@@ -110,6 +110,7 @@ function mapDispatchToProps(dispatch) {
             token: options.currentUser.token,
             confirmed: false,
             invite: null,
+            invitee: null,
             phoneNumber: null,
           };
 
@@ -123,15 +124,6 @@ function mapDispatchToProps(dispatch) {
         recip = options.currentUser;
         sender = options.otherUser;
       }
-
-      // // Is this an invite?
-      // if ( payment.type == "payment" && !recip.username || payment.type == "request" && !sender.username) {
-      //   payment.invite = true;
-      //   payment.phoneNumber = options.otherUser.phone;
-      //   payment.type = "invite";
-      // } else {
-      //   payment.invite = false;
-      // }
 
       // Recipient info
       payment.recip_name = recip.first_name + " " + recip.last_name;
@@ -152,12 +144,11 @@ function mapDispatchToProps(dispatch) {
         payment.invite = false;
       }
 
-      // console.log("%cPayment:", "color:blue;font-weight:900;");
-      // console.log(payment);
-
-      console.log("Payment info:");
+      console.log("%cPayment:", "color:blue;font-weight:900;");
       console.log(payment);
-      dispatch(set.info(payment));
+
+      if (typeof callback == 'function') callback(payment);
+      else console.log("%cCallback is not a function.", "color:red;font-weight:900;");
     },
 
     sendPayment: (payment, callback) => {

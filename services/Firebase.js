@@ -25,7 +25,6 @@ const firebaseConfig = {
 };
 
 
-
 firebase.initializeApp(firebaseConfig);
 
 
@@ -78,14 +77,19 @@ export function getPaymentFlow(user, callback) {
   *   callback function
 **/
 export function getSessionToken(callback) {
-  firebase.auth().currentUser.getToken(true).then((token) => {
-    if (typeof callback == 'function') callback(token);
-    else console.log("%cCallback is not a function", "color:red;font-weight:900;");
-  }).catch((err) => {
-    console.log("Error code", err.code, "\nError message", err.message);
+  if (firebase.auth().currentUser) {
+    firebase.auth().currentUser.getToken(true).then((token) => {
+      if (typeof callback == 'function') callback(token);
+      else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+    }).catch((err) => {
+      console.log("Error code", err.code, "\nError message", err.message);
+      if (typeof callback == 'function') callback(null);
+      else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+    });
+  } else {
     if (typeof callback == 'function') callback(null);
     else console.log("%cCallback is not a function", "color:red;font-weight:900;");
-  });
+  }
 };
 
 

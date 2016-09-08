@@ -23,12 +23,13 @@ import * as StringMaster5000 from './StringMaster5000';
   *   Given a notification object, return ready-to-render strings
 **/
 export function arrayToMap(arr) {
-  var map = {};
+  var map = {}, curr;
 
-  arr.forEach(function(element) {
-    if (!map[element.sectionTitle]) map[element.sectionTitle] = [];
-    map[element.sectionTitle].push(element);
-  });
+  for (var i = 0; i < arr.length; i++) {
+    curr = arr[i];
+    if (!map[curr.sectionTitle]) map[curr.sectionTitle] = [];
+    map[curr.sectionTitle].push(curr);
+  }
 
   if (enableLogs) {
     console.log("Converting array:", arr);
@@ -62,10 +63,9 @@ export function formatNativeContacts(contacts, phoneNumbers) {
       stylizedPhone: StringMaster5000.stylizePhoneNumber(curr.phoneNumbers[0].number),
       pic: curr.thumbnailPath,
       type: "phone",
-      sectionTitle: "Phone Contacts",
+      sectionTitle: "Invite a Contact to Use Payper",
     }
 
-    //
     if (!_.includes(nums, c.phone)) arr.push(c);
     nums.push(c.phone);
   }
@@ -78,16 +78,31 @@ export function formatNativeContacts(contacts, phoneNumbers) {
 
 
 /**
-  *   Converts Payper contact JSON to array
+  *   Converts Firebase contactListen JSON to array of objects
 **/
-export function contactsToArray(contacts) {
+export function contactListToArray(options) {
+  var arr = [], curr;
+
+  for (var c in options.contacts) {
+    curr = options.contacts[c];
+    curr.uid = c;
+    curr.sectionTitle = (curr.type == "facebook") ? "Facebook Friends" : "Contacts";
+    arr.push(curr);
+  }
+
+  return arr;
+};
+
+
+/**
+  *   Converts an array of contact objects to an array of just phone numbers
+**/
+export function contactsArrayToNumbersArray(contacts) {
   var arr = [], curr;
 
   for (var c in contacts) {
     curr = contacts[c];
-    curr.uid = c;
-    curr.sectionTitle = "Facebook Friends";
-    arr.push(curr);
+    arr.push(curr.phone);
   }
 
   return arr;
@@ -100,13 +115,13 @@ export function contactsToArray(contacts) {
 export function globalUserListToArray(options) {
   var arr = [], curr;
 
-  console.log("ALL CONTACTS:", options.allContacts);
-
-  for (var u in options.users) {
-    curr = options.users[u];
-    curr.uid = u;
-    curr.sectionTitle = "Other Payper Users";
-    arr.push(curr);
+  for (var uid in options.users) {
+    if (uid != options.uid) {
+      curr = options.users[uid];
+      curr.uid = uid;
+      curr.sectionTitle = "Other Payper Users";
+      arr.push(curr);
+    }
   }
 
   return arr;
@@ -118,25 +133,41 @@ export function globalUserListToArray(options) {
 **/
 export function filterContacts(contacts, query) {
 
-  console.log("Filter contacts:\nContacts: " + contacts + "\nQuery: " + query);
-
   // Don't run the set through our regex if there's no query
   if (query === '') return contacts;
 
+  // Delete any trailing or leading whitespace
   query = query.toLowerCase().trim();
 
   // If user's first or last name contains the regex, add them to the filtered set
-  // (i flag ignores case)
+  //   - (i flag ignores case)
   const regex = new RegExp(query + '.+$', 'i');
   return contacts.filter(c =>
     c.first_name && c.first_name.search(regex) >= 0
     || c.last_name && c.last_name.search(regex) >= 0
     || (c.first_name + " " + c.last_name) && (c.first_name + " " + c.last_name).search(regex) >= 0
     || c.username && c.username.search(regex) >= 0
-
     || ((c.first_name) ? c.first_name.toLowerCase() == query : false)
     || ((c.last_name) ? c.last_name.toLowerCase() == query : false)
     || ((c.first_name + " " + c.last_name) ? (c.first_name + " " + c.last_name).toLowerCase() == query : false)
     || ((c.username) ? c.username.toLowerCase() == query : false)
   );
+};
+
+
+/**
+  *   Merges two arrays wih
+**/
+export function mergeArrays(arr1, arr2) {
+  // Combine arrays
+  var a = arr1.concat(arr2);
+
+  // Remove duplicate elements
+  for (var i = 0; i < a.length; ++i) {
+    for (var j = i + 1; j < a.length; ++j) {
+      if (a[i] === a[j]) a.splice(j--, 1);
+    }
+  }
+
+  return a;
 };

@@ -19,7 +19,13 @@ function mapStateToProps(state) {
 
 // Decide which action creators our component will receive as props
 function mapDispatchToProps(dispatch) {
-  return {}
+  return {
+
+    setCurrentUser: (user) => {
+      dispatch(setMain.user(user));
+    },
+
+  }
 }
 
 export default connect( mapStateToProps, mapDispatchToProps )( ProfileView );

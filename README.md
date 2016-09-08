@@ -17,6 +17,7 @@
 - [ ] Invites (direct)
 - [ ] App-wide validations (Bank Onboarding, Payper Account Creation, Pay & Request)
 - [ ] App-wide empty states (Tracking Page, Notifications, Payment History)
+- [ ] Design photo selector for profile picture upload
 
 ### Polish
 - [X] CreatePaymentView.js predictive search: limit predictions to 4
@@ -24,11 +25,12 @@
 - [X] Pass numNotifications to menu in sidebar and render preview indicator next to notifications lightbulb
 - [X] Apply fade animation to inner content during create account onboarding, not entire view
 - [X] Style 'Continue with Facebook' button
+- [X] Increase padding on "Continue without Facebook" text (difficult to press rn)
 - [ ] Fix loading for IAV
-- [ ] Increase padding on "Continue without Facebook" text (difficult to press rn)
 - [ ] Revamp loading screens
 - [ ] Get rid of ugly refresh on notifications indicator
 - [ ] Find a sleeker, more modern icon set
+- [ ] Fix issue where single ArrowNav's are slightly off-center
 
 ### Architecture
 **Refactor the following to fit new Firebase/Redux model:**
@@ -42,7 +44,7 @@
 - [X] "Runtime is not ready for debugging" randomly appears.  **This went away when I downgraded from Node 6.2.0 to 5.5.0**
 - [ ] "Severe Error, duplicates recorded in Firebase, with no auth information. To reproduce delete an id but not a users and Facebook id, or switch this around until you can get duplicate users through Facebook sign in or regular user sign in." https://github.com/facebook/react-native/issues/6682
 
-### Brady (MVP)
+### Brady
 - [X] Style payment invites
 - [X] Add confirmation message to cancel payment button
 - [X] Add instant re-render for 'Cancel Payment' action
@@ -69,11 +71,13 @@
 - [X] Add section headers to user ListView in UserSearch
 - [X] Fix bug where notifications indicator is not rendered as a perfect circle on smaller devices
 - [X] Add global user list to UserSearch (naive approach)
-- [ ] Add edit pages for profile attributes
+- [X] Hit `Lambda.updateContacts()` on load, updating user's contactList
+- [X] Add edit pages for profile attributes
+- [X] Redesign BankAccountsView
+- [X] Finish edit profile component
 - [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
 - [ ] Add an onPress destination to notifications
 - [ ] Create a PaymentSeries module, containing detailed information about the payment series, and the option to skip/reschedule payments
-- [ ] Redesign BankAccountsView
 
 ### MVP Usability and Design Bugs (Brady)
 - [X] Adjust CreatePayment flow so that after payment creation: payment creation => outgoing tab of payments view, request creating => incoming tab of payments view
@@ -81,41 +85,47 @@
 - [X] Change placeholder numbers for cost and number of payments to 0
 - [X] Change landing page options to just "Continue with Facebook" and "Continue without Facebook"
 - [X] Fix profile pic preview for non-Facebook accounts on 'Profile'
+- [X] Fix Incoming/Outgoing tab padding (need to be easier to press)
+- [X] Fix keyboard spacing on edit profile pages for small phones (add real header component to the modal)
+- [X] Transfer create payment flow to modal instead of separate scene
+- [ ] Fix ugly notification indicators
 
 ### MVP Logic Bugs (Brady)
 - [X] Fix bug where user state is not properly reset upon signing out and signing in with another account
 - [X] Fix bug where app crashes if an incoming payment is cancelled
 - [X] Fix bug where Incoming/Outgoing filter state is not saved during payment creation, resulting in Outgoing payments being rendered even though the Incoming tab is selected, and vice versa
 - [X] Fix bug where payment state is not reset after creating a payment
-- [ ] Fix bug where sign in sometimes fails
-- [ ] Fix bug where, upon Facebook sign in, user's session token is undefined on the add phone number screen
-- [ ] Fix bug where the invite via payment endpoint receives incorrect sender/recip traits
+- [X] Fix bug where, upon Facebook sign in, user's session token is undefined on the add phone number screen (Eric fixed)
+- [X] Fix bug where token doesn't refresh on launch, resulting in failed endpoint hits
+- [X] Fix bug where the invite via payment endpoint receives incorrect sender/recip traits
+- [X] Fix bug where users multiply in global user area of UserSearch (in listener, don't concatenate entire contactList with the current array, just new children)
+- [X] Fix bug where you can still press create payment confirmation button while it's sending and create multiple payments
+- [X] Don't render current user in UserSearch
+- [X] Don't show Facebook icon for non-Facebook users in UserSearchView confirmation
+- [X] Fix bug where sign in sometimes fails (tough to recreate, may be a non-issue)
+- [X] Make sure payments are deleting properly (sometimes throws this.props.invite is undefined)
+- [X] Listen to appFlags > numUnseenNotifications for notification indicator instead of counting them up in the front-end
+- [X] Research and resolve token refresh issue
+- [X] Fix duplicate user bug in global user search list
+- [X] Fix bug where "Purpose" text input does not save if the user has already pressed "Pay" or "Request" and is changing something before pressing "Confirm" (just don't update payment info until user presses confirm)
+- [X] Fix bug where active filter highlighting does not change accordingly after a payment is created
+- [X] Fix bug where session token sign in does not work for non-Facebook users (must manually sign in each launch
+- [ ] Don't render existing users in "Invite a Contact to Use Payper" section of UserSearch
+- [ ] Fix duplicate user bug in UserSearch
+- [ ] Sign-in success on second attempt looks whack
 
 ### Things I Need Vash For (Brady)
-- [ ] Fix bug where payment creation sometimes fails
-- [ ] Fix bug where inviting via payment exits before completing request
-- [ ] Create Lambda endpoint that returns a decrypted phoneNumber:uid list
-- [ ] Attach "type" to Firebase payment object when creating a new payment
-- [ ] Discuss backend logic for token refresh (Option 1: Create an endpoint called updateSessionToken that takes a new session token and an old session token, cycles the old token out, and returns a user object. Option 2: Completely handle refresh in the backend. Option 1 > Option 2, probably)
-- [ ] Discuss "Interaction Ledger"
-
-### Back-burner
-- [ ] Design photo selector for profile picture upload
-- [ ] Transfer create payment flow to modal instead of separate scene
-
-### 8/31 Hackathon
-- [ ] 1 Research and resolve token refresh issue
-- [ ] 2 Fix Incoming/Outgoing tab touchability
-- [ ] 3 Finish edit profile component
-- [ ] 4 Fix ugly notification indicators
+- [X] Fix bug where inviting via payment exits before completing request
+- [X] Attach "type" to Firebase payment object when creating a new payment
+- [X] Fix bug where payment creation sometimes fails
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
+- [X] Display funding source before payment creation (Groundwork is laid, just plug in data)
+- [X] FAQ
+- [X] Delete account button
 - [ ] Request permission for automatic monthly transactions
-- [ ] Display funding source before payment creation (Groundwork is laid, just plug in data)
 - [ ] Post initiation transfer time
-- [ ] Delete account button
-- [ ] FAQ
 - [ ] Support
 - [ ] Dispute Resolution
 

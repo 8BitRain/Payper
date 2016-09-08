@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS } from 'react-native';
+import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 // Helpers
@@ -9,6 +9,7 @@ import * as StringMaster5000 from '../../helpers/StringMaster5000';
 // Partial components
 import Footer from '../../components/Footer/Footer';
 import Transaction from '../../components/Previews/Transaction/Transaction';
+import CreatePayment from '../../modules/CreatePayment/CreatePaymentViewContainer';
 
 //Init
 import * as Init from '../../_init';
@@ -22,6 +23,7 @@ class Payments extends React.Component {
     super(props);
     this.state = {
       uid: "",
+      modalVisible: false,
     }
   }
 
@@ -47,6 +49,39 @@ class Payments extends React.Component {
         this.props.listen([incomingPayments, outgoingPayments, appFlags]);
       });
     }
+  }
+
+  _toggleModal(options) {
+    console.log("Toggled modal with options:", options);
+    if (options && options.activeFilter) this.props.setActiveFilter(options.activeFilter);
+    this.setState({ modalVisible: !this.state.modalVisible });
+    if(this.props.flags.onboarding_state == 'customer'){
+      Actions.BankOnboardingContainer();
+      console.log(this.props.currentUser.token);
+      this.props.setNewUserToken(this.props.currentUser.token);
+    }
+    if(this.props.flags.onboarding_state == 'bank'){
+      console.log("BANK STATE REACHED: " + this.props.startIav );
+      //Initiate IAV
+      this.props.setNewUserToken(this.props.currentUser.token);
+      var data = {
+        token: this.props.currentUser.token
+      };
+      var _this = this;
+      console.log("Beginning IAV Initiation");
+      Init.getIavToken(data, function(iavTokenRecieved, iavToken){
+        if(iavTokenRecieved){
+          console.log("SSN IAVTOKEN: " + JSON.stringify(iavToken));
+          //Will cause the IAV Token Page to be loaded
+          _this.props.setIav(iavToken.token);
+          Actions.BankOnboardingContainer();
+        }
+      });
+    }
+    if(this.props.flags.onboarding_state == 'complete'){
+      Actions.CreatePaymentViewContainer();
+    }
+
   }
 
   _renderEmptyState() {
@@ -94,8 +129,8 @@ class Payments extends React.Component {
   }
 
   _renderRow(payment) {
-    // console.log("%cRendering payment:", "color:green;font-weight:900;");
-    // console.log(payment);
+    console.log("%cRendering payment:", "color:green;font-weight:900;");
+    console.log(payment);
     return(
       <Transaction
         payment={payment}
@@ -121,7 +156,7 @@ class Payments extends React.Component {
               pid: payment.pid,
               token: this.props.currentUser.token,
               ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-              type: (payment.confirmed) ? "active" : (payment.invite) ? "invite" : "pending",
+              type: payment.type,
               flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
             })
           });
@@ -192,7 +227,10 @@ class Payments extends React.Component {
                   pid: payment.pid,
                   token: this.props.currentUser.token,
                   ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-                })
+                  type: payment.type,
+                  flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
+                  invite: (payment.type == "invite") ? true : false,
+                }),
               });
             }
           });
@@ -249,10 +287,25 @@ class Payments extends React.Component {
           <Footer
             callbackFeed={() => this.props.setActiveTab('global')}
             callbackTracking={() => this.props.setActiveTab('tracking')}
-            callbackPay={() =>{
-              this._verifyOnboardingStatus();
-            /*Actions.CreatePaymentViewContainer()*/}} />
+            callbackPay={() => this._toggleModal()} />
         </View>
+
+        { /* Modal containing create payment panel */ }
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={ () => alert("Closed modal") }>
+
+          { /* Lighten status bar text */ }
+          <StatusBar barStyle="light-content" />
+
+          <View style={{flex: 1.0}}>
+            <CreatePayment
+              {...this.props}
+              toggleModal={(options) => this._toggleModal(options)} />
+          </View>
+        </Modal>
 
       </View>
     );

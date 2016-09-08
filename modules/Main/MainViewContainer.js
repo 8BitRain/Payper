@@ -36,6 +36,7 @@ function mapStateToProps(state) {
     header: state.getIn(['main', 'header']),
     sideMenuIsOpen: state.getIn(['main', 'sideMenuIsOpen']),
     initialized: state.getIn(['main', 'initialized']),
+    nativeContacts: state.getIn(['main', 'nativeContacts']),
 
     // payments
     activeFilter: state.getIn(['payments', 'activeFilter']),
@@ -56,14 +57,11 @@ function mapDispatchToProps(dispatch) {
 
       Async.get('user', (user) => {
         if (!user) {
-
-          // Sign in failed
-          console.log("=-=-=-=-= Sign in failed =-=-=-=-=");
+          console.log("%cSign in failed.", "color:red;font-weight:900;");
 
           dispatch(set.signedIn(false));
           if (typeof callback == 'function') callback(false);
           else console.log("Callback is not a function.");
-
         } else {
 
           var parsedUser = JSON.parse(user);
@@ -91,15 +89,16 @@ function mapDispatchToProps(dispatch) {
             } else {
               console.log("%cSuccessfully got native contacts:", "color:green;font-weight:900;");
               console.log(contacts);
+
               // Format contacts then log them to AsyncStorage
               var c = SetMaster5000.formatNativeContacts(contacts);
               dispatch(set.nativeContacts(c));
-              Async.set('native_contacts', JSON.stringify(c));
+
+              // Extract just the phone numbers, then update user's contactList
+              var numbers = SetMaster5000.contactsArrayToNumbersArray(c);
+              Lambda.updateContacts({ phoneNumbers: numbers, token: parsedUser.token });
             }
           });
-
-          // Get decrypted phoneNumber:uid list
-
 
           if (typeof callback == 'function') callback(true);
           else console.log("Callback is not a function.");
@@ -110,29 +109,14 @@ function mapDispatchToProps(dispatch) {
 
     listen: (endpoints, callback) => {
 
-      console.log("\n\n\n\n\n\n\n\n\n\nGonna listen to:", endpoints);
-
       Firebase.listenTo(endpoints, (response) => {
-        console.log("FIREBASE RESPONSE:\n\n", response);
         switch (response.endpoint.split("/")[0]) {
 
           case "notifications":
-            var notifications = response.value,
-                numUnseen = 0;
-            // Count number of unseen notifications
-            for (var n in notifications) {
-              if (!notifications[n].seen) numUnseen++;
-            }
-            dispatch(set.numUnseenNotifications(numUnseen));
-            dispatch(set.notifications(notifications));
-
-            if (typeof callback == 'function') callback();
-            else console.log("%cCallback is not a function.", "color:red;font-weight:900;");
+            dispatch(set.notifications(response.value));
           break;
 
           case "appFlags":
-            console.log("Got app flags");
-            console.log(response);
             dispatch(set.flags(response.value));
           break;
 
@@ -204,6 +188,10 @@ function mapDispatchToProps(dispatch) {
       else if (page == "fundingSources") dispatch(set.header(Headers.fundingSourcesHeader()));
       else if (page == "profile") dispatch(set.header(Headers.profileHeader()));
       dispatch(set.currentPage(page));
+    },
+
+    setCurrentUser: (user) => {
+      dispatch(set.currentUser(user));
     },
 
   }

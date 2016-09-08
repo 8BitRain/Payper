@@ -1,0 +1,5 @@
+target 'Coincast' do
+
+pod 'Mixpanel'
+
+end 

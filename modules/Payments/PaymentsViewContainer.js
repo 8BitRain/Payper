@@ -112,6 +112,11 @@ function mapDispatchToProps(dispatch) {
       dispatch(set.activeTab(tab));
     },
 
+    setActiveFilter: (filter) => {
+      console.log("Setting active filter to", filter);
+      dispatch(set.activeFilter(filter));
+    },
+
     // 1) Remove payment from DataSource
     // 2) Hit cancelPayment Lambda endpoint
     cancelPayment: (options) => {
@@ -132,7 +137,7 @@ function mapDispatchToProps(dispatch) {
       if (options.flow == "out") dispatch(set.outgoingPayments(ds));
       else if (options.flow == "in") dispatch(set.incomingPayments(ds));
 
-      Lambda.cancelPayment({type: options.type, payment_id: options.pid, token: options.token});
+      Lambda.cancelPayment({ invite: options.invite, type: options.type, payment_id: options.pid, token: options.token });
     },
 
     confirmPayment: (options) => {
@@ -154,7 +159,7 @@ function mapDispatchToProps(dispatch) {
       }
 
       dispatch(set.outgoingPayments(ds));
-      Lambda.confirmPayment({payment_id: options.pid, token: options.token});
+      Lambda.confirmPayment({ type: options.type, payment_id: options.pid, token: options.token});
     },
 
     rejectPayment: (options) => {
