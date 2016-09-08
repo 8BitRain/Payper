@@ -7,7 +7,8 @@ const initialState = Map({
   activeFirebaseListeners: [],
   signedIn: false,
   currentUser: {},
-  flags: "",
+  bankAccounts: [],
+  flags: {},
   notifications: [],
   numUnseenNotifications: 0,
   header: {
@@ -35,6 +36,7 @@ const initialState = Map({
 const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
       SET_SIGNED_IN = 'SET_SIGNED_IN',
       SET_CURRENT_USER = 'SET_CURRENT_USER',
+      SET_BANK_ACCOUNTS = 'SET_BANK_ACCOUNTS',
       SET_FLAGS = 'SET_FLAGS'
       SET_NOTIFICATIONS = 'SET_NOTIFICATIONS',
       SET_NUM_UNSEEN_NOTIFICATIONS = 'SET_NUM_UNSEEN_NOTIFICATIONS',
@@ -50,6 +52,7 @@ const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
 export function activeFirebaseListeners(input) { return {type: SET_ACTIVE_FIREBASE_LISTENERS, input: input} };
 export function signedIn(input) { return {type: SET_SIGNED_IN, input: input} };
 export function currentUser(input) { return {type: SET_CURRENT_USER, input: input} };
+export function bankAccounts(input) { return {type: SET_BANK_ACCOUNTS, input: input} };
 export function flags(input) { return {type: SET_FLAGS, input: input} };
 export function signedIn(input) { return {type: SET_SIGNED_IN, input: input} };
 export function notifications(input) { return {type: SET_NOTIFICATIONS, input: input} };
@@ -79,6 +82,10 @@ export default function MainReducer(state = initialState, action = {}) {
       break;
     case SET_CURRENT_USER:
       var newState = state.set('currentUser', action.input);
+      return newState;
+      break;
+    case SET_BANK_ACCOUNTS:
+      var newState = state.set('bankAccounts', action.input);
       return newState;
       break;
     case SET_FLAGS:

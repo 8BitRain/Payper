@@ -29,6 +29,7 @@ function mapStateToProps(state) {
     activeFirebaseListeners: state.getIn(['main', 'activeFirebaseListeners']),
     signedIn: state.getIn(['main', 'signedIn']),
     currentUser: state.getIn(['main', 'currentUser']),
+    bankAccounts: state.getIn(['main', 'bankAccounts']),
     currentPage: state.getIn(['main', 'currentPage']),
     flags: state.getIn(['main', 'flags']),
     notifications: state.getIn(['main', 'notifications']),
@@ -100,6 +101,27 @@ function mapDispatchToProps(dispatch) {
             }
           });
 
+          // Get user's funding source
+          Lambda.getFundingSource({ token: parsedUser.token }, (res) => {
+            if (res.body) {
+              var bankAccounts = [],
+                  account = {
+                    name: (res.body.name) ? res.body.name : "Nameless Account",
+                    bank: "Unknown",
+                    accountNumber: "Unkown",
+                    active: true,
+                    status: res.body.status,
+                    type: res.body.type,
+                    id: res.body.id,
+                    createdAt : res.body.created,
+                    icon: "bank",
+                  };
+
+              bankAccounts.push(account);
+              dispatch(set.bankAccounts(bankAccounts));
+            }
+          });
+
           if (typeof callback == 'function') callback(true);
           else console.log("Callback is not a function.");
         }
@@ -113,11 +135,13 @@ function mapDispatchToProps(dispatch) {
         switch (response.endpoint.split("/")[0]) {
 
           case "notifications":
-            dispatch(set.notifications(response.value));
+            if (response.value) dispatch(set.notifications(response.value));
+            else console.log("%c" + response.endpoint + " is null", "color:red;font-weight:900;");
           break;
 
           case "appFlags":
-            dispatch(set.flags(response.value));
+            if (response.value) dispatch(set.flags(response.value));
+            else console.log("%c" + response.endpoint + " is null", "color:red;font-weight:900;");
           break;
 
         }
@@ -136,6 +160,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(set.activeFirebaseListeners([]));
       dispatch(set.signedIn(false));
       dispatch(set.currentUser({}));
+      dispatch(set.bankAccounts([]));
       dispatch(set.flags(""));
       dispatch(set.notifications([]));
       dispatch(set.numUnseenNotifications(0));

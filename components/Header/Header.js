@@ -154,7 +154,7 @@ function getSettingsIcon(callback, numNotifications) {
   return(
     <Button onPress={() => {callback()}}>
       <Entypo style={styles.iconSettings} name="menu" size={25} color={colors.white}/>
-      { (numNotifications == 0) ? null :
+      { (!numNotifications || numNotifications == 0) ? null :
         <View style={notificationStyles.numNotificationsWrap}>
           <Text style={notificationStyles.numNotificationsText}>{ numNotifications }</Text>
         </View>

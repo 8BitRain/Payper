@@ -21,25 +21,8 @@ class FundingSources extends React.Component {
 
     this.state = {
       empty: true,
-      fundingSources: ds.cloneWithRows([
-        {
-          name: "Checking Account",
-          bank: "UW Credit Union",
-          accountNumber: "********3918",
-          icon: "bank",
-          active: false,
-        },
-        {
-          name: "Savings Account",
-          bank: "Chase",
-          accountNumber: "********5792",
-          icon: "bank",
-          active: true,
-        }
-      ]),
+      fundingSources: ds.cloneWithRows(this.props.bankAccounts),
     };
-
-    Lambda.getFundingSource({ token: this.props.currentUser.token });
   }
 
 

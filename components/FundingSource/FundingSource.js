@@ -80,25 +80,20 @@ class FundingSource extends React.Component {
 
         <View style={styles.wrap}>
 
-          { /* Name */
+          { /* Account name */ }
+          <Text style={styles.name}>{ this.props.fundingSource.name }</Text>
+
+          { /* Is this the currently active bank account? */
             (this.props.fundingSource.active)
-              ? <Text style={styles.name}>
-                  <Text>
-                    { this.props.fundingSource.name }
-                    { " " }
-                    <Entypo name="star" size={18} color={colors.alertYellow} />
-                    { " " }
-                  </Text>
-                  <Text style={[styles.text, {color: colors.alertYellow, fontWeight: '400'}]}>
-                    (Active)
-                  </Text>
+              ? <Text style={[styles.text, {color: colors.alertYellow, fontWeight: '400'}]}>
+                  <Entypo name="star" size={18} color={colors.alertYellow} />
+                  { " (Active)" }
                 </Text>
-              : <Text style={styles.name}>{ this.props.fundingSource.name }</Text>
-          }
+              : null }
 
           { /* Bank Name */ }
           <Text style={styles.text}>
-            { this.props.fundingSource.bank }
+            Bank: { this.props.fundingSource.bank }
           </Text>
 
           { /* Account number (hidden) */ }

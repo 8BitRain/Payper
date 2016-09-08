@@ -165,7 +165,10 @@ export function mergeArrays(arr1, arr2) {
   // Remove duplicate elements
   for (var i = 0; i < a.length; ++i) {
     for (var j = i + 1; j < a.length; ++j) {
-      if (a[i] === a[j]) a.splice(j--, 1);
+      var bothHaveUIDs = a[i].uid && a[j].uid,
+          UIDsMatch = a[i].uid === a[j].uid,
+          phoneNumbersMatch = a[i].phone === a[j].phone;
+      if (bothHaveUIDs && UIDsMatch) a.splice(j--, 1);
     }
   }
 
