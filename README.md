@@ -112,10 +112,10 @@
 - [X] Fix bug where session token sign in does not work for non-Facebook users (must manually sign in each launch
 - [X] Fix bug where empty notification indicator is rendered in sidebar if user has zero unseen notifications
 - [ ] Don't render existing users in "Invite a Contact to Use Payper" section of UserSearch
-- [ ] Sign-in success on second attempt looks whack
 - [ ] Fix duplicate user bug in UserSearch
-- [ ] Refactor entire sign-in process (follow another React Native app's example)
 - [ ] Rethink handling contacts with multiple numbers (if more than one number, use the 'Mobile' number)
+- [ ] Sign-in success on second attempt looks whack
+- [ ] Refactor entire sign-in process (follow another React Native app's example)
 
 ### Things I Need Vash For (Brady)
 - [X] Fix bug where inviting via payment exits before completing request
