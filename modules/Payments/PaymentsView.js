@@ -287,7 +287,7 @@ class Payments extends React.Component {
           <Footer
             callbackFeed={() => this.props.setActiveTab('global')}
             callbackTracking={() => this.props.setActiveTab('tracking')}
-            callbackPay={() => this._toggleModal()} />
+            callbackPay={() => this._verifyOnboardingStatus()} />
         </View>
 
         { /* Modal containing create payment panel */ }
