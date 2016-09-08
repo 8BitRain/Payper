@@ -110,9 +110,12 @@
 - [X] Fix bug where "Purpose" text input does not save if the user has already pressed "Pay" or "Request" and is changing something before pressing "Confirm" (just don't update payment info until user presses confirm)
 - [X] Fix bug where active filter highlighting does not change accordingly after a payment is created
 - [X] Fix bug where session token sign in does not work for non-Facebook users (must manually sign in each launch
+- [X] Fix bug where empty notification indicator is rendered in sidebar if user has zero unseen notifications
 - [ ] Don't render existing users in "Invite a Contact to Use Payper" section of UserSearch
-- [ ] Fix duplicate user bug in UserSearch
 - [ ] Sign-in success on second attempt looks whack
+- [ ] Fix duplicate user bug in UserSearch
+- [ ] Refactor entire sign-in process (follow another React Native app's example)
+- [ ] Rethink handling contacts with multiple numbers (if more than one number, use the 'Mobile' number)
 
 ### Things I Need Vash For (Brady)
 - [X] Fix bug where inviting via payment exits before completing request
