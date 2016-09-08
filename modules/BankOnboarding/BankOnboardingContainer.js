@@ -53,7 +53,7 @@ export default connect(
               if(response.value != null){
                 if(response.value.iav != ""){
                   console.log("Starts IAV");
-                  dispatch(dispatchFunctions.setLoading(true));
+                  //dispatch(dispatchFunctions.setLoading(true));
                   dispatch(dispatchFunctions.setIav(true));
                   //break;
                 }

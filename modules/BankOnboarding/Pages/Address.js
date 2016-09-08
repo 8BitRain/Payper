@@ -255,7 +255,7 @@ class Address extends React.Component {
 
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>State</Text>
            <View>
-            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"WI"} onChangeText={(text) => {this.refs.picker.show(); this.stateInput = text; this.props.dispatchSetState(this.stateInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />
+            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"WI"} onChangeText={(text) => { this.stateInput = text; this.props.dispatchSetState(this.stateInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />
            </View>
 
            {/*<Picker
@@ -294,7 +294,7 @@ class Address extends React.Component {
              callbackRight={() => {this.onPressRight()}}
              callbackLeft={() => {this.onPressLeft()}}/>
          </Animated.View>
-         <View style={{marginBottom: 0}}>
+         {/*<View style={{marginBottom: 0}}>
            <Modal
               animationType={"slide"}
               transparent={true}
@@ -318,7 +318,7 @@ class Address extends React.Component {
 
             </Picker>
             </Modal>
-          </View>
+          </View> */}
 
        </View>
      );
