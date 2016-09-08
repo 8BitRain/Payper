@@ -46,25 +46,38 @@ function mapDispatchToProps(dispatch) {
   return {
     listen: (endpoints) => {
       Firebase.listenTo(endpoints, (response) => {
-        console.log("PAYMENTS VIEW CONTAINER RESPONSE: " + JSON.stringify(response));
-        console.log("PAYMENTS VIEW CONTAINER RESPONSE: " + JSON.stringify(response.key));
         switch (response.key) {
-          case "in":
-            // Tack payment ID on as prop of each payment object
-            for (var p in response.value) response.value[p].pid = p;
-
-            SetMaster5000.prioritizePayments({ payments: response.value, prioritize: ["gDNTMYEaHG"] });
-
-            if (response.value) dispatch(set.incomingPayments(response.value));
-            else console.log("%cIncoming payments are null.", "color:red;font-weight:700;");
-          break;
 
           case "out":
             // Tack payment ID on as prop of each payment object
             for (var p in response.value) response.value[p].pid = p;
 
-            if (response.value) dispatch(set.outgoingPayments(response.value));
-            else console.log("%cOutgoing payments are null.", "color:red;font-weight:700;");
+            // Convert from JSON to array and extract PID's of complete payments
+            var paymentArray = SetMaster5000.JSONToArray({ JSON: response.value }),
+                paymentsToPrioritize = SetMaster5000.extractCompletedPayments({ payments: paymentArray });
+
+            // Move complete payments to the front of array
+            var orderedPayments = (paymentsToPrioritize.length == 0) ? paymentArray : SetMaster5000.prioritizePayments({ payments: paymentArray, prioritize: paymentsToPrioritize });
+
+            // Persist payments to Redux store
+            if (response.value) dispatch(set.outgoingPayments(orderedPayments));
+            else console.log("%cIncoming payments are null.", "color:red;font-weight:700;");
+          break;
+
+          case "in":
+            // Tack payment ID on as prop of each payment object
+            for (var p in response.value) response.value[p].pid = p;
+
+            // Convert from JSON to array and extract PID's of complete payments
+            var paymentArray = SetMaster5000.JSONToArray({ JSON: response.value }),
+                paymentsToPrioritize = SetMaster5000.extractCompletedPayments({ payments: paymentArray });
+
+            // Move complete payments to the front of array
+            var orderedPayments = (paymentsToPrioritize.length == 0) ? paymentArray : SetMaster5000.prioritizePayments({ payments: paymentArray, prioritize: paymentsToPrioritize });
+
+            // Persist payments to Redux store
+            if (response.value) dispatch(set.incomingPayments(orderedPayments));
+            else console.log("%cIncoming payments are null.", "color:red;font-weight:700;");
           break;
 
           case "global":
@@ -72,12 +85,6 @@ function mapDispatchToProps(dispatch) {
             else console.log("%Global payments are null.", "color:red;font-weight:700;");
           break;
 
-        }
-        switch(response.endpoint.split("/")[0]){
-          case "appFlags":
-            console.log("customerStatus: " + JSON.stringify(response.value.onboarding_state));
-            //dispatch(set.flags(response.value));
-            break;
         }
       });
       dispatch(set.activeFirebaseListeners(endpoints));

@@ -20,10 +20,6 @@ const initialState = Map({
   startIav: ''
 });
 
-
-
-
-
 // Action types
 const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
       SET_INCOMING_PAYMENTS = 'SET_INCOMING_PAYMENTS',

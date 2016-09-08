@@ -177,20 +177,67 @@ export function mergeArrays(arr1, arr2) {
 
 
 /**
-  *   Given a ListView.DataSource of payments and a list of payment ID's, move
-  *   the specified payments to the front of the DataSource
+  *   Given a JSON of payments, convert the JSON to an array
 **/
-export function prioritizePayments(options) {
-  var curr;
+export function JSONToArray(options) {
+  if (!options || !options.JSON || options.JSON.length <= 0) return;
+
+  var arr = [],
+      curr;
+
+  for (var o in options.JSON) {
+    curr = options.JSON[o];
+    arr.push(curr);
+  }
+
+  return arr;
+};
+
+
+/**
+  *   Given an array of payments, return an array of the PID's of all (if any)
+  *   payment series that have reached completion.
+**/
+export function extractCompletedPayments(options) {
+  if (!options || !options.payments || options.payments.length <= 0) return [];
+
+  var arr = [],
+      curr;
 
   for (var p in options.payments) {
-    if (_.includes(options.prioritize, p)) {
+    curr = options.payments[p];
+    if (curr.payments == curr.paymentsMade) arr.push(curr.pid);
+  }
+
+  return arr;
+};
+
+
+/**
+  *   Given an array of payments and an array of payment ID's, move
+  *   the specified payments to the front of the array
+**/
+export function prioritizePayments(options) {
+  // If there are no payments to prioritize, return original payments right away
+  if (options.prioritize.length < 1) return options.payments;
+
+  var prioritizedPayments = [],
+      curr;
+
+  for (var p in options.payments) {
+    var isPrioritizedPayment = _.includes(options.prioritize, options.payments[p].pid);
+
+    if (isPrioritizedPayment) {
       curr = options.payments[p];
       console.log("Prioritizing", p);
       console.log("Payments before deletion", options.payments);
       delete options.payments[p];
       console.log("Payments after deletion", options.payments);
-      // options.payments
+      prioritizedPayments.push(curr);
     }
   }
+
+  var ahhh = prioritizedPayments.concat(options.payments);
+  console.log("Ordered array:", ahhh);
+  return ahhh;
 };
