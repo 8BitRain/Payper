@@ -208,8 +208,8 @@ class Payments extends React.Component {
     }
     if(this.props.flags.onboarding_state == 'bank'){
       console.log("BANK STATE REACHED: " + this.props.startIav );
-      //this.props.setIav("fish");
       //Initiate IAV
+      this.props.setNewUserToken(this.props.currentUser.token);
       var data = {
         token: this.props.currentUser.token
       };
