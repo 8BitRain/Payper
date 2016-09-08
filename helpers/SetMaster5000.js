@@ -225,19 +225,12 @@ export function prioritizePayments(options) {
       curr;
 
   for (var p in options.payments) {
-    var isPrioritizedPayment = _.includes(options.prioritize, options.payments[p].pid);
-
-    if (isPrioritizedPayment) {
+    if (_.includes(options.prioritize, options.payments[p].pid)) {
       curr = options.payments[p];
-      console.log("Prioritizing", p);
-      console.log("Payments before deletion", options.payments);
       delete options.payments[p];
-      console.log("Payments after deletion", options.payments);
       prioritizedPayments.push(curr);
     }
   }
 
-  var ahhh = prioritizedPayments.concat(options.payments);
-  console.log("Ordered array:", ahhh);
-  return ahhh;
+  return prioritizedPayments.concat(options.payments);
 };
