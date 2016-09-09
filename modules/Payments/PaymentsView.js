@@ -5,14 +5,13 @@ import { Actions } from 'react-native-router-flux';
 // Helpers
 import * as Alert from '../../helpers/Alert';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
+import * as Init from '../../_init';
+import * as Lambda from '../../services/Lambda';
 
 // Partial components
 import Footer from '../../components/Footer/Footer';
 import Transaction from '../../components/Previews/Transaction/Transaction';
 import CreatePayment from '../../modules/CreatePayment/CreatePaymentViewContainer';
-
-//Init
-import * as Init from '../../_init';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -51,9 +50,21 @@ class Payments extends React.Component {
     }
   }
 
+
+  _archiveCompletePayments(options) {
+    // Determine which payment set to look through
+    var payments = (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments._dataBlob.s1 : this.props.incomingPayments._dataBlob.s1,
+        curr;
+
+    // If a payment is complete, animate it out, then archive it
+    for (var p in payments) {
+      curr = payments[p];
+      if (curr.paymentsMade == curr.payments) Lambda.archivePayment({ payment_id: curr.pid, token: this.props.currentUser.token });
+    }
+  }
+
+
   _toggleModal(options) {
-    console.log("Toggled modal with options:", options);
-    if (options && options.activeFilter) this.props.setActiveFilter(options.activeFilter);
     this.setState({ modalVisible: !this.state.modalVisible });
     // if(this.props.flags.onboarding_state == 'customer'){
     //   Actions.BankOnboardingContainer();
@@ -271,6 +282,9 @@ class Payments extends React.Component {
 
 
   render() {
+
+    this._archiveCompletePayments();
+
     return(
       <View style={{flex: 1.0, backgroundColor: colors.white}}>
 

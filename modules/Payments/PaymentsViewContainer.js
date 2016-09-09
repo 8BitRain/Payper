@@ -24,7 +24,6 @@ function mapStateToProps(state) {
   return {
 
     // main
-    // currentUser: state.getIn(['main', 'currentUser']),
     header: state.getIn(['main', 'header']),
 
     // payments
@@ -36,7 +35,7 @@ function mapStateToProps(state) {
     activeFilter: state.getIn(['payments', 'activeFilter']),
     flags: state.getIn(['main', 'flags']),
     newUser: state.getIn(['createAccount', 'newUser']),
-    startIav: state.getIn(['bankOnboarding', 'startIav'])
+    startIav: state.getIn(['bankOnboarding', 'startIav']),
 
   }
 }

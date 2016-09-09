@@ -19,6 +19,7 @@
   *     💣  Delete user:           'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/delete'
   *     💣  Update phone contacts: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneContacts'
   *     💣  Update user info:      'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/update'
+  *     💣  Archive payment:       'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/archive'
   *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
   *
@@ -469,6 +470,30 @@ export function updateUser(options, callback) {
         if (typeof callback == 'function') callback(responseData);
       } else {
         console.log("Error updating user:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(responseData);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given a payment id (payment_id) and session token (token),
+  *   archive the specified payment
+**/
+export function archivePayment(options, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/archive", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Archive payment Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error archiving payment:", responseData.errorMessage);
         if (typeof callback == 'function') callback(responseData);
       }
     })
