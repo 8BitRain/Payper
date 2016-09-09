@@ -3,7 +3,7 @@ import * as dispatchFunctions from  './BankOnboardingState';
 import BankOnboardingView from './BankOnboardingView';
 import Validators from '../../helpers/validators';
 import * as Firebase from '../../services/Firebase';
-import Actions from 'react-native-router-flux';
+import {Actions} from 'react-native-router-flux';
 
 /**
   *   Connect function for BankOnboardingView.js
@@ -57,49 +57,25 @@ export default connect(
                   dispatch(dispatchFunctions.setIav(response.value.iav));
                   //break;
                 }
-                //Go From IAV to MainViewContainer
-                /*if(response.value.fundingSourceAdded != "undefined"){
-                  if(response.value.fundingSourceAdded == true){
-                    dispatch(dispatchFunctions.setMain(response.value.fundingSourceAdded));
-                    //break;
-                  }
-                }*/
               }
               break;
             case "appFlags":
               if(response.value != null){
-                console.log("onboarding_state: " + response.value.onboarding_state);
+                //console.log("onboarding_state: " + response.value.onboarding_state);
                 if(response.value.micro_deposit_flow == true){
                   console.log("Microdeposits flow is true");
                   dispatch(dispatchFunctions.setVerifyMicroDeposit(true));
-                } else{
-
-                  console.log("Microdeposits flow is false");
+                  break;
                 }
 
                if(response.value.onboarding_state == "complete"){
                 console.log("Move to app");
-                dispatch(dispatchFunctions.setMain(true));
-                //Actions.MainViewContainer();
+                Actions.MainViewContainer();
+                break;
                }
               }
               break;
           }
-
-          /*switch (response.value.value ) {
-            case "IAV":
-            if(response.value != "null"){
-              if(response.value.iav != null){
-                console.log(response.value.iav);
-                dispatch(dispatchFunctions.setIav(response.value.iav));
-                break;
-              }
-              if(response.value.fundingSourceAdded != "null"){
-                console.log("Funding Source Added");
-                Actions.MainViewController();
-              }
-            }
-          }*/
         });
           dispatch(dispatchFunctions.activeFirebaseListeners(endpoints));
         },

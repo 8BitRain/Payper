@@ -48,7 +48,7 @@ class SSN extends React.Component {
      }*/
 
      // Props for temporary input storage
-     this.SSNInput = "";
+     this.SSNInput = this.props.dwollaCustomer.ssn;
      this.uid = "";
 
      // Props to be passed to the header
@@ -60,6 +60,7 @@ class SSN extends React.Component {
          "closeIcon": false
        },
        index: 3,
+       title: "Customer Verfication",
        numCircles: 4
      };
 
@@ -168,7 +169,7 @@ class SSN extends React.Component {
 
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>SSN</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={""} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.ssn} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
          </View>
 
            { /* Arrow nav buttons */ }

@@ -33,7 +33,7 @@ class Dob extends React.Component {
      };
 
      // Props for temporary input storage
-     this.dobInput = "";
+     this.dobInput = this.props.dwollaCustomer.dob;
 
      this.state = {
        date:"1992-09-09"
@@ -48,6 +48,7 @@ class Dob extends React.Component {
          "closeIcon": false
        },
        index: 2,
+       title: "Customer Verfication",
        numCircles: 4
      };
 
@@ -96,7 +97,7 @@ class Dob extends React.Component {
          { /* Prompt and input field */ }
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Dob</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={"1994-09-09"} onChangeText={(text) => {this.dobInput = text; this.props.dispatchSetDob(this.dobInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"YYYY-MM-DD"} keyboardType="email-address" />
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.dob} onChangeText={(text) => {this.dobInput = text; this.props.dispatchSetDob(this.dobInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"YYYY-MM-DD"} keyboardType="email-address" />
            {/*<DatePicker
               style={{width: 200}}
               date={this.state.date}

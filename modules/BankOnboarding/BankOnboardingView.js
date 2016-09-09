@@ -76,6 +76,7 @@ const BankOnboardingView = React.createClass({
             return(
               <BasicInfo
                 newUser={this.props.newUser}
+                dwollaCustomer={this.props.dwollaCustomer}
                 dispatchSetFirstName={this.props.dispatchSetFirstName}
                 dispatchSetLastName={this.props.dispatchSetLastName}
                 dispatchSetEmail={this.props.dispatchSetEmail}
@@ -111,6 +112,7 @@ const BankOnboardingView = React.createClass({
                 addressValidations = {this.props.addressValidations}
                 cityValidations = {this.props.cityValidations}
                 zipValidations = {this.props.zipValidations}
+                dwollaCustomer = {this.props.dwollaCustomer}
               />
             )
             break;
@@ -119,6 +121,7 @@ const BankOnboardingView = React.createClass({
               <Dob
                 dispatchSetDob={this.props.dispatchSetDob}
                 dispatchSetPageX={this.props.dispatchSetPageX}
+                dwollaCustomer={this.props.dwollaCustomer}
                 callbackClose={Actions.landingView}
               />
             )
@@ -160,7 +163,7 @@ const BankOnboardingView = React.createClass({
       )
     }
      if(this.props.startMain == true){
-      Actions.MainViewContainer()
+      //Actions.MainViewContainer()
       return(
         <LoadingView />
 
