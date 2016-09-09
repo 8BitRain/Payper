@@ -59,7 +59,9 @@ class Payments extends React.Component {
     // If a payment is complete, animate it out, then archive it
     for (var p in payments) {
       curr = payments[p];
-      if (curr.paymentsMade == curr.payments) Lambda.archivePayment({ payment_id: curr.pid, token: this.props.currentUser.token });
+      if (curr.paymentsMade == curr.payments) {
+        Lambda.archivePayment({ payment_id: curr.pid, token: this.props.currentUser.token });
+      }
     }
   }
 

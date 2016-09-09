@@ -75,10 +75,11 @@
 - [X] Add edit pages for profile attributes
 - [X] Redesign BankAccountsView
 - [X] Finish edit profile component
+- [X] When a payment completes, move it from payment flow to payment history in Firebase
+- [ ] Create a fading animation for completed payments
 - [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
 - [ ] Add an onPress destination to notifications
 - [ ] Create a PaymentSeries module, containing detailed information about the payment series, and the option to skip/reschedule payments
-- [ ] When a payment completes, move it to the top of the payments list and animate it out
 
 ### MVP Usability and Design Bugs (Brady)
 - [X] Adjust CreatePayment flow so that after payment creation: payment creation => outgoing tab of payments view, request creating => incoming tab of payments view
@@ -90,6 +91,7 @@
 - [X] Fix keyboard spacing on edit profile pages for small phones (add real header component to the modal)
 - [X] Transfer create payment flow to modal instead of separate scene
 - [ ] Fix ugly notification indicators (double digits and beyond look bad)
+- [ ] Add a confirmation alert for when non-Facebook users sign out
 
 ### MVP Logic Bugs (Brady)
 - [X] Fix bug where user state is not properly reset upon signing out and signing in with another account
