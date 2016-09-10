@@ -30,6 +30,8 @@ function mapStateToProps(state) {
     activeFirebaseListeners: state.getIn(['payments', 'activeFirebaseListeners']),
     incomingPayments: state.getIn(['payments', 'incomingPayments']),
     outgoingPayments: state.getIn(['payments', 'outgoingPayments']),
+    incomingPaymentsArray: state.getIn(['payments', 'incomingPaymentsArray']),
+    outgoingPaymentsArray: state.getIn(['payments', 'outgoingPaymentsArray']),
     globalPayments: state.getIn(['payments', 'globalPayments']),
     activeTab: state.getIn(['payments', 'activeTab']),
     activeFilter: state.getIn(['payments', 'activeFilter']),
@@ -59,7 +61,10 @@ function mapDispatchToProps(dispatch) {
             var orderedPayments = (paymentsToPrioritize.length == 0) ? paymentArray : SetMaster5000.prioritizePayments({ payments: paymentArray, prioritize: paymentsToPrioritize });
 
             // Persist payments to Redux store
-            if (response.value) dispatch(set.outgoingPayments(orderedPayments));
+            if (response.value) {
+              dispatch(set.outgoingPayments(orderedPayments));
+              dispatch(set.outgoingPaymentsArray(orderedPayments));
+            }
             else console.log("%cIncoming payments are null.", "color:red;font-weight:700;");
           break;
 
@@ -75,7 +80,10 @@ function mapDispatchToProps(dispatch) {
             var orderedPayments = (paymentsToPrioritize.length == 0) ? paymentArray : SetMaster5000.prioritizePayments({ payments: paymentArray, prioritize: paymentsToPrioritize });
 
             // Persist payments to Redux store
-            if (response.value) dispatch(set.incomingPayments(orderedPayments));
+            if (response.value) {
+              dispatch(set.incomingPayments(orderedPayments));
+              dispatch(set.incomingPaymentsArray(orderedPayments));
+            }
             else console.log("%cIncoming payments are null.", "color:red;font-weight:700;");
           break;
 
@@ -136,15 +144,20 @@ function mapDispatchToProps(dispatch) {
       }
 
       var ds = options.ds._dataBlob.s1;
-      for (var p in ds) if (p == options.pid) delete ds[p];
+      for (var p in ds) if (ds[p].pid == options.pid) delete ds[p];
 
       if (enableLogs) {
         console.log("%cNew data source:", "color:blue;font-weight:900;");
         console.log(ds);
       }
 
-      if (options.flow == "out") dispatch(set.outgoingPayments(ds));
-      else if (options.flow == "in") dispatch(set.incomingPayments(ds));
+      if (options.flow == "out") {
+        dispatch(set.outgoingPayments(ds));
+        dispatch(set.outgoingPaymentsArray(ds));
+      } else if (options.flow == "in") {
+        dispatch(set.incomingPayments(ds));
+        dispatch(set.incomingPaymentsArray(ds));
+      }
 
       Lambda.cancelPayment({ invite: options.invite, type: options.type, payment_id: options.pid, token: options.token });
     },
@@ -157,7 +170,7 @@ function mapDispatchToProps(dispatch) {
       }
 
       var ds = options.ds._dataBlob.s1;
-      for (var p in ds) if (p == options.pid) {
+      for (var p in ds) if (ds[p].pid == options.pid) {
         if (enableLogs) console.log("Row to edit: " + (ds[p]));
         ds[p].confirmed = true;
       };
@@ -179,7 +192,7 @@ function mapDispatchToProps(dispatch) {
       }
 
       var ds = options.ds._dataBlob.s1;
-      for (var p in ds) if (p == options.pid) {
+      for (var p in ds) if (ds[p].pid == options.pid) {
         if (enableLogs) console.log("Row to edit: " + (ds[p]));
         delete ds[p];
       };

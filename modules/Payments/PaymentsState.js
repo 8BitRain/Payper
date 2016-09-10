@@ -11,6 +11,8 @@ const initialState = Map({
   activeFirebaseListeners: [],
   incomingPayments: EMPTY_DATA_SOURCE.cloneWithRows([]),
   outgoingPayments: EMPTY_DATA_SOURCE.cloneWithRows([]),
+  incomingPaymentsArray: [],
+  outgoingPaymentsArray: [],
   globalPayments: EMPTY_DATA_SOURCE.cloneWithRows([]),
   isEmpty: true,
   activeTab: "tracking",
@@ -24,6 +26,8 @@ const initialState = Map({
 const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
       SET_INCOMING_PAYMENTS = 'SET_INCOMING_PAYMENTS',
       SET_OUTGOING_PAYMENTS = 'SET_OUTGOING_PAYMENTS',
+      SET_INCOMING_PAYMENTS_ARRAY = 'SET_INCOMING_PAYMENTS_ARRAY',
+      SET_OUTGOING_PAYMENTS_ARRAY = 'SET_OUTGOING_PAYMENTS_ARRAY',
       SET_GLOBAL_PAYMENTS = 'SET_GLOBAL_PAYMENTS',
       SET_IS_EMPTY = 'SET_IS_EMPTY',
       SET_ACTIVE_TAB = 'SET_ACTIVE_TAB',
@@ -35,6 +39,8 @@ const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
 export function activeFirebaseListeners(input) { return {type: SET_ACTIVE_FIREBASE_LISTENERS, input: input} };
 export function incomingPayments(input) { return {type: SET_INCOMING_PAYMENTS, input: EMPTY_DATA_SOURCE.cloneWithRows(input)} };
 export function outgoingPayments(input) { return {type: SET_OUTGOING_PAYMENTS, input: EMPTY_DATA_SOURCE.cloneWithRows(input)} };
+export function incomingPaymentsArray(input) { return {type: SET_INCOMING_PAYMENTS_ARRAY, input: input} };
+export function outgoingPaymentsArray(input) { return {type: SET_OUTGOING_PAYMENTS_ARRAY, input: input} };
 export function globalPayments(input) { return {type: SET_GLOBAL_PAYMENTS, input: EMPTY_DATA_SOURCE.cloneWithRows(input)} };
 export function isEmpty(input) { return {type: SET_IS_EMPTY, input: input} };
 export function activeTab(input) { return {type: SET_ACTIVE_TAB, input: input} };
@@ -61,6 +67,14 @@ export default function PaymentsReducer(state = initialState, action = {}) {
       break;
     case SET_OUTGOING_PAYMENTS:
       var newState = state.set('outgoingPayments', action.input);
+      return newState;
+      break;
+    case SET_INCOMING_PAYMENTS_ARRAY:
+      var newState = state.set('incomingPaymentsArray', action.input);
+      return newState;
+      break;
+    case SET_OUTGOING_PAYMENTS_ARRAY:
+      var newState = state.set('outgoingPaymentsArray', action.input);
       return newState;
       break;
     case SET_GLOBAL_PAYMENTS:

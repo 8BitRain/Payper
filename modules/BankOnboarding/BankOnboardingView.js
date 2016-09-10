@@ -90,7 +90,12 @@ class LoadingView extends React.Component {
     );
   }
 }
-const BankOnboardingView = React.createClass({
+
+class BankOnboardingView extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   render() {
     if(this.props.startIav == '' && this.props.startMain == false){
         console.log("BankOnboardingView: token: " + this.props.newUser.token);
@@ -173,6 +178,6 @@ const BankOnboardingView = React.createClass({
       )
     }
   }
-});
+};
 
 export default BankOnboardingView;

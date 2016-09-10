@@ -27,6 +27,16 @@ the Redux global state
 2. Stores the 'signedIn' boolean in the 'main' section of the Redux global state
   * `state.getIn(['main', 'signedIn'])`
 
+3. Gets decrypted phone number and email address and tacks them on to the
+currentUser object
+
+4. Gets user's native phone contacts and triggers a backend contact scan
+
+5. Gets user's funding sources
+
+
+
+
 
 #### startListening()
 1. Activates Firebase listeners on the signed in user's notification list and app flags

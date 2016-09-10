@@ -12,6 +12,8 @@ import * as Lambda from '../../services/Lambda';
 import Footer from '../../components/Footer/Footer';
 import Transaction from '../../components/Previews/Transaction/Transaction';
 import CreatePayment from '../../modules/CreatePayment/CreatePaymentViewContainer';
+import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingContainer';
+import DynamicListView from '../../modules/DynamicListView/DynamicListView';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -119,12 +121,23 @@ class Payments extends React.Component {
     if (ds && ds.getRowCount() > 0 && ds._cachedRowCount != 0) {
       return(
         <View style={{flex: 1.0}}>
-          <ListView
-            dataSource={ds}
-            renderRow={this._renderRow.bind(this)}
-            renderFooter={this._renderFooter.bind(this)}
-            renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-            enableEmptySections />
+
+
+          <DynamicListView
+            dataSourceArray={(this.props.activeFilter == "incoming") ? this.props.incomingPaymentsArray : this.props.outgoingPaymentsArray}
+            getRowContent={this._getRowContent.bind(this)} />
+
+
+            { /*
+              <ListView
+                dataSource={ds}
+                renderRow={this._renderRow.bind(this)}
+                renderFooter={this._renderFooter.bind(this)}
+                renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+                enableEmptySections />
+            */ }
+
+
         </View>
       );
     }
@@ -140,21 +153,21 @@ class Payments extends React.Component {
     );
   }
 
-  _renderRow(payment) {
+  _getRowContent(options) {
     console.log("%cRendering payment:", "color:green;font-weight:900;");
-    console.log(payment);
+    console.log(options);
     return(
       <Transaction
-        payment={payment}
+        payment={options.payment}
         out={this.props.activeFilter == "outgoing"}
         callbackCancel={() => {
           // Define strings to be displayed in alert
-          var firstName = (this.props.activeFilter == "outgoing") ? payment.recip_name.split(" ")[0] : payment.sender_name.split(" ")[0],
-              purpose = StringMaster5000.formatPurpose(payment.purpose),
+          var firstName = (this.props.activeFilter == "outgoing") ? options.payment.recip_name.split(" ")[0] : options.payment.sender_name.split(" ")[0],
+              purpose = StringMaster5000.formatPurpose(options.payment.purpose),
               message;
 
           // Concatenate strings depending on payment flow direction
-          if (this.props.currentUser.uid == payment.sender_id) message = "You'll stop paying " + firstName + " " + purpose;
+          if (this.props.currentUser.uid == options.payment.sender_id) message = "You'll stop paying " + firstName + " " + purpose;
           else message = firstName + " will stop paying you " + purpose;
 
           // Alert the user
@@ -164,18 +177,21 @@ class Payments extends React.Component {
             cancelMessage: "Nevermind",
             confirmMessage: "Yes please",
             cancel: () => console.log("Nevermind"),
-            confirm: () => this.props.cancelPayment({
-              pid: payment.pid,
-              token: this.props.currentUser.token,
-              ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-              type: payment.type,
-              flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
-            })
+            confirm: () => {
+              options.deleteRow();
+              this.props.cancelPayment({
+                pid: options.payment.pid,
+                token: this.props.currentUser.token,
+                ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
+                type: options.payment.type,
+                flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
+              });
+            }
           });
         }}
         callbackConfirm={() => {
-          var firstName = payment.recip_name.split(" ")[0],
-              purpose = StringMaster5000.formatPurpose(payment.purpose);
+          var firstName = options.payment.recip_name.split(" ")[0],
+              purpose = StringMaster5000.formatPurpose(options.payment.purpose);
 
           // Alert the user
           Alert.confirmation({
@@ -185,7 +201,7 @@ class Payments extends React.Component {
             confirmMessage: "Yes",
             cancel: () => console.log("Nevermind"),
             confirm: () => this.props.confirmPayment({
-              pid: payment.pid,
+              pid: options.payment.pid,
               token: this.props.currentUser.token,
               ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
             }),
@@ -194,8 +210,8 @@ class Payments extends React.Component {
         callbackReject={() => {
           console.log("Rejecting payment");
 
-          var firstName = payment.recip_name.split(" ")[0],
-              purpose = StringMaster5000.formatPurpose(payment.purpose);
+          var firstName = options.payment.recip_name.split(" ")[0],
+              purpose = StringMaster5000.formatPurpose(options.payment.purpose);
 
           // Alert the user
           Alert.confirmation({
@@ -205,14 +221,13 @@ class Payments extends React.Component {
             confirmMessage: "Yes",
             cancel: () => console.log("Nevermind"),
             confirm: () => this.props.rejectPayment({
-              pid: payment.pid,
+              pid: options.payment.pid,
               token: this.props.currentUser.token,
               ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
             }),
           });
         }}
         callbackMenu={() => {
-          console.log("payment:", payment);
           ActionSheetIOS.showActionSheetWithOptions({
             options: ['Cancel Payment Series', 'Nevermind'],
             cancelButtonIndex: 1
@@ -220,13 +235,22 @@ class Payments extends React.Component {
           (buttonIndex) => {
             if (buttonIndex == 0) {
               // Define strings to be displayed in alert
-              var firstName = (this.props.activeFilter == "outgoing") ? payment.recip_name.split(" ")[0] : payment.sender_name.split(" ")[0],
-                  purpose = StringMaster5000.formatPurpose(payment.purpose),
+              var firstName = (this.props.activeFilter == "outgoing") ? options.payment.recip_name.split(" ")[0] : options.payment.sender_name.split(" ")[0],
+                  purpose = StringMaster5000.formatPurpose(options.payment.purpose),
                   message;
 
               // Concatenate strings depending on payment flow direction
-              if (this.props.currentUser.uid == payment.sender_id) message = "You'll stop paying " + firstName + " " + purpose;
+              if (this.props.currentUser.uid == options.payment.sender_id) message = "You'll stop paying " + firstName + " " + purpose;
               else message = firstName + " will stop paying you " + purpose;
+
+              console.log("Would cancel payment:", {
+                pid: options.payment.pid,
+                token: this.props.currentUser.token,
+                ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
+                type: options.payment.type,
+                flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
+                invite: (options.payment.type == "invite") ? true : false,
+              });
 
               // Alert the user
               Alert.confirmation({
@@ -235,20 +259,24 @@ class Payments extends React.Component {
                 cancelMessage: "Nevermind",
                 confirmMessage: "Yes please",
                 cancel: () => console.log("Nevermind"),
-                confirm: () => this.props.cancelPayment({
-                  pid: payment.pid,
-                  token: this.props.currentUser.token,
-                  ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-                  type: payment.type,
-                  flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
-                  invite: (payment.type == "invite") ? true : false,
-                }),
+                confirm: () => {
+                  options.deleteRow();
+                  // this.props.cancelPayment({
+                  //   pid: options.payment.pid,
+                  //   token: this.props.currentUser.token,
+                  //   ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
+                  //   type: options.payment.type,
+                  //   flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
+                  //   invite: (options.payment.type == "invite") ? true : false,
+                  // });
+                },
               });
             }
           });
         }}/>
     );
   }
+
 
   _verifyOnboardingStatus(){
     if(this.props.flags.onboarding_state == 'customer'){
@@ -277,10 +305,7 @@ class Payments extends React.Component {
     if(this.props.flags.onboarding_state == 'complete'){
       Actions.CreatePaymentViewContainer();
     }
-
-
   }
-
 
 
   render() {
@@ -316,9 +341,17 @@ class Payments extends React.Component {
           <StatusBar barStyle="light-content" />
 
           <View style={{flex: 1.0}}>
-            <CreatePayment
-              {...this.props}
-              toggleModal={(options) => this._toggleModal(options)} />
+
+            { /* If user has a verified funding source, display create payment
+                 flow. Otherwise, display bank account onboarding flow */
+              (this.props.flags.onboarding_state == "complete")
+                ? <CreatePayment
+                    {...this.props}
+                    toggleModal={(options) => this._toggleModal(options)} />
+                : <BankOnboarding
+                    {...this.props}
+                    toggleModal={(options) => this._toggleModal(options)} /> }
+
           </View>
         </Modal>
 
