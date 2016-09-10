@@ -45,15 +45,15 @@ export default connect(
   }),
   dispatch => ({
       listen(endpoints) {
-        var dispatchList = {
-         iav: false,
-         retry: false
-        };
+
         Firebase.listenTo(endpoints, (response) => {
           console.log("%cFirebase listener received:", "color:orange;font-weight:900;");
           console.log(response);
           console.log("Response Value: " + response.value);
-
+          var dispatchList = {
+           iav: false,
+           retry: false
+          };
           var fundingSourceAdded = false;
           //Go From (Bank Onboarding Container)SSN submit page to IAV
           console.log("Response endpoint: " + JSON.stringify(endpoints));
@@ -100,8 +100,6 @@ export default connect(
               }
               break;
           }
-
-        });
           /*Handle Dispatch Priorities that cause re-rendering in app*/
           if(dispatchList.iav == true && dispatchList.retry == true){
             /*Retry IAV takes priority. It is possible iav will never be hit
@@ -114,6 +112,8 @@ export default connect(
           if(dispatchList.iav == true && dispatchList.retry == false){
             dispatch(dispatchFunctions.setIav(response.value.iav));
           }
+        });
+
           dispatch(dispatchFunctions.activeFirebaseListeners(endpoints));
         },
 
