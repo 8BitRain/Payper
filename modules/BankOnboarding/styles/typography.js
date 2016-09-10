@@ -21,7 +21,8 @@ const typography = StyleSheet.create({
     paddingLeft: 10,
     color: "#53585E",
     borderRadius: 20,
-    borderWidth: 2
+    borderWidth: 2,
+    borderColor: "transparent"
   },
 
   stateInput: {

@@ -52,6 +52,46 @@ class LoadingView extends React.Component {
     );
   }
 }
+
+class RetryModal extends React.Component {
+  constructor(props) {
+    super(props);
+
+    // Props for animation
+    this.animationProps = {
+      fadeAnim: new Animated.Value(0) // init opacity 0
+    };
+    // Props to be passed to the header
+    this.headerProps = {
+      types: {
+        "paymentIcons": false,
+        "circleIcons": false,
+        "settingsIcon": false,
+        "closeIcon": true
+      },
+      index: 0,
+      title: "Retry Status",
+      numCircles: 0
+    };
+    this.state = {
+
+    }
+  }
+
+  render() {
+    return(
+      <View style={[containers.container, backgrounds.email]}>
+        <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
+        <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
+        <Text>Please double check the information you provided us!</Text>
+        </View>
+        </Animated.View>
+        <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+      </View>
+    );
+  }
+}
+
 const BankOnboardingView = React.createClass({
 
 
@@ -162,11 +202,16 @@ const BankOnboardingView = React.createClass({
           />
       )
     }
-     if(this.props.startMain == true){
+    if(this.props.startMain == true){
       //Actions.MainViewContainer()
       return(
         <LoadingView />
 
+      )
+    }
+    if(this.props.retry == true){
+      return (
+        <RetryModal />
       )
     }
     if (this.props.startVerifyMicroDeposit == true){

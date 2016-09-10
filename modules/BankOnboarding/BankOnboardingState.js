@@ -74,6 +74,9 @@ const initialState = Map({
     currentPagex: 0,
     startIav: '',
     startMain: false,
+    retry: false,
+    document: false,
+    suspended: false,
     startVerifyMicroDeposit: false,
     firebase_token: '',
     cphoneValidations,
@@ -105,6 +108,9 @@ const SET_PAGEX = 'SET_PAGEX',
       SET_CITY = 'SET_CITY',
       SET_DOB = 'SET_DOB',
       SET_SSN = 'SET_SSN',
+      SET_RETRY = 'SET_RETRY',
+      SET_DOCUMENT = 'SET_DOCUMENT',
+      SET_SUSPENDED = 'SET_SUSPENDED',
       SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
       SET_CPHONE_VALIDATIONS = 'SET_CPHONE_VALIDATIONS',
       SET_CFIRST_NAME_VALIDATIONS = 'SET_CFIRST_NAME_VALIDATIONS',
@@ -166,6 +172,18 @@ export function setIav(index){
 
 export function setMain(index){
   return { type: SET_START_MAIN, index: index};
+};
+
+export function setRetry(index){
+  return {type: SET_RETRY, index: index};
+};
+
+export function setDocument(index){
+  return {type: SET_DOCUMENT, index: index};
+};
+
+export function setSuspended(index){
+  return {type: SET_SUSPENDED, index: index};
 };
 
 export function setVerifyMicroDeposit(index){
@@ -304,6 +322,18 @@ export default function BankOnboardingReducer(state = initialState, action = {})
       break;
     case SET_DONE_LOADING:
       var newState = state.set('done_loading', action.index);
+      return newState;
+      break;
+    case SET_RETRY:
+      var newState = state.set('retry', action.index);
+      return newState;
+      break;
+    case SET_DOCUMENT:
+      var newState = state.set('document', action.index);
+      return newState;
+      break;
+    case SET_SUSPENDED:
+      var newState = state.set('suspended', action.index);
       return newState;
       break;
     case SET_EMAIL:

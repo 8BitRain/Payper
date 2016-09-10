@@ -34,11 +34,21 @@ export default connect(
     zipValidations: state.getIn(['bankOnboarding', 'zipValidations']),
     cityValidations: state.getIn(['bankOnboarding', 'cityValidations']),
     ssnValidations: state.getIn(['bankOnboarding', 'ssnValidations']),
-    basicInfoValidations: state.getIn(['bankOnboarding', 'basicInfoValidations'])
+    basicInfoValidations: state.getIn(['bankOnboarding', 'basicInfoValidations']),
+
+    /*Dwolla Customer Creation Status*/
+    retry: state.getIn(['bankOnboarding', 'retry']),
+    document: state.getIn(['bankOnboarding', 'document']),
+    suspended: state.getIn(['bankOnboarding', 'suspended'])
+
 
   }),
   dispatch => ({
       listen(endpoints) {
+        var dispatchList = {
+         iav: false,
+         retry: false
+        };
         Firebase.listenTo(endpoints, (response) => {
           console.log("%cFirebase listener received:", "color:orange;font-weight:900;");
           console.log(response);
@@ -49,34 +59,61 @@ export default connect(
           console.log("Response endpoint: " + JSON.stringify(endpoints));
           switch(response.endpoint.split("/")[0]){
             //Next try removing IAV case
-            case "IAV":
-              if(response.value != null){
-                if(response.value.iav != ""){
-                  console.log("Starts IAV");
-                  ////dispatch(dispatchFunctions.setLoading(true));
-                  dispatch(dispatchFunctions.setIav(response.value.iav));
-                  //break;
-                }
-              }
-              break;
             case "appFlags":
               if(response.value != null){
                 //console.log("onboarding_state: " + response.value.onboarding_state);
                 if(response.value.micro_deposit_flow == true){
                   console.log("Microdeposits flow is true");
                   dispatch(dispatchFunctions.setVerifyMicroDeposit(true));
+                  priorityDispatch = "microdeposits";
+                  break;
+                }
+
+                //load Retry screen
+                if(response.value.customer_status == "retry"){
+                  /*TODO Make sure you update SSN to reset retry to false before
+                  submitting data so you don't get stuck in a loop!*/
+                  //dispatch(dispatchFunctions.setRetry(true));
+                  dispatchList.retry = true;
+                  console.log("Loading Retry scenario");
                   break;
                 }
 
                if(response.value.onboarding_state == "complete"){
                 console.log("Move to app");
+                //priorityDispatch = "main"
                 Actions.MainViewContainer();
                 break;
                }
               }
               break;
+            case "IAV":
+              if(response.value != null){
+                if(response.value.iav != ""){
+                  console.log("Starts IAV");
+                  ////dispatch(dispatchFunctions.setLoading(true));
+                  //dispatch(dispatchFunctions.setIav(response.value.iav));
+                  //priorityDispatch = "iav"
+                  dispatchList.iav = true;
+                  //break;
+                }
+              }
+              break;
           }
+
         });
+          /*Handle Dispatch Priorities that cause re-rendering in app*/
+          if(dispatchList.iav == true && dispatchList.retry == true){
+            /*Retry IAV takes priority. It is possible iav will never be hit
+             if a user's customer is not sucessfully created*/
+            dispatch(dispatchFunctions.setRetry(true));
+          }
+          if(dispatchList.iav == false && dispatchList.retry == true){
+            dispatch(dispatchFunctions.setRetry(true));
+          }
+          if(dispatchList.iav == true && dispatchList.retry == false){
+            dispatch(dispatchFunctions.setIav(response.value.iav));
+          }
           dispatch(dispatchFunctions.activeFirebaseListeners(endpoints));
         },
 
@@ -158,8 +195,15 @@ export default connect(
       dispatchSetSSNValidations(input){
         dispatch(dispatchFunctions.setSSNValidations(input));
       },
-
-
+      dispatchSetRetry(input){
+        dispatch(dispatchFunctions.setRetry(input));
+      },
+      dispatchSetDocument(input){
+        dispatch(dispatchFunctions.setDocument(input));
+      },
+      dispatchSetSuspended(input){
+        dispatch(dispatchFunctions.setSuspended(input));
+      },
       dispatchSetBasicInfoValidations(input){
         dispatch(dispatchFunctions.setBasicInfoValidations(input));
       },
