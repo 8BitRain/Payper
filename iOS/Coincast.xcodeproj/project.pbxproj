@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -45,6 +44,7 @@
 		BDD47DA019984967A92C9E8E /* libRCTFBSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 674FC4C1A5164B63AAC1B3F5 /* libRCTFBSDK.a */; };
 		CE878DF8EF9242C0BD060B2A /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86FC5D349CB74BC48A9DC027 /* Foundation.ttf */; };
 		DE5D275BD2D74B9DA0A67C7E /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09C9369473164F0088059C2E /* FontAwesome.ttf */; };
+		EB075914BD004997B488E084 /* libRNBlur.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A82EB7F2E254AEC964379B9 /* libRNBlur.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +103,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 9350E0F11CE3B0920041D815;
 			remoteInfo = RCTFBSDK;
+		};
+		0794D0B01D7913B0000514DA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 05DEED7C1C69467E80D95BEF /* RNBlur.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A68BD7BC1BC31318005F02DF;
+			remoteInfo = RNBlur;
 		};
 		07B940E01D39A689001AD244 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -179,6 +186,7 @@
 		00E356EE1AD99517003FC87E /* Coincast.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Coincast.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* CoincastTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoincastTests.m; sourceTree = "<group>"; };
+		05DEED7C1C69467E80D95BEF /* RNBlur.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNBlur.xcodeproj; path = "../node_modules/react-native-blur/ios/RNBlur.xcodeproj"; sourceTree = "<group>"; };
 		07759FC31D42CEFC00D30AA2 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../../../FacebookSDKs-iOS-4.14.0/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		079D26551D430BD2000F7943 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../../FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		079D26561D430BD2000F7943 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../../FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
@@ -197,6 +205,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Coincast/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Coincast/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+		1A82EB7F2E254AEC964379B9 /* libRNBlur.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNBlur.a; sourceTree = "<group>"; };
 		232A65CC1D03D74E0084EA8E /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		232A65CD1D03D74E0084EA8E /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
 		232A65CE1D03D74E0084EA8E /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
@@ -255,6 +264,7 @@
 				4758F8C82D514374A4D82AE5 /* libRNVectorIcons.a in Frameworks */,
 				7F7D20D76850969CC184C697 /* libPods-Coincast.a in Frameworks */,
 				BDD47DA019984967A92C9E8E /* libRCTFBSDK.a in Frameworks */,
+				EB075914BD004997B488E084 /* libRNBlur.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,6 +340,14 @@
 			isa = PBXGroup;
 			children = (
 				0788F5841D42FEC000C3286E /* libRCTFBSDK.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0794D09F1D7913B0000514DA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0794D0B11D7913B0000514DA /* libRNBlur.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -431,6 +449,7 @@
 				2DB6499B06E14647AF2065C6 /* RNVectorIcons.xcodeproj */,
 				EBF3648A563841AA8435F446 /* RCTFBLogin.xcodeproj */,
 				BA269A03C12240D5BC1EFF49 /* RCTFBSDK.xcodeproj */,
+				05DEED7C1C69467E80D95BEF /* RNBlur.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -566,7 +585,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 9MXT88RAVX;
+						DevelopmentTeam = 943498UXPL;
 					};
 				};
 			};
@@ -639,6 +658,10 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
+					ProductGroup = 0794D09F1D7913B0000514DA /* Products */;
+					ProjectRef = 05DEED7C1C69467E80D95BEF /* RNBlur.xcodeproj */;
+				},
+				{
 					ProductGroup = 5988C64B1D25657400223434 /* Products */;
 					ProjectRef = 5988C64A1D25657400223434 /* RNMixpanel.xcodeproj */;
 				},
@@ -703,6 +726,13 @@
 			fileType = archive.ar;
 			path = libRCTFBSDK.a;
 			remoteRef = 0788F5831D42FEC000C3286E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0794D0B11D7913B0000514DA /* libRNBlur.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNBlur.a;
+			remoteRef = 0794D0B01D7913B0000514DA /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		07B940E11D39A689001AD244 /* libReact-Native-Webview-Bridge.a */ = {
@@ -922,6 +952,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Coincast;
@@ -942,6 +973,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -970,6 +1002,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-facebook-login/RCTFBLogin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../node_modules/react-native-blur/ios",
 				);
 				INFOPLIST_FILE = Coincast/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
@@ -979,7 +1012,11 @@
 					"-lc++",
 					"-licucore",
 				);
+<<<<<<< HEAD
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.PayperEricsPhone;
+=======
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Payper;
+>>>>>>> dwollaTest
 				PRODUCT_NAME = Coincast;
 				PROVISIONING_PROFILE = "";
 			};
@@ -1002,6 +1039,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-facebook-login/RCTFBLogin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../node_modules/react-native-blur/ios",
 				);
 				INFOPLIST_FILE = Coincast/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
@@ -1011,7 +1049,11 @@
 					"-lc++",
 					"-licucore",
 				);
+<<<<<<< HEAD
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.PayperEricsPhone;
+=======
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Payper;
+>>>>>>> dwollaTest
 				PRODUCT_NAME = Coincast;
 				PROVISIONING_PROFILE = "";
 			};
@@ -1060,6 +1102,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-facebook-login/RCTFBLogin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../node_modules/react-native-blur/ios",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -1104,6 +1147,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-facebook-login/RCTFBLogin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../node_modules/react-native-blur/ios",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;

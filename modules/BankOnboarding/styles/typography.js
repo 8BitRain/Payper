@@ -11,16 +11,26 @@ const typography = StyleSheet.create({
 
   // Varying font sizes (ex. "What's your email?")
   fontSizeTitle: { fontSize: 20,  color: "#F4F4F9" },
-  fontSizeNote: { fontSize: 10 },
+  fontSizeNote: { fontSize: 10,  },
   fontSizeError: { fontSize: 15},
 
   textInput: {
     height: 40,
-    backgroundColor: "transparent",
+    backgroundColor: "#D8D8D8",
     padding: 10,
-    paddingLeft: 0,
-    color: "#99ECFB"
+    paddingLeft: 10,
+    color: "#53585E",
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: "transparent"
   },
+
+  stateInput: {
+    height: 60,
+    color: "black",
+    fontSize: 16
+  },
+
 
   // Helper styles
   marginLeft: { marginLeft: 20 },

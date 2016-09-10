@@ -4,6 +4,7 @@ import {View, Text, Image} from "react-native";
 
 // Custom styles
 import colors from '../../styles/colors';
+import {BlurView, VibrancyView} from "react-native-blur";
 
 class Loading extends React.Component {
   constructor(props) {
@@ -31,8 +32,8 @@ class Loading extends React.Component {
 
       // Render success or error messages
       return(
-        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent}}>
-          <Text style={{fontFamily: 'Roboto', fontSize: 30, fontWeight: '300', color: colors.white}}>
+        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: "colors.accent"}}>
+          <Text style={{fontFamily: 'Roboto', fontSize: 30, fontWeight: '300', color: "colors.white"}}>
             {(this.props.success) ? this.props.msgSuccess : this.props.msgError }
           </Text>
         </View>
@@ -42,11 +43,11 @@ class Loading extends React.Component {
     // Render loading message
     else {
       return(
-        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent}}>
+        <VibrancyView blurType="light" style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent}}>    
           <Text style={{fontFamily: 'Roboto', fontSize: 30, fontWeight: '300', color: colors.white}}>
             {(this.props.msgLoading) ? this.props.msgLoading : "Loading" }
           </Text>
-        </View>
+        </VibrancyView>
       );
     }
   }

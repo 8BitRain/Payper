@@ -252,34 +252,42 @@ class Payments extends React.Component {
   }
 
   _verifyOnboardingStatus(){
+    console.log("FLAGS" + JSON.stringify(this.props.flags));
     if(this.props.flags.onboarding_state == 'customer'){
       Actions.BankOnboardingContainer();
       console.log(this.props.currentUser.token);
       this.props.setNewUserToken(this.props.currentUser.token);
     }
     if(this.props.flags.onboarding_state == 'bank'){
-      console.log("BANK STATE REACHED: " + this.props.startIav );
-      //Initiate IAV
-      this.props.setNewUserToken(this.props.currentUser.token);
-      var data = {
-        token: this.props.currentUser.token
-      };
-      var _this = this;
-      console.log("Beginning IAV Initiation");
-      Init.getIavToken(data, function(iavTokenRecieved, iavToken){
-        if(iavTokenRecieved){
-          console.log("SSN IAVTOKEN: " + JSON.stringify(iavToken));
-          //Will cause the IAV Token Page to be loaded
-          _this.props.setIav(iavToken.token);
+      if(this.props.flags.customer_status == 'verified'){
+        console.log("BANK STATE REACHED: " + this.props.startIav );
+        //Initiate IAV
+        this.props.setNewUserToken(this.props.currentUser.token);
+        var data = {
+          token: this.props.currentUser.token
+        };
+        var _this = this;
+        console.log("Beginning IAV Initiation");
+        Init.getIavToken(data, function(iavTokenRecieved, iavToken){
+          if(iavTokenRecieved){
+            console.log("SSN IAVTOKEN: " + JSON.stringify(iavToken));
+            //Will cause the IAV Token Page to be loaded
+            _this.props.setIav(iavToken.token);
+            Actions.BankOnboardingContainer();
+          }
+        });
+      } else if(this.props.flags.customer_status == 'retry'){
+          this.props.setRetry(true);
           Actions.BankOnboardingContainer();
-        }
-      });
+      } else if (this.props.flags.customer_status == 'document'){
+          this.props.setDocument(true);
+          Actions.BankOnboardingContainer();
+      }
+
     }
     if(this.props.flags.onboarding_state == 'complete'){
       Actions.CreatePaymentViewContainer();
     }
-
-
   }
 
 

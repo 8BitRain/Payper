@@ -57,9 +57,13 @@
    * simulator in the "Release" build configuration.
    */
 
+<<<<<<< HEAD
+  //jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+=======
 
   jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 
+>>>>>>> dwollaTest
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Coincast"
