@@ -8,6 +8,13 @@ import {Actions} from 'react-native-router-flux';
 /**
   *   Connect function for BankOnboardingView.js
 **/
+var dispatchList = {
+  iav: false,
+  retry: false,
+  suspended: false,
+  document: false,
+  doneListening: false
+}
 export default connect(
   state => ({
     /*Bank Onboarding State Variables*/
@@ -49,14 +56,15 @@ export default connect(
         Firebase.listenTo(endpoints, (response) => {
           console.log("%cFirebase listener received:", "color:orange;font-weight:900;");
           console.log(response);
-          console.log("Response Value: " + response.value);
-          var dispatchList = {
-           iav: false,
-           retry: false
-          };
+          console.log("Response Value: " + JSON.stringify(response.value));
+
+
           var fundingSourceAdded = false;
           //Go From (Bank Onboarding Container)SSN submit page to IAV
-          console.log("Response endpoint: " + JSON.stringify(endpoints));
+          console.log("Endpoint: " + JSON.stringify(endpoints));
+          console.log("Response Endpoint: " + JSON.stringify(response.endpoint));
+
+
           switch(response.endpoint.split("/")[0]){
             //Next try removing IAV case
             case "appFlags":
@@ -65,7 +73,6 @@ export default connect(
                 if(response.value.micro_deposit_flow == true){
                   console.log("Microdeposits flow is true");
                   dispatch(dispatchFunctions.setVerifyMicroDeposit(true));
-                  priorityDispatch = "microdeposits";
                   break;
                 }
 
@@ -73,9 +80,28 @@ export default connect(
                 if(response.value.customer_status == "retry"){
                   /*TODO Make sure you update SSN to reset retry to false before
                   submitting data so you don't get stuck in a loop!*/
-                  //dispatch(dispatchFunctions.setRetry(true));
                   dispatchList.retry = true;
+                  dispatch(dispatchFunctions.setRetry(true));
                   console.log("Loading Retry scenario");
+                  break;
+                }
+
+                if(response.value.customer_status == "document"){
+                  /*TODO Make sure you update SSN to reset retry to false before
+                  submitting data so you don't get stuck in a loop!*/
+                  dispatchList.document = true;
+                  dispatch(dispatchFunctions.setDocument(true));
+                  console.log("Loading Document scenario");
+                  break;
+                }
+
+                if(response.value.customer_status == "suspended"){
+                  /*TODO Make sure you update SSN to reset retry to false before
+                  submitting data so you don't get stuck in a loop!*/
+                  dispatchList.suspended = true;
+                  dispatch(dispatchFunctions.setSuspended(true));
+
+                  console.log("Loading Suspended scenario");
                   break;
                 }
 
@@ -86,33 +112,51 @@ export default connect(
                 break;
                }
               }
+              //Note there is a predictable flow in the way in which events are
+              //listed to/ For the time being appFlag events are the last events
+              //that we need to listen to.
+              dispatchList.doneListening = true;
               break;
             case "IAV":
               if(response.value != null){
                 if(response.value.iav != ""){
                   console.log("Starts IAV");
                   ////dispatch(dispatchFunctions.setLoading(true));
-                  //dispatch(dispatchFunctions.setIav(response.value.iav));
+                  if(!dispatchList.retry && !dispatchList.suspended && !dispatchList.document){
+                    dispatch(dispatchFunctions.setIav(response.value.iav));
+                  }
+
                   //priorityDispatch = "iav"
                   dispatchList.iav = true;
-                  //break;
+
                 }
               }
               break;
           }
           /*Handle Dispatch Priorities that cause re-rendering in app*/
-          if(dispatchList.iav == true && dispatchList.retry == true){
-            /*Retry IAV takes priority. It is possible iav will never be hit
-             if a user's customer is not sucessfully created*/
-            dispatch(dispatchFunctions.setRetry(true));
-          }
-          if(dispatchList.iav == false && dispatchList.retry == true){
-            dispatch(dispatchFunctions.setRetry(true));
-          }
-          if(dispatchList.iav == true && dispatchList.retry == false){
-            dispatch(dispatchFunctions.setIav(response.value.iav));
-          }
+          /*Retry IAV takes priority. It is possible iav will never be hit
+           if a user's customer is not sucessfully created*/
+          /*console.log(dispatchList);
+          if(dispatchList.doneListening){
+            if(dispatchList.iav == true && dispatchList.retry == true){
+
+
+              dispatch(dispatchFunctions.setRetry(true));
+            }
+            if(dispatchList.iav == false && dispatchList.retry == true){
+              dispatch(dispatchFunctions.setRetry(true));
+            }
+            if(dispatchList.iav == true && dispatchList.retry == false){
+              dispatch(dispatchFunctions.setIav(response.value.iav));
+            }
+          }*/
+
         });
+          console.log("DispatchList" + JSON.stringify(dispatchList));
+          //reset dispatchList
+          dispatchList.retry = false;
+          dispatchList.suspended = false;
+          dispatchList.document = false;
 
           dispatch(dispatchFunctions.activeFirebaseListeners(endpoints));
         },

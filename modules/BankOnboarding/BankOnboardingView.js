@@ -76,17 +76,95 @@ class RetryModal extends React.Component {
     this.state = {
 
     }
+
+    this.callbackClose = function() { this.props.callbackClose() };
   }
 
   render() {
     return(
-      <View style={[containers.container, backgrounds.email]}>
-        <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
-        <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
-        <Text>Please double check the information you provided us!</Text>
-        </View>
-        </Animated.View>
-        <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+      <View style={[containers.container, backgrounds.email, containers.quo]}>
+          <View style={{marginTop: 100}}>
+          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 0}]}>Please double check the information you provided us. Closing this screen will take you back to the input fields. </Text>
+          </View>
+            <Header callbackClose={() => {this.props.dispatchSetPageX(0, "backward", null); this.props.dispatchSetRetry(false); }} headerProps={this.headerProps} />
+      </View>
+    )
+  }
+}
+
+class DocumentModal extends React.Component {
+  constructor(props) {
+    super(props);
+
+    // Props for animation
+    this.animationProps = {
+      fadeAnim: new Animated.Value(0) // init opacity 0
+    };
+    // Props to be passed to the header
+    this.headerProps = {
+      types: {
+        "paymentIcons": false,
+        "circleIcons": false,
+        "settingsIcon": false,
+        "closeIcon": true
+      },
+      index: 0,
+      title: "Additional Documents Required",
+      numCircles: 0
+    };
+    this.state = {
+
+    }
+
+    this.callbackClose = function() { this.props.callbackClose() };
+  }
+
+  render() {
+    return(
+      <View style={[containers.container, backgrounds.email, containers.quo]}>
+          <View style={{marginTop: 100}}>
+          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 0}]}>Our partner, Dwolla, needs extra information to verify your identity. Please check your email (Payper) for the next steps.</Text>
+          </View>
+            <Header callbackClose={() => {Actions.MainViewContainer}} headerProps={this.headerProps} />
+      </View>
+    );
+  }
+}
+
+class SuspendedModal extends React.Component {
+  constructor(props) {
+    super(props);
+
+    // Props for animation
+    this.animationProps = {
+      fadeAnim: new Animated.Value(0) // init opacity 0
+    };
+
+    this.callbackClose = function() { this.props.callbackClose() };
+    // Props to be passed to the header
+    this.headerProps = {
+      types: {
+        "paymentIcons": false,
+        "circleIcons": false,
+        "settingsIcon": false,
+        "closeIcon": true
+      },
+      index: 0,
+      title: "Suspended Account",
+      numCircles: 0
+    };
+    this.state = {
+
+    }
+  }
+
+  render() {
+    return(
+      <View style={[containers.container, backgrounds.email, containers.quo]}>
+          <View style={{marginTop: 100}}>
+          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 0}]}>It seems you''re an outlaw, please contact support.</Text>
+          </View>
+            <Header callbackClose={() => {Actions.LandingScreenContainer()}} headerProps={this.headerProps} />
       </View>
     );
   }
@@ -108,7 +186,7 @@ const BankOnboardingView = React.createClass({
           errorDestination={() => {console.log("temp loading screen")}} />
       );
     }
-    if(this.props.startIav == '' && this.props.startMain == false){
+    if(this.props.startIav == '' && this.props.startMain == false && !this.props.retry && !this.props.document && !this.props.suspended){
         console.log("BankOnboardingView: token: " + this.props.newUser.token);
         //this.props.dispatchSetFirebaseToken("eyJhbGciOiJSUzI1NiIsImtpZCI6ImI2MjVmZTczN2YwMTJmZTNmZDgzMjYyZjIxOGE1NTI1MjVmNTExNWYifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmlyZWJhc2UtY29pbmNhc3QiLCJhdWQiOiJmaXJlYmFzZS1jb2luY2FzdCIsImF1dGhfdGltZSI6MTQ3MDM0MDk4NiwidXNlcl9pZCI6Im4zb3puRFJ2bUJib3Z0N1ZpbVdOcHRaUlhScTEiLCJzdWIiOiJuM296bkRSdm1CYm92dDdWaW1XTnB0WlJYUnExIiwiaWF0IjoxNDcwMzQwOTg3LCJleHAiOjE0NzAzNDQ1ODcsImVtYWlsIjoidGVzdGVyM0B3aXNjLmVkdSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJ0ZXN0ZXIzQHdpc2MuZWR1IiwidGVzdGVyM0B3aXNjLmVkdSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.luyfhUg6wCx0g8T4jcHeU-LhJsoH_jlU5vvoKzfUVZyZm9C8gT2LxXD_MJjwGkGHzWa7kiVTt7FV0-BLX4t884XSJHPjBummJNnwWINgvbOROj7wkIMK15ZfQe149iGcXDQTJls3JEqfc9u_Iy87IX79Nm5SEnhe8UhS-UR0XP5wbXVygIfKPj4q3Ssp5ap-cs78b0p1M1-f49mUg1bcG3Lzc4wg5PVMGyxhQeu6KCiD_Aj3uyBYlW5bRCSXIHkGOUJCKxSAjYedroxC4xsFwMPEqjN1s49mnT3XZvetRUO4piShDSXYbtd_JKJrFdo-Bs9NyzLOHO56MNGQndhplw");
         switch(this.props.currentPagex){
@@ -209,9 +287,20 @@ const BankOnboardingView = React.createClass({
 
       )
     }
-    if(this.props.retry == true){
+    if(this.props.retry){
       return (
-        <RetryModal />
+        <RetryModal dispatchSetRetry={this.props.dispatchSetRetry}
+        dispatchSetPageX={this.props.dispatchSetPageX}/>
+      )
+    }
+    if(this.props.document){
+      return (
+        <DocumentModal dispatchSetDocument={this.props.dispatchSetDocument}/>
+      )
+    }
+    if(this.props.suspended){
+      return (
+        <SuspendedModal dispatchSetSuspended={this.props.dispatchSetSuspended}/>
       )
     }
     if (this.props.startVerifyMicroDeposit == true){
