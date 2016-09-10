@@ -78,12 +78,12 @@
 - [X] When a payment completes, move it from payment flow to payment history in Firebase
 - [X] Bind a Bank Account onboarding modal to the 'Add a Bank Account' button on the Bank Accounts page
 - [X] If user's onboarding status is not complete, make them add a bank account before they can make a payment
+- [X] Add optimistic deletion for funding sources
+- [X] Handle case where user makes payment to another user who hasn't yet added a funding source
 - [ ] Create an exit animation for completed payments
 - [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
 - [ ] Add an onPress destination to notifications
 - [ ] Create a PaymentSeries module, containing detailed information about the payment series, and the option to skip/reschedule payments
-- [ ] Handle case where user makes payment to another user who hasn't yet added a funding source
-- [ ] Add optimistic deletion for funding sources
 
 ### MVP Usability and Design Bugs (Brady)
 - [X] Adjust CreatePayment flow so that after payment creation: payment creation => outgoing tab of payments view, request creating => incoming tab of payments view

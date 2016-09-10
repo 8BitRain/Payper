@@ -130,6 +130,23 @@ function getPendingInvitationAlert(options) {
 
 
 /**
+  *   Return a 'Waiting for user to add funding source' alert to render in place
+  *   of the progress bar
+**/
+function getAwaitingFundingSourceAlert(options) {
+  return(
+    <View style={styles.bottom}>
+      <View style={[styles.alert, { width: dimensions.width * 0.9, padding: 10, backgroundColor: colors.alertRed }]}>
+        <Text style={styles.confirmText}>
+          { "It looks like " + options.name + " has not linked a bank account to their Payper account. Payments will commence once they do so." }
+        </Text>
+      </View>
+    </View>
+  );
+};
+
+
+/**
   *   Returns a user preview for each the user specified in 'user' prop
 **/
 class PaymentPreview extends React.Component {
@@ -179,8 +196,7 @@ class PaymentPreview extends React.Component {
                     style={[styles.dots, styles.cancel]}>
                     <Entypo style={styles.iconSettings} name="block" size={17.5} color={colors.alertRed}/>
                   </TouchableHighlight>
-                : null
-            }
+                : null }
           </View>
 
           { (this.props.payment.invitee == "recip")
@@ -212,7 +228,7 @@ class PaymentPreview extends React.Component {
             <View style={styles.textWrap}>
               <Text style={styles.name}>{ (this.props.out) ? this.props.payment.recip_name : this.props.payment.sender_name }</Text>
               <Text style={[styles.text, { color: (this.props.dummy) ? colors.white : colors.richBlack }]}>${ this.props.payment.amount } per month - { this.props.payment.purpose }</Text>
-              <Text style={[styles.text, { color: (this.props.dummy) ? colors.white : colors.richBlack }]}>Next payment: { (this.props.payment.nextPayment) ? Timestamp.calendarize(this.props.payment.nextPayment) : "Unbeknownst to thee!" }</Text>
+              <Text style={[styles.text, { color: (this.props.dummy) ? colors.white : colors.richBlack }]}>Next payment: { (typeof this.props.payment.nextPayment == 'number') ? Timestamp.calendarize(this.props.payment.nextPayment) : "Unbeknownst to thee!" }</Text>
             </View>
 
             { /* Payment settings button */ }
@@ -237,14 +253,19 @@ class PaymentPreview extends React.Component {
             }
           </View>
 
-          { /* Bottom chunk (progress bar) */ }
-          <View style={[styles.bottom]}>
-            <View style={styles.barWrap}>
-              <View style={[styles.bar, {flex: this.props.payment.paymentsMade / this.props.payment.payments}]}></View>
-              <View style={{flex: 1 - this.props.payment.paymentsMade / this.props.payment.payments}}></View>
-              <Text style={[styles.progressText, { color: (this.props.dummy) ? colors.white : colors.darkGrey }]}>{ this.props.payment.paymentsMade } of { this.props.payment.payments }</Text>
-            </View>
-          </View>
+          { /* Bottom chunk (progress bar or awaiting funding source alert) */ }
+          { (this.props.payment.nextPayment == "waiting_on_fs")
+              ? (this.props.payment.invitee == "recip")
+                  ? getAwaitingFundingSourceAlert({name: this.props.payment.recip_name.split(" ")[0]})
+                  : getAwaitingFundingSourceAlert({name: this.props.payment.sender_name.split(" ")[0]})
+              : <View style={[styles.bottom]}>
+                  <View style={styles.barWrap}>
+                    <View style={[styles.bar, {flex: this.props.payment.paymentsMade / this.props.payment.payments}]}></View>
+                    <View style={{flex: 1 - this.props.payment.paymentsMade / this.props.payment.payments}}></View>
+                    <Text style={[styles.progressText, { color: (this.props.dummy) ? colors.white : colors.darkGrey }]}>{ this.props.payment.paymentsMade } of { this.props.payment.payments }</Text>
+                  </View>
+                </View> }
+
         </View>
       );
     }
