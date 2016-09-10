@@ -17,7 +17,10 @@ const initialState = Map({
   activeFilter: "incoming",
   flags: "",
   newUser:'',
-  startIav: ''
+  startIav: '',
+  retry: '',
+  suspended: '',
+  document: ''
 });
 
 
@@ -32,6 +35,9 @@ const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
       SET_IS_EMPTY = 'SET_IS_EMPTY',
       SET_ACTIVE_TAB = 'SET_ACTIVE_TAB',
       SET_IAV = 'SET_IAV',
+      SET_RETRY = 'SET_RETRY',
+      SET_SUSPENDED = 'SET_SUSPENDED',
+      SET_DOCUMENT = 'SET_DOCUMENT',
       SET_NEWUSER_TOKEN = 'SET_NEWUSER_TOKEN',
       SET_ACTIVE_FILTER = 'SET_ACTIVE_FILTER';
 
@@ -45,6 +51,10 @@ export function activeTab(input) { return {type: SET_ACTIVE_TAB, input: input} }
 export function activeFilter(input) { return {type: SET_ACTIVE_FILTER, input: input} };
 export function setNewUserToken(input) { return { type: SET_NEWUSER_TOKEN, input: input } };
 export function setIav(index){ return { type: SET_IAV, index: index} };
+export function setDocument(index){ return { type: SET_DOCUMENT, index: index} };
+export function setRetry(index){ return { type: SET_RETRY, index: index} };
+export function setSuspended(index){ return { type: SET_SUSPENDED, index: index} };
+
 
 /**
   *   Reducer
@@ -85,6 +95,18 @@ export default function PaymentsReducer(state = initialState, action = {}) {
       break;
     case SET_IAV:
       var newState = state.set('startIav', action.input);
+      return newState;
+      break;
+    case SET_DOCUMENT:
+      var newState = state.set('document', action.input);
+      return newState;
+      break;
+    case SET_SUSPENDED:
+      var newState = state.set('suspended', action.input);
+      return newState;
+      break;
+    case SET_RETRY:
+      var newState = state.set('retry', action.input);
       return newState;
       break;
     case SET_NEWUSER_TOKEN:

@@ -125,7 +125,7 @@ class DocumentModal extends React.Component {
           <View style={{marginTop: 100}}>
           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 0}]}>Our partner, Dwolla, needs extra information to verify your identity. Please check your email (Payper) for the next steps.</Text>
           </View>
-            <Header callbackClose={() => {Actions.MainViewContainer}} headerProps={this.headerProps} />
+            <Header callbackClose={() => {Actions.MainViewContainer()}} headerProps={this.headerProps} />
       </View>
     );
   }
