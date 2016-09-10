@@ -59,7 +59,7 @@ class VerifyMicrodeposit extends React.Component {
           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} onChangeText={(text) => {this.amount1 = text;}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto"   />
           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}> Amount 2 </Text>
           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} onChangeText={(text) => {this.amount2 = text;}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto"   />
-          <Button onPress={()=> {this.submit()}}><Text style={[typography.textInput, typography.marginSides, typography.marginBottom]}>Submit</Text></Button>
+          <Button onPress={()=> {this.submit()}}><Text style={[typography.marginSides, typography.marginBottom]}>Submit</Text></Button>
         </View>
       );
   }

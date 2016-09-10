@@ -50,6 +50,10 @@ export function validateNumber(input) { return /[0-9]/.test(input) };
 export function validateSymbol(input) { return /[!”#$%&’()*+`\-./:;<=>?@\]\[\\^_’{|}~]/.test(input) };
 
 export function validateBasicInfo(firstName, lastName, email, phone){
+    console.log("validating basic info: " + '\n' +  JSON.stringify(firstName)
+    + '\n' + JSON.stringify(lastName) +
+    '\n' + JSON.stringify(email) + '\n'
+     + JSON.stringify(phone));
     var validations = {
       firstName: firstName.valid,
       lastName: lastName.valid,
@@ -75,6 +79,7 @@ export function validatePhone(input){
   return validations;
 };
 
+/*Validate Postal Code*/
 export function validatePostalCode(input){
   //Enforces digit and length
   var regexLength = /^\d{5}$/.test(input);
@@ -87,6 +92,22 @@ export function validatePostalCode(input){
   validations.valid = getValidated(validations);
   return validations;
 };
+
+/*Validate SSN */
+export function validateSSN(input){
+  //Enforces digit and length
+  var regexLength = /^\d{5}$/.test(input);
+
+  var validations = {
+    length: regexLength,
+    valid: false
+  };
+
+  validations.valid = getValidated(validations);
+  return validations;
+};
+
+/*Validate DOB (may be unnesesary)*/
 
 export function validateDOB(input){
   //Enforces digit and length
@@ -117,6 +138,44 @@ export function validateName(input) {
 
   return validations;
 };
+
+//Validations for address*/
+export function validateAddress(input){
+
+  //Temporary validation for non empty
+  var non_empty = false;
+  if(input != 0){
+    var non_empty = true;
+  }
+
+  var validations = {
+    non_empty: non_empty,
+    valid: false
+  };
+
+  validations.valid = getValidated(validations);
+  return validations;
+};
+
+/*Validations for City*/
+export function validateCity(input){
+
+  //Temporary validation for non empty
+  var non_empty = false;
+  if(input.length != 0){
+    var non_empty = true;
+  }
+
+  var validations = {
+    non_empty: non_empty,
+    valid: false
+  };
+
+  validations.valid = getValidated(validations);
+  return validations;
+};
+
+
 
 // Checks that input is a valid decimal or non-decimal number
 //    ex. 1.0, 0.1, .1, 1, 1.

@@ -225,6 +225,7 @@ export function createCustomer(data, callback){
     fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/create", {method: "POST", body: JSON.stringify(data)})
     .then((response) => response.json())
     .then((responseData) => {
+      //console.log("CreateCustomerResponse:" +  JSON.stringify(responseData));
       if (!responseData.errorMessage) {
         console.log("CreateCustomerResponse:" +  JSON.stringify(responseData));
         //if (typeof callback == 'function') callback(true);

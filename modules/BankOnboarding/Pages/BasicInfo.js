@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, DeviceEventEmitter} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import Entypo from "react-native-vector-icons/Entypo";
@@ -19,33 +19,46 @@ import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
 
-import EvilIcons from "react-native-vector-icons/EvilIcons"
+import EvilIcons from "react-native-vector-icons/EvilIcons";
 
 
 class BasicInfo extends React.Component {
    constructor(props) {
      super(props);
 
+     this.kbOffset = new Animated.Value(0);
      // Props for animation
      this.animationProps = {
        fadeAnim: new Animated.Value(0) // init opacity 0
      };
 
-     //For setting up initial Firebase. (Think about calling this in the actual view)
-     /*if(this.firebase_token == ''){
-       Async.get('session_token', (token) => {
-         this.token = token;
-         //dispatchSetFirebaseToken
-         console.log("Token: " + token);
-         this.props.dispatchSetFirebaseToken(this.token);
-       });
-     }*/
+     this.state = {
+       validInput: false
+     };
 
-     // Props for temporary input storage
-     this.emailInput = this.props.newUser.email;
-     this.firstNameInput = this.props.newUser.firstName;
-     this.lastNameInput = this.props.newUser.lastName;
-     this.phoneInput = this.props.newUser.phone;
+
+     // Set initial values from create user process.
+     if(this.props.newUser.email && this.props.newUser.firstName
+       && this.props.newUser.lastName && this.props.newUser.phone){
+         console.log("BasicInfo: Setting email, firstname, lastname, and phone");
+         this.emailInput = this.props.newUser.email;
+         this.firstNameInput = this.props.newUser.firstName;
+         this.lastNameInput = this.props.newUser.lastName;
+         this.phoneInput = this.props.newUser.phone;
+
+         //We can assume that the following validations are correct. If a user
+         //changes an input field, the new input will be validated by TextInput
+         this.props.dispatchSetCEmailValidations(this.emailInput);
+         this.props.dispatchSetCFirstNameValidations(this.firstNameInput);
+         this.props.dispatchSetCLastNameValidations(this.lastNameInput);
+         this.props.dispatchSetCPhoneValidations(this.phoneInput);
+     } else {
+       this.emailInput = this.props.dwollaCustomer.email;
+       this.firstNameInput = this.props.dwollaCustomer.firstName;
+       this.lastNameInput = this.props.dwollaCustomer.lastName;
+       this.phoneInput = this.props.dwollaCustomer.phone;
+     }
+
 
      // Props to be passed to the header
      this.headerProps = {
@@ -56,7 +69,8 @@ class BasicInfo extends React.Component {
          "closeIcon": false
        },
        index: 0,
-       numCircles: 4
+       numCircles: 4,
+       title: "Customer Verfication"
      };
 
      // Callback functions to be passed to the header
@@ -74,14 +88,44 @@ class BasicInfo extends React.Component {
        this.props.dispatchSetFirstName(this.firstNameInput);
        this.props.dispatchSetLastName(this.lastNameInput);
        this.props.dispatchSetPhone(this.phoneInput);
-       //this.props.dispatchSetBasicInfo(, this.firstNameInput, )
-       this.props.dispatchSetPageX(1, "forward", true);
+
+       if(!this.props.cemailValidations.valid || !this.props.cfirstNameValidations.valid ||
+       !this.props.clastNameValidations.valid || !this.props.cphoneValidations.valid){
+         console.log("Error with validations");
+         /*TODO Loop through validation errors to then animate (move up and down)
+           input fields that the user needs to correct. This can maybe flag a hint as
+           well?*/
+
+       } else {
+         this.props.dispatchSetPageX(1, "forward", true);
+       }
      };
      this.onPressLeft = function() { this.props.dispatchSetPageX(null, null, null) };
    }
+
+   _keyboardWillShow(e) {
+     Animated.spring(this.kbOffset, {
+       toValue: e.endCoordinates.height - 40,
+       friction: 6
+     }).start();
+   }
+
+   _keyboardWillHide(e) {
+     Animated.spring(this.kbOffset, {
+       toValue: 0,
+       friction: 6
+     }).start();
+   }
+
    componentDidMount() {
-     Animations.fadeIn(this.animationProps);
-     //Mixpanel.timeEvent("Email page Finished");
+     _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
+     _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+      Animations.fadeIn(this.animationProps);
+   }
+
+   componentWillUnmount() {
+     _keyboardWillShowSubscription.remove();
+     _keyboardWillHideSubscription.remove();
    }
    render() {
      return (
@@ -91,54 +135,58 @@ class BasicInfo extends React.Component {
          <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
 
            { /* Prompt and input field */ }
-           <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
+           <View  style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            { /*Email*/}
             <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>
-              { /* Icon appears on left side of Text label when Text label has marginLeft set to 20<EvilIcons  style={{ marginLeft: 5}} name="check" size={40} color={'green'} />*/}
-              {/*<Text style={[typography.general, typography.fontSizeTitle, typography.marginBottom, {marginLeft: 20}]}>Email</Text>*/}
-             {this.props.phoneValidations.valid? <EvilIcons  style={{ position: "absolute", bottom: .5, left: 5}} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", bottom: .5, left: 5}} name="check" size={40} color={'grey'} />}
-             <Text style={[typography.general, typography.fontSizeTitle, typography.marginBottom, {marginLeft: 65}]}>Email</Text>
-             {/*this.props.phoneValidations.valid ? <EvilIcons  style={{position: "absolute", left: 250, top: 15}} name="check" size={60} color={'green'} /> : <EvilIcons style={{position: "absolute", left: 250, top: 25}} name="check" size={30} color={'grey'} />*/}
-
+             <Text style={[typography.general, typography.fontSizeTitle, typography.marginBottom, {marginLeft: 20}]}>Email</Text>
             </View>
-            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom, {marginLeft: 65}]}  defaultValue={this.props.newUser.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmail(this.emailInput); /*this.props.dispatchSetEmailValidations(this.phoneInput)*/}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"johndoe@example.com"} keyboardType="email-address" />
+            <View>
+
+              <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom, {marginLeft: 20}]}  defaultValue={this.props.newUser.email ? this.props.newUser.email: this.props.dwollaCustomer.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmail(this.emailInput); this.props.dispatchSetCEmailValidations(this.emailInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />
+              {this.props.cemailValidations.valid ? <EvilIcons  style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'grey'} />}
+            </View>
 
              { /*FirstName*/}
             <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>
-
-              {/*this.props.phoneValidations.valid ? <EvilIcons  style={{position: "absolute", left: 250, top: 15}} name="check" size={60} color={'green'} /> : <EvilIcons style={{position: "absolute", left: 250, top: 25}} name="check" size={30} color={'grey'} />*/}
-              {this.props.phoneValidations.valid ? <EvilIcons  style={{position: "absolute", bottom: .5, left: 5}} name="check" size={40} color={'green'} /> : <EvilIcons style={{position: "absolute", bottom: .5, left: 5}} name="check" size={40} color={'grey'} />}
-              <Text style={[typography.general, typography.fontSizeTitle, typography.marginBottom, {marginLeft: 65}]}>First Name</Text>
+              <Text style={[typography.general, typography.fontSizeTitle, typography.marginBottom, {marginLeft: 20}]}>First Name</Text>
             </View>
-            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom, {marginLeft: 65}]}  defaultValue={this.props.newUser.firstName} onChangeText={(text) => {this.firstNameInput = text; this.props.dispatchSetFirstName(this.firstNameInput); /*this.props.dispatchSetFirstNameValidations(this.phoneInput)*/}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"Jane"} keyboardType="email-address" />
+            {/*FirstName TextInput*/}
+            <View>
+              <TextInput style={[typography.textInput, typography.marginSides, {marginLeft: 20}]}  defaultValue={this.props.newUser.firstName ? this.props.newUser.firstName : this.props.dwollaCustomer.firstName} onChangeText={(text) => {this.firstNameInput = text; this.props.dispatchSetFirstName(this.firstNameInput); this.props.dispatchSetCFirstNameValidations(this.firstNameInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
+              {this.props.cfirstNameValidations.valid ? <EvilIcons  style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'grey'} />}
+            </View>
 
              { /*LastName*/}
              <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>
-
-              {/*this.props.phoneValidations.valid ? <EvilIcons  style={{position: "absolute", left: 250, top: 15}} name="check" size={60} color={'green'} /> : <EvilIcons style={{position: "absolute", left: 250, top: 25}} name="check" size={30} color={'grey'} />*/}
-
-              {this.props.phoneValidations.valid   ? <EvilIcons  style={{position: "absolute", bottom: .5, left: 5}} name="check" size={40} color={'green'} /> : <EvilIcons style={{position: "absolute", bottom: .5, left: 5}} name="check" size={40} color={'grey'} />}
-              <Text style={[typography.general, typography.fontSizeTitle, typography.marginBottom, {marginLeft: 65}]}>Last Name</Text>
+              <Text style={[typography.general, typography.fontSizeTitle, typography.marginBottom, {marginLeft: 20}]}>Last Name</Text>
              </View>
-             <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom, {marginLeft: 65}]}  defaultValue={this.props.newUser.lastName} onChangeText={(text) => {this.lastNameInput = text; this.props.dispatchSetLastName(this.lastNameInput); /*this.props.dispatchSetLastNameValidations(this.phoneInput)*/}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"Victory"} keyboardType="email-address" />
+             <View>
+               <TextInput style={[typography.textInput, typography.marginSides, {marginLeft: 20}]}  defaultValue={this.props.newUser.lastName ? this.props.newUser.lastName : this.props.dwollaCustomer.lastName} onChangeText={(text) => {this.lastNameInput = text; this.props.dispatchSetLastName(this.lastNameInput); this.props.dispatchSetCLastNameValidations(this.lastNameInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
+               {this.props.clastNameValidations.valid ? <EvilIcons  style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'grey'} />}
+             </View>
 
               { /*PhoneNumber*/}
              <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>
-
-               {/*this.props.phoneValidations.valid ? <EvilIcons  style={{position: "absolute", left: 250, top: 15}} name="check" size={60} color={'green'} /> : <EvilIcons style={{position: "absolute", left: 250, top: 25}} name="check" size={30} color={'grey'} />*/}
-               {this.props.phoneValidations.valid ? <EvilIcons  style={{position: "absolute", bottom: .5, left: 5}} name="check" size={40} color={'green'} /> : <EvilIcons style={{position: "absolute", bottom: .5, left: 5}} name="check" size={40} color={'grey'} />}
-               <Text style={[typography.general, typography.fontSizeTitle, typography.marginBottom, {marginLeft: 65}]}>Phone</Text>
+               <Text style={[typography.general, typography.fontSizeTitle, typography.marginBottom, {marginLeft: 20}]}>Phone</Text>
              </View>
-             <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom, {marginLeft: 65}]}  defaultValue={this.props.newUser.phone} onChangeText={(text) => {this.phoneInput = text; this.props.dispatchSetPhone(this.phoneInput); /*this.props.dispatchSetPhoneValidations(this.phoneInput)*/}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"123-456-7890"} keyboardType="phone-pad" />
+             <View>
+               <TextInput style={[typography.textInput, typography.marginSides, {marginLeft: 20}]}  defaultValue={this.props.newUser.phone ? this.props.newUser.phone : this.props.dwollaCustomer.phone} onChangeText={(text) => {this.phoneInput = text; this.props.dispatchSetPhone(this.phoneInput); this.props.dispatchSetCPhoneValidations(this.phoneInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="phone-pad" />
+               {this.props.cfirstNameValidations.valid ? <EvilIcons  style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'grey'} />}
+             </View>
 
            </View>
 
            { /* Arrow nav buttons */ }
-           <ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} />
+           {/*<ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} />*/}
 
            { /* Header */ }
            <Header headerProps={this.headerProps} />
 
+         </Animated.View>
+         <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
+           <ArrowNav
+             arrowNavProps={this.arrowNavProps}
+             callbackRight={() => {this.onPressRight()}} />
          </Animated.View>
        </View>
      );
