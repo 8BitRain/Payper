@@ -17,6 +17,7 @@
   *     💣  Direct invite:         'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct'
   *     💣  Payment invite:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
   *     💣  Delete user:           'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/delete'
+  *     💣  Delete funding source: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/removeFundingSource'
   *     💣  Update phone contacts: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneContacts'
   *     💣  Update user info:      'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/update'
   *     💣  Archive payment:       'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/archive'
@@ -495,6 +496,29 @@ export function archivePayment(options, callback) {
       } else {
         console.log("Error archiving payment:", responseData.errorMessage);
         if (typeof callback == 'function') callback(responseData);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given session token (token), remove this user's funding source
+**/
+export function removeFundingSource(options, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/removeFundingSource", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Remove funding source Lambda response:", responseData);
+        if (typeof callback == 'function') callback(true);
+      } else {
+        console.log("Error removing funding source:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
       }
     })
     .done();

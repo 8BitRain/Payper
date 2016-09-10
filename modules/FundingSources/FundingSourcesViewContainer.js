@@ -29,6 +29,10 @@ function mapDispatchToProps(dispatch) {
       dispatch(setInBankOnboarding.setIav(token));
     },
 
+    optimisticallyRemoveFundingSource: () => {
+      
+    }
+
   }
 }
 

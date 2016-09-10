@@ -67,6 +67,14 @@ class FundingSource extends React.Component {
     },
     (buttonIndex) => {
       console.log(this.actionSheetOptions[buttonIndex]);
+      if (this.actionSheetOptions[buttonIndex] == "Delete") {
+        console.log("Removing funding source...");
+        this.props.optimisticallyRemoveFundingSource();
+        Lambda.removeFundingSource({ token: this.props.currentUser.token }, (success) => {
+          if (success) console.log("Success!");
+          else console.log("Failure :(")
+        });
+      }
     });
   }
 

@@ -13,6 +13,7 @@ import Footer from '../../components/Footer/Footer';
 import Transaction from '../../components/Previews/Transaction/Transaction';
 import CreatePayment from '../../modules/CreatePayment/CreatePaymentViewContainer';
 import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingContainer';
+import VerifyMicrodeposit from '../../modules/BankOnboarding/Pages/VerifyMicrodeposit';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -332,9 +333,13 @@ class Payments extends React.Component {
                 ? <CreatePayment
                     {...this.props}
                     toggleModal={(options) => this._toggleModal(options)} />
-                : <BankOnboarding
-                    {...this.props}
-                    toggleModal={(options) => this._toggleModal(options)} /> }
+                : (this.props.flags.micro_deposit_flow)
+                    ? <VerifyMicrodeposit
+                        {...this.props}
+                        toggleModal={(options) => this._toggleModal(options)} />
+                    : <BankOnboarding
+                        {...this.props}
+                        toggleModal={(options) => this._toggleModal(options)} /> }
 
           </View>
         </Modal>

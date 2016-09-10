@@ -21,15 +21,14 @@ class FundingSources extends React.Component {
     super(props);
 
     // Clone this for new data sources
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.EMPTY_DATA_SOURCE = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
       empty: true,
-      fundingSources: ds.cloneWithRows(this.props.bankAccounts),
+      fundingSources: this.EMPTY_DATA_SOURCE.cloneWithRows(this.props.bankAccounts),
       modalVisible: false,
     };
   }
-
 
   componentDidMount() {
     this._genRows();
@@ -42,7 +41,7 @@ class FundingSources extends React.Component {
   _verifyOnboardingStatus() {
     if (this.props.flags.onboarding_state == 'customer') {
       this.props.setNewUserToken(this.props.currentUser.token);
-    } else if (this.props.flags.onboarding_state == 'bank') {
+    } else if (this.state.fundingSources.getRowCount() == 0) {
       // Extend scope
       const _this = this;
 
@@ -55,7 +54,7 @@ class FundingSources extends React.Component {
           _this.props.setIav(iavToken.token);
         }
       });
-    } else if (this.props.flags.onboarding_state == "complete") {
+    } else if (this.state.fundingSources.getRowCount() > 0) {
       Alert.message({
         title: "Unfortunately...",
         message: "Payper doesn't currently support multiple bank accounts. This feature will be available soon!",
@@ -75,7 +74,10 @@ class FundingSources extends React.Component {
   //  Return a list of ready to render rows
   _renderRow(f) {
     return(
-      <FundingSource currentUser={this.props.currentUser} fundingSource={f} />
+      <FundingSource
+        currentUser={this.props.currentUser}
+        fundingSource={f}
+        optimisticallyRemoveFundingSource={() => this.setState({ fundingSources: this.EMPTY_DATA_SOURCE.cloneWithRows([]) })} />
     );
   }
 
@@ -116,7 +118,7 @@ class FundingSources extends React.Component {
           activeOpacity={0.7}
           onPress={() => {
             this._verifyOnboardingStatus();
-            if (this.props.flags.onboarding_state != "complete") this._toggleModal();
+            if (this.props.flags.onboarding_state != "complete" || this.state.fundingSources.getRowCount() == 0) this._toggleModal();
           }}>
 
           <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: colors.richBlack, borderBottomWidth: 1.0, borderBottomColor: colors.accent}}>
