@@ -1,16 +1,20 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TouchableHighlight, ListView, RecyclerViewBackedScrollView } from 'react-native';
+import { View, Text, TouchableHighlight, ListView, RecyclerViewBackedScrollView, Modal, StatusBar } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 // Helper functions
+import * as Alert from "../../helpers/Alert";
 import * as Lambda from "../../services/Lambda";
+import * as Init from '../../_init';
 
 // Custom stylesheets
 import colors from "../../styles/colors";
 
 // Partial components
 import FundingSource from '../../components/FundingSource/FundingSource.js';
+import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingContainer';
 
 class FundingSources extends React.Component {
   constructor(props) {
@@ -22,6 +26,7 @@ class FundingSources extends React.Component {
     this.state = {
       empty: true,
       fundingSources: ds.cloneWithRows(this.props.bankAccounts),
+      modalVisible: false,
     };
   }
 
@@ -30,6 +35,33 @@ class FundingSources extends React.Component {
     this._genRows();
   }
 
+  _toggleModal(options) {
+    this.setState({ modalVisible: !this.state.modalVisible });
+  }
+
+  _verifyOnboardingStatus() {
+    if (this.props.flags.onboarding_state == 'customer') {
+      this.props.setNewUserToken(this.props.currentUser.token);
+    } else if (this.props.flags.onboarding_state == 'bank') {
+      // Extend scope
+      const _this = this;
+
+      this.props.setNewUserToken(this.props.currentUser.token);
+      var data = { token: this.props.currentUser.token };
+
+      // Initiate IAV
+      Init.getIavToken(data, function(iavTokenRecieved, iavToken) {
+        if (iavTokenRecieved) {
+          _this.props.setIav(iavToken.token);
+        }
+      });
+    } else if (this.props.flags.onboarding_state == "complete") {
+      Alert.message({
+        title: "Unfortunately...",
+        message: "Payper doesn't currently support multiple bank accounts. This feature will be available soon!",
+      });
+    }
+  }
 
   // Generate rows for the list view
   _genRows() {
@@ -82,7 +114,10 @@ class FundingSources extends React.Component {
         <TouchableHighlight
           underlayColor={colors.richBlack}
           activeOpacity={0.7}
-          onPress={() => console.log("Pressed 'Add a new bank account'")}>
+          onPress={() => {
+            this._verifyOnboardingStatus();
+            if (this.props.flags.onboarding_state != "complete") this._toggleModal();
+          }}>
 
           <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: colors.richBlack, borderBottomWidth: 1.0, borderBottomColor: colors.accent}}>
             <Entypo name="plus" size={30} color={colors.accent} />
@@ -96,6 +131,23 @@ class FundingSources extends React.Component {
         { /* Render list of notifications or empty state */  }
         {(this.state.empty) ? this._getEmptyState() : this._getFundingSourceList() }
 
+        { /* Modal containing bank onboarding flow */ }
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={ () => alert("Closed modal") }>
+
+          { /* Lighten status bar text */ }
+          <StatusBar barStyle="light-content" />
+
+          <View style={{flex: 1.0}}>
+            <BankOnboarding
+              {...this.props}
+              toggleModal={(options) => this._toggleModal(options)} />
+          </View>
+
+        </Modal>
       </View>
     );
   }

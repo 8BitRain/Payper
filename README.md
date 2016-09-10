@@ -76,6 +76,8 @@
 - [X] Redesign BankAccountsView
 - [X] Finish edit profile component
 - [X] When a payment completes, move it from payment flow to payment history in Firebase
+- [X] Bind a Bank Account onboarding modal to the 'Add a Bank Account' button on the Bank Accounts page
+- [X] If user's onboarding status is not complete, make them add a bank account before they can make a payment
 - [ ] Create a fading animation for completed payments
 - [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
 - [ ] Add an onPress destination to notifications
@@ -119,6 +121,7 @@
 - [ ] Rethink handling contacts with multiple numbers (if more than one number, use the 'Mobile' number)
 - [ ] Sign-in success on second attempt looks whack
 - [ ] Refactor entire sign-in process (follow another React Native app's example)
+- [ ] Fix bug where, when you accept or reject a payment request, your incoming tab becomes populated with the other party's incoming payments
 
 ### Things I Need Vash For (Brady)
 - [X] Fix bug where inviting via payment exits before completing request

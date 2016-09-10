@@ -13,7 +13,7 @@ import Settings from '../../modules/Settings/SettingsView';
 import Payments from '../../modules/Payments/PaymentsViewContainer';
 import Profile from '../../modules/Profile/ProfileView';
 import Notifications from '../../modules/Notifications/NotificationsViewContainer';
-import FundingSources from '../../modules/FundingSources/FundingSourcesView';
+import FundingSources from '../../modules/FundingSources/FundingSourcesViewContainer';
 import SignIn from '../../modules/SignIn/SignInViewContainer';
 
 // Used to determine header size

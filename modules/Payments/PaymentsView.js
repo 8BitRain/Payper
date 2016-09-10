@@ -12,6 +12,7 @@ import * as Lambda from '../../services/Lambda';
 import Footer from '../../components/Footer/Footer';
 import Transaction from '../../components/Previews/Transaction/Transaction';
 import CreatePayment from '../../modules/CreatePayment/CreatePaymentViewContainer';
+import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingContainer';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -282,7 +283,6 @@ class Payments extends React.Component {
   }
 
 
-
   render() {
 
     this._archiveCompletePayments();
@@ -302,7 +302,16 @@ class Payments extends React.Component {
           <Footer
             callbackFeed={() => this.props.setActiveTab('global')}
             callbackTracking={() => this.props.setActiveTab('tracking')}
-            callbackPay={() => this._toggleModal()} />
+            callbackPay={() => {
+              if (this.props.flags.onboarding_state != "complete") {
+                Alert.message({
+                  title: "Hey!",
+                  message: "You must add a bank account before you can make a payment."
+                });
+              }
+
+              this._toggleModal();
+            }} />
         </View>
 
         { /* Modal containing create payment panel */ }
@@ -316,12 +325,19 @@ class Payments extends React.Component {
           <StatusBar barStyle="light-content" />
 
           <View style={{flex: 1.0}}>
-            <CreatePayment
-              {...this.props}
-              toggleModal={(options) => this._toggleModal(options)} />
+
+            { /* If user has a verified funding source, display create payment
+                 flow. Otherwise, display bank account onboarding flow */
+              (this.props.flags.onboarding_state == "complete")
+                ? <CreatePayment
+                    {...this.props}
+                    toggleModal={(options) => this._toggleModal(options)} />
+                : <BankOnboarding
+                    {...this.props}
+                    toggleModal={(options) => this._toggleModal(options)} /> }
+
           </View>
         </Modal>
-
       </View>
     );
   }
