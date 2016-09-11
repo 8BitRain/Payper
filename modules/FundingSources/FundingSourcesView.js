@@ -20,12 +20,11 @@ class FundingSources extends React.Component {
   constructor(props) {
     super(props);
 
-    // Clone this for new data sources
     this.EMPTY_DATA_SOURCE = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
       empty: true,
-      fundingSources: this.EMPTY_DATA_SOURCE.cloneWithRows(this.props.bankAccounts),
+      fundingSources: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
       modalVisible: false,
     };
   }
@@ -64,9 +63,7 @@ class FundingSources extends React.Component {
 
   // Generate rows for the list view
   _genRows() {
-    if (!this.state.fundingSources || this.state.fundingSources.length == 0) return;
-
-    // Set state, triggering re-rerender of list, then mark unseen notifications as seen
+    if (!this.props.fundingSourcesDataSource || this.props.fundingSourcesArray.length == 0) return;
     this.setState({ empty: false });
   }
 
@@ -77,17 +74,18 @@ class FundingSources extends React.Component {
       <FundingSource
         currentUser={this.props.currentUser}
         fundingSource={f}
-        optimisticallyRemoveFundingSource={() => this.setState({ fundingSources: this.EMPTY_DATA_SOURCE.cloneWithRows([]) })} />
+        optimisticallyRemoveFundingSource={() => this.props.setFundingSources([])} />
     );
   }
 
 
   // Returns a ready-to-render notification ListView
   _getFundingSourceList() {
+    console.log("Data source:", this.props.fundingSourcesDataSource);
     return(
       <View style={{flex: 0.9, paddingTop: 0, backgroundColor: colors.richBlack}}>
         <ListView
-          dataSource={this.state.fundingSources}
+          dataSource={this.props.fundingSourcesDataSource}
           renderRow={this._renderRow.bind(this)}
           renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
           enableEmptySections />

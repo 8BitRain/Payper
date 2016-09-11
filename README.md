@@ -80,11 +80,12 @@
 - [X] If user's onboarding status is not complete, make them add a bank account before they can make a payment
 - [X] Add optimistic deletion for funding sources
 - [X] Handle case where user makes payment to another user who hasn't yet added a funding source
+- [X] Bind bank accounts to Redux store so deletion persists app-wide.
 - [ ] Create an exit animation for completed payments
 - [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
 - [ ] Add an onPress destination to notifications
 - [ ] Create a PaymentSeries module, containing detailed information about the payment series, and the option to skip/reschedule payments
-- [ ] Set up Firebase listener for FundingSource
+- [ ] Add confirmation alert for bank account deletion
 
 ### MVP Usability and Design Bugs (Brady)
 - [X] Adjust CreatePayment flow so that after payment creation: payment creation => outgoing tab of payments view, request creating => incoming tab of payments view

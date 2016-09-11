@@ -7,7 +7,6 @@ const initialState = Map({
   activeFirebaseListeners: [],
   signedIn: false,
   currentUser: {},
-  bankAccounts: [],
   flags: {},
   notifications: [],
   numUnseenNotifications: 0,
@@ -82,10 +81,6 @@ export default function MainReducer(state = initialState, action = {}) {
       break;
     case SET_CURRENT_USER:
       var newState = state.set('currentUser', action.input);
-      return newState;
-      break;
-    case SET_BANK_ACCOUNTS:
-      var newState = state.set('bankAccounts', action.input);
       return newState;
       break;
     case SET_FLAGS:

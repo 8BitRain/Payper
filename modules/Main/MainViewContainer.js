@@ -17,6 +17,7 @@ const EMPTY_DATA_SOURCE = new ListView.DataSource({rowHasChanged: (r1, r2) => r1
 // Dispatch functions
 import * as set from './MainState';
 import * as setPayments from '../Payments/PaymentsState';
+import * as setInFundingSources from '../FundingSources/FundingSourcesState';
 
 // Base view
 import MainView from './MainView';
@@ -29,7 +30,6 @@ function mapStateToProps(state) {
     activeFirebaseListeners: state.getIn(['main', 'activeFirebaseListeners']),
     signedIn: state.getIn(['main', 'signedIn']),
     currentUser: state.getIn(['main', 'currentUser']),
-    bankAccounts: state.getIn(['main', 'bankAccounts']),
     currentPage: state.getIn(['main', 'currentPage']),
     flags: state.getIn(['main', 'flags']),
     notifications: state.getIn(['main', 'notifications']),
@@ -49,11 +49,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
 
-    /**
-      *   1) Set signed in user's user object
-      *   2) Set session token
-      *   3) Set signedIn to true
-    **/
     initialize: (callback) => {
 
       Async.get('user', (user) => {
@@ -104,7 +99,7 @@ function mapDispatchToProps(dispatch) {
           // Get user's funding source
           Lambda.getFundingSource({ token: parsedUser.token }, (res) => {
             if (res.body) {
-              var bankAccounts = [],
+              var fundingSources = [],
                   account = {
                     name: (res.body.name) ? res.body.name : "Nameless Account",
                     bank: "Unknown",
@@ -117,8 +112,9 @@ function mapDispatchToProps(dispatch) {
                     icon: "bank",
                   };
 
-              bankAccounts.push(account);
-              dispatch(set.bankAccounts(bankAccounts));
+              fundingSources.push(account);
+              dispatch(setInFundingSources.fundingSourcesArray(fundingSources));
+              dispatch(setInFundingSources.fundingSourcesDataSource(fundingSources));
             }
           });
 
@@ -129,7 +125,7 @@ function mapDispatchToProps(dispatch) {
 
     },
 
-    listen: (endpoints, callback) => {
+    listen: (endpoints, options, callback) => {
 
       Firebase.listenTo(endpoints, (response) => {
         switch (response.endpoint.split("/")[0]) {

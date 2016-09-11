@@ -12,6 +12,7 @@ import UserSearchReducer from '../modules/UserSearch/UserSearchState';
 import MainReducer from '../modules/Main/MainState';
 import PaymentsReducer from '../modules/Payments/PaymentsState';
 import PaymentReducer from '../modules/CreatePayment/CreatePaymentState';
+import FundingSourcesReducer from '../modules/FundingSources/FundingSourcesState';
 
 
 const reducers = {
@@ -35,6 +36,7 @@ const reducers = {
   userSearch: UserSearchReducer,
   payments: PaymentsReducer,
   payment: PaymentReducer,
+  fundingSources: FundingSourcesReducer,
 
 };
 

@@ -78,10 +78,11 @@ class Main extends React.Component {
         if (success) {
           var uid = this.props.currentUser.uid,
               notifications = "notifications/" + uid,
-              appFlags = "appFlags/" + uid;
+              appFlags = "appFlags/" + uid,
+              user = "users/" + uid;
 
           // Initialize Firebase listeners
-          this.props.listen([notifications, appFlags]);
+          this.props.listen([notifications, appFlags, user], { currentUser: this.props.currentUser });
 
           console.log("%cInitialization succeeded. Current user:", "color:green;font-weight:900;");
           console.log(this.props.currentUser);

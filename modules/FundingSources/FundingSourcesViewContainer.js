@@ -12,8 +12,17 @@ import FundingSourcesView from './FundingSourcesView';
 // Decide which chunk of Redux global state our component will receive as props
 function mapStateToProps(state) {
   return {
+
+    // createAccount
     newUser: state.getIn(['createAccount', 'newUser']),
+
+    // bankOnboarding
     startIav: state.getIn(['bankOnboarding', 'startIav']),
+
+    // fundingSources
+    fundingSourcesArray: state.getIn(['fundingSources', 'fundingSourcesArray']),
+    fundingSourcesDataSource: state.getIn(['fundingSources', 'fundingSourcesDataSource']),
+
   }
 }
 
@@ -29,9 +38,18 @@ function mapDispatchToProps(dispatch) {
       dispatch(setInBankOnboarding.setIav(token));
     },
 
-    optimisticallyRemoveFundingSource: () => {
-      
-    }
+    setFundingSourcesArray: (input) => {
+      dispatch(set.fundingSourcesArray(input));
+    },
+
+    setFundingSourcesDataSource: (input) => {
+      dispatch(set.fundingSourcesDataSource(input));
+    },
+
+    setFundingSources: (input) => {
+      dispatch(set.fundingSourcesArray(input));
+      dispatch(set.fundingSourcesDataSource(input));
+    },
 
   }
 }
