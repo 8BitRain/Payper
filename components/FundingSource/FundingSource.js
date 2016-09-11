@@ -6,6 +6,7 @@ import { Actions } from 'react-native-router-flux';
 
 // Helpers
 import * as Lambda from '../../services/Lambda';
+import * as Alert from '../../helpers/Alert';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -68,11 +69,27 @@ class FundingSource extends React.Component {
     (buttonIndex) => {
       console.log(this.actionSheetOptions[buttonIndex]);
       if (this.actionSheetOptions[buttonIndex] == "Delete") {
-        console.log("Removing funding source...");
-        this.props.optimisticallyRemoveFundingSource();
-        Lambda.removeFundingSource({ token: this.props.currentUser.token }, (success) => {
-          if (success) console.log("Success!");
-          else console.log("Failure :(")
+
+        // Extend scope
+        const _this = this;
+
+        // Confirm deletion
+        Alert.confirmation({
+          title: "Are you sure you'd like to remove this funding source?",
+          message: "You can always add it back later.",
+          cancelMessage: "Nevermind",
+          confirmMessage: "Yes",
+          cancel: () => {
+            console.log("Nevermind");
+          },
+          confirm: () => {
+            console.log("Removing funding source...");
+            _this.props.optimisticallyRemoveFundingSource();
+            Lambda.removeFundingSource({ token: _this.props.currentUser.token }, (success) => {
+              if (success) console.log("Success!");
+              else console.log("Failure :(")
+            });
+          },
         });
       }
     });
