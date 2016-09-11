@@ -82,9 +82,10 @@
 - [X] Handle case where user makes payment to another user who hasn't yet added a funding source
 - [X] Bind bank accounts to Redux store so deletion persists app-wide.
 - [X] Add confirmation alert for bank account deletion
+- [X] Set up listeners for username and funding source
 - [ ] Create an exit animation for completed payments
 - [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
-- [ ] Add an onPress destination to notifications
+- [ ] Add an onPress destination for notifications
 - [ ] Create a PaymentSeries module, containing detailed information about the payment series, and the option to skip/reschedule payments
 
 ### MVP Usability and Design Bugs (Brady)

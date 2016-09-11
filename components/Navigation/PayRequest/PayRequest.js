@@ -109,7 +109,7 @@ class PayRequest extends React.Component {
           </Text>
           { (!this.props.loading)
               ? <Text style={{fontSize: 13, fontWeight: '300', color: colors.white, textAlign: 'center'}}>
-                  (UWCU *3812)
+                  (Active funding source: { this.props.activeFundingSource.name })
                 </Text>
               : null
           }

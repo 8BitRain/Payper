@@ -57,6 +57,9 @@ function mapStateToProps(state) {
 
     payment: state.getIn(['payment', 'info']),
 
+    // fundingSources
+    activeFundingSource: state.getIn(['fundingSources', 'fundingSourcesArray'])[0],
+
   }
 }
 

@@ -96,28 +96,6 @@ function mapDispatchToProps(dispatch) {
             }
           });
 
-          // Get user's funding source
-          Lambda.getFundingSource({ token: parsedUser.token }, (res) => {
-            if (res.body) {
-              var fundingSources = [],
-                  account = {
-                    name: (res.body.name) ? res.body.name : "Nameless Account",
-                    bank: "Unknown",
-                    accountNumber: "Unkown",
-                    active: true,
-                    status: res.body.status,
-                    type: res.body.type,
-                    id: res.body.id,
-                    createdAt : res.body.created,
-                    icon: "bank",
-                  };
-
-              fundingSources.push(account);
-              dispatch(setInFundingSources.fundingSourcesArray(fundingSources));
-              dispatch(setInFundingSources.fundingSourcesDataSource(fundingSources));
-            }
-          });
-
           if (typeof callback == 'function') callback(true);
           else console.log("Callback is not a function.");
         }
@@ -126,6 +104,8 @@ function mapDispatchToProps(dispatch) {
     },
 
     listen: (endpoints, options, callback) => {
+
+      var CURRENT_USER = options.currentUser;
 
       Firebase.listenTo(endpoints, (response) => {
         switch (response.endpoint.split("/")[0]) {
@@ -140,6 +120,50 @@ function mapDispatchToProps(dispatch) {
             else console.log("%c" + response.endpoint + " is null", "color:red;font-weight:900;");
           break;
 
+          case "users":
+            if (response.value) {
+              console.log("Users listener response:", response.value);
+              // Update funding source in Redux store
+              if (response.value.fundingSource) {
+                Lambda.getFundingSource({ token: options.currentUser.token }, (res) => {
+                  if (res.body) {
+                    var fundingSources = [],
+                        account = {
+                          name: (res.body.name) ? res.body.name : "Nameless Account",
+                          bank: "Unknown",
+                          accountNumber: "Unkown",
+                          active: true,
+                          status: res.body.status,
+                          type: res.body.type,
+                          id: res.body.id,
+                          createdAt : res.body.created,
+                          icon: "bank",
+                        };
+
+                    fundingSources.push(account);
+
+                    dispatch(setInFundingSources.fundingSourcesArray(fundingSources));
+                    dispatch(setInFundingSources.fundingSourcesDataSource(fundingSources));
+                  }
+                });
+              } else {
+                dispatch(setInFundingSources.fundingSourcesArray([]));
+                dispatch(setInFundingSources.fundingSourcesDataSource([]));
+              }
+
+            // Update username in Redux store
+            if (response.value.username != CURRENT_USER.username) {
+              console.log("Changing username from", CURRENT_USER.username, "to", response.value.username);
+              var newUser = CURRENT_USER;
+              newUser.username = response.value.username;
+              CURRENT_USER = newUser;
+              dispatch(set.currentUser(newUser));
+            }
+
+          } else {
+            console.log("%c" + response.endpoint + " is null", "color:red;font-weight:900;");
+          }
+          break;
         }
       });
       dispatch(set.activeFirebaseListeners(endpoints));

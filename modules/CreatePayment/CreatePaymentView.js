@@ -61,6 +61,7 @@ class Purpose extends React.Component {
     if (this.state.awaitingConfirmationOn) {
       return(
         <PayRequestNav
+          {...this.props}
           awaitingConfirmationOn={this.state.awaitingConfirmationOn}
           loading={this.state.loading}
           confirmCallback={() => {
@@ -106,6 +107,7 @@ class Purpose extends React.Component {
     } else {
       return(
         <PayRequestNav
+          {...this.props}
           awaitingConfirmationOn={this.state.awaitingConfirmationOn}
           loading={this.state.loading}
           payCallback={() => this.setState({ awaitingConfirmationOn: "pay", paymentType: "payment" })}
