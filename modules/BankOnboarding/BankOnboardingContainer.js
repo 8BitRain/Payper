@@ -17,6 +17,7 @@ var dispatchList = {
 }
 export default connect(
   state => ({
+
     /*Bank Onboarding State Variables*/
     activeFirebaseListeners: state.getIn(['bankOnboarding', 'activeFirebaseListeners']),
     startIav: state.getIn(['bankOnboarding', 'startIav']),
@@ -46,8 +47,7 @@ export default connect(
     /*Dwolla Customer Creation Status*/
     retry: state.getIn(['bankOnboarding', 'retry']),
     document: state.getIn(['bankOnboarding', 'document']),
-    suspended: state.getIn(['bankOnboarding', 'suspended'])
-
+    suspended: state.getIn(['bankOnboarding', 'suspended']),
 
   }),
   dispatch => ({
