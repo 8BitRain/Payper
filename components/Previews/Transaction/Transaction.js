@@ -134,12 +134,23 @@ function getPendingInvitationAlert(options) {
   *   of the progress bar
 **/
 function getAwaitingFundingSourceAlert(options) {
+  console.log("getAwaitingFundingSourceAlert.options:", options);
   return(
     <View style={styles.bottom}>
       <View style={[styles.alert, { width: dimensions.width * 0.9, padding: 10, backgroundColor: colors.alertRed }]}>
-        <Text style={styles.confirmText}>
-          { "It looks like " + options.name + " has not linked a bank account to their Payper account. Payments will commence once they do so." }
-        </Text>
+
+        { (options.incoming)
+            ? <Text style={styles.confirmText}>
+                { (options.updatingFundingSource)
+                    ? "We're updating your bank information. Payments will commence in the next few minutes."
+                    : "It looks like you haven't linked a bank account to your Payper account. Payments will commence once you do so." }
+              </Text>
+            : <Text style={styles.confirmText}>
+                { (options.updatingFundingSource)
+                    ? "We're updating " + options.name + ( (options.name.charAt(options.name.length - 1) == 's') ? "'" : "'s" ) + " bank information. Payments will commence in the next few minutes."
+                    : "It looks like " + options.name + " hasn't linked a bank account to their Payper account yet. Payments will commence once they do so." }
+              </Text> }
+
       </View>
     </View>
   );
@@ -152,6 +163,7 @@ function getAwaitingFundingSourceAlert(options) {
 class PaymentPreview extends React.Component {
   constructor(props) {
     super(props);
+    console.log("Rendered payment preview with flags:", this.props.flags);
   }
 
   render() {
@@ -255,9 +267,9 @@ class PaymentPreview extends React.Component {
 
           { /* Bottom chunk (progress bar or awaiting funding source alert) */ }
           { (this.props.payment.nextPayment == "waiting_on_fs")
-              ? (this.props.payment.invitee == "recip")
-                  ? getAwaitingFundingSourceAlert({name: this.props.payment.recip_name.split(" ")[0]})
-                  : getAwaitingFundingSourceAlert({name: this.props.payment.sender_name.split(" ")[0]})
+              ? (this.props.currentUser.uid == this.props.payment.recip_id)
+                ? getAwaitingFundingSourceAlert({name: this.props.payment.recip_name.split(" ")[0], incoming: true, updatingFundingSource: this.props.flags.updating_funding_source})
+                : getAwaitingFundingSourceAlert({name: this.props.payment.recip_name.split(" ")[0], incoming: false, updatingFundingSource: this.props.flags.updating_funding_source})
               : <View style={[styles.bottom]}>
                   <View style={styles.barWrap}>
                     <View style={[styles.bar, {flex: this.props.payment.paymentsMade / this.props.payment.payments}]}></View>

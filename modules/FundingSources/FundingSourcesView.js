@@ -53,11 +53,6 @@ class FundingSources extends React.Component {
           _this.props.setIav(iavToken.token);
         }
       });
-    } else if (this.state.fundingSources.getRowCount() > 0) {
-      Alert.message({
-        title: "Unfortunately...",
-        message: "Payper doesn't currently support multiple bank accounts. This feature will be available soon!",
-      });
     }
   }
 
@@ -115,8 +110,15 @@ class FundingSources extends React.Component {
           underlayColor={colors.richBlack}
           activeOpacity={0.7}
           onPress={() => {
-            this._verifyOnboardingStatus();
-            if (this.props.flags.onboarding_state != "complete" || this.state.fundingSources.getRowCount() == 0) this._toggleModal();
+            if (this.props.fundingSourcesArray.length > 0) {
+              Alert.message({
+                title: "Unfortunately...",
+                message: "Payper doesn't currently support multiple bank accounts. This feature will be available soon!",
+              });
+            } else {
+              this._verifyOnboardingStatus();
+              if (this.props.flags.onboarding_state != "complete" || this.state.fundingSources.getRowCount() == 0) this._toggleModal();
+            }
           }}>
 
           <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: colors.richBlack, borderBottomWidth: 1.0, borderBottomColor: colors.accent}}>
@@ -128,8 +130,8 @@ class FundingSources extends React.Component {
 
         </TouchableHighlight>
 
-        { /* Render list of notifications or empty state */  }
-        {(this.state.empty) ? this._getEmptyState() : this._getFundingSourceList() }
+        { /* Render list of notifications or empty state */
+          (this.state.empty) ? this._getEmptyState() : this._getFundingSourceList() }
 
         { /* Modal containing bank onboarding flow */ }
         <Modal

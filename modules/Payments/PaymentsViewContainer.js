@@ -168,18 +168,18 @@ function mapDispatchToProps(dispatch) {
         console.log(options.ds._dataBlob.s1);
       }
 
-      var ds = options.ds._dataBlob.s1;
-      for (var p in ds) if (p == options.pid) {
-        if (enableLogs) console.log("Row to edit: " + (ds[p]));
-        ds[p].confirmed = true;
+      var payments = options.ds._dataBlob.s1;
+      for (var p in payments) if (payments[p].pid == options.pid) {
+        if (enableLogs) console.log("Row to edit: " + (payments[p]));
+        payments[p].confirmed = true;
       };
 
       if (enableLogs) {
         console.log("%cNew data source:", "color:blue;font-weight:900;");
-        console.log(ds);
+        console.log(payments);
       }
 
-      dispatch(set.outgoingPayments(ds));
+      dispatch(set.outgoingPayments(payments));
       Lambda.confirmPayment({ type: options.type, payment_id: options.pid, token: options.token});
     },
 
@@ -190,18 +190,18 @@ function mapDispatchToProps(dispatch) {
         console.log(options.ds._dataBlob.s1);
       }
 
-      var ds = options.ds._dataBlob.s1;
-      for (var p in ds) if (p == options.pid) {
-        if (enableLogs) console.log("Row to edit: " + (ds[p]));
-        delete ds[p];
+      var payments = options.ds._dataBlob.s1;
+      for (var p in payments) if (payments[p].pid == options.pid) {
+        if (enableLogs) console.log("Row to edit: " + (payments[p]));
+        delete payments[p];
       };
 
       if (enableLogs) {
         console.log("%cNew data source:", "color:blue;font-weight:900;");
-        console.log(ds);
+        console.log(payments);
       }
 
-      dispatch(set.outgoingPayments(ds));
+      dispatch(set.outgoingPayments(payments));
       Lambda.rejectPayment({payment_id: options.pid, token: options.token});
     },
   }

@@ -185,39 +185,29 @@ export function signInWithFacebook(data, callback) {
   *   3) POST user's object to Lambda endpoint
   *   4) Initialize the app
 **/
-export function createUser(input, _callback) {
+export function createUser(input, callback) {
   Firebase.createUser(input, (success) => {
     if (success) {
-      //Set initial flags for the user created
-      console.log("SETTING INITIAL USER FLAGS")
       Firebase.getSessionToken((token) => {
-        //input.token = token;
-        var data = {
-          email: input.email,
-          firstName: input.firstName,
-          lastName: input.lastName,
-          phone: input.phone,
-          token: token
-        }
-        _callback(true, token);
-        console.log("%cFirebaseToken: " + token, "color:purple;font-weight:700;");
-        Lambda.createUser(data, (user) => {
+        input.token = token;
+        Lambda.createUser(input, (user) => {
           if (user) {
             // Creation succeeded. Log the user to Async storage and take them
             // to the app.
             Async.set('user', JSON.stringify(user), () => {
-              if (typeof callback == 'function') callback(true);
+              if (typeof callback == 'function') callback(true, token);
               else console.log("%cCallback is not a function", "color:red;font-weight:900;");
             });
           } else {
             console.log("%cReceived null user.", "color:blue;font-weight:900;");
-            if (typeof callback == 'function') callback(false);
+            if (typeof callback == 'function') callback(false, null);
             else console.log("%cCallback is not a function", "color:red;font-weight:900;");
           }
         });
       });
-    } else{
-      _callback(false, null);
+    } else {
+      if (typeof callback == 'function') callback(false, null);
+      else console.log("%cCallback is not a function", "color:red;font-weight:900;");
     }
   });
 };

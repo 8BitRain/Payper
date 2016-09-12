@@ -126,7 +126,11 @@
 - [ ] Rethink handling contacts with multiple numbers (if more than one number, use the 'Mobile' number)
 - [ ] Sign-in success on second attempt looks whack
 - [ ] Refactor entire sign-in process (follow another React Native app's example)
-- [ ] Fix bug where, when you accept or reject a payment request, your incoming tab becomes populated with the other party's incoming payments
+- [ ] Fix bug where, when you accept or reject a payment request, your incoming tab becomes populated with the other party's incoming payments (must recreate first)
+
+### Sept. 11 UI Testing
+- [X] Fix bug where payment request rejection does not optimistically delete, also
+- [X] Fix bug where payment request accept does not optimistically re-render
 
 ### Things I Need Vash For (Brady)
 - [X] Fix bug where inviting via payment exits before completing request

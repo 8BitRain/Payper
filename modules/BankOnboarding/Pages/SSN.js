@@ -34,6 +34,8 @@ class SSN extends React.Component {
      // Props for animation
      this.kbOffset = new Animated.Value(0);
 
+     console.log("SSN received new user token:", this.props.newUser.token);
+
      this.animationProps = {
        fadeAnim: new Animated.Value(0) // init opacity 0
      };

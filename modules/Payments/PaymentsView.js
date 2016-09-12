@@ -121,6 +121,7 @@ class Payments extends React.Component {
     console.log(payment);
     return(
       <Transaction
+        {...this.props}
         payment={payment}
         out={this.props.activeFilter == "outgoing"}
         callbackCancel={() => {
@@ -229,7 +230,7 @@ class Payments extends React.Component {
   _verifyOnboardingStatus() {
     console.log("FLAGS" + JSON.stringify(this.props.flags));
     if(this.props.flags.onboarding_state == 'customer'){
-      Actions.BankOnboardingContainer();
+      // Actions.BankOnboardingContainer();
       console.log(this.props.currentUser.token);
       this.props.setNewUserToken(this.props.currentUser.token);
     }
@@ -258,7 +259,6 @@ class Payments extends React.Component {
           this.props.setDocument(true);
           Actions.BankOnboardingContainer();
       }
-
     }
     if(this.props.flags.onboarding_state == 'complete'){
       Actions.CreatePaymentViewContainer();

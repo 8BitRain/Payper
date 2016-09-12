@@ -77,22 +77,24 @@ class Summary extends React.Component {
    };
  }
 
- handlePressCheckedBox = (checked) => {
-   this.setState({
-     isChecked: checked,
-   });
-   var _this = this;
-   Init.createUser(this.props.newUser, function(userCreated, token){
-     if(userCreated){
-       console.log("SUMMARY SCREEN: TOKEN (Standalone from USERTOKEN): " + _this.props.token)
-       console.log("SUMMARY SCREEN: USER TOKEN BEFORE DISPATCH: " + _this.props.newUser.token);
-       console.log("SUMMARY SCREEN: USER TOKEN: " + token);
-       _this.props.dispatchSetNewUserToken(token);
-       console.log("SUMMARY SCREEN: USER TOKEN AFTER DISPATCH" + _this.props.newUser.token);
-       Actions.BankOnboardingContainer();
-     }
-   });
-}
+  handlePressCheckedBox = (checked) => {
+
+    // Extend scope
+    const _this = this;
+
+    // Update check box
+    this.setState({ isChecked: checked });
+
+    // Create user, dispatch jwt to Redux store, and redirect to bank onboarding flow
+    Init.createUser(this.props.newUser, function(userCreated, token) {
+      if (userCreated) {
+        console.log("createUser returned token:", token);
+        _this.props.dispatchSetNewUserToken(token);
+        Actions.BankOnboardingContainer();
+      }
+    });
+
+  }
 
   handleUrlClick = (url) =>{
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
