@@ -123,6 +123,7 @@ function mapDispatchToProps(dispatch) {
           case "users":
             if (response.value) {
               console.log("Users listener response:", response.value);
+              console.log("Getting funding source with options:", options);
               // Update funding source in Redux store
               if (response.value.fundingSource) {
                 Lambda.getFundingSource({ token: options.currentUser.token }, (res) => {

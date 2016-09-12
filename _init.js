@@ -198,8 +198,9 @@ export function createUser(input, callback) {
         };
         Lambda.createUser(userInfo, (user) => {
           if (user) {
-            // Creation succeeded. Log the user to Async storage and take them
-            // to the app.
+            // Creation succeeded. Log the user and their session_token to Async
+            // storage and take them to the app
+            user.token = token;
             Async.set('user', JSON.stringify(user), () => {
               if (typeof callback == 'function') callback(true, token);
               else console.log("%cCallback is not a function", "color:red;font-weight:900;");
