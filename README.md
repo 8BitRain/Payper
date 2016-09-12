@@ -134,6 +134,7 @@
 - [X] Fix bug where inviting via payment exits before completing request
 - [X] Attach "type" to Firebase payment object when creating a new payment
 - [X] Fix bug where payment creation sometimes fails
+- [ ] Any time a payment is created or rejected, or a user removes or adds a funding source, check all of that user's payments and mark nextPayment as 'waiting_on_fs' if need be
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)

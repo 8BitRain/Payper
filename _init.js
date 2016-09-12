@@ -189,8 +189,14 @@ export function createUser(input, callback) {
   Firebase.createUser(input, (success) => {
     if (success) {
       Firebase.getSessionToken((token) => {
-        input.token = token;
-        Lambda.createUser(input, (user) => {
+        var userInfo = {
+          email: input.email,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          phone: input.phone,
+          token: token
+        };
+        Lambda.createUser(userInfo, (user) => {
           if (user) {
             // Creation succeeded. Log the user to Async storage and take them
             // to the app.
