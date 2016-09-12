@@ -126,6 +126,7 @@
 - [X] Fix bug where payment request rejection does not optimistically delete, also
 - [X] Fix bug where payment request accept does not optimistically re-render
 - [X] Fix issue where, after adding a funding source and being taken to the app, your funding source is not loaded, but is loaded after you close and reopen the app
+- [X] Set up a cron job to refresh session token every 25 minutes
 - [ ] Rethink handling contacts with multiple numbers (if more than one number, use the 'Mobile' number)
 - [ ] Sign-in success on second attempt looks whack
 - [ ] Refactor entire sign-in process (follow another React Native app's example)

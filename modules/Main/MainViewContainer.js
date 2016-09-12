@@ -96,6 +96,19 @@ function mapDispatchToProps(dispatch) {
             }
           });
 
+          // Refresh session token every 20 minutes
+          setInterval(function() {
+            console.log("Old token:", parsedUser.token.substring(parsedUser.token.length - 5, parsedUser.token.length));
+            console.log("Refreshing session token...");
+            Firebase.getSessionToken((token) => {
+              Async.set('session_token', token, () => {
+                parsedUser.token = token;
+                console.log("New token:", parsedUser.token.substring(parsedUser.token.length - 5, parsedUser.token.length));
+                dispatch(set.currentUser(parsedUser));
+              });
+            });
+          }, 1200 * 1000);
+
           if (typeof callback == 'function') callback(true);
           else console.log("Callback is not a function.");
         }
