@@ -51,35 +51,43 @@ function mapDispatchToProps(dispatch) {
         switch (response.key) {
 
           case "out":
-            // Tack payment ID on as prop of each payment object
-            for (var p in response.value) response.value[p].pid = p;
+            if (response.value == null) {
+              console.log("%cOutgoing payments are null.", "color:red;font-weight:700;");
+              dispatch(set.outgoingPayments([]));
+            } else {
+              // Tack payment ID on as prop of each payment object
+              for (var p in response.value) response.value[p].pid = p;
 
-            // Convert from JSON to array and extract PID's of complete payments
-            var paymentArray = SetMaster5000.JSONToArray({ JSON: response.value }),
-                paymentsToPrioritize = SetMaster5000.extractCompletedPayments({ payments: paymentArray });
+              // Convert from JSON to array and extract PID's of complete payments
+              var paymentArray = SetMaster5000.JSONToArray({ JSON: response.value }),
+                  paymentsToPrioritize = SetMaster5000.extractCompletedPayments({ payments: paymentArray });
 
-            // Move complete payments to the front of array
-            var orderedPayments = (paymentsToPrioritize.length == 0) ? paymentArray : SetMaster5000.prioritizePayments({ payments: paymentArray, prioritize: paymentsToPrioritize });
+              // Move complete payments to the front of array
+              var orderedPayments = (paymentsToPrioritize.length == 0) ? paymentArray : SetMaster5000.prioritizePayments({ payments: paymentArray, prioritize: paymentsToPrioritize });
 
-            // Persist payments to Redux store
-            if (response.value) dispatch(set.outgoingPayments(orderedPayments));
-            else console.log("%cIncoming payments are null.", "color:red;font-weight:700;");
+              // Persist payments to Redux store
+              dispatch(set.outgoingPayments(orderedPayments));
+            }
           break;
 
           case "in":
-            // Tack payment ID on as prop of each payment object
-            for (var p in response.value) response.value[p].pid = p;
+            if (response.value == null) {
+              console.log("%cIncoming payments are null.", "color:red;font-weight:700;");
+              dispatch(set.incomingPayments([]));
+            } else {
+              // Tack payment ID on as prop of each payment object
+              for (var p in response.value) response.value[p].pid = p;
 
-            // Convert from JSON to array and extract PID's of complete payments
-            var paymentArray = SetMaster5000.JSONToArray({ JSON: response.value }),
-                paymentsToPrioritize = SetMaster5000.extractCompletedPayments({ payments: paymentArray });
+              // Convert from JSON to array and extract PID's of complete payments
+              var paymentArray = SetMaster5000.JSONToArray({ JSON: response.value }),
+                  paymentsToPrioritize = SetMaster5000.extractCompletedPayments({ payments: paymentArray });
 
-            // Move complete payments to the front of array
-            var orderedPayments = (paymentsToPrioritize.length == 0) ? paymentArray : SetMaster5000.prioritizePayments({ payments: paymentArray, prioritize: paymentsToPrioritize });
+              // Move complete payments to the front of array
+              var orderedPayments = (paymentsToPrioritize.length == 0) ? paymentArray : SetMaster5000.prioritizePayments({ payments: paymentArray, prioritize: paymentsToPrioritize });
 
-            // Persist payments to Redux store
-            if (response.value) dispatch(set.incomingPayments(orderedPayments));
-            else console.log("%cIncoming payments are null.", "color:red;font-weight:700;");
+              // Persist payments to Redux store
+              dispatch(set.incomingPayments(orderedPayments));
+            }
           break;
 
           case "global":
@@ -147,16 +155,16 @@ function mapDispatchToProps(dispatch) {
         console.log(options.ds._dataBlob.s1);
       }
 
-      var ds = options.ds._dataBlob.s1;
-      for (var p in ds) if (p == options.pid) delete ds[p];
+      var payments = options.ds._dataBlob.s1;
+      for (var p in payments) if (payments[p].pid == options.pid) delete payments[p];
 
       if (enableLogs) {
         console.log("%cNew data source:", "color:blue;font-weight:900;");
-        console.log(ds);
+        console.log(payments);
       }
 
-      if (options.flow == "out") dispatch(set.outgoingPayments(ds));
-      else if (options.flow == "in") dispatch(set.incomingPayments(ds));
+      if (options.flow == "out") dispatch(set.outgoingPayments(payments));
+      else if (options.flow == "in") dispatch(set.incomingPayments(payments));
 
       Lambda.cancelPayment({ invite: options.invite, type: options.type, payment_id: options.pid, token: options.token });
     },
