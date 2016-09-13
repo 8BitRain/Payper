@@ -31,6 +31,7 @@
 		232A65D11D03D74E0084EA8E /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 232A65CD1D03D74E0084EA8E /* Roboto-Light.ttf */; };
 		232A65D21D03D74E0084EA8E /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 232A65CE1D03D74E0084EA8E /* Roboto-Medium.ttf */; };
 		232A65D31D03D74E0084EA8E /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 232A65CF1D03D74E0084EA8E /* Roboto-Thin.ttf */; };
+		237E07531D8896B1009E503C /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 237E07421D8896A2009E503C /* libBVLinearGradient.a */; };
 		238A0DD11D49672D00EACFBF /* libRCTContacts.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 238A0DC21D49671D00EACFBF /* libRCTContacts.a */; };
 		44192408B916443E8CA59F4D /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F76F232837FA45489E53A198 /* EvilIcons.ttf */; };
 		4758F8C82D514374A4D82AE5 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26265A71C02048F18E3EE5F7 /* libRNVectorIcons.a */; };
@@ -139,6 +140,13 @@
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
 		};
+		237E07411D8896A2009E503C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 237E073D1D8896A2009E503C /* BVLinearGradient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = BVLinearGradient;
+		};
 		238A0DC11D49671D00EACFBF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 238A0DBC1D49671D00EACFBF /* RCTContacts.xcodeproj */;
@@ -201,6 +209,7 @@
 		232A65CD1D03D74E0084EA8E /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Light.ttf"; sourceTree = "<group>"; };
 		232A65CE1D03D74E0084EA8E /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		232A65CF1D03D74E0084EA8E /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
+		237E073D1D8896A2009E503C /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		238A0DBC1D49671D00EACFBF /* RCTContacts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTContacts.xcodeproj; path = "../node_modules/react-native-contacts/ios/RCTContacts.xcodeproj"; sourceTree = "<group>"; };
 		26265A71C02048F18E3EE5F7 /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		2DB6499B06E14647AF2065C6 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
@@ -234,6 +243,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				237E07531D8896B1009E503C /* libBVLinearGradient.a in Frameworks */,
 				238A0DD11D49672D00EACFBF /* libRCTContacts.a in Frameworks */,
 				079D26581D430BD2000F7943 /* FBSDKCoreKit.framework in Frameworks */,
 				079D26591D430BD2000F7943 /* FBSDKLoginKit.framework in Frameworks */,
@@ -388,6 +398,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		237E073E1D8896A2009E503C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				237E07421D8896A2009E503C /* libBVLinearGradient.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		238A0DBD1D49671D00EACFBF /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -415,6 +433,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				237E073D1D8896A2009E503C /* BVLinearGradient.xcodeproj */,
 				238A0DBC1D49671D00EACFBF /* RCTContacts.xcodeproj */,
 				07B940DC1D39A689001AD244 /* React-Native-Webview-Bridge.xcodeproj */,
 				5988C64A1D25657400223434 /* RNMixpanel.xcodeproj */,
@@ -583,6 +602,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 237E073E1D8896A2009E503C /* Products */;
+					ProjectRef = 237E073D1D8896A2009E503C /* BVLinearGradient.xcodeproj */;
+				},
+				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
 					ProjectRef = 00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */;
 				},
@@ -738,6 +761,13 @@
 			fileType = archive.ar;
 			path = libReact.a;
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		237E07421D8896A2009E503C /* libBVLinearGradient.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBVLinearGradient.a;
+			remoteRef = 237E07411D8896A2009E503C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		238A0DC21D49671D00EACFBF /* libRCTContacts.a */ = {

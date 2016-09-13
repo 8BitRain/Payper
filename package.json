@@ -23,6 +23,7 @@
     "react-native-facebook-login": "^1.2.0",
     "react-native-fbsdk": "^0.3.0",
     "react-native-hyperlink": "0.0.5",
+    "react-native-linear-gradient": "^1.5.12",
     "react-native-mixpanel": "0.0.10",
     "react-native-modalbox": "^1.3.3",
     "react-native-router-flux": "./libs/react-native-router-flux-master",

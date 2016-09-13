@@ -4,6 +4,7 @@ import { View, Text, Animated, Image, Dimensions, Linking, StatusBar } from 'rea
 import { Actions } from 'react-native-router-flux';
 import Hyperlink from 'react-native-hyperlink';
 import * as Animations from '../../helpers/animations';
+import LinearGradient from 'react-native-linear-gradient';
 
 // Helper functions
 import * as Timestamp from '../../helpers/Timestamp';
@@ -339,7 +340,12 @@ class LandingScreenDisplay extends React.Component {
 
     } else {
       return (
-        <Animated.View style={{flex: 1.0, backgroundColor: colors.richBlack, opacity: this.animationProps.fadeAnim}}>
+
+        <Animated.View style={{flex: 1.0, backgroundColor: 'transparent', opacity: this.animationProps.fadeAnim}}>
+
+          <LinearGradient
+            colors={['#4c669f', '#3b5998', '#192f6a']}
+            style={{ flex: 1, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, }} />
 
           { /* Lighten status bar text */ }
           <StatusBar barStyle="light-content" />
