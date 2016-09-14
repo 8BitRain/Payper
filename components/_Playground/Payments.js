@@ -21,6 +21,9 @@ class Payments extends React.Component {
     super(props);
 
     this.paneCounter = 0;
+    this.paneCounterIncreasing = true;
+    this.maxPaneCounterValue = 5;
+
     this.EMPTY_DATA_SOURCE = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2,
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2
@@ -49,6 +52,7 @@ class Payments extends React.Component {
         activeFilter: nextProps.activeFilter,
       });
       this.paneCounter = 0;
+      this.paneCounterIncreasing = true;
     }
   }
 
@@ -63,8 +67,13 @@ class Payments extends React.Component {
   _renderRow(payment) {
     // Increment paneCounter, which will determine which background color to use
     // for this row
-    if (this.paneCounter === 4) this.paneCounter = 1;
-    else this.paneCounter++;
+    if (this.paneCounterIncreasing) {
+      this.paneCounter++;
+      if (this.paneCounter === this.maxPaneCounterValue) this.paneCounterIncreasing = false;
+    } else {
+      this.paneCounter--;
+      if (this.paneCounter === 1) this.paneCounterIncreasing = true;
+    }
 
     return(
       <PaymentCard

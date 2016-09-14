@@ -1,8 +1,10 @@
 // Dependencies
 import React from 'react';
-import { View, StyleSheet, Text, Dimensions, Image, TouchableHighlight, Platform } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, Image, TouchableHighlight, Platform, ActionSheetIOS } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../styles/colors';
+import Entypo from 'react-native-vector-icons/Entypo'
+import Alert from '../../helpers/Alert';
 
 // Components
 import Avatar from './Avatar';
@@ -22,6 +24,33 @@ const dimensions = {
 class PaymentCardContent extends React.Component {
   constructor(props) {
     super(props);
+    this.actionSheetOptions = ['Cancel Payment Series', 'Nevermind'];
+  }
+
+  _toggleActionSheet() {
+    ActionSheetIOS.showActionSheetWithOptions({
+      title: "$" + this.props.payment.amount + " per month - " + this.props.payment.purpose,
+      options: this.actionSheetOptions,
+      cancelButtonIndex: 1
+    },
+    (buttonIndex) => {
+      console.log(this.actionSheetOptions[buttonIndex]);
+    });
+  }
+
+  _toggleCancelAlert() {
+    Alert.alert({
+      title: "Are you sure you'd like to cancel this payment series?",
+      message: "$" + this.props.payment.amount + " per month for " + this.props.payment.payments + " months\nPurpose: " + this.props.payment.purpose,
+      cancelMessage: "Nevermind",
+      confirmMessage: "Cancel",
+      cancel: () => {
+        console.log("Nevermind");
+      },
+      confirm: () => {
+        console.log("Cancelling payment series...");
+      },
+    });
   }
 
   render() {
@@ -71,6 +100,15 @@ class PaymentCardContent extends React.Component {
           (this.props.payment.notice)
             ? <View style={wrappers.notice} />
             : null }
+
+        { /* Menu toggle icon */ }
+        <TouchableHighlight
+          style={menu.toggleWrap}
+          activeOpacity={0.775}
+          underlayColor={'transparent'}
+          onPress={() => this._toggleActionSheet()}>
+          <Entypo name={"dots-three-horizontal"} size={20} color={"rgba(0, 0, 0, 0.8)"} />
+        </TouchableHighlight>
 
       </View>
     );
@@ -201,6 +239,18 @@ const panes = StyleSheet.create({
     flex: 1.0,
     position: 'absolute',
     top: 0, left: 0, right: 0, bottom: 0,
+  },
+});
+
+const menu = StyleSheet.create({
+  toggleWrap: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    borderWidth: (borders) ? 1.0 : 0.0,
+    borderColor: 'green',
+    padding: 10,
+    paddingTop: 7,
   },
 });
 
