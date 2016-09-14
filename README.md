@@ -87,6 +87,7 @@
 - [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
 - [ ] Add an onPress destination for notifications
 - [ ] Create a PaymentSeries module, containing detailed information about the payment series, and the option to skip/reschedule payments
+- [ ] Add character limit to payment purposes
 
 ### MVP Usability and Design Bugs (Brady)
 - [X] Adjust CreatePayment flow so that after payment creation: payment creation => outgoing tab of payments view, request creating => incoming tab of payments view

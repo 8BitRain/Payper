@@ -48,6 +48,7 @@ class Payments extends React.Component {
           : this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(nextProps.payments.outgoing),
         activeFilter: nextProps.activeFilter,
       });
+      this.paneCounter = 0;
     }
   }
 
@@ -62,7 +63,7 @@ class Payments extends React.Component {
   _renderRow(payment) {
     // Increment paneCounter, which will determine which background color to use
     // for this row
-    if (this.paneCounter === 3) this.paneCounter = 1;
+    if (this.paneCounter === 4) this.paneCounter = 1;
     else this.paneCounter++;
 
     return(

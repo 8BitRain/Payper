@@ -20,7 +20,7 @@ const db = {
         paymentsMade: "8",
         purpose: "Goods & Services",
         sender_name: "Eric Smith",
-        sender_pic: "https://scontent-ord1-1.xx.fbcdn.net/t31.0-8/13119959_1107390755948052_7502054529648141346_o.jpg",
+        sender_pic: "",
         sectionTitle: "Active (6)",
       },
       {
@@ -31,7 +31,7 @@ const db = {
         paymentsMade: "9",
         purpose: "Knee pads",
         sender_name: "Mohsin Khan",
-        sender_pic: "https://scontent-ord1-1.xx.fbcdn.net/t31.0-8/13119959_1107390755948052_7502054529648141346_o.jpg",
+        sender_pic: "",
         sectionTitle: "Active (6)",
       },
       {
@@ -53,7 +53,7 @@ const db = {
         paymentsMade: "8",
         purpose: "Goods & Services",
         sender_name: "Eric Smith",
-        sender_pic: "https://scontent-ord1-1.xx.fbcdn.net/t31.0-8/13119959_1107390755948052_7502054529648141346_o.jpg",
+        sender_pic: "",
         sectionTitle: "Active (6)",
       },
       {
@@ -64,7 +64,7 @@ const db = {
         paymentsMade: "9",
         purpose: "Knee pads",
         sender_name: "Mohsin Khan",
-        sender_pic: "https://scontent-ord1-1.xx.fbcdn.net/t31.0-8/13119959_1107390755948052_7502054529648141346_o.jpg",
+        sender_pic: "",
         sectionTitle: "Active (6)",
       },
     ],
