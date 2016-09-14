@@ -19,6 +19,10 @@ import LandingView from './components/LandingView';
 
 import FirebaseBindingViewContainer from './modules/FirebaseBinding/FirebaseBindingViewContainer';
 
+// Design experimentation
+import BlackPurple from './components/_Playground/BlackPurple';
+import Main from './components/_Playground/Main';
+
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
   return (state, action) => {
@@ -53,7 +57,7 @@ export default class Coincast extends React.Component {
           <Scene key="root" hideNavBar hideTabBar>
 
             { /* Main app flow */ }
-            <Scene key="SplashView" component={SplashView} title="SplashView" initial />
+            <Scene key="SplashView" component={SplashView} title="SplashView" />
             <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" panHandlers={null} />
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" panHandlers={null} />
             <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" panHandlers={null} />
@@ -64,6 +68,10 @@ export default class Coincast extends React.Component {
             { /* Testing */ }
             <Scene key="LandingView" component={LandingView} title="LandingView" panHandlers={null} />
             <Scene key="FirebaseBindingViewContainer" component={FirebaseBindingViewContainer} title="FirebaseBindingViewContainer" panHandlers={null} />
+
+            { /* Design experimentation */ }
+            <Scene key="BlackPurple" component={BlackPurple} title="BlackPurple" panHandlers={null} />
+            <Scene initial key="Main" component={Main} title="Main" panHandlers={null} />
 
           </Scene>
           <Scene key="error" component={Error}/>
