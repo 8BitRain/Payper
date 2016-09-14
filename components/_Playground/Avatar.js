@@ -1,16 +1,7 @@
 // Dependencies
 import React from 'react';
-import { View, Image, Text, Dimensions, TouchableHighlight, StyleSheet } from 'react-native';
+import { View, Image, Text, TouchableHighlight, StyleSheet } from 'react-native';
 import colors from '../../styles/colors';
-
-// Should we show container borders?
-const borders = true;
-
-// Window dimensions
-const dimensions = {
-  width: Dimensions.get('window').width,
-  height: Dimensions.get('window').height,
-};
 
 class Avatar extends React.Component {
   constructor(props) {
@@ -25,10 +16,8 @@ class Avatar extends React.Component {
         ? initials = (name[0].substring(0, 1) + name[name.length - 1].substring(0, 1)).toUpperCase()
         : initials = name[0].substring(0, 1).toUpperCase();
       return(
-        <View style={{width: dimensions.width, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          <View style={[styles.pic, styles.initials, {width: this.props.width, height: this.props.height, borderColor: colors.richBlack, borderRadius: this.props.width / 2}]}>
-            <Text style={{fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.richBlack}}>{ initials }</Text>
-          </View>
+        <View style={[styles.pic, styles.initials, {width: this.props.width, height: this.props.height, borderColor: colors.richBlack, borderRadius: this.props.width / 2}]}>
+          <Text style={{fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.richBlack}}>{ initials }</Text>
         </View>
       );
     } else {

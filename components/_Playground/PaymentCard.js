@@ -30,21 +30,25 @@ class PaymentCardContent extends React.Component {
 
         { /* Top half */ }
         <View style={wrappers.top}>
-          <View style={wrappers.topLeft}>
-            <Avatar
-              user={{
-                profile_pic: this.props.payment.sender_pic,
-                first_name: this.props.payment.sender_name.split(" ")[0],
-                last_name: this.props.payment.sender_name.split(" ")[1],
-              }}
-              width={58}
-              height={58} />
-          </View>
-          <View style={wrappers.topRight}>
-            <Text style={typography.name}>
-              { this.props.payment.sender_name }
-            </Text>
-            <Text style={typography.info}>
+          <Avatar
+            user={{
+              profile_pic: this.props.payment.sender_pic,
+              first_name: this.props.payment.sender_name.split(" ")[0],
+              last_name: this.props.payment.sender_name.split(" ")[1],
+            }}
+            width={48}
+            height={48} />
+          <Text style={typography.name}>
+            { (this.props.payment.sender_name.split(" ").length > 1)
+                ? this.props.payment.sender_name.split(" ")[0] + "\n" + this.props.payment.sender_name.split(" ")[1]
+                : this.props.payment.sender_name }
+          </Text>
+        </View>
+
+        { /* Bottom half */ }
+        <View style={wrappers.bottom}>
+          <View style={wrappers.info}>
+            <Text style={typography.duration}>
               { "$" + this.props.payment.amount + " per month for " + this.props.payment.payments + " months" }
             </Text>
             <Text style={typography.info}>
@@ -54,10 +58,6 @@ class PaymentCardContent extends React.Component {
               { "Next Payment: " + Timestamp.calendarize(this.props.payment.nextPayment) }
             </Text>
           </View>
-        </View>
-
-        { /* Bottom half */ }
-        <View style={wrappers.bottom}>
           <View style={wrappers.progressBar}>
             <View style={[progressBar.inner, {flex: this.props.payment.paymentsMade / this.props.payment.payments}]}></View>
             <View style={{flex: 1 - this.props.payment.paymentsMade / this.props.payment.payments}}></View>
@@ -107,44 +107,28 @@ const wrappers = StyleSheet.create({
   },
   paymentCardContent: {
     flex: 1.0,
-    width: dimensions.width * 0.9,
-    paddingTop: 15,
+    width: dimensions.width,
+    paddingTop: 20,
     paddingBottom: 20,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },
   top: {
-    flex: 0.5,
     width: dimensions.width,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  topLeft: {
-    flex: 0.3,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: (borders) ? 1.0 : 0.0,
-    borderColor: 'red',
-    paddingLeft: 15,
-  },
-  topRight: {
-    flex: 0.7,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    borderWidth: (borders) ? 1.0 : 0.0,
-    borderColor: 'blue',
   },
   bottom: {
-    flex: 0.5,
     width: dimensions.width,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 25,
+    paddingTop: 10,
+  },
+  info: {
+    paddingBottom: 15,
   },
   notice: {
     height: 40,
@@ -175,15 +159,23 @@ const typography = StyleSheet.create({
   info: {
     fontFamily: 'Roboto',
     color: colors.richBlack,
-    paddingRight: 10,
+    padding: 2,
+  },
+  duration: {
+    fontFamily: 'Roboto',
+    color: colors.richBlack,
+    padding: 5,
+    borderRadius: 2,
+    marginBottom: 5,
+    alignSelf: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
   },
   name: {
     fontFamily: 'Roboto',
     fontSize: 18.5,
     fontWeight: '200',
     color: colors.richBlack,
-    padding: 5,
-    paddingLeft: 0,
+    paddingLeft: 15,
   },
   progressBar: {
     fontFamily: 'Roboto',
