@@ -44,6 +44,16 @@
 		BDD47DA019984967A92C9E8E /* libRCTFBSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 674FC4C1A5164B63AAC1B3F5 /* libRCTFBSDK.a */; };
 		CE878DF8EF9242C0BD060B2A /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86FC5D349CB74BC48A9DC027 /* Foundation.ttf */; };
 		DE5D275BD2D74B9DA0A67C7E /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09C9369473164F0088059C2E /* FontAwesome.ttf */; };
+		0AD5683CF51247C9AF3FBCCA /* libRNBlur.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 62DA8A9C637F48BA9FCA5553 /* libRNBlur.a */; };
+		9B5A57C6800342B1A80794FC /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B11D6FEEBAAA4FFCAE0086A1 /* libBVLinearGradient.a */; };
+		BDBF3576E6E24DB385518EA6 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BE5C0AF03889410BAB2B182F /* Entypo.ttf */; };
+		0F49F4E0EFAB48EEBD5859C6 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B8B9353A71440B18DFFE326 /* EvilIcons.ttf */; };
+		C390FEFD2E88451386EE37CB /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22B90E4E9FCB427D94CB8856 /* FontAwesome.ttf */; };
+		EEE7EC30EB1048E7A40075A1 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 368E98C729DF4806AD82E7B1 /* Foundation.ttf */; };
+		6B9A03537F4D45D5B3C13A23 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 710BC9A638BD4FE8B7F8966D /* Ionicons.ttf */; };
+		72CA9231C9A546E18DC5BA96 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59AA2BFBD99E4F5ABA824650 /* MaterialIcons.ttf */; };
+		6B42B0E3EC214C0A9A9D92B0 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1137EB7B5BD54B4787F2B8DC /* Octicons.ttf */; };
+		9FB13FA9E72547BA9249896E /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F6A64632294402F96AF2CE1 /* Zocial.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -219,6 +229,18 @@
 		EBF3648A563841AA8435F446 /* RCTFBLogin.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTFBLogin.xcodeproj; path = "../node_modules/react-native-facebook-login/RCTFBLogin.xcodeproj"; sourceTree = "<group>"; };
 		F76F232837FA45489E53A198 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		FD6A5678DEBE41AE8EC825D5 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		B1B38D341CF547F99321CC67 /* RNBlur.xcodeproj */ = {isa = PBXFileReference; name = "RNBlur.xcodeproj"; path = "../../node_modules/react-native-blur/ios/RNBlur.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		62DA8A9C637F48BA9FCA5553 /* libRNBlur.a */ = {isa = PBXFileReference; name = "libRNBlur.a"; path = "libRNBlur.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		39EE3E8D6EC74BD29120A069 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; name = "BVLinearGradient.xcodeproj"; path = "../../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		B11D6FEEBAAA4FFCAE0086A1 /* libBVLinearGradient.a */ = {isa = PBXFileReference; name = "libBVLinearGradient.a"; path = "libBVLinearGradient.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		BE5C0AF03889410BAB2B182F /* Entypo.ttf */ = {isa = PBXFileReference; name = "Entypo.ttf"; path = "../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4B8B9353A71440B18DFFE326 /* EvilIcons.ttf */ = {isa = PBXFileReference; name = "EvilIcons.ttf"; path = "../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		22B90E4E9FCB427D94CB8856 /* FontAwesome.ttf */ = {isa = PBXFileReference; name = "FontAwesome.ttf"; path = "../../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		368E98C729DF4806AD82E7B1 /* Foundation.ttf */ = {isa = PBXFileReference; name = "Foundation.ttf"; path = "../../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		710BC9A638BD4FE8B7F8966D /* Ionicons.ttf */ = {isa = PBXFileReference; name = "Ionicons.ttf"; path = "../../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		59AA2BFBD99E4F5ABA824650 /* MaterialIcons.ttf */ = {isa = PBXFileReference; name = "MaterialIcons.ttf"; path = "../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1137EB7B5BD54B4787F2B8DC /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2F6A64632294402F96AF2CE1 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -254,6 +276,8 @@
 				4758F8C82D514374A4D82AE5 /* libRNVectorIcons.a in Frameworks */,
 				7F7D20D76850969CC184C697 /* libPods-Coincast.a in Frameworks */,
 				BDD47DA019984967A92C9E8E /* libRCTFBSDK.a in Frameworks */,
+				0AD5683CF51247C9AF3FBCCA /* libRNBlur.a in Frameworks */,
+				9B5A57C6800342B1A80794FC /* libBVLinearGradient.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,6 +454,8 @@
 				2DB6499B06E14647AF2065C6 /* RNVectorIcons.xcodeproj */,
 				EBF3648A563841AA8435F446 /* RCTFBLogin.xcodeproj */,
 				BA269A03C12240D5BC1EFF49 /* RCTFBSDK.xcodeproj */,
+				B1B38D341CF547F99321CC67 /* RNBlur.xcodeproj */,
+				39EE3E8D6EC74BD29120A069 /* BVLinearGradient.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -504,6 +530,14 @@
 				5D73B7E703964FB581BD9B89 /* Octicons.ttf */,
 				FD6A5678DEBE41AE8EC825D5 /* Zocial.ttf */,
 				07FF7BBB1D244F850012701C /* myicon.ttf */,
+				BE5C0AF03889410BAB2B182F /* Entypo.ttf */,
+				4B8B9353A71440B18DFFE326 /* EvilIcons.ttf */,
+				22B90E4E9FCB427D94CB8856 /* FontAwesome.ttf */,
+				368E98C729DF4806AD82E7B1 /* Foundation.ttf */,
+				710BC9A638BD4FE8B7F8966D /* Ionicons.ttf */,
+				59AA2BFBD99E4F5ABA824650 /* MaterialIcons.ttf */,
+				1137EB7B5BD54B4787F2B8DC /* Octicons.ttf */,
+				2F6A64632294402F96AF2CE1 /* Zocial.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -795,6 +829,14 @@
 				B3761CC95BD645DE9BF9D6AD /* MaterialIcons.ttf in Resources */,
 				863BB52B66654FAAA09D1450 /* Octicons.ttf in Resources */,
 				208812DB690043A981DFF18A /* Zocial.ttf in Resources */,
+				BDBF3576E6E24DB385518EA6 /* Entypo.ttf in Resources */,
+				0F49F4E0EFAB48EEBD5859C6 /* EvilIcons.ttf in Resources */,
+				C390FEFD2E88451386EE37CB /* FontAwesome.ttf in Resources */,
+				EEE7EC30EB1048E7A40075A1 /* Foundation.ttf in Resources */,
+				6B9A03537F4D45D5B3C13A23 /* Ionicons.ttf in Resources */,
+				72CA9231C9A546E18DC5BA96 /* MaterialIcons.ttf in Resources */,
+				6B42B0E3EC214C0A9A9D92B0 /* Octicons.ttf in Resources */,
+				9FB13FA9E72547BA9249896E /* Zocial.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -921,6 +963,8 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/Payper\"",
+					"\"$(SRCROOT)/Payper\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Payper;
@@ -944,6 +988,8 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/Payper\"",
+					"\"$(SRCROOT)/Payper\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Payper;
@@ -969,6 +1015,8 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-facebook-login/RCTFBLogin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../../node_modules/react-native-blur/ios",
+					"$(SRCROOT)/../../node_modules/react-native-linear-gradient/BVLinearGradient",
 				);
 				INFOPLIST_FILE = Coincast/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
@@ -981,6 +1029,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Payperseaux;
 				PRODUCT_NAME = Payper;
 				PROVISIONING_PROFILE = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Payper\"",
+					"\"$(SRCROOT)/Payper\"",
+				);
 			};
 			name = Debug;
 		};
@@ -1001,6 +1054,8 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-facebook-login/RCTFBLogin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../../node_modules/react-native-blur/ios",
+					"$(SRCROOT)/../../node_modules/react-native-linear-gradient/BVLinearGradient",
 				);
 				INFOPLIST_FILE = Coincast/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
@@ -1013,6 +1068,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Payperseaux;
 				PRODUCT_NAME = Payper;
 				PROVISIONING_PROFILE = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Payper\"",
+					"\"$(SRCROOT)/Payper\"",
+				);
 			};
 			name = Release;
 		};
@@ -1059,12 +1119,19 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-facebook-login/RCTFBLogin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../../node_modules/react-native-blur/ios",
+					"$(SRCROOT)/../../node_modules/react-native-linear-gradient/BVLinearGradient",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = Payper;
 				SDKROOT = iphoneos;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Payper\"",
+					"\"$(SRCROOT)/Payper\"",
+				);
 			};
 			name = Debug;
 		};
@@ -1104,12 +1171,19 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/react-native-facebook-login/RCTFBLogin/**",
 					"$(SRCROOT)/../node_modules/react-native-fbsdk/ios/RCTFBSDK/**",
+					"$(SRCROOT)/../../node_modules/react-native-blur/ios",
+					"$(SRCROOT)/../../node_modules/react-native-linear-gradient/BVLinearGradient",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = Payper;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Payper\"",
+					"\"$(SRCROOT)/Payper\"",
+				);
 			};
 			name = Release;
 		};
