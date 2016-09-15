@@ -2,7 +2,6 @@
 import React from 'react';
 import { View, Text, Animated, Image, Dimensions, Linking, StatusBar, StyleSheet, TouchableHighlight, Modal, TextInput, DeviceEventEmitter } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import Hyperlink from 'react-native-hyperlink';
 import Entypo from 'react-native-vector-icons/Entypo'
 import colors from '../../styles/colors';
 var Mixpanel = require('react-native-mixpanel');
@@ -10,6 +9,7 @@ var Mixpanel = require('react-native-mixpanel');
 // Helpers
 import * as Validators from '../../helpers/validators';
 import * as Lambda from '../../services/Lambda';
+import * as Async from '../../helpers/Async';
 
 // Should we show container borders?
 const borders = false;
@@ -91,7 +91,26 @@ class BetaLandingScreenView extends React.Component {
   }
 
   _onVerificationSuccess() {
-    console.log("Welcome!");
+    // Display a brief welcome message
+    this.setState({ buttonText: "Welcome!" });
+
+    // After a brief welcome message, take the user to the typical lander
+    setTimeout(() => {
+      this._toggleModal();
+      Actions.LandingScreenContainer();
+    }, 600);
+
+    // Prevent the user from seeing this screen next time they load the app
+    Async.set('betaStatus', 'fullAccess', () => {
+      Async.get('betaStatus', (val) => {
+        console.log("Beta status:", val);
+      });
+    });
+  }
+
+  _onVerificationFailure() {
+    this.setState({ buttonText: "No match 😕\nIs there a typo?" });
+    this._interpolateButtonColor({ toValue: 700 });
   }
 
   _handleSubmit(e) {
@@ -111,15 +130,8 @@ class BetaLandingScreenView extends React.Component {
       console.log("Submitting:", emailInput);
       if (this.state.onboarding == "email") {
         Lambda.checkBetaSignups({ email: this.state.emailInput }, (res) => {
-          if (res.match) {
-            this.setState({ buttonText: "Welcome!" });
-            setTimeout(() => {
-              this._onVerificationSuccess();
-            }, 600);
-          } else {
-            this.setState({ buttonText: "No match 😕\nIs there a typo?" });
-            this._interpolateButtonColor({ toValue: 700 });
-          }
+          if (res.match) this._onVerificationSuccess();
+          else this._onVerificationFailure();
         });
       } else if (this.state.onboarding == "phone") {
         console.log({phoneNumber: this.state.phoneInput});
@@ -197,6 +209,7 @@ class BetaLandingScreenView extends React.Component {
             placeholder={""}
             defaultValue={this.state.emailInput}
             autoCorrect={false} autoFocus autoCapitalize={"none"}
+            keyboardType={"email-address"}
             onChangeText={(input) => this._handleChangeText(input)}
             onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(e); }} />
 
@@ -424,7 +437,7 @@ const wrappers = StyleSheet.create({
 const typography = StyleSheet.create({
   title: {
     fontFamily: 'Roboto',
-    fontSize: 34,
+    fontSize: 38,
     fontWeight: '200',
     color: colors.accent,
     textAlign: 'center',

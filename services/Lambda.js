@@ -565,7 +565,7 @@ export function checkBetaSignups(options, callback) {
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
-        console.log("Check beta singups Lambda response:", responseData);
+        console.log("Check beta signups Lambda response:", responseData);
         if (typeof callback == 'function') callback(responseData);
       } else {
         console.log("Error checking beta signups:", responseData.errorMessage);
