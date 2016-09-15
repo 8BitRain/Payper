@@ -14,6 +14,9 @@ import MainViewContainer from './modules/Main/MainViewContainer';
 import BankOnboardingContainer from './modules/BankOnboarding/BankOnboardingContainer';
 import LandingScreenContainer from './modules/LandingScreen/LandingScreenContainer';
 
+// Beta modules
+import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreenView';
+
 // Test modules
 import LandingView from './components/LandingView';
 
@@ -53,7 +56,7 @@ export default class Coincast extends React.Component {
           <Scene key="root" hideNavBar hideTabBar>
 
             { /* Main app flow */ }
-            <Scene key="SplashView" component={SplashView} title="SplashView" initial />
+            <Scene key="SplashView" component={SplashView} title="SplashView" />
             <Scene key="SignInViewContainer" component={SignInViewContainer} title="SignInViewContainer" panHandlers={null} />
             <Scene key="CreateAccountViewContainer" component={CreateAccountViewContainer} title="CreateAccountViewContainer" panHandlers={null} />
             <Scene key="BankOnboardingContainer" component={BankOnboardingContainer} title="BankOnboardingContainer" panHandlers={null} />
@@ -64,6 +67,9 @@ export default class Coincast extends React.Component {
             { /* Testing */ }
             <Scene key="LandingView" component={LandingView} title="LandingView" panHandlers={null} />
             <Scene key="FirebaseBindingViewContainer" component={FirebaseBindingViewContainer} title="FirebaseBindingViewContainer" panHandlers={null} />
+
+            { /* Beta */ }
+            <Scene initial key="BetaLandingScreenView" component={BetaLandingScreenView} title="BetaLandingScreenView" panHandlers={null} />
 
           </Scene>
           <Scene key="error" component={Error}/>
