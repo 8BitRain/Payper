@@ -151,8 +151,10 @@ class Address extends React.Component {
 
      this.state = {
       state_index: 0,
-      modalVisible: true
+      modalVisible: false
      }
+
+
 
     this.kbOffset = new Animated.Value(0);
 
@@ -192,6 +194,10 @@ class Address extends React.Component {
      this.onPressLeft = function() { this.props.dispatchSetPageX(0, "backward", null) };
    }
 
+   _setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  }
+
    _keyboardWillShow(e) {
      Animated.spring(this.kbOffset, {
        toValue: e.endCoordinates.height - 40,
@@ -229,7 +235,36 @@ class Address extends React.Component {
 
    render() {
      return (
+
        <View style={[containers.container, backgrounds.email]}>
+        <Modal
+           animationType={"slide"}
+           transparent={true}
+           visible={this.state.modalVisible}
+         >
+           <View style={[containers.modalPickerContanier]}>
+            <View style={{backgroundColor: "white", height: 45, alignItems: "flex-end", borderBottomColor: "#d8d8d8", borderBottomWidth: 1, justifyContent: "center",}}>
+              <Button onPress={() => {this._setModalVisible(false)}}><Text style={{color: "black", fontSize: 15, fontWeight: "bold", marginRight:  15}}>Submit</Text></Button>
+            </View>
+
+            <Picker
+             style={[ {backgroundColor: "white", height: 450}, ]}
+             selectedValue={this.state.state_index}
+             itemStyle={[typography.stateInput]}
+             onValueChange={(text) => { this.onValueChange(text); console.log("State Index: " + this.state.state_index); console.log(Object.keys(this.state_list)[text]); }}>
+
+             {
+               Object.keys(this.state_list).map(function(key, value){
+                 return(
+                   <Picker.Item key={key} label={key} value={value}/>
+                 )
+               })
+             }
+
+            </Picker>
+           </View>
+         </Modal>
+
          <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
 
          { /* Prompt and input field */ }
@@ -255,9 +290,10 @@ class Address extends React.Component {
            </View>
            {/*Has an interesting effect investigate or try using with circles*/}
 
+           {/*STATE*/}
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>State</Text>
            <View>
-            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.state} onChangeText={(text) => { this.stateInput = text; this.props.dispatchSetState(this.stateInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />
+            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.state} onChangeText={(text) => { this.stateInput = text; this.props.dispatchSetState(this.stateInput);  }} autoCorrect={false}  onFocus={() => {this._setModalVisible(true)}} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />
            </View>
 
            {/*<Picker
@@ -296,32 +332,6 @@ class Address extends React.Component {
              callbackRight={() => {this.onPressRight()}}
              callbackLeft={() => {this.onPressLeft()}}/>
          </Animated.View>
-         {/*<View style={{marginBottom: 0}}>
-           <Modal
-              animationType={"slide"}
-              transparent={true}
-              visible={this.state.modalVisible}
-              style={{marginTop: 0}}
-            >
-
-            <Picker
-             style={[typography.marginBottom, {backgroundColor: "#d8d8d8", color: "black", marginLeft: 50, marginRight: 50, borderRadius: 50}]}
-             selectedValue={this.state.state_index}
-             itemStyle={[typography.stateInput]}
-             onValueChange={(text) => { this.onValueChange(text); console.log("State Index: " + this.state.state_index); console.log(Object.keys(this.state_list)[text]); }}>
-
-             {
-               Object.keys(this.state_list).map(function(key, value){
-                 return(
-                   <Picker.Item key={key} label={key} value={value}/>
-                 )
-               })
-             }
-
-            </Picker>
-            </Modal>
-          </View> */}
-
        </View>
      );
    }

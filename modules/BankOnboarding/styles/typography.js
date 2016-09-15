@@ -26,9 +26,17 @@ const typography = StyleSheet.create({
   },
 
   stateInput: {
-    height: 60,
+    height: 200,
     color: "black",
-    fontSize: 16
+    fontSize: 25,
+
+  },
+
+  stateInput2: {
+    height: 450,
+    color: "black",
+    fontSize: 25,
+    marginBottom: 0
   },
 
 
