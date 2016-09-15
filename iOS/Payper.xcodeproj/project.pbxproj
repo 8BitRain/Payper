@@ -979,7 +979,7 @@
 					"-lc++",
 					"-licucore",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Payper;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Payperloslzzz;
 				PRODUCT_NAME = Payper;
 				PROVISIONING_PROFILE = "";
 			};
@@ -1011,7 +1011,7 @@
 					"-lc++",
 					"-licucore",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Payper;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Payperloslzzz;
 				PRODUCT_NAME = Payper;
 				PROVISIONING_PROFILE = "";
 			};

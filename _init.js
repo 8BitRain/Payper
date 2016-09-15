@@ -135,13 +135,14 @@ export function signInWithFacebook(data, callback) {
   if (data.FBToken) Firebase.authWithFacebook(data.FBToken, (success) => {
     if (success) {
       Firebase.getSessionToken((token) => {
-
         data.user.token = token;
         Lambda.createFBUser(data.user, (user) => {
           if (user) {
             console.log("%cSuccessfully retrieved user object:", "color:green;font-weight:900;");
             console.log(user);
 
+            user.token = token;
+            
             // Sign in succeeded. Log the user to AsyncStorage
             Async.set('user', JSON.stringify(user), () => {
 
