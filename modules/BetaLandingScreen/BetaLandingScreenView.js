@@ -78,7 +78,6 @@ class BetaLandingScreenView extends React.Component {
       phoneInput: "",
       emailInput: "",
       attempts: 0,
-      buttonText: "",
       backgroundColor: this.colorInterpolator.interpolate({
         inputRange: [0, 350, 700], // Green, transparent, red
         outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(0, 0, 0, 0.0)', 'rgba(251, 54, 64, 1.0)'],
@@ -302,7 +301,7 @@ class BetaLandingScreenView extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => { this.setState({ onboarding: "phone" }); this._toggleModal(); }}>
+            onPress={() => { this.setState({ onboarding: "phone", buttonText: "Please enter a valid phone number." }); this._toggleModal(); }}>
 
             <View style={[wrappers.button, { backgroundColor: 'rgba(255, 255, 255, 0.1)', }]}>
               { /* Text */ }
@@ -323,7 +322,7 @@ class BetaLandingScreenView extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => { this.setState({ onboarding: "email" }); this._toggleModal(); }}>
+            onPress={() => { this.setState({ onboarding: "email", buttonText: "Please enter a valid email address." }); this._toggleModal(); }}>
 
             <View style={[wrappers.button, { backgroundColor: 'rgba(255, 255, 255, 0.06)', }]}>
               { /* Text */ }
