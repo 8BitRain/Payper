@@ -29,10 +29,10 @@ class BetaLandingScreenView extends React.Component {
       onboarding: "",
       phoneInput: "",
       emailInput: "",
-      valid: false,
+      phoneValid: false,
+      emailValid: false,
       attempts: 0,
       buttonText: "",
-      touchable: true,
       backgroundColor: this.colorInterpolator.interpolate({
         inputRange: [0, 350, 700], // Green, transparent, red
         outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(0, 0, 0, 0.0)', 'rgba(251, 54, 64, 1.0)'],
@@ -44,11 +44,6 @@ class BetaLandingScreenView extends React.Component {
     // Subscribe to keyboard events
     _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
     _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
-
-    // Initialize button color
-    this._interpolateButtonColor({
-      toValue: 350,
-    });
   }
 
   componentWillUnmount() {
@@ -78,14 +73,31 @@ class BetaLandingScreenView extends React.Component {
   }
 
   _toggleModal() {
-    this.setState({ modalVisible: !this.state.modalVisible });
+    this.setState({
+      modalVisible: !this.state.modalVisible,
+      phoneInput: "",
+      emailInput: "",
+      attempts: 0,
+      buttonText: "",
+      backgroundColor: this.colorInterpolator.interpolate({
+        inputRange: [0, 350, 700], // Green, transparent, red
+        outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(0, 0, 0, 0.0)', 'rgba(251, 54, 64, 1.0)'],
+      }),
+    });
+
+    // Reset button color
+    this._interpolateButtonColor({
+      toValue: 350,
+    });
   }
 
   _onVerificationSuccess() {
     console.log("Welcome!");
   }
 
-  _handleSubmit() {
+  _handleSubmit(e) {
+
+    if (e) e.preventDefault();
 
     const { phoneInput, emailInput } = this.state;
 
@@ -106,11 +118,12 @@ class BetaLandingScreenView extends React.Component {
               this._onVerificationSuccess();
             }, 600);
           } else {
-            this.setState({ buttonText: "No match :(\nIs there a typo?" });
+            this.setState({ buttonText: "No match 😕\nIs there a typo?" });
             this._interpolateButtonColor({ toValue: 700 });
           }
         });
       } else if (this.state.onboarding == "phone") {
+        console.log({phoneNumber: this.state.phoneInput});
         Lambda.checkBetaInvites({ phoneNumber: this.state.phoneInput }, (res) => {
 
         });
@@ -131,19 +144,17 @@ class BetaLandingScreenView extends React.Component {
       ? Validators.validatePhone(input).valid
       : Validators.validateEmail(input).valid;
 
-    this.setState({ valid: valid });
-
     // Interpolate background color of 'Continue' button
     if (valid) {
       this._interpolateButtonColor({ toValue: 0 });
       this.setState({ buttonText: "Continue" });
     } else {
+      console.log("Onboarding:", this.state.onboarding);
       this._interpolateButtonColor({ toValue: 350 });
       if (this.state.buttonText.split("")[0] != "Please") {
-        this.setState({ buttonText: "Please enter a valid " + ((this.state.onboarding == "phone") ? "phone number" : "email address") });
+        this.setState({ buttonText: (this.state.onboarding == "phone") ? "Please enter a valid phone number" : "Please enter a valid email address" });
       }
     }
-
   }
 
   _getSubmitButtonText(valid) {
@@ -180,7 +191,7 @@ class BetaLandingScreenView extends React.Component {
           </Text>
 
           <TextInput
-            ref={"emailInput"}
+            ref="emailInput"
             style={wrappers.modalInputEmail}
             placeholderFontFamily={"Roboto"}
             placeholderTextColor={colors.lightGrey}
@@ -188,17 +199,17 @@ class BetaLandingScreenView extends React.Component {
             defaultValue={this.state.emailInput}
             autoCorrect={false} autoFocus autoCapitalize={"none"}
             onChangeText={(input) => this._handleChangeText(input)}
-            onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }} />
+            onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(e); }} />
 
           { /* Arrow nav buttons */ }
           <Animated.View style={{position: 'absolute', bottom: this.keyboardOffset, left: 0, right: 0}}>
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={'transparent'}
-              onPress={() => { (this.state.touchable) ? this._handleSubmit() : console.log("Submit button not currently touchable") }}>
+              onPress={() => this._handleSubmit()}>
 
-              <Animated.View style={{ height: 55, backgroundColor: this.state.backgroundColor, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={[typography.button, { alignSelf: 'center' }]}>
+              <Animated.View style={{ height: 70, backgroundColor: this.state.backgroundColor, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center' }]}>
                   { this.state.buttonText }
                 </Text>
               </Animated.View>
@@ -243,7 +254,23 @@ class BetaLandingScreenView extends React.Component {
             keyboardType={"phone-pad"}
             maxLength={10}
             onChangeText={(input) => this._handleChangeText(input)}
-            onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(); }} />
+            onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(e); }} />
+
+          { /* Arrow nav buttons */ }
+          <Animated.View style={{position: 'absolute', bottom: this.keyboardOffset, left: 0, right: 0}}>
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              onPress={() => this._handleSubmit()}>
+
+              <Animated.View style={{ height: 70, backgroundColor: this.state.backgroundColor, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center' }]}>
+                  { this.state.buttonText }
+                </Text>
+              </Animated.View>
+
+            </TouchableHighlight>
+          </Animated.View>
 
         </View>
       </View>
