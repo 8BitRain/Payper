@@ -40,7 +40,9 @@ class DynamicHorizontalUserList extends React.Component {
     Animated.spring(this.state.height, {
       toValue: 65,
       velocity: 4,
-    }).start().then(() => console.log("Showed."));
+    }, () => {
+      console.log("Callback!");
+    }).start();
   }
 
   _hide() {

@@ -65,6 +65,7 @@ export function formatNativeContacts(contacts, phoneNumbers) {
       pic: curr.thumbnailPath,
       type: "phone",
       sectionTitle: "Invite a Contact to Use Payper",
+      selected: false,
     }
 
     if (!_.includes(nums, c.phone)) arr.push(c);

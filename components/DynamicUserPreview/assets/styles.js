@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 60,
     flexDirection: 'row',
-    backgroundColor: colors.white,
   },
 
   // Wrap for the image portion of the preview

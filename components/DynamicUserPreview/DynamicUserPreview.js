@@ -17,20 +17,38 @@ class DynamicUserPreview extends React.Component {
   constructor(props) {
     super(props);
 
+    this.colorInterpolator = new Animated.Value(0);
+
     this.state = {
-      selected: false,
+      selected: this.props.user.selected,
+      backgroundColor: this.colorInterpolator.interpolate({
+        inputRange: [0, 350], // Transparent, green
+        outputRange: ['rgba(0, 0, 0, 0.0)', 'rgba(16, 191, 90, 0.5)'],
+      }),
     };
   }
 
+  _interpolateBackgroundColor(options) {
+    Animated.spring(this.colorInterpolator, {
+      toValue: options.toValue,
+    }).start();
+  }
+
   _handleSelect() {
-    console.log("Pressed...");
+    if (this.state.selected) this._interpolateBackgroundColor({ toValue: 0 });
+    else this._interpolateBackgroundColor({ toValue: 350 });
+    this.setState({ selected: !this.state.selected });
     this.props.callbackSelect();
   }
 
   render() {
     return(
-      <TouchableHighlight onPress={() => this._handleSelect()}>
-        <View style={[styles.userWrap, {width: this.props.width}]}>
+      <TouchableHighlight
+        activeOpacity={0.8}
+        underlayColor={'transparent'}
+        onPress={() => this._handleSelect()}>
+        
+        <Animated.View style={[styles.userWrap, { backgroundColor: this.state.backgroundColor, width: this.props.width }]}>
           <View style={styles.picWrap}>
             <UserPic width={50} height={50} user={this.props.user} />
           </View>
@@ -40,7 +58,7 @@ class DynamicUserPreview extends React.Component {
               { this.props.user.username || this.props.user.stylizedPhone }
             </Text>
           </View>
-        </View>
+        </Animated.View>
       </TouchableHighlight>
     );
   }
