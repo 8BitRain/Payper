@@ -8,25 +8,23 @@ import * as StringMaster5000 from '../../helpers/StringMaster5000';
 import * as SetMaster5000 from '../../helpers/SetMaster5000';
 
 // Dispatch functions
-import * as set from './UserSearchState';
-import * as setPayment from '../CreatePayment/CreatePaymentState';
-import * as setMain from '../Main/MainState';
+import * as set from './InviteState';
 
 // Base view
-import UserSearchView from './UserSearchView';
+import InviteView from './InviteView';
 
 // Decide which chunk of Redux global state our component will receive as props
 function mapStateToProps(state) {
   return {
 
     // userSearch
-    activeFirebaseListeners: state.getIn(['userSearch', 'activeFirebaseListeners']),
-    allContactsArray: state.getIn(['userSearch', 'allContactsArray']),
-    allContactsMap: state.getIn(['userSearch', 'allContactsMap']),
-    filteredContactsMap: state.getIn(['userSearch', 'filteredContactsMap']),
-    selectedContact: state.getIn(['userSearch', 'selectedContact']),
-    empty: state.getIn(['userSearch', 'empty']),
-    startedListening: state.getIn(['userSearch', 'startedListening']),
+    activeFirebaseListeners: state.getIn(['invite', 'activeFirebaseListeners']),
+    allContactsArray: state.getIn(['invite', 'allContactsArray']),
+    allContactsMap: state.getIn(['invite', 'allContactsMap']),
+    filteredContactsMap: state.getIn(['invite', 'filteredContactsMap']),
+    selectedContacts: state.getIn(['invite', 'selectedContacts']),
+    empty: state.getIn(['invite', 'empty']),
+    startedListening: state.getIn(['invite', 'startedListening']),
 
     // main
     currentUser: state.getIn(['main', 'currentUser']),
@@ -55,34 +53,13 @@ function mapDispatchToProps(dispatch) {
         if (response.value) {
 
           switch (response.endpoint.split("/")[0]) {
-            case "contactList":
-
-              console.log("%cSuccessfully received contact list:", "color:green;font-weight:900;");
-              console.log(response.value);
-
-              // Convert Firebase JSON to array of user objects, tacking on section titles along the way
-              var contactListArray = SetMaster5000.contactListToArray({ contacts: response.value }),
-                  newAllContactsArray;
-
-              // Concatenate with native phone contact list
-              newAllContactsArray = (allContactsArray) ? SetMaster5000.mergeArrays(allContactsArray, contactListArray) : contactListArray.concat(options.nativeContacts);
-              allContactsArray = newAllContactsArray;
-
-              // Convert contact array to map for ListView rendering
-              var newAllContactsMap = SetMaster5000.arrayToMap(newAllContactsArray);
-
-              // Set user lists in Redux store, triggering re-render of UserSearch ListView
-              dispatch(set.allContactsMap(newAllContactsMap));
-              dispatch(set.allContactsArray(newAllContactsArray));
-
-            break;
             case "users":
 
               console.log("%cSuccessfully received global user list:", "color:green;font-weight:900;");
               console.log(response.value);
 
               // Convert Firebase JSON to array of user objects, tacking on section titles along the way
-              var globalUserListArray = SetMaster5000.globalUserListToArray({ sectionTitle: "Other Payper Users", users: response.value, uid: options.uid }),
+              var globalUserListArray = SetMaster5000.globalUserListToArray({ sectionTitle: "Contacts Who", users: response.value, uid: options.uid }),
                   newAllContactsArray;
 
               // Concatenate with currently rendered contact list
@@ -139,4 +116,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect( mapStateToProps, mapDispatchToProps )( UserSearchView );
+export default connect( mapStateToProps, mapDispatchToProps )( InviteView );

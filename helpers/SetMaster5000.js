@@ -20,7 +20,8 @@ import * as _ from 'lodash';
 import * as StringMaster5000 from './StringMaster5000';
 
 /**
-  *   Given a notification object, return ready-to-render strings
+  *   Given an array of objects with 'sectionTitle' properties, create a map
+  *   based on those section titles
 **/
 export function arrayToMap(arr) {
   var map = {}, curr;
@@ -119,7 +120,7 @@ export function globalUserListToArray(options) {
     if (uid != options.uid) {
       curr = options.users[uid];
       curr.uid = uid;
-      curr.sectionTitle = "Other Payper Users";
+      curr.sectionTitle = options.sectionTitle;
       arr.push(curr);
     }
   }

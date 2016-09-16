@@ -14,6 +14,7 @@ import Payments from '../../modules/Payments/PaymentsViewContainer';
 import Profile from '../../modules/Profile/ProfileView';
 import Notifications from '../../modules/Notifications/NotificationsViewContainer';
 import FundingSources from '../../modules/FundingSources/FundingSourcesViewContainer';
+import Invite from '../../modules/Invite/InviteViewContainer';
 import SignIn from '../../modules/SignIn/SignInViewContainer';
 
 // Used to determine header size
@@ -46,6 +47,10 @@ class InnerContent extends React.Component {
 
       case "fundingSources":
         return <FundingSources {...this.props} />;
+        break;
+
+      case "invite":
+        return <Invite {...this.props} />;
         break;
 
       default:
