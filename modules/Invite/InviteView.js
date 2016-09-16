@@ -9,9 +9,8 @@ import * as StringMaster5000 from '../../helpers/StringMaster5000';
 import * as SetMaster5000 from '../../helpers/SetMaster5000';
 
 // Partial components
-import UserPreview from '../../components/Previews/User/User';
-import UserPic from '../../components/Previews/UserPic/UserPic';
-import ArrowNav from '../../components/Navigation/Arrows/ArrowDouble';
+import DynamicUserPreview from '../../components/DynamicUserPreview/DynamicUserPreview';
+import DynamicHorizontalUserList from '../../components/DynamicHorizontalUserList/DynamicHorizontalUserList';
 
 // Styles
 import colors from '../../styles/colors';
@@ -75,54 +74,29 @@ class Invite extends React.Component {
   constructor(props) {
     super(props);
 
+    this.EMPTY_DATA_SOURCE = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
+    });
+
     this.state = {
-      user: {},
+      selectedContacts: [],
       inputBackgroundColor: colors.white,
       inputTextColor: colors.richBlack,
       query: "",
+      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(this.props.nativeContacts),
     };
+
+    console.log("Data source:", this.state.dataSource);
   }
-
-
-  /**
-    *   Start listening to Firebase
-  **/
-  componentWillMount() {
-    if (!this.props.startedListening) {
-      this.props.initialize(this.props.nativeContacts);
-
-      var contactList = "contactList/" + this.props.currentUser.uid,
-          globalUserList = "users";
-
-      this.props.listen([contactList, globalUserList], {
-        nativeContacts: this.props.nativeContacts,
-        allContactsArray: this.props.allContactsArray,
-        uid: this.props.currentUser.uid,
-      });
-    }
-  }
-
-
-  /**
-    *   Stop listening to Firebase
-  **/
-  componentWillUnmount() {
-    this.props.stopListening(this.props.activeFirebaseListeners);
-  }
-
 
   _renderRow(data) {
     return(
-      <UserPreview
+      <DynamicUserPreview
         user={data}
         touchable
-        callback={() => {
-          this._setSelectedContact(data);
-          this.setState({query: data.username || data.first_name + " " + data.last_name});
-        }} />
+        callbackSelect={() => this._handleSelect(data)} />
     );
   }
-
 
   _renderSectionHeader(sectionData, sectionTitle) {
     return(
@@ -132,146 +106,52 @@ class Invite extends React.Component {
     );
   }
 
-
   _filterContacts(query) {
-    var filtered = SetMaster5000.filterContacts(this.props.allContactsArray, query);
-    this.props.setFilteredContacts(SetMaster5000.arrayToMap(filtered));
+    console.log("Filtering based on query:", query);
+    // var filtered = SetMaster5000.filterContacts(this.props.allContactsArray, query);
+    // this.props.setFilteredContacts(SetMaster5000.arrayToMap(filtered));
   }
 
-
-  _setSelectedContact(data) {
-    // Set selected contact in state
-    this.props.setSelectedContact(data);
-
-    // Determine and set new input colors
-    var query = data.username || data.first_name + " " + data.last_name,
-        queryType = (query[0] == "@") ? "username" : "phone";
-    this._setInputColors(queryType);
-  }
-
-
-  _setInputColors(type) {
-    if (type == "username") {
-      this.setState({
-        inputBackgroundColor: colors.accent,
-        inputTextColor: colors.white,
-      });
-    } else if (type == "phone") {
-      this.setState({
-        inputBackgroundColor: colors.icyBlue,
-        inputTextColor: colors.white,
-      });
-    } else if (type == "noMatch") {
-      this.setState({
-        inputBackgroundColor: colors.white,
-        inputTextColor: colors.richBlack,
-      });
+  _handleSelect(data) {
+    if (!data.selected) {
+      data.selected = true;
+      this.state.selectedContacts.push(data);
+      this.setState({ selectedContacts: this.state.selectedContacts });
     }
   }
 
-
   _getContactList() {
-    console.log("Data source for all contacts:");
-    console.log(this.props.allContactsMap);
     return(
       <ListView
-        dataSource={(this.props.filteredContactsMap.getRowCount() > 0) ? this.props.filteredContactsMap : this.props.allContactsMap}
+        dataSource={this.state.dataSource}
         renderRow={this._renderRow.bind(this)}
-        renderSectionHeader={this._renderSectionHeader}
         renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-        enableEmptySections
-        />
+        enableEmptySections />
     );
   }
-
-  _getConfirmation() {
-    return(
-      <View style={styles.confirmationWrap}>
-
-        { /* Profile picture or initials */ }
-        <UserPic
-          user={this.props.selectedContact}
-          width={50}
-          height={50} />
-
-        { /* Full name */ }
-        <Text style={styles.confirmationName}>
-          { this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name }
-        </Text>
-
-        { /* Username or phone number */ }
-        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          { (this.props.selectedContact.type == "facebook" || this.props.selectedContact.type == "phone")
-              ? <Entypo
-                  style={{paddingTop: 10}}
-                  name={ (this.props.selectedContact.type == "facebook") ? "facebook" : (this.props.selectedContact.type == "phone") ? "phone" : null }
-                  color={ (this.props.selectedContact.uid) ? colors.accent : colors.icyBlue }
-                  size={25} />
-              : null }
-          <Text style={[{paddingLeft: 10}, (this.props.selectedContact.username) ? styles.confirmationUsername : styles.confirmationPhone]}>
-            { (this.props.selectedContact.username)
-                ? this.props.selectedContact.username
-                : this.props.selectedContact.stylizedPhone }
-          </Text>
-        </View>
-
-        { /* Confirmation Message */ }
-        { (!this.props.selectedContact.username)
-            ? <Text style={styles.confirmationMessage}>{"We'll invite " + this.props.selectedContact.first_name + " to join Payper."}</Text>
-            : null }
-
-        { /* Arrow nav */ }
-        <ArrowNav
-          arrowNavProps={ {right: true} }
-          callbackRight={ () => this.props.setPageIndex(1) } />
-
-      </View>
-    );
-  }
-
 
   render() {
     return(
       <View style={{flex: 1.0, justifyContent: 'center', backgroundColor: colors.white}}>
+
         { /* Query and ListView or Confirmation, depending on if a user is selected */ }
         <TextInput
           style={[styles.textInput, {backgroundColor: this.state.inputBackgroundColor, color: this.state.inputTextColor}]}
-          placeholder={"Who are you splitting with?"}
+          placeholder={"Who would you like to invite?"}
           selectionColor={this.state.textInputColor}
-          onChangeText={(query) => {
-            this.setState({query: query});
-            this._filterContacts(query);
-            if (this.props.selectedContact && query == this.props.selectedContact.username && query != "") {
-              console.log("Setting username colors");
-              this._setInputColors("username");
-            } else if (this.props.selectedContact && query == this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name && query != " ") {
-              console.log("Setting phone colors");
-              this._setInputColors("phone");
-            } else {
-              console.log("Setting noMatch colors");
-              this._setInputColors("noMatch");
-            }
-          }}
+          onChangeText={(query) => this._filterContacts(query)}
           autoFocus={true}
           autoCorrect={false}
           enablesReturnKeyAutomatically={true}
           returnKeyType={"next"}
-          defaultValue={
-            (this.props.selectedContact.username)
-              ? this.props.selectedContact.username
-              : (this.props.selectedContact.first_name)
-                ? this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name
-                : ""
-          }
-          />
+          defaultValue={""} />
 
+        { /* List of selected users */ }
+        <DynamicHorizontalUserList
+          contacts={this.state.selectedContacts}
+          handleDeselect={() => this._handleDeselect()} />
 
-        { /* Render either confirmation page or */
-          (!StringMaster5000.checkIf(this.state.query).isEmpty )
-            ? (this.state.query == this.props.selectedContact.username || this.state.query == this.props.selectedContact.first_name + " " + this.props.selectedContact.last_name)
-              ? this._getConfirmation()
-              : this._getContactList()
-            : this._getContactList() }
+        { this._getContactList() }
 
       </View>
     );
