@@ -17,7 +17,7 @@ class DynamicThumbnail extends React.Component {
   componentDidMount() {
     Animated.spring(this.state.opacity, {
       toValue: 1.0,
-      velocity: 4.0
+      velocity: 4.0,
     }).start();
   }
 

@@ -4,7 +4,7 @@ import { View, Animated, TouchableHighlight, Text, Image, Dimensions, ScrollView
 import Entypo from 'react-native-vector-icons/Entypo';
 
 // Components
-import UserPic from '../Previews/UserPic/UserPic';
+import DynamicThumbnail from '../DynamicThumbnail/DynamicThumbnail';
 
 // Styles
 import styles from './assets/styles';
@@ -63,7 +63,7 @@ class DynamicHorizontalUserList extends React.Component {
 
     for (var c in this.props.contacts) {
       thumbnails.push(
-        <UserPic key={this.props.contacts[c].phone} width={40} height={40} user={this.props.contacts[c]} />
+        <DynamicThumbnail key={this.props.contacts[c].phone} width={40} height={40} user={this.props.contacts[c]} />
       );
     }
 

@@ -20,12 +20,27 @@ class DynamicUserPreview extends React.Component {
     this.colorInterpolator = new Animated.Value(0);
 
     this.state = {
-      selected: this.props.user.selected,
-      backgroundColor: this.colorInterpolator.interpolate({
+      selected: this.props.selected,
+      color: this.colorInterpolator.interpolate({
         inputRange: [0, 350], // Transparent, green
-        outputRange: ['rgba(0, 0, 0, 0.0)', 'rgba(16, 191, 90, 0.5)'],
+        outputRange: ['rgba(0, 0, 0, 0.0)', 'rgba(16, 191, 90, 0.85)'],
       }),
     };
+  }
+
+  componentDidMount() {
+    if (this.state.selected) this._interpolateBackgroundColor({ toValue: 350 });
+    else this._interpolateBackgroundColor({ toValue: 0 });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // Throws an error on initial render
+    try {
+      if (nextProps.selected) this._interpolateBackgroundColor({ toValue: 350 });
+      else this._interpolateBackgroundColor({ toValue: 0 });
+    } catch(err) {
+      console.log(err);
+    }
   }
 
   _interpolateBackgroundColor(options) {
@@ -47,8 +62,8 @@ class DynamicUserPreview extends React.Component {
         activeOpacity={0.8}
         underlayColor={'transparent'}
         onPress={() => this._handleSelect()}>
-        
-        <Animated.View style={[styles.userWrap, { backgroundColor: this.state.backgroundColor, width: this.props.width }]}>
+
+        <Animated.View style={[styles.userWrap, { borderColor: this.state.color, borderLeftWidth: 8, width: this.props.width }]}>
           <View style={styles.picWrap}>
             <UserPic width={50} height={50} user={this.props.user} />
           </View>
@@ -59,6 +74,7 @@ class DynamicUserPreview extends React.Component {
             </Text>
           </View>
         </Animated.View>
+
       </TouchableHighlight>
     );
   }

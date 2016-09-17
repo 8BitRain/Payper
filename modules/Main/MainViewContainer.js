@@ -246,6 +246,7 @@ function mapDispatchToProps(dispatch) {
       if (page == "notifications") dispatch(set.header(Headers.notificationsHeader()));
       else if (page == "fundingSources") dispatch(set.header(Headers.fundingSourcesHeader()));
       else if (page == "profile") dispatch(set.header(Headers.profileHeader()));
+      else if (page == "invite") dispatch(set.header(Headers.inviteHeader()));
       dispatch(set.currentPage(page));
     },
 

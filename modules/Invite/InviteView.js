@@ -78,41 +78,21 @@ class Invite extends React.Component {
       rowHasChanged: (r1, r2) => r1 !== r2,
     });
 
+    this.allContacts = this.props.nativeContacts;
+    this.filteredContacts = [];
+
     this.state = {
-      selectedContacts: [],
       inputBackgroundColor: colors.white,
       inputTextColor: colors.richBlack,
       query: "",
-      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(this.props.nativeContacts),
+      selectedContacts: [],
+      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(this.allContacts),
     };
   }
 
-  _renderRow(data) {
-    return(
-      <DynamicUserPreview
-        user={data}
-        touchable
-        callbackSelect={() => this._handleSelect(data)} />
-    );
-  }
-
-  _renderSectionHeader(sectionData, sectionTitle) {
-    return(
-      <View style={{height: 30, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', padding: 10, paddingLeft: 20, backgroundColor: colors.offWhite}}>
-        <Text>{ sectionTitle }</Text>
-      </View>
-    );
-  }
-
-  _filterContacts(query) {
-    console.log("Filtering based on query:", query);
-    // var filtered = SetMaster5000.filterContacts(this.props.allContactsArray, query);
-    // this.props.setFilteredContacts(SetMaster5000.arrayToMap(filtered));
-  }
-
   /**
-    *   Update .selected value of this user
-    *   Update this.state.selectedContacts
+    *   (1) Update selected value of user object in allContacts array
+    *   (2) Update this.state.selectedContacts
   **/
   _handleSelect(user) {
     if (user.selected) {
@@ -128,15 +108,23 @@ class Invite extends React.Component {
       this.state.selectedContacts.push(user);
       this.setState({ selectedContacts: this.state.selectedContacts });
     }
+
+    console.log("allContacts post-select:", this.allContacts);
   }
 
-  _getContactList() {
+  _filterContacts(query) {
+    console.log("Filtering based on query:", query);
+    var filtered = SetMaster5000.filterContacts(this.allContacts, query);
+    this.setState({ dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(filtered) });
+  }
+
+  _renderRow(user) {
     return(
-      <ListView
-        dataSource={this.state.dataSource}
-        renderRow={this._renderRow.bind(this)}
-        renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-        enableEmptySections />
+      <DynamicUserPreview
+        user={user}
+        selected={user.selected}
+        touchable
+        callbackSelect={() => this._handleSelect(user)} />
     );
   }
 
@@ -161,7 +149,12 @@ class Invite extends React.Component {
           contacts={this.state.selectedContacts}
           handleDeselect={() => this._handleDeselect()} />
 
-        { this._getContactList() }
+        { /* Contact ListView */ }
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={this._renderRow.bind(this)}
+          renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+          enableEmptySections />
 
       </View>
     );

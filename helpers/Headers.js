@@ -206,3 +206,25 @@ export function editProfileHeader(options) {
 
   return props;
 };
+
+
+// Header props for Edit Profile modal
+export function inviteHeader() {
+  var props = {
+    types: {
+      "paymentIcons": false,
+      "circleIcons": false,
+      "settingsIcon": true,
+      "closeIcon": false,
+      "flowTabs": false,
+    },
+    index: 0,
+    numCircles: null,
+    title: "Invite a Contact",
+    callbackIn: null,
+    callbackOut: null,
+    accent: true,
+  };
+
+  return props;
+};
