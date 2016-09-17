@@ -24,9 +24,7 @@ class DynamicHorizontalUserList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("Component will receive new props:", nextProps);
-
-    // Handle show or hidie animation, if need be
+    // Handle animation
     if (nextProps.contacts.length > 0 && !this.state.visible) {
       this._show();
     } else if (nextProps.contacts.length == 0 && this.state.visible) {
@@ -35,18 +33,14 @@ class DynamicHorizontalUserList extends React.Component {
   }
 
   _show() {
-    console.log("Showing horizontal user list...");
     this.setState({ visible: true });
     Animated.spring(this.state.height, {
       toValue: 65,
       velocity: 4,
-    }, () => {
-      console.log("Callback!");
     }).start();
   }
 
   _hide() {
-    console.log("Hiding horizontal user list...");
     this.setState({ visible: false });
     Animated.spring(this.state.height, {
       toValue: 0,
@@ -73,6 +67,8 @@ class DynamicHorizontalUserList extends React.Component {
   render() {
     return(
       <Animated.View onPress={() => this._hide()} style={[styles.wrap, { height: this.state.height }]}>
+
+        { /* Thumbnail list */ }
         <ScrollView
           style={styles.horizontalScrollView}
           automaticallyAdjustContentInsets={false}

@@ -6,7 +6,7 @@ import colors from '../../../styles/colors';
 const dimensions = Dimensions.get('window');
 
 // Should we show container borders?
-const borders = true;
+const borders = false;
 
 const styles = StyleSheet.create({
   wrap: {
@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     width: dimensions.width,
     borderWidth: (borders) ? 1.0 : 0.0,
     borderColor: colors.alertRed,
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
   },
   horizontalScrollView: {
     paddingLeft: 20,
