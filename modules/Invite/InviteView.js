@@ -85,8 +85,6 @@ class Invite extends React.Component {
       query: "",
       dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(this.props.nativeContacts),
     };
-
-    console.log("Native contacts:", this.props.nativeContacts);
   }
 
   _renderRow(data) {
@@ -116,18 +114,18 @@ class Invite extends React.Component {
     *   Update .selected value of this user
     *   Update this.state.selectedContacts
   **/
-  _handleSelect(data) {
-    if (data.selected) {
-      data.selected = false;
+  _handleSelect(user) {
+    if (user.selected) {
+      user.selected = false;
       if (this.state.selectedContacts.length > 1) {
         var contacts = [];
         for (var c in this.state.selectedContacts)
-          if (this.state.selectedContacts[c].phone != data.phone) contacts.push(this.state.selectedContacts[c]);
+          if (this.state.selectedContacts[c].phone != user.phone) contacts.push(this.state.selectedContacts[c]);
         this.setState({ selectedContacts: contacts });
       } else this.setState({ selectedContacts: [] });
     } else {
-      data.selected = true;
-      this.state.selectedContacts.push(data);
+      user.selected = true;
+      this.state.selectedContacts.push(user);
       this.setState({ selectedContacts: this.state.selectedContacts });
     }
   }
