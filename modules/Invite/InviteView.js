@@ -143,6 +143,8 @@ class Invite extends React.Component {
 
     this.alertOffsetX = new Animated.Value(dimensions.width * -2.0);
     this.alertOpacity = new Animated.Value(0);
+
+    this.refs.textInput.setNativeProps({text: ''});
   }
 
   _keyboardWillShow(e) {
@@ -276,6 +278,7 @@ class Invite extends React.Component {
 
         { /* Query and ListView or Confirmation, depending on if a user is selected */ }
         <TextInput
+          ref="textInput"
           style={styles.textInput}
           placeholder={"Who would you like to invite?"}
           selectionColor={this.state.textInputColor}
@@ -283,8 +286,7 @@ class Invite extends React.Component {
           autoFocus={true}
           autoCorrect={false}
           enablesReturnKeyAutomatically={true}
-          returnKeyType={"next"}
-          defaultValue={this.state.query} />
+          returnKeyType={"next"} />
 
         { /* List of selected users */ }
         <DynamicHorizontalUserList
