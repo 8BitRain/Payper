@@ -57,17 +57,17 @@ const styles = StyleSheet.create({
 class FundingSource extends React.Component {
   constructor(props) {
     super(props);
-    this.actionSheetOptions = ['Set Active', 'Edit', 'Delete', 'Nevermind'];
+    // this.actionSheetOptions = ['Set Active', 'Edit', 'Delete', 'Nevermind'];
+    this.actionSheetOptions = ['Delete', 'Nevermind'];
   }
 
   _handleMenuPress() {
     ActionSheetIOS.showActionSheetWithOptions({
-      title: this.props.fundingSource.name + " (" + this.props.fundingSource.accountNumber + ")",
+      title: this.props.fundingSource.name,
       options: this.actionSheetOptions,
       cancelButtonIndex: 3
     },
     (buttonIndex) => {
-      console.log(this.actionSheetOptions[buttonIndex]);
       if (this.actionSheetOptions[buttonIndex] == "Delete") {
 
         // Extend scope
@@ -116,15 +116,17 @@ class FundingSource extends React.Component {
                 </Text>
               : null }
 
-          { /* Bank Name */ }
+          { /* Bank Name
           <Text style={styles.text}>
             Bank: { this.props.fundingSource.bank }
           </Text>
+          */ }
 
-          { /* Account number (hidden) */ }
+          { /* Account number (hidden)
           <Text style={styles.text}>
             Account Number: { this.props.fundingSource.accountNumber }
           </Text>
+           */ }
 
           { /* Menu icon */ }
           <TouchableHighlight

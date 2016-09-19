@@ -103,21 +103,17 @@ class Main extends React.Component {
     this.props.stopListening(this.props.activeFirebaseListeners);
   }
 
-
   // Open & close side menu
   toggle() {
     this.props.setSideMenuIsOpen(!this.props.sideMenuIsOpen);
   }
-
 
   // Switch page to be rendered in <InnerContent />
   changePage(newPage) {
     this.props.setCurrentPage(newPage);
   }
 
-
   _handleSignOut() {
-
     // Redirect user to landing screen
     Actions.LandingScreenContainer();
 
@@ -126,9 +122,7 @@ class Main extends React.Component {
 
     // Sign out of Firebase and wipe AsyncStorage
     Init.signout();
-
   }
-
 
   render() {
     return (
@@ -158,7 +152,6 @@ class Main extends React.Component {
             <InnerContent { ...this.props } />
           </View>
         </View>
-
       </SideMenu>
     );
   }

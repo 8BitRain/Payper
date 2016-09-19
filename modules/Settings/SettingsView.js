@@ -23,12 +23,9 @@ class Settings extends React.Component {
   constructor(props) {
     super(props);
 
-    console.log("%cProps received by settings:", "color:blue;font-weight:900;");
-    console.log(this.props);
+    this.EMPTY_DATA_SOURCE = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
-    var sideMenuButtons = [
+    this.sideMenuButtons = [
       {rowTitle: "Home", iconName: "home", destination: () => this.props.changePage("payments")},
       {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
       {rowTitle: "Bank Accounts", iconName: "wallet", destination: () => this.props.changePage("fundingSources")},
@@ -43,10 +40,11 @@ class Settings extends React.Component {
           confirm: () => Linking.openURL("https://www.getpayper.io/faq").catch(err => console.error('An error occurred', err)),
         });
       }},
+      {rowTitle: "Sign Out", iconName: "moon", destination: this.props.signout},
     ];
 
-    if (this.props.currentUser.provider != "facebook") {
-      sideMenuButtons.push(
+    if (this.props.currentUser.provider == "payper") {
+      this.sideMenuButtons.push(
         {rowTitle: "Delete Account", iconName: "trash", destination: () => {
           Alert.confirmation({
             title: "Delete Account",
@@ -58,20 +56,12 @@ class Settings extends React.Component {
           });
         }}
       );
-      sideMenuButtons.push({rowTitle: "Sign Out", iconName: "moon", destination: this.props.signout});
-    } else {
-      sideMenuButtons.push({rowTitle: "Sign Out", iconName: "moon", destination: this.props.signout});
     }
 
     this.state = {
-      dataSource: ds.cloneWithRows(sideMenuButtons),
+      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(this.sideMenuButtons),
     }
   }
-
-  componentDidMount() {
-    console.log("Props received by SettingsView:", this.props);
-  }
-
 
   /**
     *   Return a list of ready to render rows
