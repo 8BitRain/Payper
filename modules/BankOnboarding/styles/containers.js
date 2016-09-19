@@ -3,6 +3,8 @@ import { Dimensions } from 'react-native';
 
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+
 const containers = StyleSheet.create({
   container: {
     flex: 1
@@ -27,6 +29,11 @@ const containers = StyleSheet.create({
    alignItems: 'center',
    padding: 0,
    backgroundColor: '#F5FCFF',
+ },
+
+ modalPickerContanier: {
+   marginTop: SCREEN_HEIGHT * .66,
+   borderWidth: 0,
  },
 
 

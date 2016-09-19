@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image, Modal} from "react-native";
 import Button from "react-native-button";
-import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
+import {Scene, Reducer, Router, Switch, TabBar, Schema, Actions} from 'react-native-router-flux';
 import Entypo from "react-native-vector-icons/Entypo";
 var Mixpanel = require('react-native-mixpanel');
 
@@ -36,7 +36,8 @@ class Dob extends React.Component {
      this.dobInput = this.props.dwollaCustomer.dob;
 
      this.state = {
-       date:"1992-09-09"
+       date:"1992-09-09",
+       modalVisible: false
      };
 
      // Props to be passed to the header
@@ -65,6 +66,16 @@ class Dob extends React.Component {
      this.onPressRight = function() { this.props.dispatchSetPageX(3, "forward", true) };
      this.onPressLeft = function() { this.props.dispatchSetPageX(1, "backward", null) };
    }
+
+   _setModalVisible(visible) {
+      this.setState({modalVisible: visible});
+    }
+
+  _setDate(date){
+    this.setState({date: date});
+    this.props.dispatchSetDob(this.state.date);
+  }
+
    _keyboardWillShow(e) {
      Animated.spring(this.kbOffset, {
        toValue: e.endCoordinates.height - 40,
@@ -97,30 +108,47 @@ class Dob extends React.Component {
          { /* Prompt and input field */ }
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Dob</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.dob} onChangeText={(text) => {this.dobInput = text; this.props.dispatchSetDob(this.dobInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />
-           {/*<DatePicker
-              style={{width: 200}}
+           <DatePicker
               date={this.state.date}
               mode="date"
-              placeholder="select date"
+              placeholder=""
               format="YYYY-MM-DD"
-              minDate="2016-05-01"
-              maxDate="2016-06-01"
+              minDate="1900-01-02"
+              maxDate="2999-06-01"
               confirmBtnText="Confirm"
               cancelBtnText="Cancel"
               customStyles={{
                 dateIcon: {
                   position: 'absolute',
+                  opacity: 0,
                   left: 0,
                   top: 4,
                   marginLeft: 0
                 },
                 dateInput: {
-                  marginLeft: 36
+                  height: 40,
+                  backgroundColor: "#D8D8D8",
+                  padding: 10,
+                  paddingLeft: 10,
+                  color: "#53585E",
+                  borderRadius: 20,
+                  borderWidth: 2,
+                  borderColor: "transparent"
+                },
+                dateTouchBody: {
+                  height: 40,
+                  backgroundColor: "#D8D8D8",
+                  padding: 10,
+                  paddingLeft: 10,
+                  color: "#53585E",
+                  borderRadius: 20,
+                  borderWidth: 2,
+                  borderColor: "transparent"
                 }
+
               }}
-              onDateChange={(date) => {this.setState({date: date})}}
-            />*/}
+            onDateChange={(date) => {this._setDate(date)}}
+          />
          </View>
 
            { /* Arrow nav buttons */ }
