@@ -306,7 +306,7 @@ class Invite extends React.Component {
             underlayColor={'transparent'}
             onPress={() => this._handleSubmit()}>
 
-            <Animated.View style={{ height: 45, backgroundColor: this.state.submitBackgroundColor, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <Animated.View style={{ height: 60, backgroundColor: this.state.submitBackgroundColor, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
               <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
                 { this.state.submitText }
               </Text>
