@@ -20,6 +20,9 @@ const styles = StyleSheet.create({
   horizontalScrollView: {
     paddingLeft: 20,
     paddingRight: 20,
+    paddingTop: 5,
+    paddingBottom: 5,
+    overflow: "visible",
   },
 });
 

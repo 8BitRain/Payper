@@ -331,7 +331,7 @@ export function inviteDirect(options) {
         console.log("Invite direct Lambda response:", responseData);
         if (typeof callback == 'function') callback(responseData);
       } else {
-        console.log("Error inviting direcly:", responseData.errorMessage);
+        console.log("Error inviting directly:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
       }
     })

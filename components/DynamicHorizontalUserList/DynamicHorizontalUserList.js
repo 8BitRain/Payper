@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Animated, TouchableHighlight, Text, Image, Dimensions, ScrollView } from 'react-native';
+import { View, Animated, Easing, TouchableHighlight, Text, Image, Dimensions, ScrollView } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 // Components
@@ -19,7 +19,7 @@ class DynamicHorizontalUserList extends React.Component {
 
     this.state = {
       visible: false,
-      height: new Animated.Value(0),
+      height: new Animated.Value(1.5),
     };
   }
 
@@ -34,17 +34,19 @@ class DynamicHorizontalUserList extends React.Component {
 
   _show() {
     this.setState({ visible: true });
-    Animated.spring(this.state.height, {
-      toValue: 65,
-      velocity: 4,
+    Animated.timing(this.state.height, {
+      toValue: 60,
+      duration: 200,
+      easing: Easing.elastic(1),
     }).start();
   }
 
   _hide() {
     this.setState({ visible: false });
-    Animated.spring(this.state.height, {
-      toValue: 0,
-      velocity: 5,
+    Animated.timing(this.state.height, {
+      toValue: 1.5,
+      duration: 100,
+      easing: Easing.linear,
     }).start();
   }
 
@@ -57,7 +59,17 @@ class DynamicHorizontalUserList extends React.Component {
 
     for (var c in this.props.contacts) {
       thumbnails.push(
-        <DynamicThumbnail key={this.props.contacts[c].phone} width={40} height={40} user={this.props.contacts[c]} />
+        <TouchableHighlight
+          activeOpacity={0.8}
+          underlayColor={'transparent'}
+          key={this.props.contacts[c].phone}
+          onPress={() => this._handleDeselect()}>
+
+          <View>
+            <DynamicThumbnail width={30} height={30} user={this.props.contacts[c]} />
+          </View>
+
+        </TouchableHighlight>
       );
     }
 
@@ -67,7 +79,6 @@ class DynamicHorizontalUserList extends React.Component {
   render() {
     return(
       <Animated.View onPress={() => this._hide()} style={[styles.wrap, { height: this.state.height }]}>
-
         { /* Thumbnail list */ }
         <ScrollView
           style={styles.horizontalScrollView}
