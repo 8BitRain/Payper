@@ -98,12 +98,9 @@ function mapDispatchToProps(dispatch) {
 
           // Refresh session token every 20 minutes
           setInterval(function() {
-            console.log("Old token:", parsedUser.token.substring(parsedUser.token.length - 5, parsedUser.token.length));
-            console.log("Refreshing session token...");
             Firebase.getSessionToken((token) => {
               Async.set('session_token', token, () => {
                 parsedUser.token = token;
-                console.log("New token:", parsedUser.token.substring(parsedUser.token.length - 5, parsedUser.token.length));
                 dispatch(set.currentUser(parsedUser));
               });
             });
@@ -135,22 +132,20 @@ function mapDispatchToProps(dispatch) {
 
           case "users":
             if (response.value) {
-              console.log("Users listener response:", response.value);
-              console.log("Getting funding source with options:", options);
               // Update funding source in Redux store
               if (response.value.fundingSource) {
                 Lambda.getFundingSource({ token: options.currentUser.token }, (res) => {
-                  if (res.body) {
+                  if (res) {
                     var fundingSources = [],
                         account = {
-                          name: (res.body.name) ? res.body.name : "Nameless Account",
+                          name: (res.name) ? res.name : "Nameless Account",
                           bank: "Unknown",
                           accountNumber: "Unkown",
                           active: true,
-                          status: res.body.status,
-                          type: res.body.type,
-                          id: res.body.id,
-                          createdAt : res.body.created,
+                          status: res.status,
+                          type: res.type,
+                          id: res.id,
+                          createdAt : res.created,
                           icon: "bank",
                         };
 

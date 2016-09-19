@@ -24,7 +24,7 @@ class FundingSources extends React.Component {
 
     this.state = {
       empty: true,
-      fundingSources: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
+      fundingSources: this.props.fundingSourcesDataSource,
       modalVisible: false,
     };
   }
