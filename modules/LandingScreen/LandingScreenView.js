@@ -8,6 +8,10 @@ import * as Animations from '../../helpers/animations';
 // Helper functions
 import * as Timestamp from '../../helpers/Timestamp';
 var moment = require('moment');
+var Fabric = require('react-native-fabric');
+
+//import Crashlytics from 'react-native-fabric';
+var { Crashlytics } = Fabric;
 
 // Custom components
 import FacebookLogin from '../../components/FacebookLogin';
@@ -160,6 +164,29 @@ class ImageCarousel extends React.Component {
 class LandingScreenDisplay extends React.Component {
   constructor(props) {
     super(props);
+
+    /*Crashlytics.setUserName('megaman');
+
+    Crashlytics.setUserEmail('user@email.com');
+
+    Crashlytics.setUserIdentifier('1234');
+
+    Crashlytics.setBool('has_posted', true);
+
+    Crashlytics.setString('organization', 'Acme. Corp');
+
+    // Forces a native crash for testing
+    Crashlytics.crash();
+
+    // Record a non-fatal JS error
+    Crashlytics.recordError('something went wrong!');
+
+    // Due to differences in primitive types between iOS and Android I've exposed a setNumber function vs. setInt, setFloat, setDouble, setLong, etc
+    Crashlytics.setNumber('post_count', 5);
+
+    // Record a non-fatal JS error on Android
+    //Crashlytics.logException('');*/
+
 
     this.state = {
       email: "",

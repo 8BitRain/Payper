@@ -13,6 +13,9 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKShareKit/FBSDKShareKit.h>
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
+
 
 @implementation AppDelegate
 
@@ -25,13 +28,15 @@
 {
 
 
-
+    [Fabric with:@[[Crashlytics class]]];
     #define MIXPANEL_TOKEN @"507a107870150092ca92fa76ca7c66d6"
     [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     [mixpanel track:@("App Opened")];
 
   NSURL *jsCodeLocation;
+  
+
 
   /**
    * Loading JavaScript code - uncomment the one you want.
