@@ -20,10 +20,8 @@ class UserPic extends React.Component {
         ? initials = (name[0].substring(0, 1) + name[name.length - 1].substring(0, 1)).toUpperCase()
         : initials = name[0].substring(0, 1).toUpperCase();
       return(
-        <View style={{width: dimensions.width, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          <View style={[userStyles.pic, userStyles.initials, {width: this.props.width, height: this.props.height, borderColor: (this.props.user.provider || this.props.user.username || this.props.accent) ? colors.accent : colors.icyBlue, borderRadius: this.props.width / 2}]}>
-            <Text style={{fontFamily: 'Roboto', fontSize: 18, color: (this.props.user.provider || this.props.user.username) ? colors.accent : colors.icyBlue}}>{ initials }</Text>
-          </View>
+        <View style={[userStyles.pic, userStyles.initials, {width: this.props.width, height: this.props.height, borderColor: (this.props.user.provider || this.props.user.username || this.props.accent) ? colors.accent : colors.icyBlue, borderRadius: this.props.width / 2}]}>
+          <Text style={{fontFamily: 'Roboto', fontSize: 18, color: (this.props.user.provider || this.props.user.username) ? colors.accent : colors.icyBlue}}>{ initials }</Text>
         </View>
       );
     } else {

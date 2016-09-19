@@ -32,6 +32,7 @@ class Settings extends React.Component {
       {rowTitle: "Home", iconName: "home", destination: () => this.props.changePage("payments")},
       {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
       {rowTitle: "Bank Accounts", iconName: "wallet", destination: () => this.props.changePage("fundingSources")},
+      {rowTitle: "Invite", iconName: "users", destination: () => this.props.changePage("invite")},
       {rowTitle: "FAQ", iconName: "help-with-circle", destination: () => {
         Alert.confirmation({
           title: "Alert",

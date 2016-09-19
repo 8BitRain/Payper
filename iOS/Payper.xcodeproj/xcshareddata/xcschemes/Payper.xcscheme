@@ -56,7 +56,11 @@
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
+<<<<<<< HEAD
       buildConfiguration = "Debug"
+=======
+      buildConfiguration = "Release"
+>>>>>>> 1d0801ddab6e1d8aa02d8894b5668ee6c223799c
       selectedDebuggerIdentifier = ""
       selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
       launchStyle = "0"

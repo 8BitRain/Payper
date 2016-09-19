@@ -82,7 +82,7 @@ function mapDispatchToProps(dispatch) {
               console.log(response.value);
 
               // Convert Firebase JSON to array of user objects, tacking on section titles along the way
-              var globalUserListArray = SetMaster5000.globalUserListToArray({ users: response.value, uid: options.uid }),
+              var globalUserListArray = SetMaster5000.globalUserListToArray({ sectionTitle: "Other Payper Users", users: response.value, uid: options.uid }),
                   newAllContactsArray;
 
               // Concatenate with currently rendered contact list

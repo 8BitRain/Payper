@@ -21,6 +21,8 @@
   *     💣  Update phone contacts: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneContacts'
   *     💣  Update user info:      'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/update'
   *     💣  Archive payment:       'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/archive'
+  *     💣  Check beta invites     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/beta/inviteMatch'
+  *     💣  Check beta signups     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/beta/betaListMatch'
   *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
   *
@@ -329,7 +331,7 @@ export function inviteDirect(options) {
         console.log("Invite direct Lambda response:", responseData);
         if (typeof callback == 'function') callback(responseData);
       } else {
-        console.log("Error inviting direcly:", responseData.errorMessage);
+        console.log("Error inviting directly:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
       }
     })
@@ -519,6 +521,54 @@ export function removeFundingSource(options, callback) {
         if (typeof callback == 'function') callback(true);
       } else {
         console.log("Error removing funding source:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given phone number (phoneNumber), check if this phone number was invited
+  *   to beta
+**/
+export function checkBetaInvites(options, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/beta/inviteMatch", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Check beta invites Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error checking beta invites:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/**
+  *   Given email address (email), check if this email was used to sign up for
+  *   beta.
+**/
+export function checkBetaSignups(options, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/beta/betaListMatch", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Check beta signups Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error checking beta signups:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
       }
     })
