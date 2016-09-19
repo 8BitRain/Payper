@@ -1,6 +1,7 @@
 // Dependencies
 import React from 'react';
-import { Dimensions, StyleSheet, View, Text, TextInput, TouchableHighlight, ListView, RecyclerViewBackedScrollView, Animated, DeviceEventEmitter } from 'react-native';
+import { Dimensions, StyleSheet, View, Text, TextInput, TouchableHighlight, ListView, RecyclerViewBackedScrollView, Animated, Easing, DeviceEventEmitter } from 'react-native';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 // Helpers
 import * as Async from '../../helpers/Async';
@@ -70,6 +71,16 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
     paddingRight: 25,
   },
+
+  alertWrap: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    width: dimensions.width,
+    height: dimensions.height * 0.9,
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  },
 });
 
 class Invite extends React.Component {
@@ -83,6 +94,8 @@ class Invite extends React.Component {
     this.allContacts = this.props.nativeContacts;
     this.keyboardOffset = new Animated.Value(0);
     this.colorInterpolator = new Animated.Value(0);
+    this.alertOffsetX = new Animated.Value(dimensions.width * -2.0);
+    this.alertOpacity = new Animated.Value(0);
 
     this.state = {
       query: "",
@@ -91,8 +104,8 @@ class Invite extends React.Component {
       dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(this.allContacts),
       submitText: "No contacts are selected",
       submitBackgroundColor: this.colorInterpolator.interpolate({
-        inputRange: [0, 350, 700], // Green, transparent, red
-        outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(0, 0, 0, 0.0)', 'rgba(251, 54, 64, 1.0)'],
+        inputRange: [0, 350], // Green, transparent, red
+        outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(251, 54, 64, 1.0)'],
       }),
     };
   }
@@ -113,6 +126,25 @@ class Invite extends React.Component {
     this._interpolateSubmitColor({ toValue: 350 });
   }
 
+  _reset() {
+    this.setState({
+      query: "",
+      selectionMap: {},
+      selectedContacts: [],
+      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(this.allContacts),
+      submitText: "No contacts are selected",
+      submitBackgroundColor: this.colorInterpolator.interpolate({
+        inputRange: [0, 350], // Green, red
+        outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(251, 54, 64, 1.0)'],
+      }),
+    });
+
+    this._interpolateSubmitColor({ toValue: 350 });
+
+    this.alertOffsetX = new Animated.Value(dimensions.width * -2.0);
+    this.alertOpacity = new Animated.Value(0);
+  }
+
   _keyboardWillShow(e) {
     Animated.spring(this.keyboardOffset, {
       toValue: e.endCoordinates.height,
@@ -131,6 +163,42 @@ class Invite extends React.Component {
     Animated.spring(this.colorInterpolator, {
       toValue: options.toValue,
     }).start();
+  }
+
+  _showAlert() {
+    Animated.sequence([
+      Animated.parallel([
+        Animated.timing(this.alertOffsetX, {
+          toValue: 0,
+          duration: 400,
+          easing: Easing.elastic(1),
+        }),
+        Animated.timing(this.alertOpacity, {
+          toValue: 1.0,
+          duration: 200,
+          easing: Easing.elastic(1),
+        }),
+      ]),
+      Animated.parallel([
+        Animated.timing(this.alertOffsetX, {
+          toValue: dimensions.width * 2.0,
+          duration: 400,
+          easing: Easing.elastic(1),
+          delay: 800,
+        }),
+        Animated.timing(this.alertOpacity, {
+          toValue: 0.0,
+          duration: 200,
+          easing: Easing.elastic(1),
+          delay: 800,
+        }),
+      ]),
+    ])
+    .start();
+
+    setTimeout(() => {
+      this._reset();
+    }, 550);
   }
 
   /**
@@ -161,7 +229,7 @@ class Invite extends React.Component {
      });
 
      // (4) Interpolate submit button's background color
-     this._interpolateSubmitColor({ toValue: (this.state.selectedContacts.length > 0) ? 0 : 700 });
+     this._interpolateSubmitColor({ toValue: (this.state.selectedContacts.length > 0) ? 0 : 350 });
 
   }
 
@@ -182,6 +250,8 @@ class Invite extends React.Component {
       Lambda.inviteDirect(options, (res) => {
         console.log("Inite callback received:", res);
       });
+
+      this._showAlert();
     }
   }
 
@@ -243,6 +313,11 @@ class Invite extends React.Component {
             </Animated.View>
 
           </TouchableHighlight>
+        </Animated.View>
+
+        { /* Success alert */ }
+        <Animated.View style={[styles.alertWrap, { opacity: this.alertOpacity, left: this.alertOffsetX }]}>
+          <Entypo name={"check"} size={50} color={colors.white} />
         </Animated.View>
       </View>
     );
