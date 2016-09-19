@@ -50,23 +50,20 @@ class DynamicHorizontalUserList extends React.Component {
     }).start();
   }
 
-  _handleDeselect() {
-    console.log("Deselecting user...");
-  }
-
   _getThumbnails() {
     var thumbnails = [];
 
     for (var c in this.props.contacts) {
+      const curr = this.props.contacts[c];
       thumbnails.push(
         <TouchableHighlight
           activeOpacity={0.8}
           underlayColor={'transparent'}
-          key={this.props.contacts[c].phone}
-          onPress={() => this._handleDeselect()}>
+          key={curr.phone}
+          onPress={() => this.props.handleSelect(curr)}>
 
           <View>
-            <DynamicThumbnail width={30} height={30} user={this.props.contacts[c]} />
+            <DynamicThumbnail width={30} height={30} user={curr} />
           </View>
 
         </TouchableHighlight>

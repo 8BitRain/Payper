@@ -22,6 +22,8 @@ const styles = StyleSheet.create({
     paddingRight: 25,
     paddingTop: 10,
     paddingBottom: 10,
+    backgroundColor: colors.white,
+    color: colors.richBlack,
   },
 
   // Confirmation
@@ -79,15 +81,12 @@ class Invite extends React.Component {
     });
 
     this.allContacts = this.props.nativeContacts;
-    this.filteredContacts = [];
-
     this.keyboardOffset = new Animated.Value(0);
     this.colorInterpolator = new Animated.Value(0);
 
     this.state = {
-      inputBackgroundColor: colors.white,
-      inputTextColor: colors.richBlack,
       query: "",
+      selectionMap: {},
       selectedContacts: [],
       dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(this.allContacts),
       submitText: "No contacts are selected",
@@ -135,33 +134,35 @@ class Invite extends React.Component {
   }
 
   /**
-    *   (1) Update selected value of user object in allContacts array
+    *   (1) Update selection map value
     *   (2) Update this.state.selectedContacts
+    *   (3) Explicitly trigger re-render of all affected components
+    *   (4) Interpolate submit button's background color
   **/
   _handleSelect(user) {
-    if (user.selected) {
-      user.selected = false;
-      if (this.state.selectedContacts.length > 1) {
-        var contacts = [];
-        for (var c in this.state.selectedContacts)
-          if (this.state.selectedContacts[c].phone != user.phone) contacts.push(this.state.selectedContacts[c]);
-        this.setState({ selectedContacts: contacts });
-      } else {
-        this.setState({
-          selectedContacts: [],
-          submitText: "No contacts are selected",
-         });
-        this._interpolateSubmitColor({ toValue: 700 });
-      }
-    } else {
-      user.selected = true;
+
+    // (1) Update this.state.selectionMap
+    this.state.selectionMap[user.phone] = !this.state.selectionMap[user.phone];
+
+    // (2) Update this.state.selectedContacts
+    if (this.state.selectionMap[user.phone]) {
       this.state.selectedContacts.push(user);
-      this.setState({
-        selectedContacts: this.state.selectedContacts,
-        submitText: "Continue",
-       });
-      this._interpolateSubmitColor({ toValue: 0 });
+    } else {
+      var i = this.state.selectedContacts.indexOf(user);
+      this.state.selectedContacts.splice(i, 1);
     }
+
+    // (3) Explicitly trigger re-render
+    this.setState({
+      selectionMap: this.state.selectionMap,
+      selectedContacts: this.state.selectedContacts,
+      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(this.state.dataSource._dataBlob.s1),
+      submitText: (this.state.selectedContacts.length > 0) ? "Continue" : "No contacts are selected",
+     });
+
+     // (4) Interpolate submit button's background color
+     this._interpolateSubmitColor({ toValue: (this.state.selectedContacts.length > 0) ? 0 : 700 });
+
   }
 
   _handleSubmit() {
@@ -185,7 +186,6 @@ class Invite extends React.Component {
   }
 
   _filterContacts(query) {
-    console.log("Filtering based on query:", query);
     var filtered = SetMaster5000.filterContacts(this.allContacts, query);
     this.setState({ dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(filtered) });
   }
@@ -194,7 +194,7 @@ class Invite extends React.Component {
     return(
       <DynamicUserPreview
         user={user}
-        selected={user.selected}
+        selected={this.state.selectionMap[user.phone]}
         touchable
         callbackSelect={() => this._handleSelect(user)} />
     );
@@ -206,7 +206,7 @@ class Invite extends React.Component {
 
         { /* Query and ListView or Confirmation, depending on if a user is selected */ }
         <TextInput
-          style={[styles.textInput, {backgroundColor: this.state.inputBackgroundColor, color: this.state.inputTextColor}]}
+          style={styles.textInput}
           placeholder={"Who would you like to invite?"}
           selectionColor={this.state.textInputColor}
           onChangeText={(query) => this._filterContacts(query)}
@@ -219,7 +219,7 @@ class Invite extends React.Component {
         { /* List of selected users */ }
         <DynamicHorizontalUserList
           contacts={this.state.selectedContacts}
-          handleDeselect={() => this._handleDeselect()} />
+          handleSelect={(user) => this._handleSelect(user)} />
 
         { /* Contact ListView */ }
         <ListView

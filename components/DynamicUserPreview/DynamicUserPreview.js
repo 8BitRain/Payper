@@ -20,7 +20,6 @@ class DynamicUserPreview extends React.Component {
     this.colorInterpolator = new Animated.Value(0);
 
     this.state = {
-      selected: this.props.selected,
       color: this.colorInterpolator.interpolate({
         inputRange: [0, 350], // Transparent, green
         outputRange: ['rgba(0, 0, 0, 0.0)', 'rgba(16, 191, 90, 0.85)'],
@@ -29,7 +28,7 @@ class DynamicUserPreview extends React.Component {
   }
 
   componentDidMount() {
-    if (this.state.selected) this._interpolateBackgroundColor({ toValue: 350 });
+    if (this.props.selected) this._interpolateBackgroundColor({ toValue: 350 });
     else this._interpolateBackgroundColor({ toValue: 0 });
   }
 
@@ -50,9 +49,8 @@ class DynamicUserPreview extends React.Component {
   }
 
   _handleSelect() {
-    if (this.state.selected) this._interpolateBackgroundColor({ toValue: 0 });
+    if (this.props.selected) this._interpolateBackgroundColor({ toValue: 0 });
     else this._interpolateBackgroundColor({ toValue: 350 });
-    this.setState({ selected: !this.state.selected });
     this.props.callbackSelect();
   }
 
