@@ -284,7 +284,7 @@ class Invite extends React.Component {
           autoCorrect={false}
           enablesReturnKeyAutomatically={true}
           returnKeyType={"next"}
-          defaultValue={""} />
+          defaultValue={this.state.query} />
 
         { /* List of selected users */ }
         <DynamicHorizontalUserList
