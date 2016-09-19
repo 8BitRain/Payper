@@ -31,6 +31,7 @@ class Settings extends React.Component {
       {rowTitle: "Bank Accounts", iconName: "wallet", destination: () => this.props.changePage("fundingSources")},
       {rowTitle: "Invite", iconName: "users", destination: () => this.props.changePage("invite")},
       {rowTitle: "FAQ", iconName: "help-with-circle", destination: () => {
+        Async.set('betaStatus', 'accessDenied');
         Alert.confirmation({
           title: "Alert",
           message: "Payper would like to open Safari. Is that OK?",
