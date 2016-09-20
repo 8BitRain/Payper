@@ -308,11 +308,11 @@ class Payments extends React.Component {
             callbackTracking={() => this.props.setActiveTab('tracking')}
             callbackPay={() => {
               if (this.props.flags.onboarding_state != "complete") {
-                Alert.message({
+                /*Alert.message({
                   title: "Hey!",
                   message: "You must add a bank account before you can make a payment."
                 });
-                this._verifyOnboardingStatus();
+                this._verifyOnboardingStatus();*/
               }
 
               this._toggleModal();
@@ -333,7 +333,8 @@ class Payments extends React.Component {
 
             { /* If user has a verified funding source, display create payment
                  flow. Otherwise, display bank account onboarding flow */
-              (this.props.flags.onboarding_state == "complete")
+              /* (this.props.flags.onboarding_state == "complete") */
+              (true)
                 ? <CreatePayment
                     {...this.props}
                     toggleModal={(options) => this._toggleModal(options)} />

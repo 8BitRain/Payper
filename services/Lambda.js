@@ -5,25 +5,25 @@
   *   💣  Lambda.js  💣
   *
   *   Lambda endpoints:
-  *     💣  Base:                  'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev'
-  *     💣  Get user:              'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get'
-  *     💣  Get decrypted user:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/getPersonal'
-  *     💣  Get funding source:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource'
-  *     💣  Create user:           'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create'
-  *     💣  Create payment:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create'
-  *     💣  Accept payment:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
-  *     💣  Reject payment:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/reject'
-  *     💣  Read notification:     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/notifications/markSeen'
-  *     💣  Direct invite:         'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct'
-  *     💣  Payment invite:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
-  *     💣  Delete user:           'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/delete'
-  *     💣  Delete funding source: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/removeFundingSource'
-  *     💣  Block user:            'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/block'
-  *     💣  Update phone contacts: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneContacts'
-  *     💣  Update user info:      'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/update'
-  *     💣  Archive payment:       'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/archive'
-  *     💣  Check beta invites:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/beta/inviteMatch'
-  *     💣  Check beta signups:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/beta/betaListMatch'
+  *     💣  Base:                  'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev'
+  *     💣  Get user:              'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/auth/get'
+  *     💣  Get decrypted user:    'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/getPersonal'
+  *     💣  Get funding source:    'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource'
+  *     💣  Create user:           'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/create'
+  *     💣  Create payment:        'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/payments/create'
+  *     💣  Accept payment:        'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/payments/accept'
+  *     💣  Reject payment:        'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/payments/reject'
+  *     💣  Read notification:     'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/notifications/markSeen'
+  *     💣  Direct invite:         'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/invites/direct'
+  *     💣  Payment invite:        'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
+  *     💣  Delete user:           'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/delete'
+  *     💣  Delete funding source: 'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/customer/removeFundingSource'
+  *     💣  Block user:            'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/block'
+  *     💣  Update phone contacts: 'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneContacts'
+  *     💣  Update user info:      'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/update'
+  *     💣  Archive payment:       'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/payments/archive'
+  *     💣  Check beta invites:    'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/beta/inviteMatch'
+  *     💣  Check beta signups:    'https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/beta/betaListMatch'
   *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
   *
@@ -38,7 +38,7 @@ export function getUserWithToken(sessionToken, callback) {
   var data = {token: sessionToken};
 
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/auth/get", {method: "POST", body: JSON.stringify(data)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/auth/get", {method: "POST", body: JSON.stringify(data)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -60,7 +60,7 @@ export function getUserWithToken(sessionToken, callback) {
 **/
 export function createUser(user, callback) {
   try {
-      fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/create", {method: "POST", body: JSON.stringify(user)})
+      fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/create", {method: "POST", body: JSON.stringify(user)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -84,7 +84,7 @@ export function createUser(user, callback) {
 **/
 export function createFBUser(user, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/facebookCreate", {method: "POST", body: JSON.stringify(user)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/facebookCreate", {method: "POST", body: JSON.stringify(user)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -109,7 +109,7 @@ export function createFBUser(user, callback) {
 **/
 export function createPayment(data, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/create", {method: "POST", body: JSON.stringify(data)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/payments/create", {method: "POST", body: JSON.stringify(data)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -132,7 +132,7 @@ export function createPayment(data, callback) {
 **/
 export function confirmPayment(options) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/accept", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/payments/accept", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -155,7 +155,7 @@ export function confirmPayment(options) {
 **/
 export function rejectPayment(options) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/reject", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/payments/reject", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -181,7 +181,7 @@ export function rejectPayment(options) {
 
 export function getIavToken(data, callback){
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/utils/getIAV", {method: "POST", body: JSON.stringify(data)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/utils/getIAV", {method: "POST", body: JSON.stringify(data)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -203,7 +203,7 @@ export function getIavToken(data, callback){
 **/
 export function cancelPayment(options) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/cancel", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/payments/cancel", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -225,7 +225,7 @@ export function cancelPayment(options) {
 **/
 export function createCustomer(data, callback){
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/create", {method: "POST", body: JSON.stringify(data)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/customer/create", {method: "POST", body: JSON.stringify(data)})
     .then((response) => response.json())
     .then((responseData) => {
       //console.log("CreateCustomerResponse:" +  JSON.stringify(responseData));
@@ -253,7 +253,7 @@ export function createCustomer(data, callback){
 **/
 export function sendMicrodeposits(data, callback){
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/verifyMicroDeposits", {method: "POST", body: JSON.stringify(data)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/customer/verifyMicroDeposits", {method: "POST", body: JSON.stringify(data)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -278,7 +278,7 @@ export function sendMicrodeposits(data, callback){
 **/
 export function updatePhone(data, callback){
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneNumber", {method: "POST", body: JSON.stringify(data)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneNumber", {method: "POST", body: JSON.stringify(data)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -301,7 +301,7 @@ export function updatePhone(data, callback){
 **/
 export function seeNotifications(options) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/notifications/markSeen", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/notifications/markSeen", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -325,7 +325,7 @@ export function seeNotifications(options) {
 **/
 export function inviteDirect(options) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/direct", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/invites/direct", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -349,7 +349,7 @@ export function inviteDirect(options) {
 **/
 export function inviteViaPayment(payment, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/viaPayment", {method: "POST", body: JSON.stringify(payment)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/invites/viaPayment", {method: "POST", body: JSON.stringify(payment)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -372,7 +372,7 @@ export function inviteViaPayment(payment, callback) {
 **/
 export function getFundingSource(options, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -395,7 +395,7 @@ export function getFundingSource(options, callback) {
 **/
 export function deleteUser(options, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/delete", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/delete", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -419,7 +419,7 @@ export function deleteUser(options, callback) {
 **/
 export function getDecryptedUser(options, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/getPersonal", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/getPersonal", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -443,7 +443,7 @@ export function getDecryptedUser(options, callback) {
 **/
 export function updateContacts(options, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/triggerContactScan", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/triggerContactScan", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -467,7 +467,7 @@ export function updateContacts(options, callback) {
 **/
 export function updateUser(options, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/update", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/update", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -491,7 +491,7 @@ export function updateUser(options, callback) {
 **/
 export function archivePayment(options, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/archive", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/payments/archive", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -514,7 +514,7 @@ export function archivePayment(options, callback) {
 **/
 export function removeFundingSource(options, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/removeFundingSource", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/customer/removeFundingSource", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -538,7 +538,7 @@ export function removeFundingSource(options, callback) {
 **/
 export function checkBetaInvites(options, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/beta/inviteMatch", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/beta/inviteMatch", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -562,7 +562,7 @@ export function checkBetaInvites(options, callback) {
 **/
 export function checkBetaSignups(options, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/beta/betaListMatch", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/beta/betaListMatch", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
@@ -586,7 +586,7 @@ export function checkBetaSignups(options, callback) {
 **/
 export function blockUser(options, callback) {
   try {
-    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/block", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/block", {method: "POST", body: JSON.stringify(options)})
     .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {

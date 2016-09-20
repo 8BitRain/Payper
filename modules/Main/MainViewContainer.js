@@ -18,6 +18,7 @@ const EMPTY_DATA_SOURCE = new ListView.DataSource({rowHasChanged: (r1, r2) => r1
 import * as set from './MainState';
 import * as setPayments from '../Payments/PaymentsState';
 import * as setInFundingSources from '../FundingSources/FundingSourcesState';
+import * as setInUserSearch from '../UserSearch/UserSearchState';
 
 // Base view
 import MainView from './MainView';
@@ -41,6 +42,14 @@ function mapStateToProps(state) {
 
     // payments
     activeFilter: state.getIn(['payments', 'activeFilter']),
+
+    // userSearch
+    allContactsArray: state.getIn(['userSearch', 'allContactsArray']),
+    allContactsMap: state.getIn(['userSearch', 'allContactsMap']),
+    filteredContactsMap: state.getIn(['userSearch', 'filteredContactsMap']),
+    selectedContact: state.getIn(['userSearch', 'selectedContact']),
+    empty: state.getIn(['userSearch', 'empty']),
+    startedListening: state.getIn(['userSearch', 'startedListening']),
 
   }
 }
@@ -115,7 +124,8 @@ function mapDispatchToProps(dispatch) {
 
     listen: (endpoints, options, callback) => {
 
-      var CURRENT_USER = options.currentUser;
+      var CURRENT_USER = options.currentUser,
+          allContactsArray;
 
       Firebase.listenTo(endpoints, (response) => {
         switch (response.endpoint.split("/")[0]) {
@@ -131,6 +141,25 @@ function mapDispatchToProps(dispatch) {
           break;
 
           case "users":
+
+            // Populate global user list in Redux store
+            if (response.key == "users") {
+              // Convert Firebase JSON to array of user objects, tacking on section titles along the way
+              var globalUserListArray = SetMaster5000.globalUserListToArray({ sectionTitle: "Other Payper Users", users: response.value, uid: options.uid }),
+                  newAllContactsArray;
+
+              // Concatenate with currently rendered contact list
+              newAllContactsArray = (allContactsArray) ? SetMaster5000.mergeArrays(allContactsArray, globalUserListArray) : globalUserListArray.concat(options.nativeContacts);
+              allContactsArray = newAllContactsArray;
+
+              // Convert contact array to map for ListView rendering
+              var newAllContactsMap = SetMaster5000.arrayToMap(newAllContactsArray);
+
+              // Set user lists in Redux store, triggering re-render of UserSearch ListView
+              dispatch(setInUserSearch.allContactsMap(newAllContactsMap));
+              dispatch(setInUserSearch.allContactsArray(newAllContactsArray));
+            }
+
             if (response.value) {
               // Update funding source in Redux store
               if (response.value.fundingSource) {
@@ -173,8 +202,26 @@ function mapDispatchToProps(dispatch) {
             console.log("%c" + response.endpoint + " is null", "color:red;font-weight:900;");
           }
           break;
+
+          case "contactList":
+            // Convert Firebase JSON to array of user objects, tacking on section titles along the way
+            var contactListArray = SetMaster5000.contactListToArray({ contacts: response.value }),
+                newAllContactsArray;
+
+            // Concatenate with native phone contact list
+            newAllContactsArray = (allContactsArray) ? SetMaster5000.mergeArrays(allContactsArray, contactListArray) : contactListArray.concat(options.nativeContacts);
+            allContactsArray = newAllContactsArray;
+
+            // Convert contact array to map for ListView rendering
+            var newAllContactsMap = SetMaster5000.arrayToMap(newAllContactsArray);
+
+            // Set user lists in Redux store, triggering re-render of UserSearch ListView
+            dispatch(setInUserSearch.allContactsMap(newAllContactsMap));
+            dispatch(setInUserSearch.allContactsArray(newAllContactsArray));
+          break;
         }
       });
+
       dispatch(set.activeFirebaseListeners(endpoints));
     },
 
@@ -247,6 +294,30 @@ function mapDispatchToProps(dispatch) {
 
     setCurrentUser: (user) => {
       dispatch(set.currentUser(user));
+    },
+
+    setFilteredContacts: (contacts, callback) => {
+      dispatch(setInUserSearch.filteredContactsMap(contacts))
+      .then(() => {
+        if (typeof callback == 'function') callback();
+        else console.log("Callback is not a function.");
+      });
+    },
+
+    setSelectedContact: (contact, callback) => {
+      dispatch(setInUserSearch.selectedContact(contact))
+      .then(() => {
+        if (typeof callback == 'function') callback();
+        else console.log("Callback is not a function.");
+      });
+    },
+
+    invite: (options, callback) => {
+      options.phoneNumber = StringMaster5000.formatPhoneNumber(options.phoneNumber);
+      Lambda.inviteViaPayment(options, (success) => {
+        if (typeof callback == 'function') callback();
+        else console.log("Callback is not a function.");
+      });
     },
 
   }
