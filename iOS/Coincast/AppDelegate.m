@@ -13,6 +13,10 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKShareKit/FBSDKShareKit.h>
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
+#import "CodePush.h"
+
 
 @implementation AppDelegate
 
@@ -25,13 +29,15 @@
 {
 
 
-
+    [Fabric with:@[[Crashlytics class]]];
     #define MIXPANEL_TOKEN @"507a107870150092ca92fa76ca7c66d6"
     [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     [mixpanel track:@("App Opened")];
 
   NSURL *jsCodeLocation;
+
+
 
   /**
    * Loading JavaScript code - uncomment the one you want.
@@ -48,6 +54,11 @@
    */
 
    // jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
+  #ifdef DEBUG
+    jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
+    #else
+    jsCodeLocation = [CodePush bundleURL];
+  #endif
 
   /**
    * OPTION 2
@@ -57,7 +68,7 @@
    * simulator in the "Release"  build configuration.
    */
 
-    jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+    //jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Coincast"

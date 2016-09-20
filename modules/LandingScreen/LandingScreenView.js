@@ -8,6 +8,10 @@ import * as Animations from '../../helpers/animations';
 // Helper functions
 import * as Timestamp from '../../helpers/Timestamp';
 var moment = require('moment');
+var Fabric = require('react-native-fabric');
+
+//import Crashlytics from 'react-native-fabric';
+var { Crashlytics } = Fabric;
 
 // Custom components
 import FacebookLogin from '../../components/FacebookLogin';
@@ -160,6 +164,9 @@ class ImageCarousel extends React.Component {
 class LandingScreenDisplay extends React.Component {
   constructor(props) {
     super(props);
+
+
+
 
     this.state = {
       email: "",
