@@ -136,7 +136,8 @@ class BetaLandingScreenView extends React.Component {
       } else if (this.state.onboarding == "phone") {
         console.log({phoneNumber: this.state.phoneInput});
         Lambda.checkBetaInvites({ phoneNumber: this.state.phoneInput }, (res) => {
-
+          if (res.match) this._onVerificationSuccess();
+          else this._onVerificationFailure();
         });
       }
      } else {

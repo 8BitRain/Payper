@@ -8,6 +8,7 @@ import * as Async from '../../helpers/Async';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
 import * as SetMaster5000 from '../../helpers/SetMaster5000';
 import * as Lambda from '../../services/Lambda';
+import * as Validators from '../../helpers/validators';
 
 // Partial components
 import DynamicUserPreview from '../../components/DynamicUserPreview/DynamicUserPreview';
@@ -236,19 +237,32 @@ class Invite extends React.Component {
   }
 
   _handleSubmit() {
-    if (this.state.selectedContacts.length > 0) {
-      var options = {
-        phoneNumbers: [],
-        name: this.props.currentUser.first_name + " " + this.props.currentUser.last_name,
-        token: this.props.currentUser.token,
-      }
+    var options = {
+      phoneNumbers: [],
+      name: this.props.currentUser.first_name + " " + this.props.currentUser.last_name,
+      token: this.props.currentUser.token,
+    }
 
+    console.log("Query:", this.state.query);
+    console.log("Valid?", Validators.validatePhone(this.state.query));
+
+    if (this.state.selectedContacts.length > 0) {
       // Extract phone numbers from selected contacts
       for (var c in this.state.selectedContacts) {
         options.phoneNumbers.push(this.state.selectedContacts[c].phone);
       }
 
-      // Submit to Lambda
+      // Submit POST request
+      Lambda.inviteDirect(options, (res) => {
+        console.log("Inite callback received:", res);
+      });
+
+      this._showAlert();
+    } else if (Validators.validatePhone(this.state.query).valid) {
+      console.log("Input:", this.state.query);
+      options.phoneNumbers.push(this.state.query);
+
+      // Submit POST request
       Lambda.inviteDirect(options, (res) => {
         console.log("Inite callback received:", res);
       });
@@ -258,6 +272,19 @@ class Invite extends React.Component {
   }
 
   _filterContacts(query) {
+    // Update this.state.query
+    this.setState({ query: query });
+
+    // Update submit button
+    if (Validators.validatePhone(query).valid) {
+      this._interpolateSubmitColor({ toValue: 0 });
+      this.setState({ submitText: "Invite this phone number" });
+    } else if (this.state.selectedContacts.length == 0) {
+      this._interpolateSubmitColor({ toValue: 350 });
+      this.setState({ submitText: "No contacts are selected" });
+    }
+
+    // Update contacts rendered by ListView
     var filtered = SetMaster5000.filterContacts(this.allContacts, query);
     this.setState({ dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(filtered) });
   }

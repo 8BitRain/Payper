@@ -143,17 +143,26 @@ export function filterContacts(contacts, query) {
 
   // If user's first or last name contains the regex, add them to the filtered set
   //   - (i flag ignores case)
-  const regex = new RegExp(query + '.+$', 'i');
-  return contacts.filter(c =>
-    c.first_name && c.first_name.search(regex) >= 0
-    || c.last_name && c.last_name.search(regex) >= 0
-    || (c.first_name + " " + c.last_name) && (c.first_name + " " + c.last_name).search(regex) >= 0
-    || c.username && c.username.search(regex) >= 0
-    || ((c.first_name) ? c.first_name.toLowerCase() == query : false)
-    || ((c.last_name) ? c.last_name.toLowerCase() == query : false)
-    || ((c.first_name + " " + c.last_name) ? (c.first_name + " " + c.last_name).toLowerCase() == query : false)
-    || ((c.username) ? c.username.toLowerCase() == query : false)
-  );
+  try {
+    const regex = new RegExp(query + '.+$', 'i');
+    return contacts.filter(c =>
+      c.first_name && c.first_name.search(regex) >= 0
+      || c.last_name && c.last_name.search(regex) >= 0
+      || (c.first_name + " " + c.last_name) && (c.first_name + " " + c.last_name).search(regex) >= 0
+      || c.username && c.username.search(regex) >= 0
+      || ((c.first_name) ? c.first_name.toLowerCase() == query : false)
+      || ((c.last_name) ? c.last_name.toLowerCase() == query : false)
+      || ((c.first_name + " " + c.last_name) ? (c.first_name + " " + c.last_name).toLowerCase() == query : false)
+      || ((c.username) ? c.username.toLowerCase() == query : false)
+      || c.phone && c.phone.search(regex) >= 0
+      || c.phone && c.phone == query
+      || c.stylizedPhone && c.stylizedPhone.search(regex) >= 0
+      || c.stylizedPhone && c.stylizedPhone == query
+    );
+  } catch(err) {
+    console.log("Error filtering contacts:", err);
+    return contacts;
+  }
 };
 
 
