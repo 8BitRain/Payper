@@ -18,11 +18,12 @@
   *     💣  Payment invite:        'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/invites/payment'
   *     💣  Delete user:           'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/delete'
   *     💣  Delete funding source: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/customer/removeFundingSource'
+  *     💣  Block user:            'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/block'
   *     💣  Update phone contacts: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/updatePhoneContacts'
   *     💣  Update user info:      'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/update'
   *     💣  Archive payment:       'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/payments/archive'
-  *     💣  Check beta invites     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/beta/inviteMatch'
-  *     💣  Check beta signups     'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/beta/betaListMatch'
+  *     💣  Check beta invites:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/beta/inviteMatch'
+  *     💣  Check beta signups:    'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/beta/betaListMatch'
   *
   *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
   *
@@ -577,3 +578,27 @@ export function checkBetaSignups(options, callback) {
     console.log(err);
   }
 };
+
+
+/**
+  *   Given session token (token) and the uid of the user to block (blocked_id),
+  *   block the specified user from interacting with this user
+**/
+export function blockUser(options, callback) {
+  try {
+    fetch("https://m4gh555u28.execute-api.us-east-1.amazonaws.com/dev/user/block", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Block user Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error blocking user:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+}

@@ -191,8 +191,8 @@ class Payments extends React.Component {
         callbackMenu={() => {
           console.log("payment:", payment);
           ActionSheetIOS.showActionSheetWithOptions({
-            options: ['Cancel Payment Series', 'Nevermind'],
-            cancelButtonIndex: 1
+            options: ['Cancel Payment Series', 'Block User', 'Nevermind'],
+            cancelButtonIndex: 2
           },
           (buttonIndex) => {
             if (buttonIndex == 0) {
@@ -205,12 +205,12 @@ class Payments extends React.Component {
               if (this.props.currentUser.uid == payment.sender_id) message = "You'll stop paying " + firstName + " " + purpose;
               else message = firstName + " will stop paying you " + purpose;
 
-              // Alert the user
+              // Request confirmation
               Alert.confirmation({
                 title: "Are you sure you'd like to cancel this payment?",
                 message: message,
                 cancelMessage: "Nevermind",
-                confirmMessage: "Yes please",
+                confirmMessage: "Yes, cancel the payment series.",
                 cancel: () => console.log("Nevermind"),
                 confirm: () => this.props.cancelPayment({
                   pid: payment.pid,
@@ -219,6 +219,27 @@ class Payments extends React.Component {
                   type: payment.type,
                   flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
                   invite: (payment.type == "invite") ? true : false,
+                }),
+              });
+            } else if (buttonIndex == 1) {
+              // Extend scope
+              const _this = this;
+
+              var title = "Are you sure you'd like to block " +
+                ((this.props.activeFilter == "outgoing")
+                  ? payment.recip_name
+                  : payment.sender_name) + "?";
+
+              // Request confirmation
+              Alert.confirmation({
+                title: title,
+                message: "You can always unblock them in the 'My Profile' page.",
+                cancelMessage: "Nevermind",
+                confirmMessage: "Yes, block this user",
+                cancel: () => console.log("Nevermind"),
+                confirm: () => Lambda.blockUser({
+                  token: _this.props.currentUser.token,
+                  blocked_id: (_this.props.activeFilter == "outgoing") ? payment.recip_id : payment.sender_id,
                 }),
               });
             }

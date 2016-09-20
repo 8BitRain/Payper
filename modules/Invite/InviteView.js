@@ -211,7 +211,6 @@ class Invite extends React.Component {
     *   (4) Interpolate submit button's background color
   **/
   _handleSelect(user) {
-
     // (1) Update this.state.selectionMap
     this.state.selectionMap[user.phone] = !this.state.selectionMap[user.phone];
 
@@ -233,7 +232,6 @@ class Invite extends React.Component {
 
      // (4) Interpolate submit button's background color
      this._interpolateSubmitColor({ toValue: (this.state.selectedContacts.length > 0) ? 0 : 350 });
-
   }
 
   _handleSubmit() {
@@ -243,9 +241,6 @@ class Invite extends React.Component {
       token: this.props.currentUser.token,
     }
 
-    console.log("Query:", this.state.query);
-    console.log("Valid?", Validators.validatePhone(this.state.query));
-
     if (this.state.selectedContacts.length > 0) {
       // Extract phone numbers from selected contacts
       for (var c in this.state.selectedContacts) {
@@ -253,9 +248,7 @@ class Invite extends React.Component {
       }
 
       // Submit POST request
-      Lambda.inviteDirect(options, (res) => {
-        console.log("Inite callback received:", res);
-      });
+      Lambda.inviteDirect(options);
 
       this._showAlert();
     } else if (Validators.validatePhone(this.state.query).valid) {
@@ -263,9 +256,7 @@ class Invite extends React.Component {
       options.phoneNumbers.push(this.state.query);
 
       // Submit POST request
-      Lambda.inviteDirect(options, (res) => {
-        console.log("Inite callback received:", res);
-      });
+      Lambda.inviteDirect(options);
 
       this._showAlert();
     }

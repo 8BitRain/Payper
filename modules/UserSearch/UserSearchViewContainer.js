@@ -105,10 +105,6 @@ function mapDispatchToProps(dispatch) {
     },
 
     stopListening: (endpoints) => {
-
-
-      console.log("\n\n\n\n\nSTOPPED LISTENING\n\n\n\n");
-
       Firebase.stopListeningTo(endpoints);
       dispatch(set.activeFirebaseListeners([]));
     },
