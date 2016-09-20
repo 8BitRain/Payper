@@ -95,7 +95,7 @@ class Invite extends React.Component {
     this.allContacts = this.props.nativeContacts;
     this.keyboardOffset = new Animated.Value(0);
     this.colorInterpolator = new Animated.Value(0);
-    this.alertOffsetX = new Animated.Value(dimensions.width * -2.0);
+    this.alertOffsetX = new Animated.Value(dimensions.width * 2.0);
     this.alertOpacity = new Animated.Value(0);
 
     this.state = {
@@ -142,7 +142,7 @@ class Invite extends React.Component {
 
     this._interpolateSubmitColor({ toValue: 350 });
 
-    this.alertOffsetX = new Animated.Value(dimensions.width * -2.0);
+    this.alertOffsetX = new Animated.Value(dimensions.width * 2.0);
     this.alertOpacity = new Animated.Value(0);
 
     this.refs.textInput.setNativeProps({text: ''});
@@ -173,7 +173,7 @@ class Invite extends React.Component {
       Animated.parallel([
         Animated.timing(this.alertOffsetX, {
           toValue: 0,
-          duration: 400,
+          duration: 550,
           easing: Easing.elastic(1),
         }),
         Animated.timing(this.alertOpacity, {
@@ -184,8 +184,8 @@ class Invite extends React.Component {
       ]),
       Animated.parallel([
         Animated.timing(this.alertOffsetX, {
-          toValue: dimensions.width * 2.0,
-          duration: 400,
+          toValue: dimensions.width * -2.0,
+          duration: 550,
           easing: Easing.elastic(1),
           delay: 800,
         }),

@@ -142,7 +142,7 @@ export function signInWithFacebook(data, callback) {
             console.log(user);
 
             user.token = token;
-            
+
             // Sign in succeeded. Log the user to AsyncStorage
             Async.set('user', JSON.stringify(user), () => {
 
@@ -163,8 +163,6 @@ export function signInWithFacebook(data, callback) {
                 if (typeof callback == 'function') callback(true, user, user.token );
                 else console.log("%cCallback is not a function", "color:red;font-weight:900;");
               }); <<<<<<< eric_action_button*/
-
-
 
             });
           } else {
