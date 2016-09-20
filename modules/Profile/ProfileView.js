@@ -8,6 +8,7 @@ import * as Timestamp from '../../helpers/Timestamp';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
 import * as SetMaster5000 from '../../helpers/SetMaster5000';
 import * as Headers from '../../helpers/Headers';
+import * as Alert from '../../helpers/Alert';
 
 // Partial components
 import Header from '../../components/Header/Header';
@@ -77,6 +78,14 @@ class Profile extends React.Component {
           content: this.props.currentUser.decryptedEmail,
           info: "Your email address is used for password recovery and identity verification. Nobody can see this address but you."
         })},
+        { rowTitle: "Tom Hanks",
+          rowContent: "Last Sunday at 3:02pm",
+          sectionTitle: "Blocked Users",
+          destination: () => this._unblockUser({ name: "Tom Hanks" })},
+        { rowTitle: "Fourteen SteakTacos",
+          rowContent: "Today at 9:58am",
+          sectionTitle: "Blocked Users",
+          destination: () => this._unblockUser({ name: "Fourteen SteakTacos" })},
     ];
 
     this.state = {
@@ -88,6 +97,25 @@ class Profile extends React.Component {
         info: "",
       },
     };
+  }
+
+
+  _unblockUser(user) {
+    var title = "Unblock " + user.name,
+        message = "Are you sure you'd like to unblock this user?";
+
+    Alert.confirmation({
+      title: title,
+      message: message,
+      confirmMessage: "Yes, unblock this user",
+      cancelMessage: "Nevermind",
+      confirm: () => {
+        console.log("Unblocking", user.name);
+      },
+      cancel: () => {
+        console.log("Nevermind");
+      },
+    })
   }
 
 
@@ -165,7 +193,7 @@ class Profile extends React.Component {
           <View style={{flex: 0.5, flexDirection: 'row', justifyContent: 'flex-end'}}>
             <Text>{ row.rowContent }</Text>
             <View style={{borderColor: colors.accent, borderWidth: 1.0, padding: 3, borderRadius: 3, marginLeft: 10}}>
-              <Text style={{fontFamily: 'Roboto', fontSize: 10}}>{ (row.rowContent) ? "Edit" : "Add" }</Text>
+              <Text style={{fontFamily: 'Roboto', fontSize: 10}}>{ (row.sectionTitle == "Blocked Users") ? "Unblock" : (row.rowContent) ? "Edit" : "Add" }</Text>
             </View>
           </View>
         </View>
