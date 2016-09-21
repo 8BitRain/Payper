@@ -1,19 +1,22 @@
 import {StyleSheet} from 'react-native';
+import colors from "../../../styles/colors";
 
 const typography = StyleSheet.create({
   // General typography styles
   general: {
     fontFamily: "sans-serif",
     fontFamily: "Roboto",
-    fontWeight: "normal",
-    color: "#F4F4F9"
+    fontWeight: "100",
+    color: "#F4F4F9",
+    alignSelf: "center"
   },
 
   validationSuccess: {
     fontFamily: "sans-serif",
     fontFamily: "Roboto",
-    fontWeight: "normal",
-    color: "green"
+    fontWeight: "100",
+    color: colors.accent,
+    alignSelf: "center"
   },
 
   // Varying font sizes (ex. "What's your email?")
@@ -22,11 +25,17 @@ const typography = StyleSheet.create({
   fontSizeError: { fontSize: 15},
 
   textInput: {
-    height: 40,
-    backgroundColor: "transparent",
-    padding: 10,
+    height: 60,
+    width: 224,
+    backgroundColor: colors.obsidianInput,
     paddingLeft: 0,
-    color: "#99ECFB"
+    color: "#99ECFB",
+    fontFamily: "Roboto",
+    fontSize: 15,
+    fontWeight: "100",
+    color: colors.white,
+    textAlign: "center",
+    alignSelf: "center"
   },
 
   // Helper styles

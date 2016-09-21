@@ -10,6 +10,9 @@ import * as Init from "../../_init";
 // Stylesheets
 import colors from "../../styles/colors";
 import styles from '../../styles/SignIn/Generic';
+import typography from "./styles/typography";
+import Header from "../../components/Header/Header";
+
 const dimensions = Dimensions.get('window');
 
 // Custom components
@@ -39,6 +42,19 @@ class SignInView extends React.Component {
     super(props);
 
     this.MAX_ATTEMPTS = 7;
+
+    this.headerProps = {
+      types: {
+        "paymentIcons": false,
+        "circleIcons": false,
+        "settingsIcon": false,
+        "closeIcon": true,
+        "backIcon": false,
+        "appLogo": true
+      },
+      index: 0,
+      numCircles: 0
+    };
 
     this.state = {
       email: "",
@@ -175,20 +191,21 @@ class SignInView extends React.Component {
       );
     } else {
       return (
-        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', backgroundColor: colors.white}}>
+        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', backgroundColor: colors.obisdian}}>
 
-          <View style={{backgroundColor: colors.accent, paddingBottom: 10, flex: 0.12, flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center'}}>
-            <Text style={{fontFamily: 'Roboto', fontSize: 40, fontWeight: '300', color: colors.white, textAlign: 'center'}}>Payper</Text>
+          <View style={{backgroundColor: colors.obisdian, marginBottom: 15, flex: 0.12, flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center'}}>
+            <Text style={[typography.title]}>Payper</Text>
           </View>
 
           <View style={{flex: 0.7, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={styles.label}>
+            <Text style={[typography.general,  {marginBottom: 10}]}>
               Sign In
             </Text>
 
             <TextInput
-              style={styles.input}
+              style={[typography.textInput, {marginBottom: 15}]}
               placeholder={"Email"}
+              placeholderTextColor="#fefeff"
               defaultValue={this.state.email}
               autoFocus={false}
               autoCapitalize="none"
@@ -199,8 +216,9 @@ class SignInView extends React.Component {
 
             <TextInput
               ref="password"
-              style={styles.input}
+              style={[typography.textInput, {marginBottom: 15}]}
               placeholder={"Password"}
+              placeholderTextColor="#fefeff"
               secureTextEntry
               onChangeText={(text) => this.input.password = text}
               onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.signInWithEmail() }} />
@@ -214,14 +232,22 @@ class SignInView extends React.Component {
             }
 
             { /* Arrow nav buttons */ }
-            <View>
-              <ArrowNav
-                dark
-                arrowNavProps={this.arrowNavProps}
-                callbackLeft={() => { Actions.LandingScreenContainer(); }}
-                callbackRight={() => { this.signInWithEmail() }} />
-            </View>
+
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              onPress={() => {this.onPressRight()}}>
+
+              <Animated.View style={{ height: 70, backgroundColor: "#20BF55", flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center', color: "#fefeff", width: 224 }]}>
+                   Continue
+                </Text>
+              </Animated.View>
+
+            </TouchableHighlight>
           </View>
+          { /* Header */ }
+        <Header callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
 
           { /* Filler */ }
           <View style={{flex: 0.18, justifyContent: 'center', alignItems: 'center'}}>

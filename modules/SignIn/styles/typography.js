@@ -8,7 +8,16 @@ const typography = StyleSheet.create({
     fontFamily: "Roboto",
     fontWeight: "100",
     color: "#F4F4F9",
-    alignSelf: "center"
+    alignSelf: "center",
+    fontSize: 20
+  },
+
+  title: {
+    fontFamily: "Roboto",
+    fontWeight: "100",
+    color: colors.accent,
+    alignSelf: "center",
+    fontSize: 30
   },
 
   // Varying font sizes (ex. "What's your email?")

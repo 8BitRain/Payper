@@ -9,12 +9,12 @@ const backgrounds = StyleSheet.create({
     right: 0,
     bottom: 0
   },
-  email: { backgroundColor: colors.richBlack },
-  password: { backgroundColor: colors.richBlack },
-  firstName: { backgroundColor: colors.richBlack },
-  lastName: { backgroundColor: colors.richBlack },
-  phoneNumber: { backgroundColor: colors.richBlack },
-  summary: { backgroundColor: colors.richBlack }
+  email: { backgroundColor: colors.obisdian },
+  password: { backgroundColor: colors.obisdian },
+  firstName: { backgroundColor: colors.obisdian },
+  lastName: { backgroundColor: colors.obisdian },
+  phoneNumber: { backgroundColor: colors.obisdian },
+  summary: { backgroundColor: colors.obisdian }
 });
 
 export default backgrounds;

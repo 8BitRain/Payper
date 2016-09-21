@@ -17,6 +17,7 @@ import Dob from "./Pages/Dob";
 import SSN from "./Pages/SSN";
 import Iav from "./Pages/Iav";
 import VerifyMicrodeposit from "./Pages/VerifyMicrodeposit";
+import Comfort from "./Pages/Comfort"
 
 //styles
 import backgrounds from "./styles/backgrounds";
@@ -194,6 +195,13 @@ class BankOnboardingView extends React.Component {
         switch(this.props.currentPagex){
           case 0:
             return(
+              <Comfort
+              dispatchSetPageX={this.props.dispatchSetPageX}
+              />
+            )
+            break;
+          case 1:
+            return(
               <BasicInfo
                 newUser={this.props.newUser}
                 dwollaCustomer={this.props.dwollaCustomer}
@@ -217,7 +225,7 @@ class BankOnboardingView extends React.Component {
               />
             )
             break;
-          case 1:
+          case 2:
             return(
               <Address
                 dispatchSetAddress={this.props.dispatchSetAddress}
@@ -236,7 +244,7 @@ class BankOnboardingView extends React.Component {
               />
             )
             break;
-          case 2:
+          case 3:
             return(
               <Dob
                 dispatchSetDob={this.props.dispatchSetDob}
@@ -246,7 +254,7 @@ class BankOnboardingView extends React.Component {
               />
             )
             break;
-          case 3:
+          case 4:
             return(
               <SSN
                 dispatchSetSSN={this.props.dispatchSetSSN}

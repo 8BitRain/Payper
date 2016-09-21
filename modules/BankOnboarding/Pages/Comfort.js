@@ -27,30 +27,19 @@ import typography from "../styles/typography";
 //Init
 import * as Init from '../../../_init';
 
-class SSN extends React.Component {
+class Comfort extends React.Component {
    constructor(props) {
      super(props);
 
      // Props for animation
      this.kbOffset = new Animated.Value(0);
 
-     console.log("SSN received new user token:", this.props.newUser.token);
 
      this.animationProps = {
        fadeAnim: new Animated.Value(0) // init opacity 0
      };
 
-     /*if(this.firebase_token == ''){
-       Async.get('session_token', (token) => {
-         this.token = token;
-         //dispatchSetFirebaseToken
-         console.log("Token: " + token);
-         this.props.dispatchSetFirebaseToken(this.token);
-       });
-     }*/
 
-     // Props for temporary input storage
-     this.SSNInput = this.props.dwollaCustomer.ssn;
      this.uid = "";
 
      // Props to be passed to the header
@@ -60,7 +49,7 @@ class SSN extends React.Component {
          "circleIcons": false,
          "settingsIcon": false,
          "closeIcon": false,
-         "backIcon" : true,
+         "backIcon" : false,
          "appLogo" : true
        },
        index: 3,
@@ -78,24 +67,7 @@ class SSN extends React.Component {
      };
 
      // Callback functions to be passed to the arrow nav
-     this.onPressLeft = function() { this.props.dispatchSetPageX(3, "backward", null) };
-     this.onPressCheck = function(){
-       var data = {
-         "firstName": this.props.dwollaCustomer.firstName,
-         "lastName": this.props.dwollaCustomer.lastName,
-         "email": this.props.dwollaCustomer.email,
-         "phone": this.props.dwollaCustomer.phone,
-         "address": this.props.dwollaCustomer.address,
-         "city": this.props.dwollaCustomer.city,
-         "state": this.props.dwollaCustomer.state,
-         "zip": this.props.dwollaCustomer.zip,
-         "dob": this.props.dwollaCustomer.dob,
-         "ssn": this.props.dwollaCustomer.ssn,
-         "token": this.props.newUser.token
-       }
-       this.createCustomer(data);
-
-     }
+     this.onPressRight = function() { this.props.dispatchSetPageX(1, "forward", true) };
    }
 
    _keyboardWillShow(e) {
@@ -121,44 +93,8 @@ class SSN extends React.Component {
    componentWillUnmount() {
      _keyboardWillShowSubscription.remove();
      _keyboardWillHideSubscription.remove();
-      this.props.stopListening(this.props.activeFirebaseListeners);
    }
 
-   createCustomer(data){
-     //data.token = {this.props.firebase_token};
-     console.log("FirebaseToken: " + this.props.newUser.token);
-     //console.log("DataToken: " + data.token);
-     var _this = this;
-     Init.createCustomer(data, function(customerCreated){
-       console.log("CustomerCreated?: " + customerCreated);
-       //Grab UId
-       Async.get('user', (val) => {
-           console.log("User: " + val);
-           console.log("User: " + JSON.parse(val).uid);
-         var iav = "IAV/" + JSON.parse(val).uid;
-         var appFlags = "appFlags/" + JSON.parse(val).uid;
-         //Enable FirebaseListeners
-         _this.props.listen([appFlags, iav]);
-         //dispatch will be called from container
-       });
-      // _this.initiateIAV(_this.props.newUser.token, _this);
-     });
-   }
-
-   initiateIAV(token, _this){
-      var data = {
-        token: token
-      };
-      //var _this = this;
-      console.log("Beginning IAV Initiation");
-      Init.getIavToken(data, function(iavTokenRecieved, iavToken){
-        if(iavTokenRecieved){
-          console.log("SSN IAVTOKEN: " + JSON.stringify(iavToken));
-          //Will cause the IAV Token Page to be loaded
-          _this.props.dispatchSetIav(iavToken.token);
-        }
-      });
-   }
 
    componentWillMount() {
      // Initialize the app
@@ -172,8 +108,9 @@ class SSN extends React.Component {
          <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
 
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>What are the Last 4 Digits of your Social Security Number?</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.ssn} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" maxLength={5} placeholder={""} keyboardType="default" />
+           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Verify your identity.</Text>
+           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 100, textAlign: "center"}]}>To ensure you aren’t being impersonated we need you to verify your identity. We would like your legal name, billing address, date of birth, and social security number.</Text>
+           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 145, textAlign: "center"}]}>*Don’t worry! Your information is securely encrypted  and not stored in our database.</Text>
          </View>
 
            { /* Arrow nav buttons */ }
@@ -187,7 +124,7 @@ class SSN extends React.Component {
            <TouchableHighlight
              activeOpacity={0.8}
              underlayColor={'transparent'}
-             onPress={() => {this.onPressCheck()}}>
+             onPress={() => {this.onPressRight()}}>
 
              <Animated.View style={{ height: 70, backgroundColor: "#20BF55", flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center', color: "#fefeff" }]}>
@@ -202,4 +139,4 @@ class SSN extends React.Component {
    }
  }
 
-export default SSN;
+export default Comfort;

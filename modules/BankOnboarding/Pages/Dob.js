@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image, Modal} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image, Modal, TouchableHighlight} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Schema, Actions} from 'react-native-router-flux';
 import Entypo from "react-native-vector-icons/Entypo";
@@ -14,6 +14,8 @@ var Mixpanel = require('react-native-mixpanel');
 import Header from "../../../components/Header/Header";
 import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 import DatePicker from "react-native-datepicker";
+
+import colors from "../../../styles/colors"
 
 // Stylesheets
 import backgrounds from "../styles/backgrounds";
@@ -44,12 +46,13 @@ class Dob extends React.Component {
      this.headerProps = {
        types: {
          "paymentIcons": false,
-         "circleIcons": true,
+         "circleIcons": false,
          "settingsIcon": false,
-         "closeIcon": false
+         "closeIcon": false,
+         "backIcon": true,
+         "appLogo": true
        },
        index: 2,
-       title: "Customer Verfication",
        numCircles: 4
      };
 
@@ -63,8 +66,8 @@ class Dob extends React.Component {
      };
 
      // Callback functions to be passed to the arrow nav
-     this.onPressRight = function() { this.props.dispatchSetPageX(3, "forward", true) };
-     this.onPressLeft = function() { this.props.dispatchSetPageX(1, "backward", null) };
+     this.onPressRight = function() { this.props.dispatchSetPageX(4, "forward", true) };
+     this.onPressLeft = function() { this.props.dispatchSetPageX(2, "backward", null) };
    }
 
    _setModalVisible(visible) {
@@ -78,7 +81,7 @@ class Dob extends React.Component {
 
    _keyboardWillShow(e) {
      Animated.spring(this.kbOffset, {
-       toValue: e.endCoordinates.height - 40,
+       toValue: e.endCoordinates.height,
        friction: 6
      }).start();
    }
@@ -107,8 +110,9 @@ class Dob extends React.Component {
 
          { /* Prompt and input field */ }
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Dob</Text>
+           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>When were you born?</Text>
            <DatePicker
+              style={{alignSelf: "center"}}
               date={this.state.date}
               mode="date"
               placeholder=""
@@ -126,24 +130,44 @@ class Dob extends React.Component {
                   marginLeft: 0
                 },
                 dateInput: {
-                  height: 40,
-                  backgroundColor: "#D8D8D8",
-                  padding: 10,
-                  paddingLeft: 10,
-                  color: "#53585E",
-                  borderRadius: 20,
-                  borderWidth: 2,
-                  borderColor: "transparent"
+                  height: 60,
+                  width: 224,
+                  backgroundColor: colors.obsidianInput,
+                  paddingLeft: 0,
+                  fontFamily: "Roboto",
+                  fontWeight: "100",
+                  fontSize: 15,
+                  color: colors.white,
+                  textAlign: "center",
+                  alignSelf: "center",
+                  borderWidth: 0,
+                  borderRadius: 0
+                },
+                placeholderText: {
+                  fontFamily: "Roboto",
+                  fontWeight: "100",
+                  fontSize: 15,
+                  color: colors.white
+                },
+                dateText: {
+                  fontFamily: "Roboto",
+                  fontWeight: "100",
+                  fontSize: 15,
+                  color: colors.white
                 },
                 dateTouchBody: {
-                  height: 40,
-                  backgroundColor: "#D8D8D8",
-                  padding: 10,
-                  paddingLeft: 10,
-                  color: "#53585E",
-                  borderRadius: 20,
-                  borderWidth: 2,
-                  borderColor: "transparent"
+                  height: 60,
+                  width: 224,
+                  backgroundColor: colors.obsidianInput,
+                  paddingLeft: 0,
+                  fontFamily: "Roboto",
+                  fontWeight: "100",
+                  fontSize: 15,
+                  color: "white",
+                  textAlign: "center",
+                  alignSelf: "center",
+                  borderWidth: 0,
+                  borderRadius: 0
                 }
 
               }}
@@ -156,14 +180,22 @@ class Dob extends React.Component {
 
 
            { /* Header */ }
-           <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+           <Header callbackBack={() => {this.onPressLeft()}} callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
 
          </Animated.View>
          <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
-           <ArrowNav
-             arrowNavProps={this.arrowNavProps}
-             callbackRight={() => {this.onPressRight()}}
-             callbackLeft={() => {this.onPressLeft()}} />
+           <TouchableHighlight
+             activeOpacity={0.8}
+             underlayColor={'transparent'}
+             onPress={() => {this.onPressRight()}}>
+
+             <Animated.View style={{ height: 70, backgroundColor: "#20BF55", flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+               <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center', color: "#fefeff" }]}>
+                  Continue
+               </Text>
+             </Animated.View>
+
+           </TouchableHighlight>
          </Animated.View>
        </View>
      );

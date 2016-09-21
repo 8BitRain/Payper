@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, TouchableHighlight, DeviceEventEmitter} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 
@@ -32,6 +32,7 @@ class PhoneNumber extends React.Component {
      fadeAnim: new Animated.Value(0) // init opacity 0
    };
 
+   this.kbOffset = new Animated.Value(0);
    // Props for temporary input storage
    this.phoneNumberInput = this.props.phone;
 
@@ -39,9 +40,11 @@ class PhoneNumber extends React.Component {
    this.headerProps = {
      types: {
        "paymentIcons": false,
-       "circleIcons": true,
+       "circleIcons": false,
        "settingsIcon": false,
-       "closeIcon": true
+       "closeIcon": false,
+       "appLogo": true,
+       "backIcon": true
      },
      index: 4,
      numCircles: 6
@@ -94,13 +97,37 @@ class PhoneNumber extends React.Component {
     });
   }
 
+
+
+ _keyboardWillShow(e) {
+   Animated.spring(this.kbOffset, {
+     toValue: e.endCoordinates.height,
+     friction: 6
+   }).start();
+ }
+
+ _keyboardWillHide(e) {
+   Animated.spring(this.kbOffset, {
+     toValue: 0,
+     friction: 6
+   }).start();
+ }
+
  componentDidMount() {
-   Animations.fadeIn(this.animationProps);
-   Mixpanel.track("LastName page Finsihed");
-   Mixpanel.timeEvent("Phone# page Finished");
+   _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
+   _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+    Animations.fadeIn(this.animationProps);
+    Mixpanel.track("LastName page Finsihed");
+    Mixpanel.timeEvent("Phone# page Finished");
+ }
+
+ componentWillUnmount() {
+   _keyboardWillShowSubscription.remove();
+   _keyboardWillHideSubscription.remove();
  }
  render() {
    return (
+    <View style={[backgrounds.background, backgrounds.phoneNumber]}>
      <Animated.View style={[containers.container, {opacity: this.animationProps.fadeAnim}]}>
        { /* Background */ }
        <View style={[backgrounds.background, backgrounds.phoneNumber]}></View>
@@ -108,18 +135,35 @@ class PhoneNumber extends React.Component {
        { /* Prompt and input field */ }
        <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.phoneNumber]}>
          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Can I have your number?</Text>
-         <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput)}} defaultValue={this.props.phone} onChangeText={(text) => {this.phoneNumberInput = text}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"262-305-8038"} maxLength={10} keyboardType="phone-pad" />
+         <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom, {fontWeight: "100"}]} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput)}} defaultValue={this.props.phone} onChangeText={(text) => {this.phoneNumberInput = text}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"262-305-8038"} maxLength={10} keyboardType="phone-pad" />
        </View>
 
-       { /* Arrow nav buttons */ }
-       { this.props.provider == "facebook" ? <ArrowNav arrowNavProps={this.arrowNavProps} callbackCheck={() => {this.onPressCheck()}} />
-         : <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackRight={() => {this.onPressRight()}} />}
+
 
        { /* Filler */ }
        <View style={[containers.sixTenths, backgrounds.email]}></View>
        { /* Header */ }
-       <Header callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
+
+       <Header callbackBack={() => {this.onPressLeft()}} callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
+
     </Animated.View>
+    <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
+      <TouchableHighlight
+        activeOpacity={0.8}
+        underlayColor={'transparent'}
+        onPress={() => {  this.props.provider == "facebook" ? this.onPressCheck() : this.onPressRight()}}>
+
+        <Animated.View style={{ height: 70, backgroundColor: "#20BF55", flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center', color: "#fefeff" }]}>
+             Continue
+          </Text>
+        </Animated.View>
+
+      </TouchableHighlight>
+    </Animated.View>
+
+  </View>
+
    );
  }
 }

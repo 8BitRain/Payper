@@ -22,6 +22,8 @@ const colors = {
   // Main colors
   accent: "#20BF55",
   richBlack: "#2A2D34",
+  obisdian: "#08090A",
+  obsidianInput: "#1E1F20",
   opaqueRichBlack: "rgba(42, 45, 52, 0.8)",
 
   // Potential main colors
