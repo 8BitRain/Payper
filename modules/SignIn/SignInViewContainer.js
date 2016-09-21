@@ -236,7 +236,7 @@ class SignInView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={'transparent'}
-              onPress={() => {this.onPressRight()}}>
+              onPress={() => { this.signInWithEmail()}}>
 
               <Animated.View style={{ height: 70, backgroundColor: "#20BF55", flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center', color: "#fefeff", width: 224 }]}>
