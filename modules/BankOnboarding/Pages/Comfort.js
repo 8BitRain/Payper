@@ -109,7 +109,7 @@ class Comfort extends React.Component {
 
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Verify your identity.</Text>
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 100, textAlign: "center"}]}>To ensure you aren’t being impersonated we need you to verify your identity. We would like your legal name, address, date of birth, and social security number.</Text>
+           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 100, textAlign: "center"}]}>To ensure you aren’t being impersonated we need you to verify your identity. We would like your legal name, billing address, date of birth, and social security number.</Text>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 145, textAlign: "center"}]}>*Don’t worry! Your information is securely encrypted  and not stored in our database.</Text>
          </View>
 
