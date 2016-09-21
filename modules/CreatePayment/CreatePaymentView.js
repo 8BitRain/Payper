@@ -1,7 +1,8 @@
 // Dependencies
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, StatusBar, Animated, Easing } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Dimensions, StatusBar, Animated, Easing } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+const { State: TextInputState } = TextInput;
 
 // Helpers
 import * as Headers from '../../helpers/Headers';
@@ -29,6 +30,8 @@ class CreatePaymentView extends React.Component {
       header: Headers.createPaymentHeader(),
       offsetX: new Animated.Value(0),
       selectedContacts: {},
+      amount: "",
+      duration: "",
     };
   }
 
@@ -37,32 +40,32 @@ class CreatePaymentView extends React.Component {
   }
 
   _induceState(options) {
-    this.setState({ selectedContacts: options.selectedContacts });
-  }
-
-  _setHeader() {
-    if (this.pages[this.state.pageIndex] == "purpose") this.setState({ header: Headers.createPaymentPurposeHeader({ callbackBack: () => this._prevPage() }) });
-    else this.setState({ header: Headers.createPaymentHeader() });
+    if (options.selectedContacts) this.setState({ selectedContacts: options.selectedContacts });
+    if (options.amount && options.duration) this.setState({ amount: options.amount, duration: options.duration });
   }
 
   _nextPage() {
     this.setState({ pageIndex: this.state.pageIndex + 1 });
-    this._setHeader();
+    this._dismissKeyboard();
     Animated.timing(this.state.offsetX, {
       toValue: this.state.offsetX._value - dimensions.width,
-      duration: 100,
-      easing: Easing.cubic,
+      duration: 200,
+      easing: Easing.elastic(0),
     }).start();
   }
 
   _prevPage() {
     this.setState({ pageIndex: this.state.pageIndex - 1 });
-    this._setHeader();
+    this._dismissKeyboard();
     Animated.timing(this.state.offsetX, {
       toValue: this.state.offsetX._value + dimensions.width,
-      duration: 100,
-      easing: Easing.cubic,
+      duration: 200,
+      easing: Easing.elastic(0),
     }).start();
+  }
+
+  _dismissKeyboard() {
+    TextInputState.blurTextInput(TextInputState.currentlyFocusedField());
   }
 
   render() {
@@ -74,10 +77,10 @@ class CreatePaymentView extends React.Component {
         { /* Header */ }
         <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
           <Header
-            callbackClose={ () => { this.props.reset(); this.props.toggleModal(); }}
-            callbackBack={ () => this._setPageIndex(1) }
+            callbackClose={() => { this.props.reset(); this.props.toggleModal(); }}
+            callbackBack={() => this._prevPage()}
             numUnseenNotifications={ this.props.numUnseenNotifications }
-            headerProps={ this.state.header } />
+            headerProps={(this.state.pageIndex == 0) ? Headers.createPaymentHeader() : Headers.createPaymentPurposeHeader()} />
         </View>
 
         { /* Inner content */ }
@@ -87,6 +90,7 @@ class CreatePaymentView extends React.Component {
             <View style={[styles.panelWrap]}>
               <UserSelection
                 {...this.props}
+                dismissKeyboard={() => this._dismissKeyboard()}
                 induceState={(options) => this._induceState(options)}
                 nextPage={() => this._nextPage()} />
             </View>
@@ -95,6 +99,8 @@ class CreatePaymentView extends React.Component {
             <View style={[styles.panelWrap]}>
               <AmountAndDuration
                 {...this.props}
+                dismissKeyboard={() => this._dismissKeyboard()}
+                induceState={(options) => this._induceState(options)}
                 selectedContacts={this.state.selectedContacts}
                 nextPage={() => this._nextPage()}
                 prevPage={() => this._prevPage()} />
@@ -104,8 +110,14 @@ class CreatePaymentView extends React.Component {
             <View style={[styles.panelWrap]}>
               <Purpose
                 {...this.props}
+                dismissKeyboard={() => this._dismissKeyboard()}
                 selectedContacts={this.state.selectedContacts}
-                prevPage={() => this._prevPage()} />
+                prevPage={() => this._prevPage()}
+                payment={{
+                  amount: this.state.amount,
+                  duration: this.state.duration,
+                  users: this.state.selectedContacts,
+                }} />
             </View>
           </Animated.View>
         </View>
@@ -119,9 +131,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1.0,
     width: dimensions.width * 3.0,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
-  panelWrap: {
-  },
+  panelWrap: {},
 });
 
 export default CreatePaymentView;

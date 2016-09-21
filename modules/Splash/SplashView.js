@@ -35,8 +35,8 @@ class SplashView extends React.Component {
     *     => if no, take them to the beta lander
   **/
   componentWillMount() {
-    // Async.get('betaStatus', (val) => {
-    //   if (val == "fullAccess") {
+    Async.get('betaStatus', (val) => {
+      if (val == "fullAccess") {
         // Extend scope
         const _this = this;
 
@@ -58,10 +58,10 @@ class SplashView extends React.Component {
           else _this._handleSignInFailure();
 
         });
-    //   } else {
-    //     Actions.BetaLandingScreenView();
-    //   }
-    // });
+      } else {
+        Actions.BetaLandingScreenView();
+      }
+    });
   }
 
   render() {

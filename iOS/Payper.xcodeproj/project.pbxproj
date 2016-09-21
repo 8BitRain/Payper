@@ -617,7 +617,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 943498UXPL;
+						DevelopmentTeam = 9MXT88RAVX;
 					};
 				};
 			};
@@ -1070,8 +1070,7 @@
 					"-lc++",
 					"-licucore",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.PayperAura;
-
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Payper;
 				PRODUCT_NAME = Payper;
 				PROVISIONING_PROFILE = "";
 			};
@@ -1107,10 +1106,7 @@
 					"-lc++",
 					"-licucore",
 				);
-
-
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.PayperAura;
-
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Payper;
 				PRODUCT_NAME = Payper;
 				PROVISIONING_PROFILE = "";
 			};

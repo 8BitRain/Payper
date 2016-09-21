@@ -141,7 +141,7 @@ export function createPaymentHeader() {
 
 
 // Header props for last page in the Create Payment flow
-export function createPaymentPurposeHeader(options) {
+export function createPaymentPurposeHeader() {
   var props = {
     types: {
       "paymentIcons": true,
@@ -157,7 +157,6 @@ export function createPaymentPurposeHeader(options) {
     title: null,
     callbackIn: null,
     callbackOut: null,
-    callbackBack: () => options.callbackBack(),
   };
 
   return props;

@@ -126,7 +126,7 @@ class UserSelection extends React.Component {
   }
 
   _handleSubmit() {
-    console.log("Selected user(s):", this.state.selectedContacts);
+    this.props.dismissKeyboard();
     this.props.nextPage();
   }
 
@@ -138,7 +138,6 @@ class UserSelection extends React.Component {
     var filtered = SetMaster5000.filterContacts(this.props.allContactsArray, query);
     this.props.setFilteredContacts(SetMaster5000.arrayToMap(filtered));
   }
-
 
   _renderSectionHeader(sectionData, sectionTitle) {
     return(
@@ -170,7 +169,8 @@ class UserSelection extends React.Component {
           autoFocus={true}
           autoCorrect={false}
           enablesReturnKeyAutomatically={true}
-          returnKeyType={"next"} />
+          keyboardType={"default"}
+          returnKeyType={"done"} />
 
         { /* List of selected users */ }
         <DynamicHorizontalUserList
