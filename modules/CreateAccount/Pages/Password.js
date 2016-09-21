@@ -103,10 +103,10 @@ class Password extends React.Component {
              <TextInput style={[typography.textInput]} defaultValue={this.props.password} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(2, "forward", this.props.passwordValidations, this.passwordInput)}} onChangeText={(text) => {this.passwordInput = text; this.props.dispatchSetPasswordValidations(this.passwordInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" secureTextEntry={true} placeholder={""} />
            </View>
 
-      
+
 
            { /* Error messages */ }
-           <View style={[containers.sixTenths, backgrounds.password]}>
+           <View style={[containers.sixTenths, backgrounds.password, {marginTop: 10}]}>
               { this.props.passwordValidations.length ? null
                 : function() {
                     if (!this.props.passwordValidations.valid) {

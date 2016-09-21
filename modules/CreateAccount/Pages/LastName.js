@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, TouchableHighlight, DeviceEventEmitter} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import Entypo from "react-native-vector-icons/Entypo"
@@ -28,6 +28,8 @@ class LastName extends React.Component {
      fadeAnim: new Animated.Value(0) // init opacity 0
    };
 
+   this.kbOffset = new Animated.Value(0);
+
    // Props for temporary input storage
    this.lastNameInput = this.props.lastName;
 
@@ -35,9 +37,11 @@ class LastName extends React.Component {
    this.headerProps = {
      types: {
        "paymentIcons": false,
-       "circleIcons": true,
+       "circleIcons": false,
        "settingsIcon": false,
-       "closeIcon": true
+       "closeIcon": false,
+       "backIcon": true,
+       "appLogo": true
      },
      index: 3,
      numCircles: 6
@@ -56,12 +60,35 @@ class LastName extends React.Component {
    this.onPressRight = function() { this.props.dispatchSetPage(4, "forward", this.props.lastNameValidations, this.lastNameInput) };
    this.onPressLeft = function() { this.props.dispatchSetPage(2, null, null, null) };
  }
- componentDidMount() {
-   Animations.fadeIn(this.animationProps);
-   Mixpanel.track("FirstName page Finished");
-   Mixpanel.timeEvent("LastName page Finished");
-   Mixpanel.timeEvent("LastName page Finsihed");
+
+ _keyboardWillShow(e) {
+   Animated.spring(this.kbOffset, {
+     toValue: e.endCoordinates.height,
+     friction: 6
+   }).start();
  }
+
+ _keyboardWillHide(e) {
+   Animated.spring(this.kbOffset, {
+     toValue: 0,
+     friction: 6
+   }).start();
+ }
+
+ componentDidMount() {
+   _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
+   _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+    Animations.fadeIn(this.animationProps);
+    Mixpanel.track("LastName page Finished");
+    Mixpanel.timeEvent("LastName page Finished");
+    Mixpanel.timeEvent("LastName page Finsihed");
+ }
+
+ componentWillUnmount() {
+   _keyboardWillShowSubscription.remove();
+   _keyboardWillHideSubscription.remove();
+ }
+
  render() {
    return (
      <View style={[containers.container, backgrounds.lastName]}>
@@ -76,11 +103,10 @@ class LastName extends React.Component {
          <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} defaultValue={this.props.lastName} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(4, "forward", this.props.lastNameValidations, this.lastNameInput)}} onChangeText={(text) => {this.lastNameInput = text; this.props.dispatchSetLastNameValidations(this.lastNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} />
        </View>
 
-       { /* Arrow nav buttons */ }
-       <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackRight={() => {this.onPressRight()}} />
+      
 
        { /* Error messages */ }
-       <View style={[containers.sixTenths, backgrounds.lastName]}>
+       <View style={[containers.sixTenths, backgrounds.lastName, {marginTop: 10}]}>
          { this.props.lastNameValidations.capitalized ? null
            : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Not capitalized</Text> }
          { this.props.lastNameValidations.format ? null
@@ -90,7 +116,22 @@ class LastName extends React.Component {
        </View>
 
        { /* Header */ }
-       <Header callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
+      <Header callbackBack={() => {this.onPressLeft()}} callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
+
+       </Animated.View>
+       <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
+         <TouchableHighlight
+           activeOpacity={0.8}
+           underlayColor={'transparent'}
+           onPress={() => {this.onPressRight()}}>
+
+           <Animated.View style={{ height: 70, backgroundColor: "#20BF55", flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+             <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center', color: "#fefeff" }]}>
+                Continue
+             </Text>
+           </Animated.View>
+
+         </TouchableHighlight>
        </Animated.View>
      </View>
    );

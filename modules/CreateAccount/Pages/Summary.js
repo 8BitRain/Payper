@@ -35,9 +35,11 @@ class Summary extends React.Component {
    this.headerProps = {
      types: {
        "paymentIcons": false,
-       "circleIcons": true,
+       "circleIcons": false,
        "settingsIcon": false,
-       "closeIcon": true
+       "closeIcon": false,
+       "backIcon": true,
+       "appLogo": true
      },
      index: 5,
      numCircles: 6
@@ -156,7 +158,7 @@ class Summary extends React.Component {
        <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}}/>
 
        { /* Header */ }
-       <Header callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
+       <Header callbackBack={() => {this.onPressLeft()}} callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
      </Animated.View>
    );
  }
