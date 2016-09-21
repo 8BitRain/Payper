@@ -1,12 +1,14 @@
 import {StyleSheet} from 'react-native';
+import colors from "../../../styles/colors";
 
 const typography = StyleSheet.create({
   // General typography styles
   general: {
     fontFamily: "sans-serif",
     fontFamily: "Roboto",
-    fontWeight: "normal",
-    color: "#F4F4F9"
+    fontWeight: "100",
+    color: "#F4F4F9",
+    alignSelf: "center"
   },
 
   // Varying font sizes (ex. "What's your email?")
@@ -15,14 +17,17 @@ const typography = StyleSheet.create({
   fontSizeError: { fontSize: 15},
 
   textInput: {
-    height: 40,
-    backgroundColor: "#D8D8D8",
-    padding: 10,
-    paddingLeft: 10,
-    color: "#53585E",
-    borderRadius: 20,
-    borderWidth: 2,
-    borderColor: "transparent"
+    height: 60,
+    width: 224,
+    backgroundColor: colors.obsidianInput,
+    paddingLeft: 0,
+    color: "#99ECFB",
+    fontFamily: "Roboto",
+    fontWeight: "100",
+    fontSize: 15,
+    color: colors.white,
+    textAlign: "center",
+    alignSelf: "center"
   },
 
   stateInput: {

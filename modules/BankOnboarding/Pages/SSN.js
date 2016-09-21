@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image, TouchableHighlight} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import Entypo from "react-native-vector-icons/Entypo";
@@ -57,12 +57,13 @@ class SSN extends React.Component {
      this.headerProps = {
        types: {
          "paymentIcons": false,
-         "circleIcons": true,
+         "circleIcons": false,
          "settingsIcon": false,
-         "closeIcon": false
+         "closeIcon": false,
+         "backIcon" : true,
+         "appLogo" : true
        },
        index: 3,
-       title: "Customer Verfication",
        numCircles: 4
      };
 
@@ -99,7 +100,7 @@ class SSN extends React.Component {
 
    _keyboardWillShow(e) {
      Animated.spring(this.kbOffset, {
-       toValue: e.endCoordinates.height - 40,
+       toValue: e.endCoordinates.height,
        friction: 6
      }).start();
    }
@@ -171,7 +172,7 @@ class SSN extends React.Component {
          <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
 
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>SSN</Text>
+           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>What are the Last 4 Digits of your Social Security Number?</Text>
            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.ssn} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
          </View>
 
@@ -179,14 +180,22 @@ class SSN extends React.Component {
            {/*<ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackCheck={() => {this.onPressCheck()}} />*/}
 
            { /* Header */ }
-           <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+           <Header callbackBack={() => {this.onPressLeft()}} callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
 
          </Animated.View>
          <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
-           <ArrowNav
-             arrowNavProps={this.arrowNavProps}
-             callbackCheck={() => {this.onPressCheck()}}
-             callbackLeft={() => {this.onPressLeft()}} />
+           <TouchableHighlight
+             activeOpacity={0.8}
+             underlayColor={'transparent'}
+             onPress={() => {this.onPressCheck()}}>
+
+             <Animated.View style={{ height: 70, backgroundColor: "#20BF55", flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+               <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center', color: "#fefeff" }]}>
+                  Continue
+               </Text>
+             </Animated.View>
+
+           </TouchableHighlight>
          </Animated.View>
        </View>
      );

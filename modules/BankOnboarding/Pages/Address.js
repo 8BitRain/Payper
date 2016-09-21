@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image, Picker, Modal} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image, Picker, Modal, TouchableHighlight} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Schema, Actions} from 'react-native-router-flux';
 import Entypo from "react-native-vector-icons/Entypo";
@@ -171,12 +171,13 @@ class Address extends React.Component {
      this.headerProps = {
        types: {
          "paymentIcons": false,
-         "circleIcons": true,
+         "circleIcons": false,
          "settingsIcon": false,
-         "closeIcon": false
+         "closeIcon": false,
+         "backIcon": true,
+         "appLogo": true
        },
        index: 1,
-       title: "Customer Verfication",
        numCircles: 4
      };
 
@@ -200,7 +201,7 @@ class Address extends React.Component {
 
    _keyboardWillShow(e) {
      Animated.spring(this.kbOffset, {
-       toValue: e.endCoordinates.height - 40,
+       toValue: e.endCoordinates.height,
        friction: 6
      }).start();
    }
@@ -268,32 +269,27 @@ class Address extends React.Component {
          <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
 
          { /* Prompt and input field */ }
-         <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeaderSubSize_1, backgrounds.email]}>
+         <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            {/*ADDRESS*/}
-           <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>
-             <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Address</Text>
-           </View>
+
 
            <View>
-             <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.address} onChangeText={(text) => { this.addressInput = text; this.props.dispatchSetAddress(this.addressInput); this.props.dispatchSetAddressValidations(this.addressInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
+             <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.address} onChangeText={(text) => { this.addressInput = text; this.props.dispatchSetAddress(this.addressInput); this.props.dispatchSetAddressValidations(this.addressInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" placeholder={"Billing Address Line 1"} keyboardType="default" />
              {this.props.addressValidations.valid ? <EvilIcons  style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"  }} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'grey'} />}
            </View>
 
            {/*CITY*/}
-           <View style={{flex: .2, flexDirection: "row", justifyContent: "flex-start"}}>
-             <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>City</Text>
-           </View>
 
            <View>
-             <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.city} onChangeText={(text) => {this.cityInput = text; this.props.dispatchSetCity(this.cityInput); this.props.dispatchSetCityValidations(this.cityInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="default" />
+             <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.city} onChangeText={(text) => {this.cityInput = text; this.props.dispatchSetCity(this.cityInput); this.props.dispatchSetCityValidations(this.cityInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" placeholder={"City"} keyboardType="default" />
              {this.props.cityValidations.valid ? <EvilIcons  style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'green'} /> : <EvilIcons style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'grey'} />}
            </View>
            {/*Has an interesting effect investigate or try using with circles*/}
 
            {/*STATE*/}
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>State</Text>
+
            <View>
-            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.state} onChangeText={(text) => { this.stateInput = text; this.props.dispatchSetState(this.stateInput);  }} autoCorrect={false}  onFocus={() => {this._setModalVisible(true)}} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="email-address" />
+            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.state} onChangeText={(text) => { this.stateInput = text; this.props.dispatchSetState(this.stateInput);  }} autoCorrect={false}  onFocus={() => {this._setModalVisible(true)}} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" placeholder={"State"} keyboardType="email-address" />
            </View>
 
            {/*<Picker
@@ -313,9 +309,9 @@ class Address extends React.Component {
           </Picker>*/}
 
            {/*POSTAL CODE (ZIP)*/}
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>PostalCode(ZIP)</Text>
+
          <View>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.zip} onChangeText={(text) => {this.zipInput = text; this.props.dispatchSetZip(this.zipInput); this.props.dispatchSetZipValidations(this.zipInput)}} autoCorrect={false}  autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} keyboardType="phone-pad" />
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.zip} onChangeText={(text) => {this.zipInput = text; this.props.dispatchSetZip(this.zipInput); this.props.dispatchSetZipValidations(this.zipInput)}} autoCorrect={false}  autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" placeholder={"Zip/Postal Code"} keyboardType="phone-pad" />
            {this.props.zipValidations.valid ? <EvilIcons  style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'green'} /> : <EvilIcons style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'grey'} />}
          </View>
          </View>
@@ -323,14 +319,22 @@ class Address extends React.Component {
            { /* Arrow nav buttons */ }
            {/*<ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} callbackLeft={() => {this.onPressLeft()}} />*/}
            { /* Header */ }
-           <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+           <Header callbackBack={() => {this.onPressLeft()}} callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
 
          </Animated.View>
          <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
-           <ArrowNav
-             arrowNavProps={this.arrowNavProps}
-             callbackRight={() => {this.onPressRight()}}
-             callbackLeft={() => {this.onPressLeft()}}/>
+           <TouchableHighlight
+             activeOpacity={0.8}
+             underlayColor={'transparent'}
+             onPress={() => {this.onPressRight()}}>
+
+             <Animated.View style={{ height: 70, backgroundColor: "#20BF55", flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+               <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center', color: "#fefeff" }]}>
+                  Continue
+               </Text>
+             </Animated.View>
+
+           </TouchableHighlight>
          </Animated.View>
        </View>
      );
