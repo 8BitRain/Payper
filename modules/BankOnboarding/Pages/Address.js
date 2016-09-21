@@ -191,8 +191,8 @@ class Address extends React.Component {
      };
 
      // Callback functions to be passed to the arrow nav
-     this.onPressRight = function() { this.props.dispatchSetPageX(2, "forward", true) };
-     this.onPressLeft = function() { this.props.dispatchSetPageX(0, "backward", null) };
+     this.onPressRight = function() { this.props.dispatchSetPageX(3, "forward", true) };
+     this.onPressLeft = function() { this.props.dispatchSetPageX(1, "backward", null) };
    }
 
    _setModalVisible(visible) {

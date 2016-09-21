@@ -70,7 +70,7 @@ class BasicInfo extends React.Component {
          "circleIcons": false,
          "settingsIcon": false,
          "closeIcon": false,
-         "callbackBack": true,
+         "backIcon": true,
          "appLogo": true
        },
        index: 0,
@@ -101,10 +101,10 @@ class BasicInfo extends React.Component {
            well?*/
 
        } else {
-         this.props.dispatchSetPageX(1, "forward", true);
+         this.props.dispatchSetPageX(2, "forward", true);
        }
      };
-     this.onPressLeft = function() { this.props.dispatchSetPageX(null, null, null) };
+         this.onPressLeft = function() { this.props.dispatchSetPageX(0, "backward", null) };
    }
 
    _keyboardWillShow(e) {
