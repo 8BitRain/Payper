@@ -187,6 +187,15 @@ function getCircleIcons(numCircles, index) {
   );
 };
 
+// Return app logo
+function getAppLogo(){
+  return(
+    <View style={styles.iconWrap}>
+      <Image source={require('../../iOS/Coincast/Images.xcassets/AppIcon.appiconset/Icon-App-60x60@1x.png')}/>
+    </View>
+  )
+}
+
 // Return tabs for switching between tracking flows
 function getFlowTabs(activeTab, callbackIn, callbackOut) {
   return(
@@ -229,7 +238,7 @@ class Header extends React.Component {
 
   render() {
     return(
-      <View style={[styles.headerWrap, {backgroundColor: (this.props.headerProps.accent) ? colors.accent : colors.richBlack}]}>
+      <View style={[styles.headerWrap, {backgroundColor: (this.props.headerProps.accent) ? colors.accent : colors.obisdian}]}>
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
           { this.props.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
@@ -241,6 +250,7 @@ class Header extends React.Component {
         <View style={styles.chunkHalf}>
           { this.props.headerProps.title ? <Text style={{fontFamily: 'Roboto', fontSize: 16, color: colors.white, paddingTop: 5}}>{ this.props.headerProps.title }</Text> : null }
           { this.props.headerProps.types.paymentIcons ? getPaymentIcons(this.props.headerProps.index) : null }
+          { this.props.headerProps.types.appLogo ? getAppLogo(): null}
           { this.props.headerProps.types.circleIcons ? getCircleIcons(this.props.headerProps.numCircles, this.props.headerProps.index) : null }
           { this.props.headerProps.types.flowTabs ? getFlowTabs(this.props.activeFilter, () => {this.setState({active: 'incoming'}); this.props.headerProps.callbackIn()}, () => {this.setState({active: 'outgoing'}); this.props.headerProps.callbackOut()}) : null }
         </View>

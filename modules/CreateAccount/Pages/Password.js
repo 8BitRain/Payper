@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, TouchableHighlight, DeviceEventEmitter} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
 import Entypo from "react-native-vector-icons/Entypo"
@@ -30,21 +30,25 @@ class Password extends React.Component {
 
      // Props for temporary input storage
      this.passwordInput = this.props.password;
+     this.kbOffset = new Animated.Value(0);
 
      // Props to be passed to the header
      this.headerProps = {
        types: {
          "paymentIcons": false,
-         "circleIcons": true,
+         "circleIcons": false,
          "settingsIcon": false,
-         "closeIcon": true
+         "closeIcon": false,
+         "appLogo" : true,
+         "backIcon" : true
+
        },
        index: 1,
        numCircles: 6
      };
 
      // Callback functions to be passed to the header
-     this.callbackClose = function() { this.props.callbackClose() };
+     //this.callbackClose = function() { this.props.callbackClose() };
 
      // Props to be passed to the arrow nav
      this.arrowNavProps = {
@@ -56,11 +60,35 @@ class Password extends React.Component {
      this.onPressRight = function() { this.props.dispatchSetPage(2, "forward", this.props.passwordValidations, this.passwordInput) };
      this.onPressLeft = function() { this.props.dispatchSetPage(0, null, null, null) };
    }
-   componentDidMount() {
-     Animations.fadeIn(this.animationProps);
-     Mixpanel.track("Email page Finished");
-     Mixpanel.timeEvent("Password Page Finished");
+
+
+   _keyboardWillShow(e) {
+     Animated.spring(this.kbOffset, {
+       toValue: e.endCoordinates.height,
+       friction: 6
+     }).start();
    }
+
+   _keyboardWillHide(e) {
+     Animated.spring(this.kbOffset, {
+       toValue: 0,
+       friction: 6
+     }).start();
+   }
+
+   componentDidMount() {
+     _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
+     _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+      Animations.fadeIn(this.animationProps);
+      Mixpanel.track("Email page Finished");
+      Mixpanel.timeEvent("Password Page Finished");
+   }
+
+   componentWillUnmount() {
+     _keyboardWillShowSubscription.remove();
+     _keyboardWillHideSubscription.remove();
+   }
+
    render() {
      return (
        <View style={[containers.container, backgrounds.password]}>
@@ -72,11 +100,10 @@ class Password extends React.Component {
            { /* Prompt and input field */ }
            <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.password]}>
              <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Enter a secure password</Text>
-             <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]} defaultValue={this.props.password} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(2, "forward", this.props.passwordValidations, this.passwordInput)}} onChangeText={(text) => {this.passwordInput = text; this.props.dispatchSetPasswordValidations(this.passwordInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" secureTextEntry={true} placeholder={"not \"password\" :)"} />
+             <TextInput style={[typography.textInput]} defaultValue={this.props.password} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(2, "forward", this.props.passwordValidations, this.passwordInput)}} onChangeText={(text) => {this.passwordInput = text; this.props.dispatchSetPasswordValidations(this.passwordInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" secureTextEntry={true} placeholder={""} />
            </View>
 
-           { /* Arrow nav buttons */ }
-           <ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackRight={() => {this.onPressRight()}} />
+      
 
            { /* Error messages */ }
            <View style={[containers.sixTenths, backgrounds.password]}>
@@ -102,8 +129,23 @@ class Password extends React.Component {
            </View>
 
            { /* Header */ }
-           <Header callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
+           <Header callbackBack={() => {this.onPressLeft()}} callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
 
+         </Animated.View>
+         { /* Arrow nav buttons */ }
+         <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
+           <TouchableHighlight
+             activeOpacity={0.8}
+             underlayColor={'transparent'}
+             onPress={() => {this.onPressRight()}}>
+
+             <Animated.View style={{ height: 70, backgroundColor: "#20BF55", flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+               <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center', color: "#fefeff" }]}>
+                  Continue
+               </Text>
+             </Animated.View>
+
+           </TouchableHighlight>
          </Animated.View>
        </View>
      );
