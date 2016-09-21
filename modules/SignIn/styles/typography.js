@@ -8,20 +8,21 @@ const typography = StyleSheet.create({
     fontFamily: "Roboto",
     fontWeight: "100",
     color: "#F4F4F9",
-    alignSelf: "center"
+    alignSelf: "center",
+    fontSize: 20
   },
 
-  validationSuccess: {
-    fontFamily: "sans-serif",
+  title: {
     fontFamily: "Roboto",
     fontWeight: "100",
     color: colors.accent,
-    alignSelf: "center"
+    alignSelf: "center",
+    fontSize: 30
   },
 
   // Varying font sizes (ex. "What's your email?")
-  fontSizeTitle: { fontSize: 25 },
-  fontSizeNote: { fontSize: 20 },
+  fontSizeTitle: { fontSize: 20,  color: "#F4F4F9" },
+  fontSizeNote: { fontSize: 10,  },
   fontSizeError: { fontSize: 15},
 
   textInput: {
@@ -31,25 +32,40 @@ const typography = StyleSheet.create({
     paddingLeft: 0,
     color: "#99ECFB",
     fontFamily: "Roboto",
-    fontSize: 15,
     fontWeight: "100",
+    fontSize: 15,
     color: colors.white,
     textAlign: "center",
     alignSelf: "center"
   },
 
+  stateInput: {
+    height: 200,
+    color: "black",
+    fontSize: 25,
+
+  },
+
+  stateInput2: {
+    height: 450,
+    color: "black",
+    fontSize: 25,
+    marginBottom: 0
+  },
+
+
   // Helper styles
   marginLeft: { marginLeft: 20 },
-  marginBottom: { marginBottom: 20 },
-  marginTop: { marginBottom: 20 },
+  marginBottom: { marginBottom: 10 },
+  marginTop: { marginBottom: 10 },
   marginRight: { marginBottom: 20 },
   marginSides: {
     marginLeft: 20,
     marginRight: 20
   },
   padLeft: { paddingLeft: 20 },
-  padBottom: { paddingBottom: 20 },
-  padTop: { paddingBottom: 20 },
+  padBottom: { paddingBottom: 10 },
+  padTop: { paddingBottom: 10 },
   padRight: { paddingBottom: 20 }
 });
 

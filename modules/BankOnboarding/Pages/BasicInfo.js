@@ -143,7 +143,6 @@ class BasicInfo extends React.Component {
            { /*Email*/}
 
             <View>
-
               <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom, {marginLeft: 20, fontWeight: "100"}]}  defaultValue={this.props.newUser.email ? this.props.newUser.email: this.props.dwollaCustomer.email} onChangeText={(text) => {this.emailInput = text; this.props.dispatchSetEmail(this.emailInput); this.props.dispatchSetCEmailValidations(this.emailInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" placeholder={"Email"} keyboardType="email-address" />
               {this.props.cemailValidations.valid ? <EvilIcons  style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'grey'} />}
             </View>
@@ -166,7 +165,7 @@ class BasicInfo extends React.Component {
               { /*PhoneNumber*/}
 
              <View>
-               <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom,{marginLeft: 20, fontWeight: "100"}]}  defaultValue={this.props.newUser.phone ? this.props.newUser.phone : this.props.dwollaCustomer.phone} onChangeText={(text) => {this.phoneInput = text; this.props.dispatchSetPhone(this.phoneInput); this.props.dispatchSetCPhoneValidations(this.phoneInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" placeholder={"Phone Number"} keyboardType="phone-pad" />
+               <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom,{marginLeft: 20, fontWeight: "100"}]}  defaultValue={this.props.newUser.phone ? this.props.newUser.phone : this.props.dwollaCustomer.phone} onChangeText={(text) => {this.phoneInput = text; this.props.dispatchSetPhone(this.phoneInput); this.props.dispatchSetCPhoneValidations(this.phoneInput)}} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" maxLength={10} placeholder={"Phone Number"} keyboardType="phone-pad" />
                {this.props.cphoneValidations.valid ? <EvilIcons  style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'grey'} />}
              </View>
 
