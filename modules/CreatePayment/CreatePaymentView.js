@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux';
 const { State: TextInputState } = TextInput;
 
 // Helpers
+import * as Lambda from '../../services/Lambda';
 import * as Headers from '../../helpers/Headers';
 
 // Components
@@ -68,6 +69,32 @@ class CreatePaymentView extends React.Component {
     TextInputState.blurTextInput(TextInputState.currentlyFocusedField());
   }
 
+  _sendPayment(options) {
+    options.paymentInfo.sender = (options.paymentInfo.type == "request") ? options.user : this.props.currentUser;
+    options.paymentInfo.recip = (options.paymentInfo.type == "request") ? this.props.currentUser : options.user;
+
+    if (options.user.uid) {
+      options.paymentInfo.invite = false;
+      console.log("Sending payment:", options.paymentInfo);
+      Lambda.createPayment(options.paymentInfo, (res) => {
+        console.log("Lambda.createPayment callback received:", res);
+      });
+    } else {
+      options.paymentInfo.invite = true;
+      if (!options.paymentInfo.sender.uid) {
+        options.paymentInfo.invitee = "sender";
+        options.paymentInfo.phoneNumber = options.paymentInfo.sender.phone;
+      } else {
+        options.paymentInfo.invitee = "recip";
+        options.paymentInfo.phoneNumber = options.paymentInfo.recip.phone;
+      }
+      console.log("Sending invite via payment:", options.paymentInfo);
+      Lambda.inviteViaPayment(options.paymentInfo, (res) => {
+        console.log("Lambda.inviteViaPayment callback received:", res);
+      });
+    }
+  }
+
   render() {
     return (
       <View style={{flex: 1.0}}>
@@ -79,8 +106,8 @@ class CreatePaymentView extends React.Component {
           <Header
             callbackClose={() => { this.props.reset(); this.props.toggleModal(); }}
             callbackBack={() => this._prevPage()}
-            numUnseenNotifications={ this.props.numUnseenNotifications }
-            headerProps={(this.state.pageIndex == 0) ? Headers.createPaymentHeader() : Headers.createPaymentPurposeHeader()} />
+            numUnseenNotifications={this.props.numUnseenNotifications}
+            headerProps={Headers.createPaymentHeader(this.state.pageIndex)} />
         </View>
 
         { /* Inner content */ }
@@ -113,6 +140,8 @@ class CreatePaymentView extends React.Component {
                 dismissKeyboard={() => this._dismissKeyboard()}
                 selectedContacts={this.state.selectedContacts}
                 prevPage={() => this._prevPage()}
+                sendPayment={(options) => this._sendPayment(options)}
+                activeFundingSource={this.props.activeFundingSource}
                 payment={{
                   amount: this.state.amount,
                   duration: this.state.duration,

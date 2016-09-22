@@ -190,7 +190,7 @@ function mapDispatchToProps(dispatch) {
               }
 
             // Update username in Redux store
-            if (response.value.username != CURRENT_USER.username) {
+            if (response.value.uid == CURRENT_USER.uid && response.value.username != CURRENT_USER.username) {
               console.log("Changing username from", CURRENT_USER.username, "to", response.value.username);
               var newUser = CURRENT_USER;
               newUser.username = response.value.username;

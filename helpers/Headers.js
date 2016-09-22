@@ -120,39 +120,15 @@ export function BankOnboardingTab(options) {
 
 
 // Header props for Create Payment flow
-export function createPaymentHeader() {
+export function createPaymentHeader(index) {
   var props = {
     types: {
       "paymentIcons": true,
-      "circleIcons": false,
-      "settingsIcon": false,
-      "closeIcon": true,
-      "flowTabs": false,
+      "closeIcon": (index == 0) ? true : false,
+      "closeIconTopRight": (index > 0) ? true : false,
+      "backIcon": (index > 0) ? true : false,
     },
-    index: 0,
-    numCircles: null,
-    title: null,
-    callbackIn: null,
-    callbackOut: null,
-  };
-
-  return props;
-};
-
-
-// Header props for last page in the Create Payment flow
-export function createPaymentPurposeHeader() {
-  var props = {
-    types: {
-      "paymentIcons": true,
-      "circleIcons": false,
-      "settingsIcon": false,
-      "closeIcon": false,
-      "closeIconTopRight": true,
-      "backIcon": true,
-      "flowTabs": false,
-    },
-    index: 0,
+    index: index,
     numCircles: null,
     title: null,
     callbackIn: null,

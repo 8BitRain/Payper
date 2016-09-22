@@ -21,7 +21,15 @@ class UserSelection extends React.Component {
   constructor(props) {
     super(props);
 
-    this.allUsers = this.props.nativeContacts;
+    this.EMPTY_DATA_SOURCE = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
+      sectionHeaderHasChanged: (s1, s2) => s1 !== s2
+    });
+
+    this.allContactsArray = this.props.allContactsArray.concat(this.props.nativeContacts);
+    this.allContactsMap = SetMaster5000.arrayToMap(this.allContactsArray);
+    this.filteredContactsArray = [];
+    this.filteredContactsMap= {};
     this.keyboardOffset = new Animated.Value(0);
     this.colorInterpolator = new Animated.Value(0);
 
@@ -34,6 +42,7 @@ class UserSelection extends React.Component {
         inputRange: [0, 350], // Green, red
         outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(251, 54, 64, 1.0)'],
       }),
+      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(this.allContactsMap),
     };
   }
 
@@ -63,10 +72,9 @@ class UserSelection extends React.Component {
         inputRange: [0, 350], // Green, red
         outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(251, 54, 64, 1.0)'],
       }),
+      listViewRenderTrigger: Math.random(),
     });
-
     this._interpolateSubmitColor({ toValue: 350 });
-
     this.refs.textInput.setNativeProps({text: ''});
   }
 
@@ -98,7 +106,7 @@ class UserSelection extends React.Component {
   **/
   _handleSelect(user) {
     // (1) Update this.state.selectionMap
-    var identifier = (user.uid) ? user.uid : user.phone;
+    var identifier = user.uid || user.phone;
     this.state.selectionMap[identifier] = !this.state.selectionMap[identifier];
 
     // (2) Update this.state.selectedContacts
@@ -113,9 +121,9 @@ class UserSelection extends React.Component {
     this.setState({
       selectionMap: this.state.selectionMap,
       selectedContacts: this.state.selectedContacts,
-      dataSource: (this.props.filteredContactsMap.getRowCount() > 0) ? this.props.filteredContactsMap : this.props.allContactsMap,
       submitText: (this.state.selectedContacts.length > 0) ? "Continue" : "No contacts are selected",
-     });
+      listViewRenderTrigger: Math.random(),
+    });
 
      // (4) Interpolate submit button's background color
      this._interpolateSubmitColor({ toValue: (this.state.selectedContacts.length > 0) ? 0 : 350 });
@@ -135,8 +143,10 @@ class UserSelection extends React.Component {
     this.setState({ query: query });
 
     // Update contacts rendered by ListView
-    var filtered = SetMaster5000.filterContacts(this.props.allContactsArray, query);
-    this.props.setFilteredContacts(SetMaster5000.arrayToMap(filtered));
+    var filtered = SetMaster5000.filterContacts(this.allContactsArray, query);
+    this.filteredContactsArray = filtered;
+    this.filteredContactsMap = SetMaster5000.arrayToMap(filtered);
+    if (filtered.length > 0) this.setState({ dataSource: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(this.filteredContactsMap) });
   }
 
   _renderSectionHeader(sectionData, sectionTitle) {
@@ -151,7 +161,7 @@ class UserSelection extends React.Component {
     return(
       <DynamicUserPreview
         user={user}
-        selected={(user.uid) ? this.state.selectionMap[user.uid] : this.state.selectionMap[user.phone]}
+        selected={this.state.selectionMap[user.uid || user.phone]}
         callbackSelect={() => this._handleSelect(user)} />
     );
   }
@@ -166,8 +176,7 @@ class UserSelection extends React.Component {
           placeholder={"Who are you paying or requesting?"}
           selectionColor={this.state.textInputColor}
           onChangeText={(query) => this._filterContacts(query)}
-          autoFocus={true}
-          autoCorrect={false}
+          autoFocus={true} autoCorrect={false}
           enablesReturnKeyAutomatically={true}
           keyboardType={"default"}
           returnKeyType={"done"} />
@@ -179,10 +188,12 @@ class UserSelection extends React.Component {
 
         { /* Contact ListView */ }
         <ListView
-          dataSource={(this.props.filteredContactsMap.getRowCount() > 0) ? this.props.filteredContactsMap : this.props.allContactsMap}
+          key={this.state.listViewRenderTrigger}
+          dataSource={this.state.dataSource}
           renderRow={this._renderRow.bind(this)}
           renderSectionHeader={this._renderSectionHeader.bind(this)}
           renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+          renderFooter={() => <View style={{ height: 65 }} />}
           keyboardDismissMode={"on-drag"}
           enableEmptySections />
 
