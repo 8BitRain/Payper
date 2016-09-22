@@ -89,6 +89,7 @@ export function contactListToArray(options) {
     curr = options.contacts[c];
     curr.uid = c;
     curr.sectionTitle = (curr.type == "facebook") ? "Facebook Friends" : "Contacts";
+    curr.selected = false;
     arr.push(curr);
   }
 
@@ -122,6 +123,7 @@ export function globalUserListToArray(options) {
       curr = options.users[uid];
       curr.uid = uid;
       curr.sectionTitle = options.sectionTitle;
+      curr.selected = false;
       arr.push(curr);
     }
   }

@@ -57,13 +57,13 @@ class DynamicHorizontalUserList extends React.Component {
       const curr = this.props.contacts[c];
       thumbnails.push(
         <TouchableHighlight
-          activeOpacity={0.8}
+          activeOpacity={(!this.props.displayOnly) ? 0.8 : 1.0}
           underlayColor={'transparent'}
-          key={curr.phone}
-          onPress={() => this.props.handleSelect(curr)}>
+          key={(curr.uid) ? curr.uid : curr.phone}
+          onPress={() => (!this.props.displayOnly) ? this.props.handleSelect(curr) : console.log("This DynamicHorizontalUserList does not have interactive children. This is because you supplied it with the 'displayOnly' prop.")}>
 
           <View>
-            <DynamicThumbnail width={30} height={30} user={curr} />
+            <DynamicThumbnail width={(this.props.displayOnly) ? 55 : 30} height={(this.props.displayOnly) ? 55 : 30} user={curr} displayOnly={this.props.displayOnly} />
           </View>
 
         </TouchableHighlight>
@@ -75,11 +75,12 @@ class DynamicHorizontalUserList extends React.Component {
 
   render() {
     return(
-      <Animated.View onPress={() => this._hide()} style={[styles.wrap, { height: this.state.height }]}>
+      <Animated.View onPress={() => this._hide()} style={[styles.wrap, { height: this.state.height, backgroundColor: (this.props.backgroundColor) ? this.props.backgroundColor : 'rgba(0, 0, 0, 0.05)' }]}>
         { /* Thumbnail list */ }
         <ScrollView
-          style={styles.horizontalScrollView}
+          style={[styles.horizontalScrollView, { paddingLeft: (this.props.centerContent) ? 0 : 20, paddingRight: (this.props.centerContent) ? 0 : 20 }]}
           automaticallyAdjustContentInsets={false}
+          centerContent={this.props.centerContent}
           horizontal={true}>
 
           { this._getThumbnails() }

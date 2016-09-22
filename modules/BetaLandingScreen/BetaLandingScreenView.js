@@ -214,7 +214,7 @@ class BetaLandingScreenView extends React.Component {
             onChangeText={(input) => this._handleChangeText(input)}
             onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(e); }} />
 
-          { /* Arrow nav buttons */ }
+          { /* Submit button */ }
           <Animated.View style={{position: 'absolute', bottom: this.keyboardOffset, left: 0, right: 0}}>
             <TouchableHighlight
               activeOpacity={0.8}

@@ -34,7 +34,7 @@ class DynamicThumbnail extends React.Component {
     return(
       <Animated.View style={{ opacity: this.state.opacity, padding: 10, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <UserPic {...this.props} />
-        <Entypo style={{ marginTop: -1 }} name={"cross"} size={14} color={colors.alertRed} />
+        { (this.props.displayOnly) ? null : <Entypo style={{ marginTop: -1 }} name={"cross"} size={14} color={colors.alertRed} /> }
       </Animated.View>
     );
   }
