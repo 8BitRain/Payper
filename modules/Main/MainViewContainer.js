@@ -39,6 +39,7 @@ function mapStateToProps(state) {
     sideMenuIsOpen: state.getIn(['main', 'sideMenuIsOpen']),
     initialized: state.getIn(['main', 'initialized']),
     nativeContacts: state.getIn(['main', 'nativeContacts']),
+    blockedUsers: state.getIn(['main', 'blockedUsers']),
 
     // payments
     activeFilter: state.getIn(['payments', 'activeFilter']),
@@ -218,6 +219,10 @@ function mapDispatchToProps(dispatch) {
             // Set user lists in Redux store, triggering re-render of UserSearch ListView
             dispatch(setInUserSearch.allContactsMap(newAllContactsMap));
             dispatch(setInUserSearch.allContactsArray(newAllContactsArray));
+          break;
+
+          case "blocked":
+            dispatch(set.blockedUsers(response.value));
           break;
         }
       });

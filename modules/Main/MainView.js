@@ -86,10 +86,11 @@ class Main extends React.Component {
               appFlags = "appFlags/" + uid,
               user = "users/" + uid,
               contactList = "contactList/" + uid,
-              globalUserList = "users";
+              globalUserList = "users",
+              blockedUserList = "blocked/" + uid;
 
           // Initialize Firebase listeners
-          this.props.listen([notifications, appFlags, user, contactList, globalUserList], {
+          this.props.listen([notifications, appFlags, user, contactList, globalUserList, blockedUserList], {
             currentUser: this.props.currentUser,
             nativeContacts: this.props.nativeContacts,
             allContactsArray: this.props.allContactsArray,
