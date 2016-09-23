@@ -5,16 +5,13 @@ import {loop, Effects} from 'redux-loop';
 // Initialize state
 const initialState = Map({
     provider: '',
-    newUser: '',
-    loading: false
+    newUser: ''
 
 });
 
 // Action types
 const SET_PROVIDER = 'SET_PROVIDER',
-      SET_NEWUSER_TOKEN = 'SET_NEWUSER_TOKEN',
-      SET_LOADING = 'SET_LOADING';
-
+      SET_NEWUSER_TOKEN = 'SET_NEWUSER_TOKEN'
 // Action creators
 
 export function setProvider(input) {
@@ -25,9 +22,6 @@ export function setNewUserToken(input) {
   return { type: SET_NEWUSER_TOKEN, input: input };
 };
 
-export function setLoading(input) {
-  return { type: SET_LOADING, input: input };
-};
 
 
 
@@ -42,10 +36,6 @@ export default function LandingScreenReducer(state = initialState, action = {}) 
   switch (action.type) {
     case SET_PROVIDER:
       var newState = state.set('provider', action.input);
-      return newState;
-      break;
-    case SET_LOADING:
-      var newState = state.set('loading', action.input);
       return newState;
       break;
     case SET_NEWUSER_TOKEN:

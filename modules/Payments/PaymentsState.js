@@ -20,7 +20,8 @@ const initialState = Map({
   startIav: '',
   retry: '',
   suspended: '',
-  document: ''
+  document: '',
+  loading: false
 });
 
 // Action types
@@ -35,6 +36,7 @@ const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
       SET_SUSPENDED = 'SET_SUSPENDED',
       SET_DOCUMENT = 'SET_DOCUMENT',
       SET_NEWUSER_TOKEN = 'SET_NEWUSER_TOKEN',
+      SET_LOADING = 'SET_LOADING',
       SET_ACTIVE_FILTER = 'SET_ACTIVE_FILTER';
 
 // Action creators
@@ -50,6 +52,7 @@ export function setIav(index){ return { type: SET_IAV, index: index} };
 export function setDocument(index){ return { type: SET_DOCUMENT, index: index} };
 export function setRetry(index){ return { type: SET_RETRY, index: index} };
 export function setSuspended(index){ return { type: SET_SUSPENDED, index: index} };
+export function setLoading(index) { return { type: SET_LOADING, index: index }; };
 
 
 /**
@@ -103,6 +106,10 @@ export default function PaymentsReducer(state = initialState, action = {}) {
       break;
     case SET_RETRY:
       var newState = state.set('retry', action.input);
+      return newState;
+      break;
+    case SET_LOADING:
+      var newState = state.set('loading', action.input);
       return newState;
       break;
     case SET_NEWUSER_TOKEN:

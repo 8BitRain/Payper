@@ -255,11 +255,13 @@ class Payments extends React.Component {
       console.log(this.props.currentUser.token);
       this.props.setNewUserToken(this.props.currentUser.token);
     }
+    //The user has completed customer creation and now has to go through dwolla IAV
     if(this.props.flags.onboarding_state == 'bank') {
       if(this.props.flags.customer_status == 'verified') {
         console.log("BANK STATE REACHED: " + this.props.startIav );
         //Initiate IAV
         this.props.setNewUserToken(this.props.currentUser.token);
+        this.props.setLoading(true);
         var data = {
           token: this.props.currentUser.token
         };
@@ -273,14 +275,19 @@ class Payments extends React.Component {
             Actions.BankOnboardingContainer();
           }
         });
+        //The user needs to redo the customer creation process.
       } else if(this.props.flags.customer_status == 'retry') {
           this.props.setRetry(true);
+          this.props.setLoading(true);
           Actions.BankOnboardingContainer();
+        //The user needs to provide additonal documents.
       } else if (this.props.flags.customer_status == 'document') {
           this.props.setDocument(true);
+          this.props.setLoading(true);
           Actions.BankOnboardingContainer();
       }
     }
+    //The user has completed onboarding and can make payments.
     if(this.props.flags.onboarding_state == 'complete'){
       Actions.CreatePaymentViewContainer();
     }
@@ -308,10 +315,10 @@ class Payments extends React.Component {
             callbackTracking={() => this.props.setActiveTab('tracking')}
             callbackPay={() => {
               if (this.props.flags.onboarding_state != "complete") {
-                Alert.message({
+                /*Alert.message({
                   title: "Hey!",
                   message: "You must add a bank account before you can make a payment."
-                });
+                });*/
                 this._verifyOnboardingStatus();
               }
 
