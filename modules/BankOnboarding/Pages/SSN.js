@@ -204,10 +204,9 @@ class SSN extends React.Component {
 
            </TouchableHighlight>
          </Animated.View>
-         <Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
+         {/*<Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
             <Loading
               complete={this.props.done_loading}
-              provider={"to_iav"}
               msgSuccess={""}
               msgError={"There was an error on our end. Sorry about that ^_^;"}
               msgLoading={"One moment..."}
@@ -215,7 +214,7 @@ class SSN extends React.Component {
               successDestination={() => {console.log("SucessfullLoading")}}
               errorDestination={() => {console.log("temp loading screen")}}
             />
-         </Modal>
+         </Modal>*/}
        </View>
      );
    }

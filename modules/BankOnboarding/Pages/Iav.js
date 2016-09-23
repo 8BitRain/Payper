@@ -3,6 +3,7 @@ import {View, Text, TextInput, StyleSheet, Animated, Image, WebView, Linking, Mo
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Schema, Actions} from 'react-native-router-flux';
 import Entypo from 'react-native-vector-icons/Entypo';
+import TimerMixin from 'react-timer-mixin';
 
 
 import * as Async from '../../../helpers/Async';
@@ -60,10 +61,7 @@ class Iav extends React.Component {
   componentWillMount() {
     // Initialize the app
     var _this = this;
-    setTimeout(() => {
-      console.log("SUCESS DESTINATION FIRED");
-      _this.closeLoadingModals;
-    }, 5000);
+
     Async.get('user', (val) => {
       console.log("User: " + val);
       console.log("User: " + JSON.parse(val).uid);
@@ -76,6 +74,14 @@ class Iav extends React.Component {
 
       _this.props.listen([fundingSourceAdded, micro_deposit_flow]);
     });
+  }
+
+  componentDidMount(){
+    var _this = this;
+    setTimeout(() => {
+      console.log("IAV LOADING SCREEN SETS TIMEOUT");
+      _this.closeLoadingModals();
+    }, 5000);
   }
 
   closeLoadingModals(){
@@ -95,10 +101,9 @@ class Iav extends React.Component {
          style={{marginTop: 20}}
          startInLoadingState={false}
        />
-       {<Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
+       {/*<Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
         <Loading
           complete={this.props.done_loading}
-          provider={"to_iav"}
           msgSuccess={""}
           msgError={"There was an error on our end. Sorry about that ^_^;"}
           msgLoading={"One moment..."}
@@ -106,7 +111,7 @@ class Iav extends React.Component {
           successDestination={() => {console.log("SucessfullLoading")}}
           errorDestination={() => {console.log("temp loading screen")}}
         />
-       </Modal>}
+       </Modal>*/}
        </View>
       );
   }

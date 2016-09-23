@@ -252,6 +252,7 @@ class BankOnboardingView extends React.Component {
             break;
           case 4:
             return(
+              <View style={{flex: 1}}>
               <SSN
                 dispatchSetSSN={this.props.dispatchSetSSN}
                 dispatchSetPageX={this.props.dispatchSetPageX}
@@ -268,6 +269,7 @@ class BankOnboardingView extends React.Component {
                 loading={this.props.loading}
                 done_loading={this.props.done_loading}
               />
+              </View>
             )
             break;
         }
@@ -277,6 +279,18 @@ class BankOnboardingView extends React.Component {
       console.log("IAV: " + this.props.startIav);
 
       return(
+        <View style={{flex: 1}}>
+        <Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
+         <Loading
+           complete={this.props.done_loading}
+           msgSuccess={""}
+           msgError={"There was an error on our end. Sorry about that ^_^;"}
+           msgLoading={"One moment..."}
+           success={true}
+           successDestination={() => {console.log("SucessfullLoading")}}
+           errorDestination={() => {console.log("temp loading screen")}}
+         />
+        </Modal>
         <Iav
           listen={this.props.listen}
           stopListening={this.props.stopListening}
@@ -289,6 +303,7 @@ class BankOnboardingView extends React.Component {
           loading={this.props.loading}
           done_loading={this.props.done_loading}
           />
+        </View>
       )
     }
     if(this.props.startMain == true){
