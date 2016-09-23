@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image, TouchableHighlight} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image, TouchableHighlight, Modal} from "react-native";
 import Button from "react-native-button";
-import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
+import {Scene, Reducer, Router, Switch, TabBar, Schema, Actions} from 'react-native-router-flux';
 import Entypo from "react-native-vector-icons/Entypo";
 var Mixpanel = require('react-native-mixpanel');
 
@@ -18,6 +18,8 @@ var Mixpanel = require('react-native-mixpanel');
 import Header from "../../../components/Header/Header";
 import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
+import Loading from "../../../components/Loading/Loading";
+
 
 // Stylesheets
 import backgrounds from "../styles/backgrounds";
@@ -131,6 +133,10 @@ class SSN extends React.Component {
      var _this = this;
      Init.createCustomer(data, function(customerCreated){
        console.log("CustomerCreated?: " + customerCreated);
+       //Loading Screen to IAV
+       if(customerCreated){
+          _this.props.dispatchSetLoading(true);
+       }
        //Grab UId
        Async.get('user', (val) => {
            console.log("User: " + val);
@@ -145,7 +151,7 @@ class SSN extends React.Component {
      });
    }
 
-   initiateIAV(token, _this){
+   /*initiateIAV(token, _this){
       var data = {
         token: token
       };
@@ -155,10 +161,11 @@ class SSN extends React.Component {
         if(iavTokenRecieved){
           console.log("SSN IAVTOKEN: " + JSON.stringify(iavToken));
           //Will cause the IAV Token Page to be loaded
+          _this.props.dispatchSetLoading(true);
           _this.props.dispatchSetIav(iavToken.token);
         }
       });
-   }
+   }*/
 
    componentWillMount() {
      // Initialize the app
@@ -173,7 +180,7 @@ class SSN extends React.Component {
 
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
            <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>What are the Last 4 Digits of your Social Security Number?</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.ssn} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" maxLength={5} placeholder={""} keyboardType="default" />
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.ssn} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" maxLength={4} placeholder={""} keyboardType="default" />
          </View>
 
            { /* Arrow nav buttons */ }
@@ -197,6 +204,18 @@ class SSN extends React.Component {
 
            </TouchableHighlight>
          </Animated.View>
+         <Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
+            <Loading
+              complete={this.props.done_loading}
+              provider={"to_iav"}
+              msgSuccess={""}
+              msgError={"There was an error on our end. Sorry about that ^_^;"}
+              msgLoading={"One moment..."}
+              success={true}
+              successDestination={() => {console.log("SucessfullLoading")}}
+              errorDestination={() => {console.log("temp loading screen")}}
+            />
+         </Modal>
        </View>
      );
    }

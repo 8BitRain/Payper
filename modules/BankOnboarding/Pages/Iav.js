@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, WebView, Linking} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, WebView, Linking, Modal} from "react-native";
 import Button from "react-native-button";
-import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
+import {Scene, Reducer, Router, Switch, TabBar, Schema, Actions} from 'react-native-router-flux';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 
@@ -12,6 +12,9 @@ import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
 import colors from '../../../styles/colors';
+
+//components
+import Loading from "../../../components/Loading/Loading";
 
 
 
@@ -56,11 +59,11 @@ class Iav extends React.Component {
 
   componentWillMount() {
     // Initialize the app
-    //var url = 'http://www.getpayper.io/iav' + '?iav_token=' + this.props.startIav + '&firebase_token=' + this.firebase_token;
-    //Linking.openURL(url).catch(err => console.error('An error occurred', err));
-    this.props.dispatchSetLoading(false);
-    this.props.dispatchSetDoneLoading(true);
     var _this = this;
+    setTimeout(() => {
+      console.log("SUCESS DESTINATION FIRED");
+      _this.closeLoadingModals;
+    }, 5000);
     Async.get('user', (val) => {
       console.log("User: " + val);
       console.log("User: " + JSON.parse(val).uid);
@@ -70,10 +73,15 @@ class Iav extends React.Component {
       //Need to listen to fundingSourceAdded and IAV so
 
       var fundingSourceAdded = "IAV/" + JSON.parse(val).uid;
+
       _this.props.listen([fundingSourceAdded, micro_deposit_flow]);
     });
   }
 
+  closeLoadingModals(){
+    this.props.dispatchSetDoneLoading(true);
+    this.props.dispatchSetLoading(false);
+  }
   componentWillUnmount() {
     // Disable Firebase listeners
     this.props.stopListening(this.props.activeFirebaseListeners);
@@ -81,11 +89,25 @@ class Iav extends React.Component {
 
   render() {
       return(
+        <View style={{flex: 1}}>
         <WebView
          source={{uri: 'http://www.getpayper.io/iav'}} injectedJavaScript={this.injectedJS}
          style={{marginTop: 20}}
          startInLoadingState={false}
        />
+       {<Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
+        <Loading
+          complete={this.props.done_loading}
+          provider={"to_iav"}
+          msgSuccess={""}
+          msgError={"There was an error on our end. Sorry about that ^_^;"}
+          msgLoading={"One moment..."}
+          success={true}
+          successDestination={() => {console.log("SucessfullLoading")}}
+          errorDestination={() => {console.log("temp loading screen")}}
+        />
+       </Modal>}
+       </View>
       );
   }
 }

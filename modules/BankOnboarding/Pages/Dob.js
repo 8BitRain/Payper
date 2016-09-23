@@ -160,7 +160,6 @@ class Dob extends React.Component {
                   width: 224,
                   backgroundColor: colors.obsidianInput,
                   paddingLeft: 0,
-                  fontFamily: "Roboto",
                   fontWeight: "100",
                   fontSize: 15,
                   color: "white",
