@@ -18,6 +18,7 @@ function mapStateToProps(state) {
 
     // bankOnboarding
     startIav: state.getIn(['bankOnboarding', 'startIav']),
+    loading: state.getIn(['bankOnboarding', 'loading']),
 
     // fundingSources
     fundingSourcesArray: state.getIn(['fundingSources', 'fundingSourcesArray']),
@@ -36,6 +37,10 @@ function mapDispatchToProps(dispatch) {
 
     setIav: (token) => {
       dispatch(setInBankOnboarding.setIav(token));
+    },
+
+    setLoading: (input) => {
+      dispatch(setInBankOnboarding.setLoading(input));
     },
 
     setFundingSourcesArray: (input) => {
