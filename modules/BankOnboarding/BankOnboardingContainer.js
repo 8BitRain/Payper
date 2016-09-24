@@ -11,6 +11,7 @@ import {Actions} from 'react-native-router-flux';
 var dispatchList = {
   iav: false,
   retry: false,
+  fullSSN: false,
   suspended: false,
   document: false,
   doneListening: false
@@ -48,6 +49,7 @@ export default connect(
     retry: state.getIn(['bankOnboarding', 'retry']),
     document: state.getIn(['bankOnboarding', 'document']),
     suspended: state.getIn(['bankOnboarding', 'suspended']),
+    fullSSN: state.getIn(['bankOnboarding', 'fullSSN'])
 
   }),
   dispatch => ({
@@ -213,6 +215,9 @@ export default connect(
       },
       dispatchSetSSN(input){
         dispatch(dispatchFunctions.setSSN(input));
+      },
+      dispatchSetFullSSN(input){
+        dispatch(dispatchFunctions.setFullSSN(input));
       },
 
       dispatchSetCPhoneValidations(input){

@@ -312,7 +312,7 @@ class Address extends React.Component {
            {/*POSTAL CODE (ZIP)*/}
 
          <View>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.zip} onChangeText={(text) => {this.zipInput = text; this.props.dispatchSetZip(this.zipInput); this.props.dispatchSetZipValidations(this.zipInput)}} autoCorrect={false}  autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" maxLength={5} placeholder={"Zip/Postal Code"} keyboardType="phone-pad" />
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.zip} onChangeText={(text) => {this.zipInput = text; this.props.dispatchSetZip(this.zipInput); this.props.dispatchSetZipValidations(this.zipInput)}} autoCorrect={false}  autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" maxLength={5} placeholder={"Zip/Postal Code"} keyboardType="numeric" />
            {this.props.zipValidations.valid ? <EvilIcons  style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'green'} /> : <EvilIcons style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'grey'} />}
          </View>
          </View>

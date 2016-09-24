@@ -83,7 +83,7 @@ class RetryModal extends React.Component {
           <View style={{marginTop: 100}}>
           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 0}]}>Please double check the information you provided us. Closing this screen will take you back to the input fields. </Text>
           </View>
-            <Header callbackClose={() => {this.props.dispatchSetPageX(0, "backward", null); this.props.dispatchSetRetry(false); }} headerProps={this.headerProps} />
+            <Header callbackClose={() => {this.props.dispatchSetPageX(0, "backward", null); this.props.dispatchSetLoading(false); this.props.dispatchSetFullSSN(true); this.props.dispatchSetRetry(false); }} headerProps={this.headerProps} />
       </View>
     )
   }
@@ -288,6 +288,7 @@ class BankOnboardingView extends React.Component {
                 dispatchSetLoading={this.props.dispatchSetLoading}
                 loading={this.props.loading}
                 done_loading={this.props.done_loading}
+                fullSSN={this.props.fullSSN}
               />
               </View>
             )
@@ -336,7 +337,10 @@ class BankOnboardingView extends React.Component {
     if(this.props.retry){
       return (
         <RetryModal dispatchSetRetry={this.props.dispatchSetRetry}
-        dispatchSetPageX={this.props.dispatchSetPageX}/>
+        dispatchSetPageX={this.props.dispatchSetPageX}
+        dispatchSetFullSSN={this.props.dispatchSetFullSSN}
+        dispatchSetLoading={this.props.dispatchSetLoading}
+        />
       )
     }
     if(this.props.document){

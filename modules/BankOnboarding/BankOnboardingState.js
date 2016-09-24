@@ -77,6 +77,7 @@ const initialState = Map({
     retry: false,
     document: false,
     suspended: false,
+    fullSSN: false,
     startVerifyMicroDeposit: false,
     firebase_token: '',
     cphoneValidations,
@@ -122,12 +123,17 @@ const SET_PAGEX = 'SET_PAGEX',
       SET_ZIP_VALIDATIONS = 'SET_ZIP_VALIDATIONS',
       SET_SSN_VALIDATIONS = 'SET_SSN_VALIDATIONS',
       SET_LOADING = 'SET_LOADING',
-      SET_DONE_LOADING = 'SET_DONE_LOADING';
+      SET_DONE_LOADING = 'SET_DONE_LOADING',
+      SET_FULLSSN = 'SET_FULLSSN';
 
 
 // Action creators
 export function setPageX(index) {
   return { type: SET_PAGEX, index: index };
+};
+
+export function setFullSSN(index) {
+  return { type: SET_FULLSSN, index: index};
 };
 
 export function setCPhoneValidations(index){
@@ -326,6 +332,10 @@ export default function BankOnboardingReducer(state = initialState, action = {})
       break;
     case SET_RETRY:
       var newState = state.set('retry', action.index);
+      return newState;
+      break;
+    case SET_FULLSSN:
+      var newState = state.set('fullSSN', action.index);
       return newState;
       break;
     case SET_DOCUMENT:

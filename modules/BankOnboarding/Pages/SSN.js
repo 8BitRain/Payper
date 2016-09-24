@@ -180,8 +180,8 @@ class SSN extends React.Component {
          <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
 
          <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>What are the Last 4 Digits of your Social Security Number?</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.ssn} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" maxLength={4} placeholder={""} keyboardType="default" />
+           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>{this.props.fullSSN ? "What is your full Social Security Number?" : "What are the Last 4 Digits of your Social Security Number?"}</Text>
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.ssn} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" maxLength={this.props.fullSSN ? 9 : 4} placeholder={""} keyboardType="numeric" />
          </View>
 
            { /* Arrow nav buttons */ }
