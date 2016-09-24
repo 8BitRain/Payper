@@ -178,6 +178,7 @@ class Address extends React.Component {
          "appLogo": true
        },
        index: 1,
+       obsidian: true,
        numCircles: 4
      };
 

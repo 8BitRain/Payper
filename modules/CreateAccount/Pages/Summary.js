@@ -42,6 +42,7 @@ class Summary extends React.Component {
        "appLogo": true
      },
      index: 5,
+     obsidian: true,
      numCircles: 6
    };
 

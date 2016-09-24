@@ -47,6 +47,7 @@ class PhoneNumber extends React.Component {
        "backIcon": true
      },
      index: 4,
+    obsidian: true,
      numCircles: 6
    };
 

@@ -53,6 +53,7 @@ class Dob extends React.Component {
          "appLogo": true
        },
        index: 2,
+       obsidian: true,
        numCircles: 4
      };
 
