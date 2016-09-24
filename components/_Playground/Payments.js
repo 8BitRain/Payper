@@ -5,7 +5,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../styles/colors';
 
 // Components
-import PaymentCard from './PaymentCard';
+import ActivePaymentCard from './PaymentCards/Active';
+import ConfirmPaymentCard from './PaymentCards/Confirm';
 
 // Should we show container borders?
 const borders = false;
@@ -24,31 +25,24 @@ class Payments extends React.Component {
     this.paneCounterIncreasing = true;
     this.maxPaneCounterValue = 5;
 
-    this.EMPTY_DATA_SOURCE = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
-      sectionHeaderHasChanged: (s1, s2) => s1 !== s2
-    });
-
     this.state = {
       gradientStartX: 0.0,
       gradientStartY: 0.0,
       gradientEndX: 1.0,
       gradientEndY: 1.0,
       activeFilter: this.props.activeFilter,
-      dataSource:
-        (this.props.activeFilter == "incoming")
-        ? this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(this.props.payments.incoming)
-        : this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(this.props.payments.outgoing),
+      dataSource: (this.props.activeFilter == "incoming")
+        ? this.props.dataSources.incoming
+        : this.props.dataSources.outgoing,
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.activeFilter != this.state.activeFilter) {
       this.setState({
-        dataSource:
-          (nextProps.activeFilter == "incoming")
-          ? this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(nextProps.payments.incoming)
-          : this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(nextProps.payments.outgoing),
+        dataSource: (nextProps.activeFilter == "incoming")
+          ? this.props.dataSources.incoming
+          : this.props.dataSources.outgoing,
         activeFilter: nextProps.activeFilter,
       });
       this.paneCounter = 0;
@@ -75,11 +69,8 @@ class Payments extends React.Component {
       if (this.paneCounter === 1) this.paneCounterIncreasing = true;
     }
 
-    return(
-      <PaymentCard
-        payment={payment}
-        paneCounter={this.paneCounter} />
-    );
+    if (payment.stage == "pendingConfirmation" && payment.flow == "outgoing") return <ConfirmPaymentCard payment={payment} paneCounter={this.paneCounter} reject={() => this.props.removePayment(payment)} />
+    else return <ActivePaymentCard payment={payment} paneCounter={this.paneCounter} />
   }
 
   _renderFooter() {
@@ -107,7 +98,7 @@ class Payments extends React.Component {
             renderSectionHeader={this._renderSectionHeader}
             renderFooter={this._renderFooter.bind(this)}
             renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-            enableEmptySections />
+             />
         </View>
 
 

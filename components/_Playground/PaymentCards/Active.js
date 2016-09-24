@@ -1,16 +1,16 @@
 // Dependencies
 import React from 'react';
-import { View, StyleSheet, Text, Dimensions, Image, TouchableHighlight, Platform, ActionSheetIOS } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, Image, TouchableHighlight, Platform, ActionSheetIOS, Animated, Easing } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import colors from '../../styles/colors';
+import colors from '../../../styles/colors';
 import Entypo from 'react-native-vector-icons/Entypo'
-import Alert from '../../helpers/Alert';
+import Alert from '../../../helpers/Alert';
 
 // Components
-import Avatar from './Avatar';
+import Avatar from '../Avatar';
 
 // Helpers
-import * as Timestamp from '../../helpers/Timestamp';
+import * as Timestamp from '../../../helpers/Timestamp';
 
 // Should we show container borders?
 const borders = false;
@@ -56,22 +56,21 @@ class PaymentCardContent extends React.Component {
   render() {
     return(
       <View style={wrappers.paymentCardContent}>
-
         { /* Top half */ }
         <View style={wrappers.top}>
           <View style={wrappers.topLeft}>
             <Avatar
               user={{
                 profile_pic: this.props.payment.sender_pic,
-                first_name: this.props.payment.sender_name.split(" ")[0],
-                last_name: this.props.payment.sender_name.split(" ")[1],
+                first_name: (this.props.payment.flow == "outgoing") ? this.props.payment.recip_name.split(" ")[0] : this.props.payment.sender_name.split(" ")[0],
+                last_name: (this.props.payment.flow == "outgoing") ? this.props.payment.recip_name.split(" ")[1] : this.props.payment.sender_name.split(" ")[1],
               }}
               width={58}
               height={58} />
           </View>
           <View style={wrappers.topRight}>
             <Text style={typography.name}>
-              { this.props.payment.sender_name }
+              { (this.props.payment.flow == "outgoing") ? this.props.payment.recip_name : this.props.payment.sender_name }
             </Text>
             <Text style={typography.info}>
               { "$" + this.props.payment.amount + " per month for " + this.props.payment.payments + " months" }
@@ -86,7 +85,7 @@ class PaymentCardContent extends React.Component {
         </View>
 
         { /* Bottom half */ }
-        <View style={wrappers.bottom}>
+        <View style={[wrappers.bottom, { paddingBottom: (!this.props.payment.moreInfo) ? 20 : 0 }]}>
           <View style={wrappers.progressBar}>
             <View style={[progressBar.inner, {flex: this.props.payment.paymentsMade / this.props.payment.payments}]}></View>
             <View style={{flex: 1 - this.props.payment.paymentsMade / this.props.payment.payments}}></View>
@@ -109,15 +108,66 @@ class PaymentCardContent extends React.Component {
           onPress={() => this._toggleActionSheet()}>
           <Entypo name={"dots-three-horizontal"} size={20} color={"rgba(0, 0, 0, 0.8)"} />
         </TouchableHighlight>
-
       </View>
     );
   };
 };
 
-class PaymentCard extends React.Component {
+class ActivePaymentCard extends React.Component {
   constructor(props) {
     super(props);
+
+    this.infoHeight = new Animated.Value(0);
+    this.chevronInterpolator = new Animated.Value(0);
+
+    this.state = {
+      moreInfoVisible: false,
+      moreInfoText: "More info",
+      chevronAngle: this.chevronInterpolator.interpolate({
+        inputRange: [0, 100],
+        outputRange: ['0deg', '180deg'],
+      }),
+    };
+  }
+
+  _toggleMoreInfo() {
+    Animated.parallel([
+      Animated.timing(this.infoHeight, {
+        toValue: (this.state.moreInfoVisible) ? 0 : 80,
+        duration: 100,
+      }),
+      Animated.timing(this.chevronInterpolator, {
+        toValue: (this.state.moreInfoVisible) ? 0 : 100,
+        duration: 50,
+        easing: Easing.elastic(1),
+      })
+    ]).start();
+
+    this.setState({
+      moreInfoText: (this.state.moreInfoVisible) ? "More info" : "Less info",
+      moreInfoVisible: !this.state.moreInfoVisible,
+    });
+  }
+
+  _renderMoreInfo() {
+    return(
+      <View>
+        { /* 'More info' or 'Less info' */ }
+        <View style={{ height: 35, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: "rgba(255, 255, 255, " + 0.45 / this.props.paneCounter + ")" }}>
+          <Animated.View style={{ transform: [{rotate: this.state.chevronAngle}] }}>
+            <Entypo name={"chevron-thin-down"} size={17} color={colors.richBlack} />
+          </Animated.View>
+        </View>
+
+        { /* More detailed payment series info */ }
+        <Animated.View style={{ height: this.infoHeight, width: dimensions.width, overflow: 'hidden' }}>
+          <View style={[panes.general, { backgroundColor: 'rgba(255, 255, 255, ' + 0.45 / this.props.paneCounter + ')' }]} />
+          <Text style={[typography.info, { padding: 8, paddingLeft: 22.5 }]}>
+            { this.props.payment.moreInfo }
+          </Text>
+        </Animated.View>
+      </View>
+    );
   }
 
   render() {
@@ -125,13 +175,18 @@ class PaymentCard extends React.Component {
       <TouchableHighlight
         activeOpacity={1.0}
         underlayColor={'transparent'}
-        onPress={() => console.log("Pressed payment card")}>
+        onPress={() => this._toggleMoreInfo()}>
 
-        <View style={wrappers.paymentCard}>
-          <View style={[panes.general, { backgroundColor: "rgba(255, 255, 255, " + 0.45 / this.props.paneCounter + ")" }]} />
-          <PaymentCardContent {...this.props} />
+        <View>
+          { /* Payment card */ }
+          <View style={wrappers.paymentCard}>
+            <View style={[panes.general, { backgroundColor: 'rgba(255, 255, 255, ' + 0.45 / this.props.paneCounter + ')' }]} />
+            <PaymentCardContent {...this.props} />
+          </View>
+
+          { /* More info */
+            (this.props.payment.moreInfo) ? this._renderMoreInfo() : null }
         </View>
-
       </TouchableHighlight>
     );
   }
@@ -147,7 +202,6 @@ const wrappers = StyleSheet.create({
     flex: 1.0,
     width: dimensions.width * 0.9,
     paddingTop: 15,
-    paddingBottom: 20,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -161,7 +215,7 @@ const wrappers = StyleSheet.create({
   },
   topLeft: {
     flex: 0.3,
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: (borders) ? 1.0 : 0.0,
@@ -182,7 +236,7 @@ const wrappers = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 25,
+    paddingTop: 17,
   },
   notice: {
     height: 40,
@@ -199,6 +253,10 @@ const wrappers = StyleSheet.create({
     borderColor: colors.richBlack,
     borderWidth: 0.5,
     backgroundColor: 'transparent',
+  },
+  moreInfoWrap: {
+    width: dimensions.width,
+    overflow: 'hidden',
   },
 });
 
@@ -254,4 +312,4 @@ const menu = StyleSheet.create({
   },
 });
 
-export default PaymentCard;
+export default ActivePaymentCard;

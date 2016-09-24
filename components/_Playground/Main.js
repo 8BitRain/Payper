@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Platform, StyleSheet, Text, Dimensions, Image, TouchableHighlight, StatusBar } from 'react-native';
+import { View, ListView, DataSource, Platform, StyleSheet, Text, Dimensions, Image, TouchableHighlight, StatusBar } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../styles/colors';
 import db from './data';
@@ -25,8 +25,18 @@ class Main extends React.Component {
   constructor(props) {
     super(props);
 
+    this.EMPTY_DATA_SOURCE = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
+      sectionHeaderHasChanged: (s1, s2) => s1 !== s2
+    });
+
+    this.outgoingPaymentsMap = SetMaster5000.filterPayments(db.payments.outgoing);
+    this.incomingPaymentsMap = SetMaster5000.filterPayments(db.payments.incoming);
+
     this.state = {
       activeFilter: "incoming",
+      outgoingDataSource: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(this.outgoingPaymentsMap),
+      incomingDataSource: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(this.incomingPaymentsMap),
     };
   }
 
@@ -34,6 +44,29 @@ class Main extends React.Component {
     if (this.state.activeFilter != filter) {
       this.setState({ activeFilter: filter });
     }
+  }
+
+  _removePayment(p) {
+    var payments = (p.flow == "outgoing") ? this.outgoingPaymentsMap : this.incomingPaymentsMap;
+
+    // If this is the last payment in its section, just delete the entire section
+    // if (payments[p.sectionTitle].length === 1) {
+    //   delete payments[p.sectionTitle];
+    //   console.log("New data source:", this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(payments));
+    //   if (p.flow == "outgoing") this.setState({ outgoingDataSource: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(payments) });
+    //   else if (p.flow == "incoming") this.setState({ incomingDataSource: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(payments) });
+    //   return;
+    // }
+
+    // Recalculate number of payments in this section
+    var regex = /\(([^)]+)\)/;
+    var newNumPayments = regex.exec(p.sectionTitle)[1] - 1;
+    var newSectionTitle = p.sectionTitle.replace(/\(.*?\)/, "(" + newNumPayments + ")");
+    // TODO: Find out how to rename keys in a nested JSON structure
+
+    // Remove the payment from its section
+    var i = payments[p.sectionTitle].indexOf(p);
+    payments[p.sectionTitle].splice(i, 1);
   }
 
   render() {
@@ -53,10 +86,8 @@ class Main extends React.Component {
         <View style={wrappers.content}>
           <Payments
             activeFilter={this.state.activeFilter}
-            payments={{
-              incoming: SetMaster5000.arrayToMap(db.payments.incoming),
-              outgoing: SetMaster5000.arrayToMap(db.payments.outgoing),
-            }} />
+            removePayment={(p) => this._removePayment(p)}
+            dataSources={{ incoming: this.state.incomingDataSource, outgoing: this.state.outgoingDataSource }} />
         </View>
       </View>
     );
