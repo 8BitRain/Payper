@@ -58,7 +58,10 @@ function mapDispatchToProps(dispatch) {
               dispatch(set.outgoingPayments([]));
             } else {
               // Tack payment ID on as prop of each payment object
-              for (var p in response.value) response.value[p].pid = p;
+              for (var p in response.value) {
+                response.value[p].pid = p;
+                response.value[p].flow = "outgoing";
+              }
 
               // Convert from JSON to array and extract PID's of complete payments
               var paymentArray = SetMaster5000.JSONToArray({ JSON: response.value }),
@@ -78,7 +81,10 @@ function mapDispatchToProps(dispatch) {
               dispatch(set.incomingPayments([]));
             } else {
               // Tack payment ID on as prop of each payment object
-              for (var p in response.value) response.value[p].pid = p;
+              for (var p in response.value) {
+                response.value[p].pid = p;
+                response.value[p].flow = "incoming";
+              }
 
               // Convert from JSON to array and extract PID's of complete payments
               var paymentArray = SetMaster5000.JSONToArray({ JSON: response.value }),
@@ -171,7 +177,8 @@ function mapDispatchToProps(dispatch) {
       if (options.flow == "out") dispatch(set.outgoingPayments(payments));
       else if (options.flow == "in") dispatch(set.incomingPayments(payments));
 
-      Lambda.cancelPayment({ invite: options.invite, type: options.type, payment_id: options.pid, token: options.token });
+      console.log("Cancelling payment:", {confirmed: options.confirmed, invite: options.invite, type: options.type, payment_id: options.pid, token: options.token});
+      Lambda.cancelPayment({ confirmed: options.confirmed, invite: options.invite, type: options.type, payment_id: options.pid, token: options.token });
     },
 
     confirmPayment: (options) => {

@@ -18,7 +18,6 @@ var dimensions = Dimensions.get('window');
   *   Return a profile picture with the given source image
 **/
 function getUserPic(pic, name) {
-
   // If no profile picture, create and return initials thumbnail
   if (pic == "") {
     name = name.split(" ");

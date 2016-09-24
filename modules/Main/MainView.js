@@ -84,10 +84,18 @@ class Main extends React.Component {
           var uid = this.props.currentUser.uid,
               notifications = "notifications/" + uid,
               appFlags = "appFlags/" + uid,
-              user = "users/" + uid;
+              user = "users/" + uid,
+              contactList = "contactList/" + uid,
+              globalUserList = "users",
+              blockedUserList = "blocked/" + uid;
 
           // Initialize Firebase listeners
-          this.props.listen([notifications, appFlags, user], { currentUser: this.props.currentUser });
+          this.props.listen([notifications, appFlags, user, contactList, globalUserList, blockedUserList], {
+            currentUser: this.props.currentUser,
+            nativeContacts: this.props.nativeContacts,
+            allContactsArray: this.props.allContactsArray,
+            uid: this.props.currentUser.uid,
+          });
 
           console.log("%cInitialization succeeded. Current user:", "color:green;font-weight:900;");
           console.log(this.props.currentUser);

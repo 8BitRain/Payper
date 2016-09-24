@@ -8,12 +8,18 @@ import * as StringMaster5000 from '../../helpers/StringMaster5000';
 import * as Init from '../../_init';
 import * as Lambda from '../../services/Lambda';
 
-// Partial components
+// Components
 import Footer from '../../components/Footer/Footer';
 import Transaction from '../../components/Previews/Transaction/Transaction';
 import CreatePayment from '../../modules/CreatePayment/CreatePaymentViewContainer';
 import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingContainer';
 import VerifyMicrodeposit from '../../modules/BankOnboarding/Pages/VerifyMicrodeposit';
+
+// Payment card components
+import Active from '../../components/PaymentCards/Active';
+import PendingConfirmation from '../../components/PaymentCards/PendingConfirmation';
+import PendingFundingSource from '../../components/PaymentCards/PendingFundingSource';
+import PendingInvite from '../../components/PaymentCards/PendingInvite';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -52,6 +58,94 @@ class Payments extends React.Component {
     }
   }
 
+  _showMenu(payment) {
+    ActionSheetIOS.showActionSheetWithOptions({
+      options: ['Cancel Payment Series', 'Block User', 'Nevermind'],
+      cancelButtonIndex: 2
+    }, (buttonIndex) => {
+      if (buttonIndex == 0) {
+        // Define strings to be displayed in alert
+        var firstName = (this.props.activeFilter == "outgoing") ? payment.recip_name.split(" ")[0] : payment.sender_name.split(" ")[0],
+            purpose = StringMaster5000.formatPurpose(payment.purpose),
+            message;
+
+        // Concatenate strings depending on payment flow direction
+        if (this.props.currentUser.uid == payment.sender_id) message = "You'll stop paying " + firstName + " " + purpose;
+        else message = firstName + " will stop paying you " + purpose;
+
+        // Request confirmation
+        Alert.confirmation({
+          title: "Are you sure you'd like to cancel this payment?",
+          message: message,
+          cancelMessage: "Nevermind",
+          confirmMessage: "Yes, cancel the payment series.",
+          cancel: () => console.log("Nevermind"),
+          confirm: () => this.props.cancelPayment({
+            pid: payment.pid,
+            token: this.props.currentUser.token,
+            ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
+            type: payment.type,
+            flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
+            invite: payment.invite,
+            confirmed: payment.confirmed,
+          }),
+        });
+      } else if (buttonIndex == 1) {
+        // Extend scope
+        const _this = this;
+
+        var title = "Are you sure you'd like to block " +
+          ((this.props.activeFilter == "outgoing")
+            ? payment.recip_name
+            : payment.sender_name) + "?";
+
+        // Request confirmation
+        Alert.confirmation({
+          title: title,
+          message: "You can always unblock them in the 'My Profile' page.",
+          cancelMessage: "Nevermind",
+          confirmMessage: "Yes, block this user",
+          cancel: () => console.log("Nevermind"),
+          confirm: () => Lambda.blockUser({
+            token: _this.props.currentUser.token,
+            blocked_id: (_this.props.activeFilter == "outgoing") ? payment.recip_id : payment.sender_id,
+          }),
+        });
+      }
+    });
+  }
+
+  _confirmPayment(payment) {
+    var title = "$" + payment.amount + " per month for " + payment.payments + " months - " + payment.purpose;
+    Alert.confirmation({
+      title: title,
+      message: "Would you like to confirm this payment series?",
+      cancelMessage: "Nevermind",
+      confirmMessage: "Yes",
+      cancel: () => console.log("Nevermind"),
+      confirm: () => this.props.confirmPayment({
+        pid: payment.pid,
+        token: this.props.currentUser.token,
+        ds: (payment.flow == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
+      }),
+    });
+  }
+
+  _rejectPayment(payment) {
+    var title = "$" + payment.amount + " per month for " + payment.payments + " months - " + payment.purpose;
+    Alert.confirmation({
+      title: title,
+      message: "Would you like to reject this payment series?",
+      cancelMessage: "Nevermind",
+      confirmMessage: "Yes",
+      cancel: () => console.log("Nevermind"),
+      confirm: () => this.props.rejectPayment({
+        pid: payment.pid,
+        token: this.props.currentUser.token,
+        ds: (payment.flow == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
+      }),
+    });
+  }
 
   _archiveCompletePayments(options) {
     // Determine which payment set to look through
@@ -66,7 +160,6 @@ class Payments extends React.Component {
       }
     }
   }
-
 
   _toggleModal(options) {
     this.setState({ modalVisible: !this.state.modalVisible });
@@ -119,133 +212,86 @@ class Payments extends React.Component {
   _renderRow(payment) {
     console.log("%cRendering payment:", "color:green;font-weight:900;");
     console.log(payment);
-    return(
-      <Transaction
-        {...this.props}
-        payment={payment}
-        out={this.props.activeFilter == "outgoing"}
-        callbackCancel={() => {
-          // Define strings to be displayed in alert
-          var firstName = (this.props.activeFilter == "outgoing") ? payment.recip_name.split(" ")[0] : payment.sender_name.split(" ")[0],
-              purpose = StringMaster5000.formatPurpose(payment.purpose),
-              message;
 
-          // Concatenate strings depending on payment flow direction
-          if (this.props.currentUser.uid == payment.sender_id) message = "You'll stop paying " + firstName + " " + purpose;
-          else message = firstName + " will stop paying you " + purpose;
+    var paymentInfo = {
+      amount: payment.amount,
+      purpose: payment.purpose,
+      payments: payment.payments,
+      paymentsMade: payment.paymentsMade,
+      nextPayment: payment.nextPayment,
+    };
 
-          // Alert the user
-          Alert.confirmation({
-            title: "Are you sure you'd like to cancel this payment?",
-            message: message,
-            cancelMessage: "Nevermind",
-            confirmMessage: "Yes please",
-            cancel: () => console.log("Nevermind"),
-            confirm: () => this.props.cancelPayment({
-              pid: payment.pid,
-              token: this.props.currentUser.token,
-              ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-              type: payment.type,
-              flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
-            })
-          });
-        }}
-        callbackConfirm={() => {
-          var firstName = payment.recip_name.split(" ")[0],
-              purpose = StringMaster5000.formatPurpose(payment.purpose);
+    var user = {
+      name: (payment.flow == "incoming") ? payment.sender_name : payment.recip_name,
+      pic: (payment.flow == "incoming") ? payment.sender_pic : payment.recip_pic,
+    };
 
-          // Alert the user
-          Alert.confirmation({
-            title: "Would you like pay " + firstName + "?",
-            message: "You can cancel the payments at any time.",
-            cancelMessage: "Nevermind",
-            confirmMessage: "Yes",
-            cancel: () => console.log("Nevermind"),
-            confirm: () => this.props.confirmPayment({
-              pid: payment.pid,
-              token: this.props.currentUser.token,
-              ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-            }),
-          });
-        }}
-        callbackReject={() => {
-          console.log("Rejecting payment");
+    if (payment.invite) payment.stage = "pendingInvite";
+    else if (payment.nextPayment == "waiting_on_fs") payment.stage = "pendingRecipFundingSource";
+    else if (payment.confirmed == false) payment.stage = "pendingConfirmation";
+    else payment.stage = "active";
 
-          var firstName = payment.recip_name.split(" ")[0],
-              purpose = StringMaster5000.formatPurpose(payment.purpose);
-
-          // Alert the user
-          Alert.confirmation({
-            title: "Would you like reject the request from " + firstName + "?",
-            message: "You can cancel the payments at any time.",
-            cancelMessage: "Nevermind",
-            confirmMessage: "Yes",
-            cancel: () => console.log("Nevermind"),
-            confirm: () => this.props.rejectPayment({
-              pid: payment.pid,
-              token: this.props.currentUser.token,
-              ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-            }),
-          });
-        }}
-        callbackMenu={() => {
-          console.log("payment:", payment);
-          ActionSheetIOS.showActionSheetWithOptions({
-            options: ['Cancel Payment Series', 'Block User', 'Nevermind'],
-            cancelButtonIndex: 2
-          },
-          (buttonIndex) => {
-            if (buttonIndex == 0) {
-              // Define strings to be displayed in alert
-              var firstName = (this.props.activeFilter == "outgoing") ? payment.recip_name.split(" ")[0] : payment.sender_name.split(" ")[0],
-                  purpose = StringMaster5000.formatPurpose(payment.purpose),
-                  message;
-
-              // Concatenate strings depending on payment flow direction
-              if (this.props.currentUser.uid == payment.sender_id) message = "You'll stop paying " + firstName + " " + purpose;
-              else message = firstName + " will stop paying you " + purpose;
-
-              // Request confirmation
-              Alert.confirmation({
-                title: "Are you sure you'd like to cancel this payment?",
-                message: message,
-                cancelMessage: "Nevermind",
-                confirmMessage: "Yes, cancel the payment series.",
-                cancel: () => console.log("Nevermind"),
-                confirm: () => this.props.cancelPayment({
-                  pid: payment.pid,
-                  token: this.props.currentUser.token,
-                  ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-                  type: payment.type,
-                  flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
-                  invite: (payment.type == "invite") ? true : false,
-                }),
-              });
-            } else if (buttonIndex == 1) {
-              // Extend scope
-              const _this = this;
-
-              var title = "Are you sure you'd like to block " +
-                ((this.props.activeFilter == "outgoing")
-                  ? payment.recip_name
-                  : payment.sender_name) + "?";
-
-              // Request confirmation
-              Alert.confirmation({
-                title: title,
-                message: "You can always unblock them in the 'My Profile' page.",
-                cancelMessage: "Nevermind",
-                confirmMessage: "Yes, block this user",
-                cancel: () => console.log("Nevermind"),
-                confirm: () => Lambda.blockUser({
-                  token: _this.props.currentUser.token,
-                  blocked_id: (_this.props.activeFilter == "outgoing") ? payment.recip_id : payment.sender_id,
-                }),
-              });
-            }
-          });
-        }}/>
-    );
+    switch(payment.stage) {
+      case "active":
+        return(
+          <Active
+            user={user}
+            payment={paymentInfo}
+            showMenu={() => this._showMenu(payment)} />
+        );
+      break;
+      case "pendingInvite":
+        return(
+          <PendingInvite
+            user={user}
+            payment={paymentInfo}
+            showMenu={() => this._showMenu(payment)} />
+        );
+      break;
+      case "pendingConfirmation":
+        return(
+          <PendingConfirmation
+            user={user}
+            payment={paymentInfo}
+            showButtons={payment.flow == "outgoing"}
+            confirmPayment={() => this._confirmPayment(payment)}
+            rejectPayment={() => this._rejectPayment(payment)}
+            showMenu={() => this._showMenu(payment)} />
+        );
+      break;
+      case "pendingSenderFundingSource":
+        var message = (payment.sender_id == this.props.currentUser.uid)
+          ? "It looks like you haven't linked a bank account to your Payper account. Payments will commence once you do so."
+          : "It looks like " + payment.sender_name.split(" ")[0] + " hasn't linked a bank account to their Payper account. Payments will commence once they do so.";
+        return(
+          <PendingFundingSource
+            user={user}
+            payment={paymentInfo}
+            message={message}
+            showMenu={() => this._showMenu(payment)} />
+        );
+      break;
+      case "pendingRecipFundingSource":
+        var message = (payment.recip_id == this.props.currentUser.uid)
+          ? "It looks like you haven't linked a bank account to your Payper account. Payments will commence once you do so."
+          : "It looks like " + payment.recip_name.split(" ")[0] + " hasn't linked a bank account to their Payper account. Payments will commence once they do so.";
+        return(
+          <PendingFundingSource
+            user={user}
+            payment={paymentInfo}
+            message={message}
+            showMenu={() => this._showMenu(payment)} />
+        );
+      break;
+      default:
+        return(
+          <View style={{ justifyContent: 'center', alignItems: 'center', height: 70, backgroundColor: colors.alertRed }}>
+            <Text style={{ fontSize: 16, fontFamily: 'Roboto', color: colors.white }}>
+              Failed to render payment :(
+            </Text>
+          </View>
+        );
+    }
   }
 
   _verifyOnboardingStatus() {

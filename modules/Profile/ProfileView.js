@@ -78,15 +78,21 @@ class Profile extends React.Component {
           content: this.props.currentUser.decryptedEmail,
           info: "Your email address is used for password recovery and identity verification. Nobody can see this address but you."
         })},
-        { rowTitle: "Tom Hanks",
-          rowContent: "Last Sunday at 3:02pm",
-          sectionTitle: "Blocked Users",
-          destination: () => this._unblockUser({ name: "Tom Hanks" })},
-        { rowTitle: "Fourteen SteakTacos",
-          rowContent: "Today at 9:58am",
-          sectionTitle: "Blocked Users",
-          destination: () => this._unblockUser({ name: "Fourteen SteakTacos" })},
     ];
+
+    // Populate blocked users, if any
+    if (this.props.blockedUsers) {
+      for (var u in this.props.blockedUsers) {
+        const curr = this.props.blockedUsers[u];
+        this.options.push({
+          rowTitle: curr.first_name + " " + curr.last_name,
+          rowContent: "",
+          sectionTitle: "Blocked Users",
+          uid: u,
+          destination: () => this._unblockUser({ uid: u, name: curr.first_name + " " + curr.last_name })
+        });
+      }
+    }
 
     this.state = {
       optionsDataSource: EMPTY_DATA_SOURCE.cloneWithRowsAndSections(SetMaster5000.arrayToMap(this.options)),
@@ -99,18 +105,25 @@ class Profile extends React.Component {
     };
   }
 
-
   _unblockUser(user) {
+    // Extend scope
+    const _this = this;
+
+    // Determine alert contents
     var title = "Unblock " + user.name,
         message = "Are you sure you'd like to unblock this user?";
 
+    // Request confirmation
     Alert.confirmation({
       title: title,
       message: message,
       confirmMessage: "Yes, unblock this user",
       cancelMessage: "Nevermind",
       confirm: () => {
-        console.log("Unblocking", user.name);
+        for (var o in this.options)
+          if (this.options[o].uid && this.options[o].uid == user.uid)
+            this.options.splice(o, 1);
+        this.setState({ optionsDataSource: EMPTY_DATA_SOURCE.cloneWithRowsAndSections(SetMaster5000.arrayToMap(this.options)) });
       },
       cancel: () => {
         console.log("Nevermind");
