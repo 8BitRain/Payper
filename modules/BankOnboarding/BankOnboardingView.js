@@ -193,7 +193,7 @@ class BankOnboardingView extends React.Component {
             if(this.props.loading){
               console.log("LOADING");
               return(
-                <View style={{flex: 1}}>
+                <View style={{flex: 1, backgroundColor: colors.accent}}>
                 <Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
                  <Loading
                    complete={this.props.done_loading}
