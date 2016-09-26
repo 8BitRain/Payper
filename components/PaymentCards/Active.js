@@ -16,6 +16,47 @@ var dimensions = Dimensions.get('window');
 class Active extends React.Component {
   constructor(props) {
     super(props);
+    this.timer;
+    this.state = {
+      paymentInProgress: false,
+    };
+  }
+
+  componentDidMount() {
+    // Extend scope
+    const _this = this;
+
+    // Get current time every 5 seconds
+    this.timer = setInterval(() => {
+      var secondsTilNextPayment = _this._calculateTimeDifferences({ current: new Date().getTime(), nextPayment: _this.props.payment.nextPayment }).seconds;
+      console.log("Seconds til next payment:", secondsTilNextPayment);
+      if (secondsTilNextPayment < 60 && !_this.state.paymentInProgress) {
+        _this.setState({ paymentInProgress: true });
+      } else if (_this.state.paymentInProgress) {
+        _this.setState({ paymentInProgress: false });
+      }
+    }, 3000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  _calculateTimeDifferences(options) {
+    var diffMS = options.nextPayment - options.current;
+    var diffS = diffMS / 1000;
+    var diffM = diffS / 60;
+
+    if (false) {
+      console.log("Current time:", options.current);
+      console.log("Next payment time:", options.nextPayment);
+      console.log("Differences\n------------");
+      console.log("MS:", diffMS);
+      console.log("S:", diffS);
+      console.log("M:", diffM);
+    }
+
+    return { milliseconds: diffMS, seconds: diffS, minute: diffM };
   }
 
   _getUserPic(pic, name) {
@@ -45,7 +86,14 @@ class Active extends React.Component {
           <View style={styles.textWrap}>
             <Text style={styles.name}>{ this.props.user.name }</Text>
             <Text style={styles.text}>${ this.props.payment.amount } per month - { this.props.payment.purpose }</Text>
-            <Text style={styles.text}>Next payment: { (typeof this.props.payment.nextPayment == 'number') ? Timestamp.calendarize(this.props.payment.nextPayment) : "TBD" }</Text>
+            <Text style={styles.text}>
+              Next payment:
+              { (typeof this.props.payment.nextPayment == 'number')
+                  ? (this.state.paymentInProgress)
+                      ? " In progress..."
+                      : " " + Timestamp.calendarize(this.props.payment.nextPayment)
+                  : " TBD" }
+            </Text>
           </View>
 
           { /* Payment settings button */ }

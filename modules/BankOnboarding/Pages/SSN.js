@@ -1,31 +1,29 @@
+// Dependencies
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image, TouchableHighlight} from "react-native";
-import Button from "react-native-button";
-import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
-import Entypo from "react-native-vector-icons/Entypo";
+import { View, Text, TextInput, StyleSheet, Animated, Easing, DeviceEventEmitter, Image, TouchableHighlight, Dimensions } from 'react-native';
+import Button from 'react-native-button';
+import { Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions } from 'react-native-router-flux';
+import Entypo from 'react-native-vector-icons/Entypo';
 var Mixpanel = require('react-native-mixpanel');
 
-// Custom helper functions
-import * as Animations from "../../../helpers/animations";
-import * as Validators from "../../../helpers/validators";
+// Helpers
+import * as Init from '../../../_init';
+import * as Animations from '../../../helpers/animations';
+import * as Validators from '../../../helpers/validators';
 import * as Async from '../../../helpers/Async';
 import * as Firebase from '../../../services/Firebase';
 
-
-var Mixpanel = require('react-native-mixpanel');
-
-// Custom components
-import Header from "../../../components/Header/Header";
-import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
-import EvilIcons from "react-native-vector-icons/EvilIcons";
+// Components
+import Header from '../../../components/Header/Header';
+import ArrowNav from '../../../components/Navigation/Arrows/ArrowDouble';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 // Stylesheets
-import backgrounds from "../styles/backgrounds";
-import containers from "../styles/containers";
-import typography from "../styles/typography";
-
-//Init
-import * as Init from '../../../_init';
+import backgrounds from '../styles/backgrounds';
+import containers from '../styles/containers';
+import typography from '../styles/typography';
+import colors from '../../../styles/colors';
+const dimensions = Dimensions.get('window');
 
 class SSN extends React.Component {
    constructor(props) {
@@ -39,6 +37,8 @@ class SSN extends React.Component {
      this.animationProps = {
        fadeAnim: new Animated.Value(0) // init opacity 0
      };
+
+     this.loadingOpacity = new Animated.Value(0);
 
      /*if(this.firebase_token == ''){
        Async.get('session_token', (token) => {
@@ -95,6 +95,10 @@ class SSN extends React.Component {
        }
        this.createCustomer(data);
 
+     }
+
+     this.state = {
+       loading: false,
      }
    }
 
@@ -160,34 +164,41 @@ class SSN extends React.Component {
       });
    }
 
-   componentWillMount() {
-     // Initialize the app
+   _showLoadingScreen() {
+     this.setState({ loading: true });
+
+     Animated.timing(this.loadingOpacity, {
+       toValue: 1.0,
+       duration: 300,
+       easing: Easing.elastic(1),
+     }).start();
    }
-
-
 
    render() {
      return (
        <View style={[containers.container, backgrounds.email]}>
          <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
-
-         <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
-           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>What are the Last 4 Digits of your Social Security Number?</Text>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.ssn} onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}} autoCorrect={false} autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" maxLength={5} placeholder={""} keyboardType="default" />
-         </View>
-
-           { /* Arrow nav buttons */ }
-           {/*<ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackCheck={() => {this.onPressCheck()}} />*/}
+           <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
+             <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>What are the last 4 digits of your Social Security Number?</Text>
+             <TextInput
+                style={[typography.textInput, typography.marginSides, typography.marginBottom]}
+                defaultValue={this.props.dwollaCustomer.ssn}
+                onChangeText={(text) => {this.SSNInput = text; this.props.dispatchSetSSN(this.SSNInput)}}
+                autoCorrect={false} autoFocus={true} autoCapitalize="none"
+                placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB"
+                maxLength={4} placeholder={""} keyboardType="number-pad" />
+           </View>
 
            { /* Header */ }
-           <Header callbackBack={() => {this.onPressLeft()}} callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
-
+           <Header obsidian callbackBack={() => {this.onPressLeft()}} callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
          </Animated.View>
+
+         { /* Continue button */ }
          <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
            <TouchableHighlight
              activeOpacity={0.8}
              underlayColor={'transparent'}
-             onPress={() => {this.onPressCheck()}}>
+             onPress={() => { this.onPressCheck(); this._showLoadingScreen(); }}>
 
              <Animated.View style={{ height: 70, backgroundColor: "#20BF55", flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center', color: "#fefeff" }]}>
@@ -197,6 +208,15 @@ class SSN extends React.Component {
 
            </TouchableHighlight>
          </Animated.View>
+
+         { /* Loading screen */
+           (this.state.loading)
+            ? <Animated.View style={{ opacity: this.loadingOpacity, height: dimensions.height, width: dimensions.width, backgroundColor: colors.white, position: 'absolute', top: 0, left: 0, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ fontSize: 26, fontFamily: 'Roboto', fontWeight: '200', color: colors.richBlack, padding: 15, alignText: 'center' }}>
+                  Hold on while we catch our breath...
+                </Text>
+              </Animated.View>
+            : null }
        </View>
      );
    }

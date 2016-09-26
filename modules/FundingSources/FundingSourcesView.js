@@ -146,6 +146,7 @@ class FundingSources extends React.Component {
           <View style={{flex: 1.0}}>
             <BankOnboarding
               {...this.props}
+              skipCustomerCreation
               toggleModal={(options) => this._toggleModal(options)} />
           </View>
 

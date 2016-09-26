@@ -319,7 +319,7 @@ class Address extends React.Component {
            { /* Arrow nav buttons */ }
            {/*<ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} callbackLeft={() => {this.onPressLeft()}} />*/}
            { /* Header */ }
-           <Header callbackBack={() => {this.onPressLeft()}} callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+           <Header obsidian callbackBack={() => {this.onPressLeft()}} callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
 
          </Animated.View>
          <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>

@@ -247,7 +247,7 @@ class SignInView extends React.Component {
             </TouchableHighlight>
           </View>
           { /* Header */ }
-        <Header callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
+        <Header obsidian callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
 
           { /* Filler */ }
           <View style={{flex: 0.18, justifyContent: 'center', alignItems: 'center'}}>

@@ -84,7 +84,7 @@ class AddBank extends React.Component {
 
 
            { /* Header */ }
-           <Header callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+           <Header obsidian callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
 
          </Animated.View>
        </View>

@@ -7,6 +7,7 @@ import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 're
 import * as Animations from '../../../helpers/animations';
 import * as Validators from '../../../helpers/validators';
 import * as Init from '../../../_init';
+import * as Async from '../../../helpers/Async';
 
 // Custom components
 import Header from '../../../components/Header/Header';
@@ -93,6 +94,9 @@ class Summary extends React.Component {
         console.log("createUser returned token:", token);
         _this.props.dispatchSetNewUserToken(token);
         Actions.BankOnboardingContainer();
+        Async.set('session_token', token);
+      } else {
+        alert("Error creating user");
       }
     });
 
@@ -147,16 +151,16 @@ class Summary extends React.Component {
          </View>
 
          <View style={{alignItems: "center"}}>
-           <Button style={{alignSelf: "center"}} onPress={()=> {this.handlePressCheckedBox(true)}}>
-            {this.state.isChecked ? <Material name="check-box" size={32} color={colors.white} /> : <Material name="check-box-outline-blank" size={32} color={colors.white} />}
-           </Button>
+            <Button style={{alignSelf: "center"}} onPress={()=> {this.handlePressCheckedBox(true)}}>
+              {this.state.isChecked ? <Material name="check-box" size={40} color={colors.white} /> : <Material name="check-box-outline-blank" size={40} color={colors.white} />}
+            </Button>
          </View>
 
        </View>
 
 
        { /* Header */ }
-       <Header callbackBack={() => {this.onPressLeft()}} callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
+       <Header obsidian callbackBack={() => {this.onPressLeft()}} callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
      </Animated.View>
    );
  }

@@ -117,7 +117,7 @@ class Comfort extends React.Component {
            {/*<ArrowNav arrowNavProps={this.arrowNavProps} callbackLeft={() => {this.onPressLeft()}} callbackCheck={() => {this.onPressCheck()}} />*/}
 
            { /* Header */ }
-           <Header callbackBack={() => {this.onPressLeft()}} callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
+           <Header obsidian callbackBack={() => {this.onPressLeft()}} callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
 
          </Animated.View>
          <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>

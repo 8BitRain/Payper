@@ -19,7 +19,6 @@ import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreen
 
 // Test modules
 import LandingView from './components/LandingView';
-
 import FirebaseBindingViewContainer from './modules/FirebaseBinding/FirebaseBindingViewContainer';
 
 const reducerCreate = (params) => {

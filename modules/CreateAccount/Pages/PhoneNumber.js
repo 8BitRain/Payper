@@ -126,6 +126,7 @@ class PhoneNumber extends React.Component {
    _keyboardWillHideSubscription.remove();
  }
  render() {
+   console.log("Phone number validations:", this.props.phoneValidations);
    return (
     <View style={[backgrounds.background, backgrounds.phoneNumber]}>
      <Animated.View style={[containers.container, {opacity: this.animationProps.fadeAnim}]}>
@@ -134,17 +135,25 @@ class PhoneNumber extends React.Component {
 
        { /* Prompt and input field */ }
        <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.phoneNumber]}>
-         <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>Can I have your number?</Text>
-         <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom, {fontWeight: "100"}]} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput)}} defaultValue={this.props.phone} onChangeText={(text) => {this.phoneNumberInput = text}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={"262-305-8038"} maxLength={10} keyboardType="phone-pad" />
+         <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>{ "What's your phone number?" }</Text>
+         <TextInput
+          style={[typography.textInput, typography.marginSides, typography.marginBottom, {fontWeight: "100"}]}
+          onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput)}}
+          defaultValue={this.props.phone}
+          onChangeText={(text) => {this.phoneNumberInput = text; this.props.dispatchSetPhoneValidations(Validators.validatePhone(this.phoneNumberInput))}}
+          autoCorrect={false} autoFocus={true}
+          maxLength={10}
+          keyboardType="phone-pad" />
        </View>
 
+       { /* Error messages */ }
+       <View style={[containers.sixTenths, backgrounds.phoneNumber, {marginTop: 10}]}>
+         { this.props.phoneValidations.valid ? <Text style={[typography.validationSuccess, typography.fontSizeError, typography.marginSides]}>Good to go!</Text>
+           : null }
+       </View>
 
-
-       { /* Filler */ }
-       <View style={[containers.sixTenths, backgrounds.email]}></View>
        { /* Header */ }
-
-       <Header callbackBack={() => {this.onPressLeft()}} callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
+       <Header obsidian callbackBack={() => {this.onPressLeft()}} callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
 
     </Animated.View>
     <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>

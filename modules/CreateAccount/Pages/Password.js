@@ -129,7 +129,7 @@ class Password extends React.Component {
            </View>
 
            { /* Header */ }
-           <Header callbackBack={() => {this.onPressLeft()}} callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
+           <Header obsidian callbackBack={() => {this.onPressLeft()}} callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
 
          </Animated.View>
          { /* Arrow nav buttons */ }

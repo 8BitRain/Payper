@@ -175,7 +175,7 @@ class BasicInfo extends React.Component {
            {/*<ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} />*/}
 
            { /* Header */ }
-           <Header callbackBack={() => {this.onPressLeft()}} headerProps={this.headerProps} />
+           <Header obsidian callbackBack={() => {this.onPressLeft()}} headerProps={this.headerProps} />
 
          </Animated.View>
 
