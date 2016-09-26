@@ -15,6 +15,7 @@ export default connect(
     //Provider information
     provider: state.getIn(['landingScreen', 'provider']),
     newUser: state.getIn(['createAccount', 'newUser'])
+
   }),
   dispatch => ({
     //Update provider (How the account view container was reached)

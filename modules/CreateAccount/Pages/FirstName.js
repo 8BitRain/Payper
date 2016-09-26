@@ -43,6 +43,7 @@ class FirstName extends React.Component {
         "appLogo": true
       },
       index: 2,
+      obsidian: true,
       numCircles: 6
     };
 

@@ -6,6 +6,7 @@ import { loop, Effects } from 'redux-loop';
 const initialState = Map({
   activeFirebaseListeners: [],
   signedIn: false,
+  loading: false,
   currentUser: {},
   flags: {},
   notifications: [],

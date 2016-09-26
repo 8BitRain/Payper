@@ -74,6 +74,7 @@ class BasicInfo extends React.Component {
          "appLogo": true
        },
        index: 0,
+       obsidian: true,
        numCircles: 4,
      };
 

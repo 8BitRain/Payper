@@ -38,7 +38,9 @@ function mapStateToProps(state) {
     startIav: state.getIn(['bankOnboarding', 'startIav']),
     suspended: state.getIn(['bankOnboarding', 'suspended']),
     retry: state.getIn(['bankOnboarding', 'retry']),
-    document: state.getIn(['bankOnboarding', 'document'])
+    document: state.getIn(['bankOnboarding', 'document']),
+    loading: state.getIn(['bankOnboarding', 'loading'])
+
 
   }
 }
@@ -117,6 +119,9 @@ function mapDispatchToProps(dispatch) {
 
     setNewUserToken: (token) => {
       dispatch(set.setNewUserToken(token));
+    },
+    setLoading: (input) => {
+      dispatch(set.setLoading(input));
     },
 
     setIav: (token) => {

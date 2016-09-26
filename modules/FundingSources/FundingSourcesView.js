@@ -48,8 +48,10 @@ class FundingSources extends React.Component {
       var data = { token: this.props.currentUser.token };
 
       // Initiate IAV
+      this.props.setLoading(true);
       Init.getIavToken(data, function(iavTokenRecieved, iavToken) {
         if (iavTokenRecieved) {
+
           _this.props.setIav(iavToken.token);
         }
       });

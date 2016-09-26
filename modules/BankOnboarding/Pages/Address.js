@@ -97,56 +97,56 @@ class Address extends React.Component {
        ];
 
      this.state_list = {
-       ALABAMA:	'AL',
-       ALASKA:	'AK',
-       ARIZONA:	'AZ',
-       ARKANSAS:	'AR',
-       CALIFORNIA:	'CA',
-       COLORADO:	'CO',
-       CONNECTICUT:	'CT',
-       DELAWARE:	'DE',
-       FLORIDA:	'FL',
-       GEORGIA:	'GA',
-       HAWAII:	'HI',
-       IDAHO:	'ID',
-       ILLINOIS:	'IL',
-       INDIANA:	'IN',
-       IOWA:	'IA',
-       KANSAS:	'KS',
-       KENTUCKY:	'KY',
-       LOUISIANA:	'LA',
-       MAINE:	'ME',
-       MARYLAND:	'MD',
-       MASSACHUSETTS:	'MA',
-       MICHIGAN:	'MI',
-       MINNESOTA:	'MN',
-       MISSISSIPPI:	'MS',
-       MISSOURI:	'MO',
-       MONTANA:	'MT',
-       NEBRASKA:	'NE',
-       NEVADA:	'NV',
-       NEW_HAMPSHIRE:	'NH',
-       NEW_JERSEY:	'NJ',
-       NEW_MEXICO:	'NM',
-       NEW_YORK:	'NY',
-       NORTH_CAROLINA:	'NC',
-       NORTH_DAKOTA:	'ND',
-       OHIO: 'OH',
-       OKLAHOMA:	'OK',
-       OREGON:	'OR',
-       PENNSYLVANIA:	'PA',
-       RHODE_ISLAND:	'RI',
-       SOUTH_CAROLINA:	'SC',
-       SOUTH_DAKOTA:	'SD',
-       TENNESSEE:	'TN',
-       TEXAS:	'TX',
-       UTAH:	'UT',
-       VERMONT:	'VT',
-       VIRGINIA:	'VA',
-       WASHINGTON:	'WA',
-       WEST_VIRGINIA:	'WV',
-       WISCONSIN:	'WI',
-       WYOMING: 'WY'
+        'Alabama':'AL',
+        'Alaska':'AK',
+        'Arizona':'AZ',
+        'Arkansas':'AR',
+        'California':'CA',
+        'Colorado':'CO',
+        'Connecticut':'CT',
+        'Delaware':'DE',
+        'Florida':'FL',
+        'Georgia':'GA',
+        'Hawaii':'HI',
+        'Idaho':'ID',
+        'Illinois':'IL',
+        'Indiana':'IN',
+        'Iowa':'IA',
+        'Kansas':'KS',
+        'Kentucky':'KY',
+        'Louisiana':'LA',
+        'Maine':'ME',
+        'Maryland':'MD',
+        'Massachusetts':'MA',
+        'Michigan':'MI',
+        'Minnesota':'MN',
+        'Mississippi':'MS',
+        'Missouri':'MO',
+        'Montana':'MT',
+        'Nebraska':'NE',
+        'Nevada':'NV',
+        'New Hampshire':'NH',
+        'New Jersey':'NJ',
+        'New Mexico':'NM',
+        'New York':'NY',
+        'North Carolina':'NC',
+        'North Dakota':'ND',
+        'Ohio':'OH',
+        'Oklahoma':'OK',
+        'Oregon':'OR',
+        'Pennsylvania':'PA',
+        'Rhode Island':'RI',
+        'South Carolina':'SC',
+        'South Dakota':'SD',
+        'Tennessee':'TN',
+        'Texas':'TX',
+        'Utah':'UT',
+        'Vermont':'VT',
+        'Virginia':'VA',
+        'Washington':'WA',
+        'West Virginia':'WV',
+        'Wisconsin':'WI',
+        'Wyoming':'WY'
      }
 
      this.state = {
@@ -178,6 +178,7 @@ class Address extends React.Component {
          "appLogo": true
        },
        index: 1,
+       obsidian: true,
        numCircles: 4
      };
 
@@ -289,7 +290,7 @@ class Address extends React.Component {
            {/*STATE*/}
 
            <View>
-            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.state} onChangeText={(text) => { this.stateInput = text; this.props.dispatchSetState(this.stateInput);  }} autoCorrect={false}  onFocus={() => {this._setModalVisible(true)}} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" placeholder={"State"} keyboardType="email-address" />
+            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.state  ? this.props.dwollaCustomer.state : "AL"} onChangeText={(text) => { this.stateInput = text; this.props.dispatchSetState(this.stateInput);  }} autoCorrect={false}  onFocus={() => {this._setModalVisible(true)}} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" placeholder={"State"} keyboardType="email-address" />
            </View>
 
            {/*<Picker
@@ -311,7 +312,7 @@ class Address extends React.Component {
            {/*POSTAL CODE (ZIP)*/}
 
          <View>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.zip} onChangeText={(text) => {this.zipInput = text; this.props.dispatchSetZip(this.zipInput); this.props.dispatchSetZipValidations(this.zipInput)}} autoCorrect={false}  autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" maxLength={5} placeholder={"Zip/Postal Code"} keyboardType="phone-pad" />
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.zip} onChangeText={(text) => {this.zipInput = text; this.props.dispatchSetZip(this.zipInput); this.props.dispatchSetZipValidations(this.zipInput)}} autoCorrect={false}  autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" maxLength={5} placeholder={"Zip/Postal Code"} keyboardType="numeric" />
            {this.props.zipValidations.valid ? <EvilIcons  style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'green'} /> : <EvilIcons style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'grey'} />}
          </View>
          </View>

@@ -44,6 +44,7 @@ class Password extends React.Component {
 
        },
        index: 1,
+       obsidian: true,
        numCircles: 6
      };
 

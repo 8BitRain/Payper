@@ -53,6 +53,7 @@ class Dob extends React.Component {
          "appLogo": true
        },
        index: 2,
+       obsidian: true,
        numCircles: 4
      };
 
@@ -160,7 +161,6 @@ class Dob extends React.Component {
                   width: 224,
                   backgroundColor: colors.obsidianInput,
                   paddingLeft: 0,
-                  fontFamily: "Roboto",
                   fontWeight: "100",
                   fontSize: 15,
                   color: "white",

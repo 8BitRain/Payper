@@ -17,6 +17,7 @@ import * as Firebase from '../../../services/Firebase';
 import Header from '../../../components/Header/Header';
 import ArrowNav from '../../../components/Navigation/Arrows/ArrowDouble';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Loading from '../../../components/Loading/Loading';
 
 // Stylesheets
 import backgrounds from '../styles/backgrounds';
@@ -64,6 +65,7 @@ class SSN extends React.Component {
          "appLogo" : true
        },
        index: 3,
+       obsidian: true,
        numCircles: 4
      };
 
@@ -135,6 +137,10 @@ class SSN extends React.Component {
      var _this = this;
      Init.createCustomer(data, function(customerCreated){
        console.log("CustomerCreated?: " + customerCreated);
+       //Loading Screen to IAV
+       if(customerCreated){
+          _this.props.dispatchSetLoading(true);
+       }
        //Grab UId
        Async.get('user', (val) => {
            console.log("User: " + val);
@@ -149,7 +155,7 @@ class SSN extends React.Component {
      });
    }
 
-   initiateIAV(token, _this){
+   /*initiateIAV(token, _this){
       var data = {
         token: token
       };
@@ -159,10 +165,11 @@ class SSN extends React.Component {
         if(iavTokenRecieved){
           console.log("SSN IAVTOKEN: " + JSON.stringify(iavToken));
           //Will cause the IAV Token Page to be loaded
+          _this.props.dispatchSetLoading(true);
           _this.props.dispatchSetIav(iavToken.token);
         }
       });
-   }
+   }*/
 
    _showLoadingScreen() {
      this.setState({ loading: true });
@@ -217,6 +224,17 @@ class SSN extends React.Component {
                 </Text>
               </Animated.View>
             : null }
+         {/*<Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
+            <Loading
+              complete={this.props.done_loading}
+              msgSuccess={""}
+              msgError={"There was an error on our end. Sorry about that ^_^;"}
+              msgLoading={"One moment..."}
+              success={true}
+              successDestination={() => {console.log("SucessfullLoading")}}
+              errorDestination={() => {console.log("temp loading screen")}}
+            />
+         </Modal>*/}
        </View>
      );
    }

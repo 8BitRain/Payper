@@ -11,8 +11,7 @@ const initialState = Map({
 
 // Action types
 const SET_PROVIDER = 'SET_PROVIDER',
-      SET_NEWUSER_TOKEN = 'SET_NEWUSER_TOKEN';
-
+      SET_NEWUSER_TOKEN = 'SET_NEWUSER_TOKEN'
 // Action creators
 
 export function setProvider(input) {
@@ -22,6 +21,7 @@ export function setProvider(input) {
 export function setNewUserToken(input) {
   return { type: SET_NEWUSER_TOKEN, input: input };
 };
+
 
 
 

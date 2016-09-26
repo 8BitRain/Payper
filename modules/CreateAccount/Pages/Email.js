@@ -51,6 +51,7 @@ class Email extends React.Component {
          "backIcon": false
        },
        index: 0,
+       obsidian: true,
        numCircles: 6,
        backgroundColor: "#1E1F20"
      };

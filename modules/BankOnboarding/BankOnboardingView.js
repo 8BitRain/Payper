@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, WebView, Linking} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Image, WebView, Linking, Modal} from "react-native";
 import Button from "react-native-button";
-import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
+import {Scene, Reducer, Router, Switch, TabBar, Schema, Actions} from 'react-native-router-flux';
 import * as Animations from "../../helpers/animations";
 import * as Validators from "../../helpers/validators";
 import * as Firebase from "../../services/Firebase";
@@ -34,16 +34,15 @@ class LoadingView extends React.Component {
     super(props);
 
     this.state = {
-      loading: false,
-      doneLoading: false,
-      signInSuccess: false,
+      modalVisible: false
     }
   }
 
   render() {
+
     return(
       <Loading
-        complete={true}
+        complete={this.state.doneLoading}
         msgSuccess={"Welcome!"}
         msgError={""}
         msgLoading={"Loading"}
@@ -74,9 +73,6 @@ class RetryModal extends React.Component {
       title: "Retry Status",
       numCircles: 0
     };
-    this.state = {
-
-    }
 
     this.callbackClose = function() { this.props.callbackClose() };
   }
@@ -87,7 +83,7 @@ class RetryModal extends React.Component {
           <View style={{marginTop: 100}}>
           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 0}]}>Please double check the information you provided us. Closing this screen will take you back to the input fields. </Text>
           </View>
-            <Header callbackClose={() => {this.props.dispatchSetPageX(0, "backward", null); this.props.dispatchSetRetry(false); }} headerProps={this.headerProps} />
+            <Header callbackClose={() => {this.props.dispatchSetPageX(0, "backward", null); this.props.dispatchSetLoading(false); this.props.dispatchSetFullSSN(true); this.props.dispatchSetRetry(false); }} headerProps={this.headerProps} />
       </View>
     )
   }
@@ -113,9 +109,7 @@ class DocumentModal extends React.Component {
       title: "Additional Documents Required",
       numCircles: 0
     };
-    this.state = {
 
-    }
 
     this.callbackClose = function() { this.props.callbackClose() };
   }
@@ -154,9 +148,7 @@ class SuspendedModal extends React.Component {
       title: "Suspended Account",
       numCircles: 0
     };
-    this.state = {
 
-    }
   }
 
   render() {
@@ -193,10 +185,12 @@ class BankOnboardingView extends React.Component {
       );
     }
 
-    if(this.props.loading){
+    /*if(this.props.loading){
       return(
+
         <Loading
           complete={this.props.doneLoading}
+          provider={"to_iav"}
           msgSuccess={""}
           msgError={"There was an error on our end. Sorry about that ^_^;"}
           msgLoading={"One moment..."}
@@ -204,16 +198,37 @@ class BankOnboardingView extends React.Component {
           successDestination={() => {console.log("SucessfullLoading")}}
           errorDestination={() => {console.log("temp loading screen")}} />
       );
-    }
+
+    }*/
     if(this.props.startIav == '' && this.props.startMain == false && !this.props.retry && !this.props.document && !this.props.suspended){
         //this.props.dispatchSetFirebaseToken("eyJhbGciOiJSUzI1NiIsImtpZCI6ImI2MjVmZTczN2YwMTJmZTNmZDgzMjYyZjIxOGE1NTI1MjVmNTExNWYifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmlyZWJhc2UtY29pbmNhc3QiLCJhdWQiOiJmaXJlYmFzZS1jb2luY2FzdCIsImF1dGhfdGltZSI6MTQ3MDM0MDk4NiwidXNlcl9pZCI6Im4zb3puRFJ2bUJib3Z0N1ZpbVdOcHRaUlhScTEiLCJzdWIiOiJuM296bkRSdm1CYm92dDdWaW1XTnB0WlJYUnExIiwiaWF0IjoxNDcwMzQwOTg3LCJleHAiOjE0NzAzNDQ1ODcsImVtYWlsIjoidGVzdGVyM0B3aXNjLmVkdSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJ0ZXN0ZXIzQHdpc2MuZWR1IiwidGVzdGVyM0B3aXNjLmVkdSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.luyfhUg6wCx0g8T4jcHeU-LhJsoH_jlU5vvoKzfUVZyZm9C8gT2LxXD_MJjwGkGHzWa7kiVTt7FV0-BLX4t884XSJHPjBummJNnwWINgvbOROj7wkIMK15ZfQe149iGcXDQTJls3JEqfc9u_Iy87IX79Nm5SEnhe8UhS-UR0XP5wbXVygIfKPj4q3Ssp5ap-cs78b0p1M1-f49mUg1bcG3Lzc4wg5PVMGyxhQeu6KCiD_Aj3uyBYlW5bRCSXIHkGOUJCKxSAjYedroxC4xsFwMPEqjN1s49mnT3XZvetRUO4piShDSXYbtd_JKJrFdo-Bs9NyzLOHO56MNGQndhplw");
         switch(this.props.currentPagex){
           case 0:
-            return(
-              <Comfort
-              dispatchSetPageX={this.props.dispatchSetPageX}
-              />
-            )
+            if(this.props.loading){
+              console.log("LOADING");
+              return(
+                <View style={{flex: 1, backgroundColor: colors.accent}}>
+                <Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
+                 <Loading
+                   complete={this.props.done_loading}
+                   msgSuccess={""}
+                   msgError={"There was an error on our end. Sorry about that ^_^;"}
+                   msgLoading={"One moment..."}
+                   success={true}
+                   successDestination={() => {console.log("SucessfullLoading")}}
+                   errorDestination={() => {console.log("temp loading screen")}}
+                 />
+                </Modal>
+                </View>
+              )
+            } else {
+              console.log("NOT LOADING");
+              return(
+                <Comfort
+                  dispatchSetPageX={this.props.dispatchSetPageX}/>
+              )
+            }
+
             break;
           case 1:
             return(
@@ -270,6 +285,7 @@ class BankOnboardingView extends React.Component {
             break;
           case 4:
             return(
+              <View style={{flex: 1}}>
               <SSN
                 dispatchSetSSN={this.props.dispatchSetSSN}
                 dispatchSetPageX={this.props.dispatchSetPageX}
@@ -282,7 +298,12 @@ class BankOnboardingView extends React.Component {
                 listen={this.props.listen}
                 stopListening={this.props.stopListening}
                 activeFirebaseListeners={this.props.activeFirebaseListeners}
+                dispatchSetLoading={this.props.dispatchSetLoading}
+                loading={this.props.loading}
+                done_loading={this.props.done_loading}
+                fullSSN={this.props.fullSSN}
               />
+              </View>
             )
             break;
         }
@@ -292,6 +313,18 @@ class BankOnboardingView extends React.Component {
       console.log("IAV: " + this.props.startIav);
 
       return(
+        <View style={{flex: 1}}>
+        <Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
+         <Loading
+           complete={this.props.done_loading}
+           msgSuccess={""}
+           msgError={"There was an error on our end. Sorry about that ^_^;"}
+           msgLoading={"One moment..."}
+           success={true}
+           successDestination={() => {console.log("SucessfullLoading")}}
+           errorDestination={() => {console.log("temp loading screen")}}
+         />
+        </Modal>
         <Iav
           listen={this.props.listen}
           stopListening={this.props.stopListening}
@@ -301,7 +334,10 @@ class BankOnboardingView extends React.Component {
           startMain={this.props.startMain}
           dispatchSetLoading={this.props.dispatchSetLoading}
           dispatchSetDoneLoading={this.props.dispatchSetDoneLoading}
+          loading={this.props.loading}
+          done_loading={this.props.done_loading}
           />
+        </View>
       )
     }
     if(this.props.startMain == true){
@@ -314,7 +350,10 @@ class BankOnboardingView extends React.Component {
     if(this.props.retry){
       return (
         <RetryModal dispatchSetRetry={this.props.dispatchSetRetry}
-        dispatchSetPageX={this.props.dispatchSetPageX}/>
+        dispatchSetPageX={this.props.dispatchSetPageX}
+        dispatchSetFullSSN={this.props.dispatchSetFullSSN}
+        dispatchSetLoading={this.props.dispatchSetLoading}
+        />
       )
     }
     if(this.props.document){

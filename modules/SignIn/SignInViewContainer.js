@@ -52,6 +52,7 @@ class SignInView extends React.Component {
         "backIcon": false,
         "appLogo": true
       },
+      obsidian: true,
       index: 0,
       numCircles: 0
     };

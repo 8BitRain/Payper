@@ -19,6 +19,10 @@
 		079D26581D430BD2000F7943 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 079D26551D430BD2000F7943 /* FBSDKCoreKit.framework */; };
 		079D26591D430BD2000F7943 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 079D26561D430BD2000F7943 /* FBSDKLoginKit.framework */; };
 		079D265A1D430BD2000F7943 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 079D26571D430BD2000F7943 /* FBSDKShareKit.framework */; };
+		07A813B41D93086700E432B3 /* BlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A813B11D93086700E432B3 /* BlurView.m */; };
+		07A813B51D93086700E432B3 /* BlurViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A813B31D93086700E432B3 /* BlurViewManager.m */; };
+		07A813BA1D93089900E432B3 /* VibrancyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A813B71D93089900E432B3 /* VibrancyView.m */; };
+		07A813BB1D93089900E432B3 /* VibrancyViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 07A813B91D93089900E432B3 /* VibrancyViewManager.m */; };
 		07B9410F1D39B22F001AD244 /* libReact-Native-Webview-Bridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 07B940E11D39A689001AD244 /* libReact-Native-Webview-Bridge.a */; };
 		07E535591D9065D300209808 /* libSMXCrashlytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 07E535581D9065A100209808 /* libSMXCrashlytics.a */; };
 		07E535601D906D3300209808 /* libCodePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 07E5355F1D906D2400209808 /* libCodePush.a */; };
@@ -204,6 +208,14 @@
 		079D26551D430BD2000F7943 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../../FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		079D26561D430BD2000F7943 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../../FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		079D26571D430BD2000F7943 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = ../../../../FacebookSDK/FBSDKShareKit.framework; sourceTree = "<group>"; };
+		07A813B01D93086700E432B3 /* BlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlurView.h; sourceTree = "<group>"; };
+		07A813B11D93086700E432B3 /* BlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlurView.m; sourceTree = "<group>"; };
+		07A813B21D93086700E432B3 /* BlurViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlurViewManager.h; sourceTree = "<group>"; };
+		07A813B31D93086700E432B3 /* BlurViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlurViewManager.m; sourceTree = "<group>"; };
+		07A813B61D93089900E432B3 /* VibrancyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VibrancyView.h; sourceTree = "<group>"; };
+		07A813B71D93089900E432B3 /* VibrancyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VibrancyView.m; sourceTree = "<group>"; };
+		07A813B81D93089900E432B3 /* VibrancyViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VibrancyViewManager.h; sourceTree = "<group>"; };
+		07A813B91D93089900E432B3 /* VibrancyViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VibrancyViewManager.m; sourceTree = "<group>"; };
 		07B940DC1D39A689001AD244 /* React-Native-Webview-Bridge.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "React-Native-Webview-Bridge.xcodeproj"; path = "../node_modules/react-native-webview-bridge/ios/React-Native-Webview-Bridge.xcodeproj"; sourceTree = "<group>"; };
 		07E535431D9065A000209808 /* SMXCrashlytics.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SMXCrashlytics.xcodeproj; path = "../node_modules/react-native-fabric/ios/SMXCrashlytics.xcodeproj"; sourceTree = "<group>"; };
 		07E5355A1D906D2400209808 /* CodePush.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CodePush.xcodeproj; path = "../node_modules/react-native-code-push/ios/CodePush.xcodeproj"; sourceTree = "<group>"; };
@@ -363,6 +375,28 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		07A813AE1D93083A00E432B3 /* RNBlur */ = {
+			isa = PBXGroup;
+			children = (
+				07A813B01D93086700E432B3 /* BlurView.h */,
+				07A813B11D93086700E432B3 /* BlurView.m */,
+				07A813B21D93086700E432B3 /* BlurViewManager.h */,
+				07A813B31D93086700E432B3 /* BlurViewManager.m */,
+			);
+			name = RNBlur;
+			sourceTree = "<group>";
+		};
+		07A813AF1D93084400E432B3 /* RNVibrancy */ = {
+			isa = PBXGroup;
+			children = (
+				07A813B61D93089900E432B3 /* VibrancyView.h */,
+				07A813B71D93089900E432B3 /* VibrancyView.m */,
+				07A813B81D93089900E432B3 /* VibrancyViewManager.h */,
+				07A813B91D93089900E432B3 /* VibrancyViewManager.m */,
+			);
+			name = RNVibrancy;
+			sourceTree = "<group>";
+		};
 		07B940DD1D39A689001AD244 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -493,6 +527,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				07A813AF1D93084400E432B3 /* RNVibrancy */,
+				07A813AE1D93083A00E432B3 /* RNBlur */,
 				232A65CC1D03D74E0084EA8E /* Roboto-Bold.ttf */,
 				232A65CD1D03D74E0084EA8E /* Roboto-Light.ttf */,
 				232A65CE1D03D74E0084EA8E /* Roboto-Medium.ttf */,
@@ -617,7 +653,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 9MXT88RAVX;
+						DevelopmentTeam = 943498UXPL;
 					};
 				};
 			};
@@ -965,6 +1001,10 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				07A813B41D93086700E432B3 /* BlurView.m in Sources */,
+				07A813B51D93086700E432B3 /* BlurViewManager.m in Sources */,
+				07A813BB1D93089900E432B3 /* VibrancyViewManager.m in Sources */,
+				07A813BA1D93089900E432B3 /* VibrancyView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1070,7 +1110,7 @@
 					"-lc++",
 					"-licucore",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Payper;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.PayperAura;
 				PRODUCT_NAME = Payper;
 				PROVISIONING_PROFILE = "";
 			};
@@ -1106,7 +1146,7 @@
 					"-lc++",
 					"-licucore",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Payper;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.PayperAura;
 				PRODUCT_NAME = Payper;
 				PROVISIONING_PROFILE = "";
 			};

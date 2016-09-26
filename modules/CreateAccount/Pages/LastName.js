@@ -44,6 +44,7 @@ class LastName extends React.Component {
        "appLogo": true
      },
      index: 3,
+     obsidian: true,
      numCircles: 6
    };
 

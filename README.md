@@ -133,6 +133,10 @@
 - [ ] Refactor entire sign-in process (follow another React Native app's example)
 - [ ] Fix bug where, when you accept or reject a payment request, your incoming tab becomes populated with the other party's incoming payments (must recreate first)
 
+### Bugs (Eric)
+- [] Fix padding on state picker in Address.js
+- [] Fix returning back to app after completing bank onboarding from "add account route"
+
 ### Things I Need Vash For (Brady)
 - [X] Fix bug where inviting via payment exits before completing request
 - [X] Attach "type" to Firebase payment object when creating a new payment
