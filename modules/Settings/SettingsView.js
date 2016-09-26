@@ -44,21 +44,6 @@ class Settings extends React.Component {
       {rowTitle: "Sign Out", iconName: "moon", destination: this.props.signout},
     ];
 
-    if (this.props.currentUser.provider == "payper") {
-      this.sideMenuButtons.push(
-        {rowTitle: "Delete Account", iconName: "trash", destination: () => {
-          Alert.confirmation({
-            title: "Delete Account",
-            message: "Are you sure you'd like to delete your account? This CANNOT be undone!",
-            cancelMessage: "Nevermind",
-            confirmMessage: "Yes, delete my account",
-            cancel: () => console.log("Nevermind"),
-            confirm: () => { this.props.signout(); Init.deleteUser({ token: this.props.currentUser.token, uid: this.props.currentUser.uid }) },
-          });
-        }}
-      );
-    }
-
     this.state = {
       dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(this.sideMenuButtons),
     }
@@ -84,7 +69,7 @@ class Settings extends React.Component {
           onPress={() => options.destination()}>
           <View style={styles.row}>
 
-            <Entypo style={styles.icon} name={options.iconName} size={20} color={(options.rowTitle == "Delete Account") ? colors.alertRed : colors.accent} />
+            <Entypo style={styles.icon} name={options.iconName} size={20} color={colors.accent} />
             <Text style={styles.rowTitle}>{ options.rowTitle }</Text>
 
             { /* Render unseen notifications indicator */

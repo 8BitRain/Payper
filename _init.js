@@ -18,7 +18,8 @@ import * as Firebase from './services/Firebase';
 import * as Lambda from './services/Lambda';
 import * as Async from './helpers/Async';
 import { Actions } from 'react-native-router-flux';
-
+const FBSDK = require('react-native-fbsdk');
+const { LoginManager } = FBSDK;
 
 /**
   *   Sign in with session token. Upon success, initialize app
@@ -262,6 +263,15 @@ export function getIavToken(data, callback){
 **/
 export function signout() {
 
+  // Sign out of Facebook (if signed in with Facebook)
+  LoginManager.logOut(function(err, data) {
+    if (err) {
+      console.log(err, data);
+    } else {
+      console.log("Facebook signout was a success!");
+    }
+  });
+
   // Sign out of Firebase
   Firebase.signOut(() => {
     Async.set('session_token', '');
@@ -275,8 +285,10 @@ export function signout() {
   *   Delete the specified user
 **/
 export function deleteUser(options, callback) {
+  Firebase.deleteUser();
+  // Remove user info from Firebase database
   Lambda.deleteUser(options, (success) => {
-    console.log("%cDelete user success: " + success, "color:blue;font-weight:900;");
+    console.log("%cDelete user success (Lambda): " + success, "color:blue;font-weight:900;");
     if (typeof callback == 'function') callback(success);
     else console.log("%cCallback is not a function.", "color:red;font-weight:900;");
   });

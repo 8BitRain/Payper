@@ -1,6 +1,7 @@
 // Dependencies
 import React from 'react';
 import { View, Text, Dimensions, StyleSheet, Modal, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Button, StatusBar } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 
 // Helper functions
 import * as Lambda from '../../services/Lambda';
@@ -9,6 +10,7 @@ import * as StringMaster5000 from '../../helpers/StringMaster5000';
 import * as SetMaster5000 from '../../helpers/SetMaster5000';
 import * as Headers from '../../helpers/Headers';
 import * as Alert from '../../helpers/Alert';
+import * as Init from '../../_init';
 
 // Partial components
 import Header from '../../components/Header/Header';
@@ -53,7 +55,7 @@ class Profile extends React.Component {
           title: "Display Name",
           content: this.props.currentUser.first_name + " " + this.props.currentUser.last_name,
           info: "This is not currently editable."
-        })},
+      })},
       { rowTitle: "Username",
         rowContent: this.props.currentUser.username,
         sectionTitle: "My Profile",
@@ -61,7 +63,7 @@ class Profile extends React.Component {
           title: "Username",
           content: this.props.currentUser.username,
           info: "This is not currently editable."
-        })},
+      })},
       { rowTitle: "Phone Number",
         rowContent: StringMaster5000.stylizePhoneNumber(this.props.currentUser.decryptedPhone),
         sectionTitle: "My Profile",
@@ -69,7 +71,7 @@ class Profile extends React.Component {
           title: "Phone Number",
           content: this.props.currentUser.decryptedPhone,
           info: "Other Payper users will be able to find you by your phone number. We will not give your phone number away."
-        })},
+      })},
       { rowTitle: "Email",
         rowContent: this.props.currentUser.decryptedEmail,
         sectionTitle: "My Profile",
@@ -77,7 +79,12 @@ class Profile extends React.Component {
           title: "Email",
           content: this.props.currentUser.decryptedEmail,
           info: "Your email address is used for password recovery and identity verification. Nobody can see this address but you."
-        })},
+      })},
+      { rowTitle: "Delete Account",
+        rowContent: "",
+        sectionTitle: "My Profile",
+        destination: () => this._deleteUser(),
+      },
     ];
 
     // Populate blocked users, if any
@@ -103,6 +110,24 @@ class Profile extends React.Component {
         info: "",
       },
     };
+  }
+
+  _deleteUser() {
+    const _this = this;
+
+    Alert.confirmation({
+      title: "Delete Account",
+      message: "Are you sure you'd like to delete your account? This CANNOT be undone!",
+      cancelMessage: "Nevermind",
+      confirmMessage: "Yes, delete my account",
+      cancel: () => console.log("Nevermind"),
+      confirm: () => {
+        console.log("Deleting user with params:", { token: _this.props.currentUser.token, uid: _this.props.currentUser.uid });
+        Init.signout();
+        Init.deleteUser({ token: _this.props.currentUser.token, uid: _this.props.currentUser.uid });
+        Actions.LandingScreenContainer();
+      },
+    });
   }
 
   _unblockUser(user) {
@@ -205,9 +230,11 @@ class Profile extends React.Component {
           </View>
           <View style={{flex: 0.5, flexDirection: 'row', justifyContent: 'flex-end'}}>
             <Text>{ row.rowContent }</Text>
-            <View style={{borderColor: colors.accent, borderWidth: 1.0, padding: 3, borderRadius: 3, marginLeft: 10}}>
-              <Text style={{fontFamily: 'Roboto', fontSize: 10}}>{ (row.sectionTitle == "Blocked Users") ? "Unblock" : (row.rowContent) ? "Edit" : "Add" }</Text>
-            </View>
+            { (row.rowContent)
+                ? <View style={{borderColor: colors.accent, borderWidth: 1.0, padding: 3, borderRadius: 3, marginLeft: 10}}>
+                    <Text style={{fontFamily: 'Roboto', fontSize: 10}}>{ (row.sectionTitle == "Blocked Users") ? "Unblock" : "Edit" }</Text>
+                  </View>
+                : null }
           </View>
         </View>
 
