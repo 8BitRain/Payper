@@ -103,6 +103,12 @@ function mapDispatchToProps(dispatch) {
               // Extract just the phone numbers, then update user's contactList
               var numbers = SetMaster5000.contactsArrayToNumbersArray(c);
               Lambda.updateContacts({ phoneNumbers: numbers, token: parsedUser.token });
+
+              var parsedContacts = SetMaster5000.parseNativeContactList({
+                phoneNumbers: numbers,
+                contacts: c,
+              });
+              console.log("Filtered contacts:", parsedContacts);
             }
           });
 

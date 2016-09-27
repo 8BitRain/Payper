@@ -247,3 +247,18 @@ export function prioritizePayments(options) {
 
   return prioritizedPayments.concat(options.payments);
 };
+
+
+/**
+  *   Given an array of phone numbers and an array of contacts, remove
+  *   all instances of the phone numbers from the contacts array
+**/
+export function parseNativeContactList(options) {
+  if (!options.phoneNumbers || !options.contacts || options.phoneNumbers.length == 0 || options.contacts.length == 0) return;
+
+  for (var c in options.contacts)
+    if (_.includes(options.phoneNumbers, options.contacts[c].phone))
+      options.contacts.splice(c, 1);
+
+  return options.contacts;
+}

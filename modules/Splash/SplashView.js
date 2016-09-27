@@ -1,7 +1,8 @@
 // Dependencies
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, NetInfo, TouchableHighlight, Animated, Easing } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import Entypo from 'react-native-vector-icons/Entypo';
 var FBLoginManager = require('NativeModules').FBLoginManager;
 
 // Helpers
@@ -14,6 +15,27 @@ import colors from '../../styles/colors';
 class SplashView extends React.Component {
   constructor(props) {
     super(props);
+
+    this.refreshIconInterpolator = new Animated.Value(0);
+
+    this.state = {
+      connected: true,
+      reconnecting: false,
+      refreshIconAngle: this.refreshIconInterpolator.interpolate({
+        inputRange: [0, 100],
+        outputRange: ['0deg', '360deg'],
+      }),
+    };
+  }
+
+  _rotateRefreshIcon() {
+    Animated.timing(this.refreshIconInterpolator, {
+      toValue: 100,
+      duration: 900,
+      easing: Easing.elastic(1),
+    }).start(() => {
+      this.refreshIconInterpolator.setValue(0);
+    });
   }
 
   _handleSignInSuccess() {
@@ -26,20 +48,33 @@ class SplashView extends React.Component {
     Actions.LandingScreenContainer();
   }
 
-  // Try to sign in with session token. If none is present, take the user to
-  // the landing screen.
+  _attemptReconnect() {
+    if (this.state.reconnecting) return;
 
-  /**
-    *   Check if user has already entered their beta credentials.
-    *     => if yes, take them through typical app flow
-    *     => if no, take them to the beta lander
-  **/
-  componentWillMount() {
+    this.setState({
+      reconnecting: true,
+      reconnectMessage: "Attempting connection...",
+    });
+
+    this._rotateRefreshIcon();
+    var interval = setInterval(() => this._rotateRefreshIcon(), 900);
+
+    NetInfo.isConnected.fetch().then(isConnected => {
+      clearInterval(interval);
+      if (isConnected) this._onConnect();
+      else this._onDisconnect();
+    });
+  }
+
+  _onConnect() {
+    this.setState({ connected: true });
+
+    // Extend scope
+    const _this = this;
+
+    // Check beta status
     Async.get('betaStatus', (val) => {
       if (val == "fullAccess") {
-        // Extend scope
-        const _this = this;
-
         Init.signInWithToken(function(signedIn) {
 
           // Session token was valid. Sign in succeeded
@@ -64,12 +99,49 @@ class SplashView extends React.Component {
     });
   }
 
+  _onDisconnect() {
+    this.setState({ connected: false });
+  }
+
+  componentWillMount() {
+    NetInfo.isConnected.fetch().then((connected) => {
+      if (connected) this._onConnect();
+      else this._onDisconnect();
+    });
+  }
+
   render() {
     return(
       <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent}}>
-        <Text style={{fontFamily: 'Roboto', fontSize: 40, fontWeight: '300', color: colors.white}}>
-          Payper
-        </Text>
+        { (this.state.connected)
+            ? <Text style={{fontFamily: 'Roboto', fontSize: 40, fontWeight: '300', color: colors.white}}>
+                { "Payper" }
+              </Text>
+            : <View>
+                <Text style={{fontFamily: 'Roboto', fontSize: 24, fontWeight: '300', color: colors.white, padding: 15, textAlign: 'center'}}>
+                  { (this.state.reconnecting)
+                      ? "Reconnecting..."
+                      : "Error establishing\nconnection 🙄" }
+                </Text>
+
+                <TouchableHighlight
+                  underlayColor={colors.accent}
+                  activeOpacity={0.8}
+                  onPress={() => this._attemptReconnect()}>
+
+                  <View>
+                    <Animated.View style={{ transform: [{ rotate: this.state.refreshIconAngle }] }}>
+                      <Entypo style={{ alignSelf: 'center' }} name={"cycle"} size={32} color={colors.white} />
+                    </Animated.View>
+
+                    { (this.state.reconnecting)
+                        ? null
+                        : <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '300', color: colors.white, padding: 8, textAlign: 'center' }}>
+                            { "Tap to retry" }
+                          </Text> }
+                  </View>
+                </TouchableHighlight>
+              </View> }
       </View>
     );
   }
