@@ -51,21 +51,17 @@ class FundingSources extends React.Component {
       this.props.setLoading(true);
       Init.getIavToken(data, function(iavTokenRecieved, iavToken) {
         if (iavTokenRecieved) {
-
           _this.props.setIav(iavToken.token);
         }
       });
     }
   }
 
-  // Generate rows for the list view
   _genRows() {
     if (!this.props.fundingSourcesDataSource || this.props.fundingSourcesArray.length == 0) return;
     this.setState({ empty: false });
   }
 
-
-  //  Return a list of ready to render rows
   _renderRow(f) {
     return(
       <FundingSource
@@ -75,8 +71,6 @@ class FundingSources extends React.Component {
     );
   }
 
-
-  // Returns a ready-to-render notification ListView
   _getFundingSourceList() {
     console.log("Data source:", this.props.fundingSourcesDataSource);
     return(
@@ -89,7 +83,6 @@ class FundingSources extends React.Component {
       </View>
     );
   }
-
 
   /**
     *   Returns a ready-to-render empty state view
@@ -129,7 +122,6 @@ class FundingSources extends React.Component {
               Add a new bank acount
             </Text>
           </View>
-
         </TouchableHighlight>
 
         { /* Render list of notifications or empty state */
@@ -148,7 +140,6 @@ class FundingSources extends React.Component {
           <View style={{flex: 1.0}}>
             <BankOnboarding
               {...this.props}
-              skipCustomerCreation
               toggleModal={(options) => this._toggleModal(options)} />
           </View>
 

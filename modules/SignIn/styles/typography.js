@@ -1,5 +1,6 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import colors from "../../../styles/colors";
+const dimensions = Dimensions.get('window');
 
 const typography = StyleSheet.create({
   // General typography styles
@@ -22,28 +23,29 @@ const typography = StyleSheet.create({
 
   // Varying font sizes (ex. "What's your email?")
   fontSizeTitle: { fontSize: 20,  color: "#F4F4F9" },
-  fontSizeNote: { fontSize: 10,  },
-  fontSizeError: { fontSize: 15},
+  fontSizeNote: { fontSize: 10 },
+  fontSizeError: { fontSize: 15 },
 
   textInput: {
     height: 60,
-    width: 224,
+    width: dimensions.width - 80,
     backgroundColor: colors.obsidianInput,
     paddingLeft: 0,
     color: "#99ECFB",
     fontFamily: "Roboto",
-    fontWeight: "100",
-    fontSize: 15,
+    fontWeight: "200",
+    fontSize: 16,
     color: colors.white,
     textAlign: "center",
-    alignSelf: "center"
+    borderRadius: 3,
+    overflow: 'hidden',
+    marginBottom: 15
   },
 
   stateInput: {
     height: 200,
     color: "black",
     fontSize: 25,
-
   },
 
   stateInput2: {

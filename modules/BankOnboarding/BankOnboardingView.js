@@ -170,21 +170,6 @@ class BankOnboardingView extends React.Component {
   }
 
   render() {
-    if (this.props.skipCustomerCreation) {
-      return(
-        <Iav
-          listen={this.props.listen}
-          stopListening={this.props.stopListening}
-          activeFirebaseListeners={this.props.activeFirebaseListeners}
-          newUser={this.props.newUser}
-          startIav={this.props.startIav}
-          startMain={this.props.startMain}
-          dispatchSetLoading={this.props.dispatchSetLoading}
-          dispatchSetDoneLoading={this.props.dispatchSetDoneLoading}
-          />
-      );
-    }
-
     /*if(this.props.loading){
       return(
 

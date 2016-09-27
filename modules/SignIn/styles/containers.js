@@ -7,7 +7,9 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const containers = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    width: dimensions.width,
+    height: dimensions.height,
   },
   contentContainer: {
     flex: 1,

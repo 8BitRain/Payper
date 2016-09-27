@@ -1,30 +1,27 @@
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, DeviceEventEmitter, Image, Picker, Modal, TouchableHighlight} from "react-native";
+import {View, Text, TextInput, StyleSheet, Animated, Easing, DeviceEventEmitter, Image, Picker, Modal, TouchableHighlight, TouchableWithoutFeedback, Dimensions} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Schema, Actions} from 'react-native-router-flux';
 import Entypo from "react-native-vector-icons/Entypo";
 var Mixpanel = require('react-native-mixpanel');
+const { State: TextInputState } = TextInput;
+const dismissKeyboard = require('dismissKeyboard');
 
 // Custom helper functions
 import * as Animations from "../../../helpers/animations";
 import * as Validators from "../../../helpers/validators";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
 var Mixpanel = require('react-native-mixpanel');
-//import SimplePicker from "react-native-simple-picker";
 
 // Custom components
 import Header from "../../../components/Header/Header";
 import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 
-
 // Stylesheets
 import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
-import { Dimensions } from 'react-native';
-
-
-
+const dimensions = Dimensions.get('window');
 
 class Address extends React.Component {
    constructor(props) {
@@ -151,12 +148,12 @@ class Address extends React.Component {
 
      this.state = {
       state_index: 0,
-      modalVisible: false
-     }
-
-
+      modalVisible: false,
+      focusedInput: "",
+    };
 
     this.kbOffset = new Animated.Value(0);
+    this.inputOffsetBottom = new Animated.Value(0);
 
      //Address, City, State, Zi
      this.addressInput = this.props.dwollaCustomer.address;
@@ -164,8 +161,6 @@ class Address extends React.Component {
      this.stateInput = this.props.dwollaCustomer.state;
      this.stateIndex = 0
      this.zipInput = this.props.dwollaCustomer.zip;
-
-
 
      // Props to be passed to the header
      this.headerProps = {
@@ -201,24 +196,73 @@ class Address extends React.Component {
   }
 
    _keyboardWillShow(e) {
-     Animated.spring(this.kbOffset, {
-       toValue: e.endCoordinates.height,
-       friction: 6
-     }).start();
+     // Extend scope
+     const _this = this;
+
+     // Determine which TextInput ref to measure
+     var refToMeasure;
+     switch (this.state.focusedInput) {
+       case "addressInput": refToMeasure = this.refs.addressInput;
+       break;
+       case "cityInput": refToMeasure = this.refs.cityInput;
+       break;
+       case "stateInput": refToMeasure = this.refs.stateInput;
+       break;
+       case "zipInput": refToMeasure = this.refs.zipInput;
+       break;
+     }
+
+     // Shift the input wrap
+     refToMeasure.measureInWindow((x, y, width, height) => {
+       var kbHeight = e.endCoordinates.height; // Account for 'Continue' button
+       var offsetBottom = dimensions.height - y - height;
+       var diff = kbHeight - offsetBottom;
+
+       console.log("Keyboard height:", kbHeight);
+       console.log("Offset bottom:", offsetBottom);
+       console.log("Diff:", diff);
+
+       if (diff > -30) {
+         Animated.timing(this.inputOffsetBottom, {
+           toValue: (kbHeight + height + 70), // Account for 'Continue' button
+           duration: 200,
+           easing: Easing.elastic(1),
+         }).start();
+       }
+     });
+
+     if (this.state.focusedInput == "zipInput") {
+       Animated.spring(this.kbOffset, {
+         toValue: e.endCoordinates.height,
+         friction: 6
+       }).start();
+     } else {
+       Animated.spring(this.kbOffset, {
+         toValue: 0,
+         friction: 6
+       }).start();
+     }
    }
 
    _keyboardWillHide(e) {
-     Animated.spring(this.kbOffset, {
-       toValue: 0,
-       friction: 6
-     }).start();
+     Animated.parallel([
+       Animated.timing(this.inputOffsetBottom, {
+         toValue: 0,
+         duration: 200,
+         easing: Easing.elastic(1),
+       }),
+       Animated.spring(this.kbOffset, {
+         toValue: 0,
+         friction: 6
+       }),
+     ]).start();
    }
 
    componentDidMount() {
      _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
      _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
       Animations.fadeIn(this.animationProps);
-      console.log(Object.keys(this.state_list));
+    console.log(Object.keys(this.state_list));
    }
 
    componentWillUnmount() {
@@ -230,114 +274,92 @@ class Address extends React.Component {
      const newState = {};
      newState['state_index'] = value;
      this.setState(newState);
-     //Dispatch the state code for states
+     //  Dispatch the state code for states
      this.props.dispatchSetState(Object.values(this.state_list)[value]);
    }
 
 
    render() {
      return (
+       <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
+         <View style={[containers.container, backgrounds.email]}>
+          <Modal
+            animationType={"slide"}
+            transparent={true}
+            visible={this.state.modalVisible}>
+             <View style={[containers.modalPickerContanier]}>
+              <View style={{backgroundColor: "white", height: 45, alignItems: "flex-end", borderBottomColor: "#d8d8d8", borderBottomWidth: 1, justifyContent: "center",}}>
+                <Button onPress={() => {
+                  console.log("Closing modal...");
+                  this._setModalVisible(false);
+                }}>
+                  <Text style={{color: "black", fontSize: 15, fontWeight: "bold", marginRight:  15}}>Submit</Text>
+                </Button>
+              </View>
 
-       <View style={[containers.container, backgrounds.email]}>
-        <Modal
-           animationType={"slide"}
-           transparent={true}
-           visible={this.state.modalVisible}
-         >
-           <View style={[containers.modalPickerContanier]}>
-            <View style={{backgroundColor: "white", height: 45, alignItems: "flex-end", borderBottomColor: "#d8d8d8", borderBottomWidth: 1, justifyContent: "center",}}>
-              <Button onPress={() => {this._setModalVisible(false)}}><Text style={{color: "black", fontSize: 15, fontWeight: "bold", marginRight:  15}}>Submit</Text></Button>
-            </View>
+              <Picker
+               style={[ {backgroundColor: "white", height: 450}, ]}
+               selectedValue={this.state.state_index}
+               itemStyle={[typography.stateInput]}
+               onValueChange={(text) => { this.onValueChange(text); console.log("State Index: " + this.state.state_index); console.log(Object.keys(this.state_list)[text]); }}>
 
-            <Picker
-             style={[ {backgroundColor: "white", height: 450}, ]}
-             selectedValue={this.state.state_index}
-             itemStyle={[typography.stateInput]}
-             onValueChange={(text) => { this.onValueChange(text); console.log("State Index: " + this.state.state_index); console.log(Object.keys(this.state_list)[text]); }}>
+               {
+                 Object.keys(this.state_list).map(function(key, value){
+                   return(
+                     <Picker.Item key={key} label={key} value={value}/>
+                   )
+                 })
+               }
 
-             {
-               Object.keys(this.state_list).map(function(key, value){
-                 return(
-                   <Picker.Item key={key} label={key} value={value}/>
-                 )
-               })
-             }
+              </Picker>
+             </View>
+           </Modal>
 
-            </Picker>
-           </View>
-         </Modal>
+           { /* Input fields */ }
+           <Animated.View {...this.props} style={[containers.justifyCenter, backgrounds.email, { position: 'absolute', top: 0, left: 0, bottom: this.inputOffsetBottom, right: 0, opacity: this.animationProps.fadeAnim }]}>
+             { /* Address input */ }
+             <View>
+               <TextInput ref="addressInput" onFocus={() => this.setState({ focusedInput: "addressInput" })} style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.address} onChangeText={(text) => { this.addressInput = text; this.props.dispatchSetAddress(this.addressInput); this.props.dispatchSetAddressValidations(this.addressInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" placeholder={"Billing Address Line 1"} keyboardType="default" />
+               {this.props.addressValidations.valid ? <EvilIcons  style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"  }} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'grey'} />}
+             </View>
 
-         <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
+             { /* City input */ }
+             <View>
+               <TextInput ref="cityInput" onFocus={() => this.setState({ focusedInput: "cityInput" })} style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.city} onChangeText={(text) => {this.cityInput = text; this.props.dispatchSetCity(this.cityInput); this.props.dispatchSetCityValidations(this.cityInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" placeholder={"City"} keyboardType="default" />
+               {this.props.cityValidations.valid ? <EvilIcons  style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'green'} /> : <EvilIcons style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'grey'} />}
+             </View>
 
-         { /* Prompt and input field */ }
-         <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.email]}>
-           {/*ADDRESS*/}
+             { /* State input */ }
+             <View>
+              <TextInput ref="stateInput" onFocus={() => { dismissKeyboard(); this._setModalVisible(true); this.setState({ focusedInput: "stateInput" }); }} style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.state  ? this.props.dwollaCustomer.state : "AL"} onChangeText={(text) => { this.stateInput = text; this.props.dispatchSetState(this.stateInput);  }} autoCorrect={false} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" placeholder={"State"} keyboardType="email-address" />
+             </View>
 
+             { /* ZIP code input */ }
+             <View>
+               <TextInput ref="zipInput" onFocus={() => this.setState({ focusedInput: "zipInput" })} style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.zip} onChangeText={(text) => {this.zipInput = text; this.props.dispatchSetZip(this.zipInput); this.props.dispatchSetZipValidations(this.zipInput)}} autoCorrect={false} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" maxLength={5} placeholder={"Zip/Postal Code"} keyboardType="numeric" />
+               {this.props.zipValidations.valid ? <EvilIcons  style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'green'} /> : <EvilIcons style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'grey'} />}
+             </View>
+           </Animated.View>
 
-           <View>
-             <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.address} onChangeText={(text) => { this.addressInput = text; this.props.dispatchSetAddress(this.addressInput); this.props.dispatchSetAddressValidations(this.addressInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" placeholder={"Billing Address Line 1"} keyboardType="default" />
-             {this.props.addressValidations.valid ? <EvilIcons  style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"  }} name="check" size={40} color={'green'} /> : <EvilIcons style={{ position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent" }} name="check" size={40} color={'grey'} />}
-           </View>
-
-           {/*CITY*/}
-
-           <View>
-             <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.city} onChangeText={(text) => {this.cityInput = text; this.props.dispatchSetCity(this.cityInput); this.props.dispatchSetCityValidations(this.cityInput); }} autoCorrect={false}  autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" placeholder={"City"} keyboardType="default" />
-             {this.props.cityValidations.valid ? <EvilIcons  style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'green'} /> : <EvilIcons style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'grey'} />}
-           </View>
-           {/*Has an interesting effect investigate or try using with circles*/}
-
-           {/*STATE*/}
-
-           <View>
-            <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.state  ? this.props.dwollaCustomer.state : "AL"} onChangeText={(text) => { this.stateInput = text; this.props.dispatchSetState(this.stateInput);  }} autoCorrect={false}  onFocus={() => {this._setModalVisible(true)}} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" placeholder={"State"} keyboardType="email-address" />
-           </View>
-
-           {/*<Picker
-            style={[typography.marginBottom, {backgroundColor: "#d8d8d8", color: "black", marginLeft: 50, marginRight: 50, borderRadius: 50}]}
-            selectedValue={this.state.state_index}
-            itemStyle={[typography.stateInput]}
-            onValueChange={(text) => { this.onValueChange(text); console.log("State Index: " + this.state.state_index); console.log(Object.keys(this.state_list)[text]); }}>
-
-            {
-              Object.keys(this.state_list).map(function(key, value){
-                return(
-                  <Picker.Item key={key} label={key} value={value}/>
-                )
-              })
-            }
-
-          </Picker>*/}
-
-           {/*POSTAL CODE (ZIP)*/}
-
-         <View>
-           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom]}  defaultValue={this.props.dwollaCustomer.zip} onChangeText={(text) => {this.zipInput = text; this.props.dispatchSetZip(this.zipInput); this.props.dispatchSetZipValidations(this.zipInput)}} autoCorrect={false}  autoFocus={true} autoCapitalize="none" placeholderFontFamily="Roboto" placeholderTextColor="#fefeff" maxLength={5} placeholder={"Zip/Postal Code"} keyboardType="numeric" />
-           {this.props.zipValidations.valid ? <EvilIcons  style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'green'} /> : <EvilIcons style={{position: "absolute", top: 3.5, left: 305, backgroundColor: "transparent"}} name="check" size={40} color={'grey'} />}
-         </View>
-         </View>
-
-           { /* Arrow nav buttons */ }
-           {/*<ArrowNav arrowNavProps={this.arrowNavProps} callbackRight={() => {this.onPressRight()}} callbackLeft={() => {this.onPressLeft()}} />*/}
            { /* Header */ }
            <Header obsidian callbackBack={() => {this.onPressLeft()}} callbackClose={() => {this.callbackClose()}} headerProps={this.headerProps} />
 
-         </Animated.View>
-         <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
-           <TouchableHighlight
-             activeOpacity={0.8}
-             underlayColor={'transparent'}
-             onPress={() => {this.onPressRight()}}>
+           <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
+             <TouchableHighlight
+               activeOpacity={0.8}
+               underlayColor={'transparent'}
+               onPress={() => {this.onPressRight()}}>
 
-             <Animated.View style={{ height: 70, backgroundColor: "#20BF55", flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-               <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center', color: "#fefeff" }]}>
-                  Continue
-               </Text>
-             </Animated.View>
+               <Animated.View style={{ height: 70, backgroundColor: "#20BF55", flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                 <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center', color: "#fefeff" }]}>
+                    Continue
+                 </Text>
+               </Animated.View>
 
-           </TouchableHighlight>
-         </Animated.View>
-       </View>
+             </TouchableHighlight>
+           </Animated.View>
+         </View>
+       </TouchableWithoutFeedback>
      );
    }
  }
