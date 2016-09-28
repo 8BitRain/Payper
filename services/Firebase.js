@@ -251,10 +251,7 @@ export function listenTo(endpoints, callback) {
 **/
 export function stopListeningTo(endpoints, callback) {
   for (var e in endpoints) {
-    firebase.database().ref('/' + endpoints[e]).off('value', () => {
-      if (typeof callback == 'function') callback();
-      else console.log("Callback is not a function");
-    });
+    firebase.database().ref('/' + endpoints[e]).off();
   }
 };
 
@@ -278,9 +275,6 @@ export function sendPasswordResetEmail(email, callback) {
 };
 
 
-
-
-
 export function deleteUser() {
   // Remove user from Firebase auth
   firebase.auth().currentUser.delete().then(function() {
@@ -289,4 +283,25 @@ export function deleteUser() {
     console.log("User deletion from Firebase auth: failure");
     console.log(error);
   });
+};
+
+
+/**
+  *   Read the value at the specified Firebase endpoint and return it via
+  *   callback function
+**/
+export function listenUntilFirstValue(endpoint, callback) {
+  firebase.database().ref('/' + endpoint).on('value', (snapshot) => {
+    firebase.database().ref('/' + endpoint).off();
+    if (typeof callback == 'function') callback(snapshot.val());
+    else console.log("Callback is not a function");
+  });
+};
+
+
+/**
+  *   Delete all data nested under the specified Firebase endpoint
+**/
+export function scrub(endpoint, callback) {
+  firebase.database().ref('/' + endpoint).set({});
 };

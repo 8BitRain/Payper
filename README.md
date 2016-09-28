@@ -100,6 +100,7 @@
 - [ ] Fix ugly notification indicators (double digits and beyond look bad)
 - [ ] Add a confirmation alert for when non-Facebook users sign out
 - [ ] Break notifications ListView down into 'Read' and 'Un-Read' sections
+- [X] Clear payment card timer interval on unmount
 
 ### MVP Logic Bugs (Brady)
 - [X] Fix bug where user state is not properly reset upon signing out and signing in with another account

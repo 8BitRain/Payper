@@ -96,19 +96,26 @@ function mapDispatchToProps(dispatch) {
               console.log("%cSuccessfully got native contacts:", "color:green;font-weight:900;");
               console.log(contacts);
 
-              // Format contacts then log them to AsyncStorage
+              // Format contacts, then extract phone numbers
               var c = SetMaster5000.formatNativeContacts(contacts);
-              dispatch(set.nativeContacts(c));
-
-              // Extract just the phone numbers, then update user's contactList
               var numbers = SetMaster5000.contactsArrayToNumbersArray(c);
-              Lambda.updateContacts({ phoneNumbers: numbers, token: parsedUser.token });
 
-              var parsedContacts = SetMaster5000.parseNativeContactList({
-                phoneNumbers: numbers,
-                contacts: c,
+              // Update this user's contact list in Firebase
+              Lambda.updateContacts({ phoneNumbers: numbers, token: parsedUser.token }, () => {
+
+                // Get decrypted phone numbers for this user's Payper contact list
+                Firebase.listenUntilFirstValue("existingPhoneContacts/" + parsedUser.uid, (res) => {
+
+                  // Delete sensitive data from Firebase
+                  Firebase.scrub("existingPhoneContacts/" + parsedUser.uid);
+
+                  // Parse contacts, removing anyone who already has a Payper account
+                  if (Array.isArray(res) && res.length > 0) {
+                    var parsedContacts = SetMaster5000.parseNativeContactList({ phoneNumbers: res, contacts: c });
+                    dispatch(set.nativeContacts(parsedContacts));
+                  }
+                });
               });
-              console.log("Filtered contacts:", parsedContacts);
             }
           });
 

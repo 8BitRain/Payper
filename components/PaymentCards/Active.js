@@ -40,6 +40,7 @@ class Active extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this.timer);
+    this.timer = null;
   }
 
   _calculateTimeDifferences(options) {
