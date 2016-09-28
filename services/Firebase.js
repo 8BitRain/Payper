@@ -233,28 +233,37 @@ export function signOut(callback) {
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 
 /**
-  *   Listen to each of the specified routes
+  *   Enable listeners on the specified Firebase endpoints, returning values
+  *   via callback function
 **/
-export function listenTo(endpoints, callback) {
-  for (var e in endpoints) {
-    const endpoint = endpoints[e];
-    firebase.database().ref('/' + endpoint).on('value', (snapshot) => {
-      if (typeof callback == 'function') callback({ endpoint: endpoint, key: snapshot.key, value: snapshot.val() });
-      else console.log("Callback is not a function");
-    });
-  }
-};
-
+export function listenTo(params) {
+  console.log("Enabling listener with params:");
+  console.log(params);
+  
+  params.listener = firebase.database().ref('/' + params.endpoint).on('value', (snapshot) => {
+    if (typeof params.callback == 'function') params.callback(snapshot.val());
+    else console.log("%cCallback is not a function", "color:red;font-weight:900;");
+  });
+}
 
 /**
-  *   Turn off all listeners for the provided database endpoints
+  *   Disable listeners on the specified Firebase endpoints
 **/
-export function stopListeningTo(endpoints, callback) {
-  for (var e in endpoints) {
-    firebase.database().ref('/' + endpoints[e]).off();
-  }
+export function stopListeningTo(params) {
+  firebase.database().ref('/' + params.endpoint).off(params.eventType, params.listener);
 };
 
+/**
+  *   Read the value at the specified Firebase endpoint and return it via
+  *   callback function
+**/
+export function listenUntilFirstValue(endpoint, callback) {
+  firebase.database().ref('/' + endpoint).on('value', (snapshot) => {
+    firebase.database().ref('/' + endpoint).off();
+    if (typeof callback == 'function') callback(snapshot.val());
+    else console.log("Callback is not a function");
+  });
+};
 
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 //                    Email senders
@@ -282,19 +291,6 @@ export function deleteUser() {
   }, function(error) {
     console.log("User deletion from Firebase auth: failure");
     console.log(error);
-  });
-};
-
-
-/**
-  *   Read the value at the specified Firebase endpoint and return it via
-  *   callback function
-**/
-export function listenUntilFirstValue(endpoint, callback) {
-  firebase.database().ref('/' + endpoint).on('value', (snapshot) => {
-    firebase.database().ref('/' + endpoint).off();
-    if (typeof callback == 'function') callback(snapshot.val());
-    else console.log("Callback is not a function");
   });
 };
 

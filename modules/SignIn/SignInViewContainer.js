@@ -75,6 +75,7 @@ class SignInView extends React.Component {
     // Unsubscribe from keyboard events
     _keyboardWillShowSubscription.remove();
     _keyboardWillHideSubscription.remove();
+    console.log("Sign in view is unmounting...");
   }
 
   _keyboardWillShow(e) {

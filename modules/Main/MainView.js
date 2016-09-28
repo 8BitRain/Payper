@@ -81,24 +81,16 @@ class Main extends React.Component {
       // Initialize the app
       this.props.initialize((success) => {
         if (success) {
-          var uid = this.props.currentUser.uid,
-              notifications = "notifications/" + uid,
-              appFlags = "appFlags/" + uid,
-              user = "users/" + uid,
-              contactList = "contactList/" + uid,
-              globalUserList = "users",
-              blockedUserList = "blocked/" + uid;
+          console.log("%cInitialization succeeded. Current user:", "color:green;font-weight:900;");
+          console.log(this.props.currentUser);
 
           // Initialize Firebase listeners
-          this.props.listen([notifications, appFlags, user, contactList, globalUserList, blockedUserList], {
+          this.props.listen({
             currentUser: this.props.currentUser,
             nativeContacts: this.props.nativeContacts,
             allContactsArray: this.props.allContactsArray,
             uid: this.props.currentUser.uid,
           });
-
-          console.log("%cInitialization succeeded. Current user:", "color:green;font-weight:900;");
-          console.log(this.props.currentUser);
         } else {
           console.log("%cInitialization failed.", "color:red;font-weight:900;");
         }
@@ -108,7 +100,7 @@ class Main extends React.Component {
 
   // Disable Firebase listeners
   componentWillUnmount() {
-    this.props.stopListening(this.props.activeFirebaseListeners);
+    this.props.stopListening();
   }
 
   // Open & close side menu

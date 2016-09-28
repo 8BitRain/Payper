@@ -55,6 +55,8 @@ function mapStateToProps(state) {
   }
 }
 
+var ACTIVE_LISTENERS = [];
+
 // Decide which action creators our component will receive as props
 function mapDispatchToProps(dispatch) {
   return {
@@ -136,30 +138,32 @@ function mapDispatchToProps(dispatch) {
 
     },
 
-    listen: (endpoints, options, callback) => {
+    listen: (options) => {
 
       var CURRENT_USER = options.currentUser,
           allContactsArray;
 
-      Firebase.listenTo(endpoints, (response) => {
-        switch (response.endpoint.split("/")[0]) {
-
-          case "notifications":
-            if (response.value) dispatch(set.notifications(response.value));
-            else console.log("%c" + response.endpoint + " is null", "color:red;font-weight:900;");
-          break;
-
-          case "appFlags":
-            if (response.value) dispatch(set.flags(response.value));
-            else console.log("%c" + response.endpoint + " is null", "color:red;font-weight:900;");
-          break;
-
-          case "users":
-
-            // Populate global user list in Redux store
-            if (response.key == "users") {
+      var endpoints = [
+        {
+          endpoint: 'notifications/' + CURRENT_USER.uid,
+          eventType: 'value',
+          listener: null,
+          callback: (res) => { if (res) dispatch(set.notifications(res)) },
+        },
+        {
+          endpoint: 'appFlags/' + CURRENT_USER.uid,
+          eventType: 'value',
+          listener: null,
+          callback: (res) => { if (res) dispatch(set.flags(res)) },
+        },
+        {
+          endpoint: 'users',
+          eventType: 'value',
+          listener: null,
+          callback: (res) => {
+            if (res) {
               // Convert Firebase JSON to array of user objects, tacking on section titles along the way
-              var globalUserListArray = SetMaster5000.globalUserListToArray({ sectionTitle: "Other Payper Users", users: response.value, uid: options.uid }),
+              var globalUserListArray = SetMaster5000.globalUserListToArray({ sectionTitle: "Other Payper Users", users: res, uid: options.uid }),
                   newAllContactsArray;
 
               // Concatenate with currently rendered contact list
@@ -173,10 +177,15 @@ function mapDispatchToProps(dispatch) {
               dispatch(setInUserSearch.allContactsMap(newAllContactsMap));
               dispatch(setInUserSearch.allContactsArray(newAllContactsArray));
             }
-
-            if (response.value) {
-              // Update funding source in Redux store
-              if (response.value.fundingSource) {
+          },
+        },
+        {
+          endpoint: 'users/' + CURRENT_USER.uid,
+          eventType: 'value',
+          listener: null,
+          callback: (res) => {
+            if (res) {
+              if (res.fundingSource) {
                 Lambda.getFundingSource({ token: options.currentUser.token }, (res) => {
                   if (res) {
                     var fundingSources = [],
@@ -203,49 +212,59 @@ function mapDispatchToProps(dispatch) {
                 dispatch(setInFundingSources.fundingSourcesDataSource([]));
               }
 
-            // Update username in Redux store
-            if (response.value.uid == CURRENT_USER.uid && response.value.username != CURRENT_USER.username) {
-              console.log("Changing username from", CURRENT_USER.username, "to", response.value.username);
-              var newUser = CURRENT_USER;
-              newUser.username = response.value.username;
-              CURRENT_USER = newUser;
-              dispatch(set.currentUser(newUser));
+              // Update username in Redux store
+              if (res.uid == CURRENT_USER.uid && res.username != CURRENT_USER.username) {
+                var newUser = CURRENT_USER;
+                newUser.username = response.value.username;
+                CURRENT_USER = newUser;
+                dispatch(set.currentUser(newUser));
+              }
             }
+          },
+        },
+        {
+          endpoint: 'contactList/' + CURRENT_USER.uid,
+          eventType: 'value',
+          listener: null,
+          callback: (res) => {
+            if (res) {
+              // Convert Firebase JSON to array of user objects, tacking on section titles along the way
+              var contactListArray = SetMaster5000.contactListToArray({ contacts: res }),
+                  newAllContactsArray;
 
-          } else {
-            console.log("%c" + response.endpoint + " is null", "color:red;font-weight:900;");
-          }
-          break;
+              // Concatenate with native phone contact list
+              newAllContactsArray = (allContactsArray) ? SetMaster5000.mergeArrays(allContactsArray, contactListArray) : contactListArray.concat(options.nativeContacts);
+              allContactsArray = newAllContactsArray;
 
-          case "contactList":
-            // Convert Firebase JSON to array of user objects, tacking on section titles along the way
-            var contactListArray = SetMaster5000.contactListToArray({ contacts: response.value }),
-                newAllContactsArray;
+              // Convert contact array to map for ListView rendering
+              var newAllContactsMap = SetMaster5000.arrayToMap(newAllContactsArray);
 
-            // Concatenate with native phone contact list
-            newAllContactsArray = (allContactsArray) ? SetMaster5000.mergeArrays(allContactsArray, contactListArray) : contactListArray.concat(options.nativeContacts);
-            allContactsArray = newAllContactsArray;
+              // Set user lists in Redux store, triggering re-render of UserSearch ListView
+              dispatch(setInUserSearch.allContactsMap(newAllContactsMap));
+              dispatch(setInUserSearch.allContactsArray(newAllContactsArray));
+            }
+          },
+        },
+        {
+          endpoint: 'blocked/' + CURRENT_USER.uid,
+          eventType: 'value',
+          listener: null,
+          callback: (res) => {
+            if (res) dispatch(set.blockedUsers(res));
+          },
+        },
+      ];
 
-            // Convert contact array to map for ListView rendering
-            var newAllContactsMap = SetMaster5000.arrayToMap(newAllContactsArray);
-
-            // Set user lists in Redux store, triggering re-render of UserSearch ListView
-            dispatch(setInUserSearch.allContactsMap(newAllContactsMap));
-            dispatch(setInUserSearch.allContactsArray(newAllContactsArray));
-          break;
-
-          case "blocked":
-            dispatch(set.blockedUsers(response.value));
-          break;
-        }
-      });
-
-      dispatch(set.activeFirebaseListeners(endpoints));
+      for (var e in endpoints) {
+        Firebase.listenTo(endpoints[e]);
+        ACTIVE_LISTENERS.push(endpoints[e]);
+      }
     },
 
-    stopListening: (endpoints) => {
-      Firebase.stopListeningTo(endpoints);
-      dispatch(set.activeFirebaseListeners([]));
+    stopListening: () => {
+      for (var e in ACTIVE_LISTENERS) {
+        Firebase.stopListeningTo(ACTIVE_LISTENERS[e]);
+      }
     },
 
     reset: () => {

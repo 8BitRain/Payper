@@ -93,10 +93,7 @@ class UserSearch extends React.Component {
     if (!this.props.startedListening) {
       this.props.initialize(this.props.nativeContacts);
 
-      var contactList = "contactList/" + this.props.currentUser.uid,
-          globalUserList = "users";
-
-      this.props.listen([contactList, globalUserList], {
+      this.props.listen({
         nativeContacts: this.props.nativeContacts,
         allContactsArray: this.props.allContactsArray,
         uid: this.props.currentUser.uid,
@@ -109,7 +106,7 @@ class UserSearch extends React.Component {
     *   Stop listening to Firebase
   **/
   componentWillUnmount() {
-    this.props.stopListening(this.props.activeFirebaseListeners);
+    this.props.stopListening();
   }
 
 

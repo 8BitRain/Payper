@@ -100,7 +100,10 @@
 - [ ] Fix ugly notification indicators (double digits and beyond look bad)
 - [ ] Add a confirmation alert for when non-Facebook users sign out
 - [ ] Break notifications ListView down into 'Read' and 'Un-Read' sections
-- [X] Clear payment card timer interval on unmount
+- [ ] Create a different loading screen for sign in
+- [ ] Add a 'Forgot Password' button to sign in screen
+- [ ] Move to correct payment flow tab after payment creation
+- [ ] Make sure unblock user endpoint is working properly
 
 ### MVP Logic Bugs (Brady)
 - [X] Fix bug where user state is not properly reset upon signing out and signing in with another account
@@ -128,6 +131,7 @@
 - [X] Fix bug where payment request rejection does not optimistically delete, also
 - [X] Fix bug where payment request accept does not optimistically re-render
 - [X] Set up a cron job to refresh session token every 25 minutes
+- [X] Clear payment card timer interval on unmount
 - [ ] Fix issue where, after adding a funding source and being taken to the app, your funding source is not loaded, but is loaded after you close and reopen the app. (Fixed on generic accounts, still occurs for Facebook accounts)
 - [ ] Rethink handling contacts with multiple numbers (if more than one number, use the 'Mobile' number)
 - [ ] Sign-in success on second attempt looks whack

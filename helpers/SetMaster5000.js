@@ -11,7 +11,7 @@
   *
 **/
 
-const enableLogs = true;
+const enableLogs = false;
 
 // Dependencies
 import * as _ from 'lodash';

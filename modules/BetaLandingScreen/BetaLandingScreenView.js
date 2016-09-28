@@ -161,7 +161,6 @@ class BetaLandingScreenView extends React.Component {
       this._interpolateButtonColor({ toValue: 0 });
       this.setState({ buttonText: "Continue" });
     } else {
-      console.log("Onboarding:", this.state.onboarding);
       this._interpolateButtonColor({ toValue: 350 });
       if (this.state.buttonText.split("")[0] != "Please") {
         this.setState({ buttonText: (this.state.onboarding == "phone") ? "Please enter a valid phone number" : "Please enter a valid email address" });

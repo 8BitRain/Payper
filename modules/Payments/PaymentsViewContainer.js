@@ -45,49 +45,31 @@ function mapStateToProps(state) {
   }
 }
 
+var ACTIVE_LISTENERS = [];
+
 // Decide which action creators our component will receive as props
 function mapDispatchToProps(dispatch) {
   return {
-    listen: (endpoints) => {
-      Firebase.listenTo(endpoints, (response) => {
-        switch (response.key) {
+    listen: (params) => {
 
-          case "out":
-            if (response.value == null) {
-              console.log("%cOutgoing payments are null.", "color:red;font-weight:700;");
-              dispatch(set.outgoingPayments([]));
-            } else {
+      var endpoints = [
+        {
+          endpoint: 'paymentFlow/' + params.uid + '/in',
+          eventType: 'value',
+          listener: null,
+          callback: (res) => {
+
+            console.log("Incoming payments response:", res);
+
+            if (res) {
               // Tack payment ID on as prop of each payment object
-              for (var p in response.value) {
-                response.value[p].pid = p;
-                response.value[p].flow = "outgoing";
+              for (var p in res) {
+                res[p].pid = p;
+                res[p].flow = "incoming";
               }
 
               // Convert from JSON to array and extract PID's of complete payments
-              var paymentArray = SetMaster5000.JSONToArray({ JSON: response.value }),
-                  paymentsToPrioritize = SetMaster5000.extractCompletedPayments({ payments: paymentArray });
-
-              // Move complete payments to the front of array
-              var orderedPayments = (paymentsToPrioritize.length == 0) ? paymentArray : SetMaster5000.prioritizePayments({ payments: paymentArray, prioritize: paymentsToPrioritize });
-
-              // Persist payments to Redux store
-              dispatch(set.outgoingPayments(orderedPayments));
-            }
-          break;
-
-          case "in":
-            if (response.value == null) {
-              console.log("%cIncoming payments are null.", "color:red;font-weight:700;");
-              dispatch(set.incomingPayments([]));
-            } else {
-              // Tack payment ID on as prop of each payment object
-              for (var p in response.value) {
-                response.value[p].pid = p;
-                response.value[p].flow = "incoming";
-              }
-
-              // Convert from JSON to array and extract PID's of complete payments
-              var paymentArray = SetMaster5000.JSONToArray({ JSON: response.value }),
+              var paymentArray = SetMaster5000.JSONToArray({ JSON: res }),
                   paymentsToPrioritize = SetMaster5000.extractCompletedPayments({ payments: paymentArray });
 
               // Move complete payments to the front of array
@@ -95,22 +77,51 @@ function mapDispatchToProps(dispatch) {
 
               // Persist payments to Redux store
               dispatch(set.incomingPayments(orderedPayments));
+            } else {
+              console.log("%cIncoming payments are null.", "color:red;font-weight:700;");
+              dispatch(set.incomingPayments([]));
             }
-          break;
+          },
+        },
+        {
+          endpoint: 'paymentFlow/' + params.uid + '/out',
+          eventType: 'value',
+          listener: null,
+          callback: (res) => {
+            if (res) {
+              // Tack payment ID on as prop of each payment object
+              for (var p in res) {
+                res[p].pid = p;
+                res[p].flow = "outgoing";
+              }
 
-          case "global":
-            if (respnse.value) dispatch(set.globalPayments(response.value));
-            else console.log("%Global payments are null.", "color:red;font-weight:700;");
-          break;
+              // Convert from JSON to array and extract PID's of complete payments
+              var paymentArray = SetMaster5000.JSONToArray({ JSON: res }),
+                  paymentsToPrioritize = SetMaster5000.extractCompletedPayments({ payments: paymentArray });
 
-        }
-      });
-      dispatch(set.activeFirebaseListeners(endpoints));
+              // Move complete payments to the front of array
+              var orderedPayments = (paymentsToPrioritize.length == 0) ? paymentArray : SetMaster5000.prioritizePayments({ payments: paymentArray, prioritize: paymentsToPrioritize });
+
+              // Persist payments to Redux store
+              dispatch(set.outgoingPayments(orderedPayments));
+            } else {
+              console.log("%cOutgoing payments are null.", "color:red;font-weight:700;");
+              dispatch(set.outgoingPayments([]));
+            }
+          },
+        },
+      ];
+
+      for (var e in endpoints) {
+        Firebase.listenTo(endpoints[e]);
+        ACTIVE_LISTENERS.push(endpoints[e]);
+      }
     },
 
-    stopListening: (endpoints) => {
-      Firebase.stopListeningTo(endpoints);
-      dispatch(set.activeFirebaseListeners([]));
+    stopListening: () => {
+      for (var e in ACTIVE_LISTENERS) {
+        Firebase.stopListeningTo(ACTIVE_LISTENERS[e]);
+      }
     },
 
     setIsEmpty: (isEmpty) => {

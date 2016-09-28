@@ -29,7 +29,7 @@ class Active extends React.Component {
     // Get current time every 5 seconds
     this.timer = setInterval(() => {
       var secondsTilNextPayment = _this._calculateTimeDifferences({ current: new Date().getTime(), nextPayment: _this.props.payment.nextPayment }).seconds;
-      console.log("Seconds til next payment:", secondsTilNextPayment);
+      // console.log("Seconds til next payment:", secondsTilNextPayment);
       if (secondsTilNextPayment < 60 && !_this.state.paymentInProgress) {
         _this.setState({ paymentInProgress: true });
       } else if (_this.state.paymentInProgress) {
