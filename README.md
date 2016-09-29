@@ -98,8 +98,8 @@
 - [X] Fix keyboard spacing on edit profile pages for small phones (add real header component to the modal)
 - [X] Transfer create payment flow to modal instead of separate scene
 - [X] Move to correct payment flow tab after payment creation
+- [X] Add a confirmation alert for when non-Facebook users sign out
 - [ ] Fix ugly notification indicators (double digits and beyond look bad)
-- [ ] Add a confirmation alert for when non-Facebook users sign out
 - [ ] Break notifications ListView down into 'Read' and 'Un-Read' sections
 - [ ] Create a different loading screen for sign in
 - [ ] Add a 'Forgot Password' button to sign in screen

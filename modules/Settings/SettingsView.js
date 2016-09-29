@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions, Linking } from 'react-native';
+import { View, Text, Image, AsyncStorage, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions, Linking, ActionSheetIOS } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 const FBSDK = require('react-native-fbsdk');
 const { LoginButton } = FBSDK;
@@ -41,7 +41,15 @@ class Settings extends React.Component {
           confirm: () => Linking.openURL("https://www.getpayper.io/faq").catch(err => console.error('An error occurred', err)),
         });
       }},
-      {rowTitle: "Sign Out", iconName: "moon", destination: this.props.signout},
+      {rowTitle: "Sign Out", iconName: "moon", destination: () => {
+        ActionSheetIOS.showActionSheetWithOptions({
+          title: "Signed in as " + this.props.currentUser.first_name + " " + this.props.currentUser.last_name,
+          options: ['Sign out', 'Cancel'],
+          cancelButtonIndex: 1
+        }, (buttonIndex) => {
+          if (buttonIndex == 0) this.props.signout();
+        });
+      }},
     ];
 
     this.state = {
