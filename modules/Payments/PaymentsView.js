@@ -221,10 +221,20 @@ class Payments extends React.Component {
       pic: (payment.flow == "incoming") ? payment.sender_pic : payment.recip_pic,
     };
 
-    if (payment.invite) payment.stage = "pendingInvite";
-    else if (payment.nextPayment == "waiting_on_fs") payment.stage = "pendingRecipFundingSource";
-    else if (payment.confirmed == false) payment.stage = "pendingConfirmation";
-    else payment.stage = "active";
+    if (payment.invite)
+      payment.stage = "pendingInvite";
+    else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "incoming" && this.props.currentUser.fundingSource)
+      payment.stage = "pendingSenderFundingSource";
+    else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "incoming" && !this.props.currentUser.fundingSource)
+      payment.stage = "pendingRecipFundingSource";
+    else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "outgoing" && this.props.currentUser.fundingSource)
+      payment.stage = "pendingRecipFundingSource";
+    else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "outgoing" && !this.props.currentUser.fundingSource)
+      payment.stage = "pendingSenderFundingSource";
+    else if (payment.confirmed == false)
+      payment.stage = "pendingConfirmation";
+    else
+      payment.stage = "active";
 
     switch(payment.stage) {
       case "active":
