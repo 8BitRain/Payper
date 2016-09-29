@@ -88,12 +88,12 @@ class Active extends React.Component {
             <Text style={styles.name}>{ this.props.user.name }</Text>
             <Text style={styles.text}>${ this.props.payment.amount } per month - { this.props.payment.purpose }</Text>
             <Text style={styles.text}>
-              Next payment: { Timestamp.calendarize(this.props.payment.nextPayment) }
-              { /* (typeof this.props.payment.nextPayment == 'number')
+              Next payment:
+              { (typeof this.props.payment.nextPayment == 'number')
                   ? (this.state.paymentInProgress)
-                      ? " In progress..."
+                      ? " In less than a minute"
                       : " " + Timestamp.calendarize(this.props.payment.nextPayment)
-                  : " TBD" */ }
+                  : " TBD" }
             </Text>
           </View>
 

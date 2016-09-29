@@ -97,12 +97,12 @@
 - [X] Fix Incoming/Outgoing tab padding (need to be easier to press)
 - [X] Fix keyboard spacing on edit profile pages for small phones (add real header component to the modal)
 - [X] Transfer create payment flow to modal instead of separate scene
+- [X] Move to correct payment flow tab after payment creation
 - [ ] Fix ugly notification indicators (double digits and beyond look bad)
 - [ ] Add a confirmation alert for when non-Facebook users sign out
 - [ ] Break notifications ListView down into 'Read' and 'Un-Read' sections
 - [ ] Create a different loading screen for sign in
 - [ ] Add a 'Forgot Password' button to sign in screen
-- [ ] Move to correct payment flow tab after payment creation
 - [ ] Make sure unblock user endpoint is working properly
 
 ### MVP Logic Bugs (Brady)
@@ -134,13 +134,12 @@
 - [X] Clear payment card timer interval on unmount
 - [ ] Fix issue where, after adding a funding source and being taken to the app, your funding source is not loaded, but is loaded after you close and reopen the app. (Fixed on generic accounts, still occurs for Facebook accounts)
 - [ ] Rethink handling contacts with multiple numbers (if more than one number, use the 'Mobile' number)
-- [ ] Sign-in success on second attempt looks whack
 - [ ] Refactor entire sign-in process (follow another React Native app's example)
 - [ ] Fix bug where, when you accept or reject a payment request, your incoming tab becomes populated with the other party's incoming payments (must recreate first)
 
 ### Bugs (Eric)
-- [] Fix padding on state picker in Address.js
-- [] Fix returning back to app after completing bank onboarding from "add account route"
+- [ ] Fix padding on state picker in Address.js
+- [ ] Fix returning back to app after completing bank onboarding from "add account route"
 
 ### Things I Need Vash For (Brady)
 - [X] Fix bug where inviting via payment exits before completing request

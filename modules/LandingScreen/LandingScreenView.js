@@ -366,7 +366,7 @@ class LandingScreenDisplay extends React.Component {
               onLoginFinished={
                 (error, result) => {
                   if (error) {
-                    alert("Login has error: " + result.error);
+                    alert("Login has error: " + JSON.stringify(error));
                   } else if (result.isCancelled) {
                     // alert("Login was cancelled");
                   } else {

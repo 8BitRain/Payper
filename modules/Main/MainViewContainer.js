@@ -100,6 +100,8 @@ function mapDispatchToProps(dispatch) {
 
               // Format contacts, then extract phone numbers
               var c = SetMaster5000.formatNativeContacts(contacts);
+              dispatch(set.nativeContacts(c));
+              
               var numbers = SetMaster5000.contactsArrayToNumbersArray(c);
 
               // Update this user's contact list in Firebase

@@ -73,6 +73,8 @@ class CreatePaymentView extends React.Component {
     options.paymentInfo.sender = (options.paymentInfo.type == "request") ? options.user : this.props.currentUser;
     options.paymentInfo.recip = (options.paymentInfo.type == "request") ? this.props.currentUser : options.user;
 
+    this.props.setActiveFilter((options.paymentInfo.type == "request") ? "incoming" : "outgoing");
+
     if (options.user.uid) {
       options.paymentInfo.invite = false;
       console.log("Sending payment:", options.paymentInfo);
