@@ -75,7 +75,6 @@ class SignInView extends React.Component {
     // Unsubscribe from keyboard events
     _keyboardWillShowSubscription.remove();
     _keyboardWillHideSubscription.remove();
-    console.log("Sign in view is unmounting...");
   }
 
   _keyboardWillShow(e) {
@@ -148,44 +147,50 @@ class SignInView extends React.Component {
     });
   }
 
-  _getAttemptLimitReachedMessage() {
+  _getResetPasswordButton() {
     return(
-      <View style={{width: dimensions.width * 0.85, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={{padding: 10, textAlign: 'center'}}>
-          { (this.state.resetEmailSentTo)
-              ? "We sent password reset instructions to " + this.state.email
-              : "For security reasons, we've limited the number of times you can attempt to sign in." }
-        </Text>
+      <TouchableHighlight
+        style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', borderRadius: 4, backgroundColor: (this.state.resetEmailSentTo) ? colors.alertGreen : colors.icyBlue, paddingTop: 7.5, paddingBottom: 10, paddingLeft: 15, paddingRight: 15,}}
+        onPress={() => this._resetPassword()}
+        underlayColor={(this.state.resetEmailSentTo) ? colors.alertGreen : colors.icyBlue}
+        activeOpacity={0.7}>
 
-        { /* Reset password button */ }
-        <TouchableHighlight
-          style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', borderRadius: 4, backgroundColor: (this.state.resetEmailSentTo) ? colors.alertGreen : colors.icyBlue, paddingTop: 7.5, paddingBottom: 10, paddingLeft: 15, paddingRight: 15,}}
-          onPress={() => this._resetPassword()}
-          underlayColor={(this.state.resetEmailSentTo) ? colors.alertGreen : colors.icyBlue}
-          activeOpacity={0.7}>
-
-          <View>
-            <Entypo style={{textAlign: 'center'}} name={(this.state.resetEmailSentTo) ? "check" : "mail"} size={20} color={colors.white} />
-            <Text style={{fontSize: 14, fontWeight: '600', color: colors.white, textAlign: 'center'}}>
-              { (this.state.resetEmailSentTo)
-                  ? "Send another email"
-                  : "Reset your password" }
-            </Text>
-          </View>
-        </TouchableHighlight>
-      </View>
+        <View>
+          <Entypo style={{textAlign: 'center'}} name={(this.state.resetEmailSentTo) ? "check" : "mail"} size={20} color={colors.white} />
+          <Text style={{fontSize: 14, fontWeight: '600', color: colors.white, textAlign: 'center'}}>
+            { (this.state.resetEmailSentTo)
+                ? "Send another email"
+                : "Reset your password" }
+          </Text>
+        </View>
+      </TouchableHighlight>
     );
   }
 
   _getRemainingAttemptsMessage() {
     return(
       <View style={{ width: dimensions.width * 0.8, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{paddingTop: 10, textAlign: 'center'}}>
+        <Text style={{padding: 10, textAlign: 'center', color: colors.white}}>
           { (this.state.remainingAttempts == 1)
-              ? "You have " + this.state.remainingAttempts + " sign in attempt remaining."
-              : "You have " + this.state.remainingAttempts + " sign in attempts remaining." }
+              ? "You have " + this.state.remainingAttempts + " attempt remaining."
+              : "You have " + this.state.remainingAttempts + " attempts remaining." }
         </Text>
       </View>
+    );
+  }
+
+  _getSignInButton() {
+    return(
+      <TouchableHighlight
+        style={[buttonStyles.button, { backgroundColor: colors.accent, marginTop: 5 }]}
+        activeOpacity={0.8}
+        underlayColor={colors.accent}
+        onPress={() => { this.signInWithEmail()}}>
+
+        <Text style={{textAlign: 'center', fontFamily: 'Roboto', color: colors.white, fontSize: 18, fontWeight: '100', padding: 10}}>
+           Sign in
+        </Text>
+      </TouchableHighlight>
     );
   }
 
@@ -235,24 +240,15 @@ class SignInView extends React.Component {
                 secureTextEntry
                 onChangeText={(text) => this.input.password = text} />
 
-              { /* If sign in attempt limit has been reached, prompt user to reset password */
+              { /* Number of remaining sign-in attempts for this email address */
+                (this.state.remainingAttempts <= 3)
+                  ? this._getRemainingAttemptsMessage()
+                  : null }
+
+              { /* Sign in button or reset password button */
                 (this.state.attemptLimitReached)
-                  ? this._getAttemptLimitReachedMessage()
-                  : (this.state.remainingAttempts <= 3)
-                    ? this._getRemainingAttemptsMessage()
-                    : null }
-
-              { /* Continue button */ }
-              <TouchableHighlight
-                style={[buttonStyles.button, { backgroundColor: colors.accent, marginTop: 5 }]}
-                activeOpacity={0.8}
-                underlayColor={colors.accent}
-                onPress={() => { this.signInWithEmail()}}>
-
-                <Text style={{textAlign: 'center', fontFamily: 'Roboto', color: colors.white, fontSize: 18, fontWeight: '100', padding: 10}}>
-                   Sign in
-                </Text>
-              </TouchableHighlight>
+                  ? this._getResetPasswordButton()
+                  : this._getSignInButton() }
             </View>
           </Animated.View>
 

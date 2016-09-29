@@ -99,6 +99,7 @@
 - [X] Transfer create payment flow to modal instead of separate scene
 - [X] Move to correct payment flow tab after payment creation
 - [X] Add a confirmation alert for when non-Facebook users sign out
+- [X] Refactor sign in screen to properly display invalid email, too many attempts, and reset password messages
 - [ ] Fix ugly notification indicators (double digits and beyond look bad)
 - [ ] Break notifications ListView down into 'Read' and 'Un-Read' sections
 - [ ] Create a different loading screen for sign in
