@@ -77,10 +77,7 @@ class CreatePaymentView extends React.Component {
 
     if (options.user.uid) {
       options.paymentInfo.invite = false;
-      console.log("Sending payment:", options.paymentInfo);
-      Lambda.createPayment(options.paymentInfo, (res) => {
-        console.log("Lambda.createPayment callback received:", res);
-      });
+      Lambda.createPayment(options.paymentInfo);
     } else {
       options.paymentInfo.invite = true;
       if (!options.paymentInfo.sender.uid) {
@@ -90,10 +87,7 @@ class CreatePaymentView extends React.Component {
         options.paymentInfo.invitee = "recip";
         options.paymentInfo.phoneNumber = options.paymentInfo.recip.phone;
       }
-      console.log("Sending invite via payment:", options.paymentInfo);
-      Lambda.inviteViaPayment(options.paymentInfo, (res) => {
-        console.log("Lambda.inviteViaPayment callback received:", res);
-      });
+      Lambda.inviteViaPayment(options.paymentInfo);
     }
   }
 
@@ -116,7 +110,7 @@ class CreatePaymentView extends React.Component {
         <View style={{ flex: (dimensions.height < 667) ? 0.88 : 0.9 }}>
           <Animated.View style={[styles.allPanelsWrap, { marginLeft: this.state.offsetX }]}>
             { /* User selection */ }
-            <View style={[styles.panelWrap]}>
+            <View>
               <UserSelection
                 {...this.props}
                 dismissKeyboard={() => this._dismissKeyboard()}
@@ -125,7 +119,7 @@ class CreatePaymentView extends React.Component {
             </View>
 
             { /* Amount and duration */ }
-            <View style={[styles.panelWrap]}>
+            <View>
               <AmountAndDuration
                 {...this.props}
                 dismissKeyboard={() => this._dismissKeyboard()}
@@ -136,7 +130,7 @@ class CreatePaymentView extends React.Component {
             </View>
 
             { /* Purpose */ }
-            <View style={[styles.panelWrap]}>
+            <View>
               <Purpose
                 {...this.props}
                 dismissKeyboard={() => this._dismissKeyboard()}
@@ -163,8 +157,7 @@ const styles = StyleSheet.create({
     flex: 1.0,
     width: dimensions.width * 3.0,
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
-  },
-  panelWrap: {},
+  }
 });
 
 export default CreatePaymentView;

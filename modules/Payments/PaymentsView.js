@@ -221,22 +221,22 @@ class Payments extends React.Component {
       pic: (payment.flow == "incoming") ? payment.sender_pic : payment.recip_pic,
     };
 
-    if (payment.invite)
-      payment.stage = "pendingInvite";
-    else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "incoming" && this.props.currentUser.fundingSource)
-      payment.stage = "pendingSenderFundingSource";
-    else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "incoming" && !this.props.currentUser.fundingSource)
-      payment.stage = "pendingRecipFundingSource";
-    else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "outgoing" && this.props.currentUser.fundingSource)
-      payment.stage = "pendingRecipFundingSource";
-    else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "outgoing" && !this.props.currentUser.fundingSource)
-      payment.stage = "pendingSenderFundingSource";
-    else if (payment.confirmed == false)
-      payment.stage = "pendingConfirmation";
-    else
-      payment.stage = "active";
+    // if (payment.invite)
+    //   payment.stage = "pendingInvite";
+    // else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "incoming" && this.props.currentUser.fundingSource)
+    //   payment.stage = "pendingSenderFundingSource";
+    // else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "incoming" && !this.props.currentUser.fundingSource)
+    //   payment.stage = "pendingRecipFundingSource";
+    // else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "outgoing" && this.props.currentUser.fundingSource)
+    //   payment.stage = "pendingRecipFundingSource";
+    // else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "outgoing" && !this.props.currentUser.fundingSource)
+    //   payment.stage = "pendingSenderFundingSource";
+    // else if (payment.confirmed == false)
+    //   payment.stage = "pendingConfirmation";
+    // else
+    //   payment.stage = "active";
 
-    switch(payment.stage) {
+    switch(payment.status) {
       case "active":
         return(
           <Active
@@ -280,6 +280,18 @@ class Payments extends React.Component {
         var message = (payment.recip_id == this.props.currentUser.uid)
           ? "It looks like you haven't linked a bank account to your Payper account. Payments will commence once you do so."
           : "It looks like " + payment.recip_name.split(" ")[0] + " hasn't linked a bank account to their Payper account. Payments will commence once they do so.";
+        return(
+          <PendingFundingSource
+            user={user}
+            payment={paymentInfo}
+            message={message}
+            showMenu={() => this._showMenu(payment)} />
+        );
+      break;
+      case "pendingBothFundingSources":
+        var message = (payment.flow == "incoming")
+          ? "Neither you nor " + payment.sender_name.split(" ")[0] + " have linked a bank account to your Payper account. This payment series will begin once you do so."
+          : "Neither you nor " + payment.recip_name.split(" ")[0] + " have linked a bank account to your Payper account. This payment series will begin once you do so.";
         return(
           <PendingFundingSource
             user={user}

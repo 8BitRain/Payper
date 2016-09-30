@@ -33,6 +33,8 @@ function mapStateToProps(state) {
     globalPayments: state.getIn(['payments', 'globalPayments']),
     activeTab: state.getIn(['payments', 'activeTab']),
     activeFilter: state.getIn(['payments', 'activeFilter']),
+
+    // bankOnboarding
     flags: state.getIn(['main', 'flags']),
     newUser: state.getIn(['createAccount', 'newUser']),
     startIav: state.getIn(['bankOnboarding', 'startIav']),

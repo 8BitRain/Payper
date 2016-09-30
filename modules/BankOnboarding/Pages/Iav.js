@@ -43,24 +43,10 @@ class Iav extends React.Component {
     */
     //Attempt that causes looping of code in webview
     this.injectedJS = 'var firebase_token = ' + "'" + this.firebase_token + "'" + ';' + ' var iav_token = ' + "'" + this.props.startIav + "'" + ';' + ' $( document ).ready(function() { generateIAVToken()});';
-
-    console.log(this.injectedJS);
-  }
-
-  injectJS(){
-    console.log("injectedJS Code: " + this.injectedJS);
-    this.numInjectedJSCalls +=1;
-    console.log("number of times injectedJS ran" + this.numInjectedJSCalls);
-    return (JSON.stringify(this.injectedJS));
-  }
-
-  errorRender(){
-    console.log("There was an error :()");
   }
 
   componentWillMount() {
-    // Initialize the app
-    var _this = this;
+    const _this = this;
 
     Async.get('user', (val) => {
       var parsedUser = JSON.parse(val);
@@ -69,9 +55,9 @@ class Iav extends React.Component {
   }
 
   componentDidMount(){
-    var _this = this;
+    const _this = this;
+
     setTimeout(() => {
-      console.log("IAV LOADING SCREEN SETS TIMEOUT");
       _this.closeLoadingModals();
     }, 5000);
   }
@@ -86,26 +72,14 @@ class Iav extends React.Component {
   }
 
   render() {
-      return(
-        <View style={{flex: 1}}>
+    return(
+      <View style={{flex: 1}}>
         <WebView
          source={{uri: 'http://www.getpayper.io/iav'}} injectedJavaScript={this.injectedJS}
          style={{marginTop: 20}}
-         startInLoadingState={false}
-       />
-       {/*<Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
-        <Loading
-          complete={this.props.done_loading}
-          msgSuccess={""}
-          msgError={"There was an error on our end. Sorry about that ^_^;"}
-          msgLoading={"One moment..."}
-          success={true}
-          successDestination={() => {console.log("SucessfullLoading")}}
-          errorDestination={() => {console.log("temp loading screen")}}
-        />
-       </Modal>*/}
-       </View>
-      );
+         startInLoadingState={false} />
+     </View>
+    );
   }
 }
 

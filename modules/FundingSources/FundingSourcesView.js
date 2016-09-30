@@ -30,7 +30,6 @@ class FundingSources extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("\n\n\n\n<FundingSources /> will receive new props:", nextProps);
     if (nextProps.fundingSourcesDataSource)
       this.setState({
         dataSource: nextProps.fundingSourcesDataSource,

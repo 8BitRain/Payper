@@ -166,6 +166,7 @@ class SuspendedModal extends React.Component {
 class BankOnboardingView extends React.Component {
   constructor(props) {
     super(props);
+    console.log("Constructing <BankOnboardingView /> with props:", this.props);
   }
 
   render() {
