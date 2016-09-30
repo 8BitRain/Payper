@@ -124,12 +124,12 @@ export default connect(
 
               if(res != null){
                 //console.log(JSON.parse(res));
-                if(res.iav.body.token != ""){
+                
                   if(!dispatchList.retry && !dispatchList.suspended && !dispatchList.document){
                     dispatch(dispatchFunctions.setIav(res.iav.body.token));
                   }
                   dispatchList.iav = true;
-                }
+
               }
             },
           },
