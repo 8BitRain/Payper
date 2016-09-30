@@ -238,6 +238,7 @@
 		232A65CE1D03D74E0084EA8E /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		232A65CF1D03D74E0084EA8E /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
 		238A0DBC1D49671D00EACFBF /* RCTContacts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTContacts.xcodeproj; path = "../node_modules/react-native-contacts/ios/RCTContacts.xcodeproj"; sourceTree = "<group>"; };
+		23DE99F51D9EC6E50054D02F /* Payper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Payper.entitlements; sourceTree = "<group>"; };
 		26265A71C02048F18E3EE5F7 /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		2DB6499B06E14647AF2065C6 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		4AA0C25806AC7EDA2D542F07 /* libPods-Coincast.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Coincast.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -527,6 +528,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				23DE99F51D9EC6E50054D02F /* Payper.entitlements */,
 				07A813AF1D93084400E432B3 /* RNVibrancy */,
 				07A813AE1D93083A00E432B3 /* RNBlur */,
 				232A65CC1D03D74E0084EA8E /* Roboto-Bold.ttf */,
@@ -653,7 +655,12 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 943498UXPL;
+						DevelopmentTeam = 9MXT88RAVX;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -1085,9 +1092,11 @@
 			baseConfigurationReference = D74B44AB85A60AA14C90CBD8 /* Pods-Coincast.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Payper.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = 9MXT88RAVX;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"~/Documents/FacebookSDK",
@@ -1110,7 +1119,7 @@
 					"-lc++",
 					"-licucore",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.PayperAura;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Payper;
 				PRODUCT_NAME = Payper;
 				PROVISIONING_PROFILE = "";
 			};
@@ -1121,9 +1130,11 @@
 			baseConfigurationReference = EAA10A553EB1E264F5E29CF2 /* Pods-Coincast.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Payper.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = 9MXT88RAVX;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"~/Documents/FacebookSDK",
@@ -1146,7 +1157,7 @@
 					"-lc++",
 					"-licucore",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.PayperAura;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Payper;
 				PRODUCT_NAME = Payper;
 				PROVISIONING_PROFILE = "";
 			};
