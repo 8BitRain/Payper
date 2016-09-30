@@ -106,8 +106,13 @@ export default connect(
                 }
 
                if(res.onboarding_state == "complete"){
-                 if (typeof params.toggleModal == 'function') params.toggleModal();
-                 else Actions.MainViewContainer();
+                 try{
+                   if (typeof params.toggleModal == 'function') params.toggleModal();
+                   else Actions.MainViewContainer();
+                 }catch(err2){
+                   console.log("Error: " + err2);
+                 }
+
                }
               }
               //Note there is a predictable flow in the way in which events are
