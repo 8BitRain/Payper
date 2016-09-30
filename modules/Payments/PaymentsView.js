@@ -309,21 +309,19 @@ class Payments extends React.Component {
     //The user has completed customer creation and now has to go through dwolla IAV
     if(this.props.flags.onboarding_state == 'bank') {
       if(this.props.flags.customer_status == 'verified') {
-        console.log("BANK STATE REACHED: " + this.props.startIav );
         //Initiate IAV
         this.props.setNewUserToken(this.props.currentUser.token);
-        this.props.setLoading(true);
+
         var data = {
           token: this.props.currentUser.token
         };
-        var _this = this;
-        console.log("Beginning IAV Initiation");
+        this.props.setLoading(true);
+        const _this = this;
+        //Initiate IAV
         Init.getIavToken(data, function(iavTokenRecieved, iavToken){
           if(iavTokenRecieved){
-            console.log("SSN IAVTOKEN: " + JSON.stringify(iavToken));
-            // Will cause the IAV Token Page to be loaded
             _this.props.setIav(iavToken.token);
-            Actions.BankOnboardingContainer();
+            //Actions.BankOnboardingContainer();
           }
         });
         //The user needs to redo the customer creation process.

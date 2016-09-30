@@ -141,6 +141,15 @@ class SSN extends React.Component {
        //Loading Screen to IAV
        if(customerCreated){
           _this.props.dispatchSetLoading(true);
+          Async.get('user', (val) => {
+           console.log("User: " + val);
+           console.log("User: " + JSON.parse(val).uid);
+         var iav = "IAV/" + JSON.parse(val).uid;
+         var appFlags = "appFlags/" + JSON.parse(val).uid;
+         //Enable FirebaseListeners
+         _this.props.listen({uid: JSON.parse(val).uid});
+         //dispatch will be called from container
+       });
        }
 
       //  Async.get('user', (val) => {
@@ -211,13 +220,13 @@ class SSN extends React.Component {
          </Animated.View>
 
          { /* Loading screen */
-           (this.state.loading)
+           /*(this.state.loading)
             ? <Animated.View style={{ opacity: this.loadingOpacity, height: dimensions.height, width: dimensions.width, backgroundColor: colors.white, position: 'absolute', top: 0, left: 0, justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontSize: 26, fontFamily: 'Roboto', fontWeight: '200', color: colors.richBlack, padding: 15, alignText: 'center' }}>
                   Hold on while we catch our breath...
                 </Text>
               </Animated.View>
-            : null }
+            : null*/ }
          {/*<Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
             <Loading
               complete={this.props.done_loading}

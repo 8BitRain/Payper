@@ -121,13 +121,13 @@ export default connect(
             eventType: 'value',
             listener: null,
             callback: (res) => {
+
               if(res != null){
-                if(res.iav != ""){
-
+                //console.log(JSON.parse(res));
+                if(res.iav.body.token != ""){
                   if(!dispatchList.retry && !dispatchList.suspended && !dispatchList.document){
-                    dispatch(dispatchFunctions.setIav(res.iav));
+                    dispatch(dispatchFunctions.setIav(res.iav.body.token));
                   }
-
                   dispatchList.iav = true;
                 }
               }
