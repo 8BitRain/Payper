@@ -220,13 +220,13 @@ class SSN extends React.Component {
          </Animated.View>
 
          { /* Loading screen */
-           /*(this.state.loading)
+           (this.state.loading)
             ? <Animated.View style={{ opacity: this.loadingOpacity, height: dimensions.height, width: dimensions.width, backgroundColor: colors.white, position: 'absolute', top: 0, left: 0, justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontSize: 26, fontFamily: 'Roboto', fontWeight: '200', color: colors.richBlack, padding: 15, alignText: 'center' }}>
                   Hold on while we catch our breath...
                 </Text>
               </Animated.View>
-            : null*/ }
+            : null }
          {/*<Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
             <Loading
               complete={this.props.done_loading}
