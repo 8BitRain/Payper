@@ -39,7 +39,6 @@ const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
       SET_FLAGS = 'SET_FLAGS'
       SET_NOTIFICATIONS = 'SET_NOTIFICATIONS',
       SET_NUM_UNSEEN_NOTIFICATIONS = 'SET_NUM_UNSEEN_NOTIFICATIONS',
-      SET_SIGNED_IN = 'SET_SIGNED_IN',
       SET_HEADER = 'SET_HEADER',
       SET_SIDE_MENU_IS_OPEN = 'SET_SIDE_MENU_IS_OPEN',
       SET_CURRENT_PAGE = 'SET_CURRENT_PAGE',
@@ -53,7 +52,6 @@ export function signedIn(input) { return {type: SET_SIGNED_IN, input: input} };
 export function currentUser(input) { return {type: SET_CURRENT_USER, input: input} };
 export function bankAccounts(input) { return {type: SET_BANK_ACCOUNTS, input: input} };
 export function flags(input) { return {type: SET_FLAGS, input: input} };
-export function signedIn(input) { return {type: SET_SIGNED_IN, input: input} };
 export function notifications(input) { return {type: SET_NOTIFICATIONS, input: input} };
 export function numUnseenNotifications(input) { return {type: SET_NUM_UNSEEN_NOTIFICATIONS, input: input} };
 export function header(input) { return {type: SET_HEADER, input: input} };
