@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, ListView, DataSource, Platform, StyleSheet, Text, Dimensions, Image, TouchableHighlight, StatusBar } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import * as _ from 'lodash';
 import colors from '../../styles/colors';
 import db from './data';
 
@@ -47,26 +48,39 @@ class Main extends React.Component {
   }
 
   _removePayment(p) {
-    var payments = (p.flow == "outgoing") ? this.outgoingPaymentsMap : this.incomingPaymentsMap;
-
-    // If this is the last payment in its section, just delete the entire section
-    // if (payments[p.sectionTitle].length === 1) {
-    //   delete payments[p.sectionTitle];
-    //   console.log("New data source:", this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(payments));
-    //   if (p.flow == "outgoing") this.setState({ outgoingDataSource: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(payments) });
-    //   else if (p.flow == "incoming") this.setState({ incomingDataSource: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(payments) });
-    //   return;
-    // }
-
-    // Recalculate number of payments in this section
-    var regex = /\(([^)]+)\)/;
-    var newNumPayments = regex.exec(p.sectionTitle)[1] - 1;
-    var newSectionTitle = p.sectionTitle.replace(/\(.*?\)/, "(" + newNumPayments + ")");
-    // TODO: Find out how to rename keys in a nested JSON structure
+    var payments = (p.flow === "outgoing") ? _.cloneDeep(this.outgoingPaymentsMap) : _.cloneDeep(this.incomingPaymentsMap);
 
     // Remove the payment from its section
     var i = payments[p.sectionTitle].indexOf(p);
     payments[p.sectionTitle].splice(i, 1);
+
+    // Determine new section title
+    var regex = /\(([^)]+)\)/;
+    var newNumPayments = regex.exec(p.sectionTitle)[1] - 1;
+    var oldSectionTitle = p.sectionTitle;
+    var newSectionTitle = p.sectionTitle.replace(/\(.*?\)/, "(" + newNumPayments + ")");
+
+    // Parse payment map
+    var newPaymentsMap = {};
+    for (var k in payments) {
+      if (k === oldSectionTitle) {
+        for (var i in payments[k])
+          payments[k][i].sectionTitle = newSectionTitle;
+        newPaymentsMap[newSectionTitle] = payments[k];
+      } else {
+        newPaymentsMap[k] = payments[k];
+      }
+    }
+
+    // Trigger re-render
+    var newDataSource = this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(newPaymentsMap);
+    if (p.flow === "outgoing") {
+      this.outgoingPaymentsMap = newPaymentsMap;
+      this.setState({ outgoingDataSource: newDataSource });
+    } else if (p.flow === "incoming") {
+      this.incomingPaymentsMap = newPaymentsMap;
+      this.setState({ incomingDataSource: newDataSource });
+    }
   }
 
   render() {
@@ -85,9 +99,8 @@ class Main extends React.Component {
         { /* Page */ }
         <View style={wrappers.content}>
           <Payments
-            activeFilter={this.state.activeFilter}
-            removePayment={(p) => this._removePayment(p)}
-            dataSources={{ incoming: this.state.incomingDataSource, outgoing: this.state.outgoingDataSource }} />
+            dataSource={(this.state.activeFilter == "incoming") ? this.state.incomingDataSource : this.state.outgoingDataSource}
+            removePayment={(p) => this._removePayment(p)} />
         </View>
       </View>
     );

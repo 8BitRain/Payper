@@ -30,24 +30,12 @@ class Payments extends React.Component {
       gradientStartY: 0.0,
       gradientEndX: 1.0,
       gradientEndY: 1.0,
-      activeFilter: this.props.activeFilter,
-      dataSource: (this.props.activeFilter == "incoming")
-        ? this.props.dataSources.incoming
-        : this.props.dataSources.outgoing,
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.activeFilter != this.state.activeFilter) {
-      this.setState({
-        dataSource: (nextProps.activeFilter == "incoming")
-          ? this.props.dataSources.incoming
-          : this.props.dataSources.outgoing,
-        activeFilter: nextProps.activeFilter,
-      });
-      this.paneCounter = 0;
-      this.paneCounterIncreasing = true;
-    }
+    this.paneCounter = 0;
+    this.paneCounterIncreasing = true;
   }
 
   _renderSectionHeader(sectionData, sectionTitle) {
@@ -69,8 +57,10 @@ class Payments extends React.Component {
       if (this.paneCounter === 1) this.paneCounterIncreasing = true;
     }
 
-    if (payment.stage == "pendingConfirmation" && payment.flow == "outgoing") return <ConfirmPaymentCard payment={payment} paneCounter={this.paneCounter} reject={() => this.props.removePayment(payment)} />
-    else return <ActivePaymentCard payment={payment} paneCounter={this.paneCounter} />
+    if (payment.stage == "pendingConfirmation" && payment.flow == "outgoing")
+      return <ConfirmPaymentCard payment={payment} paneCounter={this.paneCounter} reject={() => this.props.removePayment(payment)} />
+    else
+      return <ActivePaymentCard payment={payment} paneCounter={this.paneCounter} />
   }
 
   _renderFooter() {
@@ -82,7 +72,6 @@ class Payments extends React.Component {
   render() {
     return(
       <View style={wrappers.page}>
-
         { /* Background Gradient */ }
         <LinearGradient
           start={[this.state.gradientStartX, this.state.gradientStartY]} end={[this.state.gradientEndX, this.state.gradientEndY]}
@@ -93,15 +82,12 @@ class Payments extends React.Component {
         { /* Payments List */ }
         <View style={wrappers.payments}>
           <ListView
-            dataSource={this.state.dataSource}
+            dataSource={this.props.dataSource}
             renderRow={this._renderRow.bind(this)}
             renderSectionHeader={this._renderSectionHeader}
             renderFooter={this._renderFooter.bind(this)}
-            renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-             />
+            renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />} />
         </View>
-
-
       </View>
     );
   }
