@@ -124,11 +124,15 @@ export default connect(
 
               if(res != null){
                 //console.log(JSON.parse(res));
-                
+                try{
                   if(!dispatchList.retry && !dispatchList.suspended && !dispatchList.document){
                     dispatch(dispatchFunctions.setIav(res.iav.body.token));
                   }
                   dispatchList.iav = true;
+                }catch("ERROR: " + err){
+                  console.log(err);
+                }
+
 
               }
             },
