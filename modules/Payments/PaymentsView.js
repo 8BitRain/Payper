@@ -321,7 +321,7 @@ class Payments extends React.Component {
         Init.getIavToken(data, function(iavTokenRecieved, iavToken){
           if(iavTokenRecieved){
             _this.props.setIav(iavToken.token);
-            //Actions.BankOnboardingContainer();
+            //  Actions.BankOnboardingContainer();
           }
         });
         //The user needs to redo the customer creation process.
