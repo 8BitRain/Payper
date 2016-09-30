@@ -127,26 +127,25 @@ class SSN extends React.Component {
    componentWillUnmount() {
      _keyboardWillShowSubscription.remove();
      _keyboardWillHideSubscription.remove();
-      this.props.stopListening(this.props.activeFirebaseListeners);
+      this.props.stopListening();
    }
 
    createCustomer(data){
+     const _this = this;
+
      //data.token = {this.props.firebase_token};
      console.log("FirebaseToken: " + this.props.newUser.token);
      //console.log("DataToken: " + data.token);
-     var _this = this;
      Init.createCustomer(data, function(customerCreated){
        console.log("CustomerCreated?: " + customerCreated);
        //Loading Screen to IAV
        if(customerCreated){
           _this.props.dispatchSetLoading(true);
        }
-       
-       // Grab UID
-       Async.get('user', (val) => {
-         // Enable FirebaseListeners (dispatch will be called from the container)
-         _this.props.listen({ uid: JSON.parse(val).uid });
-       });
+
+      //  Async.get('user', (val) => {
+      //    _this.props.listen({ uid: JSON.parse(val).uid });
+      //  });
      });
    }
 

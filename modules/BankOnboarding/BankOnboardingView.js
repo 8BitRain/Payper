@@ -173,7 +173,6 @@ class BankOnboardingView extends React.Component {
         switch(this.props.currentPagex){
           case 0:
             if(this.props.loading){
-              console.log("LOADING");
               return(
                 <View style={{flex: 1, backgroundColor: colors.accent}}>
                 <Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
@@ -183,8 +182,8 @@ class BankOnboardingView extends React.Component {
                    msgError={"There was an error on our end. Sorry about that ^_^;"}
                    msgLoading={"One moment..."}
                    success={true}
-                   successDestination={() => {console.log("SucessfullLoading")}}
-                   errorDestination={() => {console.log("temp loading screen")}}
+                   successDestination={() => {}}
+                   errorDestination={() => {}}
                  />
                 </Modal>
                 </View>
@@ -253,23 +252,22 @@ class BankOnboardingView extends React.Component {
           case 4:
             return(
               <View style={{flex: 1}}>
-              <SSN
-                dispatchSetSSN={this.props.dispatchSetSSN}
-                dispatchSetPageX={this.props.dispatchSetPageX}
-                dispatchSetSSNValidations={(text) => this.props.dispatchSetSSNValidations(Validators.validateSSN(text))}
-                ssnValidations = {this.props.ssnValidations}
-                callbackClose={Actions.landingView}
-                dwollaCustomer={this.props.dwollaCustomer}
-                newUser={this.props.newUser}
-                dispatchSetIav={this.props.dispatchSetIav}
-                listen={this.props.listen}
-                stopListening={this.props.stopListening}
-                activeFirebaseListeners={this.props.activeFirebaseListeners}
-                dispatchSetLoading={this.props.dispatchSetLoading}
-                loading={this.props.loading}
-                done_loading={this.props.done_loading}
-                fullSSN={this.props.fullSSN}
-              />
+                <SSN
+                  dispatchSetSSN={this.props.dispatchSetSSN}
+                  dispatchSetPageX={this.props.dispatchSetPageX}
+                  dispatchSetSSNValidations={(text) => this.props.dispatchSetSSNValidations(Validators.validateSSN(text))}
+                  ssnValidations = {this.props.ssnValidations}
+                  callbackClose={Actions.landingView}
+                  dwollaCustomer={this.props.dwollaCustomer}
+                  newUser={this.props.newUser}
+                  dispatchSetIav={this.props.dispatchSetIav}
+                  listen={(params) => this.props.listen(params)}
+                  stopListening={this.props.stopListening}
+                  activeFirebaseListeners={this.props.activeFirebaseListeners}
+                  dispatchSetLoading={this.props.dispatchSetLoading}
+                  loading={this.props.loading}
+                  done_loading={this.props.done_loading}
+                  fullSSN={this.props.fullSSN} />
               </View>
             )
             break;
@@ -277,8 +275,6 @@ class BankOnboardingView extends React.Component {
         //<OnBoardingSummaryTest  firebase_token = {this.props.firebase_token} startIav={this.props.startIav} dispatchSetIav={this.props.dispatchSetIav} dispatchSetFirebaseToken={this.props.dispatchSetFirebaseToken}/>
     }
     if (this.props.startIav != "" && this.props.startMain == false && this.props.startVerifyMicroDeposit == false){
-      console.log("IAV: " + this.props.startIav);
-
       return(
         <View style={{flex: 1}}>
         <Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
@@ -288,8 +284,8 @@ class BankOnboardingView extends React.Component {
            msgError={"There was an error on our end. Sorry about that ^_^;"}
            msgLoading={"One moment..."}
            success={true}
-           successDestination={() => {console.log("SucessfullLoading")}}
-           errorDestination={() => {console.log("temp loading screen")}}
+           successDestination={() => {}}
+           errorDestination={() => {}}
          />
         </Modal>
         <Iav
@@ -303,7 +299,7 @@ class BankOnboardingView extends React.Component {
           dispatchSetDoneLoading={this.props.dispatchSetDoneLoading}
           loading={this.props.loading}
           done_loading={this.props.done_loading}
-          />
+          toggleModal={this.props.toggleModal} />
         </View>
       )
     }

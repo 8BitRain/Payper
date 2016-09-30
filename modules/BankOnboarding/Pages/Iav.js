@@ -63,16 +63,8 @@ class Iav extends React.Component {
     var _this = this;
 
     Async.get('user', (val) => {
-      console.log("User: " + val);
-      console.log("User: " + JSON.parse(val).uid);
-      //Listen for microdeposits first
-      var micro_deposit_flow = "appFlags/" + JSON.parse(val).uid;
-
-      //Need to listen to fundingSourceAdded and IAV so
-
-      var fundingSourceAdded = "IAV/" + JSON.parse(val).uid;
-
-      _this.props.listen([fundingSourceAdded, micro_deposit_flow]);
+      var parsedUser = JSON.parse(val);
+      _this.props.listen({ uid: parsedUser.uid, token: parsedUser.token, toggleModal: () => this.props.toggleModal() });
     });
   }
 

@@ -23,14 +23,19 @@ class FundingSources extends React.Component {
     this.EMPTY_DATA_SOURCE = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
-      empty: true,
-      fundingSources: this.props.fundingSourcesDataSource,
+      empty: this.props.fundingSourcesDataSource.getRowCount() === 0,
       modalVisible: false,
+      dataSource: this.props.fundingSourcesDataSource,
     };
   }
 
-  componentDidMount() {
-    this._genRows();
+  componentWillReceiveProps(nextProps) {
+    console.log("\n\n\n\n<FundingSources /> will receive new props:", nextProps);
+    if (nextProps.fundingSourcesDataSource)
+      this.setState({
+        dataSource: nextProps.fundingSourcesDataSource,
+        empty: nextProps.fundingSourcesDataSource.getRowCount() === 0,
+      });
   }
 
   _toggleModal() {
@@ -40,7 +45,7 @@ class FundingSources extends React.Component {
   _verifyOnboardingStatus() {
     if (this.props.flags.onboarding_state == 'customer') {
       this.props.setNewUserToken(this.props.currentUser.token);
-    } else if (this.state.fundingSources.getRowCount() == 0) {
+    } else if (this.state.dataSource.getRowCount() == 0) {
       // Extend scope
       const _this = this;
 
@@ -57,11 +62,6 @@ class FundingSources extends React.Component {
     }
   }
 
-  _genRows() {
-    if (!this.props.fundingSourcesDataSource || this.props.fundingSourcesArray.length == 0) return;
-    this.setState({ empty: false });
-  }
-
   _renderRow(f) {
     return(
       <FundingSource
@@ -72,11 +72,10 @@ class FundingSources extends React.Component {
   }
 
   _getFundingSourceList() {
-    console.log("Data source:", this.props.fundingSourcesDataSource);
     return(
       <View style={{flex: 0.9, paddingTop: 0, backgroundColor: colors.richBlack}}>
         <ListView
-          dataSource={this.props.fundingSourcesDataSource}
+          dataSource={this.state.dataSource}
           renderRow={this._renderRow.bind(this)}
           renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
           enableEmptySections />

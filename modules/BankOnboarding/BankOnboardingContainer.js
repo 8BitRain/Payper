@@ -1,9 +1,18 @@
-import {connect} from 'react-redux';
-import * as dispatchFunctions from  './BankOnboardingState';
+// Dependencies
+import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
+
+// Components
 import BankOnboardingView from './BankOnboardingView';
+
+// Helpers
 import Validators from '../../helpers/validators';
+import * as Lambda from '../../services/Lambda';
 import * as Firebase from '../../services/Firebase';
-import {Actions} from 'react-native-router-flux';
+
+// Dispatch functions
+import * as dispatchFunctions from  './BankOnboardingState';
+import * as setInFundingSources from '../FundingSources/FundingSourcesState';
 
 /**
   *   Connect function for BankOnboardingView.js
@@ -59,6 +68,9 @@ export default connect(
   dispatch => ({
       listen(params) {
 
+        console.log("Listening with params:", params);
+
+
         var endpoints = [
           {
             endpoint: 'appFlags/' + params.uid,
@@ -94,7 +106,8 @@ export default connect(
                 }
 
                if(res.onboarding_state == "complete"){
-                Actions.MainViewContainer();
+                 if (typeof params.toggleModal == 'function') params.toggleModal();
+                 else Actions.MainViewContainer();
                }
               }
               //Note there is a predictable flow in the way in which events are
