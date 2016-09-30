@@ -129,8 +129,8 @@ export default connect(
                     dispatch(dispatchFunctions.setIav(res.iav.body.token));
                   }
                   dispatchList.iav = true;
-                }catch("ERROR: " + err){
-                  console.log(err);
+                }catch(err){
+                  console.log("ERROR: " + err);
                 }
 
 
