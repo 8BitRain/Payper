@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TouchableHighlight, ListView, RecyclerViewBackedScrollView, Modal, StatusBar } from 'react-native';
+import { View, Text, TouchableHighlight, ListView, RecyclerViewBackedScrollView, Modal, StatusBar, Animated, Dimensions, Easing } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Entypo from 'react-native-vector-icons/Entypo';
 
@@ -15,6 +15,7 @@ import colors from "../../styles/colors";
 // Partial components
 import FundingSource from '../../components/FundingSource/FundingSource.js';
 import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingContainer';
+const dimensions = Dimensions.get('window');
 
 class FundingSources extends React.Component {
   constructor(props) {
@@ -22,10 +23,13 @@ class FundingSources extends React.Component {
 
     this.EMPTY_DATA_SOURCE = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
+    this.loadingOpacity = new Animated.Value(0);
+
     this.state = {
       empty: true,
       fundingSources: this.props.fundingSourcesDataSource,
       modalVisible: false,
+      loading:false
     };
   }
 
@@ -52,9 +56,20 @@ class FundingSources extends React.Component {
       Init.getIavToken(data, function(iavTokenRecieved, iavToken) {
         if (iavTokenRecieved) {
           _this.props.setIav(iavToken.token);
+          Actions.BankOnboardingContainer();
         }
       });
     }
+  }
+
+  _showLoadingScreen() {
+    this.setState({ loading: true });
+
+    Animated.timing(this.loadingOpacity, {
+      toValue: 1.0,
+      duration: 300,
+      easing: Easing.elastic(1),
+    }).start();
   }
 
   _genRows() {
@@ -95,6 +110,18 @@ class FundingSources extends React.Component {
     );
   }
 
+  _getLoadingView(){
+    return(
+      <View style={{flex: 1}}>
+       <Animated.View style={{ opacity: this.loadingOpacity, height: dimensions.height, width: dimensions.width, backgroundColor: colors.white, position: 'absolute', top: 0, left: 0, justifyContent: 'center', alignItems: 'center' }}>
+           <Text style={{ fontSize: 26, fontFamily: 'Roboto', fontWeight: '200', color: colors.richBlack, padding: 15 }}>
+               Securing Bank Portal
+           </Text>
+         </Animated.View>
+      </View>
+    );
+  }
+
 
   render() {
     return (
@@ -111,8 +138,10 @@ class FundingSources extends React.Component {
                 message: "Payper doesn't currently support multiple bank accounts. This feature will be available soon!",
               });
             } else {
+              this._showLoadingScreen();
               this._verifyOnboardingStatus();
-              if (this.props.flags.onboarding_state != "complete" || this.state.fundingSources.getRowCount() == 0) this._toggleModal();
+              /*if (this.props.flags.onboarding_state != "complete" || this.state.fundingSources.getRowCount() == 0)
+              this._toggleModal();*/
             }
           }}>
 
@@ -126,6 +155,8 @@ class FundingSources extends React.Component {
 
         { /* Render list of notifications or empty state */
           (this.state.empty) ? this._getEmptyState() : this._getFundingSourceList() }
+
+
 
         { /* Modal containing bank onboarding flow */ }
         <Modal
@@ -144,7 +175,16 @@ class FundingSources extends React.Component {
           </View>
 
         </Modal>
+        { /* Loading screen */
+          (this.state.loading)
+           ? <Animated.View style={{ opacity: this.loadingOpacity, height: dimensions.height, width: dimensions.width, backgroundColor: colors.white, position: 'absolute', top: 0, left: 0, justifyContent: 'center', alignItems: 'center' }}>
+               <Text style={{ fontSize: 26, fontFamily: 'Roboto', fontWeight: '200', color: colors.richBlack, padding: 15 }}>
+                   Securing Bank Portal
+               </Text>
+             </Animated.View>
+           : null }
       </View>
+
     );
   }
 }

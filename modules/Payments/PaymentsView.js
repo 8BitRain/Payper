@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar } from 'react-native';
+import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar, Animated } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 // Helpers
@@ -31,7 +31,11 @@ class Payments extends React.Component {
     this.state = {
       uid: "",
       modalVisible: false,
+      loadingVisible: false,
+      loading: false,
     }
+
+    this.loadingOpacity = new Animated.Value(0);
   }
 
   componentDidMount() {
@@ -56,6 +60,16 @@ class Payments extends React.Component {
         this.props.listen([incomingPayments, outgoingPayments, appFlags]);
       });
     }
+  }
+
+  _showLoadingScreen() {
+    this.setState({ loading: true });
+
+    Animated.timing(this.loadingOpacity, {
+      toValue: 1.0,
+      duration: 300,
+      easing: Easing.elastic(1),
+    }).start();
   }
 
   _showMenu(payment) {
@@ -163,6 +177,10 @@ class Payments extends React.Component {
 
   _toggleModal(options) {
     this.setState({ modalVisible: !this.state.modalVisible });
+  }
+
+  _toggleLoading(options) {
+    this.setState({ loadingVisible: !this.state.loadingVisible });
   }
 
   _renderEmptyState() {
@@ -303,26 +321,10 @@ class Payments extends React.Component {
     }
     //The user has completed customer creation and now has to go through dwolla IAV
     if(this.props.flags.onboarding_state == 'bank') {
-      if(this.props.flags.customer_status == 'verified') {
-        console.log("BANK STATE REACHED: " + this.props.startIav );
-        //Initiate IAV
-        this.props.setNewUserToken(this.props.currentUser.token);
-        this.props.setLoading(true);
-        var data = {
-          token: this.props.currentUser.token
-        };
-        var _this = this;
-        console.log("Beginning IAV Initiation");
-        Init.getIavToken(data, function(iavTokenRecieved, iavToken){
-          if(iavTokenRecieved){
-            console.log("SSN IAVTOKEN: " + JSON.stringify(iavToken));
-            // Will cause the IAV Token Page to be loaded
-            _this.props.setIav(iavToken.token);
-            Actions.BankOnboardingContainer();
-          }
-        });
+      //Ask vash if he removes customer_status when a bank account is deleted
+
         //The user needs to redo the customer creation process.
-      } else if(this.props.flags.customer_status == 'retry') {
+       if(this.props.flags.customer_status == 'retry') {
           this.props.setRetry(true);
           this.props.setLoading(true);
           Actions.BankOnboardingContainer();
@@ -331,12 +333,49 @@ class Payments extends React.Component {
           this.props.setDocument(true);
           this.props.setLoading(true);
           Actions.BankOnboardingContainer();
+      } else {
+          console.log("BANK STATE REACHED: " + this.props.startIav );
+          //Initiate IAV
+          this.props.setNewUserToken(this.props.currentUser.token);
+          this.props.setLoading(true);
+          var data = {
+            token: this.props.currentUser.token
+          };
+          var _this = this;
+          console.log("Beginning IAV Initiation");
+          Init.getIavToken(data, function(iavTokenRecieved, iavToken){
+            if(iavTokenRecieved){
+              console.log("SSN IAVTOKEN: " + JSON.stringify(iavToken));
+              // Will cause the IAV Token Page to be loaded
+              _this.props.setIav(iavToken.token);
+              Actions.BankOnboardingContainer();
+              _this._toggleLoading();
+            }
+          });
       }
     }
     //The user has completed onboarding and can make payments.
     if(this.props.flags.onboarding_state == 'complete'){
       Actions.CreatePaymentViewContainer();
     }
+  }
+
+  _getLoadingView(){
+    return(
+      <View style={{flex: 1}}>
+      <Modal
+        animationType={"slide"}
+        transparent={false}
+        visible={true}>
+       <Animated.View style={{ opacity: this.loadingOpacity, height: dimensions.height, width: dimensions.width, backgroundColor: colors.white, position: 'absolute', top: 0, left: 0, justifyContent: 'center', alignItems: 'center' }}>
+           <Text style={{ fontSize: 26, fontFamily: 'Roboto', fontWeight: '200', color: colors.richBlack, padding: 15 }}>
+             Securing Bank Portal
+           </Text>
+         </Animated.View>
+      </Modal>
+
+      </View>
+    );
   }
 
 
@@ -349,8 +388,10 @@ class Payments extends React.Component {
 
         { /* List of payments or empty state */ }
         <View style={{flex: 1.0}}>
-          { this._renderPaymentList() }
+          {  this._renderPaymentList() }
         </View>
+
+
 
         { /* Footer */ }
         <View
@@ -365,10 +406,15 @@ class Payments extends React.Component {
                   title: "Hey!",
                   message: "You must add a bank account before you can make a payment."
                 });*/
+                console.log("BANK ONBOARDING IS NOT COMPLETE");
+                //this._toggleLoading();
+                this._toggleLoading();
                 this._verifyOnboardingStatus();
+              } else {
+                this._toggleModal();
               }
 
-              this._toggleModal();
+
             }} />
         </View>
 
@@ -399,6 +445,16 @@ class Payments extends React.Component {
                         toggleModal={(options) => this._toggleModal(options)} /> }
 
           </View>
+        </Modal>
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.loadingVisible}>
+           <View style={{flex: 1.0, alignItems: "center", justifyContent: "center"}}>
+             <Text style={{ fontSize: 26, fontFamily: 'Roboto', fontWeight: '200', color: colors.richBlack, padding: 15, textAlign: "center" }}>
+              Securing Bank Portal
+             </Text>
+            </View>
         </Modal>
       </View>
     );

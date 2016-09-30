@@ -90,6 +90,7 @@ class Iav extends React.Component {
   }
   componentWillUnmount() {
     // Disable Firebase listeners
+    this.props.dispatchSetIav("");
     this.props.stopListening(this.props.activeFirebaseListeners);
   }
 

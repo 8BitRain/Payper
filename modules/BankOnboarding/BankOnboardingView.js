@@ -321,6 +321,7 @@ class BankOnboardingView extends React.Component {
           dispatchSetDoneLoading={this.props.dispatchSetDoneLoading}
           loading={this.props.loading}
           done_loading={this.props.done_loading}
+          dispatchSetIav={this.props.dispatchSetIav}
           />
         </View>
       )
