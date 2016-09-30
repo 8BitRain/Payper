@@ -1,7 +1,7 @@
 # ![](./godmode.png) **Payper**
 ### Recurring payments made easy.
 
-## **To Do**
+## [To Do](TODO.md)
 
 ## **Installation**
 ```
