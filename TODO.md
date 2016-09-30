@@ -1,5 +1,5 @@
 
-## [**Todo**](TODO.md)
+## [**Todo**](https://github.com/8BitRain/Payper/blob/master/TODO.md)
 
 ### Frontend
 - [x] Sidebar
