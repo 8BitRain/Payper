@@ -16,6 +16,10 @@ var dispatchList = {
   document: false,
   doneListening: false
 }
+
+// Used to keep track of which listeners we'll disable in stopListening()
+var ACTIVE_LISTENERS = [];
+
 export default connect(
   state => ({
 
@@ -53,119 +57,86 @@ export default connect(
 
   }),
   dispatch => ({
-      listen(endpoints) {
+      listen(params) {
 
-        Firebase.listenTo(endpoints, (response) => {
-          console.log("%cFirebase listener received:", "color:orange;font-weight:900;");
-          console.log(response);
-          console.log("Response Value: " + JSON.stringify(response.value));
-
-
-          var fundingSourceAdded = false;
-          //Go From (Bank Onboarding Container)SSN submit page to IAV
-          console.log("Endpoint: " + JSON.stringify(endpoints));
-          console.log("Response Endpoint: " + JSON.stringify(response.endpoint));
-
-
-          switch(response.endpoint.split("/")[0]){
-            //Next try removing IAV case
-            case "appFlags":
-              if(response.value != null){
-                //console.log("onboarding_state: " + response.value.onboarding_state);
-                if(response.value.micro_deposit_flow == true){
-                  console.log("Microdeposits flow is true");
+        var endpoints = [
+          {
+            endpoint: 'appFlags/' + params.uid,
+            eventType: 'value',
+            listener: null,
+            callback: (res) => {
+              if(res != null){
+                //console.log("onboarding_state: " + res.onboarding_state);
+                if(res.micro_deposit_flow == true){
                   dispatch(dispatchFunctions.setVerifyMicroDeposit(true));
-                  break;
                 }
 
                 //load Retry screen
-                if(response.value.customer_status == "retry"){
+                if(res.customer_status == "retry"){
                   /*TODO Make sure you update SSN to reset retry to false before
                   submitting data so you don't get stuck in a loop!*/
                   dispatchList.retry = true;
                   dispatch(dispatchFunctions.setRetry(true));
-                  console.log("Loading Retry scenario");
-                  break;
                 }
 
-                if(response.value.customer_status == "document"){
+                if(res.customer_status == "document"){
                   /*TODO Make sure you update SSN to reset retry to false before
                   submitting data so you don't get stuck in a loop!*/
                   dispatchList.document = true;
                   dispatch(dispatchFunctions.setDocument(true));
-                  console.log("Loading Document scenario");
-                  break;
                 }
 
-                if(response.value.customer_status == "suspended"){
+                if(res.customer_status == "suspended"){
                   /*TODO Make sure you update SSN to reset retry to false before
                   submitting data so you don't get stuck in a loop!*/
                   dispatchList.suspended = true;
                   dispatch(dispatchFunctions.setSuspended(true));
-
-                  console.log("Loading Suspended scenario");
-                  break;
                 }
 
-               if(response.value.onboarding_state == "complete"){
-                console.log("Move to app");
-                //priorityDispatch = "main"
+               if(res.onboarding_state == "complete"){
                 Actions.MainViewContainer();
-                break;
                }
               }
               //Note there is a predictable flow in the way in which events are
               //listed to/ For the time being appFlag events are the last events
               //that we need to listen to.
               dispatchList.doneListening = true;
-              break;
-            case "IAV":
-              if(response.value != null){
-                if(response.value.iav != ""){
-                  console.log("Starts IAV");
+            },
+          },
+          {
+            endpoint: 'IAV/' + params.uid,
+            eventType: 'value',
+            listener: null,
+            callback: (res) => {
+              if(res != null){
+                if(res.iav != ""){
 
                   if(!dispatchList.retry && !dispatchList.suspended && !dispatchList.document){
-                    dispatch(dispatchFunctions.setIav(response.value.iav));
+                    dispatch(dispatchFunctions.setIav(res.iav));
                   }
 
-                  //priorityDispatch = "iav"
                   dispatchList.iav = true;
-
                 }
               }
-              break;
-          }
-          /*Handle Dispatch Priorities that cause re-rendering in app*/
-          /*Retry IAV takes priority. It is possible iav will never be hit
-           if a user's customer is not sucessfully created*/
-          /*console.log(dispatchList);
-          if(dispatchList.doneListening){
-            if(dispatchList.iav == true && dispatchList.retry == true){
+            },
+          },
+        ];
 
+        // Reset dispatchList
+        dispatchList.retry = false;
+        dispatchList.suspended = false;
+        dispatchList.document = false;
 
-              dispatch(dispatchFunctions.setRetry(true));
-            }
-            if(dispatchList.iav == false && dispatchList.retry == true){
-              dispatch(dispatchFunctions.setRetry(true));
-            }
-            if(dispatchList.iav == true && dispatchList.retry == false){
-              dispatch(dispatchFunctions.setIav(response.value.iav));
-            }
-          }*/
+        for (var e in endpoints) {
+          Firebase.listenTo(endpoints[e]);
+          ACTIVE_LISTENERS.push(endpoints[e]);
+        }
+      },
 
-        });
-          console.log("DispatchList" + JSON.stringify(dispatchList));
-          //reset dispatchList
-          dispatchList.retry = false;
-          dispatchList.suspended = false;
-          dispatchList.document = false;
-
-          dispatch(dispatchFunctions.activeFirebaseListeners(endpoints));
-        },
-
-      stopListening(endpoints) {
-        Firebase.stopListeningTo(endpoints);
-        dispatch(dispatchFunctions.activeFirebaseListeners([]));
+      stopListening: () => {
+        for (var e in ACTIVE_LISTENERS) {
+          Firebase.stopListeningTo(ACTIVE_LISTENERS[e]);
+        }
       },
 
       dispatchSetIav(input){

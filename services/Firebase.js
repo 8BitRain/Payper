@@ -233,7 +233,6 @@ export function signOut(callback) {
 export function listenTo(params) {
   console.log("Enabling listener with params:");
   console.log(params);
-
   params.listener = firebase.database().ref('/' + params.endpoint).on('value', (snapshot) => {
     if (typeof params.callback == 'function') params.callback(snapshot.val());
     else console.log("%cCallback is not a function", "color:red;font-weight:900;");
