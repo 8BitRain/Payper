@@ -111,6 +111,7 @@ export default connect(
                    else Actions.MainViewContainer();
                  }catch(err2){
                    console.log("Error: " + err2);
+                   Actions.MainViewContainer();
                  }
 
                }
