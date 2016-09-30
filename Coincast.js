@@ -20,6 +20,7 @@ import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreen
 // Test modules
 import LandingView from './components/LandingView';
 import FirebaseBindingViewContainer from './modules/FirebaseBinding/FirebaseBindingViewContainer';
+// import LoadingSVG from './components/LoadingSVG.js';
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);

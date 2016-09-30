@@ -95,30 +95,30 @@ class LastName extends React.Component {
      <View style={[containers.container, backgrounds.lastName]}>
        <Animated.View style={{opacity: this.animationProps.fadeAnim}}>
 
-       { /* Background */ }
-       <View style={[backgrounds.background, backgrounds.lastName]}></View>
+         { /* Background */ }
+         <View style={[backgrounds.background, backgrounds.lastName]}></View>
 
-       { /* Promp and input field */ }
-       <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.lastName]}>
-         <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>How about your last name?</Text>
-         <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom, {fontWeight: "100"}]} defaultValue={this.props.lastName} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(4, "forward", this.props.lastNameValidations, this.lastNameInput)}} onChangeText={(text) => {this.lastNameInput = text; this.props.dispatchSetLastNameValidations(this.lastNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} />
-       </View>
+         { /* Promp and input field */ }
+         <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.lastName]}>
+           <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>How about your last name?</Text>
+           <TextInput style={[typography.textInput, typography.marginSides, typography.marginBottom, {fontWeight: "100"}]} defaultValue={this.props.lastName} onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.props.dispatchSetPage(4, "forward", this.props.lastNameValidations, this.lastNameInput)}} onChangeText={(text) => {this.lastNameInput = text; this.props.dispatchSetLastNameValidations(this.lastNameInput)}} autoCorrect={false} autoFocus={true} placeholderFontFamily="Roboto" placeholderTextColor="#99ECFB" placeholder={""} />
+         </View>
 
-       { /* Error messages */ }
-       <View style={[containers.sixTenths, backgrounds.lastName, {marginTop: 10}]}>
-         { this.props.lastNameValidations.capitalized ? null
-           : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Not capitalized</Text> }
-         { this.props.lastNameValidations.format ? null
-           : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Invalid character (. and - are allowed)</Text> }
-         { this.props.lastNameValidations.valid ? <Text style={[typography.validationSuccess, typography.fontSizeError, typography.marginSides]}>Good to go!</Text>
-           : null }
-       </View>
+         { /* Error messages */ }
+         <View style={[containers.sixTenths, backgrounds.lastName, {marginTop: 10}]}>
+           { this.props.lastNameValidations.capitalized ? null
+             : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Not capitalized</Text> }
+           { this.props.lastNameValidations.format ? null
+             : <Text style={[typography.general, typography.fontSizeError, typography.marginSides]}>Invalid character (. and - are allowed)</Text> }
+           { this.props.lastNameValidations.valid ? <Text style={[typography.validationSuccess, typography.fontSizeError, typography.marginSides]}>Good to go!</Text>
+             : null }
+         </View>
 
-       { /* Header */ }
-      <Header obsidian callbackBack={() => {this.onPressLeft()}} callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
+         { /* Header */ }
+         <Header transparent callbackBack={() => {this.onPressLeft()}} callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
 
        </Animated.View>
-       <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
+       <Animated.View style={{ position: 'absolute', bottom: this.kbOffset, left: 0, right: 0 }}>
          <TouchableHighlight
            activeOpacity={0.8}
            underlayColor={'transparent'}

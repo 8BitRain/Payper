@@ -33,7 +33,7 @@ class FundingSources extends React.Component {
     this._genRows();
   }
 
-  _toggleModal(options) {
+  _toggleModal() {
     this.setState({ modalVisible: !this.state.modalVisible });
   }
 
@@ -132,7 +132,7 @@ class FundingSources extends React.Component {
           animationType={"slide"}
           transparent={false}
           visible={this.state.modalVisible}
-          onRequestClose={ () => alert("Closed modal") }>
+          onRequestClose={() => alert("Closed modal")}>
 
           { /* Lighten status bar text */ }
           <StatusBar barStyle="light-content" />
@@ -140,9 +140,8 @@ class FundingSources extends React.Component {
           <View style={{flex: 1.0}}>
             <BankOnboarding
               {...this.props}
-              toggleModal={(options) => this._toggleModal(options)} />
+              toggleModal={() => this._toggleModal()} />
           </View>
-
         </Modal>
       </View>
     );

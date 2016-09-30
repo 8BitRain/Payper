@@ -2,12 +2,14 @@ import React from 'react';
 import {View, Text, TextInput, StyleSheet, Animated, Image, TouchableHighlight, DeviceEventEmitter} from "react-native";
 import Button from "react-native-button";
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
+import Entypo from "react-native-vector-icons/Entypo";
 
-// Custom helper functions
+// Helpers
 import * as Animations from "../../../helpers/animations";
 import * as Validators from "../../../helpers/validators";
+import * as Init from '../../../_init';
 
-// Custom components
+// Components
 import Header from "../../../components/Header/Header";
 import ArrowNav from "../../../components/Navigation/Arrows/ArrowDouble";
 var Mixpanel = require('react-native-mixpanel');
@@ -16,12 +18,6 @@ var Mixpanel = require('react-native-mixpanel');
 import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
-
-//Icons
-import Entypo from "react-native-vector-icons/Entypo"
-
-//Init
-import * as Init from '../../../_init';
 
 class PhoneNumber extends React.Component {
  constructor(props) {
@@ -68,8 +64,6 @@ class PhoneNumber extends React.Component {
      };
    }
 
-
-
    // Callback functions to be passed to the arrow nav
    this.onPressRight = function() { this.props.dispatchSetPage(5, "forward", {valid: true}, this.phoneNumberInput) };
    this.onPressLeft = function() { this.props.dispatchSetPage(3, null, null, null) };
@@ -98,8 +92,6 @@ class PhoneNumber extends React.Component {
     });
   }
 
-
-
  _keyboardWillShow(e) {
    Animated.spring(this.kbOffset, {
      toValue: e.endCoordinates.height,
@@ -126,16 +118,16 @@ class PhoneNumber extends React.Component {
    _keyboardWillShowSubscription.remove();
    _keyboardWillHideSubscription.remove();
  }
+
  render() {
-   console.log("Phone number validations:", this.props.phoneValidations);
-   return (
+   return(
     <View style={[backgrounds.background, backgrounds.phoneNumber]}>
      <Animated.View style={[containers.container, {opacity: this.animationProps.fadeAnim}]}>
        { /* Background */ }
        <View style={[backgrounds.background, backgrounds.phoneNumber]}></View>
 
        { /* Prompt and input field */ }
-       <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.phoneNumber]}>
+       <View {...this.props} style={[containers.quo, containers.justifyCenter, containers.padHeader, backgrounds.lastName]}>
          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, typography.marginBottom]}>{ "What's your phone number?" }</Text>
          <TextInput
           style={[typography.textInput, typography.marginSides, typography.marginBottom, {fontWeight: "100"}]}
@@ -154,7 +146,7 @@ class PhoneNumber extends React.Component {
        </View>
 
        { /* Header */ }
-       <Header obsidian callbackBack={() => {this.onPressLeft()}} callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
+       <Header transparent callbackBack={() => {this.onPressLeft()}} callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
 
     </Animated.View>
     <Animated.View style={{position: 'absolute', bottom: this.kbOffset, left: 0, right: 0}}>
@@ -171,9 +163,7 @@ class PhoneNumber extends React.Component {
 
       </TouchableHighlight>
     </Animated.View>
-
   </View>
-
    );
  }
 }

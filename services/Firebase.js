@@ -114,7 +114,6 @@ export function getCurrentUser(callback) {
 };
 
 
-
 /**
   *   Count number of unseen notifications for the current user and return
   *   it via callback
@@ -134,8 +133,6 @@ export function getNumNotifications(uid, callback) {
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 
 
-
-// firebase.database().ref('/appFlags/' + uid).set({ val: true, hasx: false });
 /**
   *   Create the flags necessary for a user
   *   Current Flags: account_status,
@@ -147,7 +144,7 @@ export function createAppFlags(user, account_status){
   console.log("CREATING APP FLAGS");
 };
 
-// firebase.database().ref('/appFlags/' + uid).set({ val: true, hasx: false });
+
 /**
   *   Create a flag
 **/
@@ -169,9 +166,6 @@ export function createUser(data, callback) {
     if (typeof callback == 'function') callback(false);
   });
 };
-
-
-
 
 
 //  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
@@ -239,7 +233,7 @@ export function signOut(callback) {
 export function listenTo(params) {
   console.log("Enabling listener with params:");
   console.log(params);
-  
+
   params.listener = firebase.database().ref('/' + params.endpoint).on('value', (snapshot) => {
     if (typeof params.callback == 'function') params.callback(snapshot.val());
     else console.log("%cCallback is not a function", "color:red;font-weight:900;");

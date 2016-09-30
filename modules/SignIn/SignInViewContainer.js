@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Animated, Easing, Image, Dimensions, AsyncStorage, TouchableHighlight, DeviceEventEmitter } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Animated, Easing, Image, Dimensions, AsyncStorage, TouchableHighlight, DeviceEventEmitter, StatusBar } from 'react-native';
 import Button from 'react-native-button';
 import { Reducer, Router, Actions } from 'react-native-router-flux';
 import * as Animations from '../../helpers/animations';
@@ -209,6 +209,10 @@ class SignInView extends React.Component {
     } else {
       return (
         <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.obisdian}}>
+
+          { /* Lighten status bar text */ }
+          <StatusBar barStyle="light-content" />
+
           <Animated.View style={{ marginBottom: this.inputOffsetBottom }}>
             <View ref="inputWrap">
 
