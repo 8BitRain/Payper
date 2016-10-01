@@ -36,11 +36,12 @@ class Payments extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.paneCounter = 0;
     this.paneCounterIncreasing = true;
+    console.log("DataSource:", nextProps.dataSource);
   }
 
   _renderSectionHeader(sectionData, sectionTitle) {
     return(
-      <View style={{height: 30, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', padding: 10, paddingLeft: 20, backgroundColor: "rgba(255, 255, 255, 0.5)"}}>
+      <View style={{height: 32.5, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', paddingLeft: 20, backgroundColor: colors.paymentListSectionHeaderBackgroundColor, borderColor: colors.paymentListSectionHeaderBorderColor, borderBottomWidth: 0.8}}>
         <Text>{ sectionTitle }</Text>
       </View>
     );
@@ -76,7 +77,7 @@ class Payments extends React.Component {
         <LinearGradient
           start={[this.state.gradientStartX, this.state.gradientStartY]} end={[this.state.gradientEndX, this.state.gradientEndY]}
           locations={[0,1,0]}
-          colors={['#8BE8CB', '#8783D1', '#91C4F2']}
+          colors={['#8BE8CB', '#9e9be2', '#91C4F2']}
           style={gradients.payments} />
 
         { /* Payments List */ }

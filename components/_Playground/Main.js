@@ -51,7 +51,11 @@ class Main extends React.Component {
     var payments = (p.flow === "outgoing") ? _.cloneDeep(this.outgoingPaymentsMap) : _.cloneDeep(this.incomingPaymentsMap);
 
     // Remove the payment from its section
-    var i = payments[p.sectionTitle].indexOf(p);
+    var i;
+    for (var j in payments[p.sectionTitle]) {
+      const curr = payments[p.sectionTitle][j];
+      if (curr.pid === p.pid) i = j;
+    }
     payments[p.sectionTitle].splice(i, 1);
 
     // Determine new section title

@@ -1,7 +1,6 @@
 import {StyleSheet} from 'react-native';
 
 const colors = {
-
   white: "#fefeff",
   offWhite: "#ededed",
   icyBlue: "#59B5F2",
@@ -27,6 +26,10 @@ const colors = {
   // Potential main colors
   malachite: "#20BF55",
 
+  // Payment card colors
+  paymentCardBackgroundColor: 'rgba(255, 255, 255, 0.2)',
+  paymentListSectionHeaderBackgroundColor: 'rgba(255, 255, 255, 0.5)',
+  paymentListSectionHeaderBorderColor: 'rgba(255, 255, 255, 0.8)',
 }
 
 export default colors;

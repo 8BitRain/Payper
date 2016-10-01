@@ -138,7 +138,7 @@ class ActivePaymentCard extends React.Component {
       }),
       Animated.timing(this.chevronInterpolator, {
         toValue: (this.state.moreInfoVisible) ? 0 : 100,
-        duration: 50,
+        duration: 100,
         easing: Easing.elastic(1),
       })
     ]).start();
@@ -151,9 +151,9 @@ class ActivePaymentCard extends React.Component {
 
   _renderMoreInfo() {
     return(
-      <View>
+      <View style={{ backgroundColor: colors.paymentCardBackgroundColor }}>
         { /* 'More info' or 'Less info' */ }
-        <View style={{ height: 35, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: "rgba(255, 255, 255, " + 0.45 / this.props.paneCounter + ")" }}>
+        <View style={{ height: 35, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
           <Animated.View style={{ transform: [{rotate: this.state.chevronAngle}] }}>
             <Entypo name={"chevron-thin-down"} size={17} color={colors.richBlack} />
           </Animated.View>
@@ -161,7 +161,7 @@ class ActivePaymentCard extends React.Component {
 
         { /* More detailed payment series info */ }
         <Animated.View style={{ height: this.infoHeight, width: dimensions.width, overflow: 'hidden' }}>
-          <View style={[panes.general, { backgroundColor: 'rgba(255, 255, 255, ' + 0.45 / this.props.paneCounter + ')' }]} />
+          <View style={panes.general} />
           <Text style={[typography.info, { padding: 8, paddingLeft: 22.5 }]}>
             { this.props.payment.moreInfo }
           </Text>
@@ -180,7 +180,7 @@ class ActivePaymentCard extends React.Component {
         <View>
           { /* Payment card */ }
           <View style={wrappers.paymentCard}>
-            <View style={[panes.general, { backgroundColor: 'rgba(255, 255, 255, ' + 0.45 / this.props.paneCounter + ')' }]} />
+            <View style={panes.general} />
             <PaymentCardContent {...this.props} />
           </View>
 
@@ -297,6 +297,7 @@ const panes = StyleSheet.create({
     flex: 1.0,
     position: 'absolute',
     top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: colors.paymentCardBackgroundColor,
   },
 });
 

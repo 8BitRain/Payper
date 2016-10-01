@@ -69,7 +69,7 @@ class PaymentCardContent extends React.Component {
         }),
         Animated.timing(this.progressBarOffsetBottom, {
           toValue: 20,
-          duration: 50,
+          duration: 100,
         }),
       ]),
     ]).start();
@@ -197,7 +197,9 @@ class ConfirmPaymentCard extends React.Component {
         easing: Easing.cubic,
       }),
     ]).start(() => {
-      this.props.reject();
+      setTimeout(() => {
+        this.props.reject();
+      }, 100);
     });
   }
 
@@ -210,7 +212,7 @@ class ConfirmPaymentCard extends React.Component {
         <Animated.View style={{ height: this.height, marginLeft: this.offsetLeft, overflow: 'hidden' }}>
           { /* Payment card */ }
           <View style={wrappers.paymentCard}>
-            <View style={[panes.general, { backgroundColor: 'rgba(255, 255, 255, ' + 0.45 / this.props.paneCounter + ')' }]} />
+            <View style={panes.general} />
             <PaymentCardContent
               {...this.props}
               reject={() => this._reject()} />
@@ -321,6 +323,7 @@ const panes = StyleSheet.create({
     flex: 1.0,
     position: 'absolute',
     top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: colors.paymentCardBackgroundColor,
   },
 });
 
