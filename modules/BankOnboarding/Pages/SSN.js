@@ -141,6 +141,15 @@ class SSN extends React.Component {
        //Loading Screen to IAV
        if(customerCreated){
           _this.props.dispatchSetLoading(true);
+          Async.get('user', (val) => {
+           console.log("User: " + val);
+           console.log("User: " + JSON.parse(val).uid);
+         var iav = "IAV/" + JSON.parse(val).uid;
+         var appFlags = "appFlags/" + JSON.parse(val).uid;
+         //Enable FirebaseListeners
+         _this.props.listen({uid: JSON.parse(val).uid});
+         //dispatch will be called from container
+       });
        }
 
       //  Async.get('user', (val) => {

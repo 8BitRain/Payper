@@ -73,7 +73,7 @@ class Iav extends React.Component {
 
   render() {
     return(
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: "grey"}}>
         <WebView
          source={{uri: 'http://www.getpayper.io/iav'}} injectedJavaScript={this.injectedJS}
          style={{marginTop: 20}}

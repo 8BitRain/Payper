@@ -106,8 +106,14 @@ export default connect(
                 }
 
                if(res.onboarding_state == "complete"){
-                 if (typeof params.toggleModal == 'function') params.toggleModal();
-                 else Actions.MainViewContainer();
+                 try{
+                   if (typeof params.toggleModal == 'function') params.toggleModal();
+                   else Actions.MainViewContainer();
+                 }catch(err2){
+                   console.log("Error: " + err2);
+                   Actions.MainViewContainer();
+                 }
+
                }
               }
               //Note there is a predictable flow in the way in which events are
@@ -121,15 +127,19 @@ export default connect(
             eventType: 'value',
             listener: null,
             callback: (res) => {
+
               if(res != null){
-                if(res.iav != ""){
-
+                //console.log(JSON.parse(res));
+                try{
                   if(!dispatchList.retry && !dispatchList.suspended && !dispatchList.document){
-                    dispatch(dispatchFunctions.setIav(res.iav));
+                    dispatch(dispatchFunctions.setIav(res.iav.body.token));
                   }
-
                   dispatchList.iav = true;
+                }catch(err){
+                  console.log("ERROR: " + err);
                 }
+
+
               }
             },
           },
