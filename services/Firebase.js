@@ -10,11 +10,9 @@
   *
 **/
 
-
 // Dependencies
 import * as firebase from 'firebase';
 import * as Timestamp from '../helpers/Timestamp';
-
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -24,37 +22,13 @@ const firebaseConfig = {
   storageBucket: "firebase-coincast.appspot.com"
 };
 
-
 firebase.initializeApp(firebaseConfig);
-
-
-// Firebase reference points
-var usernamesRef = firebase.database().ref('/usernames');
-var fireRef = firebase.database().ref();
-var activePaymentRef = fireRef.child("activePayments"); // reference of all active recurring payments
-var pendingPaymentRef = fireRef.child("pendingPayments"); //
-var payQueue = fireRef.child("paymentQueue"); // reference of payment instances
-var payFlow = fireRef.child("paymentFlow");
-var userRef = fireRef.child("users");
-var notifRef = fireRef.child('notifications');
-var facebookRef = fireRef.child('facebook');
-var contactRef = fireRef.child('contactList');
-var appFlagsRef = fireRef.child('appFlags');
-
-
-
-
-//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
-//                                 Getters
-//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
-
 
 /**
   *   Fetches list of users and returns them via callback function
 **/
 export function getUsers(callback) {
-  usernamesRef.once('value', function(snapshot) {
-    console.log("USERS RIGHT AFTER GETTING THEM FROM FIREBASE\n", snapshot.val());
+  firebase.database().ref('/usernames').once('value', function(snapshot) {
     if (typeof callback == 'function') callback(snapshot.val());
   }).catch(function(err) {
     console.log("Error code", error.code, "\nError message", error.message);
@@ -99,7 +73,7 @@ export function getSessionToken(callback) {
 **/
 export function getAppFlags(user_id){
   // Needs to pull data
-  appFlagsRef.child(user_id).once('value', function(snap){
+  firebase.database().ref('/appFlags').child(user_id).once('value', function(snap){
     var flags = snap.val();
     return(flags);
   });
@@ -128,30 +102,16 @@ export function getNumNotifications(uid, callback) {
   });
 };
 
-//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
-//                                 Setters
-//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
-
 
 /**
   *   Create the flags necessary for a user
   *   Current Flags: account_status,
 **/
-
 export function createAppFlags(user, account_status){
   //Needs to pull data
   firebase.database().ref('/appFlags/' + user.uid).set({ val: true, account_status: account_status  });
   console.log("CREATING APP FLAGS");
 };
-
-
-/**
-  *   Create a flag
-**/
-
-//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
-//                             User creation
-//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 
 
 /**
@@ -166,11 +126,6 @@ export function createUser(data, callback) {
     if (typeof callback == 'function') callback(false);
   });
 };
-
-
-//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
-//                                 Auth
-//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 
 
 /**
@@ -219,13 +174,6 @@ export function signOut(callback) {
 };
 
 
-
-
-
-//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
-//                      Listeners
-//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
-
 /**
   *   Enable listeners on the specified Firebase endpoints, returning values
   *   via callback function
@@ -258,9 +206,6 @@ export function listenUntilFirstValue(endpoint, callback) {
   });
 };
 
-//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
-//                    Email senders
-//  💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
 
 /**
   *   Send the specified email a password reset link

@@ -131,7 +131,7 @@
 - [X] Fix bug where payment request accept does not optimistically re-render
 - [X] Set up a cron job to refresh session token every 25 minutes
 - [X] Clear payment card timer interval on unmount
-- [ ] Fix issue where, after adding a funding source and being taken to the app, your funding source is not loaded, but is loaded after you close and reopen the app. (Fixed on generic accounts, still occurs for Facebook accounts)
+- [X] Fix issue where, after adding a funding source and being taken to the app, your funding source is not loaded, but is loaded after you close and reopen the app. (Fixed on generic accounts, still occurs for Facebook accounts)
 - [ ] Rethink handling contacts with multiple numbers (if more than one number, use the 'Mobile' number)
 - [ ] Refactor entire sign-in process (follow another React Native app's example)
 - [ ] Fix bug where, when you accept or reject a payment request, your incoming tab becomes populated with the other party's incoming payments (must recreate first)

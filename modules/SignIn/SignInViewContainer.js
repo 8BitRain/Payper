@@ -1,6 +1,19 @@
+/**
+  *   Sign in cases:
+  *   --------------
+  *     1. Success!
+  *         -> take user to the app
+  *     2. Failure, no account with that email was found
+  *         -> display error message, close modal
+  *     3. Failure, incorrect password
+  *         -> display error message, close modal
+  *     4. Failure, time out
+  *         -> display error message with "Try Again" and "Cancel" options
+**/
+
 // Dependencies
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Animated, Easing, Image, Dimensions, AsyncStorage, TouchableHighlight, DeviceEventEmitter, StatusBar } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Animated, Easing, Image, Dimensions, AsyncStorage, TouchableHighlight, DeviceEventEmitter, StatusBar, Modal } from 'react-native';
 import Button from 'react-native-button';
 import { Reducer, Router, Actions } from 'react-native-router-flux';
 import * as Animations from '../../helpers/animations';
@@ -195,87 +208,99 @@ class SignInView extends React.Component {
   }
 
   render() {
-    if (this.state.loading) {
-      return(
-        <Loading
-          complete={this.state.doneLoading}
-          success={this.state.signInSuccess}
-          msgSuccess={"Welcome!"}
-          msgError={"Sign in failed"}
-          msgLoading={"Signing in"}
-          successDestination={() => Actions.MainViewContainer()}
-          errorDestination={() => { this.setState({ loading: false }) }} />
-      );
-    } else {
-      return (
-        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.obisdian}}>
+    return (
+      <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.obisdian}}>
+
+        { /* Lighten status bar text */ }
+        <StatusBar barStyle="light-content" />
+
+        <Animated.View style={{ marginBottom: this.inputOffsetBottom }}>
+          <View ref="inputWrap">
+
+            { /*
+            <Text style={[typography.general,  {marginBottom: 10}]}>
+              Sign In
+            </Text>
+            */ }
+
+            <TextInput
+              style={typography.textInput}
+              placeholder={"Email"}
+              placeholderTextColor="#fefeff"
+              defaultValue={this.state.email}
+              autoFocus={false}
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType={"email-address"}
+              onChangeText={(text) => this.input.email = text}
+              onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.refs.password.focus() }} />
+
+            <TextInput
+              ref="password"
+              style={typography.textInput}
+              placeholder={"Password"}
+              placeholderTextColor="#fefeff"
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry
+              onChangeText={(text) => this.input.password = text} />
+
+            { /* Number of remaining sign-in attempts for this email address */
+              (this.state.remainingAttempts <= 3)
+                ? this._getRemainingAttemptsMessage()
+                : null }
+
+            { /* Sign in button or reset password button */
+              (this.state.attemptLimitReached)
+                ? this._getResetPasswordButton()
+                : this._getSignInButton() }
+          </View>
+        </Animated.View>
+
+        { /* Sign up button */ }
+        <TouchableHighlight
+          ref="signUpButton"
+          style={[buttonStyles.button, { marginTop: 30 }]}
+          activeOpacity={0.8}
+          underlayColor={colors.richBlack}
+          onPress={() => Actions.CreateAccountViewContainer()}>
+
+          <Text style={{textAlign: 'center', fontFamily: 'Roboto', color: colors.accent, fontSize: 17, fontWeight: '100', padding: 10}}>
+            Don{"'"}t have an account?{"\n"}Sign up
+          </Text>
+        </TouchableHighlight>
+
+        { /* Header */ }
+        <Header transparent callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
+
+        { /* Loading screen */ }
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.loading}>
 
           { /* Lighten status bar text */ }
           <StatusBar barStyle="light-content" />
 
-          <Animated.View style={{ marginBottom: this.inputOffsetBottom }}>
-            <View ref="inputWrap">
-
-              { /*
-              <Text style={[typography.general,  {marginBottom: 10}]}>
-                Sign In
-              </Text>
-              */ }
-
-              <TextInput
-                style={typography.textInput}
-                placeholder={"Email"}
-                placeholderTextColor="#fefeff"
-                defaultValue={this.state.email}
-                autoFocus={false}
-                autoCapitalize="none"
-                autoCorrect={false}
-                keyboardType={"email-address"}
-                onChangeText={(text) => this.input.email = text}
-                onKeyPress={(e) => {if (e.nativeEvent.key == "Enter") this.refs.password.focus() }} />
-
-              <TextInput
-                ref="password"
-                style={typography.textInput}
-                placeholder={"Password"}
-                placeholderTextColor="#fefeff"
-                autoCapitalize="none"
-                autoCorrect={false}
-                secureTextEntry
-                onChangeText={(text) => this.input.password = text} />
-
-              { /* Number of remaining sign-in attempts for this email address */
-                (this.state.remainingAttempts <= 3)
-                  ? this._getRemainingAttemptsMessage()
-                  : null }
-
-              { /* Sign in button or reset password button */
-                (this.state.attemptLimitReached)
-                  ? this._getResetPasswordButton()
-                  : this._getSignInButton() }
-            </View>
-          </Animated.View>
-
-          { /* Sign up button */ }
-          <TouchableHighlight
-            ref="signUpButton"
-            style={[buttonStyles.button, { marginTop: 30 }]}
-            activeOpacity={0.8}
-            underlayColor={colors.richBlack}
-            onPress={() => Actions.CreateAccountViewContainer()}>
-
-            <Text style={{textAlign: 'center', fontFamily: 'Roboto', color: colors.accent, fontSize: 17, fontWeight: '100', padding: 10}}>
-              Don{"'"}t have an account?{"\n"}Sign up
+          <View style={{ flex: 1.0, backgroundColor: colors.richBlack, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ color: colors.accent, fontSize: 20, fontWeight: '200', fontFamily: 'Roboto' }}>
+              Signing in...
             </Text>
-          </TouchableHighlight>
-
-          { /* Header */ }
-          <Header transparent callbackClose={() => Actions.LandingScreenContainer()} headerProps={this.headerProps} />
-        </View>
-      );
-    }
+          </View>
+        </Modal>
+      </View>
+    );
   }
 }
+
+    // <Loading
+    //   complete={this.state.doneLoading}
+    //   success={this.state.signInSuccess}
+    //   msgSuccess={"Welcome!"}
+    //   msgError={"Sign in failed"}
+    //   msgLoading={"Signing in"}
+    //   successDestination={() => Actions.MainViewContainer()}
+    //   errorDestination={() => { this.setState({ loading: false }) }} />
 
 const buttonStyles = StyleSheet.create({
   button: {
