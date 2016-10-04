@@ -1,6 +1,8 @@
 // Dependencies
 import * as firebase from 'firebase';
+import * as Firebase from '../services/Firebase';
 import * as Async from '../helpers/Async';
+import * as SetMaster5000 from '../helpers/SetMaster5000';
 import { Actions } from 'react-native-router-flux';
 const FBSDK = require('react-native-fbsdk');
 const { LoginManager } = FBSDK;
@@ -8,6 +10,40 @@ const { LoginManager } = FBSDK;
 export default class User {
   constructor(props) {
     if (props) for (var i in props) this[i] = props[i];
+  }
+
+  /**
+    *   Update this user's props, then log the new user object to async storage
+    *   props: a JSON containing propKey and propValue pairs
+    *   -----------------------------------------------------------------------
+  **/
+  update(props) {
+    this.logInfo(["Updating user with props:", props]);
+    if (props) for (var i in props) this[i] = props[i];
+    Async.set('user', JSON.stringify(this));
+  }
+
+  /**
+    *   Initialize this user's props, listeners, and async storage links
+    *   props: user, a JSON user object returned by getUser Lambda endpoint
+    *   -----------------------------------------------------------------------
+  **/
+  initialize(user) {
+    this.update(user);
+    Async.set('session_token', JSON.stringify(user.token));
+    Async.set('user', JSON.stringify(user));
+    this.startListening();
+  }
+
+  /**
+    *   Wipe this user's props, listeners, and async storage links
+    *   -----------------------------------------------------------------------
+  **/
+  destroy() {
+    Async.set('session_token', '');
+    Async.set('user', '');
+    this.stopListening();
+    for (var i in this) if (typeof this[i] !== 'function') this[i] = null;
   }
 
   /**
@@ -26,9 +62,7 @@ export default class User {
             this.logError(["getUserObjectWithToken failed...", "Lambda error:", res.errorMessage]);
             onLoginFailure("lambda");
           } else {
-            this.update(res);
-            Async.set('session_token', JSON.stringify(this.token));
-            Async.set('user', JSON.stringify(this));
+            this.initialize(res);
             this.logSuccess(["getUserObjectWithToken succeeded...", "Lambda response:", res]);
             onLoginSuccess();
           }
@@ -45,8 +79,6 @@ export default class User {
     *   Log in to Firebase panel via Facebook token
     *   params: facebookToken (string)
     *   -----------------------------------------------------------------------
-    *   onSuccess -> get user object from Lambda function, pass it to caller
-    *   onFailure -> report to caller
   **/
   loginWithFacebook(params, onLoginSuccess, onLoginFailure) {
     // TODO (...)
@@ -56,8 +88,6 @@ export default class User {
     *   Log in to Firebase auth via session token
     *   params: token (string)
     *   -----------------------------------------------------------------------
-    *   onSuccess -> get user object from Lambda function, pass it to caller
-    *   onFailure -> report to caller
   **/
   loginWithSessionToken(params, onLoginSuccess, onLoginFailure) {
     // TODO (...)
@@ -71,10 +101,7 @@ export default class User {
     this.logInfo(["Logging out..."]);
     if (this.provider === "facebook") LoginManager.logOut();
     firebase.auth().signOut();
-    Async.set('session_token', '');
-    Async.set('user', '');
     Actions.LandingScreenContainer();
-    for (var i in this) if (typeof this[i] !== 'function') this[i] = null;
   }
 
   /**
@@ -106,13 +133,64 @@ export default class User {
   }
 
   /**
-    *   Update this user's props
-    *   props: a JSON containing propKey and propValue pairs
+    *   Enable listeners on this user's Firebase data
     *   -----------------------------------------------------------------------
   **/
-  update(props) {
-    this.logInfo(["Updating user with props:", props]);
-    if (props) for (var i in props) this[i] = props[i];
+  startListening() {
+    this.endpoints = [
+      {
+        endpoint: 'users/' + this.uid,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => this.update(res)
+      },
+      {
+        endpoint: 'paymentFlow/' + this.uid,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => {
+          if (res.out) SetMaster5000.tackOnKeys(res.out, "pid");
+          if (res.in) SetMaster5000.tackOnKeys(res.in, "pid");
+          this.update({ paymentFlow: res });
+        }
+      },
+      {
+        endpoint: 'appFlags/' + this.uid,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => this.update({ appFlags: res })
+      },
+      {
+        endpoint: 'notifications/' + this.uid,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => {
+          SetMaster5000.tackOnKeys(res, "timestamp");
+          this.update({ notifications: res });
+        }
+      },
+      {
+        endpoint: 'blockedUsers/' + this.uid,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => this.update({ blockedUsers: res })
+      }
+    ];
+
+    this.logInfo(["Enabling listener with params:", this.endpoints]);
+    for (var e in this.endpoints) {
+      Firebase.listenTo(this.endpoints[e]);
+    }
+  }
+
+  /**
+    *   Disable listeners on this user's Firebase data
+    *   -----------------------------------------------------------------------
+  **/
+  stopListening() {
+    for (var e in this.endpoints) {
+      Firebase.stopListeningTo(this.endpoints[e]);
+    }
   }
 
   logError(strings) {

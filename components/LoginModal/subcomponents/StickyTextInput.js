@@ -52,7 +52,7 @@ export default class StickyTextInput extends React.Component {
     // Update submit button
     if (nextProps.validations.email && nextProps.validations.password) {
       this.animate({ target: this.submitColorInterpolator, toValue: 350 });
-      this.setState({ submitText: "Continue" });
+      this.setState({ submitText: "Log in" });
     } else {
       this.animate({ target: this.submitColorInterpolator, toValue: 0 });
       this.setState({ submitText: "Please enter a valid email and password" });
@@ -107,7 +107,7 @@ export default class StickyTextInput extends React.Component {
               onPress={() => this.props.toggleModal()}
               style={styles.cancel}>
                 <View>
-                  <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.alertRed }}>
+                  <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.alertRed }}>
                     Cancel
                   </Text>
                 </View>
@@ -120,7 +120,7 @@ export default class StickyTextInput extends React.Component {
               onPress={() => Actions.CreateAccountViewContainer()}
               style={styles.signup}>
               <View>
-                <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.alertBlue }}>
+                <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.alertBlue }}>
                   Sign up
                 </Text>
               </View>

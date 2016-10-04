@@ -262,3 +262,14 @@ export function parseNativeContactList(options) {
 
   return options.contacts;
 }
+
+
+/**
+  *   Given a JSON of key value pairs, tack on the key as a property of the value
+**/
+export function tackOnKeys(j, label) {
+  for (var k in j)
+    j[k][label] = k;
+
+  return j
+}
