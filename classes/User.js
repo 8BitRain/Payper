@@ -30,7 +30,7 @@ export default class User {
   **/
   initialize(user) {
     this.update(user);
-    Async.set('session_token', JSON.stringify(user.token));
+    Async.set('session_token', user.token);
     Async.set('user', JSON.stringify(user));
     this.startListening();
   }
@@ -89,8 +89,17 @@ export default class User {
     *   params: token (string)
     *   -----------------------------------------------------------------------
   **/
-  loginWithSessionToken(params, onLoginSuccess, onLoginFailure) {
-    // TODO (...)
+  loginWithAccessToken(params, onLoginSuccess, onLoginFailure) {
+    this.getUserObjectWithToken(params, (res) => {
+      if (res.errorMessage) {
+        this.logError(["getUserObjectWithToken failed...", "Lambda error:", res.errorMessage]);
+        onLoginFailure("lambda");
+      } else {
+        this.initialize(res);
+        this.logSuccess(["getUserObjectWithToken succeeded...", "Lambda response:", res]);
+        onLoginSuccess();
+      }
+    });
   }
 
   /**
@@ -101,6 +110,7 @@ export default class User {
     this.logInfo(["Logging out..."]);
     if (this.provider === "facebook") LoginManager.logOut();
     firebase.auth().signOut();
+    this.destroy();
     Actions.LandingScreenContainer();
   }
 

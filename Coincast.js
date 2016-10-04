@@ -6,7 +6,7 @@ import Error from './components/Error';
 import * as Async from './helpers/Async';
 
 // Modules
-import SplashView from './modules/Splash/SplashView';
+import SplashViewContainer from './modules/Splash/SplashViewContainer';
 import CreateAccountViewContainer from './modules/CreateAccount/CreateAccountViewContainer';
 import CreatePaymentViewContainer from './modules/CreatePayment/CreatePaymentViewContainer';
 import SignInViewContainer from './modules/SignIn/SignInViewContainer';
@@ -51,7 +51,7 @@ export default class Coincast extends React.Component {
           <Scene key="root" hideNavBar hideTabBar>
 
             { /* Main app flow */ }
-            <Scene initial key="SplashView" type="replace" component={SplashView} title="SplashView" />
+            <Scene initial key="SplashViewContainer" type="replace" component={SplashViewContainer} title="SplashViewContainer" />
             <Scene key="SignInViewContainer" type="replace" component={SignInViewContainer} title="SignInViewContainer" panHandlers={null} />
             <Scene key="CreateAccountViewContainer" type="replace" component={CreateAccountViewContainer} title="CreateAccountViewContainer" panHandlers={null} />
             <Scene key="BankOnboardingContainer" type="replace" component={BankOnboardingContainer} title="BankOnboardingContainer" panHandlers={null} />
