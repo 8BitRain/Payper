@@ -1,19 +1,25 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TouchableHighlight } from 'react-native';
+import { View, Text, TextInput, Modal, StyleSheet, TouchableHighlight, Dimensions } from 'react-native';
 import User from '../../classes/User';
 import colors from '../../styles/colors';
+import * as Validate from '../../helpers/Validate';
 
-class LoginView extends React.Component {
+// Components
+import StickyTextInput from './helperComponents/StickyTextInput';
+
+// Screen dimensions
+const dims = Dimensions.get('window');
+
+export default class LoginView extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      info: "Awaiting login attempt...",
-      loginParams: {
-        email: "freshstunna@example.com",
-        password: "freshSTUNNA123!"
-      }
+      loginParams: { email: "", password: "" },
+      validations: { email: false, password: false },
+      errorMessage: null,
+      modalVisible: false
     };
 
     this.User = new User({
@@ -23,45 +29,87 @@ class LoginView extends React.Component {
     });
   }
 
+  updateEmail(v) {
+    this.state.loginParams.email = v;
+    this.state.validations.email = Validate.email(v);
+    this.setState({ loginParams: this.state.loginParams, validations: this.state.validations });
+  }
+
+  updatePassword(v) {
+    this.state.loginParams.password = v;
+    this.state.validations.password = Validate.password(v);
+    this.setState({ loginParams: this.state.loginParams, validations: this.state.validations });
+  }
+
   login() {
-    this.setState({ info: "Logging in..." });
+    this.setState({ loading: true });
     this.User.loginWithEmail(this.state.loginParams);
   }
 
   onLoginSuccess() {
-    console.log("this.User", this.User);
-    this.setState({ info: "Success!" });
+    this.setState({ loading: false, errorMessage: null });
+    console.log("Log in succeeded! User:", this.User);
   }
 
-  /**
-    *   Potential error codes include:
-    *     - auth/wrong-password
-    *     - auth/user-not-found
-    *     - auth/invalid-email
-    *     - lambda
-  **/
   onLoginFailure(errCode) {
-    console.log("Error code:", errCode);
-    this.setState({ info: "Failure" });
+    var errorMessage = null;
+    switch (errCode) {
+      case "auth/wrong-password":
+        errorMessage = "Incorrect password";
+      break;
+      case "auth/user-not-found":
+        errorMessage = "No user was found with that email address";
+      break;
+      case "auth/invalid-email":
+        errorMessage = "Invalid email address";
+      break;
+      case "lambda/exited-before-completion":
+      case "lambda/timed-out":
+        errorMessage = "There was an error on our end 🙄\nPlease try again";
+      break;
+    }
+    this.setState({ loading: false, errorMessage: errorMessage });
+  }
+
+  toggleModal() {
+    this.setState({ modalVisible: !this.state.modalVisible });
   }
 
   render() {
     return(
-      <View style={{ flex: 1.0, backgroundColor: colors.richBlack, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ color: colors.white, fontSize: 16 }}>
-          { this.state.info }
+      <View style={styles.wrap}>
+        <Modal
+          animationType={"slide"}
+          transparent={true}
+          visible={this.state.modalVisible}>
+
+          { /* Inputs */ }
+          <StickyTextInput
+            updateEmail={(v) => this.updateEmail(v)}
+            updatePassword={(v) => this.updatePassword(v)}
+            onSubmit={() => this.login()}
+            toggleModal={() => this.toggleModal()}
+            validations={this.state.validations}
+            loading={this.state.loading}
+            errorMessage={this.state.errorMessage} />
+
+        </Modal>
+
+        <Text style={{ fontSize: 20, color: colors.white }} onPress={() => this.toggleModal()}>
+          Toggle modal
         </Text>
 
-        <TouchableHighlight
-          activeOpacity={0.8}
-          underlayColor={colors.richBlack}
-          onPress={() => this.login()}>
-          <Text style={{ color: colors.white, fontSize: 16 }}>
-            Login
-          </Text>
-        </TouchableHighlight>
       </View>
     );
   }
 }
-export default LoginView;
+
+const styles = StyleSheet.create({
+  wrap: {
+    height: dims.height,
+    width: dims.width,
+    backgroundColor: colors.richBlack,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+});

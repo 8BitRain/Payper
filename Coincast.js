@@ -20,7 +20,6 @@ import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreen
 // Test modules
 import LandingView from './components/LandingView';
 import LoginView from './modules/Login/LoginView';
-// import LoadingSVG from './components/LoadingSVG.js';
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
@@ -56,7 +55,7 @@ export default class Coincast extends React.Component {
           <Scene key="root" hideNavBar hideTabBar>
 
             { /* Main app flow */ }
-            <Scene initial key="SplashView" type="replace" component={SplashView} title="SplashView" />
+            <Scene key="SplashView" type="replace" component={SplashView} title="SplashView" />
             <Scene key="SignInViewContainer" type="replace" component={SignInViewContainer} title="SignInViewContainer" panHandlers={null} />
             <Scene key="CreateAccountViewContainer" type="replace" component={CreateAccountViewContainer} title="CreateAccountViewContainer" panHandlers={null} />
             <Scene key="BankOnboardingContainer" type="replace" component={BankOnboardingContainer} title="BankOnboardingContainer" panHandlers={null} />
@@ -66,7 +65,7 @@ export default class Coincast extends React.Component {
 
             { /* Testing */ }
             <Scene key="LandingView" type="replace" component={LandingView} title="LandingView" panHandlers={null} />
-            <Scene key="LoginView" type="replace" component={LoginView} title="LoginView" panHandlers={null} />
+            <Scene initial key="LoginView" type="replace" component={LoginView} title="LoginView" panHandlers={null} />
 
             { /* Beta */ }
             <Scene key="BetaLandingScreenView" type="replace" component={BetaLandingScreenView} title="BetaLandingScreenView" panHandlers={null} />
