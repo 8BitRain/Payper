@@ -655,7 +655,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 3RH8L96ZE3;
+						DevelopmentTeam = 9MXT88RAVX;
 						SystemCapabilities = {
 							com.apple.Keychain = {
 								enabled = 1;
@@ -1096,7 +1096,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 3RH8L96ZE3;
+				DEVELOPMENT_TEAM = 9MXT88RAVX;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"~/Documents/FacebookSDK",
@@ -1119,9 +1119,10 @@
 					"-lc++",
 					"-licucore",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.getpayper.getpayper;
+				PRODUCT_BUNDLE_IDENTIFIER = getpayper.io.Payper;
 				PRODUCT_NAME = Payper;
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1134,7 +1135,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 3RH8L96ZE3;
+				DEVELOPMENT_TEAM = 9MXT88RAVX;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"~/Documents/FacebookSDK",
@@ -1157,9 +1158,10 @@
 					"-lc++",
 					"-licucore",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.getpayper.getpayper;
+				PRODUCT_BUNDLE_IDENTIFIER = getpayper.io.Payper;
 				PRODUCT_NAME = Payper;
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -1220,7 +1222,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 3RH8L96ZE3;
+				DEVELOPMENT_TEAM = 9MXT88RAVX;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"~/Documents/FacebookSDK",
@@ -1243,9 +1245,10 @@
 					"-lc++",
 					"-licucore",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.getpayper.getpayper;
+				PRODUCT_BUNDLE_IDENTIFIER = getpayper.io.Payper;
 				PRODUCT_NAME = Payper;
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Staging;
 		};
