@@ -27,7 +27,7 @@ import typography from './styles/typography';
 import Header from '../../components/Header/Header';
 const dimensions = Dimensions.get('window');
 
-// Custom components
+// Components
 import ArrowNav from '../../components/Navigation/Arrows/ArrowDouble';
 import Loading from '../../components/Loading/Loading';
 

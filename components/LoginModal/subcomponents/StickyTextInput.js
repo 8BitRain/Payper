@@ -1,5 +1,6 @@
 // Dependencies
 import React from 'react';
+import { Actions } from 'react-native-router-flux';
 import { View, Text, TextInput, TouchableHighlight, StyleSheet, Dimensions, Animated, Easing, DeviceEventEmitter } from 'react-native';
 import { VibrancyView } from 'react-native-blur';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -99,33 +100,38 @@ export default class StickyTextInput extends React.Component {
       <View style={{ flex: 1.0, backgroundColor: 'transparent' }}>
         <VibrancyView blurType="dark" style={styles.blur} />
         <Animated.View style={[styles.wrap, { bottom: this.offsetBottom }]}>
-
-
-          { /* Exit button */ }
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={"transparent"}
-            onPress={() => this.props.toggleModal()}>
-              <View style={styles.optionsWrap}>
-                { /* Cancel login */ }
-                <View style={styles.cancel}>
+          <View style={styles.optionsWrap}>
+            { /* Cancel login */ }
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={"transparent"}
+              onPress={() => this.props.toggleModal()}
+              style={styles.cancel}>
+                <View>
                   <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.alertRed }}>
                     Cancel
                   </Text>
                 </View>
+            </TouchableHighlight>
 
-                { /* Sign up */ }
-                <View style={styles.signup}>
-                  <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.alertBlue }}>
-                    Sign up
-                  </Text>
-                </View>
+            { /* Sign up */ }
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={"transparent"}
+              onPress={() => Actions.CreateAccountViewContainer()}
+              style={styles.signup}>
+              <View>
+                <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.alertBlue }}>
+                  Sign up
+                </Text>
               </View>
-          </TouchableHighlight>
+            </TouchableHighlight>
+          </View>
+
 
           { /* Email input */ }
           <TextInput
-            style={[styles.input, { backgroundColor: 'rgba(0, 0, 0, 0.7)' }]}
+            style={[styles.input, { backgroundColor: 'rgba(255, 255, 255, 0.06)' }]}
             ref="emailInput"
             placeholderTextColor={colors.white}
             onChangeText={(v) => { if (this.state.errorMessage) this.setState({ errorMessage: null }); this.props.updateEmail(v); }}
@@ -137,7 +143,7 @@ export default class StickyTextInput extends React.Component {
 
           { /* Password input */ }
           <TextInput
-            style={[styles.input, { backgroundColor: 'rgba(0, 0, 0, 0.15)' }]}
+            style={[styles.input, { backgroundColor: 'rgba(255, 255, 255, 0.07)' }]}
             ref="passwordInput"
             placeholderTextColor={colors.white}
             onChangeText={(v) => { if (this.state.errorMessage) this.setState({ errorMessage: null }); this.props.updatePassword(v); }}

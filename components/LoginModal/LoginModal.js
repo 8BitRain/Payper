@@ -7,20 +7,19 @@ import colors from '../../styles/colors';
 import * as Validate from '../../helpers/Validate';
 
 // Components
-import StickyTextInput from './helperComponents/StickyTextInput';
+import StickyTextInput from './subcomponents/StickyTextInput';
 
 // Screen dimensions
 const dims = Dimensions.get('window');
 
-export default class LoginView extends React.Component {
+export default class LoginModal extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       loginParams: { email: "", password: "" },
       validations: { email: false, password: false },
-      errorMessage: null,
-      modalVisible: false
+      errorMessage: null
     };
 
     this.User = new User({
@@ -28,6 +27,10 @@ export default class LoginView extends React.Component {
       onLoginSuccess: () => this.onLoginSuccess(),
       onLoginFailure: (res) => this.onLoginFailure(res)
     });
+  }
+
+  componentDidMount() {
+    console.log("Mounted");
   }
 
   updateEmail(v) {
@@ -72,45 +75,24 @@ export default class LoginView extends React.Component {
     this.setState({ loading: false, errorMessage: errorMessage });
   }
 
-  toggleModal() {
-    this.setState({ modalVisible: !this.state.modalVisible });
-  }
-
   render() {
     return(
-      <View style={styles.wrap}>
-        <Modal
-          animationType={"slide"}
-          transparent={true}
-          visible={this.state.modalVisible}>
+      <Modal
+        animationType={"slide"}
+        transparent={true}
+        visible={this.props.modalVisible}>
 
-          { /* Inputs */ }
-          <StickyTextInput
-            updateEmail={(v) => this.updateEmail(v)}
-            updatePassword={(v) => this.updatePassword(v)}
-            onSubmit={() => this.login()}
-            toggleModal={() => this.toggleModal()}
-            validations={this.state.validations}
-            loading={this.state.loading}
-            errorMessage={this.state.errorMessage} />
+        { /* Inputs */ }
+        <StickyTextInput
+          updateEmail={(v) => this.updateEmail(v)}
+          updatePassword={(v) => this.updatePassword(v)}
+          onSubmit={() => this.login()}
+          toggleModal={() => this.props.toggleModal()}
+          validations={this.state.validations}
+          loading={this.state.loading}
+          errorMessage={this.state.errorMessage} />
 
-        </Modal>
-
-        <Text style={{ fontSize: 20, color: colors.white }} onPress={() => this.toggleModal()}>
-          Toggle modal
-        </Text>
-
-      </View>
+      </Modal>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  wrap: {
-    height: dims.height,
-    width: dims.width,
-    backgroundColor: colors.richBlack,
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-});

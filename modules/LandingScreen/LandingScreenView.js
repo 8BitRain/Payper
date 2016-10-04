@@ -1,172 +1,39 @@
 // Dependencies
 import React from 'react';
-import { View, Text, Animated, Image, Dimensions, Linking, StatusBar } from 'react-native';
+import { View, Text, TouchableHighlight, Animated, Image, Dimensions, Linking, StatusBar } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Hyperlink from 'react-native-hyperlink';
 import * as Animations from '../../helpers/animations';
-
-// Helper functions
-import * as Timestamp from '../../helpers/Timestamp';
-var moment = require('moment');
+var Mixpanel = require('react-native-mixpanel');
 var Fabric = require('react-native-fabric');
-
-//import Crashlytics from 'react-native-fabric';
 var { Crashlytics } = Fabric;
-
-// Custom components
-import FacebookLogin from '../../components/FacebookLogin';
-import GenericSignUp from '../../components/GenericSignUp';
-import GenericSignIn from '../../components/GenericSignIn';
-import Loading from '../../components/Loading/Loading';
-import PaymentPreview from '../../components/Previews/Transaction/Transaction';
-
-// Facebook login module
 const FBSDK = require('react-native-fbsdk');
 const {
   LoginButton,
-  ShareDialog,
   AccessToken,
   GraphRequest,
   GraphRequestManager
 } = FBSDK;
 
-// Helpers
+// Components
+import ImageCarousel from './subcomponents/ImageCarousel';
+import LoginModal from '../../components/LoginModal/LoginModal';
+
+// Helper functions
 import * as Init from '../../_init';
+import * as Timestamp from '../../helpers/Timestamp';
+var moment = require('moment');
 
 // Stylesheets
 import colors from '../../styles/colors';
 import container from './styles/container';
 import background from './styles/background';
 import typography from './styles/typography';
-import carousel from './styles/carousel';
-var Mixpanel = require('react-native-mixpanel');
-
-// Carousel component for image sliding
-import Carousel from 'react-native-carousel';
 var dimensions = Dimensions.get('window');
-
-class ImageCarousel extends React.Component {
-  render() {
-    var imgWidth = dimensions.width - 50;
-    var imgHeight = 165 / 350;
-        imgHeight *= imgWidth;
-    return(
-      <Carousel hideIndicators={true} animate={true} delay={2750} width={dimensions.width}>
-        <View style={[carousel.container, container.image]}>
-          <PaymentPreview
-            dummy
-            out
-            style={{padding: 30}}
-            payment={{
-              amount: '10',
-              confirmed: true,
-              created_at: 1471468155170,
-              nextPayment: moment().add(1, 'hour'),
-              purpose: 'Wifi',
-              payments: '10',
-              paymentsMade: Math.floor(10 * Math.random()),
-              recip_id: "",
-              recip_name: "Brady Marada",
-              recip_pic: "",
-              sender_id: "",
-              sender_name: "Brady Sheridan",
-              sender_pic: "",
-              type: "pay",
-              token: "",
-              invite: false,
-              info: "",
-            }}
-            callbackMenu={() => alert("I'm just a dummy!")} />
-        </View>
-        <View style={[carousel.container, container.image]}>
-          <PaymentPreview
-            dummy
-            out
-            style={{padding: 30}}
-            payment={{
-              amount: '35',
-              confirmed: true,
-              created_at: 1471468155170,
-              nextPayment: moment().add(14, 'hours'),
-              purpose: 'Beer club',
-              payments: '8',
-              paymentsMade: Math.floor(8 * Math.random()),
-              recip_id: "",
-              recip_name: "Vash Smith",
-              recip_pic: "",
-              sender_id: "",
-              sender_name: "Brady Sheridan",
-              sender_pic: "",
-              type: "pay",
-              token: "",
-              invite: false,
-              info: "",
-            }}
-            callbackMenu={() => alert("I'm just a dummy!")} />
-        </View>
-        <View style={[carousel.container, container.image]}>
-          <PaymentPreview
-            dummy
-            out
-            style={{padding: 30}}
-            payment={{
-              amount: '346.50',
-              confirmed: true,
-              created_at: 1471468155170,
-              nextPayment: moment().add(5, 'days').add(22, 'hours'),
-              purpose: 'Rent baby!',
-              payments: '12',
-              paymentsMade: Math.floor(12 * Math.random()),
-              recip_id: "",
-              recip_name: "Luke Khan",
-              recip_pic: "",
-              sender_id: "",
-              sender_name: "Brady Sheirdan",
-              sender_pic: "",
-              type: "pay",
-              token: "",
-              invite: false,
-              info: "",
-            }}
-            callbackMenu={() => alert("I'm just a dummy!")} />
-        </View>
-        <View style={[carousel.container, container.image]}>
-          <PaymentPreview
-            dummy
-            out
-            style={{padding: 30}}
-            payment={{
-              amount: '6',
-              confirmed: true,
-              created_at: 1471468155170,
-              nextPayment: moment().add(2, 'weeks').add(13, 'hours'),
-              purpose: 'Spotify family plan',
-              payments: '12',
-              paymentsMade: Math.floor(12 * Math.random()),
-              recip_id: "",
-              recip_name: "Mohsin Odell",
-              recip_pic: "",
-              sender_id: "",
-              sender_name: "Brady Sheridan",
-              sender_pic: "",
-              type: "pay",
-              token: "",
-              invite: false,
-              info: "",
-            }}
-            callbackMenu={() => alert("I'm just a dummy!")} />
-        </View>
-      </Carousel>
-    );
-  }
-};
 
 class LandingScreenDisplay extends React.Component {
   constructor(props) {
     super(props);
-
-
-
 
     this.state = {
       email: "",
@@ -177,7 +44,8 @@ class LandingScreenDisplay extends React.Component {
       doneLoading: false,
       signInSuccess: false,
       fbAcessToken: "Test Value",
-      fbUser: {}
+      fbUser: {},
+      modalVisible: false
     }
 
     this.animationProps = {
@@ -295,6 +163,9 @@ class LandingScreenDisplay extends React.Component {
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
   }
 
+  toggleModal() {
+    this.setState({ modalVisible: !this.state.modalVisible });
+  }
 
   render() {
     if (this.state.loading) {
@@ -382,7 +253,15 @@ class LandingScreenDisplay extends React.Component {
               }
               onLogoutFinished={() => { /* alert("logout.") */ }} />
 
-            <GenericSignIn destination={Actions.SignInViewContainer} />
+              { /* "Continue without Facebook" button */ }
+              <TouchableHighlight
+                activeOpacity={0.8}
+                underlayColor={'transparent'}
+                onPress={() => this.toggleModal()}>
+                <Text style={{ fontFamily: 'Roboto', color: colors.white, fontSize: 16, fontWeight: '200' }}>
+                  Continue without Facebook
+                </Text>
+              </TouchableHighlight>
           </View>
 
           { /* TOS */ }
@@ -402,6 +281,9 @@ class LandingScreenDisplay extends React.Component {
               </Text>
             </Hyperlink>
           </View>
+
+          { /* Non-Facebook login modal */ }
+          <LoginModal modalVisible={this.state.modalVisible} toggleModal={() => this.toggleModal()} />
         </Animated.View>
       );
     }
@@ -411,7 +293,7 @@ class LandingScreenDisplay extends React.Component {
 class LandingScreenView extends React.Component{
   render() {
     return(
-      <LandingScreenDisplay dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetNewUserToken={this.props.dispatchSetNewUserToken}/>
+      <LandingScreenDisplay dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetNewUserToken={this.props.dispatchSetNewUserToken} />
     );
   }
 };
