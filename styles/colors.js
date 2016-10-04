@@ -17,6 +17,7 @@ const colors = {
   alertRed: "#FB3640",
   alertYellow: "#f7ca2a",
   alertGreen: "#10bf5a",
+  alertBlue: "#2c59e2",
   lightAlertGreen: "rgba(16, 191, 90, 0.73)",
 
   // Main colors

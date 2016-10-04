@@ -1,6 +1,7 @@
 // Dependencies
 import React from 'react';
 import { View, Text, TextInput, Modal, StyleSheet, TouchableHighlight, Dimensions } from 'react-native';
+import { VibrancyView } from 'react-native-blur';
 import User from '../../classes/User';
 import colors from '../../styles/colors';
 import * as Validate from '../../helpers/Validate';
@@ -65,7 +66,7 @@ export default class LoginView extends React.Component {
       break;
       case "lambda/exited-before-completion":
       case "lambda/timed-out":
-        errorMessage = "There was an error on our end 🙄\nPlease try again";
+        errorMessage = "There was an issue on our end (🙄)\nPlease try again";
       break;
     }
     this.setState({ loading: false, errorMessage: errorMessage });

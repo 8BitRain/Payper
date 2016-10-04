@@ -1,6 +1,7 @@
 // Dependencies
 import React from 'react';
 import { View, Text, TextInput, TouchableHighlight, StyleSheet, Dimensions, Animated, Easing, DeviceEventEmitter } from 'react-native';
+import { VibrancyView } from 'react-native-blur';
 import Entypo from 'react-native-vector-icons/Entypo';
 import colors from '../../../styles/colors';
 
@@ -65,6 +66,7 @@ export default class StickyTextInput extends React.Component {
   }
 
   componentDidMount() {
+    this.refs.emailInput.focus();
     _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
     _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
   }
@@ -94,83 +96,111 @@ export default class StickyTextInput extends React.Component {
 
   render() {
     return(
-      <Animated.View style={[styles.wrap, { bottom: this.offsetBottom }]}>
-        { /* Exit button */ }
-        <TouchableHighlight
-          activeOpacity={0.8}
-          underlayColor={"transparent"}
-          onPress={() => this.props.toggleModal()}>
-            <View style={styles.exit}>
-              <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.alertRed }}>
-                Cancel
-              </Text>
-            </View>
-        </TouchableHighlight>
+      <View style={{ flex: 1.0, backgroundColor: 'transparent' }}>
+        <VibrancyView blurType="dark" style={styles.blur} />
+        <Animated.View style={[styles.wrap, { bottom: this.offsetBottom }]}>
 
-        { /* Email input */ }
-        <TextInput
-          style={[styles.input, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]}
-          placeholderTextColor={colors.white}
-          onChangeText={(v) => { if (this.state.errorMessage) this.setState({ errorMessage: null }); this.props.updateEmail(v); }}
-          onKeyPress={(e) => { if (e.nativeEvent.key === 'Enter') this.refs.passwordInput.focus(); }}
-          placeholder="email"
-          keyboardType="email-address"
-          returnKeyType="next"
-          autoCapitalize="none" autoCorrect={false} autoFocus />
 
-        { /* Password input */ }
-        <TextInput
-          style={[styles.input, { backgroundColor: 'rgba(0, 0, 0, 0.35)' }]}
-          ref="passwordInput"
-          placeholderTextColor={colors.white}
-          onChangeText={(v) => { if (this.state.errorMessage) this.setState({ errorMessage: null }); this.props.updatePassword(v); }}
-          onKeyPress={(e) => { if (e.nativeEvent.key === 'Enter') this.props.onSubmit(); }}
-          placeholder="password"
-          returnKeyType="go"
-          secureTextEntry
-          autoCapitalize="none" autoCorrect={false} />
-
-        { /* Submit button */ }
-        <AnimatedTouchableHighlight
-          activeOpacity={0.8}
-          underlayColor={'transparent'}
-          onPress={() => (!this.props.loading) ? this.props.onSubmit() : console.log("Already logging in...")}
-          style={[styles.submitButton, { backgroundColor: this.submitColor }]}>
-
-          { (this.state.loading)
-              ? <Animated.View style={[styles.loading, { opacity: this.loadingOpacity }]}>
-                  <Text style={[styles.submitText, { color: colors.richBlack }]}>
-                    Loading...
+          { /* Exit button */ }
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={"transparent"}
+            onPress={() => this.props.toggleModal()}>
+              <View style={styles.optionsWrap}>
+                { /* Cancel login */ }
+                <View style={styles.cancel}>
+                  <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.alertRed }}>
+                    Cancel
                   </Text>
-                </Animated.View>
-              : <Text style={styles.submitText}>
-                  { (this.state.errorMessage) ? this.state.errorMessage : this.state.submitText }
-                </Text> }
+                </View>
 
-        </AnimatedTouchableHighlight>
-      </Animated.View>
+                { /* Sign up */ }
+                <View style={styles.signup}>
+                  <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.alertBlue }}>
+                    Sign up
+                  </Text>
+                </View>
+              </View>
+          </TouchableHighlight>
+
+          { /* Email input */ }
+          <TextInput
+            style={[styles.input, { backgroundColor: 'rgba(0, 0, 0, 0.7)' }]}
+            ref="emailInput"
+            placeholderTextColor={colors.white}
+            onChangeText={(v) => { if (this.state.errorMessage) this.setState({ errorMessage: null }); this.props.updateEmail(v); }}
+            onKeyPress={(e) => { if (e.nativeEvent.key === 'Enter') this.refs.passwordInput.focus(); }}
+            placeholder="Email"
+            keyboardType="email-address"
+            returnKeyType="next"
+            autoCapitalize="none" autoCorrect={false} autoFocus />
+
+          { /* Password input */ }
+          <TextInput
+            style={[styles.input, { backgroundColor: 'rgba(0, 0, 0, 0.15)' }]}
+            ref="passwordInput"
+            placeholderTextColor={colors.white}
+            onChangeText={(v) => { if (this.state.errorMessage) this.setState({ errorMessage: null }); this.props.updatePassword(v); }}
+            onKeyPress={(e) => { if (e.nativeEvent.key === 'Enter') this.props.onSubmit(); }}
+            placeholder="Password"
+            returnKeyType="go"
+            secureTextEntry
+            autoCapitalize="none" autoCorrect={false} />
+
+          { /* Submit button */ }
+          <AnimatedTouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => (!this.props.loading) ? this.props.onSubmit() : console.log("Already logging in...")}
+            style={[styles.submitButton, { backgroundColor: this.submitColor }]}>
+
+            { (this.state.loading)
+                ? <Animated.View style={[styles.loading, { opacity: this.loadingOpacity }]}>
+                    <Text style={[styles.submitText, { color: colors.richBlack }]}>
+                      Loading...
+                    </Text>
+                  </Animated.View>
+                : <Text style={styles.submitText}>
+                    { (this.state.errorMessage) ? this.state.errorMessage : this.state.submitText }
+                  </Text> }
+
+          </AnimatedTouchableHighlight>
+        </Animated.View>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  blur: {
+    position: 'absolute',
+    top: 0, left: 0, right: 0, bottom: 0
+  },
   wrap: {
     position: 'absolute',
-    bottom: 0, // Overridden by animated value
-    left: 0,
-    height: 250,
+    left: 0, bottom: 0, // Overridden by animated value
+    height: 210,
     width: dims.width,
-    flexDirection: 'column',
-    backgroundColor: 'transparent'
+    flexDirection: 'column'
   },
-  exit: {
+  optionsWrap: {
     flex: 0.25,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+  },
+  cancel: {
+    flex: 0.5,
     paddingLeft: 35,
     paddingBottom: 9,
     overflow: 'visible'
+  },
+  signup: {
+    flex: 0.5,
+    paddingRight: 35,
+    paddingBottom: 9,
+    overflow: 'visible',
+    alignItems: 'flex-end'
   },
   input: {
     flex: 0.25,
