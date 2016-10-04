@@ -1,5 +1,9 @@
 // Dependencies
 import * as firebase from 'firebase';
+import * as Async from '../helpers/Async';
+import { Actions } from 'react-native-router-flux';
+const FBSDK = require('react-native-fbsdk');
+const { LoginManager } = FBSDK;
 
 export default class User {
   constructor(props) {
@@ -11,7 +15,7 @@ export default class User {
     *   params: email (string), password (string)
     *   -----------------------------------------------------------------------
   **/
-  loginWithEmail(params) {
+  loginWithEmail(params, onLoginSuccess, onLoginFailure) {
     firebase.auth().signInWithEmailAndPassword(params.email, params.password)
     .then(() => {
       if (firebase.auth().currentUser) {
@@ -20,18 +24,20 @@ export default class User {
         (res) => {
           if (res.errorMessage) {
             this.logError(["getUserObjectWithToken failed...", "Lambda error:", res.errorMessage]);
-            this.onLoginFailure("lambda");
+            onLoginFailure("lambda");
           } else {
             this.update(res);
+            Async.set('session_token', JSON.stringify(this.token));
+            Async.set('user', JSON.stringify(this));
             this.logSuccess(["getUserObjectWithToken succeeded...", "Lambda response:", res]);
-            this.onLoginSuccess();
+            onLoginSuccess();
           }
         });
       }
     })
     .catch((err) => {
       this.logError(["loginWithEmail failed...", "Code: " + err.code, "Message: " + err.message]);
-      this.onLoginFailure(err.code);
+      onLoginFailure(err.code);
     });
   }
 
@@ -42,7 +48,7 @@ export default class User {
     *   onSuccess -> get user object from Lambda function, pass it to caller
     *   onFailure -> report to caller
   **/
-  loginWithFacebook(params) {
+  loginWithFacebook(params, onLoginSuccess, onLoginFailure) {
     // TODO (...)
   }
 
@@ -53,7 +59,7 @@ export default class User {
     *   onSuccess -> get user object from Lambda function, pass it to caller
     *   onFailure -> report to caller
   **/
-  loginWithSessionToken(params) {
+  loginWithSessionToken(params, onLoginSuccess, onLoginFailure) {
     // TODO (...)
   }
 
@@ -63,7 +69,12 @@ export default class User {
   **/
   logout() {
     this.logInfo(["Logging out..."]);
-    // TODO (...)
+    if (this.provider === "facebook") LoginManager.logOut();
+    firebase.auth().signOut();
+    Async.set('session_token', '');
+    Async.set('user', '');
+    Actions.LandingScreenContainer();
+    for (var i in this) if (typeof this[i] !== 'function') this[i] = null;
   }
 
   /**

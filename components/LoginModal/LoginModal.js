@@ -1,5 +1,6 @@
 // Dependencies
 import React from 'react';
+import { Actions } from 'react-native-router-flux';
 import { View, Text, TextInput, Modal, StyleSheet, TouchableHighlight, Dimensions } from 'react-native';
 import { VibrancyView } from 'react-native-blur';
 import User from '../../classes/User';
@@ -22,15 +23,7 @@ export default class LoginModal extends React.Component {
       errorMessage: null
     };
 
-    this.User = new User({
-      enableLogs:     true,
-      onLoginSuccess: () => this.onLoginSuccess(),
-      onLoginFailure: (res) => this.onLoginFailure(res)
-    });
-  }
-
-  componentDidMount() {
-    console.log("Mounted");
+    this.User = this.props.currentUser;
   }
 
   updateEmail(v) {
@@ -47,12 +40,12 @@ export default class LoginModal extends React.Component {
 
   login() {
     this.setState({ loading: true });
-    this.User.loginWithEmail(this.state.loginParams);
+    this.User.loginWithEmail(this.state.loginParams, () => this.onLoginSuccess(), () => this.onLoginFailure());
   }
 
   onLoginSuccess() {
     this.setState({ loading: false, errorMessage: null });
-    console.log("Log in succeeded! User:", this.User);
+    Actions.MainViewContainer();
   }
 
   onLoginFailure(errCode) {

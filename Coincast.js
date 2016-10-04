@@ -17,9 +17,6 @@ import LandingScreenContainer from './modules/LandingScreen/LandingScreenContain
 // Beta modules
 import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreenView';
 
-// Test modules
-import LandingView from './components/LandingView';
-
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
   return (state, action) => {
@@ -61,9 +58,6 @@ export default class Coincast extends React.Component {
             <Scene key="LandingScreenContainer" type="replace" component={LandingScreenContainer} title="LandingScreenContainer" panHandlers={null} />
             <Scene key="MainViewContainer" type="replace" component={MainViewContainer} title="MainViewContainer" panHandlers={null} />
             <Scene key="CreatePaymentViewContainer" type="replace" component={CreatePaymentViewContainer} title="CreatePaymentViewContainer" direction="vertical" panHandlers={null} />
-
-            { /* Testing */ }
-            <Scene key="LandingView" type="replace" component={LandingView} title="LandingView" panHandlers={null} />
 
             { /* Beta */ }
             <Scene key="BetaLandingScreenView" type="replace" component={BetaLandingScreenView} title="BetaLandingScreenView" panHandlers={null} />

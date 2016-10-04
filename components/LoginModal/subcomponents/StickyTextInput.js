@@ -67,7 +67,6 @@ export default class StickyTextInput extends React.Component {
   }
 
   componentDidMount() {
-    this.refs.emailInput.focus();
     _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
     _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
   }
@@ -127,7 +126,6 @@ export default class StickyTextInput extends React.Component {
               </View>
             </TouchableHighlight>
           </View>
-
 
           { /* Email input */ }
           <TextInput

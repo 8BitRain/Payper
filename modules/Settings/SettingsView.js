@@ -41,13 +41,13 @@ class Settings extends React.Component {
           confirm: () => Linking.openURL("https://www.getpayper.io/faq").catch(err => console.error('An error occurred', err)),
         });
       }},
-      {rowTitle: "Sign Out", iconName: "moon", destination: () => {
+      {rowTitle: "Log Out", iconName: "moon", destination: () => {
         ActionSheetIOS.showActionSheetWithOptions({
           title: "Signed in as " + this.props.currentUser.first_name + " " + this.props.currentUser.last_name,
           options: ['Sign out', 'Cancel'],
           cancelButtonIndex: 1
         }, (buttonIndex) => {
-          if (buttonIndex == 0) this.props.signout();
+          if (buttonIndex == 0) { this.props.currentUser.logout(); }
         });
       }},
     ];

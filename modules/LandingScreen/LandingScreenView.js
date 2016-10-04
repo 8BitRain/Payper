@@ -283,7 +283,10 @@ class LandingScreenDisplay extends React.Component {
           </View>
 
           { /* Non-Facebook login modal */ }
-          <LoginModal modalVisible={this.state.modalVisible} toggleModal={() => this.toggleModal()} />
+          <LoginModal
+            {...this.props}
+            modalVisible={this.state.modalVisible}
+            toggleModal={() => this.toggleModal()} />
         </Animated.View>
       );
     }
@@ -293,7 +296,7 @@ class LandingScreenDisplay extends React.Component {
 class LandingScreenView extends React.Component{
   render() {
     return(
-      <LandingScreenDisplay dispatchSetProvider={this.props.dispatchSetProvider} dispatchSetNewUserToken={this.props.dispatchSetNewUserToken} />
+      <LandingScreenDisplay {...this.props} />
     );
   }
 };

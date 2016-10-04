@@ -1,13 +1,15 @@
 // Dependencies
 import { Map } from 'immutable';
 import { loop, Effects } from 'redux-loop';
+import User from '../../classes/User';
+console.log("USER:", new User());
 
 // Initialize state
 const initialState = Map({
   activeFirebaseListeners: [],
   signedIn: false,
   loading: false,
-  currentUser: {},
+  currentUser: new User({ enableLogs: true }),
   flags: {},
   notifications: [],
   numUnseenNotifications: 0,
@@ -83,8 +85,10 @@ export default function MainReducer(state = initialState, action = {}) {
       return newState;
       break;
     case SET_CURRENT_USER:
-      var newState = state.set('currentUser', action.input);
-      return newState;
+      var newUser = state.get('currentUser');
+      newUser.update(action.input);
+      var newState = state.set('currentUser', newUser);
+      return state;
       break;
     case SET_FLAGS:
       var newState = state.set('flags', action.input);
