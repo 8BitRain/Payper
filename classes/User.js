@@ -56,14 +56,14 @@ export default class User {
     .then(() => {
       if (firebase.auth().currentUser) {
         var firebaseUser = firebase.auth().currentUser.toJSON();
-        this.getUserObjectWithToken({ token: firebaseUser.stsTokenManager.accessToken },
+        this.getUserWithToken({ token: firebaseUser.stsTokenManager.accessToken },
         (res) => {
           if (res.errorMessage) {
-            this.logError(["getUserObjectWithToken failed...", "Lambda error:", res.errorMessage]);
+            this.logError(["getUserWithToken failed...", "Lambda error:", res.errorMessage]);
             onLoginFailure("lambda");
           } else {
             this.initialize(res);
-            this.logSuccess(["getUserObjectWithToken succeeded...", "Lambda response:", res]);
+            this.logSuccess(["getUserWithToken succeeded...", "Lambda response:", res]);
             onLoginSuccess();
           }
         });
@@ -81,7 +81,29 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   loginWithFacebook(params, onLoginSuccess, onLoginFailure) {
-    // TODO (...)
+    var credential = firebase.auth.FacebookAuthProvider.credential(params.facebookToken);
+
+    if (credential) firebase.auth().signInWithCredential(credential)
+    .then((val) => {
+      var firebaseUser = firebase.auth().currentUser.toJSON();
+      if (firebaseUser) params.user.token = firebaseUser.stsTokenManager.accessToken;
+      this.getOrCreateFacebookUser(params.user,
+      (res) => {
+        if (res.errorMessage) {
+          this.logError(["getUserWithToken failed...", "Lambda error:", res.errorMessage]);
+          onLoginFailure("lambda");
+        } else {
+          res.user.accountStatus = res.account_status;
+          this.initialize(res.user);
+          this.logSuccess(["getUserWithToken succeeded...", "Lambda response:", res.user]);
+          onLoginSuccess();
+        }
+      });
+    })
+    .catch((err) => {
+      this.logError(["loginWithFacebook failed...", "Code: " + err.code, "Message: " + err.message]);
+      onLoginFailure(err.code);
+    });
   }
 
   /**
@@ -90,13 +112,13 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   loginWithAccessToken(params, onLoginSuccess, onLoginFailure) {
-    this.getUserObjectWithToken(params, (res) => {
+    this.getUserWithToken(params, (res) => {
       if (res.errorMessage) {
-        this.logError(["getUserObjectWithToken failed...", "Lambda error:", res.errorMessage]);
+        this.logError(["getUserWithToken failed...", "Lambda error:", res.errorMessage]);
         onLoginFailure("lambda");
       } else {
         this.initialize(res);
-        this.logSuccess(["getUserObjectWithToken succeeded...", "Lambda response:", res]);
+        this.logSuccess(["getUserWithToken succeeded...", "Lambda response:", res]);
         onLoginSuccess();
       }
     });
@@ -118,17 +140,33 @@ export default class User {
     *   Fetch user object from Lambda
     *   params: token
     *   -----------------------------------------------------------------------
-    *   onSuccess -> get user object from Lambda function, pass it to caller
-    *   onFailure -> pass null to caller
   **/
-  getUserObjectWithToken(params, callback) {
+  getUserWithToken(params, callback) {
     try {
       fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/auth/get", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => callback(responseData))
       .done();
     } catch (err) {
-      this.logError(["getUserObjectWithToken failed...", "Lambda error:", err]);
+      this.logError(["getUserWithToken failed...", "Lambda error:", err]);
+      callback(null);
+    }
+  }
+
+  /**
+    *   Create a Facebook user or, if one already exists, retrieve its user
+    *   object from Lambda
+    *   params: a JSON containing user data and access token (if any)
+    *   -----------------------------------------------------------------------
+  **/
+  getOrCreateFacebookUser(params, callback) {
+    try {
+      fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/facebookCreate", {method: "POST", body: JSON.stringify(params)})
+      .then((response) => response.json())
+      .then((responseData) => callback(responseData))
+      .done();
+    } catch (err) {
+      this.logError(["getOrCreateFacebookUser failed...", "Lambda error:", err]);
       callback(null);
     }
   }
@@ -152,13 +190,17 @@ export default class User {
         endpoint: 'users/' + this.uid,
         eventType: 'value',
         listener: null,
-        callback: (res) => this.update(res)
+        callback: (res) => {
+          if (!res) return;
+          this.update(res);
+        }
       },
       {
         endpoint: 'paymentFlow/' + this.uid,
         eventType: 'value',
         listener: null,
         callback: (res) => {
+          if (!res) return;
           if (res.out) SetMaster5000.tackOnKeys(res.out, "pid");
           if (res.in) SetMaster5000.tackOnKeys(res.in, "pid");
           this.update({ paymentFlow: res });
@@ -168,7 +210,10 @@ export default class User {
         endpoint: 'appFlags/' + this.uid,
         eventType: 'value',
         listener: null,
-        callback: (res) => this.update({ appFlags: res })
+        callback: (res) => {
+          if (!res) return;
+          this.update({ appFlags: res });
+        }
       },
       {
         endpoint: 'notifications/' + this.uid,
@@ -183,7 +228,10 @@ export default class User {
         endpoint: 'blockedUsers/' + this.uid,
         eventType: 'value',
         listener: null,
-        callback: (res) => this.update({ blockedUsers: res })
+        callback: (res) => {
+          if (!res) return;
+          this.update({ blockedUsers: res });
+        }
       }
     ];
 

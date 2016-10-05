@@ -1,304 +1,168 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TouchableHighlight, Animated, Image, Dimensions, Linking, StatusBar } from 'react-native';
+import { View, Text, TouchableHighlight, Modal, Animated, Easing, Dimensions, Linking, StatusBar } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Hyperlink from 'react-native-hyperlink';
-import * as Animations from '../../helpers/animations';
-var Mixpanel = require('react-native-mixpanel');
-var Fabric = require('react-native-fabric');
-var { Crashlytics } = Fabric;
+import Mixpanel from 'react-native-mixpanel';
 const FBSDK = require('react-native-fbsdk');
-const {
-  LoginButton,
-  AccessToken,
-  GraphRequest,
-  GraphRequestManager
-} = FBSDK;
+const { LoginButton, AccessToken, GraphRequest, GraphRequestManager } = FBSDK;
 
 // Components
 import ImageCarousel from './subcomponents/ImageCarousel';
 import LoginModal from '../../components/LoginModal/LoginModal';
 
-// Helper functions
-import * as Init from '../../_init';
-import * as Timestamp from '../../helpers/Timestamp';
-var moment = require('moment');
-
 // Stylesheets
 import colors from '../../styles/colors';
-import container from './styles/container';
-import background from './styles/background';
 import typography from './styles/typography';
-var dimensions = Dimensions.get('window');
+import container from './styles/container';
+const dimensions = Dimensions.get('window');
 
-class LandingScreenDisplay extends React.Component {
+export default class LandingScreenView extends React.Component {
   constructor(props) {
     super(props);
-
+    this.loadingOpacity = new Animated.Value(0);
     this.state = {
-      email: "",
-      password: "",
-      loading: false,
-      fbPhone: false,
-      provider: "",
-      doneLoading: false,
-      signInSuccess: false,
-      fbAcessToken: "Test Value",
-      fbUser: {},
-      modalVisible: false
-    }
-
-    this.animationProps = {
-      fadeAnim: new Animated.Value(0) // init opacity 0
+      loginModalVisible: false,
+      loading: false
     };
   }
 
-
   componentDidMount() {
-    Animations.fadeIn(this.animationProps);
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');
     Mixpanel.timeEvent("Landing Screen Duration");
   }
 
-
-  onFBPress() {
-    Mixpanel.track("FBLogin");
-    Mixpanel.timeEvent("Completed signup");
-    Mixpanel.track("Landing Screen Duration");
-    Actions.TrackingContainer();
-  }
-
-
-  onGenericPress() {
-    Mixpanel.track("GenericLogin");
-    Mixpanel.timeEvent("Completed signup");
-    Mixpanel.track("Landing Screen Duration");
-    Actions.CreateAccountViewContainer();
-  }
-
-
-  /*
-  * Query the FB Graph
-  */
-  fbAPIRequest() {
+  loginWithFacebook(token) {
     const _this = this;
+    this.toggleLoadingScreen();
 
-    // '...&type=square' specifies the image type we're retrieving
-    // (other types include small, medium, large, and thumbnail)
-    const infoRequest = new GraphRequest(
-      '/me/?fields=email,age_range,first_name,last_name,gender,picture,friends&type=square',
-      null,
-      _this.responseInfoCallback.bind(this),
-    );
+    // Query the Facebook SDK
+    var req = new GraphRequest('/me/?fields=email,age_range,first_name,last_name,gender,picture,friends&type=square', null, (err: ?Object, result: ?Object) => {
+      if (err) {
+        alert("Something went wrong 🙄\nPlease try again");
+        _this.toggleLoadingScreen();
+        console.log("%cError getting Facebook user data...", "color:red;font-weight:900;");
+        console.log(err);
+      } else {
+        // Re-structure Facebook user data
+        var userData = {
+          facebookToken: token,
+          user: {
+            first_name: result.first_name,
+            last_name: result.last_name,
+            email: result.email,
+            profile_pic: (result.picture.data.is_silhouette) ? "" : result.picture.data.url,
+            phone: "",
+            gender: result.gender,
+            friends: result.friends.data,
+            facebook_id: result.id,
+            token: ""
+          }
+        };
 
-    new GraphRequestManager().addRequest(infoRequest).start();
-  }
-
-
-  /*
-  * Response from using the FB Graph
-  */
-  responseInfoCallback(error: ?Object, result: ?Object) {
-    if (error) {
-      alert('Error fetching data: ' + error.toString());
-    } else {
-      this.signInWithFacebook(this.state.fbAcessToken, result);
-    }
-  }
-
-
-  /*
-  * Sign In With Facebook
-  */
-  signInWithFacebook(FBToken, result) {
-
-    // Extend scope
-    const _this = this;
-
-    // Get profile picture
-    var picture;
-    if (result.picture.data.is_silhouette) picture = '';
-    else picture = result.picture.data.url;
-
-    // Set up user object
-    var data = {
-      FBToken: FBToken,
-      user: {
-        first_name: result.first_name,
-        last_name: result.last_name,
-        email: result.email,
-        profile_pic: picture,
-        phone: '',
-        gender: result.gender,
-        friends: result.friends.data,
-        facebook_id: result.id,
-        token: ''
+        _this.props.currentUser.loginWithFacebook(userData,
+          () => Actions.MainViewContainer(),
+          () => {
+            alert("Something went wrong 🙄\nPlease try again");
+            _this.toggleLoadingScreen();
+          });
       }
-    };
-
-    // Critical line causing loading issues.
-    this.setState({provider: "facebook"});
-
-    // Start loading
-    this.setState({loading: true});
-
-    console.log("PROPS: " + this);
-
-    // Push user object to Lambda function
-    Init.signInWithFacebook(data, function(signedIn, user, token) {
-        console.log("TOKEN: " + token);
-        console.log("USER: " + JSON.stringify(user));
-        if (!user.phone) {
-          _this.props.dispatchSetProvider(_this.state.provider);
-          _this.props.dispatchSetNewUserToken(token);
-
-        }
-        _this.setState({fbPhone: user.phone});
-        _this.setState({provider: user.provider});
-        _this.setState({doneLoading: true, signInSuccess: signedIn});
     });
+
+    new GraphRequestManager().addRequest(req).start();
   }
 
-  handleUrlClick = (url) =>{
+  handleURLClick = (url) =>{
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
   }
 
-  toggleModal() {
-    this.setState({ modalVisible: !this.state.modalVisible });
+  toggleLoginModal() {
+    this.setState({ loginModalVisible: !this.state.loginModalVisible });
+  }
+
+  toggleLoadingScreen() {
+    this.setState({ loading: !this.state.loading });
+    Animated.timing(this.loadingOpacity, {
+      toValue: (this.loadingOpacity._value === 0) ? 1.0 : 0.0,
+      duration: 325
+    }).start();
   }
 
   render() {
-    if (this.state.loading) {
-      //FacebookAccount Either null or Already Created
-      if(this.state.provider == ""){
-        console.log("LandingScreen: GENERIC ROUTE")
-        return(
-          <Loading
-            complete={this.state.doneLoading}
-            msgSuccess={"Welcome!"}
-            msgError={"Sign in failed"}
-            msgLoading={"Signing In"}
-            success={this.state.signInSuccess}
-            successDestination={() => Actions.MainViewContainer()}
-            errorDestination={() => Actions.LandingScreenContainer()} />
-        );
-      }
+    return (
+      <Animated.View style={{ flex: 1.0, backgroundColor: colors.richBlack, opacity: this.pageWrapOpacity }}>
+        { /* Lighten status bar text */ }
+        <StatusBar barStyle="light-content" />
 
-      if(this.state.provider == "facebook"){
-        console.log("FbPhone: " + this.state.fbPhone);
-        if(this.state.fbPhone){
-          console.log("LandingScreen: TO MainView");
-          return(
-            <Loading
-              complete={this.state.doneLoading}
-              msgSuccess={"Welcome!"}
-              msgError={"Sign in failed"}
-              msgLoading={"Signing in"}
-              success={this.state.signInSuccess}
-              successDestination={() => Actions.MainViewContainer()}
-              errorDestination={() => Actions.LandingScreenContainer()} />
-          );
-        }
-        //Facebook Account Newly Created
-        if(!this.state.fbPhone){
-          console.log("LandingScreen: TO CreateAccountViewContainer");
-          return(
-            <Loading
-              complete={this.state.doneLoading}
-              msgSuccess={"Welcome!"}
-              msgError={"Sign in failed"}
-              msgLoading={"Signing in"}
-              success={this.state.signInSuccess}
-              successDestination={() => Actions.CreateAccountViewContainer()}
-              errorDestination={() => Actions.LandingScreenContainer()} />
-          );
-        }
-      }
+        { /* Title */ }
+        <View style={[{flex: 0.2}, container.image]}>
+          <Text style={[typography.main, typography.fontSizeTitle, {paddingTop: 45, color: colors.accent}]}>Payper</Text>
+        </View>
 
-    } else {
-      return (
-        <Animated.View style={{flex: 1.0, backgroundColor: colors.richBlack, opacity: this.animationProps.fadeAnim}}>
+        { /* Payment previews */ }
+        <View style={[container.image, {flex: 0.6}]}>
+          <ImageCarousel />
+        </View>
 
-          { /* Lighten status bar text */ }
-          <StatusBar barStyle="light-content" />
-
-          <View style={[{flex: 0.2}, container.image]}>
-            <Text style={[typography.main, typography.fontSizeTitle, {paddingTop: 45, color: colors.accent}]}>Payper</Text>
-          </View>
-
-          <View style={[container.image, {flex: 0.6}]}>
-            <ImageCarousel />
-          </View>
-
-          <View style={{flex: 0.2, justifyContent: 'flex-start', alignItems: 'center'}}>
-            <LoginButton
-              style={{width: dimensions.width - 50, height: 53, marginBottom: 10}}
-              readPermissions={["email", "public_profile", "user_friends"]}
-              onLoginFinished={
-                (error, result) => {
-                  if (error) {
-                    alert("Login has error: " + JSON.stringify(error));
-                  } else if (result.isCancelled) {
-                    // alert("Login was cancelled");
-                  } else {
-                    AccessToken.getCurrentAccessToken().then(
-                      (data) => {
-                        console.log("Grabbing Facebook AccessToken for User:\n", JSON.stringify(data));
-                        this.state.fbAcessToken = data.accessToken;
-                        this.fbAPIRequest();
-                      }
-                    );
-                  }
-                }
+        { /* Login buttons */ }
+        <View style={{flex: 0.2, justifyContent: 'flex-start', alignItems: 'center'}}>
+          <LoginButton
+            style={{width: dimensions.width - 50, height: 55, marginBottom: 10}}
+            readPermissions={["email", "public_profile", "user_friends"]}
+            onLoginFinished={(err, res) => {
+              if (err) {
+                console.log("Facebook login failed...", JSON.stringify(err));
+              } else if (res.isCancelled) {
+                console.log("Facebook login was cancelled...");
+              } else {
+                const _this = this;
+                AccessToken.getCurrentAccessToken().then((data) => _this.loginWithFacebook(data.accessToken));
               }
-              onLogoutFinished={() => { /* alert("logout.") */ }} />
+            }} />
 
-              { /* "Continue without Facebook" button */ }
-              <TouchableHighlight
-                activeOpacity={0.8}
-                underlayColor={'transparent'}
-                onPress={() => this.toggleModal()}>
-                <Text style={{ fontFamily: 'Roboto', color: colors.white, fontSize: 16, fontWeight: '200' }}>
-                  Continue without Facebook
-                </Text>
-              </TouchableHighlight>
-          </View>
-
-          { /* TOS */ }
-          <View style={{padding: 20, alignItems: "center"}}>
-            <Hyperlink
-              onPress={(url) => this.handleUrlClick(url)}
-              linkStyle={{color:'#2980b9', fontSize:14}}
-              linkText={(url) => {
-                if (url === 'https://www.getpayper.io/terms') {
-                  return 'Terms of Service';
-                } else if (url === 'https://www.getpayper.io/privacy') {
-                  return 'Privacy Policy';
-                }
-              }}>
-              <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: colors.white, fontWeight: '100' }}>
-                By creating an account or logging in, you agree to Payper{"'s"} https://www.getpayper.io/terms and https://www.getpayper.io/privacy.
+            { /* 'Continue without Facebook' button */ }
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              onPress={() => this.toggleLoginModal()}>
+              <Text style={{ fontFamily: 'Roboto', color: colors.white, fontSize: 16, fontWeight: '200' }}>
+                Continue without Facebook
               </Text>
-            </Hyperlink>
-          </View>
+            </TouchableHighlight>
+        </View>
 
-          { /* Non-Facebook login modal */ }
-          <LoginModal
-            {...this.props}
-            modalVisible={this.state.modalVisible}
-            toggleModal={() => this.toggleModal()} />
-        </Animated.View>
-      );
-    }
-  }
-}
+        { /* Privacy Policy and TOS */ }
+        <View style={{padding: 20, alignItems: "center"}}>
+          <Hyperlink
+            onPress={(url) => this.handleURLClick(url)}
+            linkStyle={{color:'#2980b9', fontSize:14}}
+            linkText={(url) => {
+              if (url === 'https://www.getpayper.io/terms')
+                return 'Terms of Service';
+              else if (url === 'https://www.getpayper.io/privacy')
+                return 'Privacy Policy';
+            }}>
+            <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: colors.white, fontWeight: '100' }}>
+              { "By creating an account or logging in, you agree to Payper's https://www.getpayper.io/terms and https://www.getpayper.io/privacy." }
+            </Text>
+          </Hyperlink>
+        </View>
 
-class LandingScreenView extends React.Component{
-  render() {
-    return(
-      <LandingScreenDisplay {...this.props} />
+        { /* Non-Facebook login modal */ }
+        <LoginModal
+          {...this.props}
+          modalVisible={this.state.loginModalVisible}
+          toggleModal={() => this.toggleLoginModal()} />
+
+        { /* Facebook login loading view */
+          (this.state.loading)
+            ? <Animated.View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.richBlack, opacity: this.loadingOpacity, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
+                  Logging in...
+                  </Text>
+              </Animated.View>
+            : null }
+      </Animated.View>
     );
   }
-};
-
-export default LandingScreenView;
+}
