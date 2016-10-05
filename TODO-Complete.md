@@ -1,5 +1,5 @@
 
-## **Todo**
+## **Todo (Complete)**
 
 ### Frontend
 - [x] Sidebar
@@ -13,9 +13,6 @@
 - [X] Edit profile panel
 - [X] Invites (direct)
 - [X] App-wide validations (Bank Onboarding, Payper Account Creation, Pay & Request)
-- [ ] Push notifications
-- [ ] App-wide empty states (Tracking Page, Notifications, Payment History)
-- [ ] Design photo selector for profile picture upload
 
 ### Polish
 - [X] CreatePaymentView.js predictive search: limit predictions to 4
@@ -24,11 +21,6 @@
 - [X] Apply fade animation to inner content during create account onboarding, not entire view
 - [X] Style 'Continue with Facebook' button
 - [X] Increase padding on "Continue without Facebook" text (difficult to press rn)
-- [ ] Fix loading for IAV
-- [ ] Revamp loading screens
-- [ ] Get rid of ugly refresh on notifications indicator
-- [ ] Find a sleeker, more modern icon set
-- [ ] Fix issue where single ArrowNav's are slightly off-center
 
 ### Architecture
 **Refactor the following to fit new Firebase/Redux model:**
@@ -40,7 +32,7 @@
 - [X] Header only displays notifications on Notifications page (probably an
   issue with how numNotifications is passed to <Content />)
 - [X] "Runtime is not ready for debugging" randomly appears.  **This went away when I downgraded from Node 6.2.0 to 5.5.0**
-- [ ] "Severe Error, duplicates recorded in Firebase, with no auth information. To reproduce delete an id but not a users and Facebook id, or switch this around until you can get duplicate users through Facebook sign in or regular user sign in." https://github.com/facebook/react-native/issues/6682
+- [X] "Severe Error, duplicates recorded in Firebase, with no auth information. To reproduce delete an id but not a users and Facebook id, or switch this around until you can get duplicate users through Facebook sign in or regular user sign in." https://github.com/facebook/react-native/issues/6682
 
 ### Brady
 - [X] Style payment invites
@@ -81,10 +73,6 @@
 - [X] Bind bank accounts to Redux store so deletion persists app-wide.
 - [X] Add confirmation alert for bank account deletion
 - [X] Set up listeners for username and funding source
-- [ ] Create an exit animation for completed payments
-- [ ] Add micro deposit validation screen to payment creation flow if user has not yet verified their bank account
-- [ ] Add an onPress destination for notifications
-- [ ] Create a PaymentSeries module, containing detailed information about the payment series, and the option to skip/reschedule payments
 
 ### MVP Usability and Design Bugs (Brady)
 - [X] Adjust CreatePayment flow so that after payment creation: payment creation => outgoing tab of payments view, request creating => incoming tab of payments view
@@ -98,11 +86,6 @@
 - [X] Move to correct payment flow tab after payment creation
 - [X] Add a confirmation alert for when non-Facebook users sign out
 - [X] Refactor sign in screen to properly display invalid email, too many attempts, and reset password messages
-- [ ] Fix ugly notification indicators (double digits and beyond look bad)
-- [ ] Break notifications ListView down into 'Read' and 'Un-Read' sections
-- [ ] Create a different loading screen for sign in
-- [ ] Add a 'Forgot Password' button to sign in screen
-- [ ] Make sure unblock user endpoint is working properly
 
 ### MVP Logic Bugs (Brady)
 - [X] Fix bug where user state is not properly reset upon signing out and signing in with another account
@@ -132,30 +115,14 @@
 - [X] Set up a cron job to refresh session token every 25 minutes
 - [X] Clear payment card timer interval on unmount
 - [X] Fix issue where, after adding a funding source and being taken to the app, your funding source is not loaded, but is loaded after you close and reopen the app. (Fixed on generic accounts, still occurs for Facebook accounts)
-- [ ] Rethink handling contacts with multiple numbers (if more than one number, use the 'Mobile' number)
-- [ ] Refactor entire sign-in process (follow another React Native app's example)
-- [ ] Fix bug where, when you accept or reject a payment request, your incoming tab becomes populated with the other party's incoming payments (must recreate first)
-
-### Bugs (Eric)
-- [ ] Fix padding on state picker in Address.js
-- [ ] Fix returning back to app after completing bank onboarding from "add account route"
 
 ### Things I Need Vash For (Brady)
 - [X] Fix bug where inviting via payment exits before completing request
 - [X] Attach "type" to Firebase payment object when creating a new payment
 - [X] Fix bug where payment creation sometimes fails
-- [ ] Any time a payment is created or rejected, or a user removes or adds a funding source, check all of that user's payments and mark nextPayment as 'waiting_on_fs' if need be
 
 ### Dwolla Requirements
 - [X] Accept Dwolla TOS + Privacy Policy (link to Dwolla docs)
 - [X] Display funding source before payment creation
 - [X] FAQ
 - [X] Delete account button
-- [ ] Request permission for automatic monthly transactions
-- [ ] Post initiation transfer time
-- [ ] Support
-- [ ] Dispute Resolution
-
-### Not MVP
-- [ ] Add recent users list to UserSearchView
-- [ ] Add section headers to user search list view
