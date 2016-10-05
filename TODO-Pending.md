@@ -1,5 +1,5 @@
 
-## **Todo (Completed)**
+## **Todo (Pending)**
 
 ### General
 - [ ] App-wide empty states
