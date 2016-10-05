@@ -20,6 +20,7 @@
 ### Payment Cards
 - [ ] Create an exit animation for completed payments
 - [ ] Create a PaymentSeries component containing detailed information about the payment series and the option to skip/reschedule payments
+- [ ] Debug and refactor nextPayment timer
 
 ### Onboarding
 - [ ] Refactor all things IAV

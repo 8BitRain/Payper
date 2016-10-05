@@ -7,7 +7,7 @@ import carousel from '../styles/carousel';
 import container from '../styles/container';
 
 // Components
-import PaymentPreview from '../../../components/Previews/Transaction/Transaction';
+import Dummy from '../../../components/PaymentCards/Dummy';
 
 const dimensions = Dimensions.get('window');
 
@@ -19,8 +19,7 @@ export default class ImageCarousel extends React.Component {
     return(
       <Carousel hideIndicators={true} animate={true} delay={2750} width={dimensions.width}>
         <View style={[carousel.container, container.image]}>
-          <PaymentPreview
-            dummy
+          <Dummy
             out
             style={{padding: 30}}
             payment={{
@@ -45,8 +44,7 @@ export default class ImageCarousel extends React.Component {
             callbackMenu={() => alert("I'm just a dummy!")} />
         </View>
         <View style={[carousel.container, container.image]}>
-          <PaymentPreview
-            dummy
+          <Dummy
             out
             style={{padding: 30}}
             payment={{
@@ -71,8 +69,7 @@ export default class ImageCarousel extends React.Component {
             callbackMenu={() => alert("I'm just a dummy!")} />
         </View>
         <View style={[carousel.container, container.image]}>
-          <PaymentPreview
-            dummy
+          <Dummy
             out
             style={{padding: 30}}
             payment={{
@@ -97,8 +94,7 @@ export default class ImageCarousel extends React.Component {
             callbackMenu={() => alert("I'm just a dummy!")} />
         </View>
         <View style={[carousel.container, container.image]}>
-          <PaymentPreview
-            dummy
+          <Dummy
             out
             style={{padding: 30}}
             payment={{

@@ -10,7 +10,6 @@ import * as Lambda from '../../services/Lambda';
 
 // Components
 import Footer from '../../components/Footer/Footer';
-import Transaction from '../../components/Previews/Transaction/Transaction';
 import CreatePayment from '../../modules/CreatePayment/CreatePaymentViewContainer';
 import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingContainer';
 import VerifyMicrodeposit from '../../modules/BankOnboarding/Pages/VerifyMicrodeposit';
