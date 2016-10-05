@@ -42,7 +42,7 @@ class FundingSources extends React.Component {
   }
 
   _verifyOnboardingStatus() {
-    if (this.props.flags.onboarding_state == 'customer') {
+    if (this.props.currentUser.appFlags.onboarding_state == 'customer') {
       this.props.setNewUserToken(this.props.currentUser.token);
     } else if (this.state.dataSource.getRowCount() == 0) {
       // Extend scope
@@ -110,7 +110,7 @@ class FundingSources extends React.Component {
               });
             } else {
               this._verifyOnboardingStatus();
-              if (this.props.flags.onboarding_state != "complete" || this.state.fundingSources.getRowCount() == 0) this._toggleModal();
+              if (this.props.currentUser.appFlags.onboarding_state != "complete" || this.state.fundingSources.getRowCount() == 0) this._toggleModal();
             }
           }}>
 

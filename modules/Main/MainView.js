@@ -69,12 +69,16 @@ class InnerContent extends React.Component {
 class Main extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      renderTrigger: Math.random(),
-    };
   }
 
   componentWillMount() {
+    this.props.setCurrentUser({
+      triggerRerender: () => {
+        console.log("triggerRerender was invoked...");
+        this.props.setCurrentUser(this.props.currentUser);
+      }
+    });
+
     if (!this.props.initialized) {
       console.log("%cInitializing MainView", "color:blue;font-weight:900;");
 
@@ -111,23 +115,13 @@ class Main extends React.Component {
   // Switch page to be rendered in <InnerContent />
   changePage(newPage) {
     this.props.setCurrentPage(newPage);
-  }
-
-  _handleSignOut() {
-    // Redirect user to landing screen
-    Actions.LandingScreenContainer();
-
-    // Wipe Redux store
-    this.props.reset();
-
-    // Sign out of Firebase and wipe AsyncStorage
-    Init.signout();
+    this.toggle();
   }
 
   render() {
     return (
       <SideMenu
-        menu={ <Settings {...this.props} changePage={(newPage) => { this.changePage(newPage); this.toggle(); }} signout={ () => this._handleSignOut() } /> }
+        menu={ <Settings {...this.props} changePage={(newPage) => this.changePage(newPage)} /> }
         bounceBackOnOverdraw={false}
         isOpen={this.props.sideMenuIsOpen}
         onChange={(isOpen) => this.props.setSideMenuIsOpen(isOpen)}
@@ -140,16 +134,12 @@ class Main extends React.Component {
         <View style={{flex: 1.0}}>
           { /* Header */ }
           <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
-            <Header
-              callbackSettings={ () => this.toggle() }
-              numUnseenNotifications={ this.props.flags.numUnseenNotifications }
-              headerProps={ this.props.header }
-              activeFilter={ this.props.activeFilter } />
+            <Header {...this.props} callbackSettings={ () => this.toggle() } />
           </View>
 
           { /* Inner content */ }
           <View style={{ flex: (dimensions.height < 667) ? 0.88 : 0.9 }}>
-            <InnerContent { ...this.props } />
+            <InnerContent {...this.props} />
           </View>
         </View>
       </SideMenu>

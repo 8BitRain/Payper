@@ -162,7 +162,7 @@ function getAwaitingFundingSourceAlert(options) {
 class PaymentPreview extends React.Component {
   constructor(props) {
     super(props);
-    console.log("Rendered payment preview with flags:", this.props.flags);
+    console.log("Rendered payment preview with flags:", this.props.currentUser.appFlags);
   }
 
   render() {
@@ -267,8 +267,8 @@ class PaymentPreview extends React.Component {
           { /* Bottom chunk (progress bar or awaiting funding source alert) */ }
           { (this.props.payment.nextPayment == "waiting_on_fs")
               ? (this.props.currentUser.uid == this.props.payment.recip_id)
-                ? getAwaitingFundingSourceAlert({name: this.props.payment.recip_name.split(" ")[0], incoming: true, updatingFundingSource: this.props.flags.updating_funding_source})
-                : getAwaitingFundingSourceAlert({name: this.props.payment.recip_name.split(" ")[0], incoming: false, updatingFundingSource: this.props.flags.updating_funding_source})
+                ? getAwaitingFundingSourceAlert({name: this.props.payment.recip_name.split(" ")[0], incoming: true, updatingFundingSource: this.props.currentUser.appFlags.updating_funding_source})
+                : getAwaitingFundingSourceAlert({name: this.props.payment.recip_name.split(" ")[0], incoming: false, updatingFundingSource: this.props.currentUser.appFlags.updating_funding_source})
               : <View style={[styles.bottom]}>
                   <View style={styles.barWrap}>
                     <View style={[styles.bar, {flex: this.props.payment.paymentsMade / this.props.payment.payments}]}></View>

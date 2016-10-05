@@ -1,8 +1,6 @@
 // Dependencies
 import { Map } from 'immutable';
-import { loop, Effects } from 'redux-loop';
 import User from '../../classes/User';
-console.log("USER:", new User());
 
 // Initialize state
 const initialState = Map({
@@ -40,10 +38,9 @@ const SET_ACTIVE_FIREBASE_LISTENERS = 'SET_ACTIVE_FIREBASE_LISTENERS',
       SET_SIGNED_IN = 'SET_SIGNED_IN',
       SET_CURRENT_USER = 'SET_CURRENT_USER',
       SET_BANK_ACCOUNTS = 'SET_BANK_ACCOUNTS',
-      SET_FLAGS = 'SET_FLAGS'
+      SET_FLAGS = 'SET_FLAGS',
       SET_NOTIFICATIONS = 'SET_NOTIFICATIONS',
       SET_NUM_UNSEEN_NOTIFICATIONS = 'SET_NUM_UNSEEN_NOTIFICATIONS',
-      SET_SIGNED_IN = 'SET_SIGNED_IN',
       SET_HEADER = 'SET_HEADER',
       SET_SIDE_MENU_IS_OPEN = 'SET_SIDE_MENU_IS_OPEN',
       SET_CURRENT_PAGE = 'SET_CURRENT_PAGE',
@@ -86,7 +83,8 @@ export default function MainReducer(state = initialState, action = {}) {
       break;
     case SET_CURRENT_USER:
       var newUser = state.get('currentUser');
-      newUser.update(action.input);
+      for (var k in action.input)
+        newUser[k] = action.input[k];
       var newState = state.set('currentUser', newUser);
       return state;
       break;

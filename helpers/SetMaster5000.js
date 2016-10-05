@@ -273,3 +273,40 @@ export function tackOnKeys(j, label) {
 
   return j
 }
+
+
+/**
+  *
+  *   params: payments (JSON), flow (string)
+**/
+export function processPayments(params) {
+  if (!params.payments) return;
+
+  for (var k in params.payments) {
+    params.payments[k].pid = k;
+    params.payments[k].flow = params.flow;
+  }
+
+  // Convert from JSON to array and extract PID's of complete payments
+  var paymentArray = JSONToArray({ JSON: params.payments }),
+      paymentsToPrioritize = extractCompletedPayments({ payments: paymentArray });
+
+  // Move complete payments to the front of array
+  var orderedPayments = (paymentsToPrioritize.length === 0) ? paymentArray : prioritizePayments({ payments: paymentArray, prioritize: paymentsToPrioritize });
+
+  return orderedPayments;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+//

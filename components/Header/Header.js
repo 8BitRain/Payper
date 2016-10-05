@@ -232,8 +232,8 @@ class Header extends React.Component {
 
     this.state = {
       active: this.props.activeFilter,
-      index: 0,
-    }
+      index: 0
+    };
   }
 
   render() {
@@ -242,7 +242,7 @@ class Header extends React.Component {
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
           { this.props.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
-          { this.props.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings, this.props.numUnseenNotifications) : null }
+          { this.props.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings, (this.props.currentUser.appFlags) ? this.props.currentUser.appFlags.numUnseenNotifications : 0) : null }
           { this.props.headerProps.types.backIcon ? getBackIcon(this.props.callbackBack) : null }
         </View>
 

@@ -10,6 +10,7 @@ const { LoginManager } = FBSDK;
 export default class User {
   constructor(props) {
     if (props) for (var i in props) this[i] = props[i];
+    this.appFlags = {};
   }
 
   /**
@@ -21,6 +22,7 @@ export default class User {
     this.logInfo(["Updating user with props:", props]);
     if (props) for (var i in props) this[i] = props[i];
     Async.set('user', JSON.stringify(this));
+    if (this.triggerRerender) this.triggerRerender();
   }
 
   /**
@@ -201,9 +203,10 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
-          if (res.out) SetMaster5000.tackOnKeys(res.out, "pid");
-          if (res.in) SetMaster5000.tackOnKeys(res.in, "pid");
-          this.update({ paymentFlow: res });
+          if (res.out) res.out = SetMaster5000.processPayments({ payments: res.out, flow: "outgoing" });
+          if (res.in) res.in = SetMaster5000.processPayments({ payments: res.in, flow: "incoming" });
+          console.log("Processed payments:", res);
+          // this.update({ paymentFlow: res });
         }
       },
       {

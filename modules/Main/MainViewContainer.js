@@ -35,7 +35,7 @@ function mapStateToProps(state) {
     flags: state.getIn(['main', 'flags']),
     notifications: state.getIn(['main', 'notifications']),
     numUnseenNotifications: state.getIn(['main', 'numUnseenNotifications']),
-    header: state.getIn(['main', 'header']),
+    headerProps: state.getIn(['main', 'header']),
     sideMenuIsOpen: state.getIn(['main', 'sideMenuIsOpen']),
     initialized: state.getIn(['main', 'initialized']),
     nativeContacts: state.getIn(['main', 'nativeContacts']),
@@ -147,18 +147,6 @@ function mapDispatchToProps(dispatch) {
 
       var endpoints = [
         {
-          endpoint: 'notifications/' + CURRENT_USER.uid,
-          eventType: 'value',
-          listener: null,
-          callback: (res) => { if (res) dispatch(set.notifications(res)) },
-        },
-        {
-          endpoint: 'appFlags/' + CURRENT_USER.uid,
-          eventType: 'value',
-          listener: null,
-          callback: (res) => { if (res) dispatch(set.flags(res)) },
-        },
-        {
           endpoint: 'users',
           eventType: 'value',
           listener: null,
@@ -246,15 +234,7 @@ function mapDispatchToProps(dispatch) {
               dispatch(setInUserSearch.allContactsArray(newAllContactsArray));
             }
           },
-        },
-        {
-          endpoint: 'blocked/' + CURRENT_USER.uid,
-          eventType: 'value',
-          listener: null,
-          callback: (res) => {
-            if (res) dispatch(set.blockedUsers(res));
-          },
-        },
+        }
       ];
 
       for (var e in endpoints) {

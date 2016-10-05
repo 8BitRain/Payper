@@ -1,6 +1,14 @@
 
 ## **Todo (Pending)**
 
+### Refactor
+- [X] Refactor Settings module to fit User class refactor
+- [X] Refactor Header module to fit User class refactor
+- [ ] Refactor Payments module to fit User class refactor
+- [ ] Refactor FundingSources module to fit User class refactor
+- [ ] Refactor Profile module to fit User class refactor
+- [ ] Refactor UserSearch module to fit User class refactor
+
 ### General
 - [ ] App-wide empty states
 

@@ -144,13 +144,12 @@ class Payments extends React.Component {
 
   _archiveCompletePayments(options) {
     // Determine which payment set to look through
-    var payments = (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments._dataBlob.s1 : this.props.incomingPayments._dataBlob.s1,
-        curr;
+    var payments = (this.props.activeFilter === "outgoing") ? this.props.outgoingPayments._dataBlob.s1 : this.props.incomingPayments._dataBlob.s1;
 
     // If a payment is complete, animate it out, then archive it
     for (var p in payments) {
-      curr = payments[p];
-      if (curr.paymentsMade == curr.payments) {
+      const curr = payments[p];
+      if (curr.paymentsMade === curr.payments) {
         Lambda.archivePayment({ payment_id: curr.pid, token: this.props.currentUser.token });
       }
     }
@@ -213,28 +212,13 @@ class Payments extends React.Component {
       purpose: payment.purpose,
       payments: payment.payments,
       paymentsMade: payment.paymentsMade,
-      nextPayment: payment.nextPayment,
+      nextPayment: payment.nextPayment
     };
 
     var user = {
       name: (payment.flow == "incoming") ? payment.sender_name : payment.recip_name,
-      pic: (payment.flow == "incoming") ? payment.sender_pic : payment.recip_pic,
+      pic: (payment.flow == "incoming") ? payment.sender_pic : payment.recip_pic
     };
-
-    // if (payment.invite)
-    //   payment.stage = "pendingInvite";
-    // else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "incoming" && this.props.currentUser.fundingSource)
-    //   payment.stage = "pendingSenderFundingSource";
-    // else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "incoming" && !this.props.currentUser.fundingSource)
-    //   payment.stage = "pendingRecipFundingSource";
-    // else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "outgoing" && this.props.currentUser.fundingSource)
-    //   payment.stage = "pendingRecipFundingSource";
-    // else if (payment.nextPayment == "waiting_on_fs" && payment.flow == "outgoing" && !this.props.currentUser.fundingSource)
-    //   payment.stage = "pendingSenderFundingSource";
-    // else if (payment.confirmed == false)
-    //   payment.stage = "pendingConfirmation";
-    // else
-    //   payment.stage = "active";
 
     switch(payment.status) {
       case "active":
@@ -312,15 +296,14 @@ class Payments extends React.Component {
   }
 
   _verifyOnboardingStatus() {
-    console.log("FLAGS" + JSON.stringify(this.props.flags));
-    if(this.props.flags.onboarding_state == 'customer'){
+    if(this.props.currentUser.appFlags.onboarding_state == 'customer'){
       // Actions.BankOnboardingContainer();
       console.log(this.props.currentUser.token);
       this.props.setNewUserToken(this.props.currentUser.token);
     }
     //The user has completed customer creation and now has to go through dwolla IAV
-    if(this.props.flags.onboarding_state == 'bank') {
-      if(this.props.flags.customer_status == 'verified') {
+    if(this.props.currentUser.appFlags.onboarding_state == 'bank') {
+      if(this.props.currentUser.appFlags.customer_status == 'verified') {
         //Initiate IAV
         this.props.setNewUserToken(this.props.currentUser.token);
 
@@ -337,19 +320,19 @@ class Payments extends React.Component {
           }
         });
         //The user needs to redo the customer creation process.
-      } else if(this.props.flags.customer_status == 'retry') {
+      } else if(this.props.currentUser.appFlags.customer_status == 'retry') {
           this.props.setRetry(true);
           this.props.setLoading(true);
           Actions.BankOnboardingContainer();
         //The user needs to provide additonal documents.
-      } else if (this.props.flags.customer_status == 'document') {
+      } else if (this.props.currentUser.appFlags.customer_status == 'document') {
           this.props.setDocument(true);
           this.props.setLoading(true);
           Actions.BankOnboardingContainer();
       }
     }
     //The user has completed onboarding and can make payments.
-    if(this.props.flags.onboarding_state == 'complete'){
+    if(this.props.currentUser.appFlags.onboarding_state == 'complete'){
       Actions.CreatePaymentViewContainer();
     }
   }
@@ -375,11 +358,11 @@ class Payments extends React.Component {
             callbackFeed={() => this.props.setActiveTab('global')}
             callbackTracking={() => this.props.setActiveTab('tracking')}
             callbackPay={() => {
-              if (this.props.flags.onboarding_state != "complete") {
-                /*Alert.message({
+              if (this.props.currentUser.appFlags.onboarding_state != "complete") {
+                Alert.message({
                   title: "Hey!",
                   message: "You must add a bank account before you can make a payment."
-                });*/
+                });
                 this._verifyOnboardingStatus();
               }
 
@@ -401,11 +384,11 @@ class Payments extends React.Component {
 
             { /* If user has a verified funding source, display create payment
                  flow. Otherwise, display bank account onboarding flow */
-              (this.props.flags.onboarding_state == "complete")
+              (this.props.currentUser.appFlags.onboarding_state == "complete")
                 ? <CreatePayment
                     {...this.props}
                     toggleModal={(options) => this._toggleModal(options)} />
-                : (this.props.flags.micro_deposit_flow)
+                : (this.props.currentUser.appFlags.micro_deposit_flow)
                     ? <VerifyMicrodeposit
                         {...this.props}
                         toggleModal={(options) => this._toggleModal(options)} />
