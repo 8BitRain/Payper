@@ -27,6 +27,7 @@
 - [ ] Add a 'Forgot Password' button to LoginModal
 
 ### Non-code
+- [ ] Create an animated loading svg based off the logo in InDesign
 - [ ] Find a sleeker, more modern icon set
 - [ ] Find a better font
 - [ ] Create a system for dispute resolution (web)
