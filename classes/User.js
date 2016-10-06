@@ -3,42 +3,41 @@ import * as firebase from 'firebase';
 import * as Firebase from '../services/Firebase';
 import * as Async from '../helpers/Async';
 import * as SetMaster5000 from '../helpers/SetMaster5000';
+import * as _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
 const FBSDK = require('react-native-fbsdk');
 const { LoginManager } = FBSDK;
 
 export default class User {
-  constructor(props) {
-    if (props) for (var i in props) this[i] = props[i];
+  constructor(attributes) {
+    if (attributes) for (var i in attributes) this[i] = attributes[i];
     this.appFlags = {};
   }
 
   /**
-    *   Update this user's props, then log the new user object to async storage
-    *   props: a JSON containing propKey and propValue pairs
+    *   Update this user's attributes, then log the new user object to async storage
+    *   attributes: a JSON containing propKey and propValue pairs
     *   -----------------------------------------------------------------------
   **/
-  update(props) {
-    this.logInfo(["Updating user with props:", props]);
-    if (props) for (var i in props) this[i] = props[i];
+  update(updates) {
+    this.logInfo(["Updating User with updates:", updates]);
+    for (var k in updates) this[k] = updates[k];
     Async.set('user', JSON.stringify(this));
-    if (this.triggerRerender) this.triggerRerender();
   }
 
   /**
-    *   Initialize this user's props, listeners, and async storage links
-    *   props: user, a JSON user object returned by getUser Lambda endpoint
+    *   Initialize this user's attributes, listeners, and async storage links
+    *   attributes: user, a JSON user object returned by getUser Lambda endpoint
     *   -----------------------------------------------------------------------
   **/
   initialize(user) {
-    this.update(user);
+    for (var k in user) this[k] = user[k];
     Async.set('session_token', user.token);
     Async.set('user', JSON.stringify(user));
-    this.startListening();
   }
 
   /**
-    *   Wipe this user's props, listeners, and async storage links
+    *   Wipe this user's attributes, listeners, and async storage links
     *   -----------------------------------------------------------------------
   **/
   destroy() {
@@ -134,6 +133,7 @@ export default class User {
     this.logInfo(["Logging out..."]);
     if (this.provider === "facebook") LoginManager.logOut();
     firebase.auth().signOut();
+    this.stopListening();
     this.destroy();
     Actions.LandingScreenContainer();
   }
@@ -186,7 +186,7 @@ export default class User {
     *   Enable listeners on this user's Firebase data
     *   -----------------------------------------------------------------------
   **/
-  startListening() {
+  startListening(cb) {
     this.endpoints = [
       {
         endpoint: 'users/' + this.uid,
@@ -194,7 +194,7 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
-          this.update(res);
+          cb(res);
         }
       },
       {
@@ -205,8 +205,7 @@ export default class User {
           if (!res) return;
           if (res.out) res.out = SetMaster5000.processPayments({ payments: res.out, flow: "outgoing" });
           if (res.in) res.in = SetMaster5000.processPayments({ payments: res.in, flow: "incoming" });
-          console.log("Processed payments:", res);
-          // this.update({ paymentFlow: res });
+          cb({ paymentFlow: res });
         }
       },
       {
@@ -215,7 +214,7 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
-          this.update({ appFlags: res });
+          cb({ appFlags: res });
         }
       },
       {
@@ -223,8 +222,9 @@ export default class User {
         eventType: 'value',
         listener: null,
         callback: (res) => {
+          if (!res) return;
           SetMaster5000.tackOnKeys(res, "timestamp");
-          this.update({ notifications: res });
+          cb({ notifications: res });
         }
       },
       {
@@ -233,12 +233,11 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
-          this.update({ blockedUsers: res });
+          cb({ blockedUsers: res });
         }
       }
     ];
 
-    this.logInfo(["Enabling listener with params:", this.endpoints]);
     for (var e in this.endpoints) {
       Firebase.listenTo(this.endpoints[e]);
     }

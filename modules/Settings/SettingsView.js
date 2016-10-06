@@ -23,6 +23,8 @@ class Settings extends React.Component {
   constructor(props) {
     super(props);
 
+    console.log("Constructing <SettingsView /> with props:", this.props.currentUser);
+
     this.EMPTY_DATA_SOURCE = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.sideMenuButtons = [

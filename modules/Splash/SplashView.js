@@ -76,7 +76,9 @@ class SplashView extends React.Component {
     Async.get('betaStatus', (val) => {
       if (val == "fullAccess") {
         Async.get('session_token', (token) => {
-          this.props.currentUser.loginWithAccessToken({ token: token }, () => _this._handleSignInSuccess(), () => _this._handleSignInFailure());
+          this.props.currentUser.loginWithAccessToken({ token: token },
+            () => _this._handleSignInSuccess(),
+            () => _this._handleSignInFailure());
         });
       } else {
         Actions.BetaLandingScreenView();

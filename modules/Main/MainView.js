@@ -26,11 +26,6 @@ class InnerContent extends React.Component {
   }
 
   render() {
-
-    console.log("%cGot props:", "color:purple;font-weight:900;");
-    console.log(this.props);
-
-    // Otherwise, take the user to the app
     switch (this.props.currentPage) {
 
       case "payments":
@@ -57,7 +52,7 @@ class InnerContent extends React.Component {
         return(
           <View style={{flex: 1.0, backgroundColor: "#000", justifyContent: 'center', alignItems: 'center'}}>
             <Text style={{fontSize: 16, color: '#FFF'}}>
-              { "Failed to render a page.\nCheck InnerContent's render\nfunction in MainViewV2.js" }
+              { "Failed to render a page.\nCheck <InnerContent /> render\nfunction in MainView.js" }
             </Text>
           </View>
         );
@@ -66,59 +61,26 @@ class InnerContent extends React.Component {
 }
 
 
-class Main extends React.Component {
+export default class Main extends React.Component {
   constructor(props) {
     super(props);
   }
 
   componentWillMount() {
-    this.props.setCurrentUser({
-      triggerRerender: () => {
-        console.log("triggerRerender was invoked...");
-        this.props.setCurrentUser(this.props.currentUser);
-      }
-    });
-
-    if (!this.props.initialized) {
-      console.log("%cInitializing MainView", "color:blue;font-weight:900;");
-
-      // Initialize the app
-      this.props.initialize((success) => {
-        if (success) {
-          console.log("%cInitialization succeeded. Current user:", "color:green;font-weight:900;");
-          console.log(this.props.currentUser);
-
-          // Initialize Firebase listeners
-          this.props.listen({
-            currentUser: this.props.currentUser,
-            nativeContacts: this.props.nativeContacts,
-            allContactsArray: this.props.allContactsArray,
-            uid: this.props.currentUser.uid,
-          });
-        } else {
-          console.log("%cInitialization failed.", "color:red;font-weight:900;");
-        }
-      });
-    }
+    this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates));
   }
 
-  // Disable Firebase listeners
-  componentWillUnmount() {
-    this.props.stopListening();
-  }
-
-  // Open & close side menu
-  toggle() {
+  toggleSideMenu() {
     this.props.setSideMenuIsOpen(!this.props.sideMenuIsOpen);
   }
 
-  // Switch page to be rendered in <InnerContent />
   changePage(newPage) {
     this.props.setCurrentPage(newPage);
-    this.toggle();
+    this.toggleSideMenu();
   }
 
   render() {
+
     return (
       <SideMenu
         menu={ <Settings {...this.props} changePage={(newPage) => this.changePage(newPage)} /> }
@@ -132,9 +94,8 @@ class Main extends React.Component {
 
         { /* Main page content wrap */ }
         <View style={{flex: 1.0}}>
-          { /* Header */ }
           <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
-            <Header {...this.props} callbackSettings={ () => this.toggle() } />
+            <Header {...this.props} callbackSettings={ () => this.toggleSideMenu() } />
           </View>
 
           { /* Inner content */ }
@@ -146,5 +107,3 @@ class Main extends React.Component {
     );
   }
 }
-
-export default Main;
