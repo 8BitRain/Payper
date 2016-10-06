@@ -75,7 +75,8 @@ export default class Main extends React.Component {
     this.state = {
       currentPage: "payments",
       headerProps: Headers.get("payments", this.headerCallbacks),
-      activeFilter: "incoming"
+      activeFilter: "incoming",
+      sideMenuIsOpen: false
     };
   }
 
@@ -84,7 +85,7 @@ export default class Main extends React.Component {
   }
 
   toggleSideMenu() {
-    this.props.setSideMenuIsOpen(!this.props.sideMenuIsOpen);
+    this.setState({ sideMenuIsOpen: !this.state.sideMenuIsOpen });
   }
 
   changePage(newPage) {
@@ -104,8 +105,8 @@ export default class Main extends React.Component {
       <SideMenu
         menu={ <Settings {...this.props} changePage={(newPage) => this.changePage(newPage)} /> }
         bounceBackOnOverdraw={false}
-        isOpen={this.props.sideMenuIsOpen}
-        onChange={(isOpen) => this.props.setSideMenuIsOpen(isOpen)}
+        isOpen={this.state.sideMenuIsOpen}
+        onChange={(isOpen) => this.setState({ sideMenuIsOpen: isOpen })}
         disableGestures={false}>
 
         { /* Lighten status bar text */ }
