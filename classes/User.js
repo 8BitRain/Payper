@@ -1,10 +1,12 @@
 // Dependencies
 import * as firebase from 'firebase';
 import * as Firebase from '../services/Firebase';
+import * as Lambda from '../services/Lambda';
 import * as Async from '../helpers/Async';
 import * as SetMaster5000 from '../helpers/SetMaster5000';
 import * as _ from 'lodash';
 import { Actions } from 'react-native-router-flux';
+import Contacts from 'react-native-contacts';
 const FBSDK = require('react-native-fbsdk');
 const { LoginManager } = FBSDK;
 
@@ -12,6 +14,8 @@ export default class User {
   constructor(attributes) {
     if (attributes) for (var i in attributes) this[i] = attributes[i];
     this.appFlags = {};
+    this.allContactsArray = [];
+    this.nativeContacts = [];
   }
 
   /**
@@ -32,6 +36,7 @@ export default class User {
   **/
   initialize(user) {
     for (var k in user) this[k] = user[k];
+    this.getNativeContacts();
     Async.set('session_token', user.token);
     Async.set('user', JSON.stringify(user));
   }
@@ -174,6 +179,32 @@ export default class User {
   }
 
   /**
+    *   Get this user's native phone contacts
+    *   -----------------------------------------------------------------------
+  **/
+  getNativeContacts() {
+    Contacts.getAll((err, contacts) => {
+      if (err && err.type === 'permissionDenied') this.logError(["Error getting contacts", err]);
+      else {
+        const _this = this;
+
+        var c = SetMaster5000.formatNativeContacts(contacts);
+        this.update({ nativeContacts: c });
+
+        Lambda.updateContacts({ token: this.token, phoneNumbers: SetMaster5000.contactsArrayToNumbersArray(c) }, () => {
+          Firebase.listenUntilFirstValue("existingPhoneContacts/" + this.uid, (res) => {
+            Firebase.scrub("existingPhoneContacts/" + this.uid);
+            if (Array.isArray(res) && res.length > 0) {
+              var parsedContacts = SetMaster5000.parseNativeContactList({ phoneNumbers: res, contacts: c });
+              _this.update({ nativeContacts: parsedContacts });
+            }
+          });
+        });
+      }
+    });
+  }
+
+  /**
     *   Cycle this user's access and refresh tokens
     *   -----------------------------------------------------------------------
   **/
@@ -188,6 +219,17 @@ export default class User {
   **/
   startListening(cb) {
     this.endpoints = [
+      {
+        endpoint: 'users',
+        eventType: 'value',
+        listener: null,
+        callback: (res) => {
+          if (!res) return;
+          var globalUserListArray = SetMaster5000.globalUserListToArray({ sectionTitle: "Other Payper Users", users: res, uid: this.uid });
+          globalUserListArray.concat(this.nativeContacts);
+          cb({ allContactsArray: globalUserListArray });
+        }
+      },
       {
         endpoint: 'users/' + this.uid,
         eventType: 'value',

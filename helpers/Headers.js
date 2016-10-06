@@ -1,5 +1,5 @@
 
-export function get(header, callbacks) {
+export function get(header, callbacks, index) {
   switch (header) {
     case "notifications":
       return {
@@ -82,6 +82,21 @@ export function get(header, callbacks) {
         callbackIn: () => callbacks.setActiveFilterToIncoming(),
         callbackOut: () => callbacks.setActiveFilterToOutgoing(),
         accent: false,
+      };
+    break;
+    case "createPayment":
+      return {
+        types: {
+          "paymentIcons": true,
+          "closeIcon": (index == 0) ? true : false,
+          "closeIconTopRight": (index > 0) ? true : false,
+          "backIcon": (index > 0) ? true : false,
+        },
+        index: index,
+        numCircles: null,
+        title: null,
+        callbackIn: null,
+        callbackOut: null,
       };
     break;
     default:

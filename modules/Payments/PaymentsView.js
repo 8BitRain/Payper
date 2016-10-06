@@ -175,8 +175,8 @@ class Payments extends React.Component {
   }
 
   _renderRow(payment) {
-    console.log("%cRendering payment:", "color:green;font-weight:900;");
-    console.log(payment);
+    // console.log("%cRendering payment:", "color:green;font-weight:900;");
+    // console.log(payment);
 
     var paymentInfo = {
       amount: payment.amount,

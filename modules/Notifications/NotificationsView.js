@@ -15,12 +15,12 @@ class Notifications extends React.Component {
   constructor(props) {
     super(props);
 
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.EMPTY_DATA_SOURCE = ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.state = {
       user: {},
       empty: true,
-      dataSource: ds.cloneWithRows([]),
+      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
     };
   }
 
@@ -33,13 +33,13 @@ class Notifications extends React.Component {
 
   // Generate rows for the list view
   _genRows() {
-    if (!this.props.notifications || this.props.notifications.length == 0) return;
+    if (!this.props.currentUser.notifications || this.props.currentUser.notifications.length == 0) return;
 
     // Put notifications in array format, tacking on timestamp as a key/value pair for sorting
     var notifications = [];
-    for (var timestamp in this.props.notifications) {
-      this.props.notifications[timestamp].ts = timestamp;
-      notifications.push(this.props.notifications[timestamp]);
+    for (var timestamp in this.props.currentUser.notifications) {
+      this.props.currentUser.notifications[timestamp].ts = timestamp;
+      notifications.push(this.props.currentUser.notifications[timestamp]);
     }
 
     // Sort notifications by timestamp

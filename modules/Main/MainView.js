@@ -13,7 +13,7 @@ import Header from '../../components/Header/Header';
 import Settings from '../../modules/Settings/SettingsView';
 import Payments from '../../modules/Payments/PaymentsView';
 import Profile from '../../modules/Profile/ProfileView';
-import Notifications from '../../modules/Notifications/NotificationsViewContainer';
+import Notifications from '../../modules/Notifications/NotificationsView';
 import FundingSources from '../../modules/FundingSources/FundingSourcesViewContainer';
 import Invite from '../../modules/Invite/InviteViewContainer';
 import SignIn from '../../modules/SignIn/SignInViewContainer';
@@ -38,7 +38,7 @@ class InnerContent extends React.Component {
         break;
 
       case "notifications":
-        return <Notifications />;
+        return <Notifications {...this.props} />;
         break;
 
       case "fundingSources":
@@ -76,8 +76,19 @@ export default class Main extends React.Component {
       currentPage: "payments",
       headerProps: Headers.get("payments", this.headerCallbacks),
       activeFilter: "incoming",
-      sideMenuIsOpen: false
+      sideMenuIsOpen: false,
+      incomingPayments: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
+      outgoingPayments: this.EMPTY_DATA_SOURCE.cloneWithRows([])
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentUser.paymentFlow) {
+      this.setState({
+        incomingPayments: this.EMPTY_DATA_SOURCE.cloneWithRows((nextProps.currentUser.paymentFlow.in) ? nextProps.currentUser.paymentFlow.in : []),
+        outgoingPayments: this.EMPTY_DATA_SOURCE.cloneWithRows((nextProps.currentUser.paymentFlow.out) ? nextProps.currentUser.paymentFlow.out : [])
+      });
+    }
   }
 
   componentWillMount() {
@@ -118,16 +129,16 @@ export default class Main extends React.Component {
             <Header {...this.props}
               activeFilter={this.state.activeFilter}
               headerProps={this.state.headerProps}
-              callbackSettings={ () => this.toggleSideMenu() } />
+              callbackSettings={() => this.toggleSideMenu()} />
           </View>
 
           { /* Inner content */ }
           <View style={{ flex: (dimensions.height < 667) ? 0.88 : 0.9 }}>
             <InnerContent {...this.props}
-              activeFilter={this.state.activeFilter}
               currentPage={this.state.currentPage}
-              outgoingPayments={this.EMPTY_DATA_SOURCE.cloneWithRows([])}
-              incomingPayments={this.EMPTY_DATA_SOURCE.cloneWithRows([])} />
+              activeFilter={this.state.activeFilter}
+              outgoingPayments={this.state.outgoingPayments}
+              incomingPayments={this.state.incomingPayments} />
           </View>
         </View>
       </SideMenu>

@@ -28,7 +28,6 @@ class CreatePaymentView extends React.Component {
 
     this.state = {
       pageIndex: 0,
-      header: Headers.createPaymentHeader(),
       offsetX: new Animated.Value(0),
       selectedContacts: {},
       amount: "",
@@ -103,7 +102,7 @@ class CreatePaymentView extends React.Component {
             callbackClose={() => { this.props.reset(); this.props.toggleModal(); }}
             callbackBack={() => this._prevPage()}
             numUnseenNotifications={this.props.numUnseenNotifications}
-            headerProps={Headers.createPaymentHeader(this.state.pageIndex)} />
+            headerProps={Headers.get("createPayment", null, this.state.pageIndex)} />
         </View>
 
         { /* Inner content */ }

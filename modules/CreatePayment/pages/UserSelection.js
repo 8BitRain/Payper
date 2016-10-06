@@ -26,7 +26,7 @@ class UserSelection extends React.Component {
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2
     });
 
-    this.allContactsArray = this.props.allContactsArray.concat(this.props.nativeContacts);
+    this.allContactsArray = this.props.currentUser.allContactsArray.concat(this.props.currentUser.nativeContacts);
     this.allContactsMap = SetMaster5000.arrayToMap(this.allContactsArray);
     this.filteredContactsArray = [];
     this.filteredContactsMap= {};
