@@ -1,205 +1,103 @@
-/**
-  *
-  *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
-  *
-  *   💣  Headers.js  💣
-  *
-  *   Contains header property objects for the following pages:
-  *     💣  Tracking (payments)
-  *     💣  Global (payments)
-  *     💣  Notifications
-  *     💣  Create Payment
-  *     💣  More...
-  *
-  *   💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣💣
-  *
-**/
 
-// Header props for Notifications page
-export function notificationsHeader() {
-  var props = {
-    types: {
-      "paymentIcons": false,
-      "circleIcons": false,
-      "settingsIcon": true,
-      "closeIcon": false,
-      "flowTabs": false,
-    },
-    index: null,
-    numCircles: null,
-    title: "Notifications",
-    callbackIn: null,
-    callbackOut: null,
-  };
-
-  return props;
-};
-
-
-// Header props for Notifications page
-export function fundingSourcesHeader() {
-  var props = {
-    types: {
-      "paymentIcons": false,
-      "circleIcons": false,
-      "settingsIcon": true,
-      "closeIcon": false,
-      "flowTabs": false,
-    },
-    index: null,
-    numCircles: null,
-    title: "Bank Accounts",
-    callbackIn: null,
-    callbackOut: null,
-  };
-
-  return props;
-};
-
-
-// Header props for Tracking Payments tab
-export function trackingHeader(options) {
-  var props = {
-    types: {
-      "paymentIcons": false,
-      "circleIcons": false,
-      "settingsIcon": true,
-      "closeIcon": false,
-      "flowTabs": true,
-    },
-    index: null,
-    numCircles: null,
-    title: null,
-    callbackIn: () => options.callbackIn(),
-    callbackOut: () => options.callbackOut(),
-  };
-
-  return props;
-};
-
-
-// Header props for Global Payments tab
-export function globalHeader(options) {
-  var props = {
-    types: {
-      "paymentIcons": false,
-      "circleIcons": false,
-      "settingsIcon": true,
-      "closeIcon": false,
-      "flowTabs": false,
-    },
-    index: null,
-    numCircles: null,
-    title: "Global Payments",
-    callbackIn: null,
-    callbackOut: null,
-  };
-
-  return props;
-};
-
-// Header props for BankOnboarding tab
-export function BankOnboardingTab(options) {
-  var props = {
-    types: {
-      "paymentIcons": false,
-      "circleIcons": false,
-      "settingsIcon": true,
-      "closeIcon": false,
-      "flowTabs": false,
-    },
-    index: null,
-    numCircles: null,
-    title: "Global Payments",
-    callbackIn: null,
-    callbackOut: null,
-  };
-
-  return props;
-};
-
-
-// Header props for Create Payment flow
-export function createPaymentHeader(index) {
-  var props = {
-    types: {
-      "paymentIcons": true,
-      "closeIcon": (index == 0) ? true : false,
-      "closeIconTopRight": (index > 0) ? true : false,
-      "backIcon": (index > 0) ? true : false,
-    },
-    index: index,
-    numCircles: null,
-    title: null,
-    callbackIn: null,
-    callbackOut: null,
-  };
-
-  return props;
-};
-
-
-// Header props for Create Payment flow
-export function profileHeader() {
-  var props = {
-    types: {
-      "paymentIcons": false,
-      "circleIcons": false,
-      "settingsIcon": true,
-      "closeIcon": false,
-      "flowTabs": false,
-    },
-    index: 0,
-    numCircles: null,
-    title: "My Profile",
-    callbackIn: null,
-    callbackOut: null,
-    accent: true,
-  };
-
-  return props;
-};
-
-
-// Header props for Edit Profile modal
-export function editProfileHeader(options) {
-  var props = {
-    types: {
-      "paymentIcons": false,
-      "circleIcons": false,
-      "settingsIcon": false,
-      "closeIcon": true,
-      "flowTabs": false,
-    },
-    index: 0,
-    numCircles: null,
-    title: options.title,
-    callbackIn: null,
-    callbackOut: null,
-    accent: true,
-  };
-
-  return props;
-};
-
-
-// Header props for Edit Profile modal
-export function inviteHeader() {
-  var props = {
-    types: {
-      "paymentIcons": false,
-      "circleIcons": false,
-      "settingsIcon": true,
-      "closeIcon": false,
-      "flowTabs": false,
-    },
-    index: 0,
-    numCircles: null,
-    title: "Invite a Contact",
-    callbackIn: null,
-    callbackOut: null,
-    accent: true,
-  };
-
-  return props;
+export function get(header, callbacks) {
+  switch (header) {
+    case "notifications":
+      return {
+        types: {
+          "paymentIcons": false,
+          "circleIcons": false,
+          "settingsIcon": true,
+          "closeIcon": false,
+          "flowTabs": false,
+        },
+        index: null,
+        numCircles: null,
+        title: "Notifications",
+        callbackIn: null,
+        callbackOut: null,
+      };
+    break;
+    case "fundingSources":
+      return {
+        types: {
+          "paymentIcons": false,
+          "circleIcons": false,
+          "settingsIcon": true,
+          "closeIcon": false,
+          "flowTabs": false,
+        },
+        index: null,
+        numCircles: null,
+        title: "Bank Accounts",
+        callbackIn: null,
+        callbackOut: null,
+      };
+    break;
+    case "profile":
+      return {
+        types: {
+          "paymentIcons": false,
+          "circleIcons": false,
+          "settingsIcon": true,
+          "closeIcon": false,
+          "flowTabs": false,
+        },
+        index: 0,
+        numCircles: null,
+        title: "My Profile",
+        callbackIn: null,
+        callbackOut: null,
+        accent: true,
+      };
+    break;
+    case "invite":
+      return {
+        types: {
+          "paymentIcons": false,
+          "circleIcons": false,
+          "settingsIcon": true,
+          "closeIcon": false,
+          "flowTabs": false,
+        },
+        index: 0,
+        numCircles: null,
+        title: "Invite a Contact",
+        callbackIn: null,
+        callbackOut: null,
+        accent: true,
+      };
+    break;
+    case "payments":
+      return {
+        types: {
+          "paymentIcons": false,
+          "circleIcons": false,
+          "settingsIcon": true,
+          "closeIcon": false,
+          "flowTabs": true,
+        },
+        index: null,
+        numCircles: null,
+        title: null,
+        callbackIn: () => callbacks.setActiveFilterToIncoming(),
+        callbackOut: () => callbacks.setActiveFilterToOutgoing(),
+        accent: false,
+      };
+    break;
+    default:
+      return {
+        types: {
+          "paymentIcons": false,
+          "circleIcons": false,
+          "settingsIcon": false,
+          "closeIcon": false,
+          "flowTabs": false,
+        },
+        index: null,
+        numCircles: null,
+        title: null,
+        callbackIn: null,
+        callbackOut: null,
+      };
+  }
 };

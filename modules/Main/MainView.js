@@ -1,8 +1,9 @@
 // Dependencies
 import React from 'react';
 import { Actions } from 'react-native-router-flux';
-import { View, Text, TextInput, StatusBar, Dimensions } from 'react-native';
+import { View, Text, TextInput, StatusBar, Dimensions, ListView } from 'react-native';
 import SideMenu from 'react-native-side-menu';
+import * as Headers from '../../helpers/Headers';
 
 // Helpers
 import * as Init from '../../_init';
@@ -10,7 +11,7 @@ import * as Init from '../../_init';
 // Components
 import Header from '../../components/Header/Header';
 import Settings from '../../modules/Settings/SettingsView';
-import Payments from '../../modules/Payments/PaymentsViewContainer';
+import Payments from '../../modules/Payments/PaymentsView';
 import Profile from '../../modules/Profile/ProfileView';
 import Notifications from '../../modules/Notifications/NotificationsViewContainer';
 import FundingSources from '../../modules/FundingSources/FundingSourcesViewContainer';
@@ -60,10 +61,22 @@ class InnerContent extends React.Component {
   }
 }
 
-
 export default class Main extends React.Component {
   constructor(props) {
     super(props);
+
+    this.EMPTY_DATA_SOURCE = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+
+    this.headerCallbacks = {
+      setActiveFilterToIncoming: () => this.setState({ activeFilter: "incoming" }),
+      setActiveFilterToOutgoing: () => this.setState({ activeFilter: "outgoing" })
+    };
+
+    this.state = {
+      currentPage: "payments",
+      headerProps: Headers.get("payments", this.headerCallbacks),
+      activeFilter: "incoming"
+    };
   }
 
   componentWillMount() {
@@ -75,12 +88,18 @@ export default class Main extends React.Component {
   }
 
   changePage(newPage) {
-    this.props.setCurrentPage(newPage);
+    this.setState({
+      currentPage: newPage,
+      headerProps: Headers.get(newPage, this.headerCallbacks)
+    });
     this.toggleSideMenu();
   }
 
-  render() {
+  setActiveFilter(newActiveFilter) {
+    this.setState({ activeFilter: newActiveFilter });
+  }
 
+  render() {
     return (
       <SideMenu
         menu={ <Settings {...this.props} changePage={(newPage) => this.changePage(newPage)} /> }
@@ -95,12 +114,19 @@ export default class Main extends React.Component {
         { /* Main page content wrap */ }
         <View style={{flex: 1.0}}>
           <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
-            <Header {...this.props} callbackSettings={ () => this.toggleSideMenu() } />
+            <Header {...this.props}
+              activeFilter={this.state.activeFilter}
+              headerProps={this.state.headerProps}
+              callbackSettings={ () => this.toggleSideMenu() } />
           </View>
 
           { /* Inner content */ }
           <View style={{ flex: (dimensions.height < 667) ? 0.88 : 0.9 }}>
-            <InnerContent {...this.props} />
+            <InnerContent {...this.props}
+              activeFilter={this.state.activeFilter}
+              currentPage={this.state.currentPage}
+              outgoingPayments={this.EMPTY_DATA_SOURCE.cloneWithRows([])}
+              incomingPayments={this.EMPTY_DATA_SOURCE.cloneWithRows([])} />
           </View>
         </View>
       </SideMenu>

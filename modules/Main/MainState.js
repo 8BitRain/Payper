@@ -16,13 +16,6 @@ const SET_CURRENT_USER = 'SET_CURRENT_USER',
 export function setCurrentUser(input) {return {type: SET_CURRENT_USER, input: input}};
 export function updateCurrentUser(input) {return {type: UPDATE_CURRENT_USER, input: input}};
 
-/**
-  *   Reducer
-  *
-  *   Passed a state and an action. Updates the appropriate section of the state
-  *   tree based on that action and returns full state tree.
-  *
-**/
 export default function MainReducer(state = initialState, action = {}) {
   switch (action.type) {
     case SET_CURRENT_USER:

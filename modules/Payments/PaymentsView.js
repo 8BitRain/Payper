@@ -29,27 +29,20 @@ class Payments extends React.Component {
     super(props);
     this.state = {
       uid: "",
-      modalVisible: false,
+      modalVisible: false
     }
   }
 
-  componentDidMount() {
-    // Initialize header
-    this.props.setActiveTab(this.props.activeTab);
+  cancelPayment(payment) {
+    console.log("Cancelling payment:", payment);
   }
 
-  componentWillUnmount() {
-    // Disable listeners
-    this.props.stopListening();
+  confirmPayment(payment) {
+    console.log("Confirming payment:", payment);
   }
 
-  componentWillReceiveProps(newProps) {
-    // If UID has changed, start listening to the user's payment flow
-    if (newProps.currentUser.uid && newProps.currentUser.uid != this.state.uid) {
-      this.setState({ uid: newProps.currentUser.uid }, () => {
-        this.props.listen({ uid: this.state.uid });
-      });
-    }
+  rejectPayment(payment) {
+    console.log("Rejecting payment:", payment);
   }
 
   _showMenu(payment) {
@@ -74,15 +67,7 @@ class Payments extends React.Component {
           cancelMessage: "Nevermind",
           confirmMessage: "Yes, cancel the payment series.",
           cancel: () => console.log("Nevermind"),
-          confirm: () => this.props.cancelPayment({
-            pid: payment.pid,
-            token: this.props.currentUser.token,
-            ds: (this.props.activeFilter == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-            type: payment.type,
-            flow: (this.props.activeFilter == "outgoing") ? "out" : "in",
-            invite: payment.invite,
-            confirmed: payment.confirmed,
-          }),
+          confirm: () => this.cancelPayment(payment)
         });
       } else if (buttonIndex == 1) {
         // Extend scope
@@ -117,11 +102,7 @@ class Payments extends React.Component {
       cancelMessage: "Nevermind",
       confirmMessage: "Yes",
       cancel: () => console.log("Nevermind"),
-      confirm: () => this.props.confirmPayment({
-        pid: payment.pid,
-        token: this.props.currentUser.token,
-        ds: (payment.flow == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-      }),
+      confirm: () => this.confirmPayment(payment)
     });
   }
 
@@ -133,11 +114,7 @@ class Payments extends React.Component {
       cancelMessage: "Nevermind",
       confirmMessage: "Yes",
       cancel: () => console.log("Nevermind"),
-      confirm: () => this.props.rejectPayment({
-        pid: payment.pid,
-        token: this.props.currentUser.token,
-        ds: (payment.flow == "outgoing") ? this.props.outgoingPayments : this.props.incomingPayments,
-      }),
+      confirm: () => this.rejectPayment(payment)
     });
   }
 
@@ -162,7 +139,7 @@ class Payments extends React.Component {
     return(
       <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
         <Text style={{fontSize: 18, color: colors.richBlack}}>
-          No active{ (this.props.activeTab == "tracking") ? " " + this.props.activeFilter + " " : " " }payments.
+          { "No active " + this.props.activeFilter + " payments." }
         </Text>
       </View>
     );
@@ -170,12 +147,7 @@ class Payments extends React.Component {
 
   _renderPaymentList() {
     // Determine which data source to use for the payment list view
-    var ds;
-    if (this.props.activeTab == "tracking") {
-      ds = (this.props.activeFilter == "incoming") ? this.props.incomingPayments : this.props.outgoingPayments;
-    } else if (this.props.tab == "global") {
-      ds = this.props.globalPayments;
-    }
+    var ds = (this.props.activeFilter == "incoming") ? this.props.incomingPayments : this.props.outgoingPayments;
 
     // If our data source is not null and has contents, use it to populate the payment list view
     if (ds && ds.getRowCount() > 0 && ds._cachedRowCount != 0) {
@@ -354,8 +326,6 @@ class Payments extends React.Component {
           pointerEvents="box-none"
           style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, left: 0, right: 0, height: dimensions.height * 0.2}}>
           <Footer
-            callbackFeed={() => this.props.setActiveTab('global')}
-            callbackTracking={() => this.props.setActiveTab('tracking')}
             callbackPay={() => {
               if (this.props.currentUser.appFlags.onboarding_state != "complete") {
                 Alert.message({
