@@ -34,6 +34,11 @@
     [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
     Mixpanel *mixpanel = [Mixpanel sharedInstance];
     [mixpanel track:@("App Opened")];
+  
+  // TODO: Move this to where you establish a user session
+  [self logUser];
+
+
 
   NSURL *jsCodeLocation;
 
@@ -84,6 +89,15 @@
 
   return YES;
 }
+
+- (void) logUser {
+  // TODO: Use the current user's information
+  // You can call any combination of these three methods
+  [CrashlyticsKit setUserIdentifier:@"12345"];
+  [CrashlyticsKit setUserEmail:@"8BitRain@gmail.com"];
+  [CrashlyticsKit setUserName:@"Test User"];
+}
+
 
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url

@@ -4,8 +4,12 @@ import { View, Text, TouchableHighlight, Modal, Animated, Easing, Dimensions, Li
 import { Actions } from 'react-native-router-flux';
 import Hyperlink from 'react-native-hyperlink';
 import Mixpanel from 'react-native-mixpanel';
+
 const FBSDK = require('react-native-fbsdk');
 const { LoginButton, AccessToken, GraphRequest, GraphRequestManager } = FBSDK;
+
+var Fabric = require('react-native-fabric');
+var { Crashlytics } = Fabric;
 
 // Components
 import ImageCarousel from './subcomponents/ImageCarousel';
@@ -30,6 +34,19 @@ export default class LandingScreenView extends React.Component {
   componentDidMount() {
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');
     Mixpanel.timeEvent("Landing Screen Duration");
+
+    Crashlytics.setUserName('megaman');
+
+    Crashlytics.setUserEmail('8BitRain@gmail.com');
+
+    Crashlytics.setUserIdentifier('1234');
+
+    Crashlytics.setBool('has_posted', true);
+
+    Crashlytics.setString('organization', 'Acme. Corp');
+
+    // Forces a native crash for testing
+    Crashlytics.crash();
   }
 
   loginWithFacebook(token) {
