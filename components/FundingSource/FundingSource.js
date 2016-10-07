@@ -119,14 +119,12 @@ class FundingSource extends React.Component {
           { /* Bank Name
           <Text style={styles.text}>
             Bank: { this.props.fundingSource.bank }
-          </Text>
-          */ }
+          </Text> */ }
 
           { /* Account number (hidden)
           <Text style={styles.text}>
             Account Number: { this.props.fundingSource.accountNumber }
-          </Text>
-           */ }
+          </Text> */ }
 
           { /* Menu icon */ }
           <TouchableHighlight

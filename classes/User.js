@@ -205,6 +205,26 @@ export default class User {
   }
 
   /**
+    *   Get user's bank account information (if any) from Lambda endpoint
+    *   -----------------------------------------------------------------------
+  **/
+  getFundingSource(cb) {
+    var params = { token: this.token };
+
+    try {
+      fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource", {method: "POST", body: JSON.stringify(params)})
+      .then((response) => response.json())
+      .then((responseData) => {
+        if (!responseData.errorMessage) cb({ fundingSource: responseData });
+        else this.logError(["Error getting funding source", responseData.errorMessage]);
+      })
+      .done();
+    } catch (err) {
+      this.logError(["Error getting funding source", err]);
+    }
+  }
+
+  /**
     *   Get decrypted version of all encrypted user attributes from Lambda endpoint
     *   -----------------------------------------------------------------------
   **/
@@ -259,6 +279,7 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
+          if (res.fundingSource) { res.fundingSource.active = true; this.getFundingSource(cb); }
           cb(res);
         }
       },

@@ -10,7 +10,7 @@ import Settings from '../../modules/Settings/SettingsView';
 import Payments from '../../modules/Payments/PaymentsView';
 import Profile from '../../modules/Profile/ProfileView';
 import Notifications from '../../modules/Notifications/NotificationsView';
-import FundingSources from '../../modules/FundingSources/FundingSourcesViewContainer';
+import FundingSources from '../../modules/FundingSources/FundingSourcesView';
 import Invite from '../../modules/Invite/InviteView';
 
 // Used to determine header size
@@ -62,7 +62,9 @@ export default class Main extends React.Component {
     this.EMPTY_DATA_SOURCE = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       currentPage: "payments",
-      headerProps: Headers.get({ header: "payments", setActiveFilterToOutgoing: this.headerCallbacks }),
+      headerProps: Headers.get({ header: "payments",
+          setActiveFilterToIncoming: () => this.setState({ activeFilter: "incoming" }),
+          setActiveFilterToOutgoing: () => this.setState({ activeFilter: "outgoing" }) }),
       activeFilter: "incoming",
       sideMenuIsOpen: false,
       incomingPayments: this.EMPTY_DATA_SOURCE.cloneWithRows([]),

@@ -19,46 +19,22 @@ import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingContainer
 class FundingSources extends React.Component {
   constructor(props) {
     super(props);
-
     this.EMPTY_DATA_SOURCE = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
     this.state = {
-      empty: this.props.fundingSourcesDataSource.getRowCount() === 0,
       modalVisible: false,
-      dataSource: this.props.fundingSourcesDataSource,
+      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows([])
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.fundingSourcesDataSource)
-      this.setState({
-        dataSource: nextProps.fundingSourcesDataSource,
-        empty: nextProps.fundingSourcesDataSource.getRowCount() === 0,
-      });
+    console.log("<FundingSources /> will receive props", nextProps);
+    this.setState({
+      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows((nextProps.currentUser.fundingSource) ? [nextProps.currentUser.fundingSource] : [])
+    });
   }
 
   _toggleModal() {
     this.setState({ modalVisible: !this.state.modalVisible });
-  }
-
-  _verifyOnboardingStatus() {
-    if (this.props.currentUser.appFlags.onboarding_state == 'customer') {
-      this.props.setNewUserToken(this.props.currentUser.token);
-    } else if (this.state.dataSource.getRowCount() == 0) {
-      // Extend scope
-      const _this = this;
-
-      this.props.setNewUserToken(this.props.currentUser.token);
-      var data = { token: this.props.currentUser.token };
-
-      // Initiate IAV
-      this.props.setLoading(true);
-      Init.getIavToken(data, function(iavTokenRecieved, iavToken) {
-        if (iavTokenRecieved) {
-          _this.props.setIav(iavToken.token);
-        }
-      });
-    }
   }
 
   _renderRow(f) {
@@ -66,7 +42,10 @@ class FundingSources extends React.Component {
       <FundingSource
         currentUser={this.props.currentUser}
         fundingSource={f}
-        optimisticallyRemoveFundingSource={() => this.props.setFundingSources([])} />
+        optimisticallyRemoveFundingSource={() => {
+          this.setState({ dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows([]) });
+          this.props.currentUser.update({ fundingSource: null });
+        }} />
     );
   }
 
@@ -103,7 +82,7 @@ class FundingSources extends React.Component {
           underlayColor={colors.richBlack}
           activeOpacity={0.7}
           onPress={() => {
-            if (this.props.fundingSourcesArray.length > 0) {
+            if (this.state.dataSource._dataBlob.s1.length === 0) {
               Alert.message({
                 title: "Unfortunately...",
                 message: "Payper doesn't currently support multiple bank accounts. This feature will be available soon!",
@@ -136,8 +115,7 @@ class FundingSources extends React.Component {
           <StatusBar barStyle="light-content" />
 
           <View style={{flex: 1.0}}>
-            <BankOnboarding
-              {...this.props}
+            <BankOnboarding {...this.props}
               toggleModal={() => this._toggleModal()} />
           </View>
         </Modal>
