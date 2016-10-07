@@ -102,7 +102,7 @@ class CreatePaymentView extends React.Component {
             callbackClose={() => { this.props.reset(); this.props.toggleModal(); }}
             callbackBack={() => this._prevPage()}
             numUnseenNotifications={this.props.numUnseenNotifications}
-            headerProps={Headers.get("createPayment", null, this.state.pageIndex)} />
+            headerProps={Headers.get({ header: "createPayment", index: this.state.pageIndex })} />
         </View>
 
         { /* Inner content */ }

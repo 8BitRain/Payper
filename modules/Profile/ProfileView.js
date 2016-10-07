@@ -88,9 +88,9 @@ class Profile extends React.Component {
     ];
 
     // Populate blocked users, if any
-    if (this.props.blockedUsers) {
-      for (var u in this.props.blockedUsers) {
-        const curr = this.props.blockedUsers[u];
+    if (this.props.currentUser.blockedUsers) {
+      for (var u in this.props.currentUser.blockedUsers) {
+        const curr = this.props.currentUser.blockedUsers[u];
         this.options.push({
           rowTitle: curr.first_name + " " + curr.last_name,
           rowContent: "",
@@ -305,14 +305,14 @@ class Profile extends React.Component {
           <View style={{flex: 1.0}}>
 
             { /* Header */ }
-            <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
+            <View style={{flex: (dimensions.height < 667) ? 0.12 : 0.1}}>
               <Header
-                callbackClose={ () => this._toggleModal() }
-                headerProps={ Headers.editProfileHeader({ title: this.state.modalProps.title }) } />
+                callbackClose={() => this._toggleModal()}
+                headerProps={Headers.get({ header: "editProfile", title: this.state.modalProps.title })} />
             </View>
 
             { /* Edit panel */ }
-            <View style={{ flex: (dimensions.height < 667) ? 0.88 : 0.9 }}>
+            <View style={{flex: (dimensions.height < 667) ? 0.88 : 0.9}}>
               <Edit
                 {...this.props}
                 modalProps={this.state.modalProps}

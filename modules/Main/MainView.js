@@ -62,14 +62,13 @@ export default class Main extends React.Component {
 
     this.EMPTY_DATA_SOURCE = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
-    this.headerCallbacks = {
-      setActiveFilterToIncoming: () => this.setState({ activeFilter: "incoming" }),
-      setActiveFilterToOutgoing: () => this.setState({ activeFilter: "outgoing" })
+    this.headerProps = {
+
     };
 
     this.state = {
       currentPage: "payments",
-      headerProps: Headers.get("payments", this.headerCallbacks),
+      headerProps: Headers.get({ header: "payments", setActiveFilterToOutgoing: this.headerCallbacks }),
       activeFilter: "incoming",
       sideMenuIsOpen: false,
       incomingPayments: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
@@ -95,10 +94,17 @@ export default class Main extends React.Component {
   }
 
   changePage(newPage) {
+    var params = (newPage === 'payments')
+      ? { header: newPage,
+          setActiveFilterToIncoming: () => this.setState({ activeFilter: "incoming" }),
+          setActiveFilterToOutgoing: () => this.setState({ activeFilter: "outgoing" }) }
+      : { header: newPage };
+      
     this.setState({
       currentPage: newPage,
-      headerProps: Headers.get(newPage, this.headerCallbacks)
+      headerProps: Headers.get(params)
     });
+    
     this.toggleSideMenu();
   }
 

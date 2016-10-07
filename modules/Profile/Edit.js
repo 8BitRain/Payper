@@ -92,11 +92,7 @@ class Edit extends React.Component {
 
 
   _handleChangeText(options) {
-
-    console.log("Options:", options);
-
     if (options.valid) {
-
       // Set input
       if (options.inputting == "firstName") this.firstNameInput = options.input;
       else if (options.inputting == "lastName") this.lastNameInput = options.input;
@@ -104,7 +100,6 @@ class Edit extends React.Component {
 
       // Set underline color
       this._animateUnderlineColor({ whichColor: options.whichColor, val: 500 });
-
     } else {
       this._animateUnderlineColor({ whichColor: options.whichColor, val: 0 });
     }
@@ -268,10 +263,8 @@ class Edit extends React.Component {
                 _this.setState({ loading: false, loadingMessage: "" });
               }, 750);
 
-              // Update user's phone number in Redux store
-              var currentUser = this.props.currentUser;
-              currentUser.decryptedPhone = this.input;
-              this.props.setCurrentUser(currentUser);
+              // Persist update to Redux store
+              this.props.currentUser.update({ decryptedEmail: this.input });
 
               // Trigger re-render of options list
               this.props.updateOptionsDataSource();
@@ -324,10 +317,8 @@ class Edit extends React.Component {
                 _this.setState({ loading: false, loadingMessage: "" });
               }, 750);
 
-              // Update user's phone number in Redux store
-              var currentUser = this.props.currentUser;
-              currentUser.decryptedEmail = this.input;
-              this.props.setCurrentUser(currentUser);
+              // Persist update to Redux store
+              this.props.currentUser.update({ decryptedEmail: this.input });
 
               // Trigger re-render of options list
               this.props.updateOptionsDataSource();

@@ -1,6 +1,6 @@
 
-export function get(header, callbacks, index) {
-  switch (header) {
+export function get(params) {
+  switch (params.header) {
     case "notifications":
       return {
         types: {
@@ -79,8 +79,8 @@ export function get(header, callbacks, index) {
         index: null,
         numCircles: null,
         title: null,
-        callbackIn: () => callbacks.setActiveFilterToIncoming(),
-        callbackOut: () => callbacks.setActiveFilterToOutgoing(),
+        callbackIn: () => params.setActiveFilterToIncoming(),
+        callbackOut: () => params.setActiveFilterToOutgoing(),
         accent: false,
       };
     break;
@@ -88,15 +88,32 @@ export function get(header, callbacks, index) {
       return {
         types: {
           "paymentIcons": true,
-          "closeIcon": (index == 0) ? true : false,
-          "closeIconTopRight": (index > 0) ? true : false,
-          "backIcon": (index > 0) ? true : false,
+          "closeIcon": (params.index == 0) ? true : false,
+          "closeIconTopRight": (params.index > 0) ? true : false,
+          "backIcon": (params.index > 0) ? true : false,
         },
-        index: index,
+        index: params.index,
         numCircles: null,
         title: null,
         callbackIn: null,
         callbackOut: null,
+      };
+    break;
+    case "editProfile":
+      return {
+        types: {
+          "paymentIcons": false,
+          "circleIcons": false,
+          "settingsIcon": false,
+          "closeIcon": true,
+          "flowTabs": false,
+        },
+        index: 0,
+        numCircles: null,
+        title: params.title,
+        callbackIn: null,
+        callbackOut: null,
+        accent: true,
       };
     break;
     default:

@@ -13,8 +13,6 @@ import MainReducer from '../modules/Main/MainState';
 import PaymentsReducer from '../modules/Payments/PaymentsState';
 import PaymentReducer from '../modules/CreatePayment/CreatePaymentState';
 import FundingSourcesReducer from '../modules/FundingSources/FundingSourcesState';
-import InviteReducer from '../modules/Invite/InviteState';
-
 
 const reducers = {
   // Authentication/login state
@@ -38,7 +36,6 @@ const reducers = {
   payments: PaymentsReducer,
   payment: PaymentReducer,
   fundingSources: FundingSourcesReducer,
-  invite: InviteReducer,
 
 };
 
