@@ -1,12 +1,8 @@
 // Dependencies
 import React from 'react';
-import { Actions } from 'react-native-router-flux';
-import { View, Text, TextInput, StatusBar, Dimensions, ListView } from 'react-native';
+import { View, Text, StatusBar, Dimensions, ListView } from 'react-native';
 import SideMenu from 'react-native-side-menu';
 import * as Headers from '../../helpers/Headers';
-
-// Helpers
-import * as Init from '../../_init';
 
 // Components
 import Header from '../../components/Header/Header';
@@ -15,8 +11,7 @@ import Payments from '../../modules/Payments/PaymentsView';
 import Profile from '../../modules/Profile/ProfileView';
 import Notifications from '../../modules/Notifications/NotificationsView';
 import FundingSources from '../../modules/FundingSources/FundingSourcesViewContainer';
-import Invite from '../../modules/Invite/InviteViewContainer';
-import SignIn from '../../modules/SignIn/SignInViewContainer';
+import Invite from '../../modules/Invite/InviteView';
 
 // Used to determine header size
 const dimensions = Dimensions.get('window');

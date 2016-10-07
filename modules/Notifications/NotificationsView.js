@@ -11,12 +11,10 @@ import colors from "../../styles/colors";
 // Partial components
 import Notification from '../../components/Notification/Notification.js';
 
-class Notifications extends React.Component {
+export default class Notifications extends React.Component {
   constructor(props) {
     super(props);
-
-    this.EMPTY_DATA_SOURCE = ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
+    this.EMPTY_DATA_SOURCE = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       user: {},
       empty: true,
@@ -24,14 +22,10 @@ class Notifications extends React.Component {
     };
   }
 
-
   componentDidMount() {
     this._genRows();
-    console.log("Props in NotificationsView:\n\n", this.props);
   }
 
-
-  // Generate rows for the list view
   _genRows() {
     if (!this.props.currentUser.notifications || this.props.currentUser.notifications.length == 0) return;
 
@@ -51,14 +45,12 @@ class Notifications extends React.Component {
     this.setState({ empty: false, dataSource: this.state.dataSource.cloneWithRows(notifications) }, () => this._seeNotifications());
   }
 
-
-  //  Return a list of ready to render rows
+  // Return a list of ready to render rows
   _renderRow(n) {
     return(
       <Notification notification={n} />
     );
   }
-
 
   // Returns a ready-to-render notification ListView
   _getNotificationList() {
@@ -73,7 +65,6 @@ class Notifications extends React.Component {
     );
   }
 
-
   /**
     *   Returns a ready-to-render empty state view
   **/
@@ -85,7 +76,6 @@ class Notifications extends React.Component {
     );
   }
 
-
   /**
     *   Mark unseen notifications as seen
   **/
@@ -95,15 +85,11 @@ class Notifications extends React.Component {
     });
   }
 
-
   render() {
     return (
       <View style={{flex: 1, backgroundColor: colors.white}}>
-        { /* Render list of notifications or empty state */  }
-        {(this.state.empty) ? this._getEmptyState() : this._getNotificationList() }
+        {(this.state.empty) ? this._getEmptyState() : this._getNotificationList()}
       </View>
     );
   }
 }
-
-export default Notifications;

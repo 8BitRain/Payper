@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class Invite extends React.Component {
+export default class Invite extends React.Component {
   constructor(props) {
     super(props);
 
@@ -92,7 +92,7 @@ class Invite extends React.Component {
       rowHasChanged: (r1, r2) => r1 !== r2,
     });
 
-    this.allContacts = this.props.nativeContacts;
+    this.allContacts = this.props.currentUser.nativeContacts;
     this.keyboardOffset = new Animated.Value(0);
     this.colorInterpolator = new Animated.Value(0);
     this.alertOffsetX = new Animated.Value(dimensions.width * 2.0);
@@ -139,13 +139,10 @@ class Invite extends React.Component {
         outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(251, 54, 64, 1.0)'],
       }),
     });
-
     this._interpolateSubmitColor({ toValue: 350 });
-
     this.alertOffsetX = new Animated.Value(dimensions.width * 2.0);
     this.alertOpacity = new Animated.Value(0);
-
-    this.refs.textInput.setNativeProps({text: ''});
+    this.refs.textInput.setNativeProps({ text: '' });
   }
 
   _keyboardWillShow(e) {
@@ -204,12 +201,6 @@ class Invite extends React.Component {
     }, 550);
   }
 
-  /**
-    *   (1) Update selection map value
-    *   (2) Update this.state.selectedContacts
-    *   (3) Explicitly trigger re-render of all affected components
-    *   (4) Interpolate submit button's background color
-  **/
   _handleSelect(user) {
     // (1) Update this.state.selectionMap
     this.state.selectionMap[user.phone] = !this.state.selectionMap[user.phone];
@@ -343,5 +334,3 @@ class Invite extends React.Component {
     );
   }
 };
-
-export default Invite;
