@@ -59,13 +59,7 @@ class InnerContent extends React.Component {
 export default class Main extends React.Component {
   constructor(props) {
     super(props);
-
     this.EMPTY_DATA_SOURCE = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-
-    this.headerProps = {
-
-    };
-
     this.state = {
       currentPage: "payments",
       headerProps: Headers.get({ header: "payments", setActiveFilterToOutgoing: this.headerCallbacks }),
@@ -87,6 +81,7 @@ export default class Main extends React.Component {
 
   componentWillMount() {
     this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates));
+    this.props.currentUser.decrypt((updates) => this.props.updateCurrentUser(updates));
   }
 
   toggleSideMenu() {
@@ -99,12 +94,12 @@ export default class Main extends React.Component {
           setActiveFilterToIncoming: () => this.setState({ activeFilter: "incoming" }),
           setActiveFilterToOutgoing: () => this.setState({ activeFilter: "outgoing" }) }
       : { header: newPage };
-      
+
     this.setState({
       currentPage: newPage,
       headerProps: Headers.get(params)
     });
-    
+
     this.toggleSideMenu();
   }
 

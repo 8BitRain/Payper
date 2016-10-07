@@ -205,6 +205,29 @@ export default class User {
   }
 
   /**
+    *   Get decrypted version of all encrypted user attributes from Lambda endpoint
+    *   -----------------------------------------------------------------------
+  **/
+  decrypt(cb) {
+    var params = {
+      token: this.token,
+      uid: this.uid
+    };
+
+    try {
+      fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/getPersonal", {method: "POST", body: JSON.stringify(params)})
+      .then((response) => response.json())
+      .then((responseData) => {
+        if (!responseData.errorMessage) cb({ decryptedEmail: responseData.email, decryptedPhone: responseData.phone });
+        else this.logError(["Error decrypting user", responseData.errorMessage]);
+      })
+      .done();
+    } catch (err) {
+      this.logError(["Error decrypting user", err]);
+    }
+  }
+
+  /**
     *   Cycle this user's access and refresh tokens
     *   -----------------------------------------------------------------------
   **/
