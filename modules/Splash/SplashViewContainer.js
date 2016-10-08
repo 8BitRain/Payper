@@ -9,8 +9,4 @@ function mapStateToProps(state) {
   }
 };
 
-function mapDispatchToProps(dispatch) {
-  return {}
-};
-
-export default connect( mapStateToProps, mapDispatchToProps )( SplashView );
+export default connect( mapStateToProps )( SplashView );

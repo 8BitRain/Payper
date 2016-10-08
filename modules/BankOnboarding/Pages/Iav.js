@@ -42,7 +42,7 @@ class Iav extends React.Component {
     *       Unsupported Bank - Fallback to microDeposits
     */
     //Attempt that causes looping of code in webview
-    this.injectedJS = 'var firebase_token = ' + "'" + this.firebase_token + "'" + ';' + ' var iav_token = ' + "'" + this.props.startIav + "'" + ';' + ' $( document ).ready(function() { generateIAVToken()});';
+    this.injectedJS = 'var firebase_token = ' + "'" + this.firebase_token + "'" + ';' + ' var iav_token = ' + "'" + this.props.startIav + "'" + ';' + ' $( document ).ready(function() { generateIAVToken() });';
   }
 
   componentWillMount() {

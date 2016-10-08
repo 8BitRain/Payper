@@ -17,6 +17,9 @@ import LandingScreenContainer from './modules/LandingScreen/LandingScreenContain
 // Beta modules
 import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreenView';
 
+// Test modules
+import NewBankOnboardingView from './modules/BankOnboarding/NewBankOnboardingView';
+
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
   return (state, action) => {
@@ -51,7 +54,7 @@ export default class Coincast extends React.Component {
           <Scene key="root" hideNavBar hideTabBar>
 
             { /* Main app flow */ }
-            <Scene initial key="SplashViewContainer" type="replace" component={SplashViewContainer} title="SplashViewContainer" />
+            <Scene key="SplashViewContainer" type="replace" component={SplashViewContainer} title="SplashViewContainer" />
             <Scene key="SignInViewContainer" type="replace" component={SignInViewContainer} title="SignInViewContainer" panHandlers={null} />
             <Scene key="CreateAccountViewContainer" type="replace" component={CreateAccountViewContainer} title="CreateAccountViewContainer" panHandlers={null} />
             <Scene key="BankOnboardingContainer" type="replace" component={BankOnboardingContainer} title="BankOnboardingContainer" panHandlers={null} />
@@ -61,6 +64,9 @@ export default class Coincast extends React.Component {
 
             { /* Beta */ }
             <Scene key="BetaLandingScreenView" type="replace" component={BetaLandingScreenView} title="BetaLandingScreenView" panHandlers={null} />
+
+            { /* Test */ }
+            <Scene initial key="NewBankOnboardingView" type="replace" component={NewBankOnboardingView} title="NewBankOnboardingView" panHandlers={null} />
 
           </Scene>
           <Scene key="error" component={Error}/>

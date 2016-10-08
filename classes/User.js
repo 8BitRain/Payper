@@ -38,7 +38,6 @@ export default class User {
     for (var k in user) this[k] = user[k];
     this.getNativeContacts();
     Async.set('session_token', user.token);
-    Async.set('user', JSON.stringify(user));
   }
 
   /**
@@ -47,7 +46,6 @@ export default class User {
   **/
   destroy() {
     Async.set('session_token', '');
-    Async.set('user', '');
     this.stopListening();
     for (var i in this) if (typeof this[i] !== 'function') this[i] = null;
   }
@@ -229,10 +227,7 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   decrypt(cb) {
-    var params = {
-      token: this.token,
-      uid: this.uid
-    };
+    var params = { token: this.token, uid: this.uid };
 
     try {
       fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/getPersonal", {method: "POST", body: JSON.stringify(params)})
@@ -260,7 +255,7 @@ export default class User {
     *   Enable listeners on this user's Firebase data
     *   -----------------------------------------------------------------------
   **/
-  startListening(cb) {
+  startListening(updateViaRedux) {
     this.endpoints = [
       {
         endpoint: 'users',
@@ -270,7 +265,7 @@ export default class User {
           if (!res) return;
           var globalUserListArray = SetMaster5000.globalUserListToArray({ sectionTitle: "Other Payper Users", users: res, uid: this.uid });
           globalUserListArray.concat(this.nativeContacts);
-          cb({ allContactsArray: globalUserListArray });
+          updateViaRedux({ allContactsArray: globalUserListArray });
         }
       },
       {
@@ -280,7 +275,7 @@ export default class User {
         callback: (res) => {
           if (!res) return;
           if (res.fundingSource) { res.fundingSource.active = true; this.getFundingSource(cb); }
-          cb(res);
+          updateViaRedux(res);
         }
       },
       {
@@ -291,7 +286,7 @@ export default class User {
           if (!res) return;
           if (res.out) res.out = SetMaster5000.processPayments({ payments: res.out, flow: "outgoing" });
           if (res.in) res.in = SetMaster5000.processPayments({ payments: res.in, flow: "incoming" });
-          cb({ paymentFlow: res });
+          updateViaRedux({ paymentFlow: res });
         }
       },
       {
@@ -300,7 +295,7 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
-          cb({ appFlags: res });
+          updateViaRedux({ appFlags: res });
         }
       },
       {
@@ -310,7 +305,7 @@ export default class User {
         callback: (res) => {
           if (!res) return;
           SetMaster5000.tackOnKeys(res, "timestamp");
-          cb({ notifications: res });
+          updateViaRedux({ notifications: res });
         }
       },
       {
@@ -319,7 +314,16 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
-          cb({ blockedUsers: res });
+          updateViaRedux({ blockedUsers: res });
+        }
+      },
+      {
+        endpoint: 'IAV/' + this.uid,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => {
+          if (!res) return;
+          updateViaRedux({ IAV: res });
         }
       }
     ];
