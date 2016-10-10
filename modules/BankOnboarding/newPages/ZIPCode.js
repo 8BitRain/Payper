@@ -109,11 +109,11 @@ export default class ZIPCode extends React.Component {
     if (this.state.submitText === "Search") {
       this.findCity(zip);
     } else if (this.state.submitText === "Continue") {
-      this.props.induceState({ zip: this.state.zip, city: this.state.city, state: this.state.state });
+      this.props.induceState({ zip: this.state.zip, city: this.state.city, state: this.state.state, skipCityPage: true });
       this.props.nextPage();
     } else if (this.state.submitText === "Enter my city manually") {
-      this.props.induceState({ zip: this.state.zip });
-      this.props.nextPage({ destination: "city" });
+      this.props.induceState({ zip: this.state.zip, skipCityPage: false });
+      this.props.nextPage();
     }
   }
 

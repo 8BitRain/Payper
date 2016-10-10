@@ -24,13 +24,13 @@ export default class NewBankOnboardingView extends React.Component {
   constructor(props) {
     super(props);
     this.offsetX = new Animated.Value(0);
-    this.pages = ["comfort", "basic", "billingAddress", "DOB", "SSN", "IAV"];
     this.logoAspectRatio = 377 / 568;
     this.state = {
       pageIndex: 0,
       headerHeight: 0,
       closeButtonVisible: true,
       explicitDestination: null,
+      skipCityPage: true,
       name: null,
       zip: null,
       city: null,
@@ -49,13 +49,9 @@ export default class NewBankOnboardingView extends React.Component {
   }
 
   nextPage(params) {
-    console.log("Next page was invoked with params", params);
     dismissKeyboard();
 
-    this.setState({
-      pageIndex: this.state.pageIndex + 1,
-      explicitDestination: (params && params.destination) ? params.destination : null
-    }, () => {
+    this.setState({ pageIndex: this.state.pageIndex + 1 }, () => {
       if ((this.state.pageIndex - 1) === 0) this.toggleCloseButton();
     });
 
@@ -104,7 +100,7 @@ export default class NewBankOnboardingView extends React.Component {
         </TouchableHighlight>
 
         { /* Inner content */ }
-        <Animated.View style={[styles.allPanelsWrap, { marginLeft: this.offsetX }]}>
+        <Animated.View style={[styles.allPanelsWrap, { marginLeft: this.offsetX, width: dimensions.width * ((this.state.skipCityPage) ? 7 : 8) }]}>
           <View style={{ flex: 1.0, width: dimensions.width }}>
             <Comfort nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
           </View>
@@ -114,10 +110,24 @@ export default class NewBankOnboardingView extends React.Component {
           <View style={{ flex: 1.0, width: dimensions.width }}>
             <ZIPCode nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
           </View>
+
+          { (this.state.skipCityPage)
+              ? null
+              : <View style={{ flex: 1.0, width: dimensions.width }}>
+                  <City nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+                </View> }
+
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            { (this.state.explicitDestination === "city")
-                ? <City nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
-                : <Street city={this.state.city} state={this.state.state} nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} /> }
+            <Street city={this.state.city} state={this.state.state} nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+          </View>
+          <View style={{ flex: 1.0, width: dimensions.width }}>
+            <Comfort nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+          </View>
+          <View style={{ flex: 1.0, width: dimensions.width }}>
+            <Comfort nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+          </View>
+          <View style={{ flex: 1.0, width: dimensions.width }}>
+            <Comfort nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
           </View>
         </Animated.View>
       </View>
@@ -128,8 +138,7 @@ export default class NewBankOnboardingView extends React.Component {
 const styles = StyleSheet.create({
   allPanelsWrap: {
     flexDirection: 'row',
-    flex: 0.85,
-    width: dimensions.width * 4,
+    flex: 0.85
   },
   headerWrap: {
     flexDirection: 'row',
