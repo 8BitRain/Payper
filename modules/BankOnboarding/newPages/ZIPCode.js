@@ -68,7 +68,7 @@ export default class ZIPCode extends React.Component {
         loading: false,
         city: "No match",
         state: "🙄",
-        submitText: "Enter my city manually"/* + <Entypo name={"chevron-thin-right"} size={20} color={colors.white} /> */
+        submitText: "Enter my city manually"
       });
       _this.props.induceState({ zipCode: zip });
     }
@@ -178,7 +178,11 @@ export default class ZIPCode extends React.Component {
             : null }
 
         <StickyView>
-          <ContinueButton text={this.state.submitText} onPress={() => this.handleSubmit()} />
+          <ContinueButton
+            text={(this.state.submitText === "Enter my city manually")
+              ? <Text>{this.state.submitText + " "} <Entypo name={"chevron-thin-right"} size={16} color={colors.white} /></Text>
+              : this.state.submitText}
+            onPress={() => this.handleSubmit()} />
         </StickyView>
       </View>
     );

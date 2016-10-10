@@ -51,7 +51,7 @@ export default class City extends React.Component {
       <View style={styles.wrap}>
         <GooglePlacesAutocomplete
           styles={autocompleteStyles}
-          textInputProps={{ onChangeText: (text) => this.handleChangeText(text), placeholderTextColor: colors.white }}
+          textInputProps={{ onChangeText: (text) => this.handleChangeText(text), placeholderTextColor: colors.white, autoCorrect: false }}
           placeholder={"What's your billing address' city?"}
           minLength={1}
           listViewDisplayed={true}

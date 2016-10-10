@@ -12,8 +12,9 @@ import * as Headers from '../../helpers/Headers';
 import Header from '../../components/Header/Header';
 import Comfort from './newPages/Comfort';
 import LegalName from './newPages/LegalName';
-import City from './newPages/City';
 import ZIPCode from './newPages/ZIPCode';
+import City from './newPages/City';
+import Street from './newPages/Street';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -116,7 +117,7 @@ export default class NewBankOnboardingView extends React.Component {
           <View style={{ flex: 1.0, width: dimensions.width }}>
             { (this.state.explicitDestination === "city")
                 ? <City nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
-                : <Text style={{ color: colors.white, textAlign: 'center', paddingTop: 50 }}>Date of Birth</Text> }
+                : <Street city={this.state.city} state={this.state.state} nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} /> }
           </View>
         </Animated.View>
       </View>

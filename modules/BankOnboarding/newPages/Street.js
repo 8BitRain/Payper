@@ -1,10 +1,10 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TouchableHighlight, StyleSheet, Dimensions, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TextInput } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 // Helpers
-import * as Validate from'../../../helpers/Validate';
+import * as StringMaster5000 from '../../../helpers/StringMaster5000';
 
 // Components
 import StickyView from '../../../classes/StickyView';
@@ -14,19 +14,19 @@ import ContinueButton from '../subcomponents/ContinueButton';
 import colors from '../../../styles/colors';
 const dimensions = Dimensions.get('window');
 
-export default class LegalName extends React.Component {
+export default class City extends React.Component {
   constructor(props) {
     super(props);
-    this.initialName = "Brady Sheridan";
-    this.state = {
-      name: this.initialName,
-      valid: Validate.name(this.initialName)
-    };
+    this.state = { street: "" };
+  }
+
+  handleChangeText(input) {
+    this.setState({ street: input });
   }
 
   handleSubmit() {
-    if (!this.state.valid) return;
-    this.props.induceState({ name: this.state.name });
+    if (StringMaster5000.checkIf(this.state.street).isEmpty) return;
+    this.props.induceState({ street: this.state.street });
     this.props.nextPage();
   }
 
@@ -35,20 +35,25 @@ export default class LegalName extends React.Component {
       <View style={styles.wrap}>
         <View>
           <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
-            { "Is this your legal name?" }
+            { "Enter your street address" }
+          </Text>
+          <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, textAlign: 'center', paddingTop: 15 }}>
+            <Entypo name={"location-pin"} size={20} color={colors.white} />
+            { "  " + this.props.city + ", " + this.props.state }
           </Text>
         </View>
 
         <View style={styles.inputWrap}>
           <TextInput
             style={styles.input}
-            defaultValue={this.state.name}
+            placeholder={"e.g. 1 North Avenue"}
+            placeholderTextColor={colors.lightGrey}
             autoCapitalize={"words"} autofocus autoCorrect={false}
-            onChangeText={(input) => this.setState({ name: input, valid: Validate.name(input) })} />
+            onChangeText={(input) => this.handleChangeText(input)} />
         </View>
 
         <StickyView>
-          <ContinueButton text={(this.state.valid) ? "Yes" : "Please enter a valid name."} onPress={() => this.handleSubmit()} />
+          <ContinueButton text={(this.state.street) ? "Continue" : "Enter an address"} onPress={(this.state.street) ? () => this.props.nextPage() : () => console.log("Must enter an address first...")} />
         </StickyView>
       </View>
     );
@@ -61,8 +66,7 @@ const styles = StyleSheet.create({
     width: dimensions.width,
     backgroundColor: colors.richBlack,
     justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingTop: 20
+    alignItems: 'center'
   },
   inputWrap: {
     flexDirection: 'row',
