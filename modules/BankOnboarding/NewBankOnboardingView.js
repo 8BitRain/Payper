@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, TouchableHighlight, StyleSheet, Animated, Easing, Dimensions, StatusBar, Image } from "react-native";
 import { Actions } from 'react-native-router-flux';
 import Entypo from 'react-native-vector-icons/Entypo';
+import dismissKeyboard from 'react-native-dismiss-keyboard';
 
 // Helpers
 import * as Headers from '../../helpers/Headers';
@@ -12,7 +13,7 @@ import Header from '../../components/Header/Header';
 import Comfort from './newPages/Comfort';
 import LegalName from './newPages/LegalName';
 import City from './newPages/City';
-import PostalCode from './newPages/PostalCode';
+import ZIPCode from './newPages/ZIPCode';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -27,18 +28,33 @@ export default class NewBankOnboardingView extends React.Component {
     this.state = {
       pageIndex: 0,
       headerHeight: 0,
-      closeButtonVisible: true
+      closeButtonVisible: true,
+      explicitDestination: null,
+      name: null,
+      zip: null,
+      city: null,
+      country: "United States",
+      state: null,
+      street: null,
+      dob: null,
+      ssn: null
     };
   }
 
   induceState(substate) {
     this.setState(substate, () => {
-      console.log("<BankOnboardingView /> state =", this.state);
+      console.log("<BankOnboardingView /> state:\n", this.state);
     });
   }
 
-  nextPage() {
-    this.setState({ pageIndex: this.state.pageIndex + 1 }, () => {
+  nextPage(params) {
+    console.log("Next page was invoked with params", params);
+    dismissKeyboard();
+
+    this.setState({
+      pageIndex: this.state.pageIndex + 1,
+      explicitDestination: (params && params.destination) ? params.destination : null
+    }, () => {
       if ((this.state.pageIndex - 1) === 0) this.toggleCloseButton();
     });
 
@@ -50,6 +66,8 @@ export default class NewBankOnboardingView extends React.Component {
   }
 
   prevPage() {
+    dismissKeyboard();
+
     this.setState({ pageIndex: this.state.pageIndex - 1 }, () => {
       if (this.state.pageIndex === 0) this.toggleCloseButton();
     });
@@ -87,16 +105,18 @@ export default class NewBankOnboardingView extends React.Component {
         { /* Inner content */ }
         <Animated.View style={[styles.allPanelsWrap, { marginLeft: this.offsetX }]}>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <Comfort nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} />
+            <Comfort nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <LegalName nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} />
+            <LegalName nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <City nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} />
+            <ZIPCode nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <PostalCode nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} />
+            { (this.state.explicitDestination === "city")
+                ? <City nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+                : <Text style={{ color: colors.white, textAlign: 'center', paddingTop: 50 }}>Date of Birth</Text> }
           </View>
         </Animated.View>
       </View>
