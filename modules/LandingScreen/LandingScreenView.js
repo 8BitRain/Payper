@@ -35,18 +35,30 @@ export default class LandingScreenView extends React.Component {
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');
     Mixpanel.timeEvent("Landing Screen Duration");
 
-    Crashlytics.setUserName('megaman');
+    Crashlytics.setUserName('megaman2');
 
     Crashlytics.setUserEmail('8BitRain@gmail.com');
 
-    Crashlytics.setUserIdentifier('1234');
+    Crashlytics.setUserIdentifier('123455');
+
 
     Crashlytics.setBool('has_posted', true);
 
+
     Crashlytics.setString('organization', 'Acme. Corp');
 
+    /*try{
+      random;
+    }catch(err){
+      //Crashlytics.crash();
+      console.log("There was a crash");
+      Crashlytics.recordError('something went wrong!');
+      Crashlytics.crash();
+    }*/
+
+
     // Forces a native crash for testing
-    Crashlytics.crash();
+    //Crashlytics.crash();
   }
 
   loginWithFacebook(token) {
