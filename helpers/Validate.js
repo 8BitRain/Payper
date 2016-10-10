@@ -6,3 +6,9 @@ export function email(input) {
 export function password(input) {
   return typeof input != 'undefined' && input.length > 0;
 };
+
+export function name(input) {
+  var isCapitalized = /^[A-Z]/;
+  var containsInvalidCharacter = /[\^±!@£$%^&*_+§¡€#¢§¶•ªº«\\/<>?:;|=,]/;
+  return isCapitalized.test(input) && !containsInvalidCharacter.test(input);
+};

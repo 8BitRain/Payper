@@ -11,6 +11,8 @@ import * as Headers from '../../helpers/Headers';
 import Header from '../../components/Header/Header';
 import Comfort from './newPages/Comfort';
 import LegalName from './newPages/LegalName';
+import City from './newPages/City';
+import PostalCode from './newPages/PostalCode';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -27,6 +29,12 @@ export default class NewBankOnboardingView extends React.Component {
       headerHeight: 0,
       closeButtonVisible: true
     };
+  }
+
+  induceState(substate) {
+    this.setState(substate, () => {
+      console.log("<BankOnboardingView /> state =", this.state);
+    });
   }
 
   nextPage() {
@@ -79,10 +87,16 @@ export default class NewBankOnboardingView extends React.Component {
         { /* Inner content */ }
         <Animated.View style={[styles.allPanelsWrap, { marginLeft: this.offsetX }]}>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <Comfort nextPage={() => this.nextPage()} />
+            <Comfort nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <LegalName nextPage={() => this.nextPage()} />
+            <LegalName nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} />
+          </View>
+          <View style={{ flex: 1.0, width: dimensions.width }}>
+            <City nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} />
+          </View>
+          <View style={{ flex: 1.0, width: dimensions.width }}>
+            <PostalCode nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} />
           </View>
         </Animated.View>
       </View>
@@ -94,7 +108,7 @@ const styles = StyleSheet.create({
   allPanelsWrap: {
     flexDirection: 'row',
     flex: 0.85,
-    width: dimensions.width * 2,
+    width: dimensions.width * 4,
   },
   headerWrap: {
     flexDirection: 'row',

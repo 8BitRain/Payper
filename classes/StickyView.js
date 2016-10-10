@@ -18,6 +18,8 @@ export default class StickyView extends React.Component {
   }
 
   _keyboardWillShow(e) {
+    if (this.props.onlyStickWhen === false) return;
+
     Animated.timing(this.offsetBottom, {
       toValue: e.endCoordinates.height,
       duration: 350,
@@ -25,7 +27,7 @@ export default class StickyView extends React.Component {
     }).start();
   }
 
-  _keyboardWillHide(e) {
+  _keyboardWillHide() {
     Animated.timing(this.offsetBottom, {
       toValue: 0,
       duration: 350,
