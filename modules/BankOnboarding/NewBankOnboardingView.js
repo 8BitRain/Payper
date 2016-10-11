@@ -29,6 +29,7 @@ export default class NewBankOnboardingView extends React.Component {
     this.offsetX = new Animated.Value(0);
     this.logoAspectRatio = 377 / 568;
     this.state = {
+      animating: false,
       pageIndex: 0,
       headerHeight: 0,
       closeButtonVisible: true,
@@ -59,6 +60,8 @@ export default class NewBankOnboardingView extends React.Component {
   }
 
   nextPage(params) {
+    if (this.state.animating) return;
+    this.setState({ animating: true });
     dismissKeyboard();
 
     this.setState({ pageIndex: this.state.pageIndex + 1 }, () => {
@@ -69,10 +72,12 @@ export default class NewBankOnboardingView extends React.Component {
       toValue: this.offsetX._value - dimensions.width,
       duration: 200,
       easing: Easing.elastic(0),
-    }).start();
+    }).start(() => this.setState({ animating: false }));
   }
 
   prevPage() {
+    if (this.state.animating) return;
+    this.setState({ animating: true });
     dismissKeyboard();
 
     this.setState({ pageIndex: this.state.pageIndex - 1 }, () => {
@@ -83,7 +88,7 @@ export default class NewBankOnboardingView extends React.Component {
       toValue: this.offsetX._value + dimensions.width,
       duration: 200,
       easing: Easing.elastic(0),
-    }).start();
+    }).start(() => this.setState({ animating: false }));
   }
 
   toggleCloseButton() {

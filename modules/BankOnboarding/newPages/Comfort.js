@@ -25,7 +25,7 @@ export default class Comfort extends React.Component {
             <Entypo name={"shield"} color={colors.accent} size={38} />
             { "\n" }
           </Text>
-          <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.white, width: dimensions.width * 0.8, textAlign: 'center' }}>
+          <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, width: dimensions.width * 0.8, textAlign: 'center' }}>
             { "To ensure you're not being impersonated, we'll need to collect your legal name, billing address, date of birth, and the last four digits of your social." }
             { "\n" }
           </Text>

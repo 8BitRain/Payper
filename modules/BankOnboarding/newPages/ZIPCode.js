@@ -107,7 +107,7 @@ export default class ZIPCode extends React.Component {
 
   handleSubmit() {
     if (this.state.submitText === "Search") {
-      this.findCity(zip);
+      this.findCity(this.state.zip);
     } else if (this.state.submitText === "Continue") {
       this.props.induceState({ zip: this.state.zip, city: this.state.city, state: this.state.state, skipCityPage: true });
       this.props.nextPage();
@@ -205,8 +205,8 @@ const styles = StyleSheet.create({
     paddingTop: 20
   },
   textInput: {
-    width: 45,
-    height: 45,
+    width: dimensions.width * 0.15,
+    height: dimensions.width * 0.15,
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
     color: colors.white,
     textAlign: 'center',
