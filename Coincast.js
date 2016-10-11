@@ -19,6 +19,7 @@ import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreen
 
 // Test modules
 import NewBankOnboardingView from './modules/BankOnboarding/NewBankOnboardingView';
+import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer';
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
@@ -66,7 +67,8 @@ export default class Coincast extends React.Component {
             <Scene key="BetaLandingScreenView" type="replace" component={BetaLandingScreenView} title="BetaLandingScreenView" panHandlers={null} />
 
             { /* Test */ }
-            <Scene initial key="NewBankOnboardingView" type="replace" component={NewBankOnboardingView} title="NewBankOnboardingView" panHandlers={null} />
+            <Scene initial key="UserOnboardingViewContainer" type="replace" component={UserOnboardingViewContainer} title="UserOnboardingViewContainer" panHandlers={null} />
+            <Scene key="NewBankOnboardingView" type="replace" component={NewBankOnboardingView} title="NewBankOnboardingView" panHandlers={null} />
 
           </Scene>
           <Scene key="error" component={Error}/>

@@ -1,10 +1,11 @@
 // Dependencies
 import React from 'react';
-import { View, Text, StyleSheet, WebView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 
 // Components
 import StickyView from '../../../classes/StickyView';
 import ContinueButton from '../subcomponents/ContinueButton';
+import IAVWebView from '../../../components/IAVWebView/IAVWebView';
 
 // Stylesheets
 import colors from '../../../styles/colors';
@@ -13,18 +14,9 @@ const dimensions = Dimensions.get('window');
 export default class IAV extends React.Component {
   constructor(props) {
     super(props);
-    this.injectedJS =
-      "var firebase_token = '" + this.props.currentUser.token + "';" +
-      "var iav_token = '" + this.props.currentUser.iavToken + "';" +
-      "$(function() { generateIAVToken() });";
-  }
-
-  handleError(err) {
-    console.log("Error loading WebView:", err);
   }
 
   render() {
-
     return (
       <View style={styles.wrap}>
         <View>
@@ -34,11 +26,7 @@ export default class IAV extends React.Component {
         </View>
 
         <View style={{ marginTop: 18, borderTopWidth: 1.5, borderColor: colors.accent, flex: 1.0 }}>
-          <WebView
-            source={{ uri: 'http://www.getpayper.io/iav' }}
-            injectedJavaScript={this.injectedJS}
-            startInLoadingState={false}
-            onError={err => this.handleError(err)}  />
+          <IAVWebView IAVToken={this.props.currentUser.IAVToken} firebaseToken={this.props.currentUser.token} />
         </View>
       </View>
     );

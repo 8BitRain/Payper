@@ -177,13 +177,64 @@ export default class User {
   }
 
   /**
+    *   Create a user with email and password
+    *   params: email, password, phone, firstName, lastName
+    *   -----------------------------------------------------------------------
+  **/
+  createUserWithEmailAndPassword(params, onSuccess, onFailure) {
+    firebase.auth().createUserWithEmailAndPassword(params.email, params.password).then(() => {
+      firebase.auth().currentUser.getToken(true).then((token) => {
+        params.token = token;
+        try {
+          fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/create", {method: "POST", body: JSON.stringify(params)})
+          .then((response) => response.json())
+          .then((responseData) => {
+            this.initialize(response);
+            this.logSuccess(["createUserWithEmailAndPassword succeeded...", "Lambda response:", responseData]);
+            onSuccess();
+          })
+          .done();
+        } catch (err) {
+          this.logError(["createUserWithEmailAndPassword failed...", "Lambda error:", err]);
+          onFailure("lambda");
+        }
+      }).catch((err) => {
+        this.logError(["firebase.auth().currentUser.getToken(true) failed...", "Firebase error:", err]);
+        onFailure(err.code);
+      });
+    })
+    .catch((err) => {
+      this.logError(["firebase.auth().createUserWithEmailAndPassword failed...", "Firebase error:", err]);
+      onFailure(err.code);
+    });
+  }
+
+  /**
+    *   Create a Dwolla customer for this user
+    *   -----------------------------------------------------------------------
+  **/
+  createDwollaCustomer() {
+    try {
+      fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/customer/create", {method: "POST", body: JSON.stringify({ token: this.token })})
+      .then((response) => response.json())
+      .then((responseData) => {
+        this.logSuccess(["createDwollaCustomer succeeded...", "Response data:", responseData]);
+      })
+      .done();
+    } catch (err) {
+      this.logError(["createDwollaCustomer failed...", "Lambda error:", err]);
+    }
+  }
+
+  /**
     *   Get this user's native phone contacts
     *   -----------------------------------------------------------------------
   **/
   getNativeContacts() {
     Contacts.getAll((err, contacts) => {
-      if (err && err.type === 'permissionDenied') this.logError(["Error getting contacts", err]);
-      else {
+      if (err && err.type === 'permissionDenied') {
+        this.logError(["Error getting contacts", err]);
+      } else {
         const _this = this;
 
         var c = SetMaster5000.formatNativeContacts(contacts);
@@ -323,7 +374,7 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
-          updateViaRedux({ IAV: res });
+          updateViaRedux({ IAVToken: res.iav.body.token });
         }
       }
     ];
