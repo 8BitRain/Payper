@@ -17,6 +17,7 @@ import City from './newPages/City';
 import Street from './newPages/Street';
 import DateOfBirth from './newPages/DateOfBirth';
 import Social from './newPages/Social';
+import IAV from './newPages/IAV';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -41,6 +42,14 @@ export default class NewBankOnboardingView extends React.Component {
       dob: null,
       ssn: null
     };
+
+    this.currentUser = {
+      firstName: "Brady",
+      lastName: "Sheridan",
+      token: "aosdf90qwjr0f9jfjas09fk30q29wjf",
+      iavToken: "elhiN1wQI2tV3rNxVB6XYCDUKSa5ALGPgAOVt4xJMe1L5VBonC",
+      dob: null
+    }
   }
 
   induceState(substate) {
@@ -84,7 +93,7 @@ export default class NewBankOnboardingView extends React.Component {
   render() {
     return(
       <View style={{ flex: 1.0 }}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar barStyle='light-content' />
 
         { /* Header */ }
         <View style={styles.headerWrap} onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}>
@@ -100,35 +109,48 @@ export default class NewBankOnboardingView extends React.Component {
           <Entypo color={colors.white} size={30} name={(this.state.closeButtonVisible) ? "cross" : "chevron-thin-left"} />
         </TouchableHighlight>
 
+        { /* Skip button */
+          (this.state.pageIndex === 7)
+            ? <TouchableHighlight
+                style={styles.skipButton}
+                activeOpacity={0.8}
+                underlayColor={'transparent'}
+                onPress={() => console.log("Skipping IAV...")}>
+                <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
+                  Skip
+                </Text>
+              </TouchableHighlight>
+            : null }
+
         { /* Inner content */ }
         <Animated.View style={[styles.allPanelsWrap, { marginLeft: this.offsetX, width: dimensions.width * ((this.state.skipCityPage) ? 7 : 8) }]}>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <Comfort nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+            <Comfort nextPage={p => this.nextPage(p)} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <LegalName nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+            <LegalName nextPage={p => this.nextPage(p)} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <ZIPCode nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+            <ZIPCode nextPage={p => this.nextPage(p)} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
 
           { (this.state.skipCityPage)
               ? null
               : <View style={{ flex: 1.0, width: dimensions.width }}>
-                  <City nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+                  <City nextPage={p => this.nextPage(p)} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
                 </View> }
 
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <Street city={this.state.city} state={this.state.state} nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+            <Street city={this.state.city} state={this.state.state} nextPage={p => this.nextPage(p)} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <DateOfBirth nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+            <DateOfBirth nextPage={p => this.nextPage(p)} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <Social nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+            <Social nextPage={p => this.nextPage(p)} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <Comfort nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+            <IAV induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
         </Animated.View>
       </View>
@@ -152,6 +174,14 @@ const styles = StyleSheet.create({
   backButton: {
     position: 'absolute',
     top: 20, left: 0,
+    height: dimensions.height * 0.15,
+    width: dimensions.height * 0.15,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  skipButton: {
+    position: 'absolute',
+    top: 20, right: 0,
     height: dimensions.height * 0.15,
     width: dimensions.height * 0.15,
     justifyContent: 'center',
