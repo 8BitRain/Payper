@@ -10,15 +10,15 @@ import React, {
   Component,
   PropTypes,
 } from 'react';
-import {
-  NavigationExperimental,
-} from 'react-native';
+import { BackAndroid } from 'react-native';
+import NavigationExperimental from 'react-native-experimental-navigation';
 
-import Actions from './Actions';
+import Actions, { ActionMap } from './Actions';
 import getInitialState from './State';
-import Reducer from './Reducer';
+import Reducer, { findElement } from './Reducer';
 import DefaultRenderer from './DefaultRenderer';
 import Scene from './Scene';
+import * as ActionConst from './ActionConst';
 
 const {
   RootContainer: NavigationRootContainer,
@@ -26,23 +26,68 @@ const {
 
 const propTypes = {
   dispatch: PropTypes.func,
+  backAndroidHandler: PropTypes.func,
+  onBackAndroid: PropTypes.func,
+  onExitApp: PropTypes.func,
 };
 
 class Router extends Component {
+  static childContextTypes = {
+    routes: PropTypes.object,
+  }
 
   constructor(props) {
     super(props);
-    this.state = {};
     this.renderNavigation = this.renderNavigation.bind(this);
     this.handleProps = this.handleProps.bind(this);
+    this.handleBackAndroid = this.handleBackAndroid.bind(this);
+    const reducer = this.handleProps(props);
+    this.state = { reducer };
+  }
+
+  getChildContext() {
+    return {
+      routes: Actions,
+    };
   }
 
   componentDidMount() {
-    this.handleProps(this.props);
+    BackAndroid.addEventListener('hardwareBackPress', this.handleBackAndroid);
   }
 
   componentWillReceiveProps(props) {
-    this.handleProps(props);
+    const reducer = this.handleProps(props);
+    this.setState({ reducer });
+  }
+
+  componentWillUnmount() {
+    BackAndroid.removeEventListener('hardwareBackPress', this.handleBackAndroid);
+  }
+
+  handleBackAndroid() {
+    const {
+      backAndroidHandler,
+      onBackAndroid,
+      onExitApp,
+    } = this.props;
+    // optional for customizing handler
+    if (backAndroidHandler) {
+      return backAndroidHandler();
+    }
+
+    try {
+      Actions.pop();
+      if (onBackAndroid) {
+        onBackAndroid();
+      }
+      return true;
+    } catch (err) {
+      if (onExitApp) {
+        return onExitApp();
+      }
+
+      return false;
+    }
   }
 
   handleProps(props) {
@@ -81,17 +126,24 @@ class Router extends Component {
         scenes: scenesMap,
       }));
 
-    this.setState({ reducer: routerReducer });
+    return routerReducer;
   }
 
   renderNavigation(navigationState, onNavigate) {
     if (!navigationState) {
       return null;
     }
-
+    Actions.get = key => findElement(navigationState, key, ActionConst.REFRESH);
     Actions.callback = props => {
-      if (this.props.dispatch) this.props.dispatch(props);
-      return onNavigate(props);
+      const constAction = (props.type && ActionMap[props.type] ? ActionMap[props.type] : null);
+      if (this.props.dispatch) {
+        if (constAction) {
+          this.props.dispatch({ ...props, type: constAction });
+        } else {
+          this.props.dispatch(props);
+        }
+      }
+      return (constAction ? onNavigate({ ...props, type: constAction }) : onNavigate(props));
     };
 
     return <DefaultRenderer onNavigate={onNavigate} navigationState={navigationState} />;
