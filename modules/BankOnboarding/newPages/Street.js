@@ -26,7 +26,7 @@ export default class City extends React.Component {
 
   handleSubmit() {
     if (StringMaster5000.checkIf(this.state.street).isEmpty) return;
-    this.props.induceState({ street: this.state.street });
+    this.props.induceState(this.state);
     this.props.nextPage();
   }
 
@@ -53,7 +53,7 @@ export default class City extends React.Component {
         </View>
 
         <StickyView>
-          <ContinueButton text={(this.state.street) ? "Continue" : "Enter an address"} onPress={(this.state.street) ? () => this.props.nextPage() : () => console.log("Must enter an address first...")} />
+          <ContinueButton text={(this.state.street) ? "Continue" : "Enter an address"} onPress={(this.state.street) ? () => this.handleSubmit() : () => console.log("Must enter an address first...")} />
         </StickyView>
       </View>
     );

@@ -15,6 +15,8 @@ import LegalName from './newPages/LegalName';
 import ZIPCode from './newPages/ZIPCode';
 import City from './newPages/City';
 import Street from './newPages/Street';
+import DateOfBirth from './newPages/DateOfBirth';
+import Social from './newPages/Social';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -29,14 +31,13 @@ export default class NewBankOnboardingView extends React.Component {
       pageIndex: 0,
       headerHeight: 0,
       closeButtonVisible: true,
-      explicitDestination: null,
       skipCityPage: true,
       name: null,
       zip: null,
+      street: null,
       city: null,
       country: "United States",
       state: null,
-      street: null,
       dob: null,
       ssn: null
     };
@@ -121,10 +122,10 @@ export default class NewBankOnboardingView extends React.Component {
             <Street city={this.state.city} state={this.state.state} nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <Comfort nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+            <DateOfBirth nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <Comfort nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
+            <Social nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
             <Comfort nextPage={(p) => this.nextPage(p)} induceState={substate => this.induceState(substate)} />
