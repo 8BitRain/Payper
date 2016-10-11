@@ -47,14 +47,14 @@ export default class LandingScreenView extends React.Component {
 
     Crashlytics.setString('organization', 'Acme. Corp');
 
-    /*try{
+    try{
       random;
     }catch(err){
       //Crashlytics.crash();
       console.log("There was a crash");
       Crashlytics.recordError('something went wrong!');
       Crashlytics.crash();
-    }*/
+    }
 
 
     // Forces a native crash for testing
