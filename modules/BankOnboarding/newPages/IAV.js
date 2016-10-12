@@ -1,5 +1,6 @@
 // Dependencies
 import React from 'react';
+import { Actions } from 'react-native-router-flux';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 
 // Components
@@ -14,6 +15,10 @@ const dimensions = Dimensions.get('window');
 export default class IAV extends React.Component {
   constructor(props) {
     super(props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentUser.fundingSourceAdded) Actions.MainViewContainer();
   }
 
   render() {

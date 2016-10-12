@@ -117,7 +117,7 @@ export default class StickyTextInput extends React.Component {
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={"transparent"}
-              onPress={() => Actions.CreateAccountViewContainer()}
+              onPress={() => Actions.UserOnboardingViewContainer()}
               style={styles.signup}>
               <View>
                 <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.alertBlue }}>

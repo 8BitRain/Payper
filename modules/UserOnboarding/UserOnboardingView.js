@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TouchableHighlight, StyleSheet, Animated, Easing, Dimensions, StatusBar, Image } from "react-native";
+import { View, Text, TouchableHighlight, StyleSheet, Animated, Easing, Dimensions, StatusBar, Image, Modal } from "react-native";
 import { Actions } from 'react-native-router-flux';
 import Entypo from 'react-native-vector-icons/Entypo';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
@@ -11,6 +11,7 @@ import Email from './pages/Email';
 import Password from './pages/Password';
 import Phone from './pages/Phone';
 import Summary from './pages/Summary';
+import BankOnboardingView from '../BankOnboarding/NewBankOnboardingView';
 
 // Stylesheets
 import colors from '../../styles/colors';
@@ -25,39 +26,45 @@ export default class UserOnboardingView extends React.Component {
       animating: false,
       pageIndex: 0,
       headerHeight: 0,
-      firstName: null,
-      lastName: null,
+      bankOnboardingModalVisible: false,
+      summarySubmitText: "Create user",
+      name: null,
       email: null,
       password: null,
       phone: null
     };
   }
 
-  /**
-    *   Potential errCodes:
-    *     [ ] auth/email-already-in-use
-    *     [x] auth/invalid-email
-    *     [x] auth/operation-not-allowed
-    *     [x] auth/weak-password
-  **/
-  createUser() {
+  toggleBankOnboardingModal() {
+    this.setState({ bankOnboardingModalVisible: !this.state.bankOnboardingModalVisible });
+  }
+
+  createUser(cb) {
+    var nameBuffer = this.state.name.split(" ");
     this.props.currentUser.createUserWithEmailAndPassword({
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
+      firstName: nameBuffer.splice(0, 1).join(""),
+      lastName: nameBuffer.join(" "),
       email: this.state.email,
       password: this.state.password,
       phone: this.state.phone
     },
-    () => console.log("createUser success callback function was invoked..."),
-    (errCode) => console.log("createUser failure callback function was invoked with errCode:", errCode));
+    () => {
+      this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates));
+      this.toggleBankOnboardingModal();
+      cb();
+    },
+    (errCode) => {
+      if (errCode === "auth/email-already-in-use") {
+        alert("This email is already in use.");
+      } else {
+        alert("Something went wrong on our end 🙄\n\nPlease try again");
+        cb();
+      }
+    });
   }
 
   induceState(substate) {
-    console.log("induceState was invoked with substate:\n");
-    console.log(substate);
-    this.setState(substate, () => {
-      console.log("<UserOnboardingView /> state:\n", this.state);
-    });
+    this.setState(substate);
   }
 
   nextPage(params) {
@@ -75,11 +82,7 @@ export default class UserOnboardingView extends React.Component {
   }
 
   prevPage() {
-    if (this.state.animating) return;
-    if (this.state.pageIndex === 0) {
-      console.log("Can't go back...");
-      return;
-    }
+    if (this.state.animating || this.state.pageIndex === 0) return;
     this.setState({ animating: true });
     dismissKeyboard();
 
@@ -107,8 +110,8 @@ export default class UserOnboardingView extends React.Component {
           style={styles.backButton}
           activeOpacity={0.8}
           underlayColor={'transparent'}
-          onPress={() => this.prevPage()}>
-          <Entypo color={colors.white} size={30} name={"chevron-thin-left"} />
+          onPress={() => (this.state.pageIndex === 0) ? Actions.LandingScreenContainer() : this.prevPage()}>
+          <Entypo color={colors.white} size={30} name={(this.state.pageIndex === 0) ? "cross" : "chevron-thin-left"} />
         </TouchableHighlight>
 
         { /* Inner content */ }
@@ -129,14 +132,17 @@ export default class UserOnboardingView extends React.Component {
             <Summary
               nextPage={() => this.nextPage()}
               induceState={substate => this.induceState(substate)}
-              user={{
-                name: this.state.name,
-                email: this.state.email,
-                password: this.state.password,
-                phone: this.state.phone
-              }} />
+              createUser={(cb) => this.createUser(cb)}
+              user={{ name: this.state.name, email: this.state.email, password: this.state.password, phone: this.state.phone }} />
           </View>
         </Animated.View>
+
+        { /* Bank onboarding modal */ }
+        <Modal animationType={"slide"} visible={this.state.bankOnboardingModalVisible}>
+          <View style={{ backgroundColor: colors.richBlack, flex: 1.0, width: dimensions.width }}>
+            <BankOnboardingView {...this.props} displayCloseButton={false} />
+          </View>
+        </Modal>
       </View>
     );
   };

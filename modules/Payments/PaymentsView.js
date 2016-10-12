@@ -10,8 +10,9 @@ import * as Lambda from '../../services/Lambda';
 
 // Components
 import Footer from '../../components/Footer/Footer';
+import IAVWebView from '../../components/IAVWebView/IAVWebView';
 import CreatePayment from '../../modules/CreatePayment/CreatePaymentViewContainer';
-import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingContainer';
+import BankOnboarding from '../../modules/BankOnboarding/NewBankOnboardingView';
 import VerifyMicrodeposit from '../../modules/BankOnboarding/Pages/VerifyMicrodeposit';
 
 // Payment card components
@@ -175,9 +176,6 @@ class Payments extends React.Component {
   }
 
   _renderRow(payment) {
-    // console.log("%cRendering payment:", "color:green;font-weight:900;");
-    // console.log(payment);
-
     var paymentInfo = {
       amount: payment.amount,
       purpose: payment.purpose,
@@ -266,51 +264,54 @@ class Payments extends React.Component {
     }
   }
 
-  _verifyOnboardingStatus() {
-    if(this.props.currentUser.appFlags.onboarding_state == 'customer'){
-      // Actions.BankOnboardingContainer();
-      console.log(this.props.currentUser.token);
-      this.props.setNewUserToken(this.props.currentUser.token);
-    }
-    //The user has completed customer creation and now has to go through dwolla IAV
-    if(this.props.currentUser.appFlags.onboarding_state == 'bank') {
-      if(this.props.currentUser.appFlags.customer_status == 'verified') {
-        //Initiate IAV
-        this.props.setNewUserToken(this.props.currentUser.token);
-
-        var data = {
-          token: this.props.currentUser.token
-        };
-        this.props.setLoading(true);
-        const _this = this;
-        //Initiate IAV
-        Init.getIavToken(data, function(iavTokenRecieved, iavToken){
-          if(iavTokenRecieved){
-            _this.props.setIav(iavToken.token);
-            //  Actions.BankOnboardingContainer();
-          }
-        });
-        //The user needs to redo the customer creation process.
-      } else if(this.props.currentUser.appFlags.customer_status == 'retry') {
-          this.props.setRetry(true);
-          this.props.setLoading(true);
-          Actions.BankOnboardingContainer();
-        //The user needs to provide additonal documents.
-      } else if (this.props.currentUser.appFlags.customer_status == 'document') {
-          this.props.setDocument(true);
-          this.props.setLoading(true);
-          Actions.BankOnboardingContainer();
-      }
-    }
-    //The user has completed onboarding and can make payments.
-    if(this.props.currentUser.appFlags.onboarding_state == 'complete'){
-      Actions.CreatePaymentViewContainer();
+  getModalInnerContent() {
+    if (this.props.currentUser.appFlags.micro_deposit_flow) {
+      return(
+        <View style={{ flex: 1.0, marginTop: 20, backgroundColor: colors.richBlack }}>
+          <VerifyMicrodeposit
+            {...this.props}
+            toggleModal={(options) => this._toggleModal(options)} />
+        </View>
+      );
+    } else switch (this.props.currentUser.appFlags.onboarding_state) {
+      case "complete":
+        return(
+          <CreatePayment
+            {...this.props}
+            toggleModal={(options) => this._toggleModal(options)} />
+        );
+      break;
+      case "customer":
+        return(
+          <View style={{ flex: 1.0, marginTop: 20, backgroundColor: colors.richBlack }}>
+            <BankOnboarding
+              {...this.props}
+              closeModal={() => this._toggleModal()}
+              displayCloseButton={true} />
+          </View>
+        );
+      break;
+      case "bank":
+        return(
+          <View style={{ flex: 1.0, marginTop: 20 }}>
+            <IAVWebView IAVToken={this.props.currentUser.IAVToken} firebaseToken={this.props.currentUser.token} />
+          </View>
+        );
+      break;
+      default:
+        return(
+          <View style={{ flex: 1.0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red' }}>
+            <Text style={{ color: colors.white, fontSize: 16, textAlign: 'center', paddingTop: 50 }}>
+              { "Something went wrong.\nPlease reload the app.\n(check getModalInnerContent() of PaymentsVew.js)" }
+            </Text>
+          </View>
+        );
     }
   }
 
 
   render() {
-
+    // TODO: Do this in componentDidMount() instead?
     this._archiveCompletePayments();
 
     return(
@@ -326,46 +327,19 @@ class Payments extends React.Component {
           pointerEvents="box-none"
           style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, left: 0, right: 0, height: dimensions.height * 0.2}}>
           <Footer
-            callbackPay={() => {
-              if (this.props.currentUser.appFlags.onboarding_state != "complete") {
-                Alert.message({
-                  title: "Hey!",
-                  message: "You must add a bank account before you can make a payment."
-                });
-                this._verifyOnboardingStatus();
-              }
-
-              this._toggleModal();
-            }} />
+            callbackPay={() => this._toggleModal()} />
         </View>
 
         { /* Modal containing create payment panel */ }
         <Modal
           animationType={"slide"}
-          transparent={false}
+          transparent={true}
           visible={this.state.modalVisible}
           onRequestClose={ () => alert("Closed modal") }>
 
-          { /* Lighten status bar text */ }
           <StatusBar barStyle="light-content" />
+          { this.getModalInnerContent() }
 
-          <View style={{flex: 1.0}}>
-
-            { /* If user has a verified funding source, display create payment
-                 flow. Otherwise, display bank account onboarding flow */
-              (this.props.currentUser.appFlags.onboarding_state == "complete")
-                ? <CreatePayment
-                    {...this.props}
-                    toggleModal={(options) => this._toggleModal(options)} />
-                : (this.props.currentUser.appFlags.micro_deposit_flow)
-                    ? <VerifyMicrodeposit
-                        {...this.props}
-                        toggleModal={(options) => this._toggleModal(options)} />
-                    : <BankOnboarding
-                        {...this.props}
-                        toggleModal={(options) => this._toggleModal(options)} /> }
-
-          </View>
         </Modal>
       </View>
     );

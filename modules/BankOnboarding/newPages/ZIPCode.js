@@ -81,7 +81,6 @@ export default class ZIPCode extends React.Component {
   handler() {
     if (this.status === 200 && this.responseText != null) {
       XMLParser.parseString(this.responseText, (err, res) => {
-        console.log("XML --> JSON:", res);
         if (err) {
           this.onFailure("Error parsing XML");
         } else if (res.CityStateLookupResponse.ZipCode[0].Error) {

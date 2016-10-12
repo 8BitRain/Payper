@@ -9,12 +9,13 @@ import * as Alert from "../../helpers/Alert";
 import * as Lambda from "../../services/Lambda";
 import * as Init from '../../_init';
 
+// Components
+import FundingSource from '../../components/FundingSource/FundingSource.js';
+import IAVWebView from '../../components/IAVWebView/IAVWebView';
+import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingContainer';
+
 // Custom stylesheets
 import colors from "../../styles/colors";
-
-// Partial components
-import FundingSource from '../../components/FundingSource/FundingSource.js';
-import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingContainer';
 
 class FundingSources extends React.Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class FundingSources extends React.Component {
   componentWillReceiveProps(nextProps) {
     console.log("<FundingSources /> will receive props", nextProps);
     this.setState({
+      modalVisible: (this.state.modalVisible && nextProps.currentUser.fundingSource) ? false : this.state.modalVisible,
       dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows((nextProps.currentUser.fundingSource) ? [nextProps.currentUser.fundingSource] : [])
     });
   }
@@ -82,14 +84,13 @@ class FundingSources extends React.Component {
           underlayColor={colors.richBlack}
           activeOpacity={0.7}
           onPress={() => {
-            if (this.state.dataSource._dataBlob.s1.length === 0) {
+            if (this.props.currentUser.fundingSource) {
               Alert.message({
                 title: "Unfortunately...",
                 message: "Payper doesn't currently support multiple bank accounts. This feature will be available soon!",
               });
             } else {
-              this._verifyOnboardingStatus();
-              if (this.props.currentUser.appFlags.onboarding_state != "complete" || this.state.fundingSources.getRowCount() == 0) this._toggleModal();
+              this._toggleModal();
             }
           }}>
 
@@ -107,16 +108,10 @@ class FundingSources extends React.Component {
         { /* Modal containing bank onboarding flow */ }
         <Modal
           animationType={"slide"}
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={() => alert("Closed modal")}>
-
-          { /* Lighten status bar text */ }
-          <StatusBar barStyle="light-content" />
-
-          <View style={{flex: 1.0}}>
-            <BankOnboarding {...this.props}
-              toggleModal={() => this._toggleModal()} />
+          transparent={true}
+          visible={this.state.modalVisible}>
+          <View style={{ flex: 1.0, marginTop: 20 }}>
+            <IAVWebView IAVToken={this.props.currentUser.IAVToken} firebaseToken={this.props.currentUser.token} />
           </View>
         </Modal>
       </View>

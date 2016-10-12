@@ -38,28 +38,43 @@ export default class NewBankOnboardingView extends React.Component {
       zip: null,
       street: null,
       city: null,
-      country: "United States",
       state: null,
       dob: null,
       ssn: null
     };
-
-    this.currentUser = {
-      firstName: "Brady",
-      lastName: "Sheridan",
-      token: "aosdf90qwjr0f9jfjas09fk30q29wjf",
-      iavToken: "elhiN1wQI2tV3rNxVB6XYCDUKSa5ALGPgAOVt4xJMe1L5VBonC",
-      dob: null
-    }
   }
 
-  induceState(substate) {
-    this.setState(substate, () => {
-      console.log("<BankOnboardingView /> state:\n", this.state);
+  induceState(substate, cb) {
+    this.setState(substate, (cb) => {
+      if (substate.ssn) this.createDwollaCustomer(cb);
     });
   }
 
-  nextPage(params) {
+  createDwollaCustomer(cb) {
+    var nameBuffer = this.state.name.split(" ");
+    this.props.currentUser.createDwollaCustomer({
+      firstName: nameBuffer.splice(0, 1).join(""),
+      lastName: nameBuffer.join(" "),
+      zip: this.state.zip,
+      address: this.state.street,
+      city: this.state.city,
+      state: this.state.state,
+      dob: this.state.dob.year + "-" + this.state.dob.month + "-" + this.state.dob.date,
+      ssn: this.state.ssn
+    },
+    (cb) => {
+      console.log("createDwollaCustomer success callback was invoked...");
+      this.nextPage();
+      if (typeof cb === 'function') cb(true);
+    },
+    (cb) => {
+      console.log("createDwollaCustomer failure callback was invoked...");
+      alert("Something went wrong on our end 🙄\nPlease try again");
+      if (typeof cb === 'function') cb(false);
+    });
+  }
+
+  nextPage() {
     if (this.state.animating) return;
     this.setState({ animating: true });
     dismissKeyboard();
@@ -105,22 +120,24 @@ export default class NewBankOnboardingView extends React.Component {
           <Image source={require('../../assets/images/logo.png')} style={{ height: this.state.headerHeight * 0.4, width: (this.state.headerHeight * 0.4) * this.logoAspectRatio }} />
         </View>
 
-        { /* Cancel or back button */ }
-        <TouchableHighlight
-          style={styles.backButton}
-          activeOpacity={0.8}
-          underlayColor={'transparent'}
-          onPress={() => (this.state.closeButtonVisible) ? console.log("Closing modal...") : this.prevPage()}>
-          <Entypo color={colors.white} size={30} name={(this.state.closeButtonVisible) ? "cross" : "chevron-thin-left"} />
-        </TouchableHighlight>
+        { /* Cancel or back button */
+          (!this.props.displayCloseButton && this.state.pageIndex === 0)
+            ? null
+            : <TouchableHighlight
+                style={styles.backButton}
+                activeOpacity={0.8}
+                underlayColor={'transparent'}
+                onPress={() => (this.state.closeButtonVisible) ? (this.props.closeModal) ? this.props.closeModal() : console.log("BankOnboardingView was not supplied with a closeModal function") : this.prevPage()}>
+                <Entypo color={colors.white} size={30} name={(this.state.closeButtonVisible) ? "cross" : "chevron-thin-left"} />
+              </TouchableHighlight> }
 
         { /* Skip button */
-          (this.state.pageIndex === 7)
+          (this.state.skipCityPage && this.state.pageIndex === 6 || !this.state.skipCityPage && this.state.pageIndex === 7)
             ? <TouchableHighlight
                 style={styles.skipButton}
                 activeOpacity={0.8}
                 underlayColor={'transparent'}
-                onPress={() => console.log("Skipping IAV...")}>
+                onPress={() => Actions.MainViewContainer()}>
                 <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
                   Skip
                 </Text>
@@ -130,32 +147,32 @@ export default class NewBankOnboardingView extends React.Component {
         { /* Inner content */ }
         <Animated.View style={[styles.allPanelsWrap, { marginLeft: this.offsetX, width: dimensions.width * ((this.state.skipCityPage) ? 7 : 8) }]}>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <Comfort nextPage={p => this.nextPage(p)} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+            <Comfort nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <LegalName nextPage={p => this.nextPage(p)} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+            <LegalName nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} name={this.props.currentUser.first_name + " " + this.props.currentUser.last_name} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <ZIPCode nextPage={p => this.nextPage(p)} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+            <ZIPCode nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
 
           { (this.state.skipCityPage)
               ? null
               : <View style={{ flex: 1.0, width: dimensions.width }}>
-                  <City nextPage={p => this.nextPage(p)} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+                  <City nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
                 </View> }
 
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <Street city={this.state.city} state={this.state.state} nextPage={p => this.nextPage(p)} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+            <Street city={this.state.city} state={this.state.state} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <DateOfBirth nextPage={p => this.nextPage(p)} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+            <DateOfBirth nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <Social nextPage={p => this.nextPage(p)} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+            <Social nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <IAV induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+            <IAV induceState={substate => this.induceState(substate)} currentUser={this.props.currentUser} />
           </View>
         </Animated.View>
       </View>

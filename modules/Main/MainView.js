@@ -82,7 +82,11 @@ export default class Main extends React.Component {
   }
 
   componentWillMount() {
+    // Reattach listeners if they're already active
+    if (this.props.currentUser.endpoints) this.props.currentUser.stopListening();
     this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates));
+
+    // Get decrypted email and phone attributes
     this.props.currentUser.decrypt((updates) => this.props.updateCurrentUser(updates));
   }
 

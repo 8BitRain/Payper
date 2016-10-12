@@ -17,7 +17,7 @@ export default class Summary extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      submitText: "Continue",
+      submitText: "Sign me up!",
       passwordIsHidden: true,
       nameIsValid: this.props.user.name && Validate.name(this.props.user.name) && this.props.user.name.split(" ").length > 1,
       emailIsValid: Validate.email(this.props.user.email),
@@ -33,13 +33,16 @@ export default class Summary extends React.Component {
       passwordValidations: Validate.password(nextProps.user.password),
       phoneValidations: Validate.phone(nextProps.user.phone)
     };
-    nextState.submitText = (!nextState.nameIsValid) ? "Enter a valid name" : (!nextState.emailIsValid) ? "Enter a valid email address" : (!nextState.passwordValidations.isValid) ? "Enter a valid password" : (!nextState.phoneValidations.isValid) ? "Enter a valid phone number" : "Continue";
-    this.setState(nextState, () => console.log("<Summary /> state:", this.state));
+    nextState.submitText = (!nextState.nameIsValid) ? "Enter a valid name" : (!nextState.emailIsValid) ? "Enter a valid email address" : (!nextState.passwordValidations.isValid) ? "Enter a valid password" : (!nextState.phoneValidations.isValid) ? "Enter a valid phone number" : "Sign me up!";
+    this.setState(nextState);
   }
 
   handleSubmit() {
-    if (this.state.submitText !== "Continue") return;
-    console.log("Continuing...");
+    if (this.state.submitText !== "Sign me up!") return;
+    this.setState({ submitText: "Creating user..." });
+    this.props.createUser(() => {
+      this.setState({ submitText: "Sign me up!" });
+    });
   }
 
   render() {

@@ -24,7 +24,7 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   update(updates) {
-    this.logInfo(["Updating User with updates:", updates]);
+    console.log("Updating User with updates:", updates);
     for (var k in updates) this[k] = updates[k];
     Async.set('user', JSON.stringify(this));
   }
@@ -63,18 +63,18 @@ export default class User {
         this.getUserWithToken({ token: firebaseUser.stsTokenManager.accessToken },
         (res) => {
           if (res.errorMessage) {
-            this.logError(["getUserWithToken failed...", "Lambda error:", res.errorMessage]);
+            console.log("getUserWithToken failed...", "Lambda error:", res.errorMessage);
             onLoginFailure("lambda");
           } else {
             this.initialize(res);
-            this.logSuccess(["getUserWithToken succeeded...", "Lambda response:", res]);
+            console.log("getUserWithToken succeeded...", "Lambda response:", res);
             onLoginSuccess();
           }
         });
       }
     })
     .catch((err) => {
-      this.logError(["loginWithEmail failed...", "Code: " + err.code, "Message: " + err.message]);
+      console.log("loginWithEmail failed...", "Code: " + err.code, "Message: " + err.message);
       onLoginFailure(err.code);
     });
   }
@@ -94,18 +94,18 @@ export default class User {
       this.getOrCreateFacebookUser(params.user,
       (res) => {
         if (res.errorMessage) {
-          this.logError(["getUserWithToken failed...", "Lambda error:", res.errorMessage]);
+          console.log("getUserWithToken failed...", "Lambda error:", res.errorMessage);
           onLoginFailure("lambda");
         } else {
           res.user.accountStatus = res.account_status;
           this.initialize(res.user);
-          this.logSuccess(["getUserWithToken succeeded...", "Lambda response:", res.user]);
+          console.log("getUserWithToken succeeded...", "Lambda response:", res.user);
           onLoginSuccess();
         }
       });
     })
     .catch((err) => {
-      this.logError(["loginWithFacebook failed...", "Code: " + err.code, "Message: " + err.message]);
+      console.log("loginWithFacebook failed...", "Code: " + err.code, "Message: " + err.message);
       onLoginFailure(err.code);
     });
   }
@@ -118,11 +118,11 @@ export default class User {
   loginWithAccessToken(params, onLoginSuccess, onLoginFailure) {
     this.getUserWithToken(params, (res) => {
       if (res.errorMessage) {
-        this.logError(["getUserWithToken failed...", "Lambda error:", res.errorMessage]);
+        console.log("getUserWithToken failed...", "Lambda error:", res.errorMessage);
         onLoginFailure("lambda");
       } else {
         this.initialize(res);
-        this.logSuccess(["getUserWithToken succeeded...", "Lambda response:", res]);
+        console.log("getUserWithToken succeeded...", "Lambda response:", res);
         onLoginSuccess();
       }
     });
@@ -133,7 +133,7 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   logout() {
-    this.logInfo(["Logging out..."]);
+    console.log("Logging out...");
     if (this.provider === "facebook") LoginManager.logOut();
     firebase.auth().signOut();
     this.stopListening();
@@ -153,7 +153,7 @@ export default class User {
       .then((responseData) => callback(responseData))
       .done();
     } catch (err) {
-      this.logError(["getUserWithToken failed...", "Lambda error:", err]);
+      console.log("getUserWithToken failed...", "Lambda error:", err);
       callback(null);
     }
   }
@@ -171,7 +171,7 @@ export default class User {
       .then((responseData) => callback(responseData))
       .done();
     } catch (err) {
-      this.logError(["getOrCreateFacebookUser failed...", "Lambda error:", err]);
+      console.log("getOrCreateFacebookUser failed...", "Lambda error:", err);
       callback(null);
     }
   }
@@ -182,6 +182,7 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   createUserWithEmailAndPassword(params, onSuccess, onFailure) {
+    console.log("createUserWithEmailAndPassword was invoked with params:", params);
     firebase.auth().createUserWithEmailAndPassword(params.email, params.password).then(() => {
       firebase.auth().currentUser.getToken(true).then((token) => {
         params.token = token;
@@ -189,40 +190,60 @@ export default class User {
           fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/create", {method: "POST", body: JSON.stringify(params)})
           .then((response) => response.json())
           .then((responseData) => {
-            this.initialize(response);
-            this.logSuccess(["createUserWithEmailAndPassword succeeded...", "Lambda response:", responseData]);
-            onSuccess();
+            if (!responseData.errorMessage) {
+              responseData.user.token = token;
+              this.initialize(responseData.user);
+              this.decryptedPhone = params.phone;
+              this.decryptedEmail = params.email;
+              console.log("createUserWithEmailAndPassword succeeded...", "Lambda response:", responseData);
+              onSuccess();
+            } else {
+              onFailure("lambda");
+            }
           })
           .done();
         } catch (err) {
-          this.logError(["createUserWithEmailAndPassword failed...", "Lambda error:", err]);
-          onFailure("lambda");
+          console.log("createUserWithEmailAndPassword failed...", "Fetch error:", err);
+          onFailure();
         }
       }).catch((err) => {
-        this.logError(["firebase.auth().currentUser.getToken(true) failed...", "Firebase error:", err]);
+        console.log("firebase.auth().currentUser.getToken(true) failed...", "Firebase error:", err);
         onFailure(err.code);
       });
     })
     .catch((err) => {
-      this.logError(["firebase.auth().createUserWithEmailAndPassword failed...", "Firebase error:", err]);
+      console.log("firebase.auth().createUserWithEmailAndPassword failed...", "Firebase error:", err);
       onFailure(err.code);
     });
   }
 
   /**
     *   Create a Dwolla customer for this user
+    *   params: firstName, lastName, address, city, state, zip, dob, ssn
+    *   tacked on params: email, phone, token
     *   -----------------------------------------------------------------------
   **/
-  createDwollaCustomer() {
+  createDwollaCustomer(params, onSuccess, onFailure) {
+    params.email = this.decryptedEmail;
+    params.phone = this.decryptedPhone;
+    params.token = this.token;
+    console.log("createDwollaCustomer was invoked with params:", params);
     try {
-      fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/customer/create", {method: "POST", body: JSON.stringify({ token: this.token })})
+      fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/customer/create", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
-        this.logSuccess(["createDwollaCustomer succeeded...", "Response data:", responseData]);
+        if (!responseData.errorMessage) {
+          console.log("createDwollaCustomer succeeded...", "Response data:", responseData);
+          onSuccess();
+        } else {
+          console.log("createDwollaCustomer failed...", "Error:", responseData.errorMessage);
+          onFailure();
+        }
       })
       .done();
     } catch (err) {
-      this.logError(["createDwollaCustomer failed...", "Lambda error:", err]);
+      console.log("createDwollaCustomer failed...", "Try/catch threw:", err);
+      onFailure();
     }
   }
 
@@ -233,7 +254,7 @@ export default class User {
   getNativeContacts() {
     Contacts.getAll((err, contacts) => {
       if (err && err.type === 'permissionDenied') {
-        this.logError(["Error getting contacts", err]);
+        console.log("Error getting contacts", err);
       } else {
         const _this = this;
 
@@ -265,11 +286,11 @@ export default class User {
       .then((response) => response.json())
       .then((responseData) => {
         if (!responseData.errorMessage) cb({ fundingSource: responseData });
-        else this.logError(["Error getting funding source", responseData.errorMessage]);
+        else console.log("Error getting funding source", responseData.errorMessage);
       })
       .done();
     } catch (err) {
-      this.logError(["Error getting funding source", err]);
+      console.log("Error getting funding source", err);
     }
   }
 
@@ -285,20 +306,41 @@ export default class User {
       .then((response) => response.json())
       .then((responseData) => {
         if (!responseData.errorMessage) cb({ decryptedEmail: responseData.email, decryptedPhone: responseData.phone });
-        else this.logError(["Error decrypting user", responseData.errorMessage]);
+        else console.log("Error decrypting user", responseData.errorMessage);
       })
       .done();
     } catch (err) {
-      this.logError(["Error decrypting user", err]);
+      console.log("Error decrypting user", err);
     }
   }
+
+  /**
+    *   Get a new IAV token for this user
+    *   params: token
+    *   -----------------------------------------------------------------------
+  **/
+  getIAVToken(params, updateViaRedux) {
+    try {
+      fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/utils/getIAV", {method: "POST", body: JSON.stringify(params)})
+      .then((response) => response.json())
+      .then((responseData) => {
+        if (!responseData.errorMessage)
+          updateViaRedux({ IAVToken: responseData.token });
+        else
+          console.log("Error getting IAV token:", responseData.errorMessage);
+      })
+      .done();
+    } catch (err) {
+      console.log("Error getting IAV token:", responseData.errorMessage);
+    }
+  };
 
   /**
     *   Cycle this user's access and refresh tokens
     *   -----------------------------------------------------------------------
   **/
   refresh() {
-    this.logInfo(["Refreshing access token..."]);
+    console.log("Refreshing access token...")
     // TODO (...)
   }
 
@@ -325,8 +367,10 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
-          if (res.fundingSource) { res.fundingSource.active = true; this.getFundingSource(cb); }
-          updateViaRedux(res);
+          if (res.fundingSource) {
+            res.fundingSource.active = true;
+            this.getFundingSource((fs) => updateViaRedux(fs));
+          }
         }
       },
       {
@@ -346,6 +390,8 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
+          if (res.onboarding_state === "bank")
+            this.getIAVToken({ token: this.token }, updateViaRedux);
           updateViaRedux({ appFlags: res });
         }
       },
@@ -374,7 +420,11 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
-          updateViaRedux({ IAVToken: res.iav.body.token });
+          try {
+            updateViaRedux({ IAVToken: res.iav.body.token, fundingSourceAdded: res.fundingSourceAdded });
+          } catch (err) {
+            console.log("Error in IAV listener:", err);
+          }
         }
       }
     ];
@@ -392,24 +442,6 @@ export default class User {
     for (var e in this.endpoints) {
       Firebase.stopListeningTo(this.endpoints[e]);
     }
-  }
-
-  logError(strings) {
-    if (!this.enableLogs) return;
-    console.log("%c----------------------------------------------------------------------", "color:red;font-weight:900");
-    for (var s in strings) console.log(strings[s]);
-    console.log("%c----------------------------------------------------------------------", "color:red;font-weight:900");
-  }
-  logInfo(strings) {
-    if (!this.enableLogs) return;
-    console.log("%c----------------------------------------------------------------------", "color:purple;font-weight:900");
-    for (var s in strings) console.log(strings[s]);
-    console.log("%c----------------------------------------------------------------------", "color:purple;font-weight:900");
-  }
-  logSuccess(strings) {
-    if (!this.enableLogs) return;
-    console.log("%c----------------------------------------------------------------------", "color:green;font-weight:900");
-    for (var s in strings) console.log(strings[s]);
-    console.log("%c----------------------------------------------------------------------", "color:green;font-weight:900");
+    this.endpoints = null;
   }
 }

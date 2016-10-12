@@ -17,10 +17,9 @@ const dimensions = Dimensions.get('window');
 export default class LegalName extends React.Component {
   constructor(props) {
     super(props);
-    this.initialName = "Brady Sheridan";
     this.state = {
-      name: this.initialName,
-      valid: Validate.name(this.initialName)
+      name: this.props.name,
+      valid: Validate.name(this.props.name)
     };
   }
 

@@ -30,7 +30,7 @@ export default class City extends React.Component {
       for (var ii in currComponent.types) {
         const currType = currComponent.types[ii];
         if (currType === "locality") location.city = currComponent.long_name;
-        else if (currType === "administrative_area_level_1") location.state = currComponent.long_name;
+        else if (currType === "administrative_area_level_1") location.state = currComponent.short_name;
         else if (currType === "country") location.country = currComponent.long_name;
       }
     }

@@ -75,7 +75,6 @@ export default class LoginModal extends React.Component {
         transparent={true}
         visible={this.props.modalVisible}>
 
-        { /* Inputs */ }
         <StickyTextInput
           updateEmail={(v) => this.updateEmail(v)}
           updatePassword={(v) => this.updatePassword(v)}

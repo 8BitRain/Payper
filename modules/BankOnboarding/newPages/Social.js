@@ -35,13 +35,20 @@ export default class Social extends React.Component {
   }
 
   handleSubmit() {
-    for (var i in this.values)
+    for (var i in this.values) {
       if (this.values[i] === "") {
         this.setState({ submitText: "Enter all 4 digits" });
         return;
       }
-    this.props.induceState({ ssn: this.values.join("") });
-    this.props.nextPage();
+    }
+
+    this.setState({ submitText: "Just a moment..." });
+    this.props.induceState({ ssn: this.values.join("") }, (success) => {
+      this.setState({ submitText: "Continue" });
+    });
+
+    // Pagination is handled in BankOnboardingView.createDwollaCustomer()'s
+    // callback functions
   }
 
   render() {

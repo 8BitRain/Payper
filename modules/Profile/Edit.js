@@ -264,7 +264,7 @@ class Edit extends React.Component {
               }, 750);
 
               // Persist update to Redux store
-              this.props.currentUser.update({ decryptedEmail: this.input });
+              this.props.currentUser.update({ decryptedPhone: this.input });
 
               // Trigger re-render of options list
               this.props.updateOptionsDataSource();

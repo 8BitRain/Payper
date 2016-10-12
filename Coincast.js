@@ -55,7 +55,7 @@ export default class Coincast extends React.Component {
           <Scene key="root" hideNavBar hideTabBar>
 
             { /* Main app flow */ }
-            <Scene key="SplashViewContainer" type="replace" component={SplashViewContainer} title="SplashViewContainer" />
+            <Scene initial key="SplashViewContainer" type="replace" component={SplashViewContainer} title="SplashViewContainer" />
             <Scene key="SignInViewContainer" type="replace" component={SignInViewContainer} title="SignInViewContainer" panHandlers={null} />
             <Scene key="CreateAccountViewContainer" type="replace" component={CreateAccountViewContainer} title="CreateAccountViewContainer" panHandlers={null} />
             <Scene key="BankOnboardingContainer" type="replace" component={BankOnboardingContainer} title="BankOnboardingContainer" panHandlers={null} />
@@ -67,7 +67,7 @@ export default class Coincast extends React.Component {
             <Scene key="BetaLandingScreenView" type="replace" component={BetaLandingScreenView} title="BetaLandingScreenView" panHandlers={null} />
 
             { /* Test */ }
-            <Scene initial key="UserOnboardingViewContainer" type="replace" component={UserOnboardingViewContainer} title="UserOnboardingViewContainer" panHandlers={null} />
+            <Scene key="UserOnboardingViewContainer" type="replace" component={UserOnboardingViewContainer} title="UserOnboardingViewContainer" panHandlers={null} />
             <Scene key="NewBankOnboardingView" type="replace" component={NewBankOnboardingView} title="NewBankOnboardingView" panHandlers={null} />
 
           </Scene>
