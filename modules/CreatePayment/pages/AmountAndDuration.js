@@ -137,7 +137,7 @@ class AmountAndDuration extends React.Component {
               placeholderTextColor={colors.lightGrey}
               placeholder={"0"}
               defaultValue={this.state.duration}
-              autoCorrect={false} autoFocus autoCapitalize={"none"}
+              autoCorrect={false} autoFocus={false} autoCapitalize={"none"}
               keyboardType={"number-pad"}
               onChangeText={(text) => this._handleChangeText({ amount: this.state.amount, duration: text })}
               onKeyPress={(e) => this._handleKeyPress(e)} />

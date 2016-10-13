@@ -180,9 +180,9 @@ class Payments extends React.Component {
   }
 
   _renderRow(payment) {
-    // console.log("Rendering payment:");
-    // console.log("---------------------------");
-    // console.log(payment);
+    console.log("Rendering payment:");
+    console.log("---------------------------");
+    console.log(payment);
 
     var paymentInfo = {
       amount: payment.amount,
@@ -262,16 +262,6 @@ class Payments extends React.Component {
         );
       break;
       default:
-        // if (!payment.confirmed) return(
-        //   <PendingConfirmation
-        //     user={user}
-        //     payment={paymentInfo}
-        //     showButtons={payment.flow == "outgoing"}
-        //     confirmPayment={() => this._confirmPayment(payment)}
-        //     rejectPayment={() => this._rejectPayment(payment)}
-        //     showMenu={() => this._showMenu(payment)} />
-        // );
-        // else
         return(
           <View style={{ justifyContent: 'center', alignItems: 'center', height: 70, backgroundColor: colors.alertRed }}>
             <Text style={{ fontSize: 16, fontFamily: 'Roboto', color: colors.white }}>

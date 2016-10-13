@@ -177,7 +177,7 @@ class UserSelection extends React.Component {
           placeholder={"Who are you paying or requesting?"}
           selectionColor={this.state.textInputColor}
           onChangeText={(query) => this._filterContacts(query)}
-          autoFocus={false} autoCorrect={false}
+          autoFocus autoCorrect={false}
           enablesReturnKeyAutomatically={true}
           keyboardType={"default"}
           returnKeyType={"done"} />

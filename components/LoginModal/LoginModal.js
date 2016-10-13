@@ -65,8 +65,8 @@ export default class LoginModal extends React.Component {
       break;
       case "lambda/exited-before-completion":
       case "lambda/timed-out":
+      default:
         errorMessage = "There was an issue on our end (🙄)\nPlease try again";
-      break;
     }
     alert(errorMessage);
     this.setState({ loading: false, errorMessage: errorMessage });

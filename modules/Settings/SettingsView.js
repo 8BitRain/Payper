@@ -82,7 +82,7 @@ class Settings extends React.Component {
 
             { /* Render unseen notifications indicator */
               (options.rowTitle == "Notifications")
-                ? (this.props.currentUser.appFlags.numUnseenNotifications == 0 || !this.props.currentUser.appFlags.numUnseenNotifications)
+                ? (this.props.currentUser.appFlags && this.props.currentUser.appFlags.numUnseenNotifications === 0 || !this.props.currentUser.appFlags.numUnseenNotifications)
                   ? null
                   : <View style={[notificationStyles.numNotificationsWrap, { bottom: 6 }]}>
                       <Text style={notificationStyles.numNotificationsText}>{ this.props.currentUser.appFlags.numUnseenNotifications }</Text>
