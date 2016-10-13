@@ -87,9 +87,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
-    padding: 5,
-    paddingLeft: 8,
-    paddingRight: 8,
+    paddingBottom: 5,
+    paddingTop: 4,
   },
 
   // Right (out) flow tab
@@ -106,9 +105,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
-    padding: 5,
-    paddingLeft: 8,
-    paddingRight: 8,
+    paddingBottom: 5,
+    paddingTop: 4,
   },
 
   // Flow tab inner text
