@@ -1,4 +1,4 @@
-const StateList = {
+const STATE_LIST = {
    'Alabama':'AL',
    'Alaska':'AK',
    'Arizona':'AZ',
@@ -51,4 +51,8 @@ const StateList = {
    'Wyoming':'WY'
 };
 
-module.exports = StateList;
+function getShortenedStateName(state) {
+  return STATE_LIST[state];
+}
+
+module.exports = getShortenedStateName;

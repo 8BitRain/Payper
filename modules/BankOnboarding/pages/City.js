@@ -5,6 +5,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import Entypo from 'react-native-vector-icons/Entypo';
 
 // Helpers
+import getShortenedStateName from '../../../helpers/ShortenedStateList';
 import * as Validate from '../../../helpers/Validate';
 import * as StringMaster5000 from '../../../helpers/StringMaster5000';
 
