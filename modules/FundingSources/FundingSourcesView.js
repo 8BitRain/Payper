@@ -30,8 +30,8 @@ class FundingSources extends React.Component {
   componentWillReceiveProps(nextProps) {
     console.log("<FundingSources /> will receive props", nextProps);
     this.setState({
-      modalVisible: (this.state.modalVisible && nextProps.currentUser.fundingSource) ? false : this.state.modalVisible,
-      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows((nextProps.currentUser.fundingSource) ? [nextProps.currentUser.fundingSource] : [])
+      modalVisible: (this.state.modalVisible && nextProps.currentUser.bankAccount) ? false : this.state.modalVisible,
+      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows((nextProps.currentUser.bankAccount) ? [nextProps.currentUser.bankAccount] : [])
     });
   }
 
@@ -83,7 +83,7 @@ class FundingSources extends React.Component {
           underlayColor={colors.richBlack}
           activeOpacity={0.7}
           onPress={() => {
-            if (this.props.currentUser.fundingSource) {
+            if (this.props.currentUser.bankAccount) {
               Alert.message({
                 title: "Unfortunately...",
                 message: "Payper doesn't currently support multiple bank accounts. This feature will be available soon!",

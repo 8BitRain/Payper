@@ -139,12 +139,8 @@ const styles = StyleSheet.create({
 
   // "Pending Confirmation"
   alert: {
-    backgroundColor: colors.alertRed,
-    borderRadius: 4,
-    padding: 10,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
 
   // Confirm and reject buttons wrapper
@@ -173,6 +169,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.white,
     textAlign: 'center',
+    padding: 10,
+    borderRadius: 4,
+    borderWidth: 1,
+    width: dimensions.width * 0.9,
+    overflow: 'hidden'
   },
 
 });

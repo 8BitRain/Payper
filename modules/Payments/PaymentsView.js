@@ -36,18 +36,18 @@ class Payments extends React.Component {
 
   cancelPayment(payment) {
     // TODO: Optimistically delete payment card
-    // Cancel payment
     Lambda.cancelPayment({ token: this.props.currentUser.token, payment_id: payment.pid });
   }
 
   confirmPayment(payment) {
     // TODO: Optimistically mark payment card as confirmed
-    // TODO: Confirm payment
+    Lambda.confirmPayment({ token: this.props.currentUser.token, payment_id: payment.pid });
+
   }
 
   rejectPayment(payment) {
     // TODO: Optimistically delete payment card
-    // TODO: Reject payment
+    Lambda.rejectPayment({ token: this.props.currentUser.token, payment_id: payment.pid });
   }
 
   _showMenu(payment) {

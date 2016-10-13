@@ -59,11 +59,9 @@ class PendingInvite extends React.Component {
 
         { /* Pending invite message */ }
         <View style={styles.bottom}>
-          <View style={[styles.alert, { width: dimensions.width * 0.9, padding: 10, backgroundColor: colors.alertGreen }]}>
-            <Text style={styles.confirmText}>
-              { "We invited " + this.props.user.name.split(" ")[0] + " to join Payper. Payments will commence when they create an account." }
-           </Text>
-          </View>
+          <Text style={[styles.confirmText, { borderColor: colors.alertGreen, backgroundColor: colors.alertGreen }]}>
+            { "We invited " + this.props.user.name.split(" ")[0] + " to join Payper. Payments will commence when they create an account." }
+          </Text>
         </View>
       </View>
     );

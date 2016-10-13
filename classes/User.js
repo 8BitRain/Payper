@@ -285,7 +285,7 @@ export default class User {
       fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
-        if (!responseData.errorMessage) cb({ fundingSource: responseData });
+        if (!responseData.errorMessage) cb({ bankAccount: responseData });
         else console.log("Error getting funding source", responseData.errorMessage);
       })
       .done();
