@@ -68,8 +68,7 @@ const datePickerStyles = StyleSheet.create({
     fontWeight: '100',
     fontSize: 16,
     color: colors.white
-  },
-  dateTouchBody: { alignSelf: 'center' }
+  }
 });
 
 const styles = StyleSheet.create({
