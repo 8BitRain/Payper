@@ -1,5 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { View } from 'react-native';
+import {
+  Image,
+  View,
+} from 'react-native';
 import Tabs from 'react-native-tabs';
 import DefaultRenderer from './DefaultRenderer';
 import Actions from './Actions';
@@ -12,6 +15,9 @@ class TabBar extends Component {
     navigationState: PropTypes.object,
     tabIcon: PropTypes.any,
     onNavigate: PropTypes.func,
+    unmountScenes: PropTypes.bool,
+    pressOpacity: PropTypes.number,
+    hideOnChildTabs: PropTypes.bool,
   };
 
   constructor(props, context) {
@@ -25,7 +31,11 @@ class TabBar extends Component {
         `No action is defined for name=${el.props.name} ` +
         `actions: ${JSON.stringify(Object.keys(Actions))}`);
     }
-    Actions[el.props.name]();
+    if (typeof el.props.onPress === 'function') {
+      el.props.onPress();
+    } else {
+      Actions[el.props.name]();
+    }
   }
 
   renderScene(navigationState) {
@@ -40,9 +50,27 @@ class TabBar extends Component {
 
   render() {
     const state = this.props.navigationState;
+    const selected = state.children[state.index];
 
-    const hideTabBar = deepestExplicitValueForKey(state, 'hideTabBar');
+    const hideTabBar = this.props.unmountScenes ||
+      deepestExplicitValueForKey(state, 'hideTabBar') ||
+      (this.props.hideOnChildTabs && deepestExplicitValueForKey(selected, 'tabs'));
 
+    const contents = (
+      <Tabs
+        style={state.tabBarStyle}
+        selectedIconStyle={state.tabBarSelectedItemStyle}
+        iconStyle={state.tabBarIconContainerStyle}
+        onSelect={this.onSelect} {...state}
+        selected={selected.sceneKey}
+        pressOpacity={this.props.pressOpacity}
+      >
+        {state.children.filter(el => el.icon || this.props.tabIcon).map(el => {
+          const Icon = el.icon || this.props.tabIcon;
+          return <Icon {...this.props} {...el} />;
+        })}
+      </Tabs>
+    );
     return (
       <View
         style={{ flex: 1 }}
@@ -53,16 +81,11 @@ class TabBar extends Component {
           renderScene={this.renderScene}
         />
         {!hideTabBar && state.children.filter(el => el.icon).length > 0 &&
-          <Tabs
-            style={[{ backgroundColor: 'white' }, state.tabBarStyle]}
-            onSelect={this.onSelect} {...state}
-            selected={state.children[state.index].sceneKey}
-          >
-            {state.children.filter(el => el.icon || this.props.tabIcon).map(el => {
-              const Icon = el.icon || this.props.tabIcon;
-              return <Icon {...this.props} {...el} />;
-            })}
-          </Tabs>
+          (state.tabBarBackgroundImage ? (
+            <Image source={state.tabBarBackgroundImage}>
+              {contents}
+            </Image>
+          ) : contents)
         }
       </View>
     );

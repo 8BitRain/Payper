@@ -91,10 +91,11 @@ class SplashView extends React.Component {
   }
 
   componentWillMount() {
-    NetInfo.isConnected.fetch().then((connected) => {
-      if (connected) this._onConnect();
-      else this._onDisconnect();
-    });
+    // NetInfo.isConnected.fetch().then((connected) => {
+    //   if (connected) this._onConnect();
+    //   else this._onDisconnect();
+    // });
+    this._onConnect();
   }
 
   render() {

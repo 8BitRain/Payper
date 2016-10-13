@@ -7,6 +7,7 @@
  *
  */
 import { assert } from './Util';
+import * as ActionConst from './ActionConst';
 
 function getStateFromScenes(route, scenes, props) {
   const getters = [];
@@ -30,6 +31,12 @@ function getStateFromScenes(route, scenes, props) {
   return result;
 }
 
+function getSceneKey(parent, key, position, sceneKey) {
+  return [parent, key, position, sceneKey]
+    .filter(v => typeof(v) !== 'undefined' && v !== null)
+    .join('_');
+}
+
 export function getInitialState(
   route: {string: any},
   scenes: {string: any},
@@ -37,12 +44,12 @@ export function getInitialState(
   props = {}
 ) {
   // eslint-disable-next-line no-unused-vars
-  const { key, style, type, ...parentProps } = props;
+  const { parent, key, style, type, ...parentProps } = props;
   if (!route.children) {
     return {
       ...scenes.rootProps,
       ...route,
-      key: `${position}_${route.sceneKey}`,
+      key: getSceneKey(parent, key, position, route.sceneKey),
       ...parentProps,
       ...getStateFromScenes(route, scenes, props),
     };
@@ -57,12 +64,19 @@ export function getInitialState(
   });
 
   if (route.tabs) {
-    res.children = route.children.map((r, i) => getInitialState(scenes[r], scenes, i, props));
+    res.children = route.children.map(
+      (r, i) => getInitialState(scenes[r], scenes, i, { ...props, parentIndex: position }));
     res.index = index;
   } else {
     res.children = [getInitialState(scenes[route.children[index]], scenes, 0, props)];
     res.index = 0;
   }
+
+  // Copy props to the children of tab routes
+  if (route.type === ActionConst.JUMP) {
+    res.children = res.children.map(child => ({ ...props, ...child }));
+  }
+
   res.key = `${position}_${res.key}`;
   return res;
 }

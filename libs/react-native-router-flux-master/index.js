@@ -1,5 +1,7 @@
 import Actions from './src/Actions';
+import * as ActionConst from './src/ActionConst';
 import DefaultRenderer from './src/DefaultRenderer';
+import TabbedView from './src/TabbedView';
 import Modal from './src/Modal';
 import NavBar from './src/NavBar';
 import Reducer from './src/Reducer';
@@ -12,6 +14,7 @@ import Util from './src/Util';
 
 export {
   Actions,
+  ActionConst,
   DefaultRenderer,
   Modal,
   NavBar,
@@ -20,6 +23,7 @@ export {
   Scene,
   Switch,
   TabBar,
+  TabbedView,
   getInitialState,
   Util,
 };

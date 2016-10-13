@@ -8,14 +8,32 @@
  */
 import { assert } from './Util';
 import Scene from './Scene';
-export const JUMP_ACTION = 'jump';
-export const PUSH_ACTION = 'push';
-export const REPLACE_ACTION = 'replace';
-export const POP_ACTION2 = 'back';
-export const POP_ACTION = 'BackAction';
-export const REFRESH_ACTION = 'refresh';
-export const RESET_ACTION = 'reset';
-export const FOCUS_ACTION = 'focus';
+import * as ActionConst from './ActionConst';
+
+export const ActionMap = {
+  jump: ActionConst.JUMP,
+  push: ActionConst.PUSH,
+  replace: ActionConst.REPLACE,
+  back: ActionConst.BACK,
+  BackAction: ActionConst.BACK_ACTION,
+  popAndReplace: ActionConst.POP_AND_REPLACE,
+  popTo: ActionConst.POP_TO,
+  refresh: ActionConst.REFRESH,
+  reset: ActionConst.RESET,
+  focus: ActionConst.FOCUS,
+  pushOrPop: ActionConst.PUSH_OR_POP,
+  [ActionConst.JUMP]: ActionConst.JUMP,
+  [ActionConst.PUSH]: ActionConst.PUSH,
+  [ActionConst.REPLACE]: ActionConst.REPLACE,
+  [ActionConst.BACK]: ActionConst.BACK,
+  [ActionConst.BACK_ACTION]: ActionConst.BACK_ACTION,
+  [ActionConst.POP_AND_REPLACE]: ActionConst.POP_AND_REPLACE,
+  [ActionConst.POP_TO]: ActionConst.POP_TO,
+  [ActionConst.REFRESH]: ActionConst.REFRESH,
+  [ActionConst.RESET]: ActionConst.RESET,
+  [ActionConst.FOCUS]: ActionConst.FOCUS,
+  [ActionConst.PUSH_OR_POP]: ActionConst.PUSH_OR_POP,
+};
 
 function filterParam(data) {
   if (data.toString() !== '[object Object]') {
@@ -30,18 +48,11 @@ function filterParam(data) {
 }
 
 const reservedKeys = [
-  POP_ACTION,
-  POP_ACTION2,
-  REFRESH_ACTION,
-  REPLACE_ACTION,
-  JUMP_ACTION,
-  PUSH_ACTION,
-  FOCUS_ACTION,
-  RESET_ACTION,
   'create',
   'callback',
   'iterate',
   'current',
+  ...Object.keys(ActionMap),
 ];
 
 function getInheritProps(props) {
@@ -67,12 +78,12 @@ class Actions {
     assert(key, 'unique key should be defined ');
     assert(
       reservedKeys.indexOf(key) === -1,
-      `'${key}' is not allowed as key name. Reserved keys: [${reservedKeys.join(', ')}]`,
+      `'${key}' is not allowed as key name. Reserved keys: [${reservedKeys.join(', ')}]`
     );
     const { children, component, ...staticProps } = root.props;
-    let type = root.props.type || (parentProps.tabs ? JUMP_ACTION : PUSH_ACTION);
+    let type = root.props.type || (parentProps.tabs ? ActionConst.JUMP : ActionConst.PUSH);
     if (type === 'switch') {
-      type = JUMP_ACTION;
+      type = ActionConst.JUMP;
     }
     const inheritProps = getInheritProps(parentProps);
     const componentProps = component ? { component: wrapBy(component) } : {};
@@ -97,11 +108,25 @@ class Actions {
       ...componentProps,
     };
     let list = children || [];
+    const normalized = [];
     if (!(list instanceof Array)) {
       list = [list];
     }
-    const condition = el => (!el.props.component && !el.props.children &&
-    (!el.props.type || el.props.type === REFRESH_ACTION));
+    list.forEach((item) => {
+      if (item) {
+        if (item instanceof Array) {
+          item.forEach(it => {
+            normalized.push(it);
+          });
+        } else {
+          normalized.push(item);
+        }
+      }
+    });
+    list = normalized; // normalize the list of scenes
+
+    const condition = el => (!el.props.component && !el.props.children && !el.props.onPress &&
+    (!el.props.type || ActionMap[el.props.type] === ActionConst.REFRESH));
     // determine sub-states
     let baseKey = root.key;
     let subStateParent = parentProps.key;
@@ -110,14 +135,16 @@ class Actions {
     if (list.length) {
       res.children = list.map(c => this.iterate(c, res, refs, wrapBy).key);
     } else {
-      assert(component, `component property is not set for key=${key}`);
+      if (!staticProps.onPress) {
+        assert(component, `component property is not set for key=${key}`);
+      }
       // wrap scene if parent is "tabs"
       if (parentProps.tabs) {
         const innerKey = `${res.key}_`;
         baseKey = innerKey;
         subStateParent = res.key;
         const inner = { ...res, name: key, key: innerKey,
-          sceneKey: innerKey, type: PUSH_ACTION, parent: res.key };
+          sceneKey: innerKey, type: ActionConst.PUSH, parent: res.key };
         refs[innerKey] = inner;
         res.children = [innerKey];
         delete res.component;
@@ -126,7 +153,7 @@ class Actions {
     }
     // process substates
     for (const el of subStates) {
-      refs[el.key] = { key: el.key, name: el.key, ...el.props, type: REFRESH_ACTION,
+      refs[el.key] = { key: el.key, name: el.key, ...el.props, type: ActionConst.REFRESH,
         base: baseKey, parent: subStateParent };
       if (this[el.key]) {
         console.log(`Key ${el.key} is already defined!`);
@@ -134,7 +161,7 @@ class Actions {
       this[el.key] =
         (props = {}) => {
           assert(this.callback, 'Actions.callback is not defined!');
-          this.callback({ key: el.key, type: REFRESH_ACTION, ...filterParam(props) });
+          this.callback({ key: el.key, type: ActionConst.REFRESH, ...filterParam(props) });
         };
     }
     if (this[key]) {
@@ -150,20 +177,24 @@ class Actions {
     return res;
   }
 
+  popTo(props = {}) {
+    return this.callback({ ...filterParam(props), type: ActionConst.POP_TO });
+  }
+
   pop(props = {}) {
-    return this.callback({ ...filterParam(props), type: POP_ACTION });
+    return this.callback({ ...filterParam(props), type: ActionConst.BACK_ACTION });
   }
 
   jump(props = {}) {
-    return this.callback({ ...filterParam(props), type: JUMP_ACTION });
+    return this.callback({ ...filterParam(props), type: ActionConst.JUMP });
   }
 
   refresh(props = {}) {
-    return this.callback({ ...filterParam(props), type: REFRESH_ACTION });
+    return this.callback({ ...filterParam(props), type: ActionConst.REFRESH });
   }
 
   focus(props = {}) {
-    return this.callback({ ...filterParam(props), type: FOCUS_ACTION });
+    return this.callback({ ...filterParam(props), type: ActionConst.FOCUS });
   }
 
   create(scene:Scene, wrapBy = x => x) {
@@ -174,4 +205,5 @@ class Actions {
   }
 }
 
+export { Actions as ActionsTest };
 export default new Actions();
