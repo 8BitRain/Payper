@@ -40,7 +40,7 @@ export default class LoginModal extends React.Component {
 
   login() {
     this.setState({ loading: true });
-    this.User.loginWithEmail(this.state.loginParams, () => this.onLoginSuccess(), () => this.onLoginFailure());
+    this.User.loginWithEmail(this.state.loginParams, () => this.onLoginSuccess(), (errCode) => this.onLoginFailure(errCode));
   }
 
   onLoginSuccess() {
@@ -60,11 +60,15 @@ export default class LoginModal extends React.Component {
       case "auth/invalid-email":
         errorMessage = "Invalid email address";
       break;
+      case "auth/too-many-requests":
+        errorMessage = "Too many login attempts. Please try again later"
+      break;
       case "lambda/exited-before-completion":
       case "lambda/timed-out":
         errorMessage = "There was an issue on our end (🙄)\nPlease try again";
       break;
     }
+    alert(errorMessage);
     this.setState({ loading: false, errorMessage: errorMessage });
   }
 
