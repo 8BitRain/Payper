@@ -1,343 +1,212 @@
+// Dependencies
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, WebView, Linking, Modal} from "react-native";
-import Button from "react-native-button";
-import {Scene, Reducer, Router, Switch, TabBar, Schema, Actions} from 'react-native-router-flux';
-import * as Animations from "../../helpers/animations";
-import * as Validators from "../../helpers/validators";
-import * as Firebase from "../../services/Firebase";
-import * as Async from "../../helpers/Async";
+import { View, Text, TouchableHighlight, StyleSheet, Animated, Easing, Dimensions, StatusBar, Image } from "react-native";
+import { Actions } from 'react-native-router-flux';
 import Entypo from 'react-native-vector-icons/Entypo';
-import Header from '../../components/Header/Header.js';
-/*import WebViewBridge from 'react-native-webview-bridge';*/
+import dismissKeyboard from 'react-native-dismiss-keyboard';
 
-//components
-import BasicInfo from "./Pages/BasicInfo";
-import Address from "./Pages/Address";
-import Dob from "./Pages/Dob";
-import SSN from "./Pages/SSN";
-import Iav from "./Pages/Iav";
-import VerifyMicrodeposit from "./Pages/VerifyMicrodeposit";
-import Comfort from "./Pages/Comfort"
+// Helpers
+import * as Headers from '../../helpers/Headers';
 
-//styles
-import backgrounds from "./styles/backgrounds";
-import containers from "./styles/containers";
-import typography from "./styles/typography";
+// Components
+import Header from '../../components/Header/Header';
+import Comfort from './pages/Comfort';
+import LegalName from './pages/LegalName';
+import ZIPCode from './pages/ZIPCode';
+import City from './pages/City';
+import Street from './pages/Street';
+import DateOfBirth from './pages/DateOfBirth';
+import Social from './pages/Social';
+import IAV from './pages/IAV';
+
+// Stylesheets
 import colors from '../../styles/colors';
+const dimensions = Dimensions.get('window');
 
-
-import Loading from "../../components/Loading/Loading";
-var Mixpanel = require('react-native-mixpanel');
-
-class LoadingView extends React.Component {
+export default class BankOnboardingView extends React.Component {
   constructor(props) {
     super(props);
-
+    this.offsetX = new Animated.Value(0);
+    this.logoAspectRatio = 377 / 568;
     this.state = {
-      modalVisible: false
-    }
+      animating: false,
+      pageIndex: 0,
+      headerHeight: 0,
+      closeButtonVisible: true,
+      skipCityPage: true,
+      name: null,
+      zip: null,
+      street: null,
+      city: null,
+      state: null,
+      dob: null,
+      ssn: null
+    };
   }
 
-  render() {
-
-    return(
-      <Loading
-        complete={this.state.doneLoading}
-        msgSuccess={"Welcome!"}
-        msgError={""}
-        msgLoading={"Loading"}
-        success={true}
-        successDestination={() => Actions.MainViewContainer()}
-        errorDestination={() => Actions.BankOnboardingContainer()} />
-    );
-  }
-}
-
-class RetryModal extends React.Component {
-  constructor(props) {
-    super(props);
-
-    // Props for animation
-    this.animationProps = {
-      fadeAnim: new Animated.Value(0) // init opacity 0
-    };
-    // Props to be passed to the header
-    this.headerProps = {
-      types: {
-        "paymentIcons": false,
-        "circleIcons": false,
-        "settingsIcon": false,
-        "closeIcon": true
-      },
-      index: 0,
-      title: "Retry Status",
-      numCircles: 0
-    };
-
-    this.callbackClose = function() { this.props.callbackClose() };
+  induceState(substate, cb) {
+    this.setState(substate, (cb) => {
+      if (substate.ssn) this.createDwollaCustomer(cb);
+    });
   }
 
-  render() {
-    return(
-      <View style={[containers.container, backgrounds.email, containers.quo]}>
-          <View style={{marginTop: 100}}>
-          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 0}]}>Please double check the information you provided us. Closing this screen will take you back to the input fields. </Text>
-          </View>
-            <Header callbackClose={() => {this.props.dispatchSetPageX(0, "backward", null); this.props.dispatchSetLoading(false); this.props.dispatchSetFullSSN(true); this.props.dispatchSetRetry(false); }} headerProps={this.headerProps} />
-      </View>
-    )
-  }
-}
-
-class DocumentModal extends React.Component {
-  constructor(props) {
-    super(props);
-
-    // Props for animation
-    this.animationProps = {
-      fadeAnim: new Animated.Value(0) // init opacity 0
-    };
-    // Props to be passed to the header
-    this.headerProps = {
-      types: {
-        "paymentIcons": false,
-        "circleIcons": false,
-        "settingsIcon": false,
-        "closeIcon": true
-      },
-      index: 0,
-      title: "Additional Documents Required",
-      numCircles: 0
-    };
-
-
-    this.callbackClose = function() { this.props.callbackClose() };
+  createDwollaCustomer(cb) {
+    var nameBuffer = this.state.name.split(" ");
+    this.props.currentUser.createDwollaCustomer({
+      firstName: nameBuffer.splice(0, 1).join(""),
+      lastName: nameBuffer.join(" "),
+      zip: this.state.zip,
+      address: this.state.street,
+      city: this.state.city,
+      state: this.state.state,
+      dob: this.state.dob.year + "-" + this.state.dob.month + "-" + this.state.dob.date,
+      ssn: this.state.ssn
+    },
+    (cb) => {
+      console.log("createDwollaCustomer success callback was invoked...");
+      this.nextPage();
+      if (typeof cb === 'function') cb(true);
+    },
+    (cb) => {
+      console.log("createDwollaCustomer failure callback was invoked...");
+      alert("Something went wrong on our end 🙄\nPlease try again");
+      if (typeof cb === 'function') cb(false);
+    });
   }
 
-  render() {
-    return(
-      <View style={[containers.container, backgrounds.email, containers.quo]}>
-          <View style={{marginTop: 100}}>
-          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 0}]}>Our partner, Dwolla, needs extra information to verify your identity. Please check your email (Payper) for the next steps.</Text>
-          </View>
-            <Header callbackClose={() => {Actions.MainViewContainer()}} headerProps={this.headerProps} />
-      </View>
-    );
+  nextPage() {
+    if (this.state.animating) return;
+    this.setState({ animating: true });
+    dismissKeyboard();
+
+    this.setState({ pageIndex: this.state.pageIndex + 1 }, () => {
+      if ((this.state.pageIndex - 1) === 0) this.toggleCloseButton();
+    });
+
+    Animated.timing(this.offsetX, {
+      toValue: this.offsetX._value - dimensions.width,
+      duration: 200,
+      easing: Easing.elastic(0),
+    }).start(() => this.setState({ animating: false }));
   }
-}
 
-class SuspendedModal extends React.Component {
-  constructor(props) {
-    super(props);
+  prevPage() {
+    if (this.state.animating) return;
+    this.setState({ animating: true });
+    dismissKeyboard();
 
-    // Props for animation
-    this.animationProps = {
-      fadeAnim: new Animated.Value(0) // init opacity 0
-    };
+    this.setState({ pageIndex: this.state.pageIndex - 1 }, () => {
+      if (this.state.pageIndex === 0) this.toggleCloseButton();
+    });
 
-    this.callbackClose = function() { this.props.callbackClose() };
-    // Props to be passed to the header
-    this.headerProps = {
-      types: {
-        "paymentIcons": false,
-        "circleIcons": false,
-        "settingsIcon": false,
-        "closeIcon": true
-      },
-      index: 0,
-      title: "Suspended Account",
-      numCircles: 0
-    };
+    Animated.timing(this.offsetX, {
+      toValue: this.offsetX._value + dimensions.width,
+      duration: 200,
+      easing: Easing.elastic(0),
+    }).start(() => this.setState({ animating: false }));
+  }
 
+  toggleCloseButton() {
+    this.setState({ closeButtonVisible: !this.state.closeButtonVisible });
   }
 
   render() {
     return(
-      <View style={[containers.container, backgrounds.email, containers.quo]}>
-          <View style={{marginTop: 100}}>
-          <Text style={[typography.general, typography.fontSizeTitle, typography.marginSides, {marginTop: 0}]}>It seems you''re an outlaw, please contact support.</Text>
-          </View>
-            <Header callbackClose={() => {Actions.LandingScreenContainer()}} headerProps={this.headerProps} />
-      </View>
-    );
-  }
-}
+      <View style={{ flex: 1.0 }}>
+        <StatusBar barStyle='light-content' />
 
-class BankOnboardingView extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log("Constructing <BankOnboardingView /> with props:", this.props);
-  }
-
-  render() {
-    if(this.props.startIav == '' && this.props.startMain == false && !this.props.retry && !this.props.document && !this.props.suspended){
-        switch(this.props.currentPagex){
-          case 0:
-            if(this.props.loading){
-              return(
-                <View style={{flex: 1, backgroundColor: colors.accent}}>
-                <Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
-                 <Loading
-                   complete={this.props.done_loading}
-                   msgSuccess={""}
-                   msgError={"There was an error on our end. Sorry about that ^_^;"}
-                   msgLoading={"One moment..."}
-                   success={true}
-                   successDestination={() => {}}
-                   errorDestination={() => {}}
-                 />
-                </Modal>
-                </View>
-              )
-            } else {
-              return(
-                <Comfort
-                  dispatchSetPageX={this.props.dispatchSetPageX}/>
-              )
-            }
-
-            break;
-          case 1:
-            return(
-              <BasicInfo
-                newUser={this.props.newUser}
-                dwollaCustomer={this.props.dwollaCustomer}
-                dispatchSetFirstName={this.props.dispatchSetFirstName}
-                dispatchSetLastName={this.props.dispatchSetLastName}
-                dispatchSetEmail={this.props.dispatchSetEmail}
-                dispatchSetPhone={this.props.dispatchSetPhone}
-                dispatchSetPageX={this.props.dispatchSetPageX}
-                dispatchSetCPhoneValidations={(text) => this.props.dispatchSetCPhoneValidations(Validators.validatePhone(text))}
-                dispatchSetCEmailValidations={(text) => this.props.dispatchSetCEmailValidations(Validators.validateEmail(text))}
-                dispatchSetCFirstNameValidations={(text) => this.props.dispatchSetCFirstNameValidations(Validators.validateName(text))}
-                dispatchSetCLastNameValidations={(text) => this.props.dispatchSetCLastNameValidations(Validators.validateName(text))}
-                dispatchSetBasicInfoValidations={(firstName, lastName, email, phone) => this.props.dispatchSetBasicInfoValidations(Validators.validateBasicInfo(firstName, lastName, email, phone))}
-                basicInfoValidations={this.props.basicInfoValidations}
-                cemailValidations={this.props.cemailValidations}
-                cfirstNameValidations={this.props.cfirstNameValidations}
-                clastNameValidations={this.props.clastNameValidations}
-                cphoneValidations={this.props.cphoneValidations}
-                callbackClose={Actions.landingView}
-              />
-            )
-            break;
-          case 2:
-            return(
-              <Address
-                dispatchSetAddress={this.props.dispatchSetAddress}
-                dispatchSetCity={this.props.dispatchSetCity}
-                dispatchSetState={this.props.dispatchSetState}
-                dispatchSetZip={this.props.dispatchSetZip}
-                dispatchSetPageX={this.props.dispatchSetPageX}
-                callbackClose={Actions.landingView}
-                dispatchSetAddressValidations={(text) => this.props.dispatchSetAddressValidations(Validators.validateAddress(text))}
-                dispatchSetCityValidations={(text) => this.props.dispatchSetCityValidations(Validators.validateCity(text))}
-                dispatchSetZipValidations={(text) => this.props.dispatchSetZipValidations(Validators.validatePostalCode(text))}
-                addressValidations = {this.props.addressValidations}
-                cityValidations = {this.props.cityValidations}
-                zipValidations = {this.props.zipValidations}
-                dwollaCustomer = {this.props.dwollaCustomer}
-              />
-            )
-            break;
-          case 3:
-            return(
-              <Dob
-                dispatchSetDob={this.props.dispatchSetDob}
-                dispatchSetPageX={this.props.dispatchSetPageX}
-                dwollaCustomer={this.props.dwollaCustomer}
-                callbackClose={Actions.landingView}
-              />
-            )
-            break;
-          case 4:
-            return(
-              <View style={{flex: 1}}>
-                <SSN
-                  dispatchSetSSN={this.props.dispatchSetSSN}
-                  dispatchSetPageX={this.props.dispatchSetPageX}
-                  dispatchSetSSNValidations={(text) => this.props.dispatchSetSSNValidations(Validators.validateSSN(text))}
-                  ssnValidations = {this.props.ssnValidations}
-                  callbackClose={Actions.landingView}
-                  dwollaCustomer={this.props.dwollaCustomer}
-                  newUser={this.props.newUser}
-                  dispatchSetIav={this.props.dispatchSetIav}
-                  listen={(params) => this.props.listen(params)}
-                  stopListening={this.props.stopListening}
-                  activeFirebaseListeners={this.props.activeFirebaseListeners}
-                  dispatchSetLoading={this.props.dispatchSetLoading}
-                  loading={this.props.loading}
-                  done_loading={this.props.done_loading}
-                  fullSSN={this.props.fullSSN} />
-              </View>
-            )
-            break;
-        }
-        //<OnBoardingSummaryTest  firebase_token = {this.props.firebase_token} startIav={this.props.startIav} dispatchSetIav={this.props.dispatchSetIav} dispatchSetFirebaseToken={this.props.dispatchSetFirebaseToken}/>
-    }
-    if (this.props.startIav != "" && this.props.startMain == false && this.props.startVerifyMicroDeposit == false){
-      return(
-        <View style={{flex: 1}}>
-        <Modal animationType={"slide"} transparent={true} visible={this.props.loading}>
-         <Loading
-           complete={this.props.done_loading}
-           msgSuccess={""}
-           msgError={"There was an error on our end. Sorry about that ^_^;"}
-           msgLoading={"One moment..."}
-           success={true}
-           successDestination={() => {}}
-           errorDestination={() => {}}
-         />
-        </Modal>
-        <Iav
-          listen={this.props.listen}
-          stopListening={this.props.stopListening}
-          activeFirebaseListeners={this.props.activeFirebaseListeners}
-          newUser={this.props.newUser}
-          startIav={this.props.startIav}
-          startMain={this.props.startMain}
-          dispatchSetLoading={this.props.dispatchSetLoading}
-          dispatchSetDoneLoading={this.props.dispatchSetDoneLoading}
-          loading={this.props.loading}
-          done_loading={this.props.done_loading}
-          toggleModal={this.props.toggleModal} />
+        { /* Header */ }
+        <View style={styles.headerWrap} onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}>
+          <Image source={require('../../assets/images/logo.png')} style={{ height: this.state.headerHeight * 0.4, width: (this.state.headerHeight * 0.4) * this.logoAspectRatio }} />
         </View>
-      )
-    }
-    if(this.props.startMain == true){
-      //Actions.MainViewContainer()
-      return(
-        <LoadingView />
 
-      )
-    }
-    if(this.props.retry){
-      return (
-        <RetryModal dispatchSetRetry={this.props.dispatchSetRetry}
-        dispatchSetPageX={this.props.dispatchSetPageX}
-        dispatchSetFullSSN={this.props.dispatchSetFullSSN}
-        dispatchSetLoading={this.props.dispatchSetLoading}
-        />
-      )
-    }
-    if(this.props.document){
-      return (
-        <DocumentModal dispatchSetDocument={this.props.dispatchSetDocument}/>
-      )
-    }
-    if(this.props.suspended){
-      return (
-        <SuspendedModal dispatchSetSuspended={this.props.dispatchSetSuspended}/>
-      )
-    }
-    if (this.props.startVerifyMicroDeposit == true){
-      return(
-          <VerifyMicrodeposit
-          newUser={this.props.newUser}
-          />
-      )
-    }
+        { /* Cancel or back button */
+          (!this.props.displayCloseButton && this.state.pageIndex === 0)
+            ? null
+            : <TouchableHighlight
+                style={styles.backButton}
+                activeOpacity={0.8}
+                underlayColor={'transparent'}
+                onPress={() => (this.state.closeButtonVisible) ? (this.props.closeModal) ? this.props.closeModal() : console.log("BankOnboardingView was not supplied with a closeModal function") : this.prevPage()}>
+                <Entypo color={colors.white} size={30} name={(this.state.closeButtonVisible) ? "cross" : "chevron-thin-left"} />
+              </TouchableHighlight> }
+
+        { /* Skip button */
+          (this.state.skipCityPage && this.state.pageIndex === 6 || !this.state.skipCityPage && this.state.pageIndex === 7)
+            ? <TouchableHighlight
+                style={styles.skipButton}
+                activeOpacity={0.8}
+                underlayColor={'transparent'}
+                onPress={() => Actions.MainViewContainer()}>
+                <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
+                  Skip
+                </Text>
+              </TouchableHighlight>
+            : null }
+
+        { /* Inner content */ }
+        <Animated.View style={[styles.allPanelsWrap, { marginLeft: this.offsetX, width: dimensions.width * ((this.state.skipCityPage) ? 7 : 8) }]}>
+          <View style={{ flex: 1.0, width: dimensions.width }}>
+            <Comfort nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+          </View>
+          <View style={{ flex: 1.0, width: dimensions.width }}>
+            <LegalName nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} name={this.props.currentUser.first_name + " " + this.props.currentUser.last_name} />
+          </View>
+          <View style={{ flex: 1.0, width: dimensions.width }}>
+            <ZIPCode nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+          </View>
+
+          { (this.state.skipCityPage)
+              ? null
+              : <View style={{ flex: 1.0, width: dimensions.width }}>
+                  <City nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+                </View> }
+
+          <View style={{ flex: 1.0, width: dimensions.width }}>
+            <Street city={this.state.city} state={this.state.state} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+          </View>
+          <View style={{ flex: 1.0, width: dimensions.width }}>
+            <DateOfBirth nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+          </View>
+          <View style={{ flex: 1.0, width: dimensions.width }}>
+            <Social nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+          </View>
+          <View style={{ flex: 1.0, width: dimensions.width }}>
+            <IAV induceState={substate => this.induceState(substate)} currentUser={this.props.currentUser} />
+          </View>
+        </Animated.View>
+      </View>
+    );
+  };
+}
+
+const styles = StyleSheet.create({
+  allPanelsWrap: {
+    flexDirection: 'row',
+    flex: 0.85
+  },
+  headerWrap: {
+    flexDirection: 'row',
+    flex: 0.15,
+    width: dimensions.width,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 20
+  },
+  backButton: {
+    position: 'absolute',
+    top: 20, left: 0,
+    height: dimensions.height * 0.15,
+    width: dimensions.height * 0.15,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  skipButton: {
+    position: 'absolute',
+    top: 20, right: 0,
+    height: dimensions.height * 0.15,
+    width: dimensions.height * 0.15,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
-};
-
-export default BankOnboardingView;
+});

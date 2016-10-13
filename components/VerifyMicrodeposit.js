@@ -5,14 +5,14 @@ import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 're
 import Entypo from 'react-native-vector-icons/Entypo';
 
 
-import * as Async from '../../../helpers/Async';
-import * as Init from '../../../_init';
+import * as Async from '../helpers/Async';
+import * as Init from '../_init';
 
 //styles
 import backgrounds from "../styles/backgrounds";
 import containers from "../styles/containers";
 import typography from "../styles/typography";
-import colors from '../../../styles/colors';
+import colors from '../styles/colors';
 
 
 

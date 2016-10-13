@@ -11,7 +11,7 @@ import Email from './pages/Email';
 import Password from './pages/Password';
 import Phone from './pages/Phone';
 import Summary from './pages/Summary';
-import BankOnboardingView from '../BankOnboarding/NewBankOnboardingView';
+import BankOnboardingView from '../BankOnboarding/BankOnboardingView';
 
 // Stylesheets
 import colors from '../../styles/colors';

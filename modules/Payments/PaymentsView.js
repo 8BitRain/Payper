@@ -11,9 +11,9 @@ import * as Lambda from '../../services/Lambda';
 // Components
 import Footer from '../../components/Footer/Footer';
 import IAVWebView from '../../components/IAVWebView/IAVWebView';
-import CreatePayment from '../../modules/CreatePayment/CreatePaymentViewContainer';
-import BankOnboarding from '../../modules/BankOnboarding/NewBankOnboardingView';
-import VerifyMicrodeposit from '../../modules/BankOnboarding/Pages/VerifyMicrodeposit';
+import CreatePayment from '../../modules/CreatePayment/CreatePaymentView';
+import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingView';
+import VerifyMicrodeposit from '../../components/VerifyMicrodeposit';
 
 // Payment card components
 import Active from '../../components/PaymentCards/Active';
@@ -176,6 +176,10 @@ class Payments extends React.Component {
   }
 
   _renderRow(payment) {
+    console.log("Rendering payment:");
+    console.log("---------------------------");
+    console.log(payment);
+
     var paymentInfo = {
       amount: payment.amount,
       purpose: payment.purpose,
@@ -326,8 +330,7 @@ class Payments extends React.Component {
         <View
           pointerEvents="box-none"
           style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, left: 0, right: 0, height: dimensions.height * 0.2}}>
-          <Footer
-            callbackPay={() => this._toggleModal()} />
+          <Footer callbackPay={() => this._toggleModal()} />
         </View>
 
         { /* Modal containing create payment panel */ }

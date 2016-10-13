@@ -140,7 +140,8 @@ export default class Main extends React.Component {
               currentPage={this.state.currentPage}
               activeFilter={this.state.activeFilter}
               outgoingPayments={this.state.outgoingPayments}
-              incomingPayments={this.state.incomingPayments} />
+              incomingPayments={this.state.incomingPayments}
+              setActiveFilter={(newFilter) => this.setActiveFilter(newFilter)}/>
           </View>
         </View>
       </SideMenu>

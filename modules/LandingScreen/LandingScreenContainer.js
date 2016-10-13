@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import LandingScreenView from './LandingScreenView';
 import * as setInMain from '../Main/MainState';
 
-export default connect(
-  state => ({ currentUser: state.getIn(['main', 'currentUser']) }),
-  dispatch => ({ setUser(user) { dispatch(setInMain.user(user)); } })
-)(LandingScreenView);
+function mapStateToProps(state) {
+  return { currentUser: state.getIn(['main', 'currentUser']) };
+}
+
+export default connect(mapStateToProps)(LandingScreenView);

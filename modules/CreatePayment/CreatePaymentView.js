@@ -35,10 +35,6 @@ class CreatePaymentView extends React.Component {
     };
   }
 
-  componentWillMount() {
-    this.props.setToken(this.props.currentUser.token);
-  }
-
   _induceState(options) {
     if (options.selectedContacts) this.setState({ selectedContacts: options.selectedContacts });
     if (options.amount && options.duration) this.setState({ amount: options.amount, duration: options.duration });
@@ -99,7 +95,7 @@ class CreatePaymentView extends React.Component {
         { /* Header */ }
         <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
           <Header
-            callbackClose={() => { this.props.reset(); this.props.toggleModal(); }}
+            callbackClose={() => this.props.toggleModal()}
             callbackBack={() => this._prevPage()}
             numUnseenNotifications={this.props.numUnseenNotifications}
             headerProps={Headers.get({ header: "createPayment", index: this.state.pageIndex })} />

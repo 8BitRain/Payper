@@ -12,7 +12,7 @@ import * as Init from '../../_init';
 // Components
 import FundingSource from '../../components/FundingSource/FundingSource.js';
 import IAVWebView from '../../components/IAVWebView/IAVWebView';
-import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingContainer';
+import BankOnboardingView from '../../modules/BankOnboarding/BankOnboardingView';
 
 // Custom stylesheets
 import colors from "../../styles/colors";
