@@ -97,7 +97,7 @@ export default class UserOnboardingView extends React.Component {
 
   render() {
     return(
-      <View style={{ flex: 1.0 }}>
+      <View style={{ flex: 1.0, backgroundColor: colors.richBlack }}>
         <StatusBar barStyle='light-content' />
 
         { /* Header */ }

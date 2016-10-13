@@ -57,7 +57,7 @@ export default class City extends React.Component {
           listViewDisplayed={true}
           fetchDetails={true}
           onPress={(data, details) => this.setCity(details)}
-          query={{ key: 'AIzaSyDosLKF0_VpVu8f5gYo2Pon60Ii8XpMZ_8', language: 'en', types: '(cities)' }}
+          query={{ key: 'AIzaSyDosLKF0_VpVu8f5gYo2Pon60Ii8XpMZ_8', language: 'en', types: '(cities)', components: 'country:us' }}
           nearbyPlacesAPI={'GooglePlacesSearch'}
           GooglePlacesSearchQuery={{ rankby: 'distance' }} />
 
