@@ -64,7 +64,7 @@ export default class BankOnboardingView extends React.Component {
     },
     (cb) => {
       console.log("createDwollaCustomer success callback was invoked...");
-      this.nextPage();
+      setTimeout(() => this.nextPage(), 500);
       if (typeof cb === 'function') cb(true);
     },
     (cb) => {
@@ -121,7 +121,7 @@ export default class BankOnboardingView extends React.Component {
         </View>
 
         { /* Cancel or back button */
-          (!this.props.displayCloseButton && this.state.pageIndex === 0)
+          (!this.props.displayCloseButton && this.state.pageIndex === 0 || this.state.skipCityPage && this.state.pageIndex === 6 || !this.state.skipCityPage && this.state.pageIndex === 7)
             ? null
             : <TouchableHighlight
                 style={styles.backButton}

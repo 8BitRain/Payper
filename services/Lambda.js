@@ -201,22 +201,18 @@ export function getIavToken(data, callback){
 /**
   *   Given payment_id and token, cancel a payment
 **/
-export function cancelPayment(options) {
+export function cancelPayment(params) {
+  console.log("params", params);
   try {
-    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/payments/cancel", {method: "POST", body: JSON.stringify(options)})
+    fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/payments/cancel", {method: "POST", body: JSON.stringify(params)})
     .then((response) => response.json())
     .then((responseData) => {
-      if (!responseData.errorMessage) {
-        console.log("Cancel payment Lambda response:", responseData);
-        if (typeof callback == 'function') callback(responseData);
-      } else {
-        console.log("Error cancelling payment:", responseData.errorMessage);
-        if (typeof callback == 'function') callback(false);
-      }
+      if (!responseData.errorMessage) console.log("Cancel payment Lambda response:", responseData);
+      else console.log("Error cancelling payment:", responseData.errorMessage);
     })
     .done();
   } catch (err) {
-    console.log(err);
+    console.log("Error cancelling payment:", err);
   }
 };
 
