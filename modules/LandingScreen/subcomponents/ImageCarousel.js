@@ -18,7 +18,7 @@ export default class ImageCarousel extends React.Component {
         imgHeight *= imgWidth;
     return(
       <Carousel hideIndicators={true} animate={true} delay={2750} width={dimensions.width}>
-        <View style={[carousel.container, container.image]}>
+        <View style={{ justifyContent: 'center' }}>
           <Dummy
             out
             style={{padding: 30}}
@@ -43,7 +43,7 @@ export default class ImageCarousel extends React.Component {
             }}
             callbackMenu={() => alert("I'm just a dummy!")} />
         </View>
-        <View style={[carousel.container, container.image]}>
+        <View style={{ justifyContent: 'center' }}>
           <Dummy
             out
             style={{padding: 30}}
@@ -68,7 +68,7 @@ export default class ImageCarousel extends React.Component {
             }}
             callbackMenu={() => alert("I'm just a dummy!")} />
         </View>
-        <View style={[carousel.container, container.image]}>
+        <View style={{ justifyContent: 'center' }}>
           <Dummy
             out
             style={{padding: 30}}
@@ -93,7 +93,7 @@ export default class ImageCarousel extends React.Component {
             }}
             callbackMenu={() => alert("I'm just a dummy!")} />
         </View>
-        <View style={[carousel.container, container.image]}>
+        <View style={{ justifyContent: 'center' }}>
           <Dummy
             out
             style={{padding: 30}}

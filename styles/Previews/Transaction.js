@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: dimensions.width * 0.9,
     overflow: 'hidden'
-  },
+  }
 
 });
 
