@@ -78,7 +78,6 @@ class FundingSources extends React.Component {
   render() {
     return (
       <View style={{flex: 1, backgroundColor: colors.richBlack}}>
-
         { /* 'Add a new bank account' button */ }
         <TouchableHighlight
           underlayColor={colors.richBlack}
