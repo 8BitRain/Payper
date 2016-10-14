@@ -50,27 +50,14 @@ class SplashView extends React.Component {
 
   _attemptReconnect() {
     if (this.state.reconnecting) return;
-
-    this.setState({
-      reconnecting: true,
-      reconnectMessage: "Attempting connection...",
-    });
-
+    this.setState({ reconnecting: true, reconnectMessage: "Attempting connection..." });
     this._rotateRefreshIcon();
-    var interval = setInterval(() => this._rotateRefreshIcon(), 900);
-
-    NetInfo.isConnected.fetch().then(isConnected => {
-      clearInterval(interval);
-      if (isConnected) this._onConnect();
-      else this._onDisconnect();
-    });
+    this.rotateInterval = setInterval(() => this._rotateRefreshIcon(), 900);
   }
 
   _onConnect() {
-    this.setState({ connected: true });
-
-    // Extend scope
     const _this = this;
+    this.setState({ connected: true });
 
     // Check beta status
     Async.get('betaStatus', (val) => {
@@ -91,11 +78,17 @@ class SplashView extends React.Component {
   }
 
   componentWillMount() {
-    // NetInfo.isConnected.fetch().then((connected) => {
-    //   if (connected) this._onConnect();
-    //   else this._onDisconnect();
-    // });
-    this._onConnect();
+    const _this = this;
+    this.ConnectivityListener = NetInfo.isConnected.addEventListener('change', (isConnected) => {
+      if (_this.state.reconnecting && !_this.state.connected)
+        clearInterval(_this.rotationInterval);
+      if (isConnected) _this._onConnect();
+      else _this._onDisconnect();
+    });
+  }
+
+  componentWillUnmount() {
+    this.ConnectivityListener.remove();
   }
 
   render() {
