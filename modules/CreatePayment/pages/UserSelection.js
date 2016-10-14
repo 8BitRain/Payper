@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { Dimensions, StyleSheet, View, Text, TextInput, TouchableHighlight, ListView, RecyclerViewBackedScrollView, Animated, Easing, DeviceEventEmitter } from 'react-native';
+import { Dimensions, StyleSheet, View, Text, TextInput, TouchableHighlight, ListView, RecyclerViewBackedScrollView, Animated, Easing, Keyboard } from 'react-native';
 
 // Helpers
 import * as Async from '../../../helpers/Async';
@@ -48,8 +48,8 @@ class UserSelection extends React.Component {
 
   componentDidMount() {
     // Subscribe to keyboard events
-    _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
-    _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+    _keyboardWillShowSubscription = Keyboard.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
+    _keyboardWillHideSubscription = Keyboard.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
   }
 
   componentWillUnmount() {

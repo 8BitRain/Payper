@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TextInput, Animated, Easing, StyleSheet, Dimensions, DeviceEventEmitter, TouchableHighlight } from 'react-native';
+import { View, Text, TextInput, Animated, Easing, StyleSheet, Dimensions, Keyboard, TouchableHighlight } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 // Components
@@ -37,8 +37,8 @@ class Purpose extends React.Component {
 
   componentDidMount() {
     // Subscribe to keyboard events
-    _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
-    _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+    _keyboardWillShowSubscription = Keyboard.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
+    _keyboardWillHideSubscription = Keyboard.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
   }
 
   componentWillUnmount() {

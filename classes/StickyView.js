@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Animated, Easing, DeviceEventEmitter } from 'react-native';
+import { View, Animated, Easing, Keyboard } from 'react-native';
 
 export default class StickyView extends React.Component {
   constructor(props) {
@@ -8,8 +8,8 @@ export default class StickyView extends React.Component {
   }
 
   componentDidMount() {
-    _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
-    _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+    _keyboardWillShowSubscription = Keyboard.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
+    _keyboardWillHideSubscription = Keyboard.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
   }
 
   componentWillUnmount() {

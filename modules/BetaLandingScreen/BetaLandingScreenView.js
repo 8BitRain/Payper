@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, Animated, Image, Dimensions, Linking, StatusBar, StyleSheet, TouchableHighlight, Modal, TextInput, DeviceEventEmitter } from 'react-native';
+import { View, Text, Animated, Image, Dimensions, Linking, StatusBar, StyleSheet, TouchableHighlight, Modal, TextInput, Keyboard } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Entypo from 'react-native-vector-icons/Entypo'
 import colors from '../../styles/colors';
@@ -42,8 +42,8 @@ class BetaLandingScreenView extends React.Component {
 
   componentDidMount() {
     // Subscribe to keyboard events
-    _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
-    _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+    _keyboardWillShowSubscription = Keyboard.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
+    _keyboardWillHideSubscription = Keyboard.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
   }
 
   componentWillUnmount() {

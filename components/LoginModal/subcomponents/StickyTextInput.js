@@ -1,7 +1,7 @@
 // Dependencies
 import React from 'react';
 import { Actions } from 'react-native-router-flux';
-import { View, Text, TextInput, TouchableHighlight, StyleSheet, Dimensions, Animated, Easing, DeviceEventEmitter } from 'react-native';
+import { View, Text, TextInput, TouchableHighlight, StyleSheet, Dimensions, Animated, Easing, Keyboard } from 'react-native';
 import { VibrancyView } from 'react-native-blur';
 import Entypo from 'react-native-vector-icons/Entypo';
 import colors from '../../../styles/colors';
@@ -67,8 +67,8 @@ export default class StickyTextInput extends React.Component {
   }
 
   componentDidMount() {
-    _keyboardWillShowSubscription = DeviceEventEmitter.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
-    _keyboardWillHideSubscription = DeviceEventEmitter.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+    _keyboardWillShowSubscription = Keyboard.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
+    _keyboardWillHideSubscription = Keyboard.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
   }
 
   componentWillUnmount() {
