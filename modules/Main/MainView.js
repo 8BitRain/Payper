@@ -1,6 +1,7 @@
 // Dependencies
 import React from 'react';
 import { View, Text, StatusBar, Dimensions, ListView } from 'react-native';
+import Mixpanel from 'react-native-mixpanel';
 import SideMenu from 'react-native-side-menu';
 import * as Headers from '../../helpers/Headers';
 
@@ -95,17 +96,28 @@ export default class Main extends React.Component {
   }
 
   changePage(newPage) {
-    var params = (newPage === 'payments')
+    if (newPage === this.state.currentPage) return;
+
+    // Track page change in Mixpanel
+    Mixpanel.trackWithProperties("Page Switch", {
+      from: this.state.currentPage,
+      to: newPage
+    });
+
+    // Determine which header to render
+    var headerParams = (newPage === 'payments')
       ? { header: newPage,
           setActiveFilterToIncoming: () => this.setState({ activeFilter: "incoming" }),
           setActiveFilterToOutgoing: () => this.setState({ activeFilter: "outgoing" }) }
       : { header: newPage };
 
+    // Trigger re-render
     this.setState({
       currentPage: newPage,
-      headerProps: Headers.get(params)
+      headerProps: Headers.get(headerParams)
     });
 
+    // Close side menu
     this.toggleSideMenu();
   }
 
@@ -137,6 +149,7 @@ export default class Main extends React.Component {
           { /* Inner content */ }
           <View style={{ flex: (dimensions.height < 667) ? 0.88 : 0.9 }}>
             <InnerContent {...this.props}
+              previousPage={this.state.previousPage}
               currentPage={this.state.currentPage}
               activeFilter={this.state.activeFilter}
               outgoingPayments={this.state.outgoingPayments}
