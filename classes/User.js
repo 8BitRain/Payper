@@ -227,7 +227,7 @@ export default class User {
     params.email = this.decryptedEmail;
     params.phone = this.decryptedPhone;
     params.token = this.token;
-    console.log("createDwollaCustomer was invoked with params:", params);
+
     try {
       fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/customer/create", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
@@ -237,13 +237,13 @@ export default class User {
           onSuccess();
         } else {
           console.log("createDwollaCustomer failed...", "Error:", responseData.errorMessage);
-          onFailure();
+          onFailure(resposeDate.errorMessage);
         }
       })
       .done();
     } catch (err) {
       console.log("createDwollaCustomer failed...", "Try/catch threw:", err);
-      onFailure();
+      onFailure(err);
     }
   }
 
