@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Dimensions, StatusBar, Animated, Easing } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import Mixpanel from 'react-native-mixpanel';
 const { State: TextInputState } = TextInput;
 
 // Helpers
@@ -31,8 +32,12 @@ class CreatePaymentView extends React.Component {
       offsetX: new Animated.Value(0),
       selectedContacts: {},
       amount: "",
-      duration: "",
+      duration: ""
     };
+  }
+
+  componentWillMount() {
+    Mixpanel.timeEvent('Payment Onboarding');
   }
 
   _induceState(options) {
@@ -65,6 +70,12 @@ class CreatePaymentView extends React.Component {
   }
 
   _sendPayment(options) {
+    Mixpanel.trackWithProperties('Payment Onboarding', {
+      completed: true,
+      cancelled: false,
+      cancelledOnPage: null
+    });
+
     options.paymentInfo.sender = (options.paymentInfo.type == "request") ? options.user : this.props.currentUser;
     options.paymentInfo.recip = (options.paymentInfo.type == "request") ? this.props.currentUser : options.user;
 
@@ -86,6 +97,16 @@ class CreatePaymentView extends React.Component {
     }
   }
 
+  handleCancel() {
+    Mixpanel.trackWithProperties('Payment Onboarding', {
+      completed: false,
+      cancelled: true,
+      cancelledOnPage: this.pages[this.state.pageIndex]
+    });
+
+    this.props.toggleModal();
+  }
+
   render() {
     return (
       <View style={{flex: 1.0}}>
@@ -95,7 +116,7 @@ class CreatePaymentView extends React.Component {
         { /* Header */ }
         <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
           <Header
-            callbackClose={() => this.props.toggleModal()}
+            callbackClose={() => this.handleCancel()}
             callbackBack={() => this._prevPage()}
             numUnseenNotifications={this.props.numUnseenNotifications}
             headerProps={Headers.get({ header: "createPayment", index: this.state.pageIndex })} />
