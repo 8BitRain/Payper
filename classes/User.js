@@ -138,7 +138,7 @@ export default class User {
     firebase.auth().signOut();
     this.stopListening();
     this.destroy();
-    Actions.LandingScreenContainer();
+    Actions.LandingScreenViewContainer();
   }
 
   /**

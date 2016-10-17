@@ -110,7 +110,7 @@ export default class UserOnboardingView extends React.Component {
           style={styles.backButton}
           activeOpacity={0.8}
           underlayColor={'transparent'}
-          onPress={() => (this.state.pageIndex === 0) ? Actions.LandingScreenContainer() : this.prevPage()}>
+          onPress={() => (this.state.pageIndex === 0) ? Actions.LandingScreenViewContainer() : this.prevPage()}>
           <Entypo color={colors.white} size={30} name={(this.state.pageIndex === 0) ? "cross" : "chevron-thin-left"} />
         </TouchableHighlight>
 

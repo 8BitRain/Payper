@@ -124,13 +124,25 @@ class Payments extends React.Component {
   }
 
   _archiveCompletePayments(options) {
+
+    console.log("_archiveCompletePayments was invoked...");
+    console.log("this.props.current")
+
+    let payments;
+
     // Determine which payment set to look through
-    var payments = (this.props.activeFilter === "outgoing") ? this.props.outgoingPayments._dataBlob.s1 : this.props.incomingPayments._dataBlob.s1;
+    if (this.props.currentUser.paymentFlow)
+      payments = (this.props.activeFilter === "outgoing") ? this.props.currentUser.paymentFlow.out : this.props.currentUser.paymentFlow.in;
+    else
+      payments = [];
+
+    console.log("payments\n", payments);
+
 
     // If a payment is complete, animate it out, then archive it
     for (var p in payments) {
       const curr = payments[p];
-      if (curr.paymentsMade === curr.payments) {
+      if (curr.paymentsMade === Number.parseInt(curr.payments)) {
         Lambda.archivePayment({ payment_id: curr.pid, token: this.props.currentUser.token });
       }
     }

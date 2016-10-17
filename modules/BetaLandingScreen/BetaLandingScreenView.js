@@ -4,7 +4,6 @@ import { View, Text, Animated, Image, Dimensions, Linking, StatusBar, StyleSheet
 import { Actions } from 'react-native-router-flux';
 import Entypo from 'react-native-vector-icons/Entypo'
 import colors from '../../styles/colors';
-var Mixpanel = require('react-native-mixpanel');
 
 // Helpers
 import * as Validators from '../../helpers/validators';
@@ -97,7 +96,7 @@ class BetaLandingScreenView extends React.Component {
     // After a brief welcome message, take the user to the typical lander
     setTimeout(() => {
       this._toggleModal();
-      Actions.LandingScreenContainer();
+      Actions.LandingScreenViewContainer();
     }, 600);
 
     // Prevent the user from seeing this screen next time they load the app

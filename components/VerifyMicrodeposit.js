@@ -1,40 +1,24 @@
+// Dependencies
 import React from 'react';
-import {View, Text, TextInput, StyleSheet, Animated, Image, WebView, Linking} from "react-native";
-import Button from "react-native-button";
+import {View, Text, TextInput, StyleSheet, Animated, Image, WebView, Linking} from 'react-native';
 import {Scene, Reducer, Router, Switch, TabBar, Modal, Schema, Actions} from 'react-native-router-flux';
+import Button from 'react-native-button';
 import Entypo from 'react-native-vector-icons/Entypo';
 
-
+// Helpers
 import * as Async from '../helpers/Async';
 import * as Init from '../_init';
 
-//styles
-import backgrounds from "../styles/backgrounds";
-import containers from "../styles/containers";
-import typography from "../styles/typography";
+import backgrounds from '../styles/backgrounds';
+import containers from '../styles/containers';
+import typography from '../styles/typography';
 import colors from '../styles/colors';
-
-
-
-var Mixpanel = require('react-native-mixpanel');
 
 class VerifyMicrodeposit extends React.Component {
   constructor(props) {
     super(props);
-
     this.amount1;
     this.amount2;
-
-  }
-
-  componentWillMount() {
-    // Initialize the app
-    //listen
-  }
-
-  componentWillUnmount() {
-    // Disable Firebase listeners
-    //this.props.stopListening(this.props.activeFirebaseListeners);
   }
 
   submit(){
@@ -47,7 +31,7 @@ class VerifyMicrodeposit extends React.Component {
       console.log("microdeposits_sent?: " + microdeposits_sent);
       //Go to main screen
       Actions.MainViewContainer();
-      });
+    });
   }
 
   render() {
