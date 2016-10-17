@@ -73,7 +73,8 @@ class CreatePaymentView extends React.Component {
     Mixpanel.trackWithProperties('Payment Onboarding', {
       completed: true,
       cancelled: false,
-      cancelledOnPage: null
+      cancelledOnPage: null,
+      uid: this.props.currentUser.uid
     });
 
     options.paymentInfo.sender = (options.paymentInfo.type == "request") ? options.user : this.props.currentUser;
@@ -101,7 +102,8 @@ class CreatePaymentView extends React.Component {
     Mixpanel.trackWithProperties('Payment Onboarding', {
       completed: false,
       cancelled: true,
-      cancelledOnPage: this.pages[this.state.pageIndex]
+      cancelledOnPage: this.pages[this.state.pageIndex],
+      uid: this.props.currentUser.uid
     });
 
     this.props.toggleModal();

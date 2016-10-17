@@ -13,6 +13,14 @@ export default class IAVWebView extends React.Component {
     this.WEB_VIEW_REF = "IAVWebView";
   }
 
+  componentWillMount() {
+    console.log("IAV mounted");
+  }
+
+  componentWillUnmount() {
+    console.log("IAV unmounted");
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.IAVToken || nextProps.firebaseToken) {
       this.setState({

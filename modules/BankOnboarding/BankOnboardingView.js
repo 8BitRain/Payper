@@ -92,7 +92,13 @@ export default class BankOnboardingView extends React.Component {
     dismissKeyboard();
 
     this.setState({ pageIndex: this.state.pageIndex + 1 }, () => {
-      if ((this.state.pageIndex - 1) === 0) this.toggleCloseButton();
+      // Only show the close button on first page
+      if ((this.state.pageIndex - 1) === 0)
+        this.toggleCloseButton();
+
+      // We've reached the IAV page
+      if (this.state.skipCityPage && this.state.pageIndex === 6 || !this.state.skipCityPage && this.state.pageIndex === 7)
+        Mixpanel.timeEvent('IAV Onboarding');
     });
 
     Animated.timing(this.offsetX, {
@@ -129,9 +135,21 @@ export default class BankOnboardingView extends React.Component {
       errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
       uid: this.props.currentUser.uid
     });
+
     this.props.closeModal();
   }
 
+  handleSkipIAV() {
+    Mixpanel.trackWithProperties('IAV Onboarding', {
+      completed: true,
+      cancelled: true,
+      uid: this.props.currentUser.uid,
+      IAVToken: this.props.currentUser.IAVToken,
+      firebaseToken: this.props.currentUser.token
+    });
+
+    Actions.MainViewContainer();
+  }
 
   render() {
     return(
@@ -160,7 +178,7 @@ export default class BankOnboardingView extends React.Component {
                 style={styles.skipButton}
                 activeOpacity={0.8}
                 underlayColor={'transparent'}
-                onPress={() => Actions.MainViewContainer()}>
+                onPress={() => this.handleSkipIAV()}>
                 <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
                   Skip
                 </Text>
