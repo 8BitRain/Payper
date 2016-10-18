@@ -18,7 +18,7 @@ import City from './pages/City';
 import Street from './pages/Street';
 import DateOfBirth from './pages/DateOfBirth';
 import Social from './pages/Social';
-import IAV from './pages/IAV';
+import IAV from './pages/Iav';
 
 // Stylesheets
 import colors from '../../styles/colors';
