@@ -1,0 +1,29 @@
+{
+  "dev": {
+    "lambdaBaseURL": "https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/",
+    "firebaseCredentials": {
+      "apiKey": "AIzaSyAwRj_BiJNEvKJC7GQSm9rv9dF_mjIhuzM",
+      "authDomain": "coincast.firebaseapp.com",
+      "databaseURL": "https://coincast.firebaseio.com",
+      "storageBucket": "firebase-coincast.appspot.com"
+    }
+  },
+  "test": {
+    "lambdaBaseURL": "https://mey71fma7i.execute-api.us-east-1.amazonaws.com/test/",
+    "firebaseCredentials": {
+      "apiKey": "AIzaSyBf1KgcEUMpxoMyrfOWtcED0vtNydGtiU4",
+      "authDomain": "payper-test.firebaseapp.com",
+      "databaseURL": "https://payper-test.firebaseio.com",
+      "storageBucket": "payper-test.appspot.com"
+    }
+  },
+  "prod": {
+    "lambdaBaseURL": "https://mey71fma7i.execute-api.us-east-1.amazonaws.com/prod/",
+    "firebaseCredentials": {
+      "apiKey": "AIzaSyDXhfkB6gaKnhhRQafbKdn619JWzyepDkw",
+      "authDomain": "payper-prod.firebaseapp.com",
+      "databaseURL": "https://payper-prod.firebaseio.com",
+      "storageBucket": "payper-prod.appspot.com"
+    }
+  }
+}

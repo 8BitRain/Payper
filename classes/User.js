@@ -237,7 +237,7 @@ export default class User {
           onSuccess();
         } else {
           console.log("createDwollaCustomer failed...", "Error:", responseData.errorMessage);
-          onFailure(resposeDate.errorMessage);
+          onFailure(responseData.errorMessage);
         }
       })
       .done();

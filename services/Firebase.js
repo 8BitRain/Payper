@@ -13,16 +13,10 @@
 // Dependencies
 import * as firebase from 'firebase';
 import * as Timestamp from '../helpers/Timestamp';
+import config from '../config';
 
 // Initialize Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyAwRj_BiJNEvKJC7GQSm9rv9dF_mjIhuzM",
-  authDomain: "coincast.firebaseapp.com",
-  databaseURL: "https://coincast.firebaseio.com",
-  storageBucket: "firebase-coincast.appspot.com"
-};
-
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(config.test.firebaseCredentials);
 
 /**
   *   Fetches list of users and returns them via callback function
