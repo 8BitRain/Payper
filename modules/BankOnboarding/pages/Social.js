@@ -46,9 +46,6 @@ export default class Social extends React.Component {
     this.props.induceState({ ssn: this.values.join("") }, (success) => {
       this.setState({ submitText: "Continue" });
     });
-
-    // Pagination is handled in BankOnboardingView.createDwollaCustomer()'s
-    // callback functions
   }
 
   render() {

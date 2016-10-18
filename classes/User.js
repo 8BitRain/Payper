@@ -393,8 +393,10 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
-          if (res.onboarding_state === "bank")
+          if (res.onboarding_state === "bank") {
+            console.log("getting iav with token:", this.token);
             this.getIAVToken({ token: this.token }, updateViaRedux);
+          }
           updateViaRedux({ appFlags: res });
         }
       },
@@ -423,6 +425,8 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
+          console.log("IAV Listener's callback was invoked...");
+          console.log("res:", res);
           try {
             updateViaRedux({ IAVToken: res.iav.body.token, fundingSourceAdded: res.fundingSourceAdded });
           } catch (err) {

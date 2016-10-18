@@ -119,20 +119,18 @@ class BetaLandingScreenView extends React.Component {
     const { phoneInput, emailInput } = this.state;
 
     // Determine if the input is valid
-    var valid = (this.state.onboarding == "phone")
-      ? Validators.validatePhone(phoneInput).valid
-      : Validators.validateEmail(emailInput).valid;
+    var valid = Validators.validatePhone(phoneInput).valid
 
     // If valid, submit. If not, interpolate 'Continue' button color to red
     if (valid) {
-      this.setState({ buttonText: "Verifying..." });
+      this.setState({ buttonText: "Verifying your number..." });
       console.log("Submitting:", emailInput);
-      if (this.state.onboarding == "email") {
+      if (this.state.onboarding == "invite-verification") {
         Lambda.checkBetaSignups({ email: this.state.emailInput }, (res) => {
           if (res.match) this._onVerificationSuccess();
           else this._onVerificationFailure();
         });
-      } else if (this.state.onboarding == "phone") {
+      } else if (this.state.onboarding == "invite-request") {
         console.log({phoneNumber: this.state.phoneInput});
         Lambda.checkBetaInvites({ phoneNumber: this.state.phoneInput }, (res) => {
           if (res.match) this._onVerificationSuccess();
@@ -295,6 +293,11 @@ class BetaLandingScreenView extends React.Component {
         { /* Lighten status bar text */ }
         <StatusBar barStyle="light-content" />
 
+        { /* Logo */ }
+        <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
+          <Image source={require('../../assets/images/logo.png')} style={{ height: 80, width: (377 / 568) * 80 }} />
+        </View>
+
         { /* Title */ }
         <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
           <Text style={typography.subtitle}>Welcome to</Text>
@@ -313,19 +316,19 @@ class BetaLandingScreenView extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => { this.setState({ onboarding: "phone", buttonText: "Please enter a valid phone number." }); this._toggleModal(); }}>
+            onPress={() => { this.setState({ onboarding: "invite-verification", buttonText: "Please enter a valid phone number." }); this._toggleModal(); }}>
 
             <View style={[wrappers.button, { backgroundColor: 'rgba(255, 255, 255, 0.1)', }]}>
               { /* Text */ }
               <View style={{ flex: 0.9, paddingLeft: 15 }}>
                 <Text style={typography.button}>
-                  { "I was invited by a friend" }
+                  { "I received an invite" }
                 </Text>
               </View>
 
               { /* Chevron */ }
               <View style={{ flex: 0.1, paddingRight: 22.5 }}>
-                <Entypo style={icons.chevron} name={"user"} size={20} color={colors.accent} />
+                <Entypo style={icons.chevron} name={"key"} size={20} color={colors.accent} />
               </View>
             </View>
           </TouchableHighlight>
@@ -334,19 +337,19 @@ class BetaLandingScreenView extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => { this.setState({ onboarding: "email", buttonText: "Please enter a valid email address." }); this._toggleModal(); }}>
+            onPress={() => { this.setState({ onboarding: "invite-request", buttonText: "Please enter a valid phone number." }); this._toggleModal(); }}>
 
             <View style={[wrappers.button, { backgroundColor: 'rgba(255, 255, 255, 0.06)', }]}>
               { /* Text */ }
               <View style={{ flex: 0.9, paddingLeft: 15 }}>
                 <Text style={typography.button}>
-                  { "I requested an invite on getpayper.io" }
+                  { "Request an invite" }
                 </Text>
               </View>
 
               { /* Chevron */ }
               <View style={{ flex: 0.1, paddingRight: 22.5 }}>
-                <Entypo style={icons.chevron} name={"mouse"} size={20} color={colors.accent} />
+                <Entypo style={icons.chevron} name={"chevron-thin-right"} size={20} color={colors.accent} />
               </View>
             </View>
           </TouchableHighlight>
@@ -359,9 +362,7 @@ class BetaLandingScreenView extends React.Component {
           visible={this.state.modalVisible}
           onRequestClose={ () => alert("Closed modal") }>
 
-          { (this.state.onboarding == "email")
-              ? this._getEmailOnboarding()
-              : this._getPhoneOnboarding() }
+          { this._getPhoneOnboarding() }
 
         </Modal>
       </View>
@@ -436,14 +437,14 @@ const wrappers = StyleSheet.create({
 const typography = StyleSheet.create({
   title: {
     fontFamily: 'Roboto',
-    fontSize: 38,
+    fontSize: 36,
     fontWeight: '200',
     color: colors.accent,
     textAlign: 'center',
   },
   subtitle: {
     fontFamily: 'Roboto',
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: '200',
     color: colors.white,
     textAlign: 'center',
