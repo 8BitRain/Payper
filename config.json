@@ -9,7 +9,7 @@
     }
   },
   "test": {
-    "lambdaBaseURL": "https://mey71fma7i.execute-api.us-east-1.amazonaws.com/prod/",
+    "lambdaBaseURL": "https://mey71fma7i.execute-api.us-east-1.amazonaws.com/test/",
     "firebaseCredentials": {
       "apiKey": "AIzaSyBf1KgcEUMpxoMyrfOWtcED0vtNydGtiU4",
       "authDomain": "payper-test.firebaseapp.com",
