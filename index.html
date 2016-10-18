@@ -78,7 +78,7 @@ function respondToFirebase(fundingSource){
 
   }
   $.ajax({
-    url: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/test/customer/addIAVFunding',
+    url: 'https://m4gh555u28.execute-api.us-east-1.amazonaws.com/prod/customer/addIAVFunding',
     type: 'POST',
     beforeSend: function (request){
       request.setRequestHeader("Auth", "allow");
