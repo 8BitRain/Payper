@@ -68,7 +68,8 @@
 		<true/>
 	</dict>
 	<key>NSContactsUsageDescription</key>
-	<string>This will make it easier to find your friends.</string>
+	<string>We'll run your contacts through our system to find your friends that are using Payper
+</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMainNibFile</key>
