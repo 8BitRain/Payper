@@ -93,6 +93,7 @@ class Purpose extends React.Component {
         user: curr,
         paymentInfo: {
           amount: this.props.payment.amount,
+          frequency: this.props.payment.frequency,
           payments: this.props.payment.duration,
           purpose: this.state.purpose,
           type: this.state.type,

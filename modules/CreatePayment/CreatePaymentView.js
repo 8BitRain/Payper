@@ -12,7 +12,7 @@ import * as Headers from '../../helpers/Headers';
 // Components
 import Header from '../../components/Header/Header';
 import UserSelection from './pages/UserSelection';
-import AmountAndDuration from './pages/AmountAndDuration';
+import AmountFrequencyDuration from './pages/AmountFrequencyDuration';
 import Purpose from './pages/Purpose';
 
 // Stylesheets
@@ -32,6 +32,7 @@ class CreatePaymentView extends React.Component {
       offsetX: new Animated.Value(0),
       selectedContacts: {},
       amount: "",
+      frequency: "",
       duration: ""
     };
   }
@@ -40,9 +41,8 @@ class CreatePaymentView extends React.Component {
     Mixpanel.timeEvent('Payment Onboarding');
   }
 
-  _induceState(options) {
-    if (options.selectedContacts) this.setState({ selectedContacts: options.selectedContacts });
-    if (options.amount && options.duration) this.setState({ amount: options.amount, duration: options.duration });
+  induceState(newState) {
+    this.setState(newState);
   }
 
   _nextPage() {
@@ -84,6 +84,7 @@ class CreatePaymentView extends React.Component {
 
     if (options.user.uid) {
       options.paymentInfo.invite = false;
+      console.log("Sending payment:", options.paymentInfo);
       Lambda.createPayment(options.paymentInfo);
     } else {
       options.paymentInfo.invite = true;
@@ -132,16 +133,16 @@ class CreatePaymentView extends React.Component {
               <UserSelection
                 {...this.props}
                 dismissKeyboard={() => this._dismissKeyboard()}
-                induceState={(options) => this._induceState(options)}
+                induceState={(options) => this.induceState(options)}
                 nextPage={() => this._nextPage()} />
             </View>
 
             { /* Amount and duration */ }
             <View>
-              <AmountAndDuration
+              <AmountFrequencyDuration
                 {...this.props}
                 dismissKeyboard={() => this._dismissKeyboard()}
-                induceState={(options) => this._induceState(options)}
+                induceState={(options) => this.induceState(options)}
                 selectedContacts={this.state.selectedContacts}
                 nextPage={() => this._nextPage()}
                 prevPage={() => this._prevPage()} />
@@ -159,7 +160,8 @@ class CreatePaymentView extends React.Component {
                 payment={{
                   amount: this.state.amount,
                   duration: this.state.duration,
-                  users: this.state.selectedContacts,
+                  frequency: this.state.frequency,
+                  users: this.state.selectedContacts
                 }} />
             </View>
           </Animated.View>

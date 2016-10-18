@@ -192,10 +192,6 @@ class Payments extends React.Component {
   }
 
   _renderRow(payment) {
-    console.log("Rendering payment:");
-    console.log("---------------------------");
-    console.log(payment);
-
     var paymentInfo = {
       amount: payment.amount,
       purpose: payment.purpose,

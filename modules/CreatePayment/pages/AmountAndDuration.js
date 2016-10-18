@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     width: dimensions.width,
     backgroundColor: colors.white,
-    paddingTop: 20,
+    paddingTop: 0,
   },
   amountInput: {
     fontFamily: 'Roboto',
