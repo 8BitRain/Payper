@@ -120,10 +120,13 @@ android {
     }
 }
 
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 dependencies {
     compile project(':react-native-code-push')
     compile project(':react-native-fabric')
-    compile project(':react-native-blur')
     compile project(':react-native-webview-bridge')
     compile project(':react-native-facebook-login')
     compile project(':react-native-fbsdk')
