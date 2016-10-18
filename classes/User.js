@@ -10,6 +10,9 @@ import Contacts from 'react-native-contacts';
 const FBSDK = require('react-native-fbsdk');
 const { LoginManager } = FBSDK;
 
+import config from '../config';
+let baseURL = config.dev.lambdaBaseURL;
+
 export default class User {
   constructor(attributes) {
     if (attributes) for (var i in attributes) this[i] = attributes[i];
@@ -148,7 +151,7 @@ export default class User {
   **/
   getUserWithToken(params, callback) {
     try {
-      fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/auth/get", {method: "POST", body: JSON.stringify(params)})
+      fetch(baseURL + "auth/get", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => callback(responseData))
       .done();
@@ -166,7 +169,7 @@ export default class User {
   **/
   getOrCreateFacebookUser(params, callback) {
     try {
-      fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/facebookCreate", {method: "POST", body: JSON.stringify(params)})
+      fetch(baseURL + "user/facebookCreate", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => callback(responseData))
       .done();
@@ -187,7 +190,7 @@ export default class User {
       firebase.auth().currentUser.getToken(true).then((token) => {
         params.token = token;
         try {
-          fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/create", {method: "POST", body: JSON.stringify(params)})
+          fetch(baseURL + "user/create", {method: "POST", body: JSON.stringify(params)})
           .then((response) => response.json())
           .then((responseData) => {
             if (!responseData.errorMessage) {
@@ -229,7 +232,7 @@ export default class User {
     params.token = this.token;
 
     try {
-      fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/customer/create", {method: "POST", body: JSON.stringify(params)})
+      fetch(baseURL + "customer/create", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
         if (!responseData.errorMessage) {
@@ -282,7 +285,7 @@ export default class User {
     var params = { token: this.token };
 
     try {
-      fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/customer/getFundingSource", {method: "POST", body: JSON.stringify(params)})
+      fetch(baseURL + "customer/getFundingSource", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
         if (!responseData.errorMessage) cb({ bankAccount: responseData });
@@ -302,7 +305,7 @@ export default class User {
     var params = { token: this.token, uid: this.uid };
 
     try {
-      fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/user/getPersonal", {method: "POST", body: JSON.stringify(params)})
+      fetch(baseURL + "user/getPersonal", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
         if (!responseData.errorMessage) cb({ decryptedEmail: responseData.email, decryptedPhone: responseData.phone });
@@ -321,7 +324,7 @@ export default class User {
   **/
   getIAVToken(params, updateViaRedux) {
     try {
-      fetch("https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/utils/getIAV", {method: "POST", body: JSON.stringify(params)})
+      fetch(baseURL + "utils/getIAV", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
         if (!responseData.errorMessage)
