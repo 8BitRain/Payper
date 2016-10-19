@@ -45,7 +45,7 @@ export default class LoginModal extends React.Component {
 
   onLoginSuccess() {
     this.setState({ loading: false, errorMessage: null });
-    Actions.MainViewContainer();
+    this.props.onLoginSuccess();
   }
 
   onLoginFailure(errCode) {
@@ -66,7 +66,7 @@ export default class LoginModal extends React.Component {
       case "lambda/exited-before-completion":
       case "lambda/timed-out":
       default:
-        errorMessage = "There was an issue on our end (🙄)\nPlease try again";
+        errorMessage = "There was an issue on our end 🙄\nPlease try again";
     }
     alert(errorMessage);
     this.setState({ loading: false, errorMessage: errorMessage });

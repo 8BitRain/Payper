@@ -28,6 +28,7 @@ export default class IAVWebView extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log("IAVWebView will receive props. nextProps.IAVToken =", nextProps.IAVToken);
     if (nextProps.IAVToken !== this.props.IAVToken || nextProps.firebaseToken !== this.props.firebaseToken) {
       this.setState({
         injectedJS: "var firebase_token = '" + this.props.firebaseToken + "';" +
@@ -42,8 +43,18 @@ export default class IAVWebView extends React.Component {
   }
 
   refresh(getNewIAVToken) {
-    if (getNewIAVToken) this.props.currentUser.getIAVToken();
-    this.refs[this.WEB_VIEW_REF].reload();
+    setTimeout(() => this.refs[this.WEB_VIEW_REF].reload(), 250);
+    // if (getNewIAVToken) {
+    //   this.props.currentUser.getIAVToken({ token: this.props.firebaseToken }, (res) => {
+    //     this.setState({
+    //       injectedJS: "var firebase_token = '" + this.props.firebaseToken + "';" +
+    //         "var iav_token = '" + res.IAVToken + "';" +
+    //         "$(function() { generateIAVToken(\"" + this.dwollaEnv + "\", \"" + this.payperEnv + "\") });"
+    //     }, () => this.refresh());
+    //   });
+    // } else {
+    //   this.refs[this.WEB_VIEW_REF].reload();
+    // }
   }
 
   render() {

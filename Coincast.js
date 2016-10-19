@@ -3,6 +3,7 @@ import React from 'react';
 import { AppState } from 'react-native';
 import { Scene, Reducer, Router, Modal } from 'react-native-router-flux';
 import Mixpanel from 'react-native-mixpanel';
+import colors from './styles/colors';
 import Error from './components/Error';
 
 // Modules
@@ -12,11 +13,6 @@ import LandingScreenViewContainer from './modules/LandingScreen/LandingScreenVie
 import MainViewContainer from './modules/Main/MainViewContainer';
 import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer';
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView';
-
-
-// TODO: REMOVE
-import MicrodepositOnboarding from './components/MicrodepositOnboarding/MicrodepositOnboarding';
-
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
@@ -33,6 +29,7 @@ const getSceneStyle = function(props, computedProps) {
     shadowOffset: null,
     shadowOpacity: null,
     shadowRadius: null,
+    backgroundColor: colors.richBlack
   };
 
   if (computedProps.isActive) {
@@ -106,13 +103,6 @@ export default class Coincast extends React.Component {
               key="UserOnboardingViewContainer"
               type="replace"
               panHandlers={null} />
-
-            { /* TODO: REMOVE
-            <Scene initial
-              component={MicrodepositOnboarding}
-              key="UserOnboardingViewContainer"
-              type="replace"
-              panHandlers={null} /> */ }
 
           </Scene>
           <Scene key="error" component={Error}/>

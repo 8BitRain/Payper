@@ -82,6 +82,17 @@ export default class LandingScreenView extends React.Component {
     }).start();
   }
 
+  onLoginSuccess() {
+    console.log("Login succeeded...");
+    console.log("Current user:", this.props.currentUser);
+    let appFlags = this.props.currentUser.appFlags;
+    if (appFlags && appFlags.onboarding_state === "customer") {
+      Actions.BankOnboardingView({ currentUser: this.props.currentUser });
+    } else {
+      Actions.MainViewContainer();
+    }
+  }
+
   render() {
     return (
       <Animated.View style={{ flex: 1.0, backgroundColor: colors.richBlack, opacity: this.pageWrapOpacity }}>
@@ -146,7 +157,8 @@ export default class LandingScreenView extends React.Component {
         <LoginModal
           {...this.props}
           modalVisible={this.state.loginModalVisible}
-          toggleModal={() => this.toggleLoginModal()} />
+          toggleModal={() => this.toggleLoginModal()}
+          onLoginSuccess={() => this.onLoginSuccess()} />
 
         { /* Facebook login loading view */
           (this.state.loading)

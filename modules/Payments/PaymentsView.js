@@ -139,7 +139,6 @@ class Payments extends React.Component {
 
     console.log("payments\n", payments);
 
-
     // If a payment is complete, animate it out, then archive it
     for (var p in payments) {
       const curr = payments[p];

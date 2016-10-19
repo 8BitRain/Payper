@@ -38,9 +38,15 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   initialize(user) {
-    for (var k in user) this[k] = user[k];
+    this.update(user);
+
+    // Get native cell phone contats
     this.getNativeContacts();
-    Async.set('session_token', user.token);
+
+    // Tack on decryptedPhone and decryptedEmail
+    this.decrypt((res) => {
+      if (res) this.update(res);
+    });
   }
 
   /**
@@ -48,7 +54,7 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   destroy() {
-    Async.set('session_token', '');
+    Async.set('user', '');
     this.stopListening();
     for (var i in this) if (typeof this[i] !== 'function') this[i] = null;
   }
@@ -153,7 +159,22 @@ export default class User {
     try {
       fetch(baseURL + "auth/get", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
-      .then((responseData) => callback(responseData))
+      .then((responseData) => {
+
+        // Tack on user's appFlags
+        let ref = firebase.database().ref('appFlags');
+        ref.once('value')
+        .then((snapshot) => {
+          let appFlags = snapshot.child(responseData.uid).val();
+          responseData.appFlags = appFlags;
+          callback(responseData);
+        })
+        .catch((err) => {
+          console.log("Firebase error getting appFlags:", err);
+          callback(responseData);
+        });
+
+      })
       .done();
     } catch (err) {
       console.log("getUserWithToken failed...", "Lambda error:", err);
@@ -323,6 +344,7 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   getIAVToken(params, updateViaRedux) {
+    console.log("attempting to get iav token with params", params);
     try {
       fetch(baseURL + "utils/getIAV", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())

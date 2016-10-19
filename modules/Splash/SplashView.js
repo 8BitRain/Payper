@@ -80,13 +80,22 @@ class SplashView extends React.Component {
     const _this = this;
     this.setState({ connected: true });
 
+    Async.get('user', (user) => {
+      console.log("Async got user\n", JSON.parse(user));
+    });
+
     // Check beta status
     Async.get('betaStatus', (val) => {
       if (val == "fullAccess") {
-        Async.get('session_token', (token) => {
-          this.props.currentUser.loginWithAccessToken({ token: token },
-            () => _this._handleSignInSuccess(),
-            () => _this._handleSignInFailure());
+        Async.get('user', (user) => {
+          let onboardingState = (user.appFlags) ? user.appFlags.onboarding_state : null;
+          if (onboardingState !== "customer") {
+            _this._handleSignInFailure();
+          } else {
+            this.props.currentUser.loginWithAccessToken({ token: user.token },
+              () => _this._handleSignInSuccess(),
+              () => _this._handleSignInFailure());
+          }
         });
       } else {
         Actions.BetaLandingScreenView();
