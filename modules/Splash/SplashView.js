@@ -85,6 +85,7 @@ class SplashView extends React.Component {
       if (val == "fullAccess") {
         Async.get('user', (user) => {
           user = JSON.parse(user);
+          let onboardingState = (user.appFlags) ? user.appFlags.onboarding_state : null;
           if (onboardingState === "customer") {
             _this._handleSignInFailure();
           } else {
