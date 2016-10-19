@@ -13,7 +13,7 @@ import Footer from '../../components/Footer/Footer';
 import IAVWebView from '../../components/IAVWebView/IAVWebView';
 import CreatePayment from '../../modules/CreatePayment/CreatePaymentView';
 import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingView';
-import VerifyMicrodeposit from '../../components/VerifyMicrodeposit';
+import MicrodepositOnboarding from '../../components/MicrodepositOnboarding/MicrodepositOnboarding';
 
 // Payment card components
 import Active from '../../components/PaymentCards/Active';
@@ -284,7 +284,7 @@ class Payments extends React.Component {
     if (this.props.currentUser.appFlags.micro_deposit_flow) {
       return(
         <View style={{ flex: 1.0, marginTop: 20, backgroundColor: colors.richBlack }}>
-          <VerifyMicrodeposit
+          <MicrodepositOnboarding
             {...this.props}
             toggleModal={(options) => this._toggleModal(options)} />
         </View>

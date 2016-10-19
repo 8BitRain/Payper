@@ -270,6 +270,28 @@ export function checkBetaInvites(options, callback) {
 };
 
 /**
+  *   Given a phone number (phone), add this phone number to the invite queue
+**/
+export function requestBetaInvite(options, callback) {
+  try {
+    fetch(baseURL + "beta/inviteRequest", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Request beta invite Lambda response:", responseData);
+        if (typeof callback == 'function') callback(responseData);
+      } else {
+        console.log("Error requesting beta invites:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+/**
   *   Given email address (email), check if this email was used to sign up for
   *   beta.
 **/
@@ -306,6 +328,29 @@ export function blockUser(options, callback) {
         if (typeof callback == 'function') callback(responseData);
       } else {
         console.log("Error blocking user:", responseData.errorMessage);
+        if (typeof callback == 'function') callback(false);
+      }
+    })
+    .done();
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+/**
+  *   Given amount1 and amount2 and token, verify microdeposit amounts for this
+  *   user
+**/
+export function verifyMicrodeposits(options, callback) {
+  try {
+    fetch(baseURL + "customer/verifyMicroDeposits", {method: "POST", body: JSON.stringify(options)})
+    .then((response) => response.json())
+    .then((responseData) => {
+      if (!responseData.errorMessage) {
+        console.log("Verify microdeposits Lambda response:", responseData);
+        if (typeof callback == 'function') callback(true);
+      } else {
+        console.log("Error verifying microdeposits:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
       }
     })

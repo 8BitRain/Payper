@@ -20,17 +20,16 @@ class BetaLandingScreenView extends React.Component {
   constructor(props) {
     super(props);
 
+    this.logoAspectRatio = 377 / 568;
     this.keyboardOffset = new Animated.Value(0);
     this.colorInterpolator = new Animated.Value(0);
 
     this.state = {
       modalVisible: false,
+      headerHeight: 0,
       onboarding: "",
       phoneInput: "",
-      emailInput: "",
       phoneValid: false,
-      emailValid: false,
-      attempts: 0,
       buttonText: "",
       backgroundColor: this.colorInterpolator.interpolate({
         inputRange: [0, 350, 700], // Green, transparent, red
@@ -113,47 +112,43 @@ class BetaLandingScreenView extends React.Component {
   }
 
   _handleSubmit(e) {
-
     if (e) e.preventDefault();
-
-    const { phoneInput, emailInput } = this.state;
+    const { phoneInput } = this.state;
 
     // Determine if the input is valid
-    var valid = (this.state.onboarding == "phone")
-      ? Validators.validatePhone(phoneInput).valid
-      : Validators.validateEmail(emailInput).valid;
+    let valid = Validators.validatePhone(phoneInput).valid;
 
-    // If valid, submit. If not, interpolate 'Continue' button color to red
+    // If valid, send POST request
     if (valid) {
-      this.setState({ buttonText: "Verifying..." });
-      console.log("Submitting:", emailInput);
-      if (this.state.onboarding == "email") {
-        Lambda.checkBetaSignups({ email: this.state.emailInput }, (res) => {
+      this.setState({ buttonText: "Verifying your number..." });
+      if (this.state.onboarding == "invite-request") {
+        console.log(phoneInput, "is requesting an invite");
+        Lambda.requestBetaInvite({ phone: phoneInput }, (res) => {
           if (res.match) this._onVerificationSuccess();
           else this._onVerificationFailure();
         });
-      } else if (this.state.onboarding == "phone") {
-        console.log({phoneNumber: this.state.phoneInput});
-        Lambda.checkBetaInvites({ phoneNumber: this.state.phoneInput }, (res) => {
+      } else if (this.state.onboarding == "invite-verification") {
+        console.log("Verifying that", phoneInput, "received an invite");
+        Lambda.checkBetaInvites({ phoneNumber: phoneInput }, (res) => {
           if (res.match) this._onVerificationSuccess();
           else this._onVerificationFailure();
         });
       }
-     } else {
+     }
+
+     // If invalid, interpolate 'Continue' button color to red and display error
+     else {
       this._interpolateButtonColor({ toValue: 700 });
-      this.setState({ buttonText: (this.state.onboarding == "email") ? "Please enter a valid email address." : "Please enter a valid phone number." });
+      this.setState({ buttonText: "Please enter a valid phone number." });
     }
   }
 
   _handleChangeText(input) {
 
-    if (this.state.onboarding == "phone") this.setState({ phoneInput: input });
-    else if (this.state.onboarding == "email") this.setState({ emailInput: input });
+    this.setState({ phoneInput: input });
 
     // Determine if the input is valid
-    var valid = (this.state.onboarding == "phone")
-      ? Validators.validatePhone(input).valid
-      : Validators.validateEmail(input).valid;
+    let valid = Validators.validatePhone(input).valid;
 
     // Interpolate background color of 'Continue' button
     if (valid) {
@@ -161,76 +156,8 @@ class BetaLandingScreenView extends React.Component {
       this.setState({ buttonText: "Continue" });
     } else {
       this._interpolateButtonColor({ toValue: 350 });
-      if (this.state.buttonText.split("")[0] != "Please") {
-        this.setState({ buttonText: (this.state.onboarding == "phone") ? "Please enter a valid phone number" : "Please enter a valid email address" });
-      }
+      this.setState({ buttonText: "Please enter a valid phone number" });
     }
-  }
-
-  _getSubmitButtonText(valid) {
-    if (valid) return "Continue";
-    else {
-      if (this.state.onboarding == "email") {
-        return "Please enter a valid email address."
-      } else if (this.state.onboarding == "phone") {
-        return "Please enter a valid phone number."
-      }
-    }
-  }
-
-  _getEmailOnboarding() {
-    return(
-      <View style={wrappers.modalWrap}>
-
-        { /* Header */ }
-        <View style={wrappers.modalHeader}>
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            onPress={() => { this.setState({ onboarding: "" }); this._toggleModal(); }}>
-
-            <Entypo style={icons.closeModal} name={"cross"} size={24} color={colors.white} />
-
-          </TouchableHighlight>
-        </View>
-
-        { /* Rest of modal */ }
-        <View style={wrappers.modalContent}>
-          <Text style={typography.modalTitle}>
-            { "What's your email?" }
-          </Text>
-
-          <TextInput
-            ref="emailInput"
-            style={wrappers.modalInputEmail}
-            placeholderFontFamily={"Roboto"}
-            placeholderTextColor={colors.lightGrey}
-            placeholder={""}
-            defaultValue={this.state.emailInput}
-            autoCorrect={false} autoFocus autoCapitalize={"none"}
-            keyboardType={"email-address"}
-            onChangeText={(input) => this._handleChangeText(input)}
-            onKeyPress={(e) => { if (e.nativeEvent.key == "Enter") this._handleSubmit(e); }} />
-
-          { /* Submit button */ }
-          <Animated.View style={{position: 'absolute', bottom: this.keyboardOffset, left: 0, right: 0}}>
-            <TouchableHighlight
-              activeOpacity={0.8}
-              underlayColor={'transparent'}
-              onPress={() => this._handleSubmit()}>
-
-              <Animated.View style={{ height: 70, backgroundColor: this.state.backgroundColor, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center' }]}>
-                  { this.state.buttonText }
-                </Text>
-              </Animated.View>
-
-            </TouchableHighlight>
-          </Animated.View>
-
-        </View>
-      </View>
-    );
   }
 
   _getPhoneOnboarding() {
@@ -254,6 +181,12 @@ class BetaLandingScreenView extends React.Component {
           <Text style={typography.modalTitle}>
             { "What's your number?" }
           </Text>
+
+          {(this.state.onboarding === "invite-request")
+            ? <Text style={{ fontFamily: 'Roboto', fontSize: 16, color: colors.white, textAlign: 'center', padding: 20, fontWeight: '200' }}>
+                { "We'll send you an invite when a spot opens up!" }
+              </Text>
+            : null }
 
           <TextInput
             style={wrappers.modalInputPhone}
@@ -295,6 +228,10 @@ class BetaLandingScreenView extends React.Component {
         { /* Lighten status bar text */ }
         <StatusBar barStyle="light-content" />
 
+        <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }} onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}>
+          <Image source={require('../../assets/images/logo.png')} style={{ height: this.state.headerHeight * 0.4, width: (this.state.headerHeight * 0.4) * this.logoAspectRatio }} />
+        </View>
+
         { /* Title */ }
         <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
           <Text style={typography.subtitle}>Welcome to</Text>
@@ -313,7 +250,7 @@ class BetaLandingScreenView extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => { this.setState({ onboarding: "phone", buttonText: "Please enter a valid phone number." }); this._toggleModal(); }}>
+            onPress={() => { this.setState({ onboarding: "invite-verification", buttonText: "Please enter a valid phone number." }); this._toggleModal(); }}>
 
             <View style={[wrappers.button, { backgroundColor: 'rgba(255, 255, 255, 0.1)', }]}>
               { /* Text */ }
@@ -334,19 +271,19 @@ class BetaLandingScreenView extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => { this.setState({ onboarding: "email", buttonText: "Please enter a valid email address." }); this._toggleModal(); }}>
+            onPress={() => { this.setState({ onboarding: "invite-request", buttonText: "Please enter a valid phone number." }); this._toggleModal(); }}>
 
             <View style={[wrappers.button, { backgroundColor: 'rgba(255, 255, 255, 0.06)', }]}>
               { /* Text */ }
               <View style={{ flex: 0.9, paddingLeft: 15 }}>
                 <Text style={typography.button}>
-                  { "I requested an invite on getpayper.io" }
+                  { "Request an invite" }
                 </Text>
               </View>
 
               { /* Chevron */ }
               <View style={{ flex: 0.1, paddingRight: 22.5 }}>
-                <Entypo style={icons.chevron} name={"mouse"} size={20} color={colors.accent} />
+                <Entypo style={icons.chevron} name={"chevron-thin-right"} size={22} color={colors.accent} />
               </View>
             </View>
           </TouchableHighlight>
@@ -359,9 +296,7 @@ class BetaLandingScreenView extends React.Component {
           visible={this.state.modalVisible}
           onRequestClose={ () => alert("Closed modal") }>
 
-          { (this.state.onboarding == "email")
-              ? this._getEmailOnboarding()
-              : this._getPhoneOnboarding() }
+          { this._getPhoneOnboarding() }
 
         </Modal>
       </View>
@@ -394,7 +329,7 @@ const wrappers = StyleSheet.create({
     width: dimensions.width,
   },
   modalHeader: {
-    flex: 0.1,
+    flex: 0.125,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
@@ -404,13 +339,12 @@ const wrappers = StyleSheet.create({
     width: dimensions.width,
   },
   modalContent: {
-    flex: 0.9,
+    flex: 0.875,
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
     borderWidth: (borders) ? 1.0 : 0.0,
     borderColor: 'red',
-    paddingTop: 40,
     width: dimensions.width,
   },
   modalInputPhone: {
@@ -436,14 +370,14 @@ const wrappers = StyleSheet.create({
 const typography = StyleSheet.create({
   title: {
     fontFamily: 'Roboto',
-    fontSize: 38,
+    fontSize: 36,
     fontWeight: '200',
     color: colors.accent,
     textAlign: 'center',
   },
   subtitle: {
     fontFamily: 'Roboto',
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: '200',
     color: colors.white,
     textAlign: 'center',
@@ -457,7 +391,7 @@ const typography = StyleSheet.create({
   },
   modalTitle: {
     fontFamily: 'Roboto',
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: '200',
     color: colors.white,
     textAlign: 'center',

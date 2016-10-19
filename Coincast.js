@@ -13,6 +13,11 @@ import MainViewContainer from './modules/Main/MainViewContainer';
 import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer';
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView';
 
+
+// TODO: REMOVE
+import MicrodepositOnboarding from './components/MicrodepositOnboarding/MicrodepositOnboarding';
+
+
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
   return (state, action) => {
@@ -98,6 +103,13 @@ export default class Coincast extends React.Component {
 
             <Scene
               component={UserOnboardingViewContainer}
+              key="UserOnboardingViewContainer"
+              type="replace"
+              panHandlers={null} />
+
+            { /* TODO: REMOVE */ }
+            <Scene
+              component={MicrodepositOnboarding}
               key="UserOnboardingViewContainer"
               type="replace"
               panHandlers={null} />
