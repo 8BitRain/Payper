@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TextInput, TouchableHighlight, Image, Dimensions } from 'react-native';
+import { View, Text, TextInput, TouchableHighlight, Image, Dimensions, StatusBar } from 'react-native';
 import { VibrancyView } from 'react-native-blur';
 import Entypo from 'react-native-vector-icons/Entypo';
 
@@ -61,6 +61,7 @@ export default class MicrodepositOnboarding extends React.Component {
   render() {
     return(
       <View style={styles.wrap}>
+        <StatusBar barStyle='light-content' />
         <VibrancyView blurType="dark" style={styles.blur} />
 
         { /* Logo */ }

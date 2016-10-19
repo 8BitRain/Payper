@@ -122,10 +122,9 @@ class BetaLandingScreenView extends React.Component {
     if (valid) {
       this.setState({ buttonText: "Verifying your number..." });
       if (this.state.onboarding == "invite-request") {
-        console.log(phoneInput, "is requesting an invite");
         Lambda.requestBetaInvite({ phone: phoneInput }, (res) => {
-          if (res.match) this._onVerificationSuccess();
-          else this._onVerificationFailure();
+          this._toggleModal();
+          setTimeout(() => alert("We'll send you an invite via text when a spot opens up!"), 500);
         });
       } else if (this.state.onboarding == "invite-verification") {
         console.log("Verifying that", phoneInput, "received an invite");
@@ -234,7 +233,7 @@ class BetaLandingScreenView extends React.Component {
 
         { /* Title */ }
         <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={typography.subtitle}>Welcome to</Text>
+          <Text style={[typography.title, { color: colors.white }]}>Welcome to</Text>
           <Text style={typography.title}>Payper</Text>
         </View>
 
@@ -256,7 +255,7 @@ class BetaLandingScreenView extends React.Component {
               { /* Text */ }
               <View style={{ flex: 0.9, paddingLeft: 15 }}>
                 <Text style={typography.button}>
-                  { "I was invited by a friend" }
+                  { "I received an invite" }
                 </Text>
               </View>
 

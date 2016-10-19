@@ -281,7 +281,7 @@ class Payments extends React.Component {
   }
 
   getModalInnerContent() {
-    if (this.props.currentUser.appFlags.micro_deposit_flow) {
+    if (true) {
       return(
         <View style={{ flex: 1.0, marginTop: 20, backgroundColor: colors.richBlack }}>
           <MicrodepositOnboarding

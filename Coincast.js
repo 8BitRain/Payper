@@ -107,12 +107,12 @@ export default class Coincast extends React.Component {
               type="replace"
               panHandlers={null} />
 
-            { /* TODO: REMOVE */ }
-            <Scene
+            { /* TODO: REMOVE
+            <Scene initial
               component={MicrodepositOnboarding}
               key="UserOnboardingViewContainer"
               type="replace"
-              panHandlers={null} />
+              panHandlers={null} /> */ }
 
           </Scene>
           <Scene key="error" component={Error}/>
