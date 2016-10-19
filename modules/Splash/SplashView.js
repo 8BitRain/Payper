@@ -80,10 +80,6 @@ class SplashView extends React.Component {
     const _this = this;
     this.setState({ connected: true });
 
-    Async.get('user', (user) => {
-      console.log("Async got user\n", JSON.parse(user));
-    });
-
     // Check beta status
     Async.get('betaStatus', (val) => {
       if (val == "fullAccess") {

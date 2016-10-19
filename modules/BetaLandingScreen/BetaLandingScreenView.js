@@ -124,7 +124,7 @@ class BetaLandingScreenView extends React.Component {
       if (this.state.onboarding == "invite-request") {
         Lambda.requestBetaInvite({ phone: phoneInput }, (res) => {
           this._toggleModal();
-          setTimeout(() => alert("We'll send you an invite via text when a spot opens up!"), 500);
+          setTimeout(() => alert("We'll send you an invite via text when a spot opens up!"), 750);
         });
       } else if (this.state.onboarding == "invite-verification") {
         console.log("Verifying that", phoneInput, "received an invite");
