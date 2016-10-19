@@ -15,6 +15,7 @@ import IAVWebView from '../../components/IAVWebView/IAVWebView';
 import CreatePayment from '../../modules/CreatePayment/CreatePaymentView';
 import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingView';
 import MicrodepositOnboarding from '../../components/MicrodepositOnboarding/MicrodepositOnboarding';
+import NoticeBar from '../../components/NoticeBar/NoticeBar';
 
 // Payment card components
 import Active from '../../components/PaymentCards/Active';
@@ -335,9 +336,14 @@ class Payments extends React.Component {
     return(
       <View style={{flex: 1.0, backgroundColor: colors.white}}>
 
-        { /* List of payments or empty state */ }
         <View style={{flex: 1.0}}>
-          { this._renderPaymentList() }
+          { /* Bank account notice bar (if necessary) */
+            (this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification")
+            ? <NoticeBar onboardingState={this.props.currentUser.appFlags.onboarding_state} />
+            : null }
+
+          { /* Payment list (or empty state) */
+            this._renderPaymentList() }
         </View>
 
         { /* Footer */ }

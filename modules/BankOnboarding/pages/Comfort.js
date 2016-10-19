@@ -1,7 +1,7 @@
 // Dependencies
 import React from 'react';
 import { View, Text, TouchableHighlight, StyleSheet, Dimensions } from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 // Components
 import ContinueButton from '../subcomponents/ContinueButton';
@@ -22,10 +22,10 @@ export default class Comfort extends React.Component {
           <Text style={{ fontFamily: 'Roboto', fontSize: 28, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
             { "Let's verify your identity" }
             { "\n\n" }
-            <Entypo name={"shield"} color={colors.accent} size={38} />
+            <FontAwesome name={"user-secret"} color={colors.accent} size={38} />
             { "\n" }
           </Text>
-          <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, width: dimensions.width * 0.8, textAlign: 'center' }}>
+          <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, width: dimensions.width * 1.0, textAlign: 'center', paddingLeft: 25, paddingRight: 25 }}>
             { "To ensure you're not being impersonated, we'll need to collect your legal name, billing address, date of birth, and the last four digits of your social." }
             { "\n" }
           </Text>
