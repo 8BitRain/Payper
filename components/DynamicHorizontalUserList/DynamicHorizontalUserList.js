@@ -63,7 +63,7 @@ class DynamicHorizontalUserList extends React.Component {
           onPress={() => (!this.props.displayOnly) ? this.props.handleSelect(curr) : console.log("This DynamicHorizontalUserList does not have interactive children. This is because you supplied it with the 'displayOnly' prop.")}>
 
           <View>
-            <DynamicThumbnail width={(this.props.displayOnly) ? 55 : 30} height={(this.props.displayOnly) ? 55 : 30} user={curr} displayOnly={this.props.displayOnly} />
+            <DynamicThumbnail width={30} height={30} user={curr} displayOnly={this.props.displayOnly} />
           </View>
 
         </TouchableHighlight>

@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, Image, NetInfo, TouchableHighlight, Animated, Easing } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import Mixpanel from 'react-native-mixpanel';
 import Entypo from 'react-native-vector-icons/Entypo';
 var FBLoginManager = require('NativeModules').FBLoginManager;
 
@@ -28,6 +29,26 @@ class SplashView extends React.Component {
     };
   }
 
+  componentWillMount() {
+    const _this = this;
+    Mixpanel.timeEvent('Load Time: Splash View');
+
+    this.ConnectivityListener = NetInfo.isConnected.addEventListener('change', (isConnected) => {
+      if (_this.state.reconnecting && !_this.state.connected)
+        clearInterval(_this.rotationInterval);
+
+      if (isConnected)
+        _this._onConnect();
+      else
+        _this._onDisconnect();
+    });
+  }
+
+  componentWillUnmount() {
+    Mixpanel.track('Load Time: Splash View');
+    this.ConnectivityListener.remove();
+  }
+
   _rotateRefreshIcon() {
     Animated.timing(this.refreshIconInterpolator, {
       toValue: 100,
@@ -45,7 +66,7 @@ class SplashView extends React.Component {
 
   _handleSignInFailure() {
     console.log("%cSigned in: false", "color:red;font-weight:900;");
-    Actions.LandingScreenContainer();
+    Actions.LandingScreenViewContainer();
   }
 
   _attemptReconnect() {
@@ -74,21 +95,8 @@ class SplashView extends React.Component {
   }
 
   _onDisconnect() {
+    Mixpanel.track('Connection Failed');
     this.setState({ connected: false });
-  }
-
-  componentWillMount() {
-    const _this = this;
-    this.ConnectivityListener = NetInfo.isConnected.addEventListener('change', (isConnected) => {
-      if (_this.state.reconnecting && !_this.state.connected)
-        clearInterval(_this.rotationInterval);
-      if (isConnected) _this._onConnect();
-      else _this._onDisconnect();
-    });
-  }
-
-  componentWillUnmount() {
-    this.ConnectivityListener.remove();
   }
 
   render() {

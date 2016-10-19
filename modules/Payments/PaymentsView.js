@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 // Helpers
 import * as Alert from '../../helpers/Alert';
@@ -13,7 +14,7 @@ import Footer from '../../components/Footer/Footer';
 import IAVWebView from '../../components/IAVWebView/IAVWebView';
 import CreatePayment from '../../modules/CreatePayment/CreatePaymentView';
 import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingView';
-import VerifyMicrodeposit from '../../components/VerifyMicrodeposit';
+import MicrodepositOnboarding from '../../components/MicrodepositOnboarding/MicrodepositOnboarding';
 
 // Payment card components
 import Active from '../../components/PaymentCards/Active';
@@ -124,13 +125,25 @@ class Payments extends React.Component {
   }
 
   _archiveCompletePayments(options) {
+
+    console.log("_archiveCompletePayments was invoked...");
+    console.log("this.props.current")
+
+    let payments;
+
     // Determine which payment set to look through
-    var payments = (this.props.activeFilter === "outgoing") ? this.props.outgoingPayments._dataBlob.s1 : this.props.incomingPayments._dataBlob.s1;
+    if (this.props.currentUser.paymentFlow)
+      payments = (this.props.activeFilter === "outgoing") ? this.props.currentUser.paymentFlow.out : this.props.currentUser.paymentFlow.in;
+    else
+      payments = [];
+
+    console.log("payments\n", payments);
+
 
     // If a payment is complete, animate it out, then archive it
     for (var p in payments) {
       const curr = payments[p];
-      if (curr.paymentsMade === curr.payments) {
+      if (curr.paymentsMade === Number.parseInt(curr.payments)) {
         Lambda.archivePayment({ payment_id: curr.pid, token: this.props.currentUser.token });
       }
     }
@@ -180,10 +193,6 @@ class Payments extends React.Component {
   }
 
   _renderRow(payment) {
-    console.log("Rendering payment:");
-    console.log("---------------------------");
-    console.log(payment);
-
     var paymentInfo = {
       amount: payment.amount,
       purpose: payment.purpose,
@@ -273,10 +282,10 @@ class Payments extends React.Component {
   }
 
   getModalInnerContent() {
-    if (this.props.currentUser.appFlags.micro_deposit_flow) {
+    if (this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification") {
       return(
         <View style={{ flex: 1.0, marginTop: 20, backgroundColor: colors.richBlack }}>
-          <VerifyMicrodeposit
+          <MicrodepositOnboarding
             {...this.props}
             toggleModal={(options) => this._toggleModal(options)} />
         </View>
@@ -301,9 +310,11 @@ class Payments extends React.Component {
       break;
       case "bank":
         return(
-          <View style={{ flex: 1.0, marginTop: 20 }}>
-            <IAVWebView IAVToken={this.props.currentUser.IAVToken} firebaseToken={this.props.currentUser.token} />
-          </View>
+          <IAVWebView refreshable
+            IAVToken={this.props.currentUser.IAVToken}
+            firebaseToken={this.props.currentUser.token}
+            currentUser={this.props.currentUser}
+            toggleModal={() => this._toggleModal()} />
         );
       break;
       default:

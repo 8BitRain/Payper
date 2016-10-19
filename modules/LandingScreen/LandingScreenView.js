@@ -3,7 +3,6 @@ import React from 'react';
 import { View, Text, TouchableHighlight, Modal, Animated, Easing, Dimensions, Linking, StatusBar } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Hyperlink from 'react-native-hyperlink';
-import Mixpanel from 'react-native-mixpanel';
 const FBSDK = require('react-native-fbsdk');
 const { LoginButton, AccessToken, GraphRequest, GraphRequestManager } = FBSDK;
 
@@ -25,11 +24,6 @@ export default class LandingScreenView extends React.Component {
       loginModalVisible: false,
       loading: false
     };
-  }
-
-  componentDidMount() {
-    Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');
-    Mixpanel.timeEvent("Landing Screen Duration");
   }
 
   loginWithFacebook(token) {

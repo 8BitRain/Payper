@@ -125,7 +125,7 @@ class Profile extends React.Component {
         console.log("Deleting user with params:", { token: _this.props.currentUser.token, uid: _this.props.currentUser.uid });
         Init.signout();
         Init.deleteUser({ token: _this.props.currentUser.token, uid: _this.props.currentUser.uid });
-        Actions.LandingScreenContainer();
+        Actions.LandingScreenViewContainer();
       },
     });
   }

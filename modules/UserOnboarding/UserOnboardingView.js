@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableHighlight, StyleSheet, Animated, Easing, Dimensions, StatusBar, Image, Modal } from "react-native";
 import { Actions } from 'react-native-router-flux';
+import Mixpanel from 'react-native-mixpanel';
 import Entypo from 'react-native-vector-icons/Entypo';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 
@@ -22,6 +23,7 @@ export default class UserOnboardingView extends React.Component {
     super(props);
     this.offsetX = new Animated.Value(0);
     this.logoAspectRatio = 377 / 568;
+    this.errCodes = [];
     this.state = {
       animating: false,
       pageIndex: 0,
@@ -33,6 +35,10 @@ export default class UserOnboardingView extends React.Component {
       password: null,
       phone: null
     };
+  }
+
+  componentWillMount() {
+    Mixpanel.timeEvent('User Onboarding');
   }
 
   toggleBankOnboardingModal() {
@@ -49,11 +55,19 @@ export default class UserOnboardingView extends React.Component {
       phone: this.state.phone
     },
     () => {
+      Mixpanel.trackWithProperties('User Onboarding', {
+        completed: true,
+        cancelled: false,
+        errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
+        uid: this.props.currentUser.uid
+      });
       this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates));
       this.toggleBankOnboardingModal();
       cb();
     },
     (errCode) => {
+      this.errCodes.push({ errCode: errCode, timestamp: new Date().getTime() });
+      Mixpanel.trackWithProperties('Failed User Creation', { errCode: errCode });
       if (errCode === "auth/email-already-in-use") {
         alert("This email is already in use.");
       } else {
@@ -95,6 +109,16 @@ export default class UserOnboardingView extends React.Component {
     }).start(() => this.setState({ animating: false }));
   }
 
+  handleCancel() {
+    Mixpanel.trackWithProperties('User Onboarding', {
+      completed: false,
+      cancelled: true,
+      errCodes: (this.errCodes.length > 0) ? this.errCodes : "none"
+    });
+
+    Actions.LandingScreenViewContainer();
+  }
+
   render() {
     return(
       <View style={{ flex: 1.0, backgroundColor: colors.richBlack }}>
@@ -110,7 +134,7 @@ export default class UserOnboardingView extends React.Component {
           style={styles.backButton}
           activeOpacity={0.8}
           underlayColor={'transparent'}
-          onPress={() => (this.state.pageIndex === 0) ? Actions.LandingScreenContainer() : this.prevPage()}>
+          onPress={() => (this.state.pageIndex === 0) ? this.handleCancel() : this.prevPage()}>
           <Entypo color={colors.white} size={30} name={(this.state.pageIndex === 0) ? "cross" : "chevron-thin-left"} />
         </TouchableHighlight>
 

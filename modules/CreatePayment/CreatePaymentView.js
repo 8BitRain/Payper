@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Dimensions, StatusBar, Animated, Easing } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import Mixpanel from 'react-native-mixpanel';
 const { State: TextInputState } = TextInput;
 
 // Helpers
@@ -11,7 +12,7 @@ import * as Headers from '../../helpers/Headers';
 // Components
 import Header from '../../components/Header/Header';
 import UserSelection from './pages/UserSelection';
-import AmountAndDuration from './pages/AmountAndDuration';
+import AmountFrequencyDuration from './pages/AmountFrequencyDuration';
 import Purpose from './pages/Purpose';
 
 // Stylesheets
@@ -31,13 +32,17 @@ class CreatePaymentView extends React.Component {
       offsetX: new Animated.Value(0),
       selectedContacts: {},
       amount: "",
-      duration: "",
+      frequency: "",
+      duration: ""
     };
   }
 
-  _induceState(options) {
-    if (options.selectedContacts) this.setState({ selectedContacts: options.selectedContacts });
-    if (options.amount && options.duration) this.setState({ amount: options.amount, duration: options.duration });
+  componentWillMount() {
+    Mixpanel.timeEvent('Payment Onboarding');
+  }
+
+  induceState(newState) {
+    this.setState(newState);
   }
 
   _nextPage() {
@@ -65,6 +70,13 @@ class CreatePaymentView extends React.Component {
   }
 
   _sendPayment(options) {
+    Mixpanel.trackWithProperties('Payment Onboarding', {
+      completed: true,
+      cancelled: false,
+      cancelledOnPage: null,
+      uid: this.props.currentUser.uid
+    });
+
     options.paymentInfo.sender = (options.paymentInfo.type == "request") ? options.user : this.props.currentUser;
     options.paymentInfo.recip = (options.paymentInfo.type == "request") ? this.props.currentUser : options.user;
 
@@ -72,6 +84,7 @@ class CreatePaymentView extends React.Component {
 
     if (options.user.uid) {
       options.paymentInfo.invite = false;
+      console.log("Sending payment:", options.paymentInfo);
       Lambda.createPayment(options.paymentInfo);
     } else {
       options.paymentInfo.invite = true;
@@ -86,6 +99,17 @@ class CreatePaymentView extends React.Component {
     }
   }
 
+  handleCancel() {
+    Mixpanel.trackWithProperties('Payment Onboarding', {
+      completed: false,
+      cancelled: true,
+      cancelledOnPage: this.pages[this.state.pageIndex],
+      uid: this.props.currentUser.uid
+    });
+
+    this.props.toggleModal();
+  }
+
   render() {
     return (
       <View style={{flex: 1.0}}>
@@ -95,7 +119,7 @@ class CreatePaymentView extends React.Component {
         { /* Header */ }
         <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
           <Header
-            callbackClose={() => this.props.toggleModal()}
+            callbackClose={() => this.handleCancel()}
             callbackBack={() => this._prevPage()}
             numUnseenNotifications={this.props.numUnseenNotifications}
             headerProps={Headers.get({ header: "createPayment", index: this.state.pageIndex })} />
@@ -109,16 +133,16 @@ class CreatePaymentView extends React.Component {
               <UserSelection
                 {...this.props}
                 dismissKeyboard={() => this._dismissKeyboard()}
-                induceState={(options) => this._induceState(options)}
+                induceState={(options) => this.induceState(options)}
                 nextPage={() => this._nextPage()} />
             </View>
 
             { /* Amount and duration */ }
             <View>
-              <AmountAndDuration
+              <AmountFrequencyDuration
                 {...this.props}
                 dismissKeyboard={() => this._dismissKeyboard()}
-                induceState={(options) => this._induceState(options)}
+                induceState={(options) => this.induceState(options)}
                 selectedContacts={this.state.selectedContacts}
                 nextPage={() => this._nextPage()}
                 prevPage={() => this._prevPage()} />
@@ -136,7 +160,8 @@ class CreatePaymentView extends React.Component {
                 payment={{
                   amount: this.state.amount,
                   duration: this.state.duration,
-                  users: this.state.selectedContacts,
+                  frequency: this.state.frequency,
+                  users: this.state.selectedContacts
                 }} />
             </View>
           </Animated.View>

@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableHighlight, StyleSheet, Animated, Easing, Dimensions, StatusBar, Image } from "react-native";
 import { Actions } from 'react-native-router-flux';
+import Mixpanel from 'react-native-mixpanel';
 import Entypo from 'react-native-vector-icons/Entypo';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 
@@ -28,6 +29,7 @@ export default class BankOnboardingView extends React.Component {
     super(props);
     this.offsetX = new Animated.Value(0);
     this.logoAspectRatio = 377 / 568;
+    this.errCodes = [];
     this.state = {
       animating: false,
       pageIndex: 0,
@@ -42,6 +44,10 @@ export default class BankOnboardingView extends React.Component {
       dob: null,
       ssn: null
     };
+  }
+
+  componentWillMount() {
+    Mixpanel.timeEvent('Dwolla Customer Onboarding');
   }
 
   induceState(substate, cb) {
@@ -63,12 +69,18 @@ export default class BankOnboardingView extends React.Component {
       ssn: this.state.ssn
     },
     (cb) => {
-      console.log("createDwollaCustomer success callback was invoked...");
+      Mixpanel.trackWithProperties('Dwolla Customer Onboarding', {
+        completed: true,
+        cancelled: false,
+        errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
+        uid: this.props.currentUser.uid
+      });
       setTimeout(() => this.nextPage(), 500);
       if (typeof cb === 'function') cb(true);
     },
-    (cb) => {
-      console.log("createDwollaCustomer failure callback was invoked...");
+    (errCode, cb) => {
+      this.errCodes.push({ errCode: errCode, timestamp: new Date().getTime() });
+      Mixpanel.trackWithProperties('Failed Dwolla Customer Creation', { errCode: errCode });
       alert("Something went wrong on our end 🙄\nPlease try again");
       if (typeof cb === 'function') cb(false);
     });
@@ -80,7 +92,13 @@ export default class BankOnboardingView extends React.Component {
     dismissKeyboard();
 
     this.setState({ pageIndex: this.state.pageIndex + 1 }, () => {
-      if ((this.state.pageIndex - 1) === 0) this.toggleCloseButton();
+      // Only show the close button on first page
+      if ((this.state.pageIndex - 1) === 0)
+        this.toggleCloseButton();
+
+      // We've reached the IAV page
+      if (this.state.skipCityPage && this.state.pageIndex === 6 || !this.state.skipCityPage && this.state.pageIndex === 7)
+        Mixpanel.timeEvent('IAV Onboarding');
     });
 
     Animated.timing(this.offsetX, {
@@ -110,6 +128,29 @@ export default class BankOnboardingView extends React.Component {
     this.setState({ closeButtonVisible: !this.state.closeButtonVisible });
   }
 
+  handleCancel() {
+    Mixpanel.trackWithProperties('Dwolla Customer Onboarding', {
+      completed: false,
+      cancelled: true,
+      errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
+      uid: this.props.currentUser.uid
+    });
+
+    this.props.closeModal();
+  }
+
+  handleSkipIAV() {
+    Mixpanel.trackWithProperties('IAV Onboarding', {
+      completed: true,
+      cancelled: true,
+      uid: this.props.currentUser.uid,
+      IAVToken: this.props.currentUser.IAVToken,
+      firebaseToken: this.props.currentUser.token
+    });
+
+    Actions.MainViewContainer();
+  }
+
   render() {
     return(
       <View style={{ flex: 1.0 }}>
@@ -127,7 +168,7 @@ export default class BankOnboardingView extends React.Component {
                 style={styles.backButton}
                 activeOpacity={0.8}
                 underlayColor={'transparent'}
-                onPress={() => (this.state.closeButtonVisible) ? (this.props.closeModal) ? this.props.closeModal() : console.log("BankOnboardingView was not supplied with a closeModal function") : this.prevPage()}>
+                onPress={() => (this.state.closeButtonVisible) ? (this.props.closeModal) ? this.handleCancel() : console.log("BankOnboardingView was not supplied with a closeModal function") : this.prevPage()}>
                 <Entypo color={colors.white} size={30} name={(this.state.closeButtonVisible) ? "cross" : "chevron-thin-left"} />
               </TouchableHighlight> }
 
@@ -137,7 +178,7 @@ export default class BankOnboardingView extends React.Component {
                 style={styles.skipButton}
                 activeOpacity={0.8}
                 underlayColor={'transparent'}
-                onPress={() => Actions.MainViewContainer()}>
+                onPress={() => this.handleSkipIAV()}>
                 <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
                   Skip
                 </Text>
