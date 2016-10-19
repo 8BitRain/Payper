@@ -16,22 +16,6 @@ export default class IAVWebView extends React.Component {
     this.WEB_VIEW_REF = "IAVWebView";
   }
 
-  componentWillMount() {
-    console.log("IAV mounted");
-    console.log("Firebase Token:", this.props.firebaseToken);
-    console.log("IAV Token:", this.props.IAVToken);
-    console.log("Dwolla Env:", this.dwollaEnv);
-    console.log("Payper Env:", this.payperEnv);
-
-
-    console.log("injected js:\n", this.state.injectedJS);
-
-  }
-
-  componentWillUnmount() {
-    console.log("IAV unmounted");
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.IAVToken !== this.props.IAVToken || nextProps.firebaseToken !== this.props.firebaseToken) {
       this.setState({
@@ -40,8 +24,6 @@ export default class IAVWebView extends React.Component {
           "$(function() { generateIAVToken(\"" + this.dwollaEnv + "\", \"" + this.payperEnv + "\") });"
       }, () => this.refs[this.WEB_VIEW_REF].reload());
     }
-
-    console.log("injected js:\n", this.state.injectedJS);
   }
 
   handleError(err) {
