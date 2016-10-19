@@ -1,32 +1,27 @@
 // Dependencies
 import React from 'react';
 import { WebView } from 'react-native';
+import config from '../../config';
 
 export default class IAVWebView extends React.Component {
   constructor(props) {
     super(props);
+    this.payperEnv = config.env;
+    this.dwollaEnv = (config.env === "dev") ? "sandbox" : "prod";
     this.state = {
       injectedJS: "var firebase_token = '" + this.props.firebaseToken + "';" +
         "var iav_token = '" + this.props.IAVToken + "';" +
-        "$(function() { generateIAVToken() });"
+        "$(function() { generateIAVToken(\"" + this.dwollaEnv + "\", \"" + this.payperEnv + "\") });"
     }
     this.WEB_VIEW_REF = "IAVWebView";
   }
 
-  componentWillMount() {
-    console.log("IAV mounted");
-  }
-
-  componentWillUnmount() {
-    console.log("IAV unmounted");
-  }
-
   componentWillReceiveProps(nextProps) {
-    if (nextProps.IAVToken || nextProps.firebaseToken) {
+    if (nextProps.IAVToken !== this.props.IAVToken || nextProps.firebaseToken !== this.props.firebaseToken) {
       this.setState({
-        injectedJS: "var firebase_token = '" + nextProps.firebaseToken + "';" +
-          "var iav_token = '" + nextProps.IAVToken + "';" +
-          "$(function() { generateIAVToken() });"
+        injectedJS: "var firebase_token = '" + this.props.firebaseToken + "';" +
+          "var iav_token = '" + this.props.IAVToken + "';" +
+          "$(function() { generateIAVToken(\"" + this.dwollaEnv + "\", \"" + this.payperEnv + "\") });"
       }, () => this.refs[this.WEB_VIEW_REF].reload());
     }
   }
