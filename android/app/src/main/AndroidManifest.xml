@@ -10,11 +10,12 @@
       android:allowBackup="true"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
-      android:theme="@style/AppTheme">
+      android:theme="@style/AppTheme"
+        android:name=".MainApplication">
 
       <activity
-        android:name=".MainApplication"
         android:label="@string/app_name"
+          android:name=".MainActivity"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
