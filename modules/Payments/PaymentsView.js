@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 // Helpers
 import * as Alert from '../../helpers/Alert';
@@ -281,7 +282,7 @@ class Payments extends React.Component {
   }
 
   getModalInnerContent() {
-    if (true) {
+    if (this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification") {
       return(
         <View style={{ flex: 1.0, marginTop: 20, backgroundColor: colors.richBlack }}>
           <MicrodepositOnboarding
@@ -309,9 +310,11 @@ class Payments extends React.Component {
       break;
       case "bank":
         return(
-          <View style={{ flex: 1.0, marginTop: 20 }}>
-            <IAVWebView IAVToken={this.props.currentUser.IAVToken} firebaseToken={this.props.currentUser.token} />
-          </View>
+          <IAVWebView refreshable
+            IAVToken={this.props.currentUser.IAVToken}
+            firebaseToken={this.props.currentUser.token}
+            currentUser={this.props.currentUser}
+            toggleModal={() => this._toggleModal()} />
         );
       break;
       default:
