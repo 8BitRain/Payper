@@ -84,8 +84,8 @@ class SplashView extends React.Component {
     Async.get('betaStatus', (val) => {
       if (val == "fullAccess") {
         Async.get('user', (user) => {
-          let onboardingState = (user.appFlags) ? user.appFlags.onboarding_state : null;
-          if (onboardingState !== "customer") {
+          user = JSON.parse(user);
+          if (onboardingState === "customer") {
             _this._handleSignInFailure();
           } else {
             this.props.currentUser.loginWithAccessToken({ token: user.token },
