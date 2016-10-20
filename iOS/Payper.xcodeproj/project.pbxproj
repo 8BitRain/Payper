@@ -655,7 +655,8 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 9MXT88RAVX;
+						DevelopmentTeam = 3RH8L96ZE3;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Keychain = {
 								enabled = 1;
@@ -1096,7 +1097,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 9MXT88RAVX;
+				DEVELOPMENT_TEAM = 3RH8L96ZE3;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"~/Documents/FacebookSDK",
@@ -1121,7 +1122,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.getpayper.getpayer;
 				PRODUCT_NAME = Payper;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e932d2b3-7f97-4076-b267-c5774cc20ba8";
+				PROVISIONING_PROFILE_SPECIFIER = io.getpayper.payper;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1135,7 +1137,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 9MXT88RAVX;
+				DEVELOPMENT_TEAM = 3RH8L96ZE3;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"~/Documents/FacebookSDK",
@@ -1160,7 +1162,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.getpayper.getpayer;
 				PRODUCT_NAME = Payper;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e932d2b3-7f97-4076-b267-c5774cc20ba8";
+				PROVISIONING_PROFILE_SPECIFIER = io.getpayper.payper;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -1222,7 +1225,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 9MXT88RAVX;
+				DEVELOPMENT_TEAM = 3RH8L96ZE3;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"~/Documents/FacebookSDK",
@@ -1247,7 +1250,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.getpayper.getpayer;
 				PRODUCT_NAME = Payper;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "e932d2b3-7f97-4076-b267-c5774cc20ba8";
+				PROVISIONING_PROFILE_SPECIFIER = io.getpayper.payper;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Staging;

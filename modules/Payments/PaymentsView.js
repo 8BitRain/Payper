@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar } from 'react-native';
+import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar, Image } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Entypo from 'react-native-vector-icons/Entypo';
 
@@ -15,6 +15,7 @@ import IAVWebView from '../../components/IAVWebView/IAVWebView';
 import CreatePayment from '../../modules/CreatePayment/CreatePaymentView';
 import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingView';
 import MicrodepositOnboarding from '../../components/MicrodepositOnboarding/MicrodepositOnboarding';
+import Carousel from 'react-native-carousel';
 
 // Payment card components
 import Active from '../../components/PaymentCards/Active';
@@ -22,8 +23,11 @@ import PendingConfirmation from '../../components/PaymentCards/PendingConfirmati
 import PendingFundingSource from '../../components/PaymentCards/PendingFundingSource';
 import PendingInvite from '../../components/PaymentCards/PendingInvite';
 
+//Icons
+import Ionicons from 'react-native-vector-icons/Ionicons';
 // Stylesheets
 import colors from '../../styles/colors';
+import carousel from '../../styles/carousel';
 const dimensions = Dimensions.get('window');
 
 class Payments extends React.Component {
@@ -155,10 +159,34 @@ class Payments extends React.Component {
 
   _renderEmptyState() {
     return(
-      <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white}}>
-        <Text style={{fontSize: 18, color: colors.richBlack}}>
-          { "No active " + this.props.activeFilter + " payments." }
-        </Text>
+      <View style={{flex: 1, flexDirection: 'column', backgroundColor: colors.white}}>
+        
+          <Carousel hideIndicators={true} animate={true} delay={5000}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 60, width: dimensions.width - 20}}>
+              <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-beer" color={"grey"} />
+              <Text style={{textAlign: 'center', fontSize: 18, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>More savings, more beer money!</Text>
+            </View>
+            <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 60, width: dimensions.width - 20}}>
+              <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-cut" color={"grey"} />
+              <Text style={{textAlign: 'center', fontSize: 18, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>Split Spotify Premium with a friend and save $7.50 a month!</Text>
+            </View>
+            <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 60, width: dimensions.width - 20}}>
+              <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-stopwatch" color={"grey"} />
+              <Text style={{textAlign: 'center', fontSize: 18, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>The longer you wait, the less you save! Start splitting now!</Text>
+            </View>
+            <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 60, width: dimensions.width - 20}}>
+              <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-thermometer" color={"grey"} />
+              <Text style={{textAlign: 'center', fontSize: 18, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>It’s getting hot in here, so cut down on all your expenses!</Text>
+            </View>
+            <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 60, width: dimensions.width - 20}}>
+              <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-cut" color={"grey"} />
+              <Text style={{textAlign: 'center', fontSize: 18, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>time to cut your expenses</Text>
+            </View>
+            <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 60, width: dimensions.width - 20}}>
+              <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-thunderstorm" color={"grey"} />
+              <Text style={{textAlign: 'center', fontSize: 18, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>There’s a storm brewing. A storm of savings!</Text>
+            </View>
+          </Carousel>
       </View>
     );
   }
