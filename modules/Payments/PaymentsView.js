@@ -338,7 +338,7 @@ class Payments extends React.Component {
 
         <View style={{flex: 1.0}}>
           { /* Bank account notice bar (if necessary) */
-            (this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification")
+            (this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification" || this.props.currentUser.appFlags.onboarding_state === "bank")
             ? <NoticeBar onboardingState={this.props.currentUser.appFlags.onboarding_state} />
             : null }
 
