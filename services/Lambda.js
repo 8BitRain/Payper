@@ -350,6 +350,7 @@ export function verifyMicrodeposits(options, callback) {
         console.log("Verify microdeposits Lambda response:", responseData);
         if (typeof callback == 'function') callback(true);
       } else {
+        console.log("resdata", responseData);
         console.log("Error verifying microdeposits:", responseData.errorMessage);
         if (typeof callback == 'function') callback(false);
       }

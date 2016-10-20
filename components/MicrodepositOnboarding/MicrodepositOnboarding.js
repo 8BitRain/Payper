@@ -31,7 +31,7 @@ export default class MicrodepositOnboarding extends React.Component {
     let valid = Number.parseFloat(this.state.amountOne) > 0 && Number.parseFloat(this.state.amountTwo) > 0;
 
     if (valid) {
-      let params = { amount1: Number.parseFloat(this.state.amountOne), amount2: Number.parseFloat(this.state.amountTwo), token: "token" };
+      let params = { amount1: Number.parseFloat(this.state.amountOne), amount2: Number.parseFloat(this.state.amountTwo), token: this.props.currentUser.token };
       this.setState({ submitText: "Verifying..." });
       Lambda.verifyMicrodeposits(params, (success) => {
         this.setState({ submitText: (success) ? "Verified!" : "We couldn't verify those amounts. Is there a typo?" });

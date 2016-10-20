@@ -31,7 +31,10 @@ export default class IAV extends React.Component {
         </View>
 
         <View style={{ marginTop: 18, borderTopWidth: 1.5, borderColor: colors.accent, flex: 1.0 }}>
-          <IAVWebView IAVToken={this.props.currentUser.IAVToken} firebaseToken={this.props.currentUser.token} />
+          <IAVWebView
+            currentUser={this.props.currentUser}
+            IAVToken={this.props.currentUser.IAVToken}
+            firebaseToken={this.props.currentUser.token} />
         </View>
       </View>
     );

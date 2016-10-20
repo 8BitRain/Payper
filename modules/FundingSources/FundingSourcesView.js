@@ -53,7 +53,7 @@ class FundingSources extends React.Component {
         fundingSource={f}
         optimisticallyRemoveFundingSource={() => {
           this.setState({ dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows([]) });
-          this.props.currentUser.update({ fundingSource: null });
+          this.props.currentUser.update({ fundingSource: null, bankAccount: null });
         }} />
     );
   }
@@ -104,33 +104,6 @@ class FundingSources extends React.Component {
               </View>
             </View>
           </TouchableHighlight>
-
-          { /* Cancel microdeposits button */ }
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            onPress={() => console.log("Cancelling microdeposits...")}>
-
-            <View style={{
-              width: dimensions.width,
-              flexDirection: 'row',
-              alignItems: 'center',
-              height: 60,
-              flex: 0.5,
-              backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
-              { /* Text */ }
-              <View style={{ flex: 0.9, paddingLeft: 15 }}>
-                <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white }}>
-                  { "Cancel microdeposits and link a different bank account" }
-                </Text>
-              </View>
-
-              { /* Chevron */ }
-              <View style={{ flex: 0.1, paddingRight: 15 }}>
-                <Entypo name={"chevron-thin-right"} size={20} color={colors.accent} />
-              </View>
-            </View>
-          </TouchableHighlight>
         </View>
       </View>
     );
@@ -151,33 +124,33 @@ class FundingSources extends React.Component {
   render() {
     return (
       <View style={{flex: 1, backgroundColor: colors.richBlack}}>
-        { /* 'Add a new bank account' button */
-          (this.props.currentUser.appFlags.onboarding_state !== "awaitingMicrodepositVerification")
-          ? <TouchableHighlight
-              underlayColor={colors.richBlack}
-              activeOpacity={0.7}
-              onPress={() => {
-                if (this.props.currentUser.bankAccount) {
-                  Alert.message({
-                    title: "Unfortunately...",
-                    message: "Payper doesn't currently support multiple bank accounts. This feature will be available soon!",
-                  });
-                } else {
-                  this._toggleIAVModal();
-                }
-              }}>
+        { /* 'Add a new bank account' button */ }
+        <TouchableHighlight
+          underlayColor={colors.richBlack}
+          activeOpacity={0.7}
+          onPress={() => {
+            if (this.props.currentUser.bankAccount) {
+              Alert.message({
+                title: "Unfortunately...",
+                message: "Payper doesn't currently support multiple bank accounts. This feature will be available soon!",
+              });
+            } else {
+              this._toggleIAVModal();
+            }
+          }}>
 
-              <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: colors.richBlack, borderBottomWidth: 1.0, borderBottomColor: colors.accent}}>
-                <Entypo name="plus" size={30} color={colors.accent} />
-                <Text style={{fontFamily: 'Roboto', fontWeight: '100', fontSize: 16, paddingLeft: 10, color: colors.accent}}>
-                  Add a new bank acount
-                </Text>
-              </View>
-            </TouchableHighlight>
-          : null }
+          <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: colors.richBlack, borderBottomWidth: 1.0, borderBottomColor: colors.accent}}>
+            <Entypo name="plus" size={30} color={colors.accent} />
+            <Text style={{fontFamily: 'Roboto', fontWeight: '100', fontSize: 16, paddingLeft: 10, color: colors.accent}}>
+              Add a new bank acount
+            </Text>
+          </View>
+        </TouchableHighlight>
 
         { /* Render list of notifications or empty state */
-          (this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification") ? this._getMicrodepositReminder() : this._getFundingSourceList() }
+          (this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification")
+          ? this._getMicrodepositReminder()
+          : this._getFundingSourceList() }
 
         { /* IAV modal */ }
         <Modal

@@ -20,15 +20,8 @@ export default class IAVWebView extends React.Component {
     this.WEB_VIEW_REF = "IAVWebView";
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log("<IAVWebView /> received IAVToken:\n", nextProps.IAVToken);
-    if (nextProps.IAVToken !== this.props.IAVToken || nextProps.firebaseToken !== this.props.firebaseToken) {
-      this.setState({
-        injectedJS: "var firebase_token = '" + this.props.firebaseToken + "';" +
-          "var iav_token = '" + this.props.IAVToken + "';" +
-          "$(function() { generateIAVToken(\"" + this.dwollaEnv + "\", \"" + this.payperEnv + "\") });"
-      }, () => this.refresh());
-    }
+  componentWillMount() {
+    this.refreshIAVToken(() => this.refresh());
   }
 
   handleError(err) {
@@ -37,21 +30,19 @@ export default class IAVWebView extends React.Component {
   }
 
   refresh() {
-    if (this.timesRefreshed > 0)
-      this.refreshIAVToken(() => this.refs[this.WEB_VIEW_REF].reload());
-    else
-      this.refs[this.WEB_VIEW_REF].reload();
-
-    this.timesRefreshed++;
+    this.refs[this.WEB_VIEW_REF].reload();
   }
 
   refreshIAVToken(cb) {
     this.props.currentUser.getIAVToken({ token: this.props.currentUser.token }, (res) => {
+      console.log("new iav token:\n", res);
       this.setState({
         injectedJS: "var firebase_token = '" + this.props.firebaseToken + "';" +
-          "var iav_token = '" + res.token + "';" +
+          "var iav_token = '" + res.IAVToken + "';" +
           "$(function() { generateIAVToken(\"" + this.dwollaEnv + "\", \"" + this.payperEnv + "\") });"
-      }, () => cb());
+      }, () => {
+        if (typeof cb === 'function') cb();
+      });
     });
   }
 
@@ -80,7 +71,7 @@ export default class IAVWebView extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => this.refresh(true)}>
+            onPress={() => this.refresh()}>
 
             <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.white, padding: 6, borderRadius: 4, overflow: 'hidden', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
               Refresh
