@@ -11,6 +11,7 @@ export default class IAVWebView extends React.Component {
     super(props);
     this.payperEnv = config.env;
     this.dwollaEnv = (config.env === "dev") ? "sandbox" : "prod";
+    this.timesRefreshed = 0;
     this.state = {
       injectedJS: "var firebase_token = '" + this.props.firebaseToken + "';" +
         "var iav_token = '" + this.props.IAVToken + "';" +
@@ -19,16 +20,8 @@ export default class IAVWebView extends React.Component {
     this.WEB_VIEW_REF = "IAVWebView";
   }
 
-  componentDidMount() {
-    console.log("IAVWebView mounted...");
-    console.log("this.payperEnv", this.payperEnv);
-    console.log("this.dwollaEnv", this.dwollaEnv);
-    console.log("this.props.firebaseToken", this.props.firebaseToken);
-    console.log("this.props.IAVToken", this.props.IAVToken);
-  }
-
   componentWillReceiveProps(nextProps) {
-    console.log("IAVWebView will receive props. nextProps.IAVToken =", nextProps.IAVToken);
+    console.log("<IAVWebView /> received IAVToken:\n", nextProps.IAVToken);
     if (nextProps.IAVToken !== this.props.IAVToken || nextProps.firebaseToken !== this.props.firebaseToken) {
       this.setState({
         injectedJS: "var firebase_token = '" + this.props.firebaseToken + "';" +
@@ -39,22 +32,27 @@ export default class IAVWebView extends React.Component {
   }
 
   handleError(err) {
-    console.log("Error loading WebView:", err);
+    console.log("Error loading WebView:\n", err);
+    this.refreshIAVToken(() => this.refresh());
   }
 
-  refresh(getNewIAVToken) {
-    setTimeout(() => this.refs[this.WEB_VIEW_REF].reload(), 250);
-    // if (getNewIAVToken) {
-    //   this.props.currentUser.getIAVToken({ token: this.props.firebaseToken }, (res) => {
-    //     this.setState({
-    //       injectedJS: "var firebase_token = '" + this.props.firebaseToken + "';" +
-    //         "var iav_token = '" + res.IAVToken + "';" +
-    //         "$(function() { generateIAVToken(\"" + this.dwollaEnv + "\", \"" + this.payperEnv + "\") });"
-    //     }, () => this.refresh());
-    //   });
-    // } else {
-    //   this.refs[this.WEB_VIEW_REF].reload();
-    // }
+  refresh() {
+    if (this.timesRefreshed > 0)
+      this.refreshIAVToken(() => this.refs[this.WEB_VIEW_REF].reload());
+    else
+      this.refs[this.WEB_VIEW_REF].reload();
+
+    this.timesRefreshed++;
+  }
+
+  refreshIAVToken(cb) {
+    this.props.currentUser.getIAVToken({ token: this.props.currentUser.token }, (res) => {
+      this.setState({
+        injectedJS: "var firebase_token = '" + this.props.firebaseToken + "';" +
+          "var iav_token = '" + res.token + "';" +
+          "$(function() { generateIAVToken(\"" + this.dwollaEnv + "\", \"" + this.payperEnv + "\") });"
+      }, () => cb());
+    });
   }
 
   render() {

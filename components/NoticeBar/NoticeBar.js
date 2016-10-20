@@ -46,7 +46,7 @@ export default class NoticeBar extends React.Component {
         activeOpacity={0.8}
         underlayColor={colors.richBlack}
         style={{ borderTopWidth: 1.0, borderBottomWidth: 1.8, borderColor: colors.accent }}
-        onPress={() => console.log("Pressed")}>
+        onPress={() => this.props.onPress()}>
 
         <Animated.View style={[styles.wrap, { height: this.height }]}>
           <FontAwesome name={"bank"} size={22} color={colors.accent} style={{ padding: 5 }} />

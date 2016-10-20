@@ -31,8 +31,8 @@ class Payments extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      uid: "",
-      modalVisible: false
+      modalVisible: false,
+      bankModalVisible: false
     }
   }
 
@@ -126,10 +126,6 @@ class Payments extends React.Component {
   }
 
   _archiveCompletePayments(options) {
-
-    console.log("_archiveCompletePayments was invoked...");
-    console.log("this.props.current")
-
     let payments;
 
     // Determine which payment set to look through
@@ -137,8 +133,6 @@ class Payments extends React.Component {
       payments = (this.props.activeFilter === "outgoing") ? this.props.currentUser.paymentFlow.out : this.props.currentUser.paymentFlow.in;
     else
       payments = [];
-
-    console.log("payments\n", payments);
 
     // If a payment is complete, animate it out, then archive it
     for (var p in payments) {
@@ -151,6 +145,10 @@ class Payments extends React.Component {
 
   _toggleModal(options) {
     this.setState({ modalVisible: !this.state.modalVisible });
+  }
+
+  toggleBankModal() {
+    this.setState({ bankModalVisible: !this.state.bankModalVisible });
   }
 
   _renderEmptyState() {
@@ -281,54 +279,6 @@ class Payments extends React.Component {
     }
   }
 
-  getModalInnerContent() {
-    if (this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification") {
-      return(
-        <View style={{ flex: 1.0, marginTop: 20, backgroundColor: colors.richBlack }}>
-          <MicrodepositOnboarding
-            {...this.props}
-            toggleModal={(options) => this._toggleModal(options)} />
-        </View>
-      );
-    } else switch (this.props.currentUser.appFlags.onboarding_state) {
-      case "complete":
-        return(
-          <CreatePayment
-            {...this.props}
-            toggleModal={(options) => this._toggleModal(options)} />
-        );
-      break;
-      case "customer":
-        return(
-          <View style={{ flex: 1.0, marginTop: 20, backgroundColor: colors.richBlack }}>
-            <BankOnboarding
-              {...this.props}
-              closeModal={() => this._toggleModal()}
-              displayCloseButton={true} />
-          </View>
-        );
-      break;
-      case "bank":
-        return(
-          <IAVWebView refreshable
-            IAVToken={this.props.currentUser.IAVToken}
-            firebaseToken={this.props.currentUser.token}
-            currentUser={this.props.currentUser}
-            toggleModal={() => this._toggleModal()} />
-        );
-      break;
-      default:
-        return(
-          <View style={{ flex: 1.0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'red' }}>
-            <Text style={{ color: colors.white, fontSize: 16, textAlign: 'center', paddingTop: 50 }}>
-              { "Something went wrong.\nPlease reload the app.\n(check getModalInnerContent() of PaymentsVew.js)" }
-            </Text>
-          </View>
-        );
-    }
-  }
-
-
   render() {
     // TODO: Do this in componentDidMount() instead?
     this._archiveCompletePayments();
@@ -339,7 +289,9 @@ class Payments extends React.Component {
         <View style={{flex: 1.0}}>
           { /* Bank account notice bar (if necessary) */
             (this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification" || this.props.currentUser.appFlags.onboarding_state === "bank")
-            ? <NoticeBar onboardingState={this.props.currentUser.appFlags.onboarding_state} />
+            ? <NoticeBar
+                onboardingState={this.props.currentUser.appFlags.onboarding_state}
+                onPress={() => this.toggleBankModal()} />
             : null }
 
           { /* Payment list (or empty state) */
@@ -353,7 +305,7 @@ class Payments extends React.Component {
           <Footer callbackPay={() => this._toggleModal()} />
         </View>
 
-        { /* Modal containing create payment panel */ }
+        { /* Create payment modal */ }
         <Modal
           animationType={"slide"}
           transparent={true}
@@ -361,9 +313,36 @@ class Payments extends React.Component {
           onRequestClose={ () => alert("Closed modal") }>
 
           <StatusBar barStyle="light-content" />
-          { this.getModalInnerContent() }
+
+          <CreatePayment
+            {...this.props}
+            toggleModal={(options) => this._toggleModal(options)} />
 
         </Modal>
+
+        { /* Bank onboarding modal (if necessary) */
+          (this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification" || this.props.currentUser.appFlags.onboarding_state === "bank")
+          ? <Modal
+              animationType={"slide"}
+              transparent={true}
+              visible={this.state.bankModalVisible}
+              onRequestClose={() => alert("Closed modal")}>
+
+              <StatusBar barStyle="light-content" />
+
+              {(this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification")
+              ? <MicrodepositOnboarding currentUser={this.props.currentUser} toggleModal={() => this.toggleBankModal()} />
+              : (this.props.currentUser.appFlags.onboarding_state === "bank")
+                ? <IAVWebView refreshable
+                    currentUser={this.props.currentUser}
+                    firebaseToken={this.props.currentUser.token}
+                    IAVToken={this.props.currentUser.IAVToken}
+                    toggleModal={() => this.toggleBankModal()} />
+                : null }
+
+            </Modal>
+          : null }
+
       </View>
     );
   }

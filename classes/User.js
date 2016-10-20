@@ -344,13 +344,16 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   getIAVToken(params, updateViaRedux) {
-    console.log("attempting to get iav token with params", params);
     try {
       fetch(baseURL + "utils/getIAV", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
-        if (!responseData.errorMessage)
-          updateViaRedux({ IAVToken: responseData.token });
+        if (!responseData.errorMessage) {
+          if (responseData.token)
+            updateViaRedux({ IAVToken: responseData.token });
+          else
+            console.log("getIAVToken received an undefined token.");
+        }
         else
           console.log("Error getting IAV token:", responseData.errorMessage);
       })
@@ -445,8 +448,9 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
+          console.log("res", res);
           try {
-            updateViaRedux({ IAVToken: res.iav.body.token, fundingSourceAdded: res.fundingSourceAdded });
+            updateViaRedux({ IAVToken: res.iav });
           } catch (err) {
             console.log("Error in IAV listener:", err);
           }
