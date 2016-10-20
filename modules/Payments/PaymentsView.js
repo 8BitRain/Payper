@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar, Image } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Entypo from 'react-native-vector-icons/Entypo';
+import * as Animatable from 'react-native-animatable';
+
 
 // Helpers
 import * as Alert from '../../helpers/Alert';
@@ -159,8 +161,8 @@ class Payments extends React.Component {
 
   _renderEmptyState() {
     return(
+  
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: colors.white}}>
-        
           <Carousel hideIndicators={true} animate={true} delay={5000}>
             <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 60, width: dimensions.width - 20}}>
               <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-beer" color={"grey"} />
@@ -180,7 +182,7 @@ class Payments extends React.Component {
             </View>
             <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 60, width: dimensions.width - 20}}>
               <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-cut" color={"grey"} />
-              <Text style={{textAlign: 'center', fontSize: 18, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>time to cut your expenses</Text>
+              <Text style={{textAlign: 'center', fontSize: 18, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>Time to cut your expenses!</Text>
             </View>
             <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 60, width: dimensions.width - 20}}>
               <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-thunderstorm" color={"grey"} />

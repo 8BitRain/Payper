@@ -19,6 +19,7 @@
     "querystring": "^0.2.0",
     "react": "15.3.2",
     "react-native": "0.34.x",
+    "react-native-animatable": "^0.6.1",
     "react-native-autocomplete-input": "*",
     "react-native-blur": "*",
     "react-native-button": "github:ide/react-native-button",
