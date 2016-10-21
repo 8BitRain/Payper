@@ -75,7 +75,12 @@ export default class BankOnboardingView extends React.Component {
         errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
         uid: this.props.currentUser.uid
       });
-      setTimeout(() => this.nextPage(), 500);
+      setTimeout(() => {
+        if (typeof this.props.closeModal === 'function')
+          this.props.closeModal();
+        else
+          Actions.MainViewContainer();
+      }, 500);
       if (typeof cb === 'function') cb(true);
     },
     (errCode, cb) => {
@@ -95,10 +100,6 @@ export default class BankOnboardingView extends React.Component {
       // Only show the close button on first page
       if ((this.state.pageIndex - 1) === 0)
         this.toggleCloseButton();
-
-      // We've reached the IAV page
-      if (this.state.skipCityPage && this.state.pageIndex === 6 || !this.state.skipCityPage && this.state.pageIndex === 7)
-        Mixpanel.timeEvent('IAV Onboarding');
     });
 
     Animated.timing(this.offsetX, {
@@ -139,18 +140,6 @@ export default class BankOnboardingView extends React.Component {
     this.props.closeModal();
   }
 
-  handleSkipIAV() {
-    Mixpanel.trackWithProperties('IAV Onboarding', {
-      completed: true,
-      cancelled: true,
-      uid: this.props.currentUser.uid,
-      IAVToken: this.props.currentUser.IAVToken,
-      firebaseToken: this.props.currentUser.token
-    });
-
-    Actions.MainViewContainer();
-  }
-
   render() {
     return(
       <View style={{ flex: 1.0 }}>
@@ -162,7 +151,7 @@ export default class BankOnboardingView extends React.Component {
         </View>
 
         { /* Cancel or back button */
-          (!this.props.displayCloseButton && this.state.pageIndex === 0 || this.state.skipCityPage && this.state.pageIndex === 6 || !this.state.skipCityPage && this.state.pageIndex === 7)
+          (!this.props.displayCloseButton && this.state.pageIndex === 0)
             ? null
             : <TouchableHighlight
                 style={styles.backButton}
@@ -172,21 +161,8 @@ export default class BankOnboardingView extends React.Component {
                 <Entypo color={colors.white} size={30} name={(this.state.closeButtonVisible) ? "cross" : "chevron-thin-left"} />
               </TouchableHighlight> }
 
-        { /* Skip button */
-          (this.state.skipCityPage && this.state.pageIndex === 6 || !this.state.skipCityPage && this.state.pageIndex === 7)
-            ? <TouchableHighlight
-                style={styles.skipButton}
-                activeOpacity={0.8}
-                underlayColor={'transparent'}
-                onPress={() => this.handleSkipIAV()}>
-                <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
-                  Skip
-                </Text>
-              </TouchableHighlight>
-            : null }
-
         { /* Inner content */ }
-        <Animated.View style={[styles.allPanelsWrap, { marginLeft: this.offsetX, width: dimensions.width * ((this.state.skipCityPage) ? 7 : 8) }]}>
+        <Animated.View style={[styles.allPanelsWrap, { marginLeft: this.offsetX, width: dimensions.width * ((this.state.skipCityPage) ? 6 : 7) }]}>
           <View style={{ flex: 1.0, width: dimensions.width }}>
             <Comfort nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
@@ -211,9 +187,6 @@ export default class BankOnboardingView extends React.Component {
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
             <Social nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
-          </View>
-          <View style={{ flex: 1.0, width: dimensions.width }}>
-            <IAV induceState={substate => this.induceState(substate)} currentUser={this.props.currentUser} />
           </View>
         </Animated.View>
       </View>

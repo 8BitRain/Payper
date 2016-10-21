@@ -309,7 +309,11 @@ export default class User {
       fetch(baseURL + "customer/getFundingSource", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
-        if (!responseData.errorMessage) cb({ bankAccount: responseData });
+        if (!responseData) {
+          console.log("getFundingSource response was null");
+          return;
+        }
+        if (responseData && !responseData.errorMessage) cb({ bankAccount: responseData });
         else console.log("Error getting funding source", responseData.errorMessage);
       })
       .done();

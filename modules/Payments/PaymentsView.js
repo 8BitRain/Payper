@@ -37,19 +37,46 @@ class Payments extends React.Component {
   }
 
   cancelPayment(payment) {
+    let params = {
+      token: this.props.currentUser.token,
+      payment_id: payment.pid,
+      type: payment.type,
+      status: payment.status
+    };
+
+    console.log("Cancelling payment with params", params);
+
     // TODO: Optimistically delete payment card
-    Lambda.cancelPayment({ token: this.props.currentUser.token, payment_id: payment.pid });
+    Lambda.cancelPayment(params);
   }
 
   confirmPayment(payment) {
+    let params = {
+      token: this.props.currentUser.token,
+      payment_id: payment.pid,
+      type: payment.type,
+      status: payment.status
+    };
+
+    console.log("Confirming payment with params", params);
+
     // TODO: Optimistically mark payment card as confirmed
-    Lambda.confirmPayment({ token: this.props.currentUser.token, payment_id: payment.pid });
+    Lambda.confirmPayment(params);
 
   }
 
   rejectPayment(payment) {
+    let params = {
+      token: this.props.currentUser.token,
+      payment_id: payment.pid,
+      type: payment.type,
+      status: payment.status
+    };
+
+    console.log("Rejecting payment with params", params);
+
     // TODO: Optimistically delete payment card
-    Lambda.rejectPayment({ token: this.props.currentUser.token, payment_id: payment.pid });
+    Lambda.rejectPayment(params);
   }
 
   _showMenu(payment) {

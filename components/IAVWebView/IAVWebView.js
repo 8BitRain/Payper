@@ -1,6 +1,7 @@
 // Dependencies
 import React from 'react';
 import { View, Text, TouchableHighlight, WebView, Dimensions } from 'react-native';
+import Mixpanel from 'react-native-mixpanel';
 import Entypo from 'react-native-vector-icons/Entypo';
 import config from '../../config';
 import colors from '../../styles/colors';
@@ -11,8 +12,9 @@ export default class IAVWebView extends React.Component {
     super(props);
     this.payperEnv = config.env;
     this.dwollaEnv = (config.env === "dev") ? "sandbox" : "prod";
-    this.timesRefreshed = 0;
     this.state = {
+      cancelled: false,
+      IAVToken: this.props.IAVToken,
       injectedJS: "var firebase_token = '" + this.props.firebaseToken + "';" +
         "var iav_token = '" + this.props.IAVToken + "';" +
         "$(function() { generateIAVToken(\"" + this.dwollaEnv + "\", \"" + this.payperEnv + "\") });"
@@ -22,6 +24,16 @@ export default class IAVWebView extends React.Component {
 
   componentWillMount() {
     this.refreshIAVToken(() => this.refresh());
+    Mixpanel.timeEvent('IAV Onboarding');
+  }
+
+  componentWillUnmount() {
+    Mixpanel.trackWithProperties('IAV Onboarding', {
+      cancelled: this.state.cancelled,
+      uid: this.props.currentUser.uid,
+      IAVToken: this.state.IAVToken,
+      firebaseToken: this.props.currentUser.token
+    });
   }
 
   handleError(err) {
@@ -35,8 +47,9 @@ export default class IAVWebView extends React.Component {
 
   refreshIAVToken(cb) {
     this.props.currentUser.getIAVToken({ token: this.props.currentUser.token }, (res) => {
-      console.log("new iav token:\n", res);
+      console.log("New IAVToken:\n", res);
       this.setState({
+        IAVToken: res.IAVToken,
         injectedJS: "var firebase_token = '" + this.props.firebaseToken + "';" +
           "var iav_token = '" + res.IAVToken + "';" +
           "$(function() { generateIAVToken(\"" + this.dwollaEnv + "\", \"" + this.payperEnv + "\") });"
@@ -61,7 +74,7 @@ export default class IAVWebView extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => this.props.toggleModal()}>
+            onPress={() => this.setState({ cancelled: true }, () => this.props.toggleModal())}>
 
             <Entypo name={"cross"} size={24} color={colors.white} />
 
