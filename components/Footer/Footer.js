@@ -4,22 +4,18 @@ import {View, Text, TextInput, StyleSheet, Image, TouchableHighlight} from 'reac
 import Button from 'react-native-button';
 import Entypo from 'react-native-vector-icons/Entypo'
 
+// Stylesheets
 import colors from '../../styles/colors';
-
-// footer styles
 const styles = StyleSheet.create({
-  // Container for footer elements
   footerWrap: {
+    flex: 1,
+    flexDirection: 'row',
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    top: 0,
-
-    flex: 1,
-    flexDirection: 'row',
+    top: 0
   },
-
   button: {
     flex: 0.33,
     flexDirection: 'column',
@@ -27,80 +23,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'transparent',
   },
-
   text: {
     fontFamily: 'Roboto',
     fontSize: 12,
     color: colors.richBlack,
-  },
-
-  payButton: {
-
-  },
+  }
 });
-
-// Return a 'FEED' button
-function getFeedButton(_this, callback) {
-  return(
-    <TouchableHighlight
-      activeOpacity={0.7}
-      underlayColor={'transparent'}
-      style={[styles.button]}
-      onPress={() => { _this.setState({active: 'feed'}); callback(); }}>
-      <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-        <Entypo style={styles.iconSettings} name="globe" size={20} color={(_this.state.active == "feed") ? colors.accent : colors.richBlack} />
-        <Text style={[styles.text, {color: (_this.state.active == "feed") ? colors.accent : colors.richBlack}]}>Feed</Text>
-      </View>
-    </TouchableHighlight>
-  );
-};
-
-// Return a 'TRACKING' button
-function getTrackingButton(_this, callback) {
-  return(
-    <TouchableHighlight
-      activeOpacity={0.7}
-      underlayColor={'transparent'}
-      style={[styles.button]}
-      onPress={() => { _this.setState({active: 'myPayments'}); callback(); }}>
-      <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-        <Entypo style={styles.iconSettings} name="user" size={20} color={(_this.state.active == "myPayments") ? colors.accent : colors.richBlack} />
-        <Text style={[styles.text, {color: (_this.state.active == "myPayments") ? colors.accent : colors.richBlack}]}>My Payments</Text>
-      </View>
-    </TouchableHighlight>
-  );
-};
-
-// Return a pay button
-function getPayButton(callback) {
-  return(
-    <TouchableHighlight
-      activeOpacity={0.7}
-      underlayColor={'transparent'}
-      style={[styles.button]}
-      onPress={() => callback()}>
-        <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-          <Entypo style={[styles.iconSettings]} name="credit" size={20} color={colors.green} />
-          <Text style={[styles.text]}>New Payment</Text>
-        </View>
-    </TouchableHighlight>
-  );
-};
 
 class Footer extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      active: 'myPayments',
-    }
+    this.state = { active: 'myPayments' }
   }
+
   render() {
     return(
       <TouchableHighlight
         activeOpacity={0.8}
         underlayColor={colors.accent}
-        style={{
+        onPress={() => this.props.callbackPay()}>
+        <View style={{
           justifyContent: 'center',
           alignItems: 'center',
           width: 65,
@@ -113,11 +55,11 @@ class Footer extends React.Component {
           shadowOffset: {width: 0, height: 0},
           shadowOpacity: 0.45,
           shadowRadius: 3.0
-        }}
-        onPress={() => this.props.callbackPay()}>
+        }}>
 
         <Entypo style={[styles.iconSettings, {marginLeft: 3.5}]} name="credit" size={30} color={colors.white} />
 
+        </View>
       </TouchableHighlight>
     );
   }

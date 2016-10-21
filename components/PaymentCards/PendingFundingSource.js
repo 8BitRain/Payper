@@ -34,8 +34,8 @@ class PendingFundingSource extends React.Component {
 
   _getPendingFundingSourceMessage() {
     return(
-      <View style={styles.bottom}>
-        <Text style={[styles.confirmText, { borderColor: colors.alertRed, backgroundColor: colors.alertRed }]}>
+      <View style={[styles.bottom, { paddingBottom: 7 }]}>
+        <Text style={[styles.confirmText, { backgroundColor: colors.alertRed, width: dimensions.width * 0.8, borderRadius: 4, overflow: 'hidden' }]}>
           { this.props.message }
         </Text>
       </View>

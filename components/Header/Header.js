@@ -189,7 +189,7 @@ function getCircleIcons(numCircles, index) {
 function getAppLogo(){
   return(
     <View style={styles.iconWrap}>
-      <Image source={require('../../iOS/Coincast/Images.xcassets/AppIcon.appiconset/Icon-App-60x60@1x.png')}/>
+      { /* <Image source={require('../../iOS/Coincast/Images.xcassets/AppIcon.appiconset/Icon-App-60x60@1x.png')}/> */ }
     </View>
   )
 }

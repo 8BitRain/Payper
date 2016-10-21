@@ -34,40 +34,35 @@ class PendingConfirmation extends React.Component {
 
   _getPendingConfirmationAlert() {
     return(
-      <View style={styles.bottom}>
-        <Text style={[styles.confirmText, { borderColor: colors.alertRed, backgroundColor: colors.alertRed }]}>
-          Pending Confirmation
-        </Text>
-      </View>
+      <Text style={[styles.confirmText, { borderColor: colors.alertRed, backgroundColor: colors.alertRed }]}>
+        Pending Confirmation
+      </Text>
     );
   };
 
   _getButtons() {
     return(
-      <View style={styles.bottom}>
-        <View style={styles.confirmationWrap}>
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={colors.alertGreen}
-            onPress={() => this.props.confirmPayment()}
-            style={[styles.confirmationButton, {backgroundColor: colors.alertGreen}]}>
+      <View style={styles.confirmationWrap}>
+        <TouchableHighlight
+          activeOpacity={0.8}
+          underlayColor={colors.alertGreen}
+          onPress={() => this.props.confirmPayment()}
+          style={[styles.confirmationButton, {backgroundColor: colors.alertGreen}]}>
 
-            <Text style={styles.confirmText}>Accept</Text>
+          <Text style={styles.confirmText}>Accept</Text>
 
-          </TouchableHighlight>
+        </TouchableHighlight>
 
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={colors.alertRed}
-            onPress={() => this.props.rejectPayment()}
-            style={[styles.confirmationButton, {backgroundColor: colors.alertRed}]}>
+        <TouchableHighlight
+          activeOpacity={0.8}
+          underlayColor={colors.alertRed}
+          onPress={() => this.props.rejectPayment()}
+          style={[styles.confirmationButton, {backgroundColor: colors.alertRed}]}>
 
-            <Text style={styles.confirmText}>Reject</Text>
+          <Text style={styles.confirmText}>Reject</Text>
 
-          </TouchableHighlight>
-        </View>
+        </TouchableHighlight>
       </View>
-
     );
   }
 
@@ -97,7 +92,9 @@ class PendingConfirmation extends React.Component {
           </TouchableHighlight>
         </View>
 
-        { (this.props.showButtons) ? this._getButtons() : this._getPendingConfirmationAlert() }
+        <View style={styles.bottom}>
+          { (this.props.showButtons) ? this._getButtons() : this._getPendingConfirmationAlert() }
+        </View>
       </View>
     );
   }

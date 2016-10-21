@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   // Dot TouchableHighlight wrap
   dots: {
     position: 'absolute',
-    top: -5,
+    top: 0,
     right: 22.5,
     width: 50,
     height: 50,
@@ -145,22 +145,24 @@ const styles = StyleSheet.create({
 
   // Confirm and reject buttons wrapper
   confirmationWrap: {
+    flex: 1.0,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    flexWrap: 'wrap'
   },
 
   // Confirm and reject buttons
   confirmationButton: {
-    marginLeft: 3.5,
-    marginRight: 3.5,
-    padding: 10,
-    height: 30,
-    width: 80,
+    marginLeft: 4,
+    marginRight: 4,
+    padding: 14,
+    paddingTop: 0,
     borderRadius: 4,
+    overflow: 'hidden',
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
 
   // Inner text for confirmation buttons
@@ -169,11 +171,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.white,
     textAlign: 'center',
-    padding: 10,
-    borderRadius: 4,
-    borderWidth: 1,
-    width: dimensions.width * 0.9,
-    overflow: 'hidden'
+    padding: 10
   }
 
 });
