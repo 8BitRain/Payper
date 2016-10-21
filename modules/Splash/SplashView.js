@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, Image, NetInfo, TouchableHighlight, Animated, Easing } from 'react-native';
+import { View, Text, Image, NetInfo, TouchableHighlight, Animated, Easing, Dimensions } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Mixpanel from 'react-native-mixpanel';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -12,6 +12,7 @@ import * as Async from '../../helpers/Async';
 
 // Custom styles
 import colors from '../../styles/colors';
+const dimensions = Dimensions.get('window');
 
 class SplashView extends React.Component {
   constructor(props) {
@@ -114,12 +115,15 @@ class SplashView extends React.Component {
   }
 
   render() {
+    /*
+    <Text style={{fontFamily: 'Roboto', fontSize: 40, fontWeight: '300', color: colors.white}}>
+      { "Payper" }
+    </Text>
+    */
     return(
-      <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent}}>
+      <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.richBlack}}>
         { (this.state.connected)
-            ? <Text style={{fontFamily: 'Roboto', fontSize: 40, fontWeight: '300', color: colors.white}}>
-                { "Payper" }
-              </Text>
+            ? <Image source={require('../../assets/images/logo.png')} style={{ width: dimensions.width * (117/635), height: (dimensions.width * (117/635) * (568/377)) }} />
             : <View>
                 <Text style={{fontFamily: 'Roboto', fontSize: 24, fontWeight: '300', color: colors.white, padding: 15, textAlign: 'center'}}>
                   { (this.state.reconnecting)
