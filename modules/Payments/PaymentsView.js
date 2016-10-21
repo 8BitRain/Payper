@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar, Image } from 'react-native';
+import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar, Image, Easing, Animated } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Entypo from 'react-native-vector-icons/Entypo';
 import * as Animatable from 'react-native-animatable';
@@ -32,6 +32,7 @@ import colors from '../../styles/colors';
 import carousel from '../../styles/carousel';
 const dimensions = Dimensions.get('window');
 
+
 class Payments extends React.Component {
   constructor(props) {
     super(props);
@@ -39,7 +40,105 @@ class Payments extends React.Component {
       uid: "",
       modalVisible: false
     }
+     this.pulseValue_0 = new Animated.Value(1);
+     this.pulseValue_1 = new Animated.Value(1);
+     this.pulseValue_2 = new Animated.Value(1);
+
+
   }
+
+  componentDidMount(){
+    //this.refs.pulse.transitionTo({opacity: 0}, 9);
+    console.log("Animating");
+    this.pulse_0();
+    this.pulse_1();
+    this.pulse_2();
+    //this.animatePulse();
+  }
+
+  pulse_0() {
+  this.pulseValue_0.setValue(1);
+  Animated.timing(
+    this.pulseValue_0,
+    {
+      toValue: 0,
+      duration: 1000,
+      easing: Easing.ease
+    }
+  ).start(() => this.pulse_0())
+  }
+
+  pulse_1() {
+  this.pulseValue_1.setValue(1);
+  Animated.timing(
+    this.pulseValue_1,
+    {
+      toValue: 0,
+      duration: 1500,
+      easing: Easing.ease,
+      delay: 1000,
+    }
+  ).start(() => this.pulse_1())
+  }
+
+  pulse_2() {
+  this.pulseValue_2.setValue(1);
+  Animated.timing(
+    this.pulseValue_2,
+    {
+      toValue: 0,
+      duration: 2000,
+      easing: Easing.ease,
+      delay: 1500
+    }
+  ).start(() => this.pulse_2())
+  }
+
+  animatePulse() {
+  this.pulseValue_0.setValue(1);
+  this.pulseValue_1.setValue(1);
+  this.pulseValue_2.setValue(1);
+  const createAnimation = function (value, duration, easing, delay = 0) {
+    return Animated.timing(
+      value,
+      {
+        toValue: 0,
+        duration,
+        easing,
+        delay
+      }
+    )
+  }
+  Animated.stagger([
+    Animated.timing(
+      this.pulseValue_0,
+      {
+        toValue: 0,
+        duration: 500,
+        easing: Easing.ease,
+        delay: 0
+      }
+    ),
+    Animated.timing(
+      this.pulseValue_1,
+      {
+        toValue: 0,
+        duration: 1000,
+        easing: Easing.ease,
+        delay: 0
+      }
+    ),
+    Animated.timing(
+      this.pulseValue_2,
+      {
+        toValue: 0,
+        duration: 1500,
+        easing: Easing.ease,
+        delay: 0
+      }
+    )
+  ]).start()
+}
 
   cancelPayment(payment) {
     // TODO: Optimistically delete payment card
@@ -160,9 +259,29 @@ class Payments extends React.Component {
   }
 
   _renderEmptyState() {
+    const pulse_0 = this.pulseValue_0.interpolate({
+     inputRange: [0, 1],
+     outputRange: [1.25, 1]
+    })
+    const pulse_1 = this.pulseValue_1.interpolate({
+     inputRange: [0, 1],
+     outputRange: [2.03, 1]
+    })
+    const pulse_2 = this.pulseValue_2.interpolate({
+     inputRange: [0, 1],
+     outputRange: [2.8, 1]
+    })
     return(
-  
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: colors.white}}>
+          {/*Note the static value 165 needs to account for the position that the footer is away from the bottom of the screen*/}
+          <View style={{position: "absolute", height: dimensions.height * .16, bottom: 0, left: 0, right: 0,  justifyContent: 'center', alignItems: 'center', borderColor: "black", borderWidth: 0}}>
+          {/*<Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: -((80-64)/2), left: dimensions.width/2 - (80/2), height: pulse_0, width: pulse_0, opacity: this.pulseValue_0}}/>*/}
+          <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_0}, {scaleY: pulse_0}], opacity: this.pulseValue_0}}/>
+          <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_1}, {scaleY: pulse_1}], opacity: this.pulseValue_1}}/>
+          <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_2}, {scaleY: pulse_2}], opacity: this.pulseValue_2}}/>
+          {/*<Animated.Image  source={require('../../assets/images/Oval.png')} style={{ position: "absolute", top: -((130-64)/2), left: dimensions.width/2 - (130/2), height: 130, width: 130, opacity: this.pulseValue_1}}/>
+          <Animated.Image  source={require('../../assets/images/Oval.png')} style={{ position: "absolute", top: -((180-64)/2), left: dimensions.width/2 - (180/2), height: 180, width: 180, opacity: this.pulseValue_2}}/>*/}
+          </View>
           <Carousel hideIndicators={true} animate={true} delay={5000}>
             <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 60, width: dimensions.width - 20}}>
               <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-beer" color={"grey"} />
@@ -374,7 +493,7 @@ class Payments extends React.Component {
         { /* Footer */ }
         <View
           pointerEvents="box-none"
-          style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'absolute', bottom: 0, left: 0, right: 0, height: dimensions.height * 0.2}}>
+          style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start', position: 'absolute', bottom: 0, left: 0, right: 0, height: dimensions.height * 0.16}}>
           <Footer callbackPay={() => this._toggleModal()} />
         </View>
 

@@ -26,6 +26,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    borderBottomWidth: 0
   },
 
   text: {
@@ -106,7 +108,7 @@ class Footer extends React.Component {
           width: 65,
           height: 65,
           borderRadius: 32.5,
-          borderWidth: 1.0,
+          borderWidth: 0.0,
           borderColor: colors.white,
           backgroundColor: colors.accent,
           shadowColor: colors.lightGrey,
