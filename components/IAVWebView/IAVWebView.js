@@ -3,15 +3,15 @@ import React from 'react';
 import { View, Text, TouchableHighlight, WebView, Dimensions } from 'react-native';
 import Mixpanel from 'react-native-mixpanel';
 import Entypo from 'react-native-vector-icons/Entypo';
-import config from '../../config';
+import * as config from '../../config';
 import colors from '../../styles/colors';
 const dimensions = Dimensions.get('window');
 
 export default class IAVWebView extends React.Component {
   constructor(props) {
     super(props);
-    this.payperEnv = config.env;
-    this.dwollaEnv = (config.env === "dev") ? "sandbox" : "prod";
+    this.payperEnv = config.details.env;
+    this.dwollaEnv = (config.details.env === "dev") ? "sandbox" : "prod";
     this.state = {
       cancelled: false,
       IAVToken: this.props.IAVToken,

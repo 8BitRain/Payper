@@ -1,5 +1,5 @@
-import config from '../config';
-let baseURL = config.dev.lambdaBaseURL;
+import * as config from '../config';
+let baseURL = config.details.dev.lambdaBaseURL;
 
 /**
   *   Given session_token and payment info, initialize a payment

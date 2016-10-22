@@ -10,8 +10,8 @@ import Contacts from 'react-native-contacts';
 const FBSDK = require('react-native-fbsdk');
 const { LoginManager } = FBSDK;
 
-import config from '../config';
-let baseURL = config.dev.lambdaBaseURL;
+import * as config from '../config';
+let baseURL = config.details.dev.lambdaBaseURL;
 
 export default class User {
   constructor(attributes) {
@@ -29,7 +29,8 @@ export default class User {
   update(updates) {
     console.log("Updating User with updates:", updates);
     for (var k in updates) this[k] = updates[k];
-    Async.set('user', JSON.stringify(this));
+    if (this.appFlags && this.appFlags.onboarding_state !== 'customer')
+      Async.set('user', JSON.stringify(this));
   }
 
   /**
@@ -106,10 +107,20 @@ export default class User {
           console.log("getUserWithToken failed...", "Lambda error:", res.errorMessage);
           onLoginFailure("lambda");
         } else {
-          res.user.accountStatus = res.account_status;
-          this.initialize(res.user);
           console.log("getUserWithToken succeeded...", "Lambda response:", res.user);
-          onLoginSuccess();
+          res.user.accountStatus = res.account_status;
+          firebase.database().ref('appFlags').child(res.user.uid)
+          .once('value', (snapshot) => {
+            let appFlags = snapshot.val();
+            res.user.appFlags = (appFlags) ? appFlags : {};
+            this.initialize(res.user);
+            onLoginSuccess(res.user);
+          })
+          .catch((err) => {
+            console.log("Error getting appFlags:", err);
+            onLoginSuccess(res.user);
+          })
+          .done();
         }
       });
     })

@@ -80,13 +80,9 @@ class SplashView extends React.Component {
   _onConnect() {
     const _this = this;
     this.setState({ connected: true });
-    Async.get('session_token', (token) => {
-      this.props.currentUser.loginWithAccessToken({ token: token },
-        () => _this._handleSignInSuccess(),
-        () => _this._handleSignInFailure());
-    });
+    
     // Check beta status
-    /*Async.get('betaStatus', (val) => {
+    Async.get('betaStatus', (val) => {
       if (val == "fullAccess") {
         Async.get('user', (user) => {
           if (!user) {
@@ -106,7 +102,7 @@ class SplashView extends React.Component {
       } else {
         Actions.BetaLandingScreenView();
       }
-    });*/
+    });
   }
 
   _onDisconnect() {

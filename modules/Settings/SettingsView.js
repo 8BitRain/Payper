@@ -53,7 +53,9 @@ class Settings extends React.Component {
 
     this.state = {
       dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(this.sideMenuButtons),
-    }
+    };
+
+    console.log("Constructing <SettingsView /> with this.props.currentUser:", this.props.currentUser);
   }
 
   /**

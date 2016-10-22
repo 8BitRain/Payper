@@ -13,10 +13,10 @@
 // Dependencies
 import * as firebase from 'firebase';
 import * as Timestamp from '../helpers/Timestamp';
-import config from '../config';
+import * as config from '../config';
 
 // Initialize Firebase
-firebase.initializeApp(config.dev.firebaseCredentials);
+firebase.initializeApp(config.details.dev.firebaseCredentials);
 
 /**
   *   Fetches list of users and returns them via callback function

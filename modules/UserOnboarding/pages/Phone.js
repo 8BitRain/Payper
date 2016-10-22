@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TextInput, Image, StatusBar } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 // Helpers
@@ -19,8 +19,10 @@ export default class Phone extends React.Component {
     super(props);
 
     this.validationMessages = { isCorrectLength: "10 digits" };
+    this.logoAspectRatio = 377 / 568;
 
     this.state = {
+      headerHeight: 0,
       phone: "",
       submitText: "Please enter a valid phone number",
       validations: {
@@ -67,28 +69,41 @@ export default class Phone extends React.Component {
   render() {
     return (
       <View style={styles.wrap}>
-        <View>
-          <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
-            { "What's your phone number?" }
-          </Text>
-        </View>
+        <StatusBar barStyle='light-content' />
 
-        <View style={styles.inputWrap}>
-          <TextInput
-            style={styles.input}
-            defaultValue={this.state.name}
-            placeholder={"e.g. 2623058038"}
-            placeholderTextColor={colors.lightGrey}
-            autoCapitalize={"none"} autoCorrect={false}
-            keyboardType={"number-pad"}
-            onChangeText={(input) => this.handleChangeText(input)}
-            maxLength={10}
-            onKeyPress={e => { if (e.nativeEvent.key === "Enter") this.handleSubmit() }} />
-        </View>
+        { /* Header is rendered if we're onboarding phone number by itself
+          (outside of the full user onboarding flow) */
+          (this.props.showHeader)
+            ? <View style={styles.headerWrap} onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}>
+                <Image source={require('../../../assets/images/logo.png')} style={{ height: this.state.headerHeight * 0.4, width: (this.state.headerHeight * 0.4) * this.logoAspectRatio }} />
+              </View>
+            : null }
 
-        <View style={styles.validationsWrap}>
+
+        <View style={{ flex: (this.props.showHeader) ? 0.85 : 1.0 }}>
           <View>
-            { this.getValidationCheckBoxes() }
+            <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '200', color: colors.white, textAlign: 'center', paddingLeft: 10, paddingRight: 10 }}>
+              { "What's your phone number?" }
+            </Text>
+          </View>
+
+          <View style={styles.inputWrap}>
+            <TextInput
+              style={styles.input}
+              defaultValue={this.state.name}
+              placeholder={"e.g. 2623058038"}
+              placeholderTextColor={colors.lightGrey}
+              autoCapitalize={"none"} autoCorrect={false}
+              keyboardType={"number-pad"}
+              onChangeText={(input) => this.handleChangeText(input)}
+              maxLength={10}
+              onKeyPress={e => { if (e.nativeEvent.key === "Enter") this.handleSubmit() }} />
+          </View>
+
+          <View style={styles.validationsWrap}>
+            <View>
+              { this.getValidationCheckBoxes() }
+            </View>
           </View>
         </View>
 
@@ -127,5 +142,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 15
-  }
+  },
+  headerWrap: {
+    flexDirection: 'row',
+    flex: 0.15,
+    width: dimensions.width,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 20
+  },
 });

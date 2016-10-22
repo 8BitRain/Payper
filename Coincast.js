@@ -6,6 +6,10 @@ import Mixpanel from 'react-native-mixpanel';
 import colors from './styles/colors';
 import Error from './components/Error';
 
+// Uncomment to reset user manually
+// import * as Async from './helpers/Async';
+// Async.set('user', '');
+
 // Modules
 import SplashViewContainer from './modules/Splash/SplashViewContainer';
 import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreenView';
@@ -13,6 +17,7 @@ import LandingScreenViewContainer from './modules/LandingScreen/LandingScreenVie
 import MainViewContainer from './modules/Main/MainViewContainer';
 import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer';
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView';
+import Phone from './modules/UserOnboarding/pages/Phone';
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
@@ -101,6 +106,12 @@ export default class Coincast extends React.Component {
             <Scene
               component={UserOnboardingViewContainer}
               key="UserOnboardingViewContainer"
+              type="replace"
+              panHandlers={null} />
+
+            <Scene
+              component={Phone}
+              key="Phone"
               type="replace"
               panHandlers={null} />
 

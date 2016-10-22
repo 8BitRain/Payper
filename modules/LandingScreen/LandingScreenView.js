@@ -6,6 +6,9 @@ import Hyperlink from 'react-native-hyperlink';
 const FBSDK = require('react-native-fbsdk');
 const { LoginButton, AccessToken, GraphRequest, GraphRequestManager } = FBSDK;
 
+// Helpers
+import * as Lambda from '../../services/Lambda';
+
 // Components
 import ImageCarousel from './subcomponents/ImageCarousel';
 import LoginModal from '../../components/LoginModal/LoginModal';
@@ -55,7 +58,56 @@ export default class LandingScreenView extends React.Component {
         };
 
         _this.props.currentUser.loginWithFacebook(userData,
-          () => Actions.MainViewContainer(),
+          (res) => {
+            console.log("Login with Facebook was a success. Here's the user object:\n", res);
+
+            if (res.appFlags.onboarding_state === 'customer') {
+              if (res.phone) {
+
+                // Go to customer creation flow
+                Actions.BankOnboardingView({ currentUser: _this.props.currentUser });
+
+              } else {
+
+                // Input phone number, then go to customer creation flow
+                Actions.Phone({
+                  showHeader: true,
+                  currentUser: _this.props.currentUser,
+                  nextPage: () => Actions.BankOnboardingView({ currentUser: _this.props.currentUser }),
+                  induceState: (substate) => {
+                    let updates = {
+                      updatedPhone: substate.phone,
+                      phone: substate.phone,
+                      decryptedPhone: substate.phone
+                    };
+                    _this.props.currentUser.update(updates);
+                    Lambda.updateUser({ token: _this.props.currentUser.token, user: _this.props.currentUser });
+                  }
+                });
+
+              }
+            } else if (!res.phone) {
+
+              // Input phone number, then go to app
+              Actions.Phone({
+                showHeader: true,
+                currentUser: _this.props.currentUser,
+                nextPage: () => _this.onLoginSuccess(),
+                induceState: (substate) => {
+                  console.log("Updating phone number...");
+                  console.log("Substate:", substate);
+                  _this.props.currentUser.update(substate);
+                  Lambda.updateUser({ token: _this.props.currentUser.token, phone: substate.phone });
+                }
+              });
+
+            } else {
+
+              // Go to app
+              _this.onLoginSuccess();
+
+            }
+          },
           () => {
             alert("Something went wrong 🙄\nPlease try again");
             _this.toggleLoadingScreen();
