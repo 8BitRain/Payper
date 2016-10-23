@@ -16,7 +16,7 @@ const styles = {
     fontSize: 16,
     fontWeight: '200',
     color: colors.white,
-    padding: 5,
+    paddingTop: 5, paddingBottom: 5, paddingLeft: 15, paddingRight: 15,
     textAlign: 'center'
   }
 };

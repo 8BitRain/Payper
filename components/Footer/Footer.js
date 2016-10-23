@@ -42,7 +42,7 @@ class Footer extends React.Component {
     return(
       <TouchableHighlight
         activeOpacity={0.8}
-        underlayColor={colors.accent}
+        underlayColor={'transparent'}
         onPress={() => this.props.callbackPay()}>
         <View style={{
           justifyContent: 'center',

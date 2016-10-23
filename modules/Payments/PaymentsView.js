@@ -1,9 +1,8 @@
+// Dependencies
 import React from 'react';
 import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar, Image, Easing, Animated } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import Entypo from 'react-native-vector-icons/Entypo';
 import * as Animatable from 'react-native-animatable';
-
 
 // Helpers
 import * as Alert from '../../helpers/Alert';
@@ -26,8 +25,10 @@ import PendingConfirmation from '../../components/PaymentCards/PendingConfirmati
 import PendingFundingSource from '../../components/PaymentCards/PendingFundingSource';
 import PendingInvite from '../../components/PaymentCards/PendingInvite';
 
-//Icons
+// Icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
+
 // Stylesheets
 import colors from '../../styles/colors';
 import carousel from '../../styles/carousel';
@@ -276,11 +277,28 @@ class Payments extends React.Component {
   }
 
   _toggleModal(options) {
-    this.setState({ modalVisible: !this.state.modalVisible });
+    // Don't allow user to create payments if their customer status is not verified
+    if (this.props.currentUser.appFlags.customer_status !== "verified")
+      alert("You won't be able to send payments until we've verified your identity.");
+    else
+      this.setState({ modalVisible: !this.state.modalVisible });
   }
 
   toggleBankModal() {
     this.setState({ bankModalVisible: !this.state.bankModalVisible });
+  }
+
+  getBankModalContent(onboardingState, customerStatus) {
+    if (customerStatus === "retry")
+      return(
+        <View style={{ flex: 1.0, backgroundColor: colors.richBlack }}>
+          <BankOnboarding displayCloseButton currentUser={this.props.currentUser} closeModal={() => this.toggleBankModal()} />
+        </View>
+      );
+    else if (onboardingState === "awaitingMicrodepositVerification")
+      return <MicrodepositOnboarding currentUser={this.props.currentUser} toggleModal={() => this.toggleBankModal()} />;
+    else if (onboardingState === "bank")
+      return <IAVWebView refreshable currentUser={this.props.currentUser} toggleModal={() => this.toggleBankModal()} />;
   }
 
   _renderEmptyState() {
@@ -458,6 +476,7 @@ class Payments extends React.Component {
           { /* Bank account notice bar (if necessary) */
             (this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification" || this.props.currentUser.appFlags.onboarding_state === "bank")
             ? <NoticeBar
+                dwollaCustomerStatus={(this.props.currentUser.appFlags.customer_status !== "verified") ? this.props.currentUser.appFlags.customer_status : null}
                 onboardingState={this.props.currentUser.appFlags.onboarding_state}
                 onPress={() => this.toggleBankModal()} />
             : null }
@@ -498,15 +517,7 @@ class Payments extends React.Component {
 
               <StatusBar barStyle="light-content" />
 
-              {(this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification")
-              ? <MicrodepositOnboarding currentUser={this.props.currentUser} toggleModal={() => this.toggleBankModal()} />
-              : (this.props.currentUser.appFlags.onboarding_state === "bank")
-                ? <IAVWebView refreshable
-                    currentUser={this.props.currentUser}
-                    firebaseToken={this.props.currentUser.token}
-                    IAVToken={this.props.currentUser.IAVToken}
-                    toggleModal={() => this.toggleBankModal()} />
-                : null }
+              { this.getBankModalContent(this.props.currentUser.appFlags.onboarding_state, this.props.currentUser.appFlags.customer_status) }
 
             </Modal>
           : null }

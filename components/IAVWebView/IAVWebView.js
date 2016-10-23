@@ -43,7 +43,7 @@ export default class IAVWebView extends React.Component {
     this.getIAVToken((IAVToken) => {
       this.generateInjectedJS({
         IAVToken: IAVToken,
-        firebaseToken: this.props.firebaseToken,
+        firebaseToken: this.props.currentUser.token,
         dwollaEnv: this.dwollaEnv,
         payperEnv: this.payperEnv
       }, () => {

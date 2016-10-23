@@ -129,7 +129,9 @@ class FundingSources extends React.Component {
           underlayColor={colors.richBlack}
           activeOpacity={0.7}
           onPress={() => {
-            if (this.props.currentUser.bankAccount) {
+            if (this.props.currentUser.appFlags.customer_status !== "verified") {
+              alert("You won't be able to add a bank account until we've verified your identity.");
+            } else if (this.props.currentUser.bankAccount) {
               Alert.message({
                 title: "Unfortunately...",
                 message: "Payper doesn't currently support multiple bank accounts. This feature will be available soon!",
@@ -173,7 +175,7 @@ class FundingSources extends React.Component {
           visible={this.state.microdepositModalVisible}>
 
           <View style={{ flex: 1.0, marginTop: 20 }}>
-            <MicrodepositOnboarding toggleModal={() => this._toggleMicrodepositModal()} />
+            <MicrodepositOnboarding currentUser={this.props.currentUser} toggleModal={() => this._toggleMicrodepositModal()} />
           </View>
 
         </Modal>

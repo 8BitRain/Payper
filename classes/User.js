@@ -410,6 +410,7 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
+          updateViaRedux(res);
           if (res.fundingSource) {
             res.fundingSource.active = true;
             this.getFundingSource((fs) => updateViaRedux(fs));
