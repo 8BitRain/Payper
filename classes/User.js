@@ -41,9 +41,6 @@ export default class User {
   initialize(user) {
     this.update(user);
 
-    // Get native cell phone contats
-    this.getNativeContacts();
-
     // Tack on decryptedPhone and decryptedEmail
     this.decrypt((res) => {
       if (res) this.update(res);
@@ -286,7 +283,7 @@ export default class User {
     *   Get this user's native phone contacts
     *   -----------------------------------------------------------------------
   **/
-  getNativeContacts() {
+  getNativeContacts(updateViaRedux) {
     Contacts.getAll((err, contacts) => {
       if (err && err.type === 'permissionDenied') {
         console.log("Error getting contacts", err);
@@ -294,14 +291,14 @@ export default class User {
         const _this = this;
 
         var c = SetMaster5000.formatNativeContacts(contacts);
-        this.update({ nativeContacts: c });
-
+        updateViaRedux({ nativeContacts: c });
+        
         Lambda.updateContacts({ token: this.token, phoneNumbers: SetMaster5000.contactsArrayToNumbersArray(c) }, () => {
           Firebase.listenUntilFirstValue("existingPhoneContacts/" + this.uid, (res) => {
             Firebase.scrub("existingPhoneContacts/" + this.uid);
             if (Array.isArray(res) && res.length > 0) {
               var parsedContacts = SetMaster5000.parseNativeContactList({ phoneNumbers: res, contacts: c });
-              _this.update({ nativeContacts: parsedContacts });
+              updateViaRedux({ nativeContacts: parsedContacts });
             }
           });
         });

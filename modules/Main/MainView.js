@@ -89,6 +89,9 @@ export default class Main extends React.Component {
 
     // Get decrypted email and phone attributes
     this.props.currentUser.decrypt((updates) => this.props.updateCurrentUser(updates));
+
+    // Prompt user for contact access
+    this.props.currentUser.getNativeContacts((updates) => this.props.updateCurrentUser(updates));
   }
 
   toggleSideMenu() {

@@ -102,13 +102,19 @@ export default class Invite extends React.Component {
       query: "",
       selectionMap: {},
       selectedContacts: [],
-      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(this.allContacts),
+      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(this.props.currentUser.nativeContacts),
       submitText: "No contacts are selected",
       submitBackgroundColor: this.colorInterpolator.interpolate({
         inputRange: [0, 350], // Green, transparent, red
         outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(251, 54, 64, 1.0)'],
       }),
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRows(nextProps.currentUser.nativeContacts)
+    });
   }
 
   componentDidMount() {
