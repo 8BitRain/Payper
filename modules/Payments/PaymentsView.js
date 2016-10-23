@@ -324,10 +324,6 @@ class Payments extends React.Component {
               <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-stopwatch-outline" color={'rgba(0, 0, 0, 0.15)'} />
               <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '200', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>{ "The longer you wait, the less you save. Start splitting now!" }</Text>
             </View>
-            <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 100, width: dimensions.width - 20}}>
-              <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-flame-outline" color={'rgba(0, 0, 0, 0.15)'} />
-              <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '200', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>{ "\"It’s getting hot in here, so cut down on all your expenses\"" }</Text>
-            </View>
           </Carousel>
       </View>
     );
