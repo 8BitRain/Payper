@@ -68,6 +68,7 @@ class SplashView extends React.Component {
   _handleSignInFailure() {
     console.log("%cSigned in: false", "color:red;font-weight:900;");
     Actions.LandingScreenViewContainer();
+    FBLoginManager.logOut();
   }
 
   _attemptReconnect() {
@@ -80,7 +81,7 @@ class SplashView extends React.Component {
   _onConnect() {
     const _this = this;
     this.setState({ connected: true });
-    
+
     // Check beta status
     Async.get('betaStatus', (val) => {
       if (val == "fullAccess") {
