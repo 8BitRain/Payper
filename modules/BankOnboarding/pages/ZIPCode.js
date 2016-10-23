@@ -22,6 +22,16 @@ export default class ZIPCode extends React.Component {
     };
     this.values = ["", "", "", "", ""];
     this.zipCache = {};
+    this.initalizedFromCache = false;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.zip && !this.initalizedFromCache) {
+      this.values = [nextProps.zip.charAt(0), nextProps.zip.charAt(1), nextProps.zip.charAt(2), nextProps.zip.charAt(3), nextProps.zip.charAt(4)];
+      this.setState({ zip: nextProps.zip, submitText: "Search" });
+      this.findCity(nextProps.zip);
+      this.initalizedFromCache = true;
+    }
   }
 
   findCity(zip) {
@@ -156,11 +166,11 @@ export default class ZIPCode extends React.Component {
         </View>
 
         <View style={styles.textInputWrap}>
-          <TextInput ref="0" onFocus={() => this.setState({ index: 0 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="1" onFocus={() => this.setState({ index: 1 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="2" onFocus={() => this.setState({ index: 2 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="3" onFocus={() => this.setState({ index: 3 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="4" onFocus={() => this.setState({ index: 4 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="0" defaultValue={this.values[0]} onFocus={() => this.setState({ index: 0 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="1" defaultValue={this.values[1]} onFocus={() => this.setState({ index: 1 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="2" defaultValue={this.values[2]} onFocus={() => this.setState({ index: 2 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="3" defaultValue={this.values[3]} onFocus={() => this.setState({ index: 3 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="4" defaultValue={this.values[4]} onFocus={() => this.setState({ index: 4 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
         </View>
 
         { (this.state.city && this.state.state)

@@ -266,7 +266,7 @@ export default class User {
       .then((responseData) => {
         if (!responseData.errorMessage) {
           console.log("createDwollaCustomer succeeded...", "Response data:", responseData);
-          onSuccess();
+          onSuccess(responseData.status);
         } else {
           console.log("createDwollaCustomer failed...", "Error:", responseData.errorMessage);
           onFailure(responseData.errorMessage);
@@ -292,7 +292,7 @@ export default class User {
 
         var c = SetMaster5000.formatNativeContacts(contacts);
         updateViaRedux({ nativeContacts: c });
-        
+
         Lambda.updateContacts({ token: this.token, phoneNumbers: SetMaster5000.contactsArrayToNumbersArray(c) }, () => {
           Firebase.listenUntilFirstValue("existingPhoneContacts/" + this.uid, (res) => {
             Firebase.scrub("existingPhoneContacts/" + this.uid);

@@ -8,6 +8,7 @@ import dismissKeyboard from 'react-native-dismiss-keyboard';
 
 // Helpers
 import * as Headers from '../../helpers/Headers';
+import * as Async from '../../helpers/Async';
 
 // Components
 import Header from '../../components/Header/Header';
@@ -47,6 +48,18 @@ export default class BankOnboardingView extends React.Component {
   }
 
   componentWillMount() {
+    // Check for state cache
+    Async.get('BankOnboardingStateCache', (cachedState) => {
+      if (!cachedState) return;
+      cachedState = JSON.parse(cachedState);
+      cachedState.animating = false;
+      cachedState.pageIndex = 0;
+      cachedState.headerHeight = 0;
+      cachedState.closeButtonVisible = true;
+      cachedState.skipCityPage = true;
+      this.setState(cachedState);
+    });
+
     Mixpanel.timeEvent('Dwolla Customer Onboarding');
   }
 
@@ -58,7 +71,8 @@ export default class BankOnboardingView extends React.Component {
 
   createDwollaCustomer(cb) {
     var nameBuffer = this.state.name.split(" ");
-    this.props.currentUser.createDwollaCustomer({
+
+    var params = {
       firstName: nameBuffer.splice(0, 1).join(""),
       lastName: nameBuffer.join(" "),
       zip: this.state.zip,
@@ -67,28 +81,41 @@ export default class BankOnboardingView extends React.Component {
       state: this.state.state,
       dob: this.state.dob.year + "-" + this.state.dob.month + "-" + this.state.dob.date,
       ssn: this.state.ssn
-    },
-    (cb) => {
-      Mixpanel.trackWithProperties('Dwolla Customer Onboarding', {
-        completed: true,
-        cancelled: false,
-        errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
-        uid: this.props.currentUser.uid
-      });
-      setTimeout(() => {
-        if (typeof this.props.closeModal === 'function')
-          this.props.closeModal();
+    };
+
+    this.props.currentUser.createDwollaCustomer(params,
+      (customerStatus, cb) => {
+        // If KYC failed due to retry status, cache this onboarding session
+        if (customerStatus === "retry")
+          Async.set('BankOnboardingStateCache', JSON.stringify(this.state));
         else
-          Actions.MainViewContainer();
-      }, 500);
-      if (typeof cb === 'function') cb(true);
-    },
-    (errCode, cb) => {
-      this.errCodes.push({ errCode: errCode, timestamp: new Date().getTime() });
-      Mixpanel.trackWithProperties('Failed Dwolla Customer Creation', { errCode: errCode });
-      alert("Something went wrong on our end 🙄\nPlease try again");
-      if (typeof cb === 'function') cb(false);
-    });
+          Async.set('BankOnboardingStateCache', '');
+
+        // Track this onboarding session in Mixpanel
+        Mixpanel.trackWithProperties('Dwolla Customer Onboarding', {
+          completed: true,
+          cancelled: false,
+          errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
+          uid: this.props.currentUser.uid,
+          customerStatus: customerStatus
+        });
+
+        // Exit onboarding flow
+        setTimeout(() => {
+          if (typeof this.props.closeModal === 'function')
+            this.props.closeModal();
+          else
+            Actions.MainViewContainer();
+        }, 500);
+
+        if (typeof cb === 'function') cb(true);
+      },
+      (errCode, cb) => {
+        this.errCodes.push({ errCode: errCode, timestamp: new Date().getTime() });
+        Mixpanel.trackWithProperties('Failed Dwolla Customer Creation', { errCode: errCode });
+        alert("Something went wrong on our end 🙄\nPlease try again");
+        if (typeof cb === 'function') cb(false);
+      });
   }
 
   nextPage() {
@@ -170,20 +197,20 @@ export default class BankOnboardingView extends React.Component {
             <LegalName nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} name={this.props.currentUser.first_name + " " + this.props.currentUser.last_name} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <ZIPCode nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+            <ZIPCode zip={this.state.zip} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
 
           { (this.state.skipCityPage)
               ? null
               : <View style={{ flex: 1.0, width: dimensions.width }}>
-                  <City nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+                  <City city={this.state.city} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
                 </View> }
 
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <Street city={this.state.city} state={this.state.state} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+            <Street street={this.state.street} city={this.state.city} state={this.state.state} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <DateOfBirth nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+            <DateOfBirth dob={this.state.dob} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
             <Social nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
