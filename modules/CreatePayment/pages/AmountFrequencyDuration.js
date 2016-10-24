@@ -21,7 +21,7 @@ export default class AmountFrequencyDuration extends React.Component {
       amount: 0,
       frequency: "",
       duration: 0,
-      submitText: "Amount must be between $1 and $250",
+      submitText: "Amount must be between $1 and $3000",
       submitBackgroundColor: this.colorInterpolator.interpolate({
         inputRange: [0, 350], // Green, red
         outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(251, 54, 64, 1.0)'],
@@ -105,10 +105,10 @@ export default class AmountFrequencyDuration extends React.Component {
 
   validateAmount(input) {
     let newState = {},
-        valid = input > 0 && input < 250;
+        valid = input > 0 && input < 3001;
 
     newState.amount = input;
-    newState.submitText = (valid) ? "Next" : "Amount must be between $1 and $250";
+    newState.submitText = (valid) ? "Next" : "Amount must be between $1 and $3000";
 
     return newState;
   }
@@ -133,7 +133,7 @@ export default class AmountFrequencyDuration extends React.Component {
 
     newState.duration = input;
 
-    if (!amountIsValid) newState.submitText = "Amount must be between $1 and $250";
+    if (!amountIsValid) newState.submitText = "Amount must be between $1 and $3000";
     else if (!frequencyIsValid) newState.submitText = "Frequency must be per 'month' or 'week'";
     else if (!durationIsValid) newState.submitText = "Duration must be between 1 and 999";
     else newState.submitText = "Continue";

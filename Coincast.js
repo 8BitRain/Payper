@@ -12,7 +12,6 @@ import Error from './components/Error';
 // Async.set('BankOnboardingStateCache', '');
 // Async.set('betaStatus', 'fullAccess');
 
-
 // Modules
 import SplashViewContainer from './modules/Splash/SplashViewContainer';
 import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreenView';
