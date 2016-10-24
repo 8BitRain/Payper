@@ -218,8 +218,11 @@ export default class User {
     firebase.auth().createUserWithEmailAndPassword(params.email, params.password).then(() => {
       firebase.auth().currentUser.getToken(true).then((token) => {
         params.token = token;
+        params.password = null;
+        var stringifiedParams = JSON.stringify(params);
+        console.log("stringifiedParams", stringifiedParams);
         try {
-          fetch(baseURL + "user/create", {method: "POST", body: JSON.stringify(params)})
+          fetch(baseURL + "user/create", {method: "POST", body: stringifiedParams})
           .then((response) => response.json())
           .then((responseData) => {
             if (!responseData.errorMessage) {
