@@ -16,7 +16,7 @@ import * as Timestamp from '../helpers/Timestamp';
 import * as config from '../config';
 
 // Initialize Firebase
-firebase.initializeApp(config.details.dev.firebaseCredentials);
+firebase.initializeApp(config.details[config.details.env].firebaseCredentials);
 
 /**
   *   Fetches list of users and returns them via callback function
