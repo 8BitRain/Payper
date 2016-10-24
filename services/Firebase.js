@@ -215,18 +215,6 @@ export function sendPasswordResetEmail(email, callback) {
   });
 };
 
-
-export function deleteUser() {
-  // Remove user from Firebase auth
-  firebase.auth().currentUser.delete().then(function() {
-    console.log("User deletion from Firebase auth: success");
-  }, function(error) {
-    console.log("User deletion from Firebase auth: failure");
-    console.log(error);
-  });
-};
-
-
 /**
   *   Delete all data nested under the specified Firebase endpoint
 **/

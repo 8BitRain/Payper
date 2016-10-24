@@ -280,21 +280,6 @@ export function signout() {
 
 };
 
-
-/**
-  *   Delete the specified user
-**/
-export function deleteUser(options, callback) {
-  Firebase.deleteUser();
-  // Remove user info from Firebase database
-  Lambda.deleteUser(options, (success) => {
-    console.log("%cDelete user success (Lambda): " + success, "color:blue;font-weight:900;");
-    if (typeof callback == 'function') callback(success);
-    else console.log("%cCallback is not a function.", "color:red;font-weight:900;");
-  });
-};
-
-
 /**
   *   Initialize a payment
 **/
@@ -303,7 +288,6 @@ export function createPayment(data, callback) {
     callback(res);
   });
 };
-
 
 /**
   * Update phone number

@@ -53,6 +53,41 @@ export default class User {
   }
 
   /**
+    *   Delete this user
+  **/
+  delete(cb) {
+    const _this = this;
+
+    // Delete user from Firebase auth
+    let user = firebase.auth().currentUser;
+    user.delete().then(
+    () => {
+      cb(true);
+
+      // Delete user data via Lambda endpoint
+      try {
+        fetch(baseURL + "user/delete", {method: "POST", body: JSON.stringify({ token: _this.token, uid: _this.uid })})
+        .then((response) => response.json())
+        .then((responseData) => {
+          if (!responseData.errorMessage) {
+            console.log("Delete user Lambda response:", responseData);
+            _this.destroy();
+          } else {
+            console.log("Error deleting user:", responseData.errorMessage);
+          }
+        })
+        .done();
+      } catch (err) {
+        console.log("getUserWithToken failed...", "Lambda error:", err);
+      }
+    },
+    (err) => {
+      console.log("Error deleting user from Firebase auth:", err);
+      cb(false);
+    });
+  }
+
+  /**
     *   Wipe this user's attributes, listeners, and async storage links
     *   -----------------------------------------------------------------------
   **/

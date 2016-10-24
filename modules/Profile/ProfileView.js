@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, Dimensions, StyleSheet, Modal, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Button, StatusBar } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+var FBLoginManager = require('NativeModules').FBLoginManager;
 
 // Helper functions
 import * as Lambda from '../../services/Lambda';
@@ -122,10 +123,14 @@ class Profile extends React.Component {
       confirmMessage: "Yes, delete my account",
       cancel: () => console.log("Nevermind"),
       confirm: () => {
-        console.log("Deleting user with params:", { token: _this.props.currentUser.token, uid: _this.props.currentUser.uid });
-        Init.signout();
-        Init.deleteUser({ token: _this.props.currentUser.token, uid: _this.props.currentUser.uid });
-        Actions.LandingScreenViewContainer();
+        _this.props.currentUser.delete((success) => {
+          if (success) {
+            Actions.LandingScreenViewContainer();
+            FBLoginManager.logOut();
+          } else {
+            alert("Account deletion failed. Please logout, log back in, and try again. Sorry about that!");
+          }
+        });
       },
     });
   }
