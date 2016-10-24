@@ -45,6 +45,11 @@ export default class User {
     this.decrypt((res) => {
       if (res) this.update(res);
     });
+
+    // Refresh Firebase token every 20 minutes
+    this.tokenRefreshInterval = setInterval(() => {
+      this.refresh();
+    }, ((60 * 1000) * 20));
   }
 
   /**
@@ -54,6 +59,7 @@ export default class User {
   destroy() {
     Async.set('user', '');
     this.stopListening();
+    clearInterval(this.tokenRefreshInterval);
     for (var i in this) if (typeof this[i] !== 'function') this[i] = null;
   }
 
@@ -220,7 +226,6 @@ export default class User {
         params.token = token;
         params.password = null;
         var stringifiedParams = JSON.stringify(params);
-        console.log("stringifiedParams", stringifiedParams);
         try {
           fetch(baseURL + "user/create", {method: "POST", body: stringifiedParams})
           .then((response) => response.json())
@@ -415,8 +420,13 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   refresh() {
-    console.log("Refreshing access token...")
-    // TODO (...)
+    const _this = this;
+    firebase.auth().currentUser.getToken(true)
+    .then(function(tkn) {
+      _this.update({ token: tkn });
+    }).catch(function(err) {
+      console.log("Error getting new token:", err);
+    });
   }
 
   /**

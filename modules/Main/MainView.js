@@ -14,7 +14,8 @@ import Notifications from '../../modules/Notifications/NotificationsView';
 import FundingSources from '../../modules/FundingSources/FundingSourcesView';
 import Invite from '../../modules/Invite/InviteView';
 
-// Used to determine header size
+// Stylesheets
+import colors from '../../styles/colors';
 const dimensions = Dimensions.get('window');
 
 class InnerContent extends React.Component {
@@ -142,7 +143,7 @@ export default class Main extends React.Component {
 
         { /* Main page content wrap */ }
         <View style={{flex: 1.0}}>
-          <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
+          <View style={{ flex: 0.12, backgroundColor: colors.richBlack }}>
             <Header {...this.props}
               activeFilter={this.state.activeFilter}
               headerProps={this.state.headerProps}
@@ -150,7 +151,7 @@ export default class Main extends React.Component {
           </View>
 
           { /* Inner content */ }
-          <View style={{ flex: (dimensions.height < 667) ? 0.88 : 0.9 }}>
+          <View style={{ flex: 0.88 }}>
             <InnerContent {...this.props}
               previousPage={this.state.previousPage}
               currentPage={this.state.currentPage}

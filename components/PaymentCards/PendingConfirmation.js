@@ -34,7 +34,7 @@ class PendingConfirmation extends React.Component {
 
   _getPendingConfirmationAlert() {
     return(
-      <Text style={[styles.confirmText, { borderColor: colors.alertRed, backgroundColor: colors.alertRed }]}>
+      <Text style={[styles.confirmText, { backgroundColor: colors.alertRed, borderRadius: 4, overflow: 'hidden' }]}>
         Pending Confirmation
       </Text>
     );
