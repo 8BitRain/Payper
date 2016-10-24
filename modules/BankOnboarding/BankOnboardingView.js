@@ -52,6 +52,13 @@ export default class BankOnboardingView extends React.Component {
     Async.get('BankOnboardingStateCache', (cachedState) => {
       if (!cachedState) return;
       cachedState = JSON.parse(cachedState);
+
+      // If this is a cached state from a different user's session, clear it
+      if (cachedState.uid !== this.props.currentUser.uid) {
+        Async.set('BankOnboardingStateCache', '');
+        return;
+      }
+
       cachedState.animating = false;
       cachedState.pageIndex = 0;
       cachedState.headerHeight = 0;
@@ -83,39 +90,54 @@ export default class BankOnboardingView extends React.Component {
       ssn: this.state.ssn
     };
 
-    this.props.currentUser.createDwollaCustomer(params,
-      (customerStatus, cb) => {
-        // If KYC failed due to retry status, cache this onboarding session
-        if (customerStatus === "retry")
-          Async.set('BankOnboardingStateCache', JSON.stringify(this.state));
-        else
-          Async.set('BankOnboardingStateCache', '');
+    if (this.props.retry) this.props.currentUser.retryDwollaVerification(params,
+      (customerStatus, cb) => this.handleSuccess(customerStatus, cb),
+      (errCode, cb) => this.handleFailure(errCode, cb));
+    else this.props.currentUser.createDwollaCustomer(params,
+      (customerStatus, cb) => this.handleSuccess(customerStatus, cb),
+      (errCode, cb) => this.handleFailure(errCode, cb));
+  }
 
-        // Track this onboarding session in Mixpanel
-        Mixpanel.trackWithProperties('Dwolla Customer Onboarding', {
-          completed: true,
-          cancelled: false,
-          errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
-          uid: this.props.currentUser.uid,
-          customerStatus: customerStatus
-        });
+  /**
+    *   Handle successful Dwolla customer creation
+  **/
+  handleSuccess(customerStatus, cb) {
+    // If KYC failed due to retry status, cache this onboarding session
+    if (customerStatus === "retry") {
+      this.state.uid = this.props.currentUser.uid;
+      Async.set('BankOnboardingStateCache', JSON.stringify(this.state));
+    } else {
+      Async.set('BankOnboardingStateCache', '');
+    }
 
-        // Exit onboarding flow
-        setTimeout(() => {
-          if (typeof this.props.closeModal === 'function')
-            this.props.closeModal();
-          else
-            Actions.MainViewContainer();
-        }, 500);
+    // Track this onboarding session in Mixpanel
+    Mixpanel.trackWithProperties('Dwolla Customer Onboarding', {
+      completed: true,
+      cancelled: false,
+      errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
+      uid: this.props.currentUser.uid,
+      customerStatus: customerStatus
+    });
 
-        if (typeof cb === 'function') cb(true);
-      },
-      (errCode, cb) => {
-        this.errCodes.push({ errCode: errCode, timestamp: new Date().getTime() });
-        Mixpanel.trackWithProperties('Failed Dwolla Customer Creation', { errCode: errCode });
-        alert("Something went wrong on our end 🙄\nPlease try again");
-        if (typeof cb === 'function') cb(false);
-      });
+    // Exit onboarding flow
+    setTimeout(() => {
+      if (typeof this.props.closeModal === 'function')
+        this.props.closeModal();
+      else
+        Actions.MainViewContainer();
+    }, 500);
+
+    if (typeof cb === 'function') cb(true);
+  }
+
+  /**
+    *   Handle failed Dwolla customer creation
+  **/
+  handleFailure(errCode, cb) {
+    this.errCodes.push({ errCode: errCode, timestamp: new Date().getTime() });
+    Mixpanel.trackWithProperties('Failed Dwolla Customer Creation', { errCode: errCode });
+    alert("Something went wrong on our end 🙄\nPlease try again");
+    if (typeof cb === 'function') cb(false);
   }
 
   nextPage() {
@@ -191,7 +213,7 @@ export default class BankOnboardingView extends React.Component {
         { /* Inner content */ }
         <Animated.View style={[styles.allPanelsWrap, { marginLeft: this.offsetX, width: dimensions.width * ((this.state.skipCityPage) ? 6 : 7) }]}>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <Comfort nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+            <Comfort retry={this.props.retry} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
             <LegalName nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} name={this.props.currentUser.first_name + " " + this.props.currentUser.last_name} />
@@ -213,7 +235,7 @@ export default class BankOnboardingView extends React.Component {
             <DateOfBirth dob={this.state.dob} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <Social nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+            <Social requireAllDigits={this.props.retry} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
         </Animated.View>
       </View>

@@ -292,7 +292,7 @@ class Payments extends React.Component {
     if (customerStatus === "retry")
       return(
         <View style={{ flex: 1.0, backgroundColor: colors.richBlack }}>
-          <BankOnboarding displayCloseButton currentUser={this.props.currentUser} closeModal={() => this.toggleBankModal()} />
+          <BankOnboarding retry displayCloseButton currentUser={this.props.currentUser} closeModal={() => this.toggleBankModal()} />
         </View>
       );
     else if (onboardingState === "awaitingMicrodepositVerification")
@@ -474,7 +474,7 @@ class Payments extends React.Component {
 
         <View style={{flex: 1.0}}>
           { /* Bank account notice bar (if necessary) */
-            (this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification" || this.props.currentUser.appFlags.onboarding_state === "bank")
+            (this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification" || this.props.currentUser.appFlags.onboarding_state === "bank" || this.props.currentUser.appFlags.customer_status !== "verified")
             ? <NoticeBar
                 dwollaCustomerStatus={(this.props.currentUser.appFlags.customer_status !== "verified") ? this.props.currentUser.appFlags.customer_status : null}
                 onboardingState={this.props.currentUser.appFlags.onboarding_state}

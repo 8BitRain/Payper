@@ -26,7 +26,9 @@ export default class Comfort extends React.Component {
             { "\n" }
           </Text>
           <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, width: dimensions.width * 1.0, textAlign: 'center', paddingLeft: 25, paddingRight: 25 }}>
-            { "To ensure you're not being impersonated, we'll need to collect your legal name, billing address, date of birth, and the last four digits of your social." }
+            {(this.props.retry)
+              ? "Your first identity verification failed. Please double check your information for accuracy and try again.\n\n(Hint: be sure to enter your billing address)"
+              : "To ensure you're not being impersonated, we'll need to collect your legal name, billing address, date of birth, and the last four digits of your social." }
             { "\n" }
           </Text>
         </View>

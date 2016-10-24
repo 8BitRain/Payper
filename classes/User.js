@@ -280,6 +280,37 @@ export default class User {
   }
 
   /**
+    *   Retry Dwolla customer creation
+    *   params: firstName, lastName, address, city, state, zip, dob, ssn
+    *   tacked on params: email, phone, token
+    *   -----------------------------------------------------------------------
+  **/
+  retryDwollaVerification(params, onSuccess, onFailure) {
+    params.email = this.decryptedEmail;
+    params.phone = this.decryptedPhone;
+    params.token = this.token;
+
+    console.log("retryDwollaVerification was invoked with params:", params);
+
+    try {
+      fetch(baseURL + "customer/retryVerification", {method: "POST", body: JSON.stringify(params)})
+      .then((responseData) => {
+        if (!responseData.errorMessage) {
+          console.log("retryDwollaVerification succeeded...", "Response data:", responseData);
+          onSuccess(responseData.status);
+        } else {
+          console.log("retryDwollaVerification failed...", "Error:", responseData.errorMessage);
+          onFailure(responseData.errorMessage);
+        }
+      })
+      .done();
+    } catch (err) {
+      console.log("retryDwollaVerification failed...", "Try/catch threw:", err);
+      onFailure(err);
+    }
+  }
+
+  /**
     *   Get this user's native phone contacts
     *   -----------------------------------------------------------------------
   **/

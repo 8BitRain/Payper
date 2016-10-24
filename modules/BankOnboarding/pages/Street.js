@@ -18,6 +18,14 @@ export default class City extends React.Component {
   constructor(props) {
     super(props);
     this.state = { street: "" };
+    this.initalizedFromCache = false;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.street && !this.initalizedFromCache) {
+      this.setState({ street: nextProps.street });
+      this.initalizedFromCache = true;
+    }
   }
 
   handleChangeText(input) {
@@ -48,6 +56,7 @@ export default class City extends React.Component {
             style={styles.input}
             placeholder={"e.g. 1 North Avenue"}
             placeholderTextColor={colors.lightGrey}
+            defaultValue={this.state.street}
             autoCapitalize={"words"} autofocus autoCorrect={false}
             onChangeText={(input) => this.handleChangeText(input)} />
         </View>

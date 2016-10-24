@@ -9,6 +9,8 @@ import Error from './components/Error';
 // Uncomment to reset user manually
 // import * as Async from './helpers/Async';
 // Async.set('user', '');
+// Async.set('BankOnboardingStateCache', '');
+
 
 // Modules
 import SplashViewContainer from './modules/Splash/SplashViewContainer';

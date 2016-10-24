@@ -14,7 +14,17 @@ const dimensions = Dimensions.get('window');
 export default class DateOfBirth extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { date: this.props.dob };
+    this.state = { date: (this.props.dob) ? this.props.dob : "1991-01-01" };
+    this.initalizedFromCache = false;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.dob && !this.initalizedFromCache) {
+      let buffer = [nextProps.dob.year, nextProps.dob.month, nextProps.dob.date];
+      let dob = buffer.join("-");
+      this.setState({ date: dob });
+      this.initalizedFromCache = true;
+    }
   }
 
   handleSubmit() {
