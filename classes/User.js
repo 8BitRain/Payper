@@ -11,7 +11,7 @@ const FBSDK = require('react-native-fbsdk');
 const { LoginManager } = FBSDK;
 
 import * as config from '../config';
-let baseURL = config.details.dev.lambdaBaseURL;
+let baseURL = config.details[config.details.env].lambdaBaseURL;
 
 export default class User {
   constructor(attributes) {
