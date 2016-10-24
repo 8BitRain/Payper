@@ -428,8 +428,8 @@ class Payments extends React.Component {
       break;
       case "pendingSenderFundingSource":
         var message = (payment.sender_id == this.props.currentUser.uid)
-          ? "It looks like you haven't linked a bank account to your Payper account. Payments will commence once you do so."
-          : "It looks like " + payment.sender_name.split(" ")[0] + " hasn't linked a bank account to their Payper account. Payments will commence once they do so.";
+          ? "You must add a bank account."
+          : payment.sender_name.split(" ")[0] + " must add a bank account.";
         return(
           <PendingFundingSource
             user={user}
@@ -440,8 +440,8 @@ class Payments extends React.Component {
       break;
       case "pendingRecipFundingSource":
         var message = (payment.recip_id == this.props.currentUser.uid)
-          ? "It looks like you haven't linked a bank account to your Payper account. Payments will commence once you do so."
-          : "It looks like " + payment.recip_name.split(" ")[0] + " hasn't linked a bank account to their Payper account. Payments will commence once they do so.";
+          ? "You must add a bank account."
+          : payment.recip_name.split(" ")[0] + " must add a bank account.";
         return(
           <PendingFundingSource
             user={user}
@@ -452,8 +452,8 @@ class Payments extends React.Component {
       break;
       case "pendingBothFundingSources":
         var message = (payment.flow == "incoming")
-          ? "Neither you nor " + payment.sender_name.split(" ")[0] + " have linked a bank account to your Payper account. This payment series will begin once you do so."
-          : "Neither you nor " + payment.recip_name.split(" ")[0] + " have linked a bank account to your Payper account. This payment series will begin once you do so.";
+          ? "Neither you nor " + payment.sender_name.split(" ")[0] + " have added a bank account."
+          : "Neither you nor " + payment.recip_name.split(" ")[0] + " have added a bank account.";
         return(
           <PendingFundingSource
             user={user}
