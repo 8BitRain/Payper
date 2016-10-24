@@ -294,6 +294,7 @@ export default class User {
 
     try {
       fetch(baseURL + "customer/retryVerification", {method: "POST", body: JSON.stringify(params)})
+      .then((response) => response.json())
       .then((responseData) => {
         if (!responseData.errorMessage) {
           console.log("retryDwollaVerification succeeded...", "Response data:", responseData);

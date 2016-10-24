@@ -344,7 +344,7 @@ export function blockUser(options, callback) {
 export function verifyMicrodeposits(options, callback) {
   try {
     fetch(baseURL + "customer/verifyMicroDeposits", {method: "POST", body: JSON.stringify(options)})
-    // .then((response) => response.json())
+    .then((response) => response.json())
     .then((responseData) => {
       if (!responseData.errorMessage) {
         console.log("Verify microdeposits Lambda response:", responseData);
