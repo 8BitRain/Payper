@@ -10,6 +10,7 @@ import Error from './components/Error';
 // import * as Async from './helpers/Async';
 // Async.set('user', '');
 // Async.set('BankOnboardingStateCache', '');
+// Async.set('betaStatus', 'fullAccess');
 
 
 // Modules
