@@ -146,9 +146,8 @@ export default class User {
           onLoginFailure("lambda");
         } else {
           console.log("getUserWithToken succeeded...", "Lambda response:", res.user);
-          res.user.accountStatus = res.account_status;
-          firebase.database().ref('appFlags').child(res.user.uid)
-          .once('value', (snapshot) => {
+          // Tack on appFlags
+          firebase.database().ref('appFlags').child(res.user.uid).once('value', (snapshot) => {
             let appFlags = snapshot.val();
             res.user.appFlags = (appFlags) ? appFlags : {};
             this.initialize(res.user);
@@ -156,6 +155,7 @@ export default class User {
           })
           .catch((err) => {
             console.log("Error getting appFlags:", err);
+            this.initialize(res.user);
             onLoginSuccess(res.user);
           })
           .done();

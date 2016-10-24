@@ -77,12 +77,7 @@ export default class LandingScreenView extends React.Component {
                   currentUser: _this.props.currentUser,
                   nextPage: () => Actions.BankOnboardingView({ currentUser: _this.props.currentUser }),
                   induceState: (substate) => {
-                    let updates = {
-                      updatedPhone: substate.phone,
-                      phone: substate.phone,
-                      decryptedPhone: substate.phone
-                    };
-                    _this.props.currentUser.update(updates);
+                    _this.props.currentUser.updatedPhone = substate.phone;
                     Lambda.updateUser({ token: _this.props.currentUser.token, user: _this.props.currentUser });
                   }
                 });
@@ -96,10 +91,8 @@ export default class LandingScreenView extends React.Component {
                 currentUser: _this.props.currentUser,
                 nextPage: () => _this.onLoginSuccess(),
                 induceState: (substate) => {
-                  console.log("Updating phone number...");
-                  console.log("Substate:", substate);
-                  _this.props.currentUser.update(substate);
-                  Lambda.updateUser({ token: _this.props.currentUser.token, phone: substate.phone });
+                  _this.props.currentUser.updatedPhone = substate.phone;
+                  Lambda.updateUser({ token: _this.props.currentUser.token, user: _this.props.currentUser });
                 }
               });
 
