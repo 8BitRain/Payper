@@ -160,11 +160,7 @@ class FundingSources extends React.Component {
           transparent={true}
           visible={this.state.IAVModalVisible}>
 
-          <IAVWebView refreshable
-            IAVToken={this.props.currentUser.IAVToken}
-            firebaseToken={this.props.currentUser.token}
-            currentUser={this.props.currentUser}
-            toggleModal={() => this._toggleIAVModal()} />
+          <IAVWebView refreshable currentUser={this.props.currentUser} toggleModal={() => this._toggleIAVModal()} />
 
         </Modal>
 

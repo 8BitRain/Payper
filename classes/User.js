@@ -534,20 +534,6 @@ export default class User {
           if (!res) return;
           updateViaRedux({ blockedUsers: res });
         }
-      },
-      {
-        endpoint: 'IAV/' + this.uid,
-        eventType: 'value',
-        listener: null,
-        callback: (res) => {
-          if (!res) return;
-          console.log("res", res);
-          try {
-            updateViaRedux({ IAVToken: res.iav });
-          } catch (err) {
-            console.log("Error in IAV listener:", err);
-          }
-        }
       }
     ];
 
