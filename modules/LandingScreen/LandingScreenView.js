@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TouchableHighlight, Modal, Animated, Easing, Dimensions, Linking, StatusBar } from 'react-native';
+import { View, Text, TouchableHighlight, Modal, Animated, Easing, Dimensions, Linking, StatusBar, Image } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Hyperlink from 'react-native-hyperlink';
 const FBSDK = require('react-native-fbsdk');
@@ -23,7 +23,9 @@ export default class LandingScreenView extends React.Component {
   constructor(props) {
     super(props);
     this.loadingOpacity = new Animated.Value(0);
+    this.logoAspectRatio = 377 / 568;
     this.state = {
+      headerHeight: 0,
       loginModalVisible: false,
       loading: false
     };
@@ -152,17 +154,23 @@ export default class LandingScreenView extends React.Component {
         <StatusBar barStyle="light-content" />
 
         { /* Title */ }
-        <View style={[{flex: 0.2}, container.image]}>
-          <Text style={[typography.main, typography.fontSizeTitle, {paddingTop: 45, color: colors.accent}]}>Payper</Text>
+        <View style={{ flex: 0.4, justifyContent: 'center', alignItems: 'center', paddingTop: 20 }} onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}>
+          <Image source={require('../../assets/images/logo.png')} style={{ height: this.state.headerHeight * 0.25, width: (this.state.headerHeight * 0.25) * this.logoAspectRatio }} />
+          <Text style={[typography.main, {fontSize: 28, paddingTop: 10, color: colors.white}]}>
+            { "Welcome to" }
+          </Text>
+          <Text style={[typography.main, {fontSize: 32, color: colors.accent}]}>
+            { "Payper" }
+          </Text>
         </View>
 
         { /* Payment previews */ }
-        <View style={[container.image, {flex: 0.6}]}>
+        <View style={[container.image, {flex: 0.3, justifyContent: 'flex-start', alignItems: 'flex-start'}]}>
           <ImageCarousel />
         </View>
 
         { /* Login buttons */ }
-        <View style={{flex: 0.2, justifyContent: 'flex-start', alignItems: 'center'}}>
+        <View style={{ flex: 0.3, justifyContent: 'center', alignItems: 'center' }}>
           <LoginButton
             style={{width: dimensions.width - 50, height: 55, marginBottom: 10}}
             readPermissions={["email", "public_profile", "user_friends"]}
