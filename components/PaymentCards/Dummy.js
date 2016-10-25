@@ -35,7 +35,7 @@ export default class Dummy extends React.Component {
 
   render() {
     return(
-      <View style={[styles.wrap, { borderBottomWidth: 0 }]}>
+      <View style={[styles.wrap, { backgroundColor: colors.white, borderTopWidth: 1.5, borderBottomWidth: 1.5, borderColor: colors.accent }]}>
         { /* Top chunk (pic, name, payment info) */ }
         <View style={styles.top}>
 
@@ -49,8 +49,8 @@ export default class Dummy extends React.Component {
           { /* Name and payment info */ }
           <View style={styles.textWrap}>
             <Text style={styles.name}>{ (this.props.out) ? this.props.payment.recip_name : this.props.payment.sender_name }</Text>
-            <Text style={[styles.text, { color: colors.white }]}>${ this.props.payment.amount } per month - { this.props.payment.purpose }</Text>
-            <Text style={[styles.text, { color: colors.white }]}>Next payment: { (typeof this.props.payment.nextPayment === 'number') ? Timestamp.calendarize(this.props.payment.nextPayment) : "Unbeknownst to thee!" }</Text>
+            <Text style={styles.text}>${ this.props.payment.amount } per month - { this.props.payment.purpose }</Text>
+            <Text style={styles.text}>Next payment: { (typeof this.props.payment.nextPayment === 'number') ? Timestamp.calendarize(this.props.payment.nextPayment) : "Unbeknownst to thee!" }</Text>
           </View>
 
           { /* Payment settings button */ }
@@ -72,7 +72,7 @@ export default class Dummy extends React.Component {
                 <View style={styles.barWrap}>
                   <View style={[styles.bar, {flex: this.props.payment.paymentsMade / this.props.payment.payments}]}></View>
                   <View style={{flex: 1 - this.props.payment.paymentsMade / this.props.payment.payments}}></View>
-                  <Text style={[styles.progressText, { color: colors.white }]}>{ this.props.payment.paymentsMade } of { this.props.payment.payments }</Text>
+                  <Text style={styles.progressText}>{ this.props.payment.paymentsMade } of { this.props.payment.payments }</Text>
                 </View>
               </View> }
       </View>

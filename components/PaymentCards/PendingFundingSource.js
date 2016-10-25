@@ -55,7 +55,7 @@ class PendingFundingSource extends React.Component {
           <View style={styles.textWrap}>
             <Text style={styles.name}>{ this.props.user.name }</Text>
             <Text style={styles.text}>${ this.props.payment.amount } per month - { this.props.payment.purpose }</Text>
-            <Text style={styles.text}>Next payment: { (typeof this.props.payment.nextPayment == 'number') ? Timestamp.calendarize(this.props.payment.nextPayment) : "TBD" }</Text>
+            <Text style={styles.text}>Next payment: TBD</Text>
           </View>
 
           { /* Payment settings button */ }
