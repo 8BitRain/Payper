@@ -158,7 +158,7 @@ export default class LandingScreenView extends React.Component {
         </View>
 
         { /* Payment previews */ }
-        <View style={[container.image, {flex: 0.3, justifyContent: 'flex-start', alignItems: 'flex-start'}]}>
+        <View style={[container.image, {flex: 0.3, justifyContent: 'flex-start', alignItems: 'flex-start',  borderColor: 'transparent', borderWidth: 0}]}>
           <ImageCarousel />
         </View>
 
