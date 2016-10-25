@@ -77,9 +77,20 @@ class CreatePaymentView extends React.Component {
       uid: this.props.currentUser.uid
     });
 
-    options.paymentInfo.sender = (options.paymentInfo.type == "request") ? options.user : this.props.currentUser;
-    options.paymentInfo.recip = (options.paymentInfo.type == "request") ? this.props.currentUser : options.user;
+    // Strip user objects of unnecessary attributes
+    let thisUser = this.props.currentUser.getPaymentAttributes(),
+        otherUser = {
+          first_name: options.user.first_name,
+          last_name: options.user.last_name,
+          profile_pic: options.user.profile_pic,
+          uid: options.user.uid
+        };
 
+    // Determine sender and recip
+    options.paymentInfo.sender = (options.paymentInfo.type == "request") ? otherUser : thisUser;
+    options.paymentInfo.recip = (options.paymentInfo.type == "request") ? thisUser : otherUser;
+
+    // Change active filter for when user is returned to payments view
     this.props.setActiveFilter((options.paymentInfo.type == "request") ? "incoming" : "outgoing");
 
     if (options.user.uid) {

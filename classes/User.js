@@ -22,6 +22,20 @@ export default class User {
   }
 
   /**
+    *   Return all necessary user attributes for payment creation
+  **/
+  getPaymentAttributes() {
+    let attributes = {
+      first_name: this.first_name,
+      last_name: this.last_name,
+      profile_pic: this.profile_pic,
+      uid: this.uid
+    };
+
+    return attributes;
+  }
+
+  /**
     *   Update this user's attributes, then log the new user object to async storage
     *   attributes: a JSON containing propKey and propValue pairs
     *   -----------------------------------------------------------------------
