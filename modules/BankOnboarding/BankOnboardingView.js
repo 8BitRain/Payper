@@ -37,7 +37,8 @@ export default class BankOnboardingView extends React.Component {
       headerHeight: 0,
       closeButtonVisible: true,
       skipCityPage: true,
-      name: null,
+      firstName: null,
+      lastName: null,
       zip: null,
       street: null,
       city: null,
@@ -77,11 +78,10 @@ export default class BankOnboardingView extends React.Component {
   }
 
   createDwollaCustomer(cb) {
-    var nameBuffer = this.state.name.split(" ");
 
     var params = {
-      firstName: nameBuffer.splice(0, 1).join(""),
-      lastName: nameBuffer.join(" "),
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
       zip: this.state.zip,
       address: this.state.street,
       city: this.state.city,
@@ -216,7 +216,7 @@ export default class BankOnboardingView extends React.Component {
             <Comfort retry={this.props.retry} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
-            <LegalName nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} name={this.props.currentUser.first_name + " " + this.props.currentUser.last_name} />
+            <LegalName nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} firstName={this.props.currentUser.first_name} lastName={this.props.currentUser.last_name} />
           </View>
           <View style={{ flex: 1.0, width: dimensions.width }}>
             <ZIPCode zip={this.state.zip} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />

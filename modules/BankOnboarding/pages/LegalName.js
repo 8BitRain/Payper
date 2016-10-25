@@ -18,14 +18,15 @@ export default class LegalName extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: this.props.name,
-      valid: Validate.name(this.props.name)
+      firstName: this.props.firstName,
+      lastName: this.props.lastName,
+      valid: Validate.name(this.props.firstName) && Validate.name(this.props.lastName)
     };
   }
 
   handleSubmit() {
     if (!this.state.valid) return;
-    this.props.induceState({ name: this.state.name });
+    this.props.induceState({ firstName: this.props.firstName, lastName: this.props.lastName });
     this.props.nextPage();
   }
 
@@ -34,16 +35,22 @@ export default class LegalName extends React.Component {
       <View style={styles.wrap}>
         <View>
           <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
-            { "Is this your legal name?" }
+            { "Is this your legal first and last name?" }
           </Text>
         </View>
 
         <View style={styles.inputWrap}>
           <TextInput
             style={styles.input}
-            defaultValue={this.state.name}
+            defaultValue={this.state.firstName}
             autoCapitalize={"words"} autofocus autoCorrect={false}
-            onChangeText={(input) => this.setState({ name: input, valid: Validate.name(input) })} />
+            onChangeText={(input) => this.setState({ firstName: input, valid: Validate.name(input) })} />
+
+          <TextInput
+            style={styles.input}
+            defaultValue={this.state.lastName}
+            autoCapitalize={"words"} autofocus autoCorrect={false}
+            onChangeText={(input) => this.setState({ lastName: input, valid: Validate.name(input) })} />
         </View>
 
         <StickyView>
@@ -64,7 +71,7 @@ const styles = StyleSheet.create({
     paddingTop: 20
   },
   inputWrap: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'
   },

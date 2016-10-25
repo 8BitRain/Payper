@@ -19,7 +19,7 @@ export default class Summary extends React.Component {
     this.state = {
       submitText: "Sign me up!",
       passwordIsHidden: true,
-      nameIsValid: this.props.user.name && Validate.name(this.props.user.name) && this.props.user.name.split(" ").length > 1,
+      nameIsValid: this.props.user.firstName && Validate.name(this.props.user.firstName) && this.props.user.lastName && Validate.name(this.props.user.lastName),
       emailIsValid: Validate.email(this.props.user.email),
       passwordValidations: Validate.password(this.props.user.password),
       phoneValidations: Validate.phone(this.props.user.phone)
@@ -28,7 +28,7 @@ export default class Summary extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     var nextState = {
-      nameIsValid: nextProps.user.name && Validate.name(nextProps.user.name) && nextProps.user.name.split(" ").length > 1,
+      nameIsValid: this.props.user.firstName && Validate.name(this.props.user.firstName) && this.props.user.lastName && Validate.name(this.props.user.lastName),
       emailIsValid: Validate.email(nextProps.user.email),
       passwordValidations: Validate.password(nextProps.user.password),
       phoneValidations: Validate.phone(nextProps.user.phone)
@@ -64,7 +64,7 @@ export default class Summary extends React.Component {
                 placeholderTextColor={colors.lightGrey}
                 autoCapitalize={"words"} autoCorrect={false}
                 onChangeText={input => this.props.induceState({ name: input.trim() })}
-                defaultValue={this.props.user.name}
+                defaultValue={this.props.user.firstName + " " + this.props.user.lastName}
                 style={styles.input} />
             </View>
 

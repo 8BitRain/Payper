@@ -35,7 +35,7 @@ export default class Dummy extends React.Component {
 
   render() {
     return(
-      <View style={[styles.wrap, { backgroundColor: colors.white, borderTopWidth: 1.5, borderBottomWidth: 1.5, borderColor: colors.accent }]}>
+      <View style={[styles.wrap, { backgroundColor: colors.white, borderTopWidth: 0, borderBottomWidth: 0, borderColor: colors.accent }]}>
         { /* Top chunk (pic, name, payment info) */ }
         <View style={styles.top}>
 
