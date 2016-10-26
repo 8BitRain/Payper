@@ -32,7 +32,7 @@ export default class Name extends React.Component {
   }
 
   handleFirstNameChangeText(input) {
-    var isValid = Validate.name(input);
+    var isValid = Validate.name(input) && Validate.name(this.state.lastName);
     this.setState({
       firstName: input,
       valid: isValid,
@@ -41,14 +41,13 @@ export default class Name extends React.Component {
   }
 
   handleLastNameChangeText(input) {
-    var isValid = Validate.name(input);
+    var isValid = Validate.name(input) && Validate.name(this.state.firstName);
     this.setState({
       lastName: input,
       valid: isValid,
       submitText: (isValid) ?  "Continue" :  "Please enter a valid name"
     });
   }
-
 
   render() {
     return (
@@ -68,14 +67,14 @@ export default class Name extends React.Component {
             autoCapitalize={"words"} autoCorrect={false}
             onChangeText={(input) => this.handleFirstNameChangeText(input)}
             onKeyPress={e => { if (e.nativeEvent.key === "Enter") this.handleSubmit() }} />
-            <TextInput
-              style={styles.input}
-              defaultValue={this.state.name}
-              placeholder={"e.g. Doe"}
-              placeholderTextColor={colors.lightGrey}
-              autoCapitalize={"words"} autoCorrect={false}
-              onChangeText={(input) => this.handleLastNameChangeText(input)}
-              onKeyPress={e => { if (e.nativeEvent.key === "Enter") this.handleSubmit() }} />
+          <TextInput
+            style={styles.input}
+            defaultValue={this.state.name}
+            placeholder={"e.g. Doe"}
+            placeholderTextColor={colors.lightGrey}
+            autoCapitalize={"words"} autoCorrect={false}
+            onChangeText={(input) => this.handleLastNameChangeText(input)}
+            onKeyPress={e => { if (e.nativeEvent.key === "Enter") this.handleSubmit() }} />
         </View>
 
         <StickyView>
