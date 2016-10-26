@@ -96,14 +96,15 @@ const styles = StyleSheet.create({
     paddingTop: 20
   },
   inputWrap: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
   },
   input: {
     height: 55,
-    width: dimensions.width * 0.75,
+    width: dimensions.width * 0.4,
     marginTop: 15,
+    marginRight: 6,
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
     textAlign: 'center',
     color: colors.white
