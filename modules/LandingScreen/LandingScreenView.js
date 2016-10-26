@@ -43,6 +43,8 @@ export default class LandingScreenView extends React.Component {
         console.log("%cError getting Facebook user data...", "color:red;font-weight:900;");
         console.log(err);
       } else {
+        if (!result.email) alert("Facebook did not return an email address.");
+
         // Re-structure Facebook user data
         var userData = {
           facebookToken: token,
@@ -180,6 +182,7 @@ export default class LandingScreenView extends React.Component {
 
             { /* 'Continue without Facebook' button */ }
             <TouchableHighlight
+              style={{ padding: 30, paddingTop: 4 }}
               activeOpacity={0.8}
               underlayColor={'transparent'}
               onPress={() => this.toggleLoginModal()}>

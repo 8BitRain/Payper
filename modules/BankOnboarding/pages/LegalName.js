@@ -20,14 +20,33 @@ export default class LegalName extends React.Component {
     this.state = {
       firstName: this.props.firstName,
       lastName: this.props.lastName,
-      valid: Validate.name(this.props.firstName) && Validate.name(this.props.lastName)
+      valid: Validate.name(this.props.firstName) && Validate.name(this.props.lastName),
+      submitText: "Continue"
     };
   }
 
   handleSubmit() {
     if (!this.state.valid) return;
-    this.props.induceState({ firstName: this.props.firstName, lastName: this.props.lastName });
+    this.props.induceState({ firstName: this.state.firstName, lastName: this.state.lastName });
     this.props.nextPage();
+  }
+
+  handleFirstNameChangeText(input) {
+    var isValid = Validate.name(input) && Validate.name(this.state.lastName);
+    this.setState({
+      firstName: input,
+      valid: isValid,
+      submitText: (isValid) ?  "Continue" :  "Please enter a valid name"
+    });
+  }
+
+  handleLastNameChangeText(input) {
+    var isValid = Validate.name(input) && Validate.name(this.state.firstName);
+    this.setState({
+      lastName: input,
+      valid: isValid,
+      submitText: (isValid) ?  "Continue" :  "Please enter a valid name"
+    });
   }
 
   render() {
@@ -44,17 +63,17 @@ export default class LegalName extends React.Component {
             style={styles.input}
             defaultValue={this.state.firstName}
             autoCapitalize={"words"} autofocus autoCorrect={false}
-            onChangeText={(input) => this.setState({ firstName: input, valid: Validate.name(input) })} />
+            onChangeText={(input) => this.handleFirstNameChangeText(input)} />
 
           <TextInput
             style={styles.input}
             defaultValue={this.state.lastName}
             autoCapitalize={"words"} autofocus autoCorrect={false}
-            onChangeText={(input) => this.setState({ lastName: input, valid: Validate.name(input) })} />
+            onChangeText={(input) => this.handleLastNameChangeText(input)} />
         </View>
 
         <StickyView>
-          <ContinueButton text={(this.state.valid) ? "Yes" : "Please enter a valid name."} onPress={() => this.handleSubmit()} />
+          <ContinueButton text={this.state.submitText} onPress={() => this.handleSubmit()} />
         </StickyView>
       </View>
     );
