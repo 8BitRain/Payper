@@ -107,7 +107,7 @@ export default class StickyTextInput extends React.Component {
               onPress={() => this.props.toggleModal()}
               style={styles.cancel}>
                 <View>
-                  <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.alertRed }}>
+                  <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: '200', color: colors.alertRed }}>
                     Cancel
                   </Text>
                 </View>
@@ -120,7 +120,7 @@ export default class StickyTextInput extends React.Component {
               onPress={() => Actions.UserOnboardingViewContainer()}
               style={styles.signup}>
               <View>
-                <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.alertBlue }}>
+                <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: '200', color: colors.accent }}>
                   Sign up
                 </Text>
               </View>
