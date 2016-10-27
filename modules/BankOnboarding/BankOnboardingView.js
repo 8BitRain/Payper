@@ -36,7 +36,7 @@ export default class BankOnboardingView extends React.Component {
     this.errCodes = [];
     this.state = {
       animating: false,
-      pageCount: 7, // as long as this is <= the minimum page count we're gucci
+      pageCount: 2, // as long as this is <= the minimum page count we're gucci
       pageIndex: 0,
       headerHeight: 0,
       closeButtonVisible: true,
