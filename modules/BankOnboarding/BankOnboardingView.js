@@ -9,9 +9,12 @@ import dismissKeyboard from 'react-native-dismiss-keyboard';
 // Helpers
 import * as Headers from '../../helpers/Headers';
 import * as Async from '../../helpers/Async';
+import * as Lambda from '../../services/Lambda';
 
 // Components
 import Header from '../../components/Header/Header';
+import Phone from './pages/Phone';
+import Email from './pages/Email';
 import Comfort from './pages/Comfort';
 import LegalName from './pages/LegalName';
 import ZIPCode from './pages/ZIPCode';
@@ -33,6 +36,7 @@ export default class BankOnboardingView extends React.Component {
     this.errCodes = [];
     this.state = {
       animating: false,
+      pageCount: 7, // as long as this is <= the minimum page count we're gucci
       pageIndex: 0,
       headerHeight: 0,
       closeButtonVisible: true,
@@ -72,6 +76,16 @@ export default class BankOnboardingView extends React.Component {
   }
 
   induceState(substate, cb) {
+    // If we're skipping the city page, decrement total page count
+    if (substate.skipCityPage) substate.pageCount = this.state.pageCount - 1;
+
+    // Make phone and email updates if necessary
+    if (substate.phone) this.props.currentUser.updatedPhone = substate.phone;
+    if (substate.email) this.props.currentUser.updatedEmail = substate.email;
+    if (this.props.currentUser.updatedPhone || this.props.currentUser.updatedEmail)
+      Lambda.updateUser({ token: this.props.currentUser.token, user: this.props.currentUser })
+
+    // Create Dwolla customer if user submitted SSN page
     this.setState(substate, (cb) => {
       if (substate.ssn) this.createDwollaCustomer(cb);
     });
@@ -215,7 +229,20 @@ export default class BankOnboardingView extends React.Component {
               </TouchableHighlight> }
 
         { /* Inner content */ }
-        <Animated.View style={[styles.allPanelsWrap, { marginLeft: this.offsetX, width: dimensions.width * ((this.state.skipCityPage) ? 6 : 7) }]}>
+        <Animated.View style={[styles.allPanelsWrap, { marginLeft: this.offsetX, width: dimensions.width * this.state.pageCount }]}>
+
+          {(this.props.onboardPhone)
+            ? <View style={{ flex: 1.0, width: dimensions.width }}>
+                <Phone phone={this.props.phoneFromFacebook || ""} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+              </View>
+            : null }
+
+          {(this.props.onboardEmail)
+            ? <View style={{ flex: 1.0, width: dimensions.width }}>
+                <Email email={this.props.emailFromFacebook || ""} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+              </View>
+            : null }
+
           <View style={{ flex: 1.0, width: dimensions.width }}>
             <Comfort retry={this.props.retry} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
@@ -226,11 +253,11 @@ export default class BankOnboardingView extends React.Component {
             <ZIPCode zip={this.state.zip} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
           </View>
 
-          { (this.state.skipCityPage)
-              ? null
-              : <View style={{ flex: 1.0, width: dimensions.width }}>
-                  <City city={this.state.city} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
-                </View> }
+          {(this.state.skipCityPage)
+            ? null
+            : <View style={{ flex: 1.0, width: dimensions.width }}>
+                <City city={this.state.city} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />
+              </View> }
 
           <View style={{ flex: 1.0, width: dimensions.width }}>
             <Street street={this.state.street} city={this.state.city} state={this.state.state} nextPage={() => this.nextPage()} induceState={substate => this.induceState(substate)} currentUser={this.currentUser} />

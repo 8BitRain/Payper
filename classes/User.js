@@ -501,7 +501,11 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
+
+          // Update user attributes
           updateViaRedux(res);
+
+          // If user has a funding source, fetch its bank account info
           if (res.fundingSource) {
             res.fundingSource.active = true;
             this.getFundingSource((fs) => updateViaRedux(fs));
@@ -519,7 +523,7 @@ export default class User {
             if (res.out) res.out = SetMaster5000.processPayments({ payments: res.out, flow: "outgoing" });
             if (res.in) res.in = SetMaster5000.processPayments({ payments: res.in, flow: "incoming" });
           }
-          
+
           updateViaRedux({ paymentFlow: res });
         }
       },

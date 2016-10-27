@@ -63,39 +63,19 @@ export default class LandingScreenView extends React.Component {
 
         _this.props.currentUser.loginWithFacebook(userData,
           (res) => {
-            console.log("Login with Facebook was a success. Here's the user object:\n", res);
+
+            var emailFromFacebook = userData.user.email,
+                phoneFromFacebook = userData.user.phone;
 
             if (res.appFlags.onboarding_state === 'customer') {
-              if (res.phone) {
 
-                // Go to customer creation flow
-                Actions.BankOnboardingView({ currentUser: _this.props.currentUser });
-
-              } else {
-
-                // Input phone number, then go to customer creation flow
-                Actions.Phone({
-                  showHeader: true,
-                  currentUser: _this.props.currentUser,
-                  nextPage: () => Actions.BankOnboardingView({ currentUser: _this.props.currentUser }),
-                  induceState: (substate) => {
-                    _this.props.currentUser.updatedPhone = substate.phone;
-                    Lambda.updateUser({ token: _this.props.currentUser.token, user: _this.props.currentUser });
-                  }
-                });
-
-              }
-            } else if (!res.phone) {
-
-              // Input phone number, then go to app
-              Actions.Phone({
-                showHeader: true,
+              // Onboarding Dwolla customer info and email/phone
+              Actions.BankOnboardingView({
                 currentUser: _this.props.currentUser,
-                nextPage: () => _this.onLoginSuccess(),
-                induceState: (substate) => {
-                  _this.props.currentUser.updatedPhone = substate.phone;
-                  Lambda.updateUser({ token: _this.props.currentUser.token, user: _this.props.currentUser });
-                }
+                emailFromFacebook: emailFromFacebook,
+                phoneFromFacebook: phoneFromFacebook,
+                onboardEmail: true,
+                onboardPhone: true
               });
 
             } else {
@@ -106,7 +86,7 @@ export default class LandingScreenView extends React.Component {
             }
           },
           () => {
-            alert("Something went wrong 🙄\nPlease try again");
+            alert("Facebook login failed. Please try again later.");
             _this.toggleLoadingScreen();
           });
       }
