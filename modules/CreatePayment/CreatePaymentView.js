@@ -167,7 +167,7 @@ class CreatePaymentView extends React.Component {
                 selectedContacts={this.state.selectedContacts}
                 prevPage={() => this._prevPage()}
                 sendPayment={(options) => this._sendPayment(options)}
-                activeFundingSource={this.props.activeFundingSource}
+                activeFundingSource={this.props.currentUser.bankAccount}
                 payment={{
                   amount: this.state.amount,
                   duration: this.state.duration,
