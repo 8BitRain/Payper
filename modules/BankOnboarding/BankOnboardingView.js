@@ -78,7 +78,6 @@ export default class BankOnboardingView extends React.Component {
   }
 
   createDwollaCustomer(cb) {
-
     var params = {
       firstName: this.state.firstName,
       lastName: this.state.lastName,
@@ -87,8 +86,13 @@ export default class BankOnboardingView extends React.Component {
       city: this.state.city,
       state: this.state.state,
       dob: this.state.dob.year + "-" + this.state.dob.month + "-" + this.state.dob.date,
-      ssn: this.state.ssn
+      ssn: undefined
     };
+
+    for (var k in params) if (!params[k]) {
+      alert("Tried to create a Dwolla customer but " + k + " is undefined");
+      return;
+    }
 
     if (this.props.retry) this.props.currentUser.retryDwollaVerification(params,
       (customerStatus, cb) => this.handleSuccess(customerStatus, cb),
