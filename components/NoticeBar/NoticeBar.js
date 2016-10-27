@@ -69,7 +69,6 @@ export default class NoticeBar extends React.Component {
             ? null
             : <Entypo name={"chevron-thin-right"} color={colors.accent} size={16} style={{ padding: 5 }} /> }
         </Animated.View>
-
       </TouchableHighlight>
     );
   }

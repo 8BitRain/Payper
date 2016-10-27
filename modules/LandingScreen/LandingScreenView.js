@@ -221,7 +221,7 @@ export default class LandingScreenView extends React.Component {
             ? <Animated.View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.richBlack, opacity: this.loadingOpacity, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
                   Logging in...
-                  </Text>
+                </Text>
               </Animated.View>
             : null }
       </Animated.View>

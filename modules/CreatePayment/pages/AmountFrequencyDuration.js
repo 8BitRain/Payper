@@ -1,6 +1,7 @@
 // Dependencies
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Dimensions, Animated, Easing, Keyboard, TouchableHighlight } from 'react-native';
+import dismissKeyboard from 'react-native-dismiss-keyboard';
 
 // Components
 import DynamicHorizontalUserList from '../../../components/DynamicHorizontalUserList/DynamicHorizontalUserList';
@@ -15,7 +16,7 @@ export default class AmountFrequencyDuration extends React.Component {
 
     this.keyboardOffset = new Animated.Value(0);
     this.colorInterpolator = new Animated.Value(0);
-    this.frequencyPickerOffsetBottom = new Animated.Value(-60);
+    this.frequencyPickerOffsetBottom = new Animated.Value(-140);
 
     this.state = {
       amount: 0,
@@ -69,15 +70,15 @@ export default class AmountFrequencyDuration extends React.Component {
     Animated.timing(this.frequencyPickerOffsetBottom, {
       toValue: 0,
       duration: 200,
-      easing: Easing.elastic(1)
+      easing: Easing.elastic(0.4)
     }).start();
   }
 
   hideFrequencyMenu() {
     Animated.timing(this.frequencyPickerOffsetBottom, {
-      toValue: -60,
+      toValue: -140,
       duration: 200,
-      easing: Easing.elastic(1)
+      easing: Easing.elastic(0.4)
     }).start();
   }
 
@@ -95,7 +96,7 @@ export default class AmountFrequencyDuration extends React.Component {
   handleKeyPress(e) {
     if (e.nativeEvent.key === 'Enter') {
       if (this.state.focusedInputIndex === 2) {
-        this.handleSubmit()
+        this.handleSubmit();
       } else {
         this.refs[this.state.focusedInputIndex].blur();
         this.refs[this.state.focusedInputIndex + 1].focus();
@@ -172,6 +173,7 @@ export default class AmountFrequencyDuration extends React.Component {
     } else if (i === 1) {
       newState = this.validateFrequency(this.state.frequency);
       this.showFrequencyMenu();
+      dismissKeyboard();
     } else if (i === 2) {
       newState = this.validateDuration(this.state.duration);
       this.hideFrequencyMenu();
@@ -252,38 +254,41 @@ export default class AmountFrequencyDuration extends React.Component {
             activeOpacity={0.8}
             underlayColor={'transparent'}
             onPress={() => this.handleSubmit()}>
-
-            <View>
               { /* Continue button */ }
               <Animated.View style={{ height: 60, backgroundColor: this.state.submitBackgroundColor, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
                   { this.state.submitText }
                 </Text>
               </Animated.View>
-
-              { /* Frequency picker */ }
-              <Animated.View style={[styles.frequencyPicker, { bottom: this.frequencyPickerOffsetBottom, backgroundColor: colors.richBlack }]}>
-                <TouchableHighlight
-                  activeOpacity={0.8}
-                  underlayColor={'transparent'}
-                  onPress={() => this.handleFrequencyPick("MONTHLY")}>
-                  <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1.0, width: dimensions.width * 0.5, backgroundColor: 'rgba(145, 145, 145, 0)' }}>
-                    <Text style={[styles.text, { color: colors.accent, fontSize: 20 }]}>month</Text>
-                  </View>
-                </TouchableHighlight>
-
-                <TouchableHighlight
-                  activeOpacity={0.8}
-                  underlayColor={'transparent'}
-                  onPress={() => this.handleFrequencyPick("WEEKLY")}>
-                  <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1.0, width: dimensions.width * 0.5, backgroundColor: 'rgba(145, 145, 145, 0.1)' }}>
-                    <Text style={[styles.text, { color: colors.accent, fontSize: 20 }]}>week</Text>
-                  </View>
-                </TouchableHighlight>
-              </Animated.View>
-            </View>
-
           </TouchableHighlight>
+
+          <Animated.View style={[styles.frequencyPicker, { bottom: this.frequencyPickerOffsetBottom, backgroundColor: colors.richBlack }]}>
+            <View style={{ justifyContent: 'center', alignItems: 'center', flex: 0.4, width: dimensions.width * 1.0, backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
+              <Text style={[styles.text, { color: colors.white, fontSize: 20 }]}>
+                Select a payment frequency
+              </Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flex: 0.6, width: dimensions.width * 1.0, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+              <TouchableHighlight
+                style={{ flex: 0.5 }}
+                activeOpacity={0.8}
+                underlayColor={'transparent'}
+                onPress={() => this.handleFrequencyPick("WEEKLY")}>
+                <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: '200', color: colors.accent, alignSelf: 'center' }}>
+                  weekly
+                </Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={{ flex: 0.5, borderLeftWidth: 1.0, borderColor: colors.accent }}
+                activeOpacity={0.8}
+                underlayColor={'transparent'}
+                onPress={() => this.handleFrequencyPick("MONTHLY")}>
+                <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: '200', color: colors.accent, alignSelf: 'center', padding: 10 }}>
+                  monthly
+                </Text>
+              </TouchableHighlight>
+            </View>
+          </Animated.View>
         </Animated.View>
       </View>
     );
@@ -330,9 +335,9 @@ const styles = StyleSheet.create({
   },
   frequencyPicker: {
     position: 'absolute',
+    flexDirection: 'column',
     left: 0,
     right: 0,
-    height: 60,
-    flexDirection: 'row'
+    height: 140
   }
 });
