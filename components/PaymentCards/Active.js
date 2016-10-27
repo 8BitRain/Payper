@@ -86,7 +86,7 @@ class Active extends React.Component {
           { /* Name and payment info */ }
           <View style={styles.textWrap}>
             <Text style={styles.name}>{ this.props.user.name }</Text>
-            <Text style={styles.text}>${ this.props.payment.amount } per month - { this.props.payment.purpose }</Text>
+            <Text style={styles.text}>${ this.props.payment.amount } per {(this.props.payment.frequency === "WEEKLY") ? "week" : "month"} - { this.props.payment.purpose }</Text>
             <Text style={styles.text}>
               Next payment:
               { (typeof this.props.payment.nextPayment == 'number')

@@ -390,7 +390,8 @@ class Payments extends React.Component {
       purpose: payment.purpose,
       payments: payment.payments,
       paymentsMade: payment.paymentsMade,
-      nextPayment: payment.nextPayment
+      nextPayment: payment.nextPayment,
+      frequency: payment.frequency
     };
 
     var user = {
