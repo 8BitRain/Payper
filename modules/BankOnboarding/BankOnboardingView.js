@@ -86,7 +86,7 @@ export default class BankOnboardingView extends React.Component {
       city: this.state.city,
       state: this.state.state,
       dob: this.state.dob.year + "-" + this.state.dob.month + "-" + this.state.dob.date,
-      ssn: undefined
+      ssn: this.state.ssn
     };
 
     for (var k in params) if (!params[k]) {
