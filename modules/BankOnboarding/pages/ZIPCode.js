@@ -161,7 +161,7 @@ export default class ZIPCode extends React.Component {
       <View style={styles.wrap}>
         <View>
           <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
-            { "What's your ZIP code?" }
+            { "What's your billing ZIP code?" }
           </Text>
         </View>
 

@@ -43,6 +43,8 @@ export default class LandingScreenView extends React.Component {
         console.log("%cError getting Facebook user data...", "color:red;font-weight:900;");
         console.log(err);
       } else {
+        if (!result.email) alert("Facebook did not return an email address.");
+
         // Re-structure Facebook user data
         var userData = {
           facebookToken: token,
@@ -158,7 +160,7 @@ export default class LandingScreenView extends React.Component {
         </View>
 
         { /* Payment previews */ }
-        <View style={[container.image, {flex: 0.3, justifyContent: 'flex-start', alignItems: 'flex-start'}]}>
+        <View style={[container.image, {flex: 0.3, justifyContent: 'flex-start', alignItems: 'flex-start',  borderColor: 'transparent', borderWidth: 0}]}>
           <ImageCarousel />
         </View>
 
@@ -180,6 +182,7 @@ export default class LandingScreenView extends React.Component {
 
             { /* 'Continue without Facebook' button */ }
             <TouchableHighlight
+              style={{ padding: 30, paddingTop: 4 }}
               activeOpacity={0.8}
               underlayColor={'transparent'}
               onPress={() => this.toggleLoginModal()}>
@@ -218,7 +221,7 @@ export default class LandingScreenView extends React.Component {
             ? <Animated.View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.richBlack, opacity: this.loadingOpacity, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
                   Logging in...
-                  </Text>
+                </Text>
               </Animated.View>
             : null }
       </Animated.View>

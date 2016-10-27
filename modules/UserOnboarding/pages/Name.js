@@ -18,7 +18,8 @@ export default class Name extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
+      firstName: "",
+      lastName: "",
       valid: false,
       submitText: "Please enter a valid name"
     };
@@ -26,17 +27,25 @@ export default class Name extends React.Component {
 
   handleSubmit() {
     if (this.state.submitText !== "Continue") return;
-    this.props.induceState({ name: this.state.name.trim() });
+    this.props.induceState({ firstName: this.state.firstName, lastName: this.state.lastName });
     this.props.nextPage();
   }
 
-  handleChangeText(input) {
-    var isValid = Validate.name(input);
-    var isMoreThanOneWord = input.split(" ").length > 1;
+  handleFirstNameChangeText(input) {
+    var isValid = Validate.name(input) && Validate.name(this.state.lastName);
     this.setState({
-      name: input,
+      firstName: input,
       valid: isValid,
-      submitText: (isValid) ? (isMoreThanOneWord) ? "Continue" : "Please enter your first and last name" : "Please enter a valid name"
+      submitText: (isValid) ?  "Continue" :  "Please enter a valid name"
+    });
+  }
+
+  handleLastNameChangeText(input) {
+    var isValid = Validate.name(input) && Validate.name(this.state.firstName);
+    this.setState({
+      lastName: input,
+      valid: isValid,
+      submitText: (isValid) ?  "Continue" :  "Please enter a valid name"
     });
   }
 
@@ -45,7 +54,7 @@ export default class Name extends React.Component {
       <View style={styles.wrap}>
         <View>
           <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
-            { "What's your name?" }
+            { "What's your first and last name?" }
           </Text>
         </View>
 
@@ -53,10 +62,18 @@ export default class Name extends React.Component {
           <TextInput
             style={styles.input}
             defaultValue={this.state.name}
-            placeholder={"e.g. John Doe"}
+            placeholder={"e.g. John"}
             placeholderTextColor={colors.lightGrey}
             autoCapitalize={"words"} autoCorrect={false}
-            onChangeText={(input) => this.handleChangeText(input)}
+            onChangeText={(input) => this.handleFirstNameChangeText(input)}
+            onKeyPress={e => { if (e.nativeEvent.key === "Enter") this.handleSubmit() }} />
+          <TextInput
+            style={styles.input}
+            defaultValue={this.state.name}
+            placeholder={"e.g. Doe"}
+            placeholderTextColor={colors.lightGrey}
+            autoCapitalize={"words"} autoCorrect={false}
+            onChangeText={(input) => this.handleLastNameChangeText(input)}
             onKeyPress={e => { if (e.nativeEvent.key === "Enter") this.handleSubmit() }} />
         </View>
 
@@ -84,8 +101,9 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 55,
-    width: dimensions.width * 0.75,
+    width: dimensions.width * 0.4,
     marginTop: 15,
+    marginRight: 6,
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
     textAlign: 'center',
     color: colors.white

@@ -30,7 +30,8 @@ export default class UserOnboardingView extends React.Component {
       headerHeight: 0,
       bankOnboardingModalVisible: false,
       summarySubmitText: "Create user",
-      name: null,
+      firstName: null,
+      lastName: null,
       email: null,
       password: null,
       phone: null
@@ -46,10 +47,12 @@ export default class UserOnboardingView extends React.Component {
   }
 
   createUser(cb) {
-    var nameBuffer = this.state.name.split(" ");
+    //var nameBuffer = this.state.name.split(" ");
     this.props.currentUser.createUserWithEmailAndPassword({
-      firstName: nameBuffer.splice(0, 1).join(""),
-      lastName: nameBuffer.join(" "),
+      //firstName: nameBuffer.splice(0, 1).join(""),
+      //lastName: nameBuffer.join(" "),
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
       email: this.state.email,
       password: this.state.password,
       phone: this.state.phone
@@ -157,7 +160,7 @@ export default class UserOnboardingView extends React.Component {
               nextPage={() => this.nextPage()}
               induceState={substate => this.induceState(substate)}
               createUser={(cb) => this.createUser(cb)}
-              user={{ name: this.state.name, email: this.state.email, password: this.state.password, phone: this.state.phone }} />
+              user={{firstName: this.state.firstName, lastName: this.state.lastName, email: this.state.email, password: this.state.password, phone: this.state.phone }} />
           </View>
         </Animated.View>
 
