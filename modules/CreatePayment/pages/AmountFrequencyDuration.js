@@ -87,6 +87,10 @@ export default class AmountFrequencyDuration extends React.Component {
       this.refs[this.state.focusedInputIndex].blur();
       this.refs[this.state.focusedInputIndex + 1].focus();
     } else if (this.state.submitText === "Continue") {
+      if (this.state.amount < 1 || this.state.amount > 3000) {
+        alert("Amount must be between $1 and $3000");
+        return;
+      }
       this.props.dismissKeyboard();
       this.props.induceState({ amount: this.state.amount, frequency: this.state.frequency, duration: this.state.duration });
       this.props.nextPage();
@@ -106,7 +110,7 @@ export default class AmountFrequencyDuration extends React.Component {
 
   validateAmount(input) {
     let newState = {},
-        valid = input > 0 && input < 3001;
+        valid = input >= 1 && input <= 3000;
 
     newState.amount = input;
     newState.submitText = (valid) ? "Next" : "Amount must be between $1 and $3000";
