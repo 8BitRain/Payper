@@ -209,10 +209,10 @@ class Payments extends React.Component {
 
         // Request confirmation
         Alert.confirmation({
-          title: "Are you sure you'd like to cancel this payment?",
-          message: message,
+          title: "Are you sure you'd like to cancel this payment series?",
+          message: "Payments " + (payment.payments - payment.paymentsMade) + " thru " + (payment.payments) + " will not occur.",
           cancelMessage: "Nevermind",
-          confirmMessage: "Yes, cancel the payment series.",
+          confirmMessage: "Yes, cancel the payment series",
           cancel: () => console.log("Nevermind"),
           confirm: () => this.cancelPayment(payment)
         });
