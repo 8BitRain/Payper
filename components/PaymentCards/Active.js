@@ -19,45 +19,15 @@ class Active extends React.Component {
     this.timer;
     this.state = {
       paymentInProgress: false,
+      clock: new Date().getTime()
     };
   }
 
-  componentDidMount() {
-    // Extend scope
-    const _this = this;
-
-    // Get current time every 5 seconds
-    this.timer = setInterval(() => {
-      var secondsTilNextPayment = _this._calculateTimeDifferences({ current: new Date().getTime(), nextPayment: _this.props.payment.nextPayment }).seconds;
-      // console.log("Seconds til next payment:", secondsTilNextPayment);
-      if (secondsTilNextPayment < 60 && !_this.state.paymentInProgress) {
-        _this.setState({ paymentInProgress: true });
-      } else if (_this.state.paymentInProgress) {
-        _this.setState({ paymentInProgress: false });
-      }
-    }, 3000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timer);
-    this.timer = null;
-  }
-
-  _calculateTimeDifferences(options) {
-    var diffMS = options.nextPayment - options.current;
-    var diffS = diffMS / 1000;
-    var diffM = diffS / 60;
-
-    if (false) {
-      console.log("Current time:", options.current);
-      console.log("Next payment time:", options.nextPayment);
-      console.log("Differences\n------------");
-      console.log("MS:", diffMS);
-      console.log("S:", diffS);
-      console.log("M:", diffM);
-    }
-
-    return { milliseconds: diffMS, seconds: diffS, minute: diffM };
+  componentWillReceiveProps(nextProps) {
+    let secondsTilNextPayment = (nextProps.payment.nextPayment -  nextProps.clock) / 1000;
+    this.setState({
+      paymentInProgress: secondsTilNextPayment <= 65
+    });
   }
 
   _getUserPic(pic, name) {
@@ -86,14 +56,18 @@ class Active extends React.Component {
           { /* Name and payment info */ }
           <View style={styles.textWrap}>
             <Text style={styles.name}>{ this.props.user.name }</Text>
-            <Text style={styles.text}>${ this.props.payment.amount } per {(this.props.payment.frequency === "WEEKLY") ? "week" : "month"} - { this.props.payment.purpose }</Text>
             <Text style={styles.text}>
-              Next payment:
-              { (typeof this.props.payment.nextPayment == 'number')
-                  ? (this.state.paymentInProgress)
-                      ? " In less than a minute"
-                      : " " + Timestamp.calendarize(this.props.payment.nextPayment)
-                  : " TBD" }
+              { "$" + this.props.payment.amount +
+                " per " + ((this.props.payment.frequency === "WEEKLY") ? "week" : "month") +
+                " - " + this.props.payment.purpose
+              }
+              </Text>
+            <Text style={styles.text}>
+              { "Next payment: " +
+                ((this.state.paymentInProgress)
+                ? "In less than a minute..."
+                : Timestamp.calendarize(this.props.payment.nextPayment))
+              }
             </Text>
           </View>
 

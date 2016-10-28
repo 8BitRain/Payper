@@ -40,13 +40,23 @@ class Payments extends React.Component {
     super(props);
     this.state = {
       modalVisible: false,
-      bankModalVisible: false
+      bankModalVisible: false,
+      clock: new Date().getTime()
     }
-     this.pulseValue_0 = new Animated.Value(1);
-     this.pulseValue_1 = new Animated.Value(1);
-     this.pulseValue_2 = new Animated.Value(1);
 
+    this.pulseValue_0 = new Animated.Value(1);
+    this.pulseValue_1 = new Animated.Value(1);
+    this.pulseValue_2 = new Animated.Value(1);
+  }
 
+  componentWillMount() {
+    this.clockInterval = setInterval(() => {
+      this.setState({ clock: new Date().getTime() });
+    }, 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.clockInterval);
   }
 
   componentDidMount(){
@@ -355,7 +365,7 @@ class Payments extends React.Component {
     );
   }
 
-  _renderPaymentList() {
+  _renderPaymentList(clock) {
     // Determine which data source to use for the payment list view
     var ds = (this.props.activeFilter == "incoming") ? this.props.incomingPayments : this.props.outgoingPayments;
 
@@ -405,7 +415,8 @@ class Payments extends React.Component {
           <Active
             user={user}
             payment={paymentInfo}
-            showMenu={() => this._showMenu(payment)} />
+            showMenu={() => this._showMenu(payment)}
+            clock={this.state.clock} />
         );
       break;
       case "pendingInvite":
