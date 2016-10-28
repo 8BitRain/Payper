@@ -100,13 +100,10 @@ export default class BankOnboardingView extends React.Component {
       city: this.state.city,
       state: this.state.state,
       dob: this.state.dob.year + "-" + this.state.dob.month + "-" + this.state.dob.date,
+      email: this.state.email,
+      phone: this.state.phone,
       ssn: this.state.ssn
     };
-
-    for (var k in params) if (!params[k]) {
-      alert("Tried to create a Dwolla customer but " + k + " is undefined");
-      return;
-    }
 
     if (this.props.retry) this.props.currentUser.retryDwollaVerification(params,
       (customerStatus, cb) => this.handleSuccess(customerStatus, cb),
