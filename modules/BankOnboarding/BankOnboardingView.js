@@ -151,7 +151,10 @@ export default class BankOnboardingView extends React.Component {
   handleFailure(errCode, cb) {
     this.errCodes.push({ errCode: errCode, timestamp: new Date().getTime() });
     Mixpanel.trackWithProperties('Failed Dwolla Customer Creation', { errCode: errCode });
-    alert("Something went wrong on our end 🙄\nPlease try again");
+    let msg = (errCode === 'Duplicate')
+      ? "A customer with that email address already exists. Please use a different one."
+      : "Something went wrong on our end 🙄. Please try again.";
+    alert(msg);
     if (typeof cb === 'function') cb(false);
   }
 

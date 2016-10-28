@@ -59,13 +59,10 @@ class Payments extends React.Component {
     clearInterval(this.clockInterval);
   }
 
-  componentDidMount(){
-    //this.refs.pulse.transitionTo({opacity: 0}, 9);
-    console.log("Animating");
+  componentDidMount() {
     this.pulse_0();
     this.pulse_1();
     this.pulse_2();
-    //this.animatePulse();
   }
 
   pulse_0() {
@@ -268,24 +265,6 @@ class Payments extends React.Component {
     });
   }
 
-  _archiveCompletePayments(options) {
-    let payments;
-
-    // Determine which payment set to look through
-    if (this.props.currentUser.paymentFlow)
-      payments = (this.props.activeFilter === "outgoing") ? this.props.currentUser.paymentFlow.out : this.props.currentUser.paymentFlow.in;
-    else
-      payments = [];
-
-    // If a payment is complete, animate it out, then archive it
-    for (var p in payments) {
-      const curr = payments[p];
-      if (curr.paymentsMade === Number.parseInt(curr.payments)) {
-        Lambda.archivePayment({ payment_id: curr.pid, token: this.props.currentUser.token });
-      }
-    }
-  }
-
   _toggleModal(options) {
     // Don't allow user to create payments if their customer status is not verified
     if (this.props.currentUser.appFlags.customer_status !== "verified")
@@ -395,6 +374,11 @@ class Payments extends React.Component {
   }
 
   _renderRow(payment) {
+    if (payment.nextPayment === 'complete') {
+      Lambda.archivePayment({ payment_id: payment.pid, token: this.props.currentUser.token });
+      return <View />;
+    }
+
     var paymentInfo = {
       amount: payment.amount,
       purpose: payment.purpose,
@@ -486,9 +470,6 @@ class Payments extends React.Component {
   }
 
   render() {
-    // TODO: Do this in componentDidMount() instead?
-    this._archiveCompletePayments();
-
     return(
       <View style={{flex: 1.0, backgroundColor: colors.white}}>
 

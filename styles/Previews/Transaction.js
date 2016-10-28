@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 
   // Wrap for top half (user and payment info)
   top: {
-    marginTop: 15,
+    marginTop: 22.5,
     flex: 0.65,
     backgroundColor: 'transparent',
     flexDirection: 'row',
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Roboto',
     color: colors.richBlack,
-    fontSize: 12,
+    fontSize: 14,
   },
 
   // Name text styles
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   // Dot TouchableHighlight wrap
   dots: {
     position: 'absolute',
-    top: 0,
+    top: -10,
     right: 22.5,
     width: 50,
     height: 50,

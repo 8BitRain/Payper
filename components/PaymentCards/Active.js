@@ -66,7 +66,7 @@ class Active extends React.Component {
               { "Next payment: " +
                 ((this.state.paymentInProgress)
                 ? "In less than a minute..."
-                : Timestamp.calendarize(this.props.payment.nextPayment))
+                : (typeof this.props.payment.nextPayment === 'number') ? Timestamp.calendarize(this.props.payment.nextPayment) : this.props.payment.nextPayment)
               }
             </Text>
           </View>
