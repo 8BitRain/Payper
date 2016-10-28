@@ -533,9 +533,6 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
-          
-          console.log("notifications listener returned res", res);
-
           if (res.onboarding_state === "bank")
             this.getIAVToken({ token: this.token }, updateViaRedux);
           updateViaRedux({ appFlags: res });
