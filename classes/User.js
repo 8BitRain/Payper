@@ -333,8 +333,11 @@ export default class User {
           console.log("createDwollaCustomer succeeded...", "Response data:", responseData);
           onSuccess(responseData.status);
         } else {
-          console.log("createDwollaCustomer failed...", "Error:", responseData.errorMessage);
-          onFailure(responseData.errorMessage);
+          console.log("createDwollaCustomer failed...", "Error:", responseData);
+          let str = responseData.errorMessage;
+          let buffer = JSON.parse(str);
+          let code = buffer[0].code;
+          onFailure(code);
         }
       })
       .done();
