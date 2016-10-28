@@ -313,9 +313,17 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   createDwollaCustomer(params, onSuccess, onFailure) {
-    params.email = this.decryptedEmail;
-    params.phone = this.decryptedPhone;
-    params.token = this.token;
+    if (!params.email) params.email = this.decryptedEmail;
+    if (!params.phone) params.phone = this.decryptedPhone;
+    if (!params.token) params.token = this.token;
+
+    console.log("creating dwolla customer w params\n", params);
+
+    for (var k in params) if (!params[k]) {
+      alert("Tried to create a Dwolla customer but " + k + " is undefined");
+      onFailure("undefined " + k);
+      return;
+    }
 
     try {
       fetch(baseURL + "customer/create", {method: "POST", body: JSON.stringify(params)})
