@@ -148,15 +148,10 @@ function getCloseIcon(callback) {
 };
 
 // Return a settings icon
-function getSettingsIcon(callback, numNotifications) {
+function getSettingsIcon(callback) {
   return(
     <Button onPress={() => {callback()}}>
       <Entypo style={styles.iconSettings} name="menu" size={25} color={colors.white}/>
-      { (!numNotifications || numNotifications == 0) ? null :
-        <View style={notificationStyles.numNotificationsWrap}>
-          <Text style={notificationStyles.numNotificationsText}>{ numNotifications }</Text>
-        </View>
-      }
     </Button>
   );
 };
@@ -221,8 +216,20 @@ function getFlowTabs(activeTab, callbackIn, callbackOut) {
       </TouchableHighlight>
     </View>
   );
-};
+}
 
+function getNotificationsIcon(callback, opacity, num) {
+  return(
+    <Button onPress={() => callback()}>
+      <Entypo style={[styles.iconSettings, { opacity: opacity }]} name="globe" size={25} color={colors.white} />
+      { (!num || num == 0) ? null :
+        <View style={notificationStyles.numNotificationsWrap}>
+          <Text style={notificationStyles.numNotificationsText}>{ num }</Text>
+        </View>
+      }
+    </Button>
+  );
+}
 
 class Header extends React.Component {
   constructor(props) {
@@ -240,7 +247,7 @@ class Header extends React.Component {
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
           { this.props.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
-          { this.props.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings, (this.props.currentUser.appFlags) ? this.props.currentUser.appFlags.numUnseenNotifications : 0) : null }
+          { this.props.headerProps.types.settingsIcon ? getSettingsIcon(this.props.callbackSettings) : null }
           { this.props.headerProps.types.backIcon ? getBackIcon(this.props.callbackBack) : null }
         </View>
 
@@ -256,6 +263,7 @@ class Header extends React.Component {
         { /* Filler */ }
         <View style={[styles.chunkQuo, { alignItems: 'center' }]}>
           { this.props.headerProps.types.closeIconTopRight ? getCloseIcon(this.props.callbackClose) : null }
+          { this.props.headerProps.types.notificationsIcon ? getNotificationsIcon(this.props.headerProps.callbackNotifications, this.props.headerProps.opacity, this.props.currentUser.appFlags.numUnseenNotifications) : null }
         </View>
       </View>
     );

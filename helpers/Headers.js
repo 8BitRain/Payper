@@ -9,12 +9,15 @@ export function get(params) {
           "settingsIcon": true,
           "closeIcon": false,
           "flowTabs": false,
+          "notificationsIcon": true
         },
         index: null,
         numCircles: null,
         title: "Notifications",
+        callbackNotifications: () => params.closeNotifications(),
         callbackIn: null,
         callbackOut: null,
+        opacity: 0.6
       };
     break;
     case "fundingSources":
@@ -75,13 +78,16 @@ export function get(params) {
           "settingsIcon": true,
           "closeIcon": false,
           "flowTabs": true,
+          "notificationsIcon": true
         },
         index: null,
         numCircles: null,
         title: null,
         callbackIn: () => params.setActiveFilterToIncoming(),
         callbackOut: () => params.setActiveFilterToOutgoing(),
+        callbackNotifications: () => params.openNotifications(),
         accent: false,
+        opacity: 1.0
       };
     break;
     case "createPayment":

@@ -13,7 +13,6 @@ import * as Init from '../../_init';
 // Custom stylesheets
 import colors from '../../styles/colors';
 import styles from '../../styles/Settings/Settings';
-import notificationStyles from '../../styles/Notifications/Preview';
 const dimensions = Dimensions.get('window');
 
 // Iconography
@@ -27,7 +26,6 @@ class Settings extends React.Component {
 
     this.sideMenuButtons = [
       {rowTitle: "Home", iconName: "home", destination: () => this.props.changePage("payments")},
-      {rowTitle: "Notifications", iconName: "light-bulb", destination: () => this.props.changePage("notifications")},
       {rowTitle: "Bank Accounts", iconName: "wallet", destination: () => this.props.changePage("fundingSources")},
       {rowTitle: "Invite", iconName: "users", destination: () => this.props.changePage("invite")},
       {rowTitle: "FAQ", iconName: "help-with-circle", destination: () => {
@@ -80,15 +78,6 @@ class Settings extends React.Component {
 
             <Entypo style={styles.icon} name={options.iconName} size={20} color={colors.accent} />
             <Text style={styles.rowTitle}>{ options.rowTitle }</Text>
-
-            { /* Render unseen notifications indicator */
-              (options.rowTitle == "Notifications")
-                ? (this.props.currentUser.appFlags && this.props.currentUser.appFlags.numUnseenNotifications === 0 || !this.props.currentUser.appFlags.numUnseenNotifications)
-                  ? null
-                  : <View style={[notificationStyles.numNotificationsWrap, { bottom: 6 }]}>
-                      <Text style={notificationStyles.numNotificationsText}>{ this.props.currentUser.appFlags.numUnseenNotifications }</Text>
-                    </View>
-                : null }
 
           </View>
         </TouchableHighlight>

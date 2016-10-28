@@ -64,9 +64,12 @@ export default class Main extends React.Component {
     this.EMPTY_DATA_SOURCE = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       currentPage: "payments",
-      headerProps: Headers.get({ header: "payments",
-          setActiveFilterToIncoming: () => this.setState({ activeFilter: "incoming" }),
-          setActiveFilterToOutgoing: () => this.setState({ activeFilter: "outgoing" }) }),
+      headerProps: Headers.get({
+        header: "payments",
+        setActiveFilterToIncoming: () => this.setState({ activeFilter: "incoming" }),
+        setActiveFilterToOutgoing: () => this.setState({ activeFilter: "outgoing" }),
+        openNotifications: () => this.changePage('notifications')
+      }),
       activeFilter: "incoming",
       sideMenuIsOpen: false,
       incomingPayments: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
@@ -99,7 +102,7 @@ export default class Main extends React.Component {
     this.setState({ sideMenuIsOpen: !this.state.sideMenuIsOpen });
   }
 
-  changePage(newPage) {
+  changePage(newPage, dontToggleSideMenu) {
     if (newPage === this.state.currentPage) return;
 
     // Track page change in Mixpanel
@@ -109,11 +112,24 @@ export default class Main extends React.Component {
     });
 
     // Determine which header to render
-    var headerParams = (newPage === 'payments')
-      ? { header: newPage,
-          setActiveFilterToIncoming: () => this.setState({ activeFilter: "incoming" }),
-          setActiveFilterToOutgoing: () => this.setState({ activeFilter: "outgoing" }) }
-      : { header: newPage };
+    var headerParams, toggleSideMenu = true;
+    if (newPage === 'payments') {
+      headerParams = {
+        header: newPage,
+        setActiveFilterToIncoming: () => this.setState({ activeFilter: "incoming" }),
+        setActiveFilterToOutgoing: () => this.setState({ activeFilter: "outgoing" }),
+        openNotifications: () => this.changePage('notifications', true)
+      };
+    } else if (newPage === 'notifications') {
+      headerParams = {
+        header: newPage,
+        closeNotifications: () => this.changePage('payments', true)
+      };
+    } else {
+      headerParams = {
+        header: newPage
+      };
+    }
 
     // Trigger re-render
     this.setState({
@@ -121,8 +137,8 @@ export default class Main extends React.Component {
       headerProps: Headers.get(headerParams)
     });
 
-    // Close side menu
-    this.toggleSideMenu();
+    let shouldToggleSideMenu = typeof dontToggleSideMenu === 'undefined' && newPage !== 'notifications';
+    if (shouldToggleSideMenu) this.toggleSideMenu();
   }
 
   setActiveFilter(newActiveFilter) {
@@ -158,7 +174,7 @@ export default class Main extends React.Component {
               activeFilter={this.state.activeFilter}
               outgoingPayments={this.state.outgoingPayments}
               incomingPayments={this.state.incomingPayments}
-              setActiveFilter={(newFilter) => this.setActiveFilter(newFilter)}/>
+              setActiveFilter={(newFilter) => this.setActiveFilter(newFilter)} />
           </View>
         </View>
       </SideMenu>

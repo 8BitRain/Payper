@@ -42,7 +42,13 @@ export default class Notifications extends React.Component {
     });
 
     // Set state, triggering re-rerender of list, then mark unseen notifications as seen
-    this.setState({ empty: false, dataSource: this.state.dataSource.cloneWithRows(notifications) }, () => this._seeNotifications());
+    this.setState({
+      empty: false,
+      dataSource: this.state.dataSource.cloneWithRows(notifications)
+    });
+
+    // Mark unseen notifications as seen
+    this._seeNotifications()
   }
 
   // Return a list of ready to render rows
