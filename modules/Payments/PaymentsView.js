@@ -374,10 +374,8 @@ class Payments extends React.Component {
   }
 
   _renderRow(payment) {
-    if (payment.nextPayment === 'complete') {
+    if (payment.nextPayment === 'complete')
       Lambda.archivePayment({ payment_id: payment.pid, token: this.props.currentUser.token });
-      return <View />;
-    }
 
     var paymentInfo = {
       amount: payment.amount,
