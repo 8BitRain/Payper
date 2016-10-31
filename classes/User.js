@@ -334,10 +334,14 @@ export default class User {
           onSuccess(responseData.status);
         } else {
           console.log("createDwollaCustomer failed...", "Error:", responseData);
-          let str = responseData.errorMessage;
-          let buffer = JSON.parse(str);
-          let code = buffer[0].code;
-          onFailure(code);
+          try {
+            let str = responseData.errorMessage;
+            let buffer = JSON.parse(str);
+            let code = buffer[0].code;
+            onFailure(code);
+          } catch(err) {
+            onFailure("timed out");
+          }
         }
       })
       .done();
