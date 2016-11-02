@@ -24,6 +24,7 @@
     "react-native-blur": "*",
     "react-native-button": "github:ide/react-native-button",
     "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
+    "react-native-camera-roll-picker": "^1.1.9",
     "react-native-carousel": "*",
     "react-native-code-push": "*",
     "react-native-contacts": "*",

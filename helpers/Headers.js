@@ -108,8 +108,8 @@ export function get(params) {
     case "photoUpload":
       return {
         types: {
-          "backIcon": (params.back) ? true : false,
-          "closeIcon": (params.close) ? true : false
+          "backIcon": (params.index > 0) ? true : false,
+          "closeIcon": (params.index == 0) ? true : false
         },
         index: params.index,
         numCircles: null,

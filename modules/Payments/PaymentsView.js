@@ -18,6 +18,7 @@ import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingView';
 import MicrodepositOnboarding from '../../components/MicrodepositOnboarding/MicrodepositOnboarding';
 import NoticeBar from '../../components/NoticeBar/NoticeBar';
 import Carousel from 'react-native-carousel';
+import PhotoUploader from '../../components/PhotoUploader/PhotoUploader'
 
 // Payment card components
 import Active from '../../components/PaymentCards/Active';
@@ -41,6 +42,7 @@ class Payments extends React.Component {
     this.state = {
       modalVisible: false,
       bankModalVisible: false,
+      documentUploadModalVisible: false,
       clock: new Date().getTime()
     }
 
@@ -277,6 +279,10 @@ class Payments extends React.Component {
     this.setState({ bankModalVisible: !this.state.bankModalVisible });
   }
 
+  toggleDocumentUploadModal(){
+    this.setState({ documentUploadModalVisible: !this.state.documentUploadModalVisible});
+  }
+
   getBankModalContent(onboardingState, customerStatus) {
     if (customerStatus === "retry")
       return(
@@ -477,7 +483,7 @@ class Payments extends React.Component {
             ? <NoticeBar
                 dwollaCustomerStatus={(this.props.currentUser.appFlags.customer_status !== "verified") ? this.props.currentUser.appFlags.customer_status : null}
                 onboardingState={this.props.currentUser.appFlags.onboarding_state}
-                onPress={() => this.toggleBankModal()} />
+                onPress={/*() => this.toggleBankModal()*/ () => this.toggleDocumentUploadModal()} />
             : null }
 
           { /* Payment list (or empty state) */
@@ -503,6 +509,25 @@ class Payments extends React.Component {
           <CreatePayment
             {...this.props}
             toggleModal={(options) => this._toggleModal(options)} />
+
+        </Modal>
+
+        { /* Document Upload modal*/}
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.documentUploadModalVisible}
+          onRequestClose={ () => alert("Closed modal") }>
+
+          <StatusBar barStyle="light-content" />
+
+          {/*<CreatePayment
+            {...this.props}
+            toggleModal={(options) => this._toggleModal(options)} />*/}
+          <PhotoUploader
+            toggleModal={() => this.toggleDocumentUploadModal()}
+            title={"Document Upload"}
+            index={0} />
 
         </Modal>
 

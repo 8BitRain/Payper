@@ -27,17 +27,17 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
-
-    [Fabric with:@[[Crashlytics class]]];
-    #define MIXPANEL_TOKEN @"507a107870150092ca92fa76ca7c66d6"
-    [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
-    Mixpanel *mixpanel = [Mixpanel sharedInstance];
-    [mixpanel track:@("App Opened")];
-
+  
+  
+  [Fabric with:@[[Crashlytics class]]];
+#define MIXPANEL_TOKEN @"507a107870150092ca92fa76ca7c66d6"
+  [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
+  Mixpanel *mixpanel = [Mixpanel sharedInstance];
+  [mixpanel track:@("App Opened")];
+  
   NSURL *jsCodeLocation;
-
-
+  
+  
   /**
    * Loading JavaScript code - uncomment the one you want.
    *
@@ -51,13 +51,13 @@
    * `inet` value under `en0:`) and make sure your computer and iOS device are
    * on the same Wi-Fi network.
    */
-
-  #ifdef DEBUG
-    jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
-    #else
-    jsCodeLocation = [CodePush bundleURL];
-  #endif
-
+  
+#ifdef DEBUG
+  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
+#else
+  jsCodeLocation = [CodePush bundleURL];
+#endif
+  
   /**
    * OPTION 2
    * Load from pre-bundled file on disk. The static bundle is automatically
@@ -65,26 +65,26 @@
    * running the project on an actual device or running the project on the
    * simulator in the "Release"  build configuration.
    */
-
-//  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-
+  
+  //  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Coincast"
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
-
+  
   // Customize root view background color
   rootView.backgroundColor = [[UIColor alloc] initWithRed:.42f green:.45f blue:.52f alpha:1];
-
+  
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-
+  
   [[FBSDKApplicationDelegate sharedInstance] application:application
                            didFinishLaunchingWithOptions:launchOptions];
-
+  
   return YES;
 }
 
