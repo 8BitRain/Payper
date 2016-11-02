@@ -421,6 +421,8 @@ export default class User {
       fetch(baseURL + "customer/getFundingSource", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
+        console.log("\n\ngetFundingSource res:", responseData);
+        
         if (!responseData) {
           console.log("getFundingSource response was null");
           return;
