@@ -47,7 +47,7 @@ export default class NoticeBar extends React.Component {
   }
 
   handlePress() {
-    if (this.props.dwollaCustomerStatus === "document" || this.props.dwollaCustomerStatus === "suspended" || this.props.dwollaCustomerStatus === "documentRecieved" || this.props.dwollaCustomerStatus === "documentProcessing")
+    if (this.props.dwollaCustomerStatus === "suspended" || this.props.dwollaCustomerStatus === "documentRecieved" || this.props.dwollaCustomerStatus === "documentProcessing")
       return;
 
     this.props.onPress();

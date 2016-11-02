@@ -15,6 +15,7 @@
 		00E356F31AD99517003FC87E /* CoincastTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* CoincastTests.m */; };
 		071349021D90529000B3B998 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071349001D90529000B3B998 /* Fabric.framework */; };
 		071349031D90529000B3B998 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071349011D90529000B3B998 /* Crashlytics.framework */; };
+		076CE2EE1DCA5C2F008C8D96 /* AssetLibraryToBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 076CE2ED1DCA5C2F008C8D96 /* AssetLibraryToBase64.m */; };
 		0788F5851D4306C800C3286E /* libRCTFBLogin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0788F5731D42FEC000C3286E /* libRCTFBLogin.a */; };
 		079D26581D430BD2000F7943 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 079D26551D430BD2000F7943 /* FBSDKCoreKit.framework */; };
 		079D26591D430BD2000F7943 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 079D26561D430BD2000F7943 /* FBSDKLoginKit.framework */; };
@@ -228,6 +229,7 @@
 		00E356F21AD99517003FC87E /* CoincastTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoincastTests.m; sourceTree = "<group>"; };
 		071349001D90529000B3B998 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		071349011D90529000B3B998 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		076CE2ED1DCA5C2F008C8D96 /* AssetLibraryToBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AssetLibraryToBase64.m; path = "../node_modules/react-native-asset-library-to-base64/ios/AssetLibraryToBase64.m"; sourceTree = "<group>"; };
 		07759FC31D42CEFC00D30AA2 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../../../FacebookSDKs-iOS-4.14.0/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		079D26551D430BD2000F7943 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../../FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		079D26561D430BD2000F7943 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../../../FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
@@ -549,6 +551,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				076CE2ED1DCA5C2F008C8D96 /* AssetLibraryToBase64.m */,
 				07C843781DC90C0800363701 /* RCTCameraRoll.xcodeproj */,
 				07C843711DC9069900363701 /* RNUploader.xcodeproj */,
 				07C843441DC903E600363701 /* RCTCamera.xcodeproj */,
@@ -1102,6 +1105,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				076CE2EE1DCA5C2F008C8D96 /* AssetLibraryToBase64.m in Sources */,
 				07A813B41D93086700E432B3 /* BlurView.m in Sources */,
 				07A813B51D93086700E432B3 /* BlurViewManager.m in Sources */,
 				07A813BB1D93089900E432B3 /* VibrancyViewManager.m in Sources */,

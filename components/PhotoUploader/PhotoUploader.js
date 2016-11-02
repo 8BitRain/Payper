@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import {   AppRegistry, Dimensions, StyleSheet, Text,TouchableHighlight, View, Animated, Image } from 'react-native';
+import {   AppRegistry, Dimensions, StyleSheet, Text,TouchableHighlight, View, Animated, Image, NativeModules } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import colors from '../../styles/colors';
 import * as Headers from '../../helpers/Headers';
@@ -8,6 +8,7 @@ import * as Headers from '../../helpers/Headers';
 // Additional Components
 import CameraRollPicker from 'react-native-camera-roll-picker';
 import Camera from 'react-native-camera';
+var ReadImageData = require('NativeModules').ReadImageData
 
 // Components
 import UserPic from '../Previews/UserPic/UserPic';
@@ -48,6 +49,7 @@ class PhotoUploader extends React.Component {
       title: this.props.title,
       index: this.props.index,
       image: this.props.image,
+      selectedImage: null,
       mode: "library",
       num: 0,
       selected: []
@@ -78,6 +80,17 @@ class PhotoUploader extends React.Component {
 
    console.log(current);
    console.log(this.state.selected);
+   if(this.state.selected[0]){
+     //this.readImage(this.state.selected[0].uri);
+     this.setState({ selectedImage: this.state.selected[0].uri });
+   }
+ }
+
+ readImage(uri){
+   ReadImageData.readImage(this.state.selected[0].uri, (imageBase64) => {
+     console.log("Base 64 Image: " + imageBase64);
+     this.setState({ selectedImage: imageBase64 });
+   });
  }
 
  takePicture() {
@@ -89,22 +102,25 @@ class PhotoUploader extends React.Component {
   _renderImageAndCameraRoll(){
     return(
       <View style={{flex: 1}}>
-        <View style={{marginTop: 100}}>
-        <CameraRollPicker
-         scrollRenderAheadDistance={500}
-         initialListSize={1}
-         pageSize={3}
-         removeClippedSubviews={false}
-         groupTypes='SavedPhotos'
-         batchSize={5}
-         maximum={1}
-         selected={this.state.selected}
-         assetType='Photos'
-         imagesPerRow={3}
-         imageMargin={5}
-         style={{backgroundColor: colors.richBlack}}
-         callback={this.getSelectedImages.bind(this)}
-        />
+        <View style={{marginTop: 5}}>
+          {(this.state.selectedImage) ? <Image source={{uri: this.state.selectedImage}} style={{height: 128, width: 128}} /> : null }
+        </View>
+        <View style={{marginTop: 0}}>
+          <CameraRollPicker
+           scrollRenderAheadDistance={500}
+           initialListSize={1}
+           pageSize={3}
+           removeClippedSubviews={false}
+           groupTypes='SavedPhotos'
+           batchSize={5}
+           maximum={1}
+           selected={this.state.selected}
+           assetType='Photos'
+           imagesPerRow={3}
+           imageMargin={5}
+           backgroundColor={colors.richBlack}
+           callback={this.getSelectedImages.bind(this)}
+          />
         </View>
       </View>
     );
@@ -112,6 +128,28 @@ class PhotoUploader extends React.Component {
 
   _renderDocumentUploadExplanation(){
 
+  }
+
+  _renderFooter(){
+    return(
+      <View style={{flex: (dimensions.height < 667) ? 0.12 : 0.1, flexDirection: 'row', backgroundColor: "white"}}>
+      <TouchableHighlight
+        style={{justifyContent: "center", alignItems: "center" }}
+        activeOpacity={0.8}
+        underlayColor={'transparent'}
+        onPress={() => this.setState({mode: "library"})}>
+          <Text style={{fontSize: 32}}>Library</Text>
+      </TouchableHighlight>
+      <TouchableHighlight
+        style={{justifyContent: "center", alignItems: "center"}}
+        activeOpacity={0.8}
+        underlayColor={'transparent'}
+        onPress={() => this.setState({mode: "photo"})}>
+          <Text style={{fontSize: 32}} >Photo</Text>
+      </TouchableHighlight>
+
+      </View>
+    );
   }
 
   _renderCamera(){
@@ -132,15 +170,16 @@ class PhotoUploader extends React.Component {
   render() {
     return(
       <View style={{flex: 1, backgroundColor: colors.richBlack}}>
-      <View>
+      <View style={{flex: (dimensions.height < 667) ? 0.12 : 0.1}}>
         <Header
           //callback
-          callbackClose={() => this.props.toggleDocumentUploadModal()}
+          callbackClose={() => this.props.toggleModal()}
           headerProps={Headers.get({ header: "photoUpload", title: this.state.title, index: this.state.index })} />
       </View>
-      <View>
+      <View style={{flex: .8}}>
         {(this.state.mode == "photo") ? this._renderCamera() : this._renderImageAndCameraRoll()}
       </View>
+      {this._renderFooter()}
       </View>
 
     );
