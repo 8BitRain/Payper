@@ -105,6 +105,19 @@ export function get(params) {
         callbackOut: null,
       };
     break;
+    case "photoUpload":
+      return {
+        types: {
+          "backIcon": (params.back) ? true : false,
+          "closeIcon": (params.close) ? true : false
+        },
+        index: params.index,
+        numCircles: null,
+        title: params.title,
+        callbackIn: null,
+        callbackOut: null,
+      };
+    break;
     case "editProfile":
       return {
         types: {
