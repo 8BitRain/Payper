@@ -26,6 +26,7 @@ export default class DateOfBirth extends React.Component {
       index6Focused: false,
       index7Focused: false
     };
+    this.dates = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     this.values = ["", "", "", "", "", "", "", ""];
     this.initalizedFromCache = false;
   }
@@ -92,31 +93,27 @@ export default class DateOfBirth extends React.Component {
           </Text>
         </View>
 
-        {/*<View style={styles.inputWrap}>
-          <DatePicker
-            date={this.state.date}
-            mode={"date"}
-            format={"YYYY-MM-DD"}
-            minDate={(new Date().getFullYear() - 200) + "-01-01"}
-            maxDate={(new Date().getFullYear() - 10) + "-01-01"}
-            confirmBtnText={"Confirm"}
-            cancelBtnText={"Cancel"}
-            customStyles={datePickerStyles}
-            showIcon={false}
-            onDateChange={date => this.setState({ date: date })} />
-        </View>*/}
         <View style={styles.textInputWrap}>
-          <TextInput ref="0" defaultValue={this.values[0]} onFocus={() => this.setState({ index0Focused: true, index: 0 })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index0Focused) ? null : "D"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="1" defaultValue={this.values[1]} onFocus={() => this.setState({ index: 1, index1Focused: true  })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index1Focused) ? null : "D"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="0" defaultValue={this.values[0]} onFocus={() => this.setState({ index: 0, index0Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index0Focused) ? null : "D"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e) } />
+          <TextInput ref="1" defaultValue={this.values[1]} onFocus={() => this.setState({ index: 1, index1Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index1Focused) ? null : "D"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onKeyPress={e => { if (e.nativeEvent.key === "Backspace") console.log("") }} onChangeText={(e) => this.handleChangeText(e)} />
           <Text style={styles.dateDash}>-</Text>
-          <TextInput ref="2" defaultValue={this.values[2]} onFocus={() => this.setState({ index: 2, index2Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index2Focused) ? null : "M"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="3" defaultValue={this.values[3]} onFocus={() => this.setState({ index: 3, index3Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index3Focused) ? null : "M"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="2" defaultValue={this.values[2]} onFocus={() => this.setState({ index: 2, index2Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index2Focused) ? null : "M"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onKeyPress={e => { if (e.nativeEvent.key === "Backspace") console.log("")  }} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="3" defaultValue={this.values[3]} onFocus={() => this.setState({ index: 3, index3Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index3Focused) ? null : "M"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onKeyPress={e => { if (e.nativeEvent.key === "Backspace") console.log("") }} onChangeText={(e) => this.handleChangeText(e)} />
           <Text style={styles.dateDash}>-</Text>
-          <TextInput ref="4" defaultValue={this.values[4]} onFocus={() => this.setState({ index: 4, index4Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index4Focused) ? null : "Y"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="5" defaultValue={this.values[5]} onFocus={() => this.setState({ index: 5, index5Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index5Focused) ? null : "Y"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="6" defaultValue={this.values[6]} onFocus={() => this.setState({ index: 6, index6Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index6Focused) ? null : "Y"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="7" defaultValue={this.values[7]} onFocus={() => this.setState({ index: 7, index7Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index7Focused) ? null : "Y"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="4" defaultValue={this.values[4]} onFocus={() => this.setState({ index: 4, index4Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index4Focused) ? null : "Y"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onKeyPress={e => { if (e.nativeEvent.key === "Backspace") console.log("") }} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="5" defaultValue={this.values[5]} onFocus={() => this.setState({ index: 5, index5Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index5Focused) ? null : "Y"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onKeyPress={e => { if (e.nativeEvent.key === "Backspace") console.log("") }} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="6" defaultValue={this.values[6]} onFocus={() => this.setState({ index: 6, index6Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index6Focused) ? null : "Y"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onKeyPress={e => { if (e.nativeEvent.key === "Backspace") console.log("") }} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="7" defaultValue={this.values[7]} onFocus={() => this.setState({ index: 7, index7Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index7Focused) ? null : "Y"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onKeyPress={e => { if (e.nativeEvent.key === "Backspace") console.log("") }} onChangeText={(e) => this.handleChangeText(e)} />
         </View>
+
+        <View style={{flexDirection: "row"}}>
+        <Text style={styles.birthdayText}>You were born on </Text>
+        {Number(this.values[0] + this.values[1]) ? <Text style={styles.birthdayText}> {this.dates[parseInt(this.values[0] + this.values[1])] }</Text> : null}
+        {Number(this.values[2] + this.values[3]) ? <Text style={styles.birthdayText}> {parseInt(this.values[2] + this.values[3])}</Text> : null}
+        {Number(this.values[4] + this.values[5] + this.values[6] + this.values[7]) ? <View style={{flexDirection: "row"}}><Text style={styles.birthdayText}> {parseInt(this.values[4] + this.values[5] + this.values[6] + this.values[7])} </Text><Text style={styles.birthdayTextEmoji}>🎉</Text></View> : null}
+
+        </View>
+
 
         <StickyView>
           <ContinueButton text={"Continue"} onPress={() => this.handleSubmit()} />
@@ -164,8 +161,8 @@ const styles = StyleSheet.create({
     paddingTop: 20
   },
   textInput: {
-    width: dimensions.width * 0.10,
-    height: dimensions.width * 0.10,
+    width: dimensions.width * 0.109,
+    height: dimensions.width * 0.109,
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
     color: colors.white,
     textAlign: 'center',
@@ -182,5 +179,16 @@ const styles = StyleSheet.create({
   dateDash:{
     color: colors.white,
     fontSize: 32
+  },
+  birthdayText:{
+    color: colors.white,
+    fontSize: 20,
+    marginTop: 10,
+    textAlign: "center"
+  },
+
+  birthdayTextEmoji:{
+    fontSize: 20,
+    marginTop: 7.5
   }
 });
