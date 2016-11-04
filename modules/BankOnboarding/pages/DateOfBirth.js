@@ -16,7 +16,15 @@ export default class DateOfBirth extends React.Component {
     super(props);
     this.state = {
       date: (this.props.dob) ? this.props.dob : "01011994",
-      index: 0
+      index: 0,
+      index0Focused: false,
+      index1Focused: false,
+      index2Focused: false,
+      index3Focused: false,
+      index4Focused: false,
+      index5Focused: false,
+      index6Focused: false,
+      index7Focused: false
     };
     this.values = ["", "", "", "", "", "", "", ""];
     this.initalizedFromCache = false;
@@ -48,6 +56,11 @@ export default class DateOfBirth extends React.Component {
     // Update dob
     var date = this.validateAndReturnDOB();
     this.setState({ date: date });
+
+    //Reset placeholderTextValues
+    this.setState({index0Focused: false, index1Focused: false, index2Focused: false, index3Focused: false,
+    index4Focused: false, index5Focused: false, index6Focused: false, index7Focused: false});
+
   }
 
   validateAndReturnDOB() {
@@ -93,16 +106,16 @@ export default class DateOfBirth extends React.Component {
             onDateChange={date => this.setState({ date: date })} />
         </View>*/}
         <View style={styles.textInputWrap}>
-          <TextInput ref="0" defaultValue={this.values[0]} onFocus={() => this.setState({ index: 0 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="1" defaultValue={this.values[1]} onFocus={() => this.setState({ index: 1 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="0" defaultValue={this.values[0]} onFocus={() => this.setState({ index0Focused: true, index: 0 })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index0Focused) ? null : "D"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="1" defaultValue={this.values[1]} onFocus={() => this.setState({ index: 1, index1Focused: true  })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index1Focused) ? null : "D"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
           <Text style={styles.dateDash}>-</Text>
-          <TextInput ref="2" defaultValue={this.values[2]} onFocus={() => this.setState({ index: 2 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="3" defaultValue={this.values[3]} onFocus={() => this.setState({ index: 3 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="2" defaultValue={this.values[2]} onFocus={() => this.setState({ index: 2, index2Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index2Focused) ? null : "M"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="3" defaultValue={this.values[3]} onFocus={() => this.setState({ index: 3, index3Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index3Focused) ? null : "M"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
           <Text style={styles.dateDash}>-</Text>
-          <TextInput ref="4" defaultValue={this.values[4]} onFocus={() => this.setState({ index: 4 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="5" defaultValue={this.values[5]} onFocus={() => this.setState({ index: 5 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="6" defaultValue={this.values[6]} onFocus={() => this.setState({ index: 6 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="7" defaultValue={this.values[7]} onFocus={() => this.setState({ index: 7 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="4" defaultValue={this.values[4]} onFocus={() => this.setState({ index: 4, index4Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index4Focused) ? null : "Y"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="5" defaultValue={this.values[5]} onFocus={() => this.setState({ index: 5, index5Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index5Focused) ? null : "Y"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="6" defaultValue={this.values[6]} onFocus={() => this.setState({ index: 6, index6Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index6Focused) ? null : "Y"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="7" defaultValue={this.values[7]} onFocus={() => this.setState({ index: 7, index7Focused: true })} maxLength={1} keyboardType={'number-pad'} placeholder={(this.state.index7Focused) ? null : "Y"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
         </View>
 
         <StickyView>
