@@ -44,6 +44,17 @@ export default class DateOfBirth extends React.Component {
     // Update value
     this.values[this.state.index] = input;
 
+    //Reset placeholderTextValues
+    if(this.state.index0Focused || this.state.index1Focused){
+      this.setState({index0Focused: true, index1Focused: true});
+    }
+    if(this.state.index2Focused || this.state.index3Focused){
+      this.setState({index2Focused: true, index3Focused: true});
+    }
+    if(this.state.index4Focused || this.state.index5Focused || this.state.index6Focused || this.state.index7Focused){
+      this.setState({index4Focused: true, index5Focused: true, index6Focused: true, index7Focused: true});
+    }
+
     // Focus next TextInput
     console.log(this.state.index);
     if (this.state.index !== 7 && input !== "") {
@@ -58,9 +69,8 @@ export default class DateOfBirth extends React.Component {
     var date = this.validateAndReturnDOB();
     this.setState({ date: date });
 
-    //Reset placeholderTextValues
-    this.setState({index0Focused: false, index1Focused: false, index2Focused: false, index3Focused: false,
-    index4Focused: false, index5Focused: false, index6Focused: false, index7Focused: false});
+
+    //Celebrate Birth!
 
   }
 
@@ -72,11 +82,15 @@ export default class DateOfBirth extends React.Component {
   }
 
   handleSubmit() {
-    console.log(this.state.date);
     //var splitDate = this.state.date.split("-");
-    var date = this.state.date[0] + this.state.date[1];
-    var month = this.state.date[2] + this.state.date[3];
-    var year = this.state.date[4] + this.state.date[5] + this.state.date[6] + this.state.date[7];
+    try{
+      var date = this.state.date[0] + this.state.date[1];
+      var month = this.state.date[2] + this.state.date[3];
+      var year = this.state.date[4] + this.state.date[5] + this.state.date[6] + this.state.date[7];
+    }catch(err){
+      console.log("error");
+      return;
+    }
 
     var parsedDate = { date: date, month: month, year: year };
     console.log(parsedDate);
@@ -111,7 +125,7 @@ export default class DateOfBirth extends React.Component {
         {Number(this.values[0] + this.values[1]) ? <Text style={styles.birthdayText}> {this.dates[parseInt(this.values[0] + this.values[1])] }</Text> : null}
         {Number(this.values[2] + this.values[3]) ? <Text style={styles.birthdayText}> {parseInt(this.values[2] + this.values[3])}</Text> : null}
         {Number(this.values[4] + this.values[5] + this.values[6] + this.values[7]) ? <View style={{flexDirection: "row"}}><Text style={styles.birthdayText}> {parseInt(this.values[4] + this.values[5] + this.values[6] + this.values[7])} </Text><Text style={styles.birthdayTextEmoji}>🎉</Text></View> : null}
-
+        {this.state.birthdayCelebration}
         </View>
 
 
@@ -183,12 +197,13 @@ const styles = StyleSheet.create({
   birthdayText:{
     color: colors.white,
     fontSize: 20,
-    marginTop: 10,
-    textAlign: "center"
+    marginTop: 25,
+    textAlign: "center",
+    fontWeight: "100"
   },
 
   birthdayTextEmoji:{
     fontSize: 20,
-    marginTop: 7.5
+    marginTop: 20
   }
 });
