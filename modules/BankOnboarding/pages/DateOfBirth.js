@@ -75,7 +75,7 @@ const datePickerStyles = StyleSheet.create({
   },
   dateText: {
     fontFamily: 'Roboto',
-    fontWeight: '100',
+    fontWeight: '400',
     fontSize: 16,
     color: colors.white
   }

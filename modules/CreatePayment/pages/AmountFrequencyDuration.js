@@ -260,7 +260,7 @@ export default class AmountFrequencyDuration extends React.Component {
             onPress={() => this.handleSubmit()}>
               { /* Continue button */ }
               <Animated.View style={{ height: 60, backgroundColor: this.state.submitBackgroundColor, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
+                <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '400', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
                   { this.state.submitText }
                 </Text>
               </Animated.View>
@@ -268,7 +268,7 @@ export default class AmountFrequencyDuration extends React.Component {
 
           <Animated.View style={[styles.frequencyPicker, { bottom: this.frequencyPickerOffsetBottom, backgroundColor: colors.richBlack }]}>
             <View style={{ justifyContent: 'center', alignItems: 'center', flex: 0.4, width: dimensions.width * 1.0, backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
-              <Text style={[styles.text, { color: colors.white, fontSize: 20 }]}>
+              <Text style={[styles.text, { color: colors.white, fontSize: 20, fontWeight: "400" }]}>
                 Select a payment frequency
               </Text>
             </View>
@@ -278,7 +278,7 @@ export default class AmountFrequencyDuration extends React.Component {
                 activeOpacity={0.8}
                 underlayColor={'transparent'}
                 onPress={() => this.handleFrequencyPick("WEEKLY")}>
-                <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: '200', color: colors.accent, alignSelf: 'center' }}>
+                <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: '400', color: colors.accent, alignSelf: 'center' }}>
                   weekly
                 </Text>
               </TouchableHighlight>
@@ -287,7 +287,7 @@ export default class AmountFrequencyDuration extends React.Component {
                 activeOpacity={0.8}
                 underlayColor={'transparent'}
                 onPress={() => this.handleFrequencyPick("MONTHLY")}>
-                <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: '200', color: colors.accent, alignSelf: 'center', padding: 10 }}>
+                <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: '400', color: colors.accent, alignSelf: 'center', padding: 10 }}>
                   monthly
                 </Text>
               </TouchableHighlight>
