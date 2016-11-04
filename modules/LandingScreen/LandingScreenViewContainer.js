@@ -1,10 +1,14 @@
 // Dependencies
 import { connect } from 'react-redux';
 import LandingScreenView from './LandingScreenView';
-import * as setInMain from '../Main/MainState';
+import * as dMain from '../Main/MainState';
 
 function mapStateToProps(state) {
   return { currentUser: state.getIn(['main', 'currentUser']) };
 }
 
-export default connect(mapStateToProps)(LandingScreenView);
+function mapDispatchToProps(dispatch) {
+  return { updateCurrentUser: (input) => dispatch(dMain.updateCurrentUser(input)) };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LandingScreenView);
