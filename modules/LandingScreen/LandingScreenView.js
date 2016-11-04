@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TouchableHighlight, Modal, Animated, Easing, Dimensions, Linking, StatusBar, Image } from 'react-native';
+import { View, ScrollView, Text, TouchableHighlight, Modal, Animated, Easing, Dimensions, Linking, StatusBar, Image } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Hyperlink from 'react-native-hyperlink';
 const FBSDK = require('react-native-fbsdk');
@@ -10,7 +10,8 @@ const { LoginButton, AccessToken, GraphRequest, GraphRequestManager } = FBSDK;
 import * as Lambda from '../../services/Lambda';
 
 // Components
-import ImageCarousel from './subcomponents/ImageCarousel';
+import UserOnboardingView from '../../modules/UserOnboarding/UserOnboardingView';
+import PaymentCards from './subcomponents/PaymentCards';
 import LoginModal from '../../components/LoginModal/LoginModal';
 
 // Stylesheets
@@ -24,9 +25,11 @@ export default class LandingScreenView extends React.Component {
     super(props);
     this.loadingOpacity = new Animated.Value(0);
     this.logoAspectRatio = 377 / 568;
+    this.logoTextAspectRatio = 402 / 104;
     this.state = {
       headerHeight: 0,
       loginModalVisible: false,
+      signUpModalVisible: false,
       loading: false
     };
   }
@@ -103,6 +106,10 @@ export default class LandingScreenView extends React.Component {
     this.setState({ loginModalVisible: !this.state.loginModalVisible });
   }
 
+  toggleSignUpModal() {
+    this.setState({ signUpModalVisible: !this.state.signUpModalVisible });
+  }
+
   toggleLoadingScreen() {
     this.setState({ loading: !this.state.loading });
     Animated.timing(this.loadingOpacity, {
@@ -124,30 +131,47 @@ export default class LandingScreenView extends React.Component {
 
   render() {
     return (
-      <Animated.View style={{ flex: 1.0, backgroundColor: colors.richBlack, opacity: this.pageWrapOpacity }}>
+      <Animated.View style={{ flex: 1.0, backgroundColor: colors.richBlack, opacity: this.pageWrapOpacity, paddingTop: 20 }}>
         { /* Lighten status bar text */ }
         <StatusBar barStyle="light-content" />
 
-        { /* Title */ }
-        <View style={{ flex: 0.4, justifyContent: 'center', alignItems: 'center', paddingTop: 20 }} onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}>
-          <Image source={require('../../assets/images/logo.png')} style={{ height: this.state.headerHeight * 0.25, width: (this.state.headerHeight * 0.25) * this.logoAspectRatio }} />
-          <Text style={[typography.main, {fontSize: 28, paddingTop: 10, color: colors.white}]}>
-            { "Welcome to" }
-          </Text>
-          <Text style={[typography.main, {fontSize: 32, color: colors.accent}]}>
-            { "Payper" }
-          </Text>
+        { /* Header */ }
+        <View
+          onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}
+          style={{ flex: 0.1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+
+          <View style={{ width: dimensions.width * 0.333, justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 25 }}>
+            <Image source={require('../../assets/images/logo.png')} style={{ height: this.state.headerHeight * 0.6, width: (this.state.headerHeight * 0.6) * this.logoAspectRatio }} />
+          </View>
+
+          <View style={{ width: dimensions.width * 0.333, justifyContent: 'center', alignItems: 'center' }}>
+            <Image source={require('../../assets/images/logo-with-text.png')} style={{ height: this.state.headerHeight * 0.45, width: (this.state.headerHeight * 0.45) * this.logoTextAspectRatio }} />
+          </View>
+
+          <View style={{ width: dimensions.width * 0.333, justifyContent: 'center', alignItems: 'flex-end', paddingRight: 20 }}>
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              onPress={() => this.toggleLoginModal()}>
+              <Text style={{ fontSize: 16, color: colors.white, padding: 10, fontWeight: '300', paddingBottom: 15, paddingRight: 0 }}>
+                {"Sign in"}
+              </Text>
+            </TouchableHighlight>
+          </View>
         </View>
 
-        { /* Payment previews */ }
-        <View style={[container.image, {flex: 0.3, justifyContent: 'flex-start', alignItems: 'flex-start',  borderColor: 'transparent', borderWidth: 0}]}>
-          <ImageCarousel />
+        { /* Payment cards */ }
+        <View style={{ flex: 0.9, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white }}>
+          <ScrollView style={{ backgroundColor: colors.lightGrey }}>
+            <PaymentCards />
+            <View style={{ height: dimensions.height * 0.2, width: dimensions.width, backgroundColor: colors.white }} />
+          </ScrollView>
         </View>
 
-        { /* Login buttons */ }
-        <View style={{ flex: 0.3, justifyContent: 'center', alignItems: 'center' }}>
+        { /* Footer */ }
+        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: dimensions.height * 0.2, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.9)' }}>
           <LoginButton
-            style={{width: dimensions.width - 50, height: 55, marginBottom: 10}}
+            style={{width: dimensions.width - 60, height: 45 }}
             readPermissions={["email", "public_profile", "user_friends"]}
             onLoginFinished={(err, res) => {
               if (err) {
@@ -160,33 +184,21 @@ export default class LandingScreenView extends React.Component {
               }
             }} />
 
-            { /* 'Continue without Facebook' button */ }
-            <TouchableHighlight
-              style={{ padding: 30, paddingTop: 4 }}
-              activeOpacity={0.8}
-              underlayColor={'transparent'}
-              onPress={() => this.toggleLoginModal()}>
-              <Text style={{ fontFamily: 'Roboto', color: colors.white, fontSize: 16, fontWeight: '200' }}>
-                Continue without Facebook
+          { /* 'Continue without Facebook' button */ }
+          <TouchableHighlight
+            style={{ paddingTop: 10 }}
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => Actions.UserOnboardingViewContainer()}>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={{ fontFamily: 'Roboto', color: colors.white, fontSize: 18, fontWeight: '100' }}>
+                {"or "}
               </Text>
-            </TouchableHighlight>
-        </View>
-
-        { /* Privacy Policy and TOS */ }
-        <View style={{padding: 20, alignItems: "center"}}>
-          <Hyperlink
-            onPress={(url) => this.handleURLClick(url)}
-            linkStyle={{color:'#2980b9', fontSize:14}}
-            linkText={(url) => {
-              if (url === 'https://www.getpayper.io/terms')
-                return 'Terms of Service';
-              else if (url === 'https://www.getpayper.io/privacy')
-                return 'Privacy Policy';
-            }}>
-            <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: colors.white, fontWeight: '100' }}>
-              { "By creating an account or logging in, you agree to Payper's https://www.getpayper.io/terms and https://www.getpayper.io/privacy." }
-            </Text>
-          </Hyperlink>
+              <Text style={{ fontFamily: 'Roboto', color: colors.accent, fontSize: 18, fontWeight: '100' }}>
+                {"sign up with email"}
+              </Text>
+            </View>
+          </TouchableHighlight>
         </View>
 
         { /* Non-Facebook login modal */ }
@@ -200,10 +212,23 @@ export default class LandingScreenView extends React.Component {
           (this.state.loading)
             ? <Animated.View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.richBlack, opacity: this.loadingOpacity, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
-                  Logging in...
+                  {"Logging in..."}
                 </Text>
               </Animated.View>
             : null }
+
+        { /* Generic sign up modal */ }
+        <Modal
+          animationType={"slide"}
+          transparent={true}
+          visible={this.state.signUpModalVisible}>
+
+          <UserOnboardingView
+            handleCancel={() => this.toggleSignUpModal()}
+            updateCurrentUser={this.props.updateCurrentUser}
+            currentUser={this.props.currentUser} />
+
+        </Modal>
       </Animated.View>
     );
   }

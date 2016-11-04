@@ -31,7 +31,7 @@ export function getBaseURL(cb) {
 }
 
 export var details = {
-  "env": "test",
+  "env": "prod",
   "dev": {
     "lambdaBaseURL": "https://mey71fma7i.execute-api.us-east-1.amazonaws.com/dev/",
     "firebaseCredentials": {

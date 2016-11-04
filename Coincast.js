@@ -108,7 +108,6 @@ export default class Coincast extends React.Component {
             <Scene
               component={UserOnboardingViewContainer}
               key="UserOnboardingViewContainer"
-              type="replace"
               panHandlers={null} />
 
             <Scene

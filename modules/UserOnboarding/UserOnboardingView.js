@@ -119,7 +119,8 @@ export default class UserOnboardingView extends React.Component {
       errCodes: (this.errCodes.length > 0) ? this.errCodes : "none"
     });
 
-    Actions.LandingScreenViewContainer();
+    if (typeof this.props.handleCancel === 'function') this.props.handleCancel();
+    else Actions.LandingScreenViewContainer();
   }
 
   render() {
