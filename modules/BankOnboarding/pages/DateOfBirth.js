@@ -48,6 +48,7 @@ export default class DateOfBirth extends React.Component {
             date={this.state.date}
             mode={"date"}
             format={"YYYY-MM-DD"}
+            delay={150}
             minDate={(new Date().getFullYear() - 200) + "-01-01"}
             maxDate={(new Date().getFullYear() - 10) + "-01-01"}
             confirmBtnText={"Confirm"}
