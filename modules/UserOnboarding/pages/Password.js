@@ -41,6 +41,10 @@ export default class Password extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.props.induceState(this.refs);
+  }
+
   handleSubmit() {
     if (this.state.submitText !== "Continue") return;
     this.props.induceState({ password: this.state.password });
@@ -86,6 +90,7 @@ export default class Password extends React.Component {
 
         <View style={styles.inputWrap}>
           <TextInput
+            ref={"passwordInput"}
             style={styles.input}
             defaultValue={this.state.name}
             placeholder={"e.g. SeCur1ty!"}
