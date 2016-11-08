@@ -25,6 +25,10 @@ export default class ZIPCode extends React.Component {
     this.initalizedFromCache = false;
   }
 
+  componentDidMount() {
+    this.props.induceState(this.refs);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.zip && !this.initalizedFromCache) {
       this.values = [nextProps.zip.charAt(0), nextProps.zip.charAt(1), nextProps.zip.charAt(2), nextProps.zip.charAt(3), nextProps.zip.charAt(4)];
@@ -150,6 +154,7 @@ export default class ZIPCode extends React.Component {
 
         <View style={styles.textInputWrap}>
           <TextInput
+            ref={"zipInput"}
             placeholder="e.g. 53715"
             placeholderTextColor={colors.lightGrey}
             defaultValue={this.state.zip}

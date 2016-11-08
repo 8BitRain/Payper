@@ -20,6 +20,10 @@ export default class Social extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.props.induceState(this.refs);
+  }
+
   handleChangeText(input) {
     this.setState({ input: input });
   }
@@ -53,6 +57,7 @@ export default class Social extends React.Component {
 
         <View style={styles.textInputWrap}>
           <TextInput
+            ref={"ssnInput"}
             placeholder="e.g. 1234"
             placeholderTextColor={colors.lightGrey}
             style={styles.textInput}

@@ -23,6 +23,10 @@ export default class City extends React.Component {
     this.state = { location: null };
   }
 
+  componentDidMount() {
+    this.props.induceState(this.refs);
+  }
+
   setCity(data) {
     var addressComponents = data.address_components, location = {};
 
@@ -51,6 +55,7 @@ export default class City extends React.Component {
     return (
       <View style={styles.wrap}>
         <GooglePlacesAutocomplete
+          ref={"cityInput"}
           styles={autocompleteStyles}
           textInputProps={{ onChangeText: (text) => this.handleChangeText(text), placeholderTextColor: colors.white, autoCorrect: false }}
           placeholder={"What's your billing address' city?"}

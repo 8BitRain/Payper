@@ -21,6 +21,10 @@ export default class City extends React.Component {
     this.initalizedFromCache = false;
   }
 
+  componentDidMount() {
+    this.props.induceState(this.refs);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.street && !this.initalizedFromCache) {
       this.setState({ street: nextProps.street });
@@ -53,6 +57,7 @@ export default class City extends React.Component {
 
         <View style={styles.inputWrap}>
           <TextInput
+            ref={"streetInput"}
             style={styles.input}
             placeholder={"e.g. 1 North Avenue"}
             placeholderTextColor={colors.lightGrey}

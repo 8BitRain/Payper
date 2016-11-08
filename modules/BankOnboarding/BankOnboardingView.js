@@ -158,6 +158,32 @@ export default class BankOnboardingView extends React.Component {
     if (typeof cb === 'function') cb(false);
   }
 
+  focusInput() {
+    let pages = (this.state.skipCityPage)
+      ? ['comfort', 'name', 'zip', 'street', 'dob', 'ssn']
+      : ['comfort', 'name', 'zip', 'city', 'street', 'dob', 'ssn'];
+
+    let currPage = pages[this.state.pageIndex];
+
+    switch (currPage) {
+      case "name":
+        this.state.firstNameInput.focus();
+      break;
+      case "zip":
+        this.state.zipInput.focus();
+      break;
+      case "street":
+        this.state.streetInput.focus();
+      break;
+      case "ssn":
+        this.state.ssnInput.focus();
+      break;
+      default:
+        dismissKeyboard();
+    }
+  }
+
+
   nextPage() {
     if (this.state.animating) return;
     this.setState({ animating: true });
@@ -167,6 +193,8 @@ export default class BankOnboardingView extends React.Component {
       // Only show the close button on first page
       if ((this.state.pageIndex - 1) === 0)
         this.toggleCloseButton();
+
+      this.focusInput();
     });
 
     Animated.timing(this.offsetX, {
@@ -183,6 +211,7 @@ export default class BankOnboardingView extends React.Component {
 
     this.setState({ pageIndex: this.state.pageIndex - 1 }, () => {
       if (this.state.pageIndex === 0) this.toggleCloseButton();
+      this.focusInput();
     });
 
     Animated.timing(this.offsetX, {

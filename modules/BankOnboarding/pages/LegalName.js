@@ -25,6 +25,10 @@ export default class LegalName extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.props.induceState(this.refs);
+  }
+
   handleSubmit() {
     if (!this.state.valid) return;
     this.props.induceState({ firstName: this.state.firstName, lastName: this.state.lastName });
@@ -60,6 +64,7 @@ export default class LegalName extends React.Component {
 
         <View style={styles.inputWrap}>
           <TextInput
+            ref={"firstNameInput"}
             style={styles.input}
             defaultValue={this.state.firstName}
             autoCapitalize={"words"} autofocus autoCorrect={false}
