@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Dimensions, Image } from 'react-native'
+import { View, Text, TouchableHighlight, Dimensions, Image } from 'react-native'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import colors from '../styles/colors'
@@ -15,74 +15,119 @@ class PaymentCard extends React.Component {
     super(props)
     this.state = {
       progbarDims: {},
-      imageWrapDims: {}
+      profPicDims: {},
+      amountDims: {}
     }
   }
 
+  layoutProfPic(e) {
+    console.log("image wrap layout\n", e.nativeEvent.layout);
+    this.setState({ profPicDims: e.nativeEvent.layout });
+  }
+
+  layoutAmount(e) {
+    console.log("amount wrap layout\n", e.nativeEvent.layout);
+    this.setState({ amountDims: e.nativeEvent.layout });
+  }
+
   render() {
+
+    let pic = "https://scontent-ord1-1.xx.fbcdn.net/t31.0-8/15000684_1250241661662960_1895438605245811540_o.jpg";
+    let name = "Brady Sheridan";
+    let purpose = "Spotify Family Plan";
+    let amount = 999;
+    let frequency = "Monthly";
+    let next = "Nov 13th";
+    let incoming = false;
+
     return(
-      <View style={styles.wrap}>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{justifyContent: 'center', borderWidth: 0.0, borderColor: 'yellow', padding: 14}} onLayout={(e) => this.setState({ imageWrapDims: e.nativeEvent.layout })}>
-            <View style={styles.imageWrap}>
-              <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: 'https://scontent-ord1-1.xx.fbcdn.net/t31.0-8/15000684_1250241661662960_1895438605245811540_o.jpg'}} />
+
+      <TouchableHighlight
+        activeOpacity={0.8}
+        underlayColor={colors.mintCream}
+        onPress={() => console.log('pressed paycard')}>
+
+        <View style={styles.wrap}>
+          <View style={{flexDirection: 'column', flex: 1.0}}>
+            <View style={{flexDirection: 'row'}}>
+
+              { /* Profile pic */ }
+              <View style={{justifyContent: 'center', padding: 10}} onLayout={(e) => this.layoutProfPic(e)}>
+                <View style={styles.imageWrap}>
+                  <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: pic}} />
+                </View>
+              </View>
+
+              { /* Name and payment purpose */ }
+              <View style={{flex: 0.85, justifyContent: 'center'}}>
+                <Text style={{color: colors.deepBlue, fontSize: 22, fontWeight: '200'}}>
+                  {name}
+                </Text>
+                <View style={{flexDirection: 'row'}}>
+                  <EvilIcons name={"pencil"} size={22} color={colors.slateGrey} />
+                  <Text style={{color: colors.slateGrey, fontSize: 14}}>
+                    {purpose}
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <View style={{flexDirection: 'row', paddingBottom: 10}}>
+
+              { /* Payment amount */ }
+              <View style={{width: this.state.profPicDims.width || null, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}} onLayout={(e) => this.layoutAmount(e)}>
+                <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.alertRed, fontSize: 14}]}>
+                  {(incoming) ? "+" : "-"}
+                </Text>
+                <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.alertRed, fontSize: 14, alignSelf: 'flex-start', paddingTop: 3}]}>
+                  {"$"}
+                </Text>
+                <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.alertRed, fontSize: (amount > 999) ? 16 : 20}]}>
+                  {amount}
+                </Text>
+              </View>
+
+              { /* Frequency and next payment */ }
+              <View style={{flex: 1.0, flexDirection: 'column'}}>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={styles.freqAndNextPaymentWrap}>
+                    <EvilIcons name={"calendar"} size={22} color={colors.maastrichtBlue} />
+                    <Text style={[styles.freqAndNextPaymentText, {paddingLeft: 3}]}>
+                      {frequency}
+                    </Text>
+                    <Entypo name={"hour-glass"} size={17} color={colors.maastrichtBlue} style={{paddingLeft: 3}} />
+                    <Text style={[styles.freqAndNextPaymentText, {paddingLeft: 3}]}>
+                      {next}
+                    </Text>
+                  </View>
+                </View>
+
+                { /* Progress bar */ }
+                <View style={{flexDirection: 'row'}}>
+                  <View style={[styles.progbarBackground, styles.shadow]} onLayout={(e) => this.setState({ progbarDims: e.nativeEvent.layout })}>
+                    <View style={[styles.progbarForeground, {width: this.state.progbarDims.width * 0.6 || 0}]} />
+                  </View>
+                </View>
+              </View>
             </View>
           </View>
-          <View style={{flex: 0.85, justifyContent: 'center', borderWidth: 0.0, borderColor: 'pink'}}>
-            <Text style={{color: colors.deepBlue, fontSize: 22, fontWeight: '200'}}>
-              {"Brady Sheridan"}
-            </Text>
-            <Text style={{color: colors.slateGrey, fontSize: 14}}>
-              {"Next payment: Nov 13 at 1:00am"}
-            </Text>
-          </View>
-          <View style={{flex: 0.15, justifyContent: 'center', borderWidth: 0.0, borderColor: 'pink'}}>
+
+          { /* Chevron */ }
+          <View style={{justifyContent: 'center', paddingRight: 15}}>
             <Entypo name={"chevron-thin-right"} size={18} color={colors.slateGrey} />
           </View>
         </View>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{width: this.state.imageWrapDims.width || 0, flexDirection: 'row', justifyContent: 'center'}}>
-            <Text style={[styles.amountText, {fontSize: 14, paddingTop: 5}]}>
-              {"+"}
-            </Text>
-            <Text style={[styles.amountText, {fontSize: 14, paddingBottom: 7}]}>
-              {"$"}
-            </Text>
-            <Text style={styles.amountText}>
-              {"10"}
-            </Text>
-          </View>
-          <View style={{flex: 1.0, flexDirection: 'column', paddingRight: 20}}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={styles.frequencyAndPurposeWrap}>
-              <EvilIcons name={"calendar"} size={22} color={colors.maastrichtBlue} />
-                <Text style={[styles.frequencyAndPurposeText, {paddingLeft: 3}]}>
-                  {"Monthly"}
-                </Text>
-                <EvilIcons name={"pencil"} size={22} color={colors.maastrichtBlue} style={{paddingLeft: 4}} />
-                <Text style={[styles.frequencyAndPurposeText, {paddingLeft: 3}]}>
-                  {"Spotify Family Plan"}
-                </Text>
-              </View>
-            </View>
-            <View style={{flexDirection: 'row'}}>
-              <View style={[styles.progbarBackground, styles.shadow]} onLayout={(e) => this.setState({ progbarDims: e.nativeEvent.layout })}>
-                <View style={[styles.progbarForeground, {width: this.state.progbarDims.width * 0.6 || 0}]} />
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
+      </TouchableHighlight>
     )
   }
 }
 
 const styles = {
   wrap: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     backgroundColor: colors.mintCream,
     width: dims.width,
-    height: 130
+    alignItems: 'center',
+    paddingLeft: 15
   },
   imageWrap: {
     width: imageDims.width,
@@ -98,16 +143,16 @@ const styles = {
   },
   amountText: {
     color: colors.alertGreen,
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '200'
   },
 
-  frequencyAndPurposeWrap: {
+  freqAndNextPaymentWrap: {
     flexDirection: 'row',
     flex: 0.9,
     paddingBottom: 4
   },
-  frequencyAndPurposeText: {
+  freqAndNextPaymentText: {
     color: colors.maastrichtBlue,
     fontSize: 14
   },
