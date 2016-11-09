@@ -60,9 +60,9 @@ class Payments extends React.Component {
   }
 
   componentDidMount() {
-    this.pulse_0();
-    this.pulse_1();
-    this.pulse_2();
+    // this.pulse_0();
+    // this.pulse_1();
+    // this.pulse_2();
   }
 
   pulse_0() {

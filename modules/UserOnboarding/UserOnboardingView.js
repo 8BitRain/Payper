@@ -24,6 +24,7 @@ export default class UserOnboardingView extends React.Component {
     this.offsetX = new Animated.Value(0);
     this.logoAspectRatio = 377 / 568;
     this.errCodes = [];
+    this.pages = ['name', 'email', 'password', 'phone', 'summary']
     this.state = {
       animating: false,
       pageIndex: 0,
@@ -81,15 +82,34 @@ export default class UserOnboardingView extends React.Component {
   }
 
   induceState(substate) {
-    this.setState(substate);
+    this.setState(substate, () => this.state.firstNameInput.focus());
+  }
+
+  focusInput() {
+    let currPage = this.pages[this.state.pageIndex];
+    switch (currPage) {
+      case "name":
+        this.state.firstNameInput.focus();
+      break;
+      case "email":
+        this.state.emailInput.focus();
+      break;
+      case "password":
+        this.state.passwordInput.focus();
+      break;
+      case "phone":
+        this.state.phoneInput.focus();
+      break;
+      default:
+        dismissKeyboard();
+    }
   }
 
   nextPage(params) {
     if (this.state.animating) return;
     this.setState({ animating: true });
-    dismissKeyboard();
 
-    this.setState({ pageIndex: this.state.pageIndex + 1 });
+    this.setState({ pageIndex: this.state.pageIndex + 1 }, () => this.focusInput());
 
     Animated.timing(this.offsetX, {
       toValue: this.offsetX._value - dimensions.width,
@@ -101,9 +121,8 @@ export default class UserOnboardingView extends React.Component {
   prevPage() {
     if (this.state.animating || this.state.pageIndex === 0) return;
     this.setState({ animating: true });
-    dismissKeyboard();
 
-    this.setState({ pageIndex: this.state.pageIndex - 1 });
+    this.setState({ pageIndex: this.state.pageIndex - 1 }, () => this.focusInput());
 
     Animated.timing(this.offsetX, {
       toValue: this.offsetX._value + dimensions.width,
@@ -119,7 +138,8 @@ export default class UserOnboardingView extends React.Component {
       errCodes: (this.errCodes.length > 0) ? this.errCodes : "none"
     });
 
-    Actions.LandingScreenViewContainer();
+    if (typeof this.props.handleCancel === 'function') this.props.handleCancel();
+    else Actions.LandingScreenViewContainer();
   }
 
   render() {

@@ -18,11 +18,15 @@ export default class ZIPCode extends React.Component {
     this.state = {
       index: 0,
       valid: false,
-      submitText: "Search"
+      submitText: "Search",
+      input: ""
     };
-    this.values = ["", "", "", "", ""];
     this.zipCache = {};
     this.initalizedFromCache = false;
+  }
+
+  componentDidMount() {
+    this.props.induceState(this.refs);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -107,13 +111,6 @@ export default class ZIPCode extends React.Component {
     }
   }
 
-  validateAndReturnZIP() {
-    for (var i in this.values)
-      if (this.values[i] === "")
-        return null;
-    return this.values.join("");
-  }
-
   handleSubmit() {
     if (this.state.submitText === "Search") {
       this.findCity(this.state.zip);
@@ -136,24 +133,14 @@ export default class ZIPCode extends React.Component {
     // Clear matched city
     this.setState({ city: null, state: null });
 
-    // Update value
-    this.values[this.state.index] = input;
-
-    // Focus next TextInput
-    if (this.state.index !== 4 && input !== "") {
-      this.refs[this.state.index].blur();
-      this.refs[this.state.index + 1].focus();
-    } else if (this.state.index !== 0 && input === "" && this.values[this.state.index] === "") {
-      this.refs[this.state.index].blur();
-      this.refs[this.state.index - 1].focus();
-    }
+    let zip = input
+        isValid = zip && zip.length === 5
 
     // Update state
-    var zip = this.validateAndReturnZIP();
-    this.setState({ zip: zip, submitText: (zip) ? "Search" : "Enter a valid ZIP code" });
+    this.setState({ zip: zip, submitText: (isValid) ? "Search" : "Enter a valid ZIP code" });
 
     // Start searching if input is complete
-    if (zip && zip.length === 5) this.findCity(zip);
+    if (zip && isValid) this.findCity(zip);
   }
 
   render() {
@@ -166,11 +153,15 @@ export default class ZIPCode extends React.Component {
         </View>
 
         <View style={styles.textInputWrap}>
-          <TextInput ref="0" defaultValue={this.values[0]} onFocus={() => this.setState({ index: 0 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="1" defaultValue={this.values[1]} onFocus={() => this.setState({ index: 1 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="2" defaultValue={this.values[2]} onFocus={() => this.setState({ index: 2 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="3" defaultValue={this.values[3]} onFocus={() => this.setState({ index: 3 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
-          <TextInput ref="4" defaultValue={this.values[4]} onFocus={() => this.setState({ index: 4 })} maxLength={1} keyboardType={'number-pad'} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput
+            ref={"zipInput"}
+            placeholder="e.g. 53715"
+            placeholderTextColor={colors.lightGrey}
+            defaultValue={this.state.zip}
+            maxLength={5}
+            keyboardType={'number-pad'}
+            style={styles.textInput}
+            onChangeText={(e) => this.handleChangeText(e)} />
         </View>
 
         { (this.state.city && this.state.state)
@@ -214,8 +205,8 @@ const styles = StyleSheet.create({
     paddingTop: 20
   },
   textInput: {
-    width: dimensions.width * 0.15,
-    height: dimensions.width * 0.15,
+    height: 55,
+    width: dimensions.width * 0.75,
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
     color: colors.white,
     textAlign: 'center',

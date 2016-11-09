@@ -227,7 +227,7 @@ class Purpose extends React.Component {
             onPress={() => this._showConfirmButton("request")}>
 
             <Animated.View style={{ width: dimensions.width / 2, height: 60, backgroundColor: '#11ac53', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
+              <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '400', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
                 { "Request" }
               </Text>
             </Animated.View>
@@ -241,7 +241,7 @@ class Purpose extends React.Component {
             onPress={() => this._showConfirmButton("payment")}>
 
             <Animated.View style={{ width: dimensions.width / 2, height: 60, backgroundColor: colors.alertGreen, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
+              <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '400', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
                 { "Pay" }
               </Text>
             </Animated.View>
@@ -257,7 +257,7 @@ class Purpose extends React.Component {
             onPress={() => this._handleSubmit()}>
 
             <View style={{ width: dimensions.width * 0.8, height: 60, backgroundColor: colors.alertGreen, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontFamily: 'Roboto', fontSize: (this.props.activeFundingSource) ? 16 : 18, fontWeight: '200', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
+              <Text style={{ fontFamily: 'Roboto', fontSize: (this.props.activeFundingSource) ? 16 : 18, fontWeight: '400', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
                 { this.state.confirmText }
                 {(this.props.activeFundingSource) ? "\n(" + this.props.activeFundingSource.name + ")" : null }
               </Text>

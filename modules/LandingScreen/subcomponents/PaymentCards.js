@@ -1,17 +1,15 @@
 // Dependencies
 import React from 'react';
-import { View, Text, Image, Dimensions } from 'react-native';
+import { View, Text, Image, Dimensions, Animated, Easing } from 'react-native';
 import moment from 'moment';
-import Carousel from 'react-native-carousel';
-import carousel from '../styles/carousel';
-import container from '../styles/container';
+import colors from '../../../styles/colors';
 
 // Components
 import Dummy from '../../../components/PaymentCards/Dummy';
 
 const dimensions = Dimensions.get('window');
 
-export default class ImageCarousel extends React.Component {
+export default class PaymentCards extends React.Component {
   constructor(props) {
     super(props);
 
@@ -78,7 +76,7 @@ export default class ImageCarousel extends React.Component {
         confirmed: true,
         created_at: 1471468155170,
         nextPayment: moment().add(2, 'weeks').add(13, 'hours').valueOf(),
-        purpose: 'Monthly wine',
+        purpose: 'Wine of the month',
         payments: '6',
         paymentsMade: Math.floor(6 * Math.random()),
         recip_id: "",
@@ -93,43 +91,44 @@ export default class ImageCarousel extends React.Component {
         info: ""
       }
     };
-  };
-  render() {
-    var imgWidth = dimensions.width - 50;
-    var imgHeight = 165 / 350;
-        imgHeight *= imgWidth;
+  }
 
+  animateProgBar() {
+    console.log("animateProgBar was invoked...")
+  }
+
+  render() {
     return(
-      <Carousel hideIndicators={true} animate={true} delay={3250} width={dimensions.width}>
-        <View style={{ justifyContent: 'center' }}>
+      <View style={{ flex: 1.0, backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
+        <View onPress={() => alert('yo')} style={{ justifyContent: 'center', borderBottomWidth: 1.0, borderColor: colors.lightGrey }}>
           <Dummy
             out
             style={{padding: 30}}
             payment={this.payments["ameera"]}
             callbackMenu={() => { return false }} />
         </View>
-        <View style={{ justifyContent: 'center' }}>
+        <View style={{ justifyContent: 'center', borderBottomWidth: 1.0, borderColor: colors.lightGrey }}>
           <Dummy
             out
             style={{padding: 30}}
             payment={this.payments["mohsin"]}
             callbackMenu={() => { return false }} />
         </View>
-        <View style={{ justifyContent: 'center' }}>
+        <View style={{ justifyContent: 'center', borderBottomWidth: 1.0, borderColor: colors.lightGrey }}>
           <Dummy
             out
             style={{padding: 30}}
             payment={this.payments["diane"]}
             callbackMenu={() => { return false }} />
         </View>
-        <View style={{ justifyContent: 'center' }}>
+        <View style={{ justifyContent: 'center', borderBottomWidth: 1.0, borderColor: colors.lightGrey }}>
           <Dummy
             out
             style={{padding: 30}}
             payment={this.payments["eric"]}
             callbackMenu={() => { return false }} />
         </View>
-      </Carousel>
+      </View>
     );
   }
 };

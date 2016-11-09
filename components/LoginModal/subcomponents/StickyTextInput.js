@@ -97,6 +97,7 @@ export default class StickyTextInput extends React.Component {
   render() {
     return(
       <View style={{ flex: 1.0, backgroundColor: 'transparent' }}>
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.4)' }} />
         <VibrancyView blurType="dark" style={styles.blur} />
         <Animated.View style={[styles.wrap, { bottom: this.offsetBottom }]}>
           <View style={styles.optionsWrap}>
@@ -107,13 +108,13 @@ export default class StickyTextInput extends React.Component {
               onPress={() => this.props.toggleModal()}
               style={styles.cancel}>
                 <View>
-                  <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: '200', color: colors.alertRed }}>
+                  <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: '300', color: colors.alertRed }}>
                     Cancel
                   </Text>
                 </View>
             </TouchableHighlight>
 
-            { /* Sign up */ }
+            { /* Sign up
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={"transparent"}
@@ -124,7 +125,7 @@ export default class StickyTextInput extends React.Component {
                   Sign up
                 </Text>
               </View>
-            </TouchableHighlight>
+            </TouchableHighlight> */ }
           </View>
 
           { /* Email input */ }
@@ -190,12 +191,11 @@ const styles = StyleSheet.create({
   optionsWrap: {
     flex: 0.25,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    justifyContent: 'flex-end',
+    alignItems: 'center'
   },
   cancel: {
-    flex: 0.5,
-    paddingLeft: 35,
+    paddingRight: 25,
     paddingBottom: 9,
     overflow: 'visible'
   },
@@ -222,7 +222,6 @@ const styles = StyleSheet.create({
   submitText: {
     fontFamily: 'Roboto',
     fontSize: 16,
-    fontWeight: '200',
     color: 'white',
     textAlign: 'center'
   },
