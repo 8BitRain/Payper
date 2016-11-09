@@ -1,4 +1,5 @@
 import React from 'react'
+import { Actions } from 'react-native-router-flux'
 import { View, Text, TouchableHighlight, Dimensions, Image } from 'react-native'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -18,34 +19,77 @@ class PaymentCard extends React.Component {
       profPicDims: {},
       amountDims: {}
     }
+
+    this.details = {
+      pic: "https://scontent-ord1-1.xx.fbcdn.net/t31.0-8/15000684_1250241661662960_1895438605245811540_o.jpg",
+      name: "Brady Sheridan",
+      purpose: "Spotify Family Plan",
+      amount: 999,
+      frequency: "Monthly",
+      next: "Nov 13th",
+      incoming: false,
+      status: "Active",
+      payments: 10,
+      paymentsMade: 7,
+      timeline: [
+        {
+          timestamp: "Jan 13th",
+          amount: 10,
+          bankAccount: "",
+          transferStatus: "arrived",
+          id: "1"
+        },
+        {
+          timestamp: "Dec 13th",
+          amount: 10,
+          bankAccount: "",
+          transferStatus: "arrived",
+          id: "2"
+        },
+        {
+          timestamp: "Nov 13th",
+          amount: 10,
+          bankAccount: "",
+          transferStatus: "arrived",
+          id: "3"
+        },
+        {
+          timestamp: "Oct 13th",
+          amount: 10,
+          bankAccount: "",
+          transferStatus: "arrived",
+          id: "4"
+        },
+        {
+          timestamp: "Sep 13th",
+          amount: 10,
+          bankAccount: "",
+          transferStatus: "arrived",
+          id: "5"
+        }
+      ]
+    }
   }
 
   layoutProfPic(e) {
-    console.log("image wrap layout\n", e.nativeEvent.layout);
-    this.setState({ profPicDims: e.nativeEvent.layout });
+    console.log("image wrap layout\n", e.nativeEvent.layout)
+    this.setState({ profPicDims: e.nativeEvent.layout })
   }
 
   layoutAmount(e) {
-    console.log("amount wrap layout\n", e.nativeEvent.layout);
-    this.setState({ amountDims: e.nativeEvent.layout });
+    console.log("amount wrap layout\n", e.nativeEvent.layout)
+    this.setState({ amountDims: e.nativeEvent.layout })
   }
 
   render() {
-
-    let pic = "https://scontent-ord1-1.xx.fbcdn.net/t31.0-8/15000684_1250241661662960_1895438605245811540_o.jpg";
-    let name = "Brady Sheridan";
-    let purpose = "Spotify Family Plan";
-    let amount = 999;
-    let frequency = "Monthly";
-    let next = "Nov 13th";
-    let incoming = false;
+    let { pic, name, purpose, amount, frequency, next, incoming } = this.details
 
     return(
 
       <TouchableHighlight
         activeOpacity={0.8}
         underlayColor={colors.mintCream}
-        onPress={() => console.log('pressed paycard')}>
+        onPress={() => Actions.PaymentDetails(this.details)}>
 
         <View style={styles.wrap}>
           <View style={{flexDirection: 'column', flex: 1.0}}>

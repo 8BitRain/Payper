@@ -22,7 +22,7 @@ import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView';
 import Phone from './modules/UserOnboarding/pages/Phone';
 
 // Test components
-import { Lander } from './testComponents'
+import { Lander, PaymentDetails } from './testComponents'
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
@@ -83,6 +83,11 @@ export default class Coincast extends React.Component {
               component={Lander}
               key="Lander"
               type="replace"
+              panHandlers={null} />
+
+            <Scene
+              component={PaymentDetails}
+              key="PaymentDetails"
               panHandlers={null} />
 
             <Scene
