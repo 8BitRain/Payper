@@ -141,39 +141,100 @@ export default class User {
     });
   }
 
+
+
+
+
+  /**
+    1. login with facebook
+    2. get firebaseToken in response
+    3. exchange firebaseToken for signInToken
+    4. sign in with signInToken
+    5. get new firebaseToken in response
+    6. use this firebaseToken for all operations other than sign-in
+  **/
+
+  getLoginToken(firebaseToken, cb) {
+    let env = config.details.env;
+    let body = { token: firebaseToken, env: env };
+
+    fetch("https://www.getpayper.io/getToken", {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body)
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      console.log("Got loginToken " + responseData.substring(responseData.length - 5, responseData.length));
+      cb(responseData);
+    })
+    .done();
+  }
+
+  loginWithLoginToken(loginToken, cb) {
+    firebase.auth().signInWithCustomToken(loginToken)
+    .then((responseData) => {
+      let res = responseData.toJSON();
+      let newFirebaseToken = res.stsTokenManager.accessToken;
+      cb(newFirebaseToken);
+    })
+    .catch(function(err) {
+      var errCode = err.code;
+      var errMessage = err.message;
+      console.log("errCode", errCode);
+      console.log("errMessage", errMessage);
+    });
+  }
+
   /**
     *   Log in to Firebase panel via Facebook token
     *   params: facebookToken (string)
     *   -----------------------------------------------------------------------
   **/
   loginWithFacebook(params, onLoginSuccess, onLoginFailure) {
-    var credential = firebase.auth.FacebookAuthProvider.credential(params.facebookToken);
+    console.log("loginWithFacebook was invoked...");
 
-    if (credential) firebase.auth().signInWithCredential(credential)
-    .then((val) => {
-      var firebaseUser = firebase.auth().currentUser.toJSON();
-      if (firebaseUser) params.user.token = firebaseUser.stsTokenManager.accessToken;
-      this.getOrCreateFacebookUser(params.user,
-      (res) => {
-        if (res.errorMessage) {
-          console.log("getUserWithToken failed...", "Lambda error:", res.errorMessage);
-          onLoginFailure("lambda");
-        } else {
-          console.log("getUserWithToken succeeded...", "Lambda response:", res.user);
-          // Tack on appFlags
-          firebase.database().ref('appFlags').child(res.user.uid).once('value', (snapshot) => {
-            let appFlags = snapshot.val();
-            res.user.appFlags = (appFlags) ? appFlags : {};
-            this.initialize(res.user);
-            onLoginSuccess(res.user);
-          })
-          .catch((err) => {
-            console.log("Error getting appFlags:", err);
-            this.initialize(res.user);
-            onLoginSuccess(res.user);
-          })
-          .done();
-        }
+    var credential = firebase.auth.FacebookAuthProvider.credential(params.facebookToken);
+    firebase.auth().signInWithCredential(credential).then((userData) => {
+      let firebaseUser = userData.toJSON();
+      let firebaseToken = firebaseUser.stsTokenManager.accessToken;
+
+      this.getLoginToken(firebaseToken, (loginToken) => {
+        console.log("ogFirebaseToken:", firebaseToken)
+        console.log("loginToken:", loginToken)
+
+        // Login with loginToken
+        this.loginWithLoginToken(loginToken, (newFirebaseToken) => {
+          console.log("newFirebaseToken:", newFirebaseToken);
+
+          params.user.token = newFirebaseToken;
+          this.getOrCreateFacebookUser(params.user,
+          (res) => {
+            if (res.errorMessage) {
+              console.log("getUserWithToken failed...", "Lambda error:", res.errorMessage);
+              onLoginFailure("lambda");
+            } else {
+              console.log("getUserWithToken succeeded...", "Lambda response:", res.user);
+              // Tack on appFlags
+              firebase.database().ref('appFlags').child(res.user.uid).once('value', (snapshot) => {
+                let appFlags = snapshot.val();
+                res.user.appFlags = (appFlags) ? appFlags : {};
+                res.user.loginToken = loginToken;
+                this.initialize(res.user);
+                onLoginSuccess(res.user);
+              })
+              .catch((err) => {
+                console.log("Error getting appFlags:", err);
+                this.initialize(res.user);
+                onLoginSuccess(res.user);
+              })
+              .done();
+            }
+          });
+        });
       });
     })
     .catch((err) => {
@@ -187,16 +248,21 @@ export default class User {
     *   params: token (string)
     *   -----------------------------------------------------------------------
   **/
-  loginWithAccessToken(params, onLoginSuccess, onLoginFailure) {
-    this.getUserWithToken(params, (res) => {
-      if (res.errorMessage) {
-        console.log("getUserWithToken failed...", "Lambda error:", res.errorMessage);
-        onLoginFailure("lambda");
-      } else {
-        this.initialize(res);
-        console.log("getUserWithToken succeeded...", "Lambda response:", res);
-        onLoginSuccess();
-      }
+  loginWithCachedToken(params, onLoginSuccess, onLoginFailure) {
+    let { loginToken } = params;
+
+    this.loginWithLoginToken(loginToken, (newFirebaseToken) => {
+      this.getUserWithToken({token: newFirebaseToken}, (res) => {
+        if (res.errorMessage) {
+          console.log("getUserWithToken failed...", "Lambda error:", res.errorMessage);
+          onLoginFailure("lambda");
+        } else {
+          res.loginToken = loginToken;
+          this.initialize(res);
+          console.log("getUserWithToken succeeded...", "Lambda response:", res);
+          onLoginSuccess();
+        }
+      });
     });
   }
 
