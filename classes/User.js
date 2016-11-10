@@ -155,23 +155,26 @@ export default class User {
   **/
 
   getLoginToken(firebaseToken, cb) {
-    let env = config.details.env;
-    let body = { token: firebaseToken, env: env };
+    let body = { token: firebaseToken, env: config.details.env };
 
-    fetch("https://www.getpayper.io/getToken", {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body)
-    })
-    .then((response) => response.json())
-    .then((responseData) => {
-      console.log("Got loginToken " + responseData.substring(responseData.length - 5, responseData.length));
-      cb(responseData);
-    })
-    .done();
+    try {
+      fetch("https://www.getpayper.io/getToken", {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body)
+      })
+      .then((res) => res.json())
+      .then((responseData) => {
+        console.log("Got loginToken " + responseData.substring(responseData.length - 5, responseData.length));
+        cb(responseData);
+      })
+      .done();
+    } catch (err) {
+      console.log("Err getting loginToken", err);
+    }
   }
 
   loginWithLoginToken(loginToken, cb) {
@@ -201,6 +204,8 @@ export default class User {
     firebase.auth().signInWithCredential(credential).then((userData) => {
       let firebaseUser = userData.toJSON();
       let firebaseToken = firebaseUser.stsTokenManager.accessToken;
+
+      console.log('firebaseToken', firebaseToken);
 
       this.getLoginToken(firebaseToken, (loginToken) => {
         console.log("ogFirebaseToken:", firebaseToken)
