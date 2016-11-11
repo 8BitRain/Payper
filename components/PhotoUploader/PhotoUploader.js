@@ -2,6 +2,7 @@
 import React from 'react';
 import {   AppRegistry, Dimensions, Platform,  StyleSheet, Text,TouchableHighlight, View, Animated, Image, NativeModules, ListView, DeviceEventEmitter } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import colors from '../../styles/colors';
 import * as Headers from '../../helpers/Headers';
 
@@ -45,6 +46,8 @@ const styles = StyleSheet.create({
   },
   capture: {
     flex: dimensions.height,
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: '#fff',
     borderRadius: 0,
     color: '#000',
@@ -61,11 +64,12 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   generalText: {
-    fontSize: 14,
-    color: colors.white
+    fontSize: 24,
+    color: colors.white,
+    margin: 5
   },
   generalTextBold: {
-    fontSize: 14,
+    fontSize: 24,
     color: colors.white,
     fontWeight: "bold"
   }
@@ -79,7 +83,7 @@ class PhotoUploader extends React.Component {
     this.state = {
       opacity: new Animated.Value(0),
       title: this.props.title,
-      index: 1,
+      index: 0,
       image: this.props.image,
       selectedImage: null,
       mode: "photo",
@@ -121,10 +125,11 @@ class PhotoUploader extends React.Component {
    });
 
    console.log(current);
-   console.log("Image" + this.state.selected[0]);
+
    if(this.state.selected[0]){
-     this.readImage(this.state.selected[0].uri);
-     //this.setState({ selectedImage: this.state.selected[0].uri });
+     console.log("Image" + this.state.selected[0].uri);
+     //this.readImage(this.state.selected[0].uri);
+     this.setState({ selectedImage: this.state.selected[0].uri, index: 2 });
    }
  }
 
@@ -152,7 +157,7 @@ class PhotoUploader extends React.Component {
 
     return(
       <View style={{flex: 1}}>
-          {(this.state.selectedImage ? <Image source={{uri: this.state.selectedImage}} style={{height: dimensions.height * .66, width: dimensions.width}} /> : null)}
+          {(this.state.selectedImage ? <Image source={{uri: this.state.selectedImage}} style={{height: dimensions.height * .33, width: dimensions.width}} /> : null)}
           <CameraRollPicker
            scrollRenderAheadDistance={500}
            initialListSize={1}
@@ -187,7 +192,7 @@ class PhotoUploader extends React.Component {
             aspect={Camera.constants.Aspect.fill}>
           </Camera>
           <View style={styles.capture}>
-            <Text style={styles.capture} onPress={this.takePicture.bind(this)}>[CAPTURE]</Text>
+            <Ionicons onPress={this.takePicture.bind(this)} style={{}} size={48} name="ios-camera" color={"black"} />
           </View>
           </View>
 
@@ -197,7 +202,7 @@ class PhotoUploader extends React.Component {
       case 2:
         return(
           <View style={styles.container}>
-          <Image source={{uri: this.state.selectedImage}} style={{height: dimensions.height * .66, width: dimensions.width}} />
+          <Image source={{uri: this.state.selectedImage}} style={{height: dimensions.height, width: dimensions.width}} />
           </View>
         );
         break;
@@ -205,30 +210,45 @@ class PhotoUploader extends React.Component {
   }
 
   _renderDocumentUploadExplanation(){
-    <View style={styles.container}>
-      <Text style={styles.generalText}> We need additional documents to verify your identity. Please upload either a picture of your <Text style={styles.generalTextBold}>photo id</Text> or <Text style={styles.generalTextBold}>passport photo</Text></Text>
-    </View>
+    return(
+      <View style={styles.container}>
+        <Text style={styles.generalText}> We need additional documents to verify your identity. Please upload either a picture of your <Text style={styles.generalTextBold}>photo id</Text> or <Text style={styles.generalTextBold}>passport photo</Text>.</Text>
+      </View>
+    );
   }
 
   _renderFooter(){
     switch(this.state.index){
       case 0:
+      return(
+        <StickyView>
+          <ContinueButton text={"Continue"} onPress={() => {
+            this.setState({index: 1});
+          ;}}/>
+        </StickyView>
+      );
+      break;
       case 1:
       return(
-        <View style={{flex: (dimensions.height < 667) ? 0.12 : 0.1, flexDirection: 'row', backgroundColor: "white"}}>
+        <View style={{flex: (dimensions.height < 667) ? 0.12 : 0.1, width: dimensions.width, flexDirection: 'row', justifyContent:"center", backgroundColor: "black"}}>
         <TouchableHighlight
-          style={{justifyContent: "center", alignItems: "center" }}
           activeOpacity={0.8}
           underlayColor={'transparent'}
           onPress={() => this.setState({mode: "library", selectedImage: null})}>
-            <Text style={{fontSize: 32}}>Library</Text>
+          <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dimensions.width * .5}}>
+            <Text style={{fontSize: 18, color: "white"}}>Library</Text>
+            <Ionicons style={{}} size={32} name="ios-images" color={colors.white} />
+          </View>
         </TouchableHighlight>
+
         <TouchableHighlight
-          style={{justifyContent: "center", alignItems: "center"}}
           activeOpacity={0.8}
           underlayColor={'transparent'}
           onPress={() => this.setState({mode: "photo", selectedImage: null})}>
-            <Text style={{fontSize: 32}} >Photo</Text>
+          <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dimensions.width * .5}}>
+            <Text style={{fontSize: 18, color: "white"}} >Photo</Text>
+            <Ionicons style={{}} size={32} name="ios-camera" color={colors.white} />
+          </View>
         </TouchableHighlight>
 
         </View>
@@ -295,7 +315,9 @@ class PhotoUploader extends React.Component {
           headerProps={Headers.get({ header: "photoUpload", title: this.state.title, index: this.state.index })} />
       </View>
       <View style={{flex: .8}}>
-        {(this.state.mode == "photo") ? this._renderPhotoView()  : this._renderLibraryView()}
+        {(this.state.index == 0) ? this._renderDocumentUploadExplanation() : null}
+        {(this.state.index == 0) ? null : (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView()}
+
       </View>
       {this._renderFooter()}
       </View>
