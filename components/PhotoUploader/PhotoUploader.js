@@ -10,7 +10,6 @@ import * as Headers from '../../helpers/Headers';
 // Modules
 import CameraRollPicker from 'react-native-camera-roll-picker';
 import Camera from 'react-native-camera';
-import CameraRoll from 'rn-camera-roll';
 var ReadImageData = require('NativeModules').ReadImageData;
 import { RNS3 } from 'react-native-aws3';
 
@@ -21,6 +20,7 @@ import StickyView from '../../classes/StickyView';
 import ContinueButton from './subcomponents/ContinueButton';
 // Partial components
 import Header from '../../components/Header/Header';
+import * as Alert from '../../helpers/Alert';
 
 // Enviroment
 import * as config from '../../config';
@@ -68,12 +68,16 @@ const styles = StyleSheet.create({
   generalText: {
     fontSize: 24,
     color: colors.white,
-    margin: 5,
+    margin: 15,
+    marginLeft: dimensions.width * .05
   },
   generalTextBold: {
     fontSize: 24,
     color: colors.white,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    margin: 15,
+    marginBottom: 0,
+    marginLeft: dimensions.width * .15
   },
   headerWrap: {
     flexDirection: 'row',
@@ -88,7 +92,7 @@ const styles = StyleSheet.create({
     width: dimensions.width,
     backgroundColor: colors.richBlack,
     justifyContent: 'flex-start',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingTop: 65
   }
 
@@ -103,6 +107,7 @@ class PhotoUploader extends React.Component {
       title: this.props.title,
       index: 0,
       image: this.props.image,
+      photoUploaded: false,
       selectedImage: null,
       mode: "photo",
       num: 0,
@@ -147,7 +152,7 @@ class PhotoUploader extends React.Component {
    if(this.state.selected[0]){
      console.log("Image" + this.state.selected[0].uri);
      //this.readImage(this.state.selected[0].uri);
-     this.setState({ selectedImage: this.state.selected[0].uri, index: 2 });
+     this.setState({ selectedImage: this.state.selected[0].uri, index: 2, photoUploaded: true });
    }
  }
 
@@ -231,7 +236,7 @@ class PhotoUploader extends React.Component {
       case 2:
         return(
           <View style={styles.container}>
-          <Image source={{uri: this.state.selectedImage}} style={{height: dimensions.height, width: dimensions.width}} />
+            <Image source={{uri: this.state.selectedImage}} style={{height: dimensions.height, width: dimensions.width}} />
           </View>
         );
         break;
@@ -241,9 +246,14 @@ class PhotoUploader extends React.Component {
   _renderDocumentUploadExplanation(){
     return(
       <View style={styles.wrap}>
-        <FontAwesome name={"user-secret"} color={colors.accent} size={64} />
-        <Text style={styles.generalText}>We need additional documents to verify your identity!</Text>
-        <Text style={styles.generalText}>Please upload either a picture of your <Text style={styles.generalTextBold}>photo id</Text> or <Text style={styles.generalTextBold}>passport photo</Text>.</Text>
+        <View style={{alignSelf: "center"}}>
+          <FontAwesome name={"user-secret"} color={colors.accent} size={64} />
+        </View>
+        {(this.props.currentUser.appFlags.customer_status == "document") ? <Text style={styles.generalText}>We need additional documents to verify your identity. Please upload a photo of a valid form of ID</Text> : <Text style={styles.generalText}>There was an issue with the original documents you sent to us. Please reupload a valid form of ID.</Text>}
+        {(this.props.currentUser.appFlags.customer_status == "document") ? <Text style={styles.generalText}>Valid forms of id include... </Text> : <Text style={styles.generalText}>Common reasons we see document submissions fail...</Text>}
+        {(this.props.currentUser.appFlags.customer_status == "document") ? <Text style={styles.generalTextBold}>{"Driver's License"}</Text> : <Text style={styles.generalTextBold}>{"Low Image Quality"}</Text>}
+        {(this.props.currentUser.appFlags.customer_status == "document") ? <Text style={styles.generalTextBold}>{"Passport Photo ID"}</Text> : <Text style={styles.generalTextBold}>{"Invalid Driver's License"}</Text>}
+        {(this.props.currentUser.appFlags.customer_status == "documentFailure") ? <Text style={styles.generalTextBold}>{"Invalid Passport Photo ID"}</Text> : null}
       </View>
     );
   }
@@ -251,50 +261,89 @@ class PhotoUploader extends React.Component {
   _renderFooter(){
     switch(this.state.index){
       case 0:
-      return(
-        <StickyView>
-          <ContinueButton text={"Continue"} onPress={() => {
-            this.setState({index: 1});
-          ;}}/>
-        </StickyView>
-      );
-      break;
+        return(
+          <StickyView>
+            <ContinueButton text={"Continue"} onPress={() => {
+              this.setState({index: 1});
+            ;}}/>
+          </StickyView>
+        );
+        break;
       case 1:
-      return(
-        <View style={{flex: (dimensions.height < 667) ? 0.12 : 0.1, width: dimensions.width, flexDirection: 'row', justifyContent:"center", backgroundColor: "black"}}>
-        <TouchableHighlight
-          activeOpacity={0.8}
-          underlayColor={'transparent'}
-          onPress={() => this.setState({mode: "library", selectedImage: null})}>
-          <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dimensions.width * .5}}>
-            <Text style={{fontSize: 18, color: "white"}}>Library</Text>
-            <Ionicons style={{}} size={32} name="ios-images" color={colors.white} />
-          </View>
-        </TouchableHighlight>
+        return(
+          <View style={{flex: (dimensions.height < 667) ? 0.12 : 0.1, width: dimensions.width, flexDirection: 'row', justifyContent:"center", backgroundColor: "black"}}>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => this.setState({mode: "library", selectedImage: null})}>
+            <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dimensions.width * .5}}>
+              <Text style={{fontSize: 18, color: "white"}}>Library</Text>
+              <Ionicons style={{}} size={32} name="ios-images" color={colors.white} />
+            </View>
+          </TouchableHighlight>
 
-        <TouchableHighlight
-          activeOpacity={0.8}
-          underlayColor={'transparent'}
-          onPress={() => this.setState({mode: "photo", selectedImage: null})}>
-          <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dimensions.width * .5}}>
-            <Text style={{fontSize: 18, color: "white"}} >Photo</Text>
-            <Ionicons style={{}} size={32} name="ios-camera" color={colors.white} />
-          </View>
-        </TouchableHighlight>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => this.setState({mode: "photo", selectedImage: null})}>
+            <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dimensions.width * .5}}>
+              <Text style={{fontSize: 18, color: "white"}} >Photo</Text>
+              <Ionicons style={{}} size={32} name="ios-camera" color={colors.white} />
+            </View>
+          </TouchableHighlight>
 
-        </View>
-      );
+          </View>
+        );
+        break;
       case 2:
-      return(
-        <StickyView>
-          <ContinueButton text={"Upload Photo"} onPress={() => {
-            this.uploadPhotoS3(this.state.selectedImage);
-            this.setState({index: 3});
-          ;}}/>
-        </StickyView>
-      );
+        return(
+          <StickyView>
+            <ContinueButton text={(this.state.photoUploaded) ? "Uploading..." : "Upload Photo"} onPress={() => {
+              this.uploadPhotoS3(this.state.selectedImage);
+              this.setState({photoUploaded: true});
+            }}/>
+          </StickyView>
+        );
+       break;
     }
 
+  }
+
+  _renderContinueButton(){
+    return(
+      <StickyView>
+        <ContinueButton text={"Upload Photo"} onPress={() => {
+          this.uploadPhotoS3(this.state.selectedImage);
+          this.setState({index: 3});
+        ;}}/>
+      </StickyView>
+    );
+  }
+
+  _renderUploadedPhoto(){
+    return(
+      <TouchableHighlight
+        activeOpacity={0.8}
+        underlayColor={'transparent'}
+        onPress={() => this.props.onPress()}>
+
+        <View style={{ height: 60, backgroundColor: colors.accent, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <Ionicons style={{}} size={48} name="ios-checkmark-outline" color={colors.accent} />
+        </View>
+      </TouchableHighlight>
+    );
+  }
+
+  _renderAlert(){
+    Alert.photoUpload({
+      title: "Document Upload Status",
+      message: "Your document successfully uploaded!",
+      confirmMessage: "Ok",
+      confirm: () => {
+        this.setState({photoUploaded: false});
+        this.props.toggleModal();
+      }
+    });
   }
 
   uploadPhotoS3(uri){
@@ -303,31 +352,30 @@ class PhotoUploader extends React.Component {
       console.log("Decrypted User: " + response);
     });*/
 
+
     var decryptedEmail = this.props.currentUser.decryptedEmail.replace(".", ">");
     console.log(decryptedEmail);
 
     let file = {
       // `uri` can also be a file system path (i.e. file://)
       uri: uri,
-      name: "PersonalID.png",
+      name: decryptedEmail + ".png",
       type: "image/png"
     }
 
     let options = {
-      bucket: "payper-verifydocs-dev",
+      bucket: "payper-verifydocs-" + config.details.env,
       region: "us-east-1",
       accessKey: "AKIAJAPGM72WRCJVO33A",
       secretKey: "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",
       successActionStatus: 201
     }
-
     RNS3.put(file, options).then(response => {
       if (response.status !== 201){
-          console.log(response.body);
+          console.log(response);
           throw new Error("Failed to upload image to S3");
       }
-
-
+      this._renderAlert();
       /**
        * {
        *   postResponse: {
@@ -338,7 +386,7 @@ class PhotoUploader extends React.Component {
        *   }
        * }
        */
-    });
+    }).progress((e) => console.log(e.loaded / e.total));;
   }
 
   render() {

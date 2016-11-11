@@ -21,6 +21,15 @@ export function message(options) {
   );
 }
 
+export function photoUpload(options){
+  Alert.alert(
+    options.title,
+    options.message,
+    [{text: options.confirmMessage, onPress: () => options.confirm()}]
+  );
+}
+
+
 export function confirmation(options) {
   Alert.alert(
    options.title,

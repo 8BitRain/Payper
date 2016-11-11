@@ -483,7 +483,7 @@ class Payments extends React.Component {
             ? <NoticeBar
                 dwollaCustomerStatus={(this.props.currentUser.appFlags.customer_status !== "verified") ? this.props.currentUser.appFlags.customer_status : null}
                 onboardingState={this.props.currentUser.appFlags.onboarding_state}
-                onPress={() => {(this.props.currentUser.appFlags.customer_status == "document") ? this.toggleDocumentUploadModal() : this.toggleBankModal()}} />
+                onPress={() => {(this.props.currentUser.appFlags.customer_status == "document" || this.props.currentUser.appFlags.customer_status == "documentFailure") ? this.toggleDocumentUploadModal() : this.toggleBankModal()}} />
             : null }
 
           { /* Payment list (or empty state) */
