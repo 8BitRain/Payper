@@ -23,47 +23,48 @@ class PaymentCard extends React.Component {
     this.details = {
       pic: "https://scontent-ord1-1.xx.fbcdn.net/t31.0-8/15000684_1250241661662960_1895438605245811540_o.jpg",
       name: "Brady Sheridan",
+      username: "@Brady-Sheridan",
       purpose: "Spotify Family Plan",
-      amount: 999,
+      amount: 5,
       frequency: "Monthly",
-      next: "Nov 13th",
-      incoming: false,
-      status: "Active",
+      next: "Nov 9th",
+      incoming: true,
+      status: "pendingConfirmation",
       payments: 10,
       paymentsMade: 7,
       timeline: [
         {
-          timestamp: "Jan 13th",
-          amount: 10,
-          bankAccount: "",
-          transferStatus: "arrived",
+          timestamp: "Jan 9th at 1:04pm",
+          amount: 5,
+          bankAccount: "UWCU Checking",
+          transferStatus: "uninitiated",
           id: "1"
         },
         {
-          timestamp: "Dec 13th",
-          amount: 10,
-          bankAccount: "",
-          transferStatus: "arrived",
+          timestamp: "Dec 9th at 1:04pm",
+          amount: 5,
+          bankAccount: "UWCU Checking",
+          transferStatus: "uninitiated",
           id: "2"
         },
         {
-          timestamp: "Nov 13th",
-          amount: 10,
-          bankAccount: "",
-          transferStatus: "arrived",
+          timestamp: "Nov 9th at 1:04pm",
+          amount: 5,
+          bankAccount: "UWCU Checking",
+          transferStatus: "initiated",
           id: "3"
         },
         {
-          timestamp: "Oct 13th",
-          amount: 10,
-          bankAccount: "",
+          timestamp: "Oct 9th at 1:04pm",
+          amount: 5,
+          bankAccount: "UWCU Checking",
           transferStatus: "arrived",
           id: "4"
         },
         {
-          timestamp: "Sep 13th",
-          amount: 10,
-          bankAccount: "",
+          timestamp: "Sep 9th at 1:04pm",
+          amount: 5,
+          bankAccount: "UWCU Checking",
           transferStatus: "arrived",
           id: "5"
         }
@@ -72,12 +73,10 @@ class PaymentCard extends React.Component {
   }
 
   layoutProfPic(e) {
-    console.log("image wrap layout\n", e.nativeEvent.layout)
     this.setState({ profPicDims: e.nativeEvent.layout })
   }
 
   layoutAmount(e) {
-    console.log("amount wrap layout\n", e.nativeEvent.layout)
     this.setState({ amountDims: e.nativeEvent.layout })
   }
 
@@ -85,7 +84,6 @@ class PaymentCard extends React.Component {
     let { pic, name, purpose, amount, frequency, next, incoming } = this.details
 
     return(
-
       <TouchableHighlight
         activeOpacity={0.8}
         underlayColor={colors.mintCream}
