@@ -45,7 +45,8 @@ class PaymentDetails extends React.Component {
   componentDidMount() {
     let detailRows = this.generateDetailRows()
     let timelineRows = this.generateTimelineRows()
-    let allRows = Object.assign({}, detailRows, timelineRows)
+    let sectionlessRows = {"": [{key: "Accept or Reject Request", val: ""}]}
+    let allRows = Object.assign({}, sectionlessRows, detailRows, timelineRows)
     this.setState({ rows: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(allRows) })
   }
 
@@ -107,8 +108,12 @@ class PaymentDetails extends React.Component {
   }
 
   renderRow(rowData, sectionTitle) {
+    console.log("rowData", rowData)
+    if (sectionTitle === "" && rowData.key === "Accept or Reject Request") return this.renderAcceptRejectRow()
     if (sectionTitle === 'Payment Timeline') return this.renderTimelineRow(rowData)
-    else return this.renderDetailRow(rowData)
+    if (sectionTitle === 'Payment Details') return this.renderDetailRow(rowData)
+
+    return <View style={{height: 0}} />
   }
 
   renderDetailRow(params) {
@@ -187,12 +192,49 @@ class PaymentDetails extends React.Component {
     )
   }
 
-  renderSectionHeader(sectionData, sectionTitle) {
+  renderAcceptRejectRow() {
     return(
-      <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', padding: 8, backgroundColor: colors.gainsboro}}>
-        <Text style={{color: colors.deepBlue}}>{ sectionTitle }</Text>
+      <View style={{flexDirection: 'column'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flex: 1.0}}>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={colors.mintCream}
+            onPress={() => console.log("Accepting payment request...")}>
+            <View style={{padding: 20, alignItems: 'center'}}>
+              <EvilIcons name={"like"} size={80} color={colors.dodgerBlue} />
+              <Text style={{color: colors.deepBlue, fontSize: 16, textAlign: 'center', fontWeight: '300'}}>
+                {"Accept\nRequest"}
+              </Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={colors.mintCream}
+            onPress={() => console.log("Rejecting payment request...")}>
+            <View style={{padding: 20, alignItems: 'center'}}>
+              <EvilIcons name={"like"} size={80} color={colors.alertRed} style={{transform: [{rotate: '180deg'}]}} />
+              <Text style={{color: colors.deepBlue, fontSize: 16, textAlign: 'center', fontWeight: '300'}}>
+                {"Reject\nRequest"}
+              </Text>
+            </View>
+          </TouchableHighlight>
+        </View>
       </View>
     )
+  }
+
+  renderSectionHeader(sectionData, sectionTitle) {
+    if (sectionTitle.length === 0) {
+      return(
+        <View style={{height: 0}} />
+      )
+    } else {
+      return(
+        <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', padding: 8, backgroundColor: colors.gainsboro}}>
+          <Text style={{color: colors.deepBlue}}>{ sectionTitle }</Text>
+        </View>
+      )
+    }
   }
 
   expand(id) {
@@ -238,7 +280,7 @@ class PaymentDetails extends React.Component {
   }
 
   render() {
-    let { pic, name, username, purpose, amount, frequency, next, incoming } = this.props
+    let { pic, name, username, purpose, amount, frequency, next, incoming, payments } = this.props
 
     return(
       <View style={styles.wrap}>
@@ -275,7 +317,7 @@ class PaymentDetails extends React.Component {
           </TouchableHighlight>
         </View>
 
-        { /* Payment details and timeline */ }
+        { /* Situational buttons, payment details and timeline */ }
         <ListView
           style={{width: dims.width, backgroundColor: 'transparent'}}
           dataSource={this.state.rows}

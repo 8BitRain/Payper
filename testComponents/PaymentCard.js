@@ -28,7 +28,7 @@ class PaymentCard extends React.Component {
       amount: 5,
       frequency: "Monthly",
       next: "Nov 9th",
-      incoming: true,
+      incoming: false,
       status: "pendingConfirmation",
       payments: 10,
       paymentsMade: 7,
