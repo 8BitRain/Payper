@@ -1,6 +1,6 @@
 import React from 'react'
 import { Actions } from 'react-native-router-flux'
-import { View, Text, TouchableHighlight, Dimensions, Image, ListView, DataSource, RecyclerViewBackedScrollView, StatusBar, Animated, Easing } from 'react-native'
+import { View, Text, TouchableHighlight, Dimensions, Image, ListView, DataSource, RecyclerViewBackedScrollView, StatusBar, Animated, Easing, ActionSheetIOS } from 'react-native'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import colors from '../styles/colors'
@@ -39,6 +39,16 @@ class PaymentDetails extends React.Component {
       "initiated": "Funds will arrive in your bank account 3-5 business days from the specified date."
     }
 
+    this.ACTION_SHEET_CONFIG = {
+      options: [
+        "Block User",
+        "Cancel Payment Series",
+        "Nevermind"
+      ],
+      cancelButtonIndex: 2,
+      destructiveButtonIndex: 1
+    }
+
     this.animatedValues = {}
   }
 
@@ -48,6 +58,12 @@ class PaymentDetails extends React.Component {
     let sectionlessRows = {"": [{key: "Accept or Reject Request", val: ""}]}
     let allRows = Object.assign({}, sectionlessRows, detailRows, timelineRows)
     this.setState({ rows: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(allRows) })
+  }
+
+  showActionSheet() {
+    ActionSheetIOS.showActionSheetWithOptions(this.ACTION_SHEET_CONFIG, (i) => {
+      console.log("clicked", this.ACTION_SHEET_CONFIG.options[i])
+    });
   }
 
   generateDetailRows() {
@@ -312,7 +328,7 @@ class PaymentDetails extends React.Component {
             activeOpacity={0.8}
             underlayColor={colors.mintCream}
             style={{padding: 25, paddingTop: 0}}
-            onPress={() => console.log("Showing action sheet...")}>
+            onPress={() => this.showActionSheet()}>
             <Entypo name={"dots-three-horizontal"} size={22} color={colors.deepBlue} />
           </TouchableHighlight>
         </View>
