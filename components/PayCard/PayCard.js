@@ -37,7 +37,7 @@ class PayCard extends React.Component {
   }
 
   render() {
-    let { pic, name, purpose, amount, frequency, next, incoming, status } = this.props
+    let { pic, name, purpose, amount, frequency, next, incoming, status, payments, paymentsMade } = this.props
 
     return(
       <TouchableHighlight
@@ -63,7 +63,7 @@ class PayCard extends React.Component {
               </View>
 
               { /* Name and payment purpose */ }
-              <View style={{justifyContent: 'center'}}>
+              <View style={{justifyContent: 'center', paddingLeft: 4}}>
                 <Text style={{color: colors.deepBlue, fontSize: 22, fontWeight: '200'}}>
                   {name}
                 </Text>
@@ -108,7 +108,7 @@ class PayCard extends React.Component {
                 { /* Progress bar */ }
                 <View style={{flexDirection: 'row'}}>
                   <View style={[styles.progbarBackground, styles.shadow]} onLayout={(e) => this.setState({ progbarDims: e.nativeEvent.layout })}>
-                    <View style={[styles.progbarForeground, {width: this.state.progbarDims.width * 0.6 || 0}]} />
+                    <View style={[styles.progbarForeground, {width: this.state.progbarDims.width * ((paymentsMade > 0) ? (paymentsMade / payments) : 0) || 0}]} />
                   </View>
                 </View>
               </View>

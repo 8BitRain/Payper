@@ -86,6 +86,34 @@ class paydetails extends React.Component {
     }
   }
 
+  acceptRequest(payment) {
+    let { token, pid, paymentType, status } = this.props
+
+    // TODO: Optimistically mark payment card as confirmed
+    Lambda.confirmPayment({
+      token: token,
+      payment_id: pid,
+      type: paymentType,
+      status: status
+    })
+
+    Actions.pop()
+  }
+
+  rejectRequest(payment) {
+    let { token, pid, paymentType, status } = this.props
+
+    // TODO: Optimistically mark payment card as confirmed
+    Lambda.rejectPayment({
+      token: token,
+      payment_id: pid,
+      type: paymentType,
+      status: status
+    })
+
+    Actions.pop()
+  }
+
   blockUser() {
     console.log("blockUser was invoked...")
   }
@@ -250,7 +278,7 @@ class paydetails extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={colors.mintCream}
-            onPress={() => console.log("Accepting payment request...")}>
+            onPress={() => this.acceptRequest()}>
             <View style={{padding: 20, alignItems: 'center'}}>
               <EvilIcons name={"like"} size={80} color={colors.dodgerBlue} />
               <Text style={{color: colors.deepBlue, fontSize: 16, textAlign: 'center', fontWeight: '300'}}>
@@ -261,7 +289,7 @@ class paydetails extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={colors.mintCream}
-            onPress={() => console.log("Rejecting payment request...")}>
+            onPress={() => this.rejectRequest()}>
             <View style={{padding: 20, alignItems: 'center'}}>
               <EvilIcons name={"like"} size={80} color={colors.alertRed} style={{transform: [{rotate: '180deg'}]}} />
               <Text style={{color: colors.deepBlue, fontSize: 16, textAlign: 'center', fontWeight: '300'}}>
