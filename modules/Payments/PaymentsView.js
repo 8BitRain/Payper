@@ -18,6 +18,7 @@ import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingView';
 import MicrodepositOnboarding from '../../components/MicrodepositOnboarding/MicrodepositOnboarding';
 import NoticeBar from '../../components/NoticeBar/NoticeBar';
 import Carousel from 'react-native-carousel';
+import PhotoUploader from '../../components/PhotoUploader/PhotoUploader'
 
 // Payment card components
 import Active from '../../components/PaymentCards/Active';
@@ -41,6 +42,7 @@ class Payments extends React.Component {
     this.state = {
       modalVisible: false,
       bankModalVisible: false,
+      documentUploadModalVisible: false,
       clock: new Date().getTime()
     }
 
@@ -277,6 +279,10 @@ class Payments extends React.Component {
     this.setState({ bankModalVisible: !this.state.bankModalVisible });
   }
 
+  toggleDocumentUploadModal(){
+    this.setState({ documentUploadModalVisible: !this.state.documentUploadModalVisible});
+  }
+
   getBankModalContent(onboardingState, customerStatus) {
     if (customerStatus === "retry")
       return(
@@ -307,12 +313,12 @@ class Payments extends React.Component {
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: colors.white}}>
           {/*Note the static value 165 needs to account for the position that the footer is away from the bottom of the screen*/}
           <View style={{position: "absolute", height: dimensions.height * .16, bottom: 0, left: 0, right: 0,  justifyContent: 'center', alignItems: 'center', borderColor: "black", borderWidth: 0}}>
-          {/*<Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: -((80-64)/2), left: dimensions.width/2 - (80/2), height: pulse_0, width: pulse_0, opacity: this.pulseValue_0}}/>*/}
-          <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_0}, {scaleY: pulse_0}], opacity: this.pulseValue_0}}/>
+
+          {<Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_0}, {scaleY: pulse_0}], opacity: this.pulseValue_0}}/>
           <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_1}, {scaleY: pulse_1}], opacity: this.pulseValue_1}}/>
-          <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_2}, {scaleY: pulse_2}], opacity: this.pulseValue_2}}/>
-          {/*<Animated.Image  source={require('../../assets/images/Oval.png')} style={{ position: "absolute", top: -((130-64)/2), left: dimensions.width/2 - (130/2), height: 130, width: 130, opacity: this.pulseValue_1}}/>
-          <Animated.Image  source={require('../../assets/images/Oval.png')} style={{ position: "absolute", top: -((180-64)/2), left: dimensions.width/2 - (180/2), height: 180, width: 180, opacity: this.pulseValue_2}}/>*/}
+          <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_2}, {scaleY: pulse_2}], opacity: this.pulseValue_2}}/>}
+
+
           </View>
           <Carousel hideIndicators={true} animate={true} delay={5000}>
             <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 100, width: dimensions.width - 20}}>
@@ -477,7 +483,7 @@ class Payments extends React.Component {
             ? <NoticeBar
                 dwollaCustomerStatus={(this.props.currentUser.appFlags.customer_status !== "verified") ? this.props.currentUser.appFlags.customer_status : null}
                 onboardingState={this.props.currentUser.appFlags.onboarding_state}
-                onPress={() => this.toggleBankModal()} />
+                onPress={() => {(this.props.currentUser.appFlags.customer_status == "document" || this.props.currentUser.appFlags.customer_status == "documentFailure") ? this.toggleDocumentUploadModal() : this.toggleBankModal()}} />
             : null }
 
           { /* Payment list (or empty state) */
@@ -503,6 +509,26 @@ class Payments extends React.Component {
           <CreatePayment
             {...this.props}
             toggleModal={(options) => this._toggleModal(options)} />
+
+        </Modal>
+
+        { /* Document Upload modal*/}
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.documentUploadModalVisible}
+          onRequestClose={ () => alert("Closed modal") }>
+
+          <StatusBar barStyle="light-content" />
+
+          {/*<CreatePayment
+            {...this.props}
+            toggleModal={(options) => this._toggleModal(options)} />*/}
+          <PhotoUploader
+            toggleModal={() => this.toggleDocumentUploadModal()}
+            title={"Secure Document Upload"}
+            index={0}
+            currentUser={this.props.currentUser}/>
 
         </Modal>
 
