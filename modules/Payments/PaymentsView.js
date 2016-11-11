@@ -343,6 +343,7 @@ class Payments extends React.Component {
 
     let user = {
       name: (payment.flow == "incoming") ? payment.sender_name : payment.recip_name,
+      username: (payment.flow == "incoming") ? payment.sender_username : payment.recip_username,
       pic: (payment.flow == "incoming") ? payment.sender_pic : payment.recip_pic
     }
 
@@ -360,7 +361,7 @@ class Payments extends React.Component {
     let details = {
       pic: user.pic,
       name: user.name,
-      username: "",
+      username: user.username,
       purpose: payment.purpose,
       amount: payment.amount,
       frequency: frequency,
@@ -380,34 +381,6 @@ class Payments extends React.Component {
           bankAccount: "UWCU Checking",
           transferStatus: "uninitiated",
           id: "1"
-        },
-        {
-          timestamp: "Dec 9th at 1:04pm",
-          amount: 5,
-          bankAccount: "UWCU Checking",
-          transferStatus: "uninitiated",
-          id: "2"
-        },
-        {
-          timestamp: "Nov 9th at 1:04pm",
-          amount: 5,
-          bankAccount: "UWCU Checking",
-          transferStatus: "initiated",
-          id: "3"
-        },
-        {
-          timestamp: "Oct 9th at 1:04pm",
-          amount: 5,
-          bankAccount: "UWCU Checking",
-          transferStatus: "arrived",
-          id: "4"
-        },
-        {
-          timestamp: "Sep 9th at 1:04pm",
-          amount: 5,
-          bankAccount: "UWCU Checking",
-          transferStatus: "arrived",
-          id: "5"
         }
       ]
     }

@@ -37,13 +37,13 @@ class PayCard extends React.Component {
   }
 
   render() {
-    let { pic, name, purpose, amount, frequency, next, incoming, status, payments, paymentsMade } = this.props
+    let { dummy, pic, name, purpose, amount, frequency, next, incoming, status, payments, paymentsMade } = this.props
 
     return(
       <TouchableHighlight
         activeOpacity={0.8}
         underlayColor={colors.mintCream}
-        onPress={() => Actions.PaymentDetails(this.props)}>
+        onPress={() => (dummy) ? null : Actions.PaymentDetails(this.props)}>
 
         <View style={[styles.wrap, {paddingTop: 5, paddingBottom: 5, borderBottomWidth: 1.0, borderBottomColor: colors.gainsboro}]}>
           <View style={{flexDirection: 'column', flex: 1.0}}>
@@ -98,7 +98,7 @@ class PayCard extends React.Component {
                     <Text style={[styles.freqAndNextPaymentText, {paddingLeft: 3}]}>
                       {frequency}
                     </Text>
-                    <Entypo name={"hour-glass"} size={17} color={colors.maastrichtBlue} style={{paddingLeft: 3}} />
+                    <Entypo name={"hour-glass"} size={13} color={colors.maastrichtBlue} style={{paddingLeft: 3}} />
                     <Text style={[styles.freqAndNextPaymentText, {paddingLeft: 3}]}>
                       {next}
                     </Text>

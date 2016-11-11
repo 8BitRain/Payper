@@ -2,6 +2,7 @@ import React from 'react'
 import { Actions } from 'react-native-router-flux'
 import { View, Text, TouchableHighlight, Dimensions, Image, ListView, DataSource, RecyclerViewBackedScrollView, StatusBar, Animated, Easing, ActionSheetIOS, Alert } from 'react-native'
 import * as Lambda from '../../services/Lambda'
+import moment from 'moment'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import colors from '../../styles/colors'
@@ -55,7 +56,11 @@ class paydetails extends React.Component {
 
   componentDidMount() {
     let detailRows = this.generateDetailRows()
-    let timelineRows = (this.props.status.indexOf("pending") === -1) ? this.generateTimelineRows() : {}
+
+    // TODO: Finish timeline generator
+    // let timelineRows = (this.props.status.indexOf("pending") === -1) ? this.generateTimelineRows() : {}
+    let timelineRows = {}
+
     let sectionlessRows = (this.props.incoming === false && this.props.status === "pendingConfirmation") ? {"": [{key: "Accept or Reject Request", val: ""}]} : {}
     let allRows = Object.assign({}, sectionlessRows, detailRows, timelineRows)
     this.setState({ rows: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(allRows) })
@@ -130,7 +135,7 @@ class paydetails extends React.Component {
   }
 
   generateDetailRows() {
-    let { payments, paymentsMade, status, next, purpose, amount, frequency, name, incoming } = this.props
+    let { payments, paymentsMade, status, nextTimestamp, purpose, amount, frequency, name, incoming } = this.props
     let firstName = name.split(" ")[0]
     let endsInS = firstName.charAt(firstName.length - 1) === 's'
 
@@ -147,7 +152,7 @@ class paydetails extends React.Component {
       "Payment Details": [
         {key: "Status", val: statuses[status]},
         {key: "Current Payment", val: paymentsMade + " of " + payments},
-        {key: "Next Payment", val: next},
+        {key: "Next Payment", val: moment(nextTimestamp).format("MMM D [around] h:mma")},
         {key: "Purpose", val: purpose},
         {key: "Amount", val: "$" + amount},
         {key: "Frequency", val: frequency}

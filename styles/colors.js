@@ -32,12 +32,12 @@ const colors = {
 
   // New color scheme
   gainsboro: "#CDDDDD",
-  mintCream: "#EFFFFA",
+  originalMintCream: "#EFFFFA",
+  mintCream: "#f7fffd",
   maastrichtBlue: "#011936",
   dodgerBlue: "#1098F7",
   deepBlue: "#001021",
   slateGrey: "#acbdba"
-
 }
 
 export default colors;
