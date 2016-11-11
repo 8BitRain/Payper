@@ -1,5 +1,6 @@
 // Dependencies
 import React from 'react';
+import moment from 'moment';
 import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar, Image, Easing, Animated } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import * as Animatable from 'react-native-animatable';
@@ -18,6 +19,7 @@ import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingView';
 import MicrodepositOnboarding from '../../components/MicrodepositOnboarding/MicrodepositOnboarding';
 import NoticeBar from '../../components/NoticeBar/NoticeBar';
 import Carousel from 'react-native-carousel';
+import { PayCard } from '../../components/PayCard'
 
 // Payment card components
 import Active from '../../components/PaymentCards/Active';
@@ -40,8 +42,7 @@ class Payments extends React.Component {
     super(props);
     this.state = {
       modalVisible: false,
-      bankModalVisible: false,
-      clock: new Date().getTime()
+      bankModalVisible: false
     }
 
     this.pulseValue_0 = new Animated.Value(1);
@@ -49,20 +50,10 @@ class Payments extends React.Component {
     this.pulseValue_2 = new Animated.Value(1);
   }
 
-  componentWillMount() {
-    this.clockInterval = setInterval(() => {
-      this.setState({ clock: new Date().getTime() });
-    }, 5000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.clockInterval);
-  }
-
   componentDidMount() {
-    // this.pulse_0();
-    // this.pulse_1();
-    // this.pulse_2();
+    this.pulse_0();
+    this.pulse_1();
+    this.pulse_2();
   }
 
   pulse_0() {
@@ -163,34 +154,7 @@ class Payments extends React.Component {
     Lambda.cancelPayment(params);
   }
 
-  confirmPayment(payment) {
-    let params = {
-      token: this.props.currentUser.token,
-      payment_id: payment.pid,
-      type: payment.type,
-      status: payment.status
-    };
 
-    console.log("Confirming payment with params", params);
-
-    // TODO: Optimistically mark payment card as confirmed
-    Lambda.confirmPayment(params);
-
-  }
-
-  rejectPayment(payment) {
-    let params = {
-      token: this.props.currentUser.token,
-      payment_id: payment.pid,
-      type: payment.type,
-      status: payment.status
-    };
-
-    console.log("Rejecting payment with params", params);
-
-    // TODO: Optimistically delete payment card
-    Lambda.rejectPayment(params);
-  }
 
   _showMenu(payment) {
     ActionSheetIOS.showActionSheetWithOptions({
@@ -344,7 +308,7 @@ class Payments extends React.Component {
     );
   }
 
-  _renderPaymentList(clock) {
+  _renderPaymentList() {
     // Determine which data source to use for the payment list view
     var ds = (this.props.activeFilter == "incoming") ? this.props.incomingPayments : this.props.outgoingPayments;
 
@@ -377,93 +341,107 @@ class Payments extends React.Component {
     if (payment.nextPayment === 'complete')
       Lambda.archivePayment({ payment_id: payment.pid, token: this.props.currentUser.token });
 
-    var paymentInfo = {
-      amount: payment.amount,
-      purpose: payment.purpose,
+    let user = {
+      name: (payment.flow == "incoming") ? payment.sender_name : payment.recip_name,
+      username: (payment.flow == "incoming") ? payment.sender_username : payment.recip_username,
+      pic: (payment.flow == "incoming") ? payment.sender_pic : payment.recip_pic
+    }
+
+    let frequency = payment.frequency.charAt(0).toUpperCase() + payment.frequency.slice(1).toLowerCase()
+    let formattedTimestamp = moment(payment.nextPayment).format("MMM D")
+    let next = (formattedTimestamp !== "Invalid date") ? formattedTimestamp : "TBD"
+
+    generateTimeline({
+      frequency: payment.frequency,
       payments: payment.payments,
       paymentsMade: payment.paymentsMade,
-      nextPayment: payment.nextPayment,
-      frequency: payment.frequency
-    };
+      nextPayment: payment.nextPayment
+    })
 
-    var user = {
-      name: (payment.flow == "incoming") ? payment.sender_name : payment.recip_name,
-      pic: (payment.flow == "incoming") ? payment.sender_pic : payment.recip_pic
-    };
+    let details = {
+      pic: user.pic,
+      name: user.name,
+      username: user.username,
+      purpose: payment.purpose,
+      amount: payment.amount,
+      frequency: frequency,
+      nextTimestamp: payment.nextPayment,
+      next: next,
+      incoming: payment.flow === "incoming",
+      status: payment.status,
+      payments: payment.payments,
+      paymentsMade: payment.paymentsMade,
+      pid: payment.pid,
+      token: this.props.currentUser.token,
+      paymentType: payment.type,
+      timeline: [
+        {
+          timestamp: "Jan 9th at 1:04pm",
+          amount: 5,
+          bankAccount: "UWCU Checking",
+          transferStatus: "uninitiated",
+          id: "1"
+        }
+      ]
+    }
 
-    switch(payment.status) {
-      case "active":
-        return(
-          <Active
-            user={user}
-            payment={paymentInfo}
-            showMenu={() => this._showMenu(payment)}
-            clock={this.state.clock} />
-        );
-      break;
-      case "pendingInvite":
-        return(
-          <PendingInvite
-            user={user}
-            payment={paymentInfo}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      case "pendingConfirmation":
-        return(
-          <PendingConfirmation
-            user={user}
-            payment={paymentInfo}
-            showButtons={payment.flow == "outgoing"}
-            confirmPayment={() => this._confirmPayment(payment)}
-            rejectPayment={() => this._rejectPayment(payment)}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      case "pendingSenderFundingSource":
-        var message = (payment.sender_id == this.props.currentUser.uid)
-          ? "You must add a bank account."
-          : payment.sender_name.split(" ")[0] + " must add a bank account.";
-        return(
-          <PendingFundingSource
-            user={user}
-            payment={paymentInfo}
-            message={message}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      case "pendingRecipFundingSource":
-        var message = (payment.recip_id == this.props.currentUser.uid)
-          ? "You must add a bank account."
-          : payment.recip_name.split(" ")[0] + " must add a bank account.";
-        return(
-          <PendingFundingSource
-            user={user}
-            payment={paymentInfo}
-            message={message}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      case "pendingBothFundingSources":
-        var message = (payment.flow == "incoming")
-          ? "Neither you nor " + payment.sender_name.split(" ")[0] + " have added a bank account."
-          : "Neither you nor " + payment.recip_name.split(" ")[0] + " have added a bank account.";
-        return(
-          <PendingFundingSource
-            user={user}
-            payment={paymentInfo}
-            message={message}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      default:
-        return(
-          <View style={{ justifyContent: 'center', alignItems: 'center', height: 70, backgroundColor: colors.alertRed }}>
-            <Text style={{ fontSize: 16, fontFamily: 'Roboto', color: colors.white }}>
-              Failed to render payment :(
-            </Text>
-          </View>
-        );
+    return <PayCard {...details} />
+
+    function generateTimeline(params) {
+      // let { frequency, payments, paymentsMade, nextPayment } = params
+      // console.log("generateTimeline was invoked with params", params)
+
+      // if (!nextPayment || nextPayment === "" || typeof nextPayment === 'undefined')
+      //   nextPayment =
+      //
+
+      let timeline = []
+
+      let nextPayment = moment().add(3, "w")
+      let frequency = "WEEKLY"
+      let payments = 4
+      let paymentsMade = 3
+      let amount = 10
+
+      console.log("--------------------------------")
+      console.log("nextPayment", nextPayment)
+      console.log("frequency", frequency)
+      console.log("payments", payments)
+      console.log("paymentsMade", paymentsMade)
+
+      // {
+      //   timestamp: "Sep 9th at 1:04pm",
+      //   amount: 5,
+      //   bankAccount: "UWCU Checking",
+      //   transferStatus: "arrived",
+      //   id: "5"
+      // }
+
+      // Determine when the first payment occured
+      let by = (frequency === "MONTHLY") ? "M" : "w"
+      let firstPayment = moment(nextPayment).subtract(paymentsMade, by)
+      console.log("firstPayment", firstPayment)
+
+      timeline.push({
+        timestamp: firstPayment.add(1, by).format("MMM d"),
+        amount: amount,
+        bankAccount: "Unknown"
+      })
+
+      // for (var i = 1; i <= payments; i++) {
+      //   console.log("i:", i)
+      //   console.log("by:", by)
+      //   timeline.push({
+      //     timestamp: firstPayment.add(i, by).format("MMM d"),
+      //     amount: amount,
+      //     bankAccount: "Unknown",
+      //     transferStatus: (i <= paymentsMade) ? "arrived" : "uninitiated",
+      //     id: i
+      //   })
+      // }
+
+      console.log("Timeline:", timeline)
+      console.log("--------------------------------")
     }
   }
 

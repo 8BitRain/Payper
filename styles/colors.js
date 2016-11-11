@@ -30,6 +30,14 @@ const colors = {
   // Potential main colors
   malachite: "#20BF55",
 
+  // New color scheme
+  gainsboro: "#CDDDDD",
+  originalMintCream: "#EFFFFA",
+  mintCream: "#f7fffd",
+  maastrichtBlue: "#011936",
+  dodgerBlue: "#1098F7",
+  deepBlue: "#001021",
+  slateGrey: "#acbdba"
 }
 
 export default colors;

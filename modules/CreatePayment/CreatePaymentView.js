@@ -83,6 +83,7 @@ class CreatePaymentView extends React.Component {
           first_name: options.user.first_name,
           last_name: options.user.last_name,
           profile_pic: options.user.profile_pic,
+          username: options.user.username,
           uid: options.user.uid
         };
 

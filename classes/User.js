@@ -29,7 +29,8 @@ export default class User {
       first_name: this.first_name,
       last_name: this.last_name,
       profile_pic: this.profile_pic,
-      uid: this.uid
+      uid: this.uid,
+      username: this.username
     };
 
     return attributes;

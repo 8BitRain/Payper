@@ -1,133 +1,90 @@
-// Dependencies
 import React from 'react';
-import { View, Text, Image, Dimensions, Animated, Easing } from 'react-native';
 import moment from 'moment';
-import colors from '../../../styles/colors';
-
-// Components
-import Dummy from '../../../components/PaymentCards/Dummy';
-
-const dimensions = Dimensions.get('window');
+import { View } from 'react-native';
+import { PayCard } from '../../../components/PayCard';
 
 export default class PaymentCards extends React.Component {
   constructor(props) {
     super(props);
 
-    this.payments = {
-      "ameera": {
-        amount: '35',
-        confirmed: true,
-        created_at: 1471468155170,
-        nextPayment: moment().add(1, 'hour').valueOf(),
-        purpose: 'Internet & cable',
-        payments: '12',
-        paymentsMade: Math.floor(12 * Math.random()),
-        recip_id: "",
-        recip_name: "Ameera Johnson",
-        recip_pic: "https://s3.amazonaws.com/payper-landerpics/ameera.jpg",
-        sender_id: "",
-        sender_name: "Brady Sheridan",
-        sender_pic: "",
-        type: "pay",
-        token: "",
-        invite: false,
-        info: ""
+    this.payments = [
+      {
+        pic: "https://s3.amazonaws.com/payper-landerpics/ameera.jpg",
+        name: "Ameera Johnson",
+        username: "@Ameera-Johnson",
+        purpose: "Internet & cable",
+        amount: 35,
+        frequency: "Monthly",
+        nextTimestamp: moment().add(1, 'month').valueOf(),
+        next: moment().add(1, 'month').format("MMM D"),
+        incoming: true,
+        status: "active",
+        payments: 12,
+        paymentsMade: 8,
+        pid: "1",
+        token: "asdf1",
+        paymentType: "payment"
       },
-      "diane": {
-        amount: '346.50',
-        confirmed: true,
-        created_at: 1471468155170,
-        nextPayment: moment().add(5, 'days').add(22, 'hours').valueOf(),
-        purpose: 'Rent',
-        payments: '9',
-        paymentsMade: Math.floor(9 * Math.random()),
-        recip_id: "",
-        recip_name: "Diane Xue",
-        recip_pic: "https://s3.amazonaws.com/payper-landerpics/diane.jpg",
-        sender_id: "",
-        sender_name: "Brady Sheirdan",
-        sender_pic: "",
-        type: "pay",
-        token: "",
-        invite: false,
-        info: ""
+      {
+        pic: "https://s3.amazonaws.com/payper-landerpics/diane.jpg",
+        name: "Diane Xue",
+        username: "@Diane-Xue",
+        purpose: "Rent",
+        amount: 450,
+        frequency: "Monthly",
+        nextTimestamp: moment().add(3, 'days').valueOf(),
+        next: moment().add(3, 'days').format("MMM D"),
+        incoming: true,
+        status: "active",
+        payments: 12,
+        paymentsMade: 10,
+        pid: "2",
+        token: "asdf2",
+        paymentType: "payment"
       },
-      "mohsin": {
-        amount: '7.50',
-        confirmed: true,
-        created_at: 1471468155170,
-        nextPayment: moment().add(14, 'hours').valueOf(),
-        purpose: 'Tidal family plan',
-        payments: '8',
-        paymentsMade: Math.floor(8 * Math.random()),
-        recip_id: "",
-        recip_name: "Mohsin Khan",
-        recip_pic: "https://s3.amazonaws.com/payper-landerpics/mo.jpg",
-        sender_id: "",
-        sender_name: "Brady Sheridan",
-        sender_pic: "",
-        type: "pay",
-        token: "",
-        invite: false,
-        info: ""
+      {
+        pic: "https://s3.amazonaws.com/payper-landerpics/mo.jpg",
+        name: "Mohsin Khan",
+        username: "@Mohsin-Khan",
+        purpose: "Spotify family plan",
+        amount: 5,
+        frequency: "Monthly",
+        nextTimestamp: moment().add(3, 'weeks').valueOf(),
+        next: moment().add(3, 'weeks').format("MMM D"),
+        incoming: false,
+        status: "active",
+        payments: 12,
+        paymentsMade: 3,
+        pid: "3",
+        token: "asdf3",
+        paymentType: "request"
       },
-      "eric": {
-        amount: '8',
-        confirmed: true,
-        created_at: 1471468155170,
-        nextPayment: moment().add(2, 'weeks').add(13, 'hours').valueOf(),
-        purpose: 'Wine of the month',
-        payments: '6',
-        paymentsMade: Math.floor(6 * Math.random()),
-        recip_id: "",
-        recip_name: "Eric Smith",
-        recip_pic: "https://s3.amazonaws.com/payper-landerpics/eric.jpg",
-        sender_id: "",
-        sender_name: "Brady Sheridan",
-        sender_pic: "",
-        type: "pay",
-        token: "",
-        invite: false,
-        info: ""
+      {
+        pic: "https://s3.amazonaws.com/payper-landerpics/eric.jpg",
+        name: "Eric Smith",
+        username: "@Eric-Smith",
+        purpose: "Wine of the week",
+        amount: 10,
+        frequency: "Weekly",
+        nextTimestamp: moment().add(5, 'days').valueOf(),
+        next: moment().add(5, 'days').format("MMM D"),
+        incoming: true,
+        status: "active",
+        payments: 12,
+        paymentsMade: 6,
+        pid: "4",
+        token: "asdf4",
+        paymentType: "payment"
       }
-    };
-  }
-
-  animateProgBar() {
-    console.log("animateProgBar was invoked...")
+    ];
   }
 
   render() {
     return(
-      <View style={{ flex: 1.0, backgroundColor: 'rgba(0, 0, 0, 0.05)' }}>
-        <View onPress={() => alert('yo')} style={{ justifyContent: 'center', borderBottomWidth: 1.0, borderColor: colors.lightGrey }}>
-          <Dummy
-            out
-            style={{padding: 30}}
-            payment={this.payments["ameera"]}
-            callbackMenu={() => { return false }} />
-        </View>
-        <View style={{ justifyContent: 'center', borderBottomWidth: 1.0, borderColor: colors.lightGrey }}>
-          <Dummy
-            out
-            style={{padding: 30}}
-            payment={this.payments["mohsin"]}
-            callbackMenu={() => { return false }} />
-        </View>
-        <View style={{ justifyContent: 'center', borderBottomWidth: 1.0, borderColor: colors.lightGrey }}>
-          <Dummy
-            out
-            style={{padding: 30}}
-            payment={this.payments["diane"]}
-            callbackMenu={() => { return false }} />
-        </View>
-        <View style={{ justifyContent: 'center', borderBottomWidth: 1.0, borderColor: colors.lightGrey }}>
-          <Dummy
-            out
-            style={{padding: 30}}
-            payment={this.payments["eric"]}
-            callbackMenu={() => { return false }} />
-        </View>
+      <View style={{flex: 1.0}}>
+        {
+          this.payments.map((payment) => <PayCard {...payment} dummy key={Math.random()} />)
+        }
       </View>
     );
   }
