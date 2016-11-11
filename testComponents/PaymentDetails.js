@@ -65,8 +65,8 @@ class PaymentDetails extends React.Component {
 
     let rows = {
       "Payment Details": [
-        {key: "Current Payment", val: paymentsMade + " of " + payments},
         {key: "Status", val: statuses[status]},
+        {key: "Current Payment", val: paymentsMade + " of " + payments},
         {key: "Next Payment", val: next},
         {key: "Purpose", val: purpose},
         {key: "Amount", val: "$" + amount},
@@ -113,6 +113,7 @@ class PaymentDetails extends React.Component {
 
   renderDetailRow(params) {
     let { key, val } = params
+    let { status } = this.props
     let splitVal = val.split(" - ")
 
     return(
@@ -127,9 +128,12 @@ class PaymentDetails extends React.Component {
         </View>
 
         {(splitVal.length > 1)
-          ? <Text style={{color: colors.deepBlue, padding: 10, paddingTop: 5}}>
-              { splitVal[1] }
-            </Text>
+          ? <View style={{flexDirection: 'row', alignItems: 'center', padding: 10, paddingTop: 0}}>
+              <EvilIcons name={"exclamation"} size={20} color={colors.alertYellow} style={{paddingRight: 3}} />
+              <Text style={{color: colors.deepBlue}}>
+                {splitVal[1]}
+              </Text>
+            </View>
           : null }
       </View>
     )

@@ -81,7 +81,7 @@ class PaymentCard extends React.Component {
   }
 
   render() {
-    let { pic, name, purpose, amount, frequency, next, incoming } = this.details
+    let { pic, name, purpose, amount, frequency, next, incoming, status } = this.details
 
     return(
       <TouchableHighlight
@@ -101,7 +101,7 @@ class PaymentCard extends React.Component {
               </View>
 
               { /* Name and payment purpose */ }
-              <View style={{flex: 0.85, justifyContent: 'center'}}>
+              <View style={{justifyContent: 'center'}}>
                 <Text style={{color: colors.deepBlue, fontSize: 22, fontWeight: '200'}}>
                   {name}
                 </Text>
@@ -144,7 +144,7 @@ class PaymentCard extends React.Component {
                 </View>
 
                 { /* Progress bar */ }
-                <View style={{flexDirection: 'row'}}>
+                <View style={{flexDirection: 'row', paddingRight: 25}}>
                   <View style={[styles.progbarBackground, styles.shadow]} onLayout={(e) => this.setState({ progbarDims: e.nativeEvent.layout })}>
                     <View style={[styles.progbarForeground, {width: this.state.progbarDims.width * 0.6 || 0}]} />
                   </View>
@@ -154,8 +154,15 @@ class PaymentCard extends React.Component {
           </View>
 
           { /* Chevron */ }
-          <View style={{justifyContent: 'center', paddingRight: 15}}>
-            <Entypo name={"chevron-thin-right"} size={18} color={colors.slateGrey} />
+          <View style={{padding: 10}}>
+            <Entypo name={"chevron-thin-right"} color={colors.slateGrey} size={20} style={{alignSelf: 'flex-start'}} />
+          </View>
+
+          { /* Notice indiciator (if need be) */ }
+          <View style={{position: 'absolute', top: 0, right: 0, padding: 8}}>
+            {(status.indexOf("pending") === -1)
+              ? null
+              : <EvilIcons name={"exclamation"} color={colors.alertYellow} size={24} /> }
           </View>
         </View>
       </TouchableHighlight>
