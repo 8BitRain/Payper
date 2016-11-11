@@ -109,7 +109,7 @@ export function get(params) {
       return {
         types: {
           "backIcon": (params.index > 0) ? true : false,
-          "closeIcon": (params.index == 0) ? true : false
+          "closeIcon": (params.index == 0 ) ? true : false
         },
         index: params.index,
         numCircles: null,

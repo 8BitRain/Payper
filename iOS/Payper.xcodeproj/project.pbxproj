@@ -1481,7 +1481,7 @@
 				594B39581DA2C3F400E4D3D8 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Payper" */ = {
 			isa = XCConfigurationList;
@@ -1491,7 +1491,7 @@
 				594B39571DA2C3F400E4D3D8 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Payper" */ = {
 			isa = XCConfigurationList;
@@ -1501,7 +1501,7 @@
 				594B39561DA2C3F400E4D3D8 /* Staging */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
