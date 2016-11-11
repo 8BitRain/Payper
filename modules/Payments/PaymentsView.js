@@ -1,5 +1,6 @@
 // Dependencies
 import React from 'react';
+import moment from 'moment';
 import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar, Image, Easing, Animated } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import * as Animatable from 'react-native-animatable';
@@ -18,6 +19,7 @@ import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingView';
 import MicrodepositOnboarding from '../../components/MicrodepositOnboarding/MicrodepositOnboarding';
 import NoticeBar from '../../components/NoticeBar/NoticeBar';
 import Carousel from 'react-native-carousel';
+import { PayCard } from '../../components/PayCard'
 
 // Payment card components
 import Active from '../../components/PaymentCards/Active';
@@ -377,94 +379,66 @@ class Payments extends React.Component {
     if (payment.nextPayment === 'complete')
       Lambda.archivePayment({ payment_id: payment.pid, token: this.props.currentUser.token });
 
-    var paymentInfo = {
-      amount: payment.amount,
-      purpose: payment.purpose,
-      payments: payment.payments,
-      paymentsMade: payment.paymentsMade,
-      nextPayment: payment.nextPayment,
-      frequency: payment.frequency
-    };
-
-    var user = {
+    let user = {
       name: (payment.flow == "incoming") ? payment.sender_name : payment.recip_name,
       pic: (payment.flow == "incoming") ? payment.sender_pic : payment.recip_pic
-    };
-
-    switch(payment.status) {
-      case "active":
-        return(
-          <Active
-            user={user}
-            payment={paymentInfo}
-            showMenu={() => this._showMenu(payment)}
-            clock={this.state.clock} />
-        );
-      break;
-      case "pendingInvite":
-        return(
-          <PendingInvite
-            user={user}
-            payment={paymentInfo}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      case "pendingConfirmation":
-        return(
-          <PendingConfirmation
-            user={user}
-            payment={paymentInfo}
-            showButtons={payment.flow == "outgoing"}
-            confirmPayment={() => this._confirmPayment(payment)}
-            rejectPayment={() => this._rejectPayment(payment)}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      case "pendingSenderFundingSource":
-        var message = (payment.sender_id == this.props.currentUser.uid)
-          ? "You must add a bank account."
-          : payment.sender_name.split(" ")[0] + " must add a bank account.";
-        return(
-          <PendingFundingSource
-            user={user}
-            payment={paymentInfo}
-            message={message}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      case "pendingRecipFundingSource":
-        var message = (payment.recip_id == this.props.currentUser.uid)
-          ? "You must add a bank account."
-          : payment.recip_name.split(" ")[0] + " must add a bank account.";
-        return(
-          <PendingFundingSource
-            user={user}
-            payment={paymentInfo}
-            message={message}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      case "pendingBothFundingSources":
-        var message = (payment.flow == "incoming")
-          ? "Neither you nor " + payment.sender_name.split(" ")[0] + " have added a bank account."
-          : "Neither you nor " + payment.recip_name.split(" ")[0] + " have added a bank account.";
-        return(
-          <PendingFundingSource
-            user={user}
-            payment={paymentInfo}
-            message={message}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      default:
-        return(
-          <View style={{ justifyContent: 'center', alignItems: 'center', height: 70, backgroundColor: colors.alertRed }}>
-            <Text style={{ fontSize: 16, fontFamily: 'Roboto', color: colors.white }}>
-              Failed to render payment :(
-            </Text>
-          </View>
-        );
     }
+
+    let frequency = payment.frequency.charAt(0).toUpperCase() + payment.frequency.slice(1).toLowerCase()
+
+    let details = {
+      pic: user.pic,
+      name: user.name,
+      username: "",
+      purpose: payment.purpose,
+      amount: payment.amount,
+      frequency: frequency,
+      nextTimestamp: payment.nextPayment,
+      next: moment(payment.nextPayment).format("MMM D"),
+      incoming: payment.flow === "incoming",
+      status: payment.status,
+      payments: payment.payments,
+      paymentsMade: payment.paymentsMade,
+      timeline: [
+        {
+          timestamp: "Jan 9th at 1:04pm",
+          amount: 5,
+          bankAccount: "UWCU Checking",
+          transferStatus: "uninitiated",
+          id: "1"
+        },
+        {
+          timestamp: "Dec 9th at 1:04pm",
+          amount: 5,
+          bankAccount: "UWCU Checking",
+          transferStatus: "uninitiated",
+          id: "2"
+        },
+        {
+          timestamp: "Nov 9th at 1:04pm",
+          amount: 5,
+          bankAccount: "UWCU Checking",
+          transferStatus: "initiated",
+          id: "3"
+        },
+        {
+          timestamp: "Oct 9th at 1:04pm",
+          amount: 5,
+          bankAccount: "UWCU Checking",
+          transferStatus: "arrived",
+          id: "4"
+        },
+        {
+          timestamp: "Sep 9th at 1:04pm",
+          amount: 5,
+          bankAccount: "UWCU Checking",
+          transferStatus: "arrived",
+          id: "5"
+        }
+      ]
+    }
+
+    return <PayCard {...details} />
   }
 
   render() {

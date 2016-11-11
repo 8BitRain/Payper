@@ -20,9 +20,7 @@ import MainViewContainer from './modules/Main/MainViewContainer';
 import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer';
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView';
 import Phone from './modules/UserOnboarding/pages/Phone';
-
-// Test components
-import { Lander, PaymentDetails } from './testComponents'
+import { PayDetails } from './components/PayCard'
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
@@ -78,19 +76,7 @@ export default class Coincast extends React.Component {
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 
-            { /* Test Components */ }
             <Scene initial
-              component={Lander}
-              key="Lander"
-              type="replace"
-              panHandlers={null} />
-
-            <Scene
-              component={PaymentDetails}
-              key="PaymentDetails"
-              panHandlers={null} />
-
-            <Scene
               component={SplashViewContainer}
               key="SplashViewContainer"
               type="replace"
@@ -129,6 +115,11 @@ export default class Coincast extends React.Component {
               component={Phone}
               key="Phone"
               type="replace"
+              panHandlers={null} />
+
+            <Scene
+              component={PayDetails}
+              key="PaymentDetails"
               panHandlers={null} />
 
           </Scene>
