@@ -42,8 +42,7 @@ class Payments extends React.Component {
     super(props);
     this.state = {
       modalVisible: false,
-      bankModalVisible: false,
-      clock: new Date().getTime()
+      bankModalVisible: false
     }
 
     this.pulseValue_0 = new Animated.Value(1);
@@ -51,20 +50,10 @@ class Payments extends React.Component {
     this.pulseValue_2 = new Animated.Value(1);
   }
 
-  componentWillMount() {
-    this.clockInterval = setInterval(() => {
-      this.setState({ clock: new Date().getTime() });
-    }, 5000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.clockInterval);
-  }
-
   componentDidMount() {
-    // this.pulse_0();
-    // this.pulse_1();
-    // this.pulse_2();
+    this.pulse_0();
+    this.pulse_1();
+    this.pulse_2();
   }
 
   pulse_0() {
@@ -346,7 +335,7 @@ class Payments extends React.Component {
     );
   }
 
-  _renderPaymentList(clock) {
+  _renderPaymentList() {
     // Determine which data source to use for the payment list view
     var ds = (this.props.activeFilter == "incoming") ? this.props.incomingPayments : this.props.outgoingPayments;
 
@@ -385,6 +374,15 @@ class Payments extends React.Component {
     }
 
     let frequency = payment.frequency.charAt(0).toUpperCase() + payment.frequency.slice(1).toLowerCase()
+    let formattedTimestamp = moment(payment.nextPayment).format("MMM D")
+    let next = (formattedTimestamp !== "Invalid date") ? formattedTimestamp : "TBD"
+
+    generateTimeline({
+      frequency: payment.frequency,
+      payments: payment.payments,
+      paymentsMade: payment.paymentsMade,
+      nextPayment: payment.nextPayment
+    })
 
     let details = {
       pic: user.pic,
@@ -394,11 +392,14 @@ class Payments extends React.Component {
       amount: payment.amount,
       frequency: frequency,
       nextTimestamp: payment.nextPayment,
-      next: moment(payment.nextPayment).format("MMM D"),
+      next: next,
       incoming: payment.flow === "incoming",
       status: payment.status,
       payments: payment.payments,
       paymentsMade: payment.paymentsMade,
+      pid: payment.pid,
+      token: this.props.currentUser.token,
+      paymentType: payment.type,
       timeline: [
         {
           timestamp: "Jan 9th at 1:04pm",
@@ -439,6 +440,63 @@ class Payments extends React.Component {
     }
 
     return <PayCard {...details} />
+
+    function generateTimeline(params) {
+      // let { frequency, payments, paymentsMade, nextPayment } = params
+      // console.log("generateTimeline was invoked with params", params)
+
+      // if (!nextPayment || nextPayment === "" || typeof nextPayment === 'undefined')
+      //   nextPayment =
+      //
+
+      let timeline = []
+
+      let nextPayment = moment().add(3, "w")
+      let frequency = "WEEKLY"
+      let payments = 4
+      let paymentsMade = 3
+      let amount = 10
+
+      console.log("--------------------------------")
+      console.log("nextPayment", nextPayment)
+      console.log("frequency", frequency)
+      console.log("payments", payments)
+      console.log("paymentsMade", paymentsMade)
+
+      // {
+      //   timestamp: "Sep 9th at 1:04pm",
+      //   amount: 5,
+      //   bankAccount: "UWCU Checking",
+      //   transferStatus: "arrived",
+      //   id: "5"
+      // }
+
+      // Determine when the first payment occured
+      let by = (frequency === "MONTHLY") ? "M" : "w"
+      let firstPayment = moment(nextPayment).subtract(paymentsMade, by)
+      console.log("firstPayment", firstPayment)
+
+      timeline.push({
+        timestamp: firstPayment.add(1, by).format("MMM d"),
+        amount: amount,
+        bankAccount: "Unknown"
+      })
+
+      // for (var i = 1; i <= payments; i++) {
+      //   console.log("i:", i)
+      //   console.log("by:", by)
+      //   timeline.push({
+      //     timestamp: firstPayment.add(i, by).format("MMM d"),
+      //     amount: amount,
+      //     bankAccount: "Unknown",
+      //     transferStatus: (i <= paymentsMade) ? "arrived" : "uninitiated",
+      //     id: i
+      //   })
+      // }
+
+      console.log("Timeline:", timeline)
+      console.log("--------------------------------")
+    }
   }
 
   render() {

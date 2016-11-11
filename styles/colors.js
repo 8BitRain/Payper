@@ -30,7 +30,7 @@ const colors = {
   // Potential main colors
   malachite: "#20BF55",
 
-  //
+  // New color scheme
   gainsboro: "#CDDDDD",
   mintCream: "#EFFFFA",
   maastrichtBlue: "#011936",

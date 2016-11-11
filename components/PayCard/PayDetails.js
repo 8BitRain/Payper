@@ -1,6 +1,7 @@
 import React from 'react'
 import { Actions } from 'react-native-router-flux'
-import { View, Text, TouchableHighlight, Dimensions, Image, ListView, DataSource, RecyclerViewBackedScrollView, StatusBar, Animated, Easing, ActionSheetIOS } from 'react-native'
+import { View, Text, TouchableHighlight, Dimensions, Image, ListView, DataSource, RecyclerViewBackedScrollView, StatusBar, Animated, Easing, ActionSheetIOS, Alert } from 'react-native'
+import * as Lambda from '../../services/Lambda'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import colors from '../../styles/colors'
@@ -54,15 +55,49 @@ class paydetails extends React.Component {
 
   componentDidMount() {
     let detailRows = this.generateDetailRows()
-    let timelineRows = this.generateTimelineRows()
-    let sectionlessRows = {"": [{key: "Accept or Reject Request", val: ""}]}
+    let timelineRows = (this.props.status.indexOf("pending") === -1) ? this.generateTimelineRows() : {}
+    let sectionlessRows = (this.props.incoming === false && this.props.status === "pendingConfirmation") ? {"": [{key: "Accept or Reject Request", val: ""}]} : {}
     let allRows = Object.assign({}, sectionlessRows, detailRows, timelineRows)
     this.setState({ rows: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(allRows) })
   }
 
+  cancelPayment() {
+    let { token, pid, paymentType, status } = this.props
+
+    Alert.alert(
+      "Wait!",
+      "Are you sure you'd like to cancel this payment series?",
+      [
+        {text: 'Nevermind', onPress: () => console.log('Nevermind'), style: 'cancel'},
+        {text: 'Yes', onPress: () => confirm()},
+      ]
+    )
+
+    function confirm() {
+      // TODO: Optimistically delete payment card
+      Lambda.cancelPayment({
+        token: token,
+        payment_id: pid,
+        type: paymentType,
+        status: status
+      })
+
+      Actions.pop()
+    }
+  }
+
+  blockUser() {
+    console.log("blockUser was invoked...")
+  }
+
   showActionSheet() {
     ActionSheetIOS.showActionSheetWithOptions(this.ACTION_SHEET_CONFIG, (i) => {
-      console.log("clicked", this.ACTION_SHEET_CONFIG.options[i])
+      switch (this.ACTION_SHEET_CONFIG.options[i]) {
+        case "Cancel Payment Series": this.cancelPayment()
+          break;
+        case "Block User": this.blockUser()
+          break;
+      }
     });
   }
 
@@ -150,8 +185,8 @@ class paydetails extends React.Component {
 
         {(splitVal.length > 1)
           ? <View style={{flexDirection: 'row', alignItems: 'center', padding: 10, paddingTop: 0}}>
-              <EvilIcons name={"exclamation"} size={20} color={colors.alertYellow} style={{paddingRight: 3}} />
-              <Text style={{color: colors.deepBlue}}>
+              <EvilIcons name={"exclamation"} size={20} color={colors.alertYellow} style={{paddingRight: 5}} />
+              <Text style={{color: colors.deepBlue, width: dims.width * 0.8}}>
                 {splitVal[1]}
               </Text>
             </View>
@@ -295,6 +330,13 @@ class paydetails extends React.Component {
     ]).start()
   }
 
+  getInitials() {
+    let { name } = this.props
+    let buffer = name.split(" ").map((name) => name.charAt(0))
+    let initials = buffer.join("")
+    return initials
+  }
+
   render() {
     let { pic, name, username, purpose, amount, frequency, next, incoming, payments } = this.props
 
@@ -314,7 +356,13 @@ class paydetails extends React.Component {
 
           <View style={{flexDirection: 'column', alignItems: 'center'}}>
             <View style={styles.imageWrap}>
-              <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: pic}} />
+              {(pic)
+                ? <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: pic}} />
+                : <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
+                      {this.getInitials()}
+                    </Text>
+                  </View> }
             </View>
             <Text style={{color: colors.deepBlue, fontSize: 22, fontWeight: '200', paddingTop: 8, textAlign: 'center', backgroundColor: 'transparent'}}>
               {name}

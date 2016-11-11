@@ -45,7 +45,7 @@ class PayCard extends React.Component {
         underlayColor={colors.mintCream}
         onPress={() => Actions.PaymentDetails(this.props)}>
 
-        <View style={[styles.wrap, {paddingTop: 10}]}>
+        <View style={[styles.wrap, {paddingTop: 5, paddingBottom: 5, borderBottomWidth: 1.0, borderBottomColor: colors.gainsboro}]}>
           <View style={{flexDirection: 'column', flex: 1.0}}>
             <View style={{flexDirection: 'row'}}>
 
