@@ -20,6 +20,7 @@ import MicrodepositOnboarding from '../../components/MicrodepositOnboarding/Micr
 import NoticeBar from '../../components/NoticeBar/NoticeBar';
 import Carousel from 'react-native-carousel';
 import { PayCard } from '../../components/PayCard'
+import PhotoUploader from '../../components/PhotoUploader/PhotoUploader'
 
 // Payment card components
 import Active from '../../components/PaymentCards/Active';
@@ -42,7 +43,8 @@ class Payments extends React.Component {
     super(props);
     this.state = {
       modalVisible: false,
-      bankModalVisible: false
+      bankModalVisible: false,
+      documentUploadModalVisible: false
     }
 
     this.pulseValue_0 = new Animated.Value(1);
@@ -140,95 +142,6 @@ class Payments extends React.Component {
   ]).start()
 }
 
-  cancelPayment(payment) {
-    let params = {
-      token: this.props.currentUser.token,
-      payment_id: payment.pid,
-      type: payment.type,
-      status: payment.status
-    };
-
-    console.log("Cancelling payment with params", params);
-
-    // TODO: Optimistically delete payment card
-    Lambda.cancelPayment(params);
-  }
-
-
-
-  _showMenu(payment) {
-    ActionSheetIOS.showActionSheetWithOptions({
-      options: ['Cancel Payment Series', 'Block User', 'Nevermind'],
-      cancelButtonIndex: 2
-    }, (buttonIndex) => {
-      if (buttonIndex == 0) {
-        // Define strings to be displayed in alert
-        var firstName = (this.props.activeFilter == "outgoing") ? payment.recip_name.split(" ")[0] : payment.sender_name.split(" ")[0],
-            purpose = StringMaster5000.formatPurpose(payment.purpose),
-            message;
-
-        // Concatenate strings depending on payment flow direction
-        if (this.props.currentUser.uid == payment.sender_id) message = "You'll stop paying " + firstName + " " + purpose;
-        else message = firstName + " will stop paying you " + purpose;
-
-        // Request confirmation
-        Alert.confirmation({
-          title: "Are you sure you'd like to cancel this payment series?",
-          message: "Payments " + (payment.payments - payment.paymentsMade) + " thru " + (payment.payments) + " will not occur.",
-          cancelMessage: "Nevermind",
-          confirmMessage: "Yes, cancel the payment series",
-          cancel: () => console.log("Nevermind"),
-          confirm: () => this.cancelPayment(payment)
-        });
-      } else if (buttonIndex == 1) {
-        // Extend scope
-        const _this = this;
-
-        var title = "Are you sure you'd like to block " +
-          ((this.props.activeFilter == "outgoing")
-            ? payment.recip_name
-            : payment.sender_name) + "?";
-
-        // Request confirmation
-        Alert.confirmation({
-          title: title,
-          message: "You can always unblock them in the 'My Profile' page.",
-          cancelMessage: "Nevermind",
-          confirmMessage: "Yes, block this user",
-          cancel: () => console.log("Nevermind"),
-          confirm: () => Lambda.blockUser({
-            token: _this.props.currentUser.token,
-            blocked_id: (_this.props.activeFilter == "outgoing") ? payment.recip_id : payment.sender_id,
-          }),
-        });
-      }
-    });
-  }
-
-  _confirmPayment(payment) {
-    var title = "$" + payment.amount + " per month for " + payment.payments + " months - " + payment.purpose;
-    Alert.confirmation({
-      title: title,
-      message: "Would you like to confirm this payment series?",
-      cancelMessage: "Nevermind",
-      confirmMessage: "Yes",
-      cancel: () => console.log("Nevermind"),
-      confirm: () => this.confirmPayment(payment)
-    });
-  }
-
-  _rejectPayment(payment) {
-    var title = "$" + payment.amount + " per month for " + payment.payments + " months - " + payment.purpose;
-    Alert.confirmation({
-      title: title,
-      message: "Would you like to reject this payment series?",
-      cancelMessage: "Nevermind",
-      confirmMessage: "Yes",
-      cancel: () => console.log("Nevermind"),
-      confirm: () => this.rejectPayment(payment)
-    });
-  }
-
   _toggleModal(options) {
     // Don't allow user to create payments if their customer status is not verified
     if (this.props.currentUser.appFlags.customer_status !== "verified")
@@ -239,6 +152,10 @@ class Payments extends React.Component {
 
   toggleBankModal() {
     this.setState({ bankModalVisible: !this.state.bankModalVisible });
+  }
+
+  toggleDocumentUploadModal(){
+    this.setState({ documentUploadModalVisible: !this.state.documentUploadModalVisible});
   }
 
   getBankModalContent(onboardingState, customerStatus) {
@@ -271,12 +188,12 @@ class Payments extends React.Component {
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: colors.white}}>
           {/*Note the static value 165 needs to account for the position that the footer is away from the bottom of the screen*/}
           <View style={{position: "absolute", height: dimensions.height * .16, bottom: 0, left: 0, right: 0,  justifyContent: 'center', alignItems: 'center', borderColor: "black", borderWidth: 0}}>
-          {/*<Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: -((80-64)/2), left: dimensions.width/2 - (80/2), height: pulse_0, width: pulse_0, opacity: this.pulseValue_0}}/>*/}
+
           <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_0}, {scaleY: pulse_0}], opacity: this.pulseValue_0}}/>
           <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_1}, {scaleY: pulse_1}], opacity: this.pulseValue_1}}/>
           <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_2}, {scaleY: pulse_2}], opacity: this.pulseValue_2}}/>
-          {/*<Animated.Image  source={require('../../assets/images/Oval.png')} style={{ position: "absolute", top: -((130-64)/2), left: dimensions.width/2 - (130/2), height: 130, width: 130, opacity: this.pulseValue_1}}/>
-          <Animated.Image  source={require('../../assets/images/Oval.png')} style={{ position: "absolute", top: -((180-64)/2), left: dimensions.width/2 - (180/2), height: 180, width: 180, opacity: this.pulseValue_2}}/>*/}
+
+
           </View>
           <Carousel hideIndicators={true} animate={true} delay={5000}>
             <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 100, width: dimensions.width - 20}}>
@@ -455,7 +372,7 @@ class Payments extends React.Component {
             ? <NoticeBar
                 dwollaCustomerStatus={(this.props.currentUser.appFlags.customer_status !== "verified") ? this.props.currentUser.appFlags.customer_status : null}
                 onboardingState={this.props.currentUser.appFlags.onboarding_state}
-                onPress={() => this.toggleBankModal()} />
+                onPress={() => {(this.props.currentUser.appFlags.customer_status == "document" || this.props.currentUser.appFlags.customer_status == "documentFailure") ? this.toggleDocumentUploadModal() : this.toggleBankModal()}} />
             : null }
 
           { /* Payment list (or empty state) */
@@ -481,6 +398,26 @@ class Payments extends React.Component {
           <CreatePayment
             {...this.props}
             toggleModal={(options) => this._toggleModal(options)} />
+
+        </Modal>
+
+        { /* Document Upload modal*/}
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.documentUploadModalVisible}
+          onRequestClose={ () => alert("Closed modal") }>
+
+          <StatusBar barStyle="light-content" />
+
+          {/*<CreatePayment
+            {...this.props}
+            toggleModal={(options) => this._toggleModal(options)} />*/}
+          <PhotoUploader
+            toggleModal={() => this.toggleDocumentUploadModal()}
+            title={"Secure Document Upload"}
+            index={0}
+            currentUser={this.props.currentUser}/>
 
         </Modal>
 
