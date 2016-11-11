@@ -63,7 +63,7 @@ class PayCard extends React.Component {
               </View>
 
               { /* Name and payment purpose */ }
-              <View style={{justifyContent: 'center', paddingLeft: 4}}>
+              <View style={{justifyContent: 'center', paddingLeft: 6}}>
                 <Text style={{color: colors.deepBlue, fontSize: 22, fontWeight: '200'}}>
                   {name}
                 </Text>
@@ -91,7 +91,7 @@ class PayCard extends React.Component {
               </View>
 
               { /* Frequency and next payment */ }
-              <View style={{flex: 1.0, flexDirection: 'column'}}>
+              <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-end'}}>
                 <View style={{flexDirection: 'row'}}>
                   <View style={styles.freqAndNextPaymentWrap}>
                     <EvilIcons name={"calendar"} size={22} color={colors.maastrichtBlue} />
