@@ -152,7 +152,7 @@ class PhotoUploader extends React.Component {
    if(this.state.selected[0]){
      console.log("Image" + this.state.selected[0].uri);
      //this.readImage(this.state.selected[0].uri);
-     this.setState({ selectedImage: this.state.selected[0].uri, index: 2, photoUploaded: true });
+     this.setState({ selectedImage: this.state.selected[0].uri, index: 2});
    }
  }
 
