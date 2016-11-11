@@ -3,6 +3,7 @@ import React from 'react';
 import {   AppRegistry, Dimensions, Platform,  StyleSheet, Text,TouchableHighlight, View, Animated, Image, NativeModules, ListView, DeviceEventEmitter } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import colors from '../../styles/colors';
 import * as Headers from '../../helpers/Headers';
 
@@ -18,13 +19,14 @@ import { RNS3 } from 'react-native-aws3';
 import UserPic from '../Previews/UserPic/UserPic';
 import StickyView from '../../classes/StickyView';
 import ContinueButton from './subcomponents/ContinueButton';
-
 // Partial components
 import Header from '../../components/Header/Header';
 
 // Enviroment
 import * as config from '../../config';
 
+// classes
+import User from '../../classes/User';
 //Custom
 const dimensions = Dimensions.get('window');
 let PHOTOS_COUNT_BY_FETCH = 24;
@@ -66,12 +68,28 @@ const styles = StyleSheet.create({
   generalText: {
     fontSize: 24,
     color: colors.white,
-    margin: 5
+    margin: 5,
   },
   generalTextBold: {
     fontSize: 24,
     color: colors.white,
     fontWeight: "bold"
+  },
+  headerWrap: {
+    flexDirection: 'row',
+    flex: 0.15,
+    width: dimensions.width,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 20
+  },
+  wrap: {
+    flex: 1.0,
+    width: dimensions.width,
+    backgroundColor: colors.richBlack,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingTop: 65
   }
 
 });
@@ -157,7 +175,7 @@ class PhotoUploader extends React.Component {
 
     return(
       <View style={{flex: 1}}>
-          {(this.state.selectedImage ? <Image source={{uri: this.state.selectedImage}} style={{height: dimensions.height * .33, width: dimensions.width}} /> : null)}
+          {(this.state.selectedImage ? <Image source={{uri: this.state.selectedImage}} style={{height: dimensions.height * .45, width: dimensions.width}} /> : null)}
           <CameraRollPicker
            scrollRenderAheadDistance={500}
            initialListSize={1}
@@ -191,8 +209,19 @@ class PhotoUploader extends React.Component {
             style={styles.preview}
             aspect={Camera.constants.Aspect.fill}>
           </Camera>
-          <View style={styles.capture}>
+          {/*<View style={styles.capture}>
             <Ionicons onPress={this.takePicture.bind(this)} style={{}} size={48} name="ios-camera" color={"black"} />
+          </View>*/}
+          <View style={[styles.capture]}>
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              onPress={this.takePicture.bind(this)}
+              style={{width: dimensions.width}}>
+              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <Ionicons style={{}} size={48} name="ios-camera" color={"black"} />
+              </View>
+            </TouchableHighlight>
           </View>
           </View>
 
@@ -211,8 +240,10 @@ class PhotoUploader extends React.Component {
 
   _renderDocumentUploadExplanation(){
     return(
-      <View style={styles.container}>
-        <Text style={styles.generalText}> We need additional documents to verify your identity. Please upload either a picture of your <Text style={styles.generalTextBold}>photo id</Text> or <Text style={styles.generalTextBold}>passport photo</Text>.</Text>
+      <View style={styles.wrap}>
+        <FontAwesome name={"user-secret"} color={colors.accent} size={64} />
+        <Text style={styles.generalText}>We need additional documents to verify your identity!</Text>
+        <Text style={styles.generalText}>Please upload either a picture of your <Text style={styles.generalTextBold}>photo id</Text> or <Text style={styles.generalTextBold}>passport photo</Text>.</Text>
       </View>
     );
   }
@@ -267,7 +298,13 @@ class PhotoUploader extends React.Component {
   }
 
   uploadPhotoS3(uri){
-    // I need to retrieve this users email.
+    // Decrypt user email
+    /*User.decrypt((response) => {
+      console.log("Decrypted User: " + response);
+    });*/
+
+    var decryptedEmail = this.props.currentUser.decryptedEmail.replace(".", ">");
+    console.log(decryptedEmail);
 
     let file = {
       // `uri` can also be a file system path (i.e. file://)
@@ -308,16 +345,20 @@ class PhotoUploader extends React.Component {
     return(
       <View style={{flex: 1, backgroundColor: colors.richBlack}}>
       <View style={{flex: (dimensions.height < 667) ? 0.12 : 0.1}}>
+      <View style={styles.headerWrap}>
+        <Image source={require('../../assets/images/logo.png')} style={{ height: 32, width: 32}} />
+      </View>
         <Header
           //callback
           callbackClose={() => this.props.toggleModal()}
           callbackBack={() => this.setState({index: this.state.index - 1})}
           headerProps={Headers.get({ header: "photoUpload", title: this.state.title, index: this.state.index })} />
-      </View>
-      <View style={{flex: .8}}>
-        {(this.state.index == 0) ? this._renderDocumentUploadExplanation() : null}
-        {(this.state.index == 0) ? null : (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView()}
 
+      </View>
+
+      <View style={{flex: .8}}>
+        {(this.state.index == 0) && (this.state.title == "Secure Document Upload") ? this._renderDocumentUploadExplanation() : null}
+        {(this.state.index == 0) && (this.state.title == "Secure Document Upload") ? null : (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView()}
       </View>
       {this._renderFooter()}
       </View>
