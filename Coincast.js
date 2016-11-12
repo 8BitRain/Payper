@@ -7,10 +7,10 @@ import colors from './styles/colors';
 import Error from './components/Error';
 
 // Uncomment to reset user manually
-// import * as Async from './helpers/Async';
+import * as Async from './helpers/Async';
 // Async.set('user', '');
 // Async.set('BankOnboardingStateCache', '');
-// Async.set('betaStatus', 'fullAccess');
+Async.set('betaStatus', 'fullAccess');
 
 // Modules
 import SplashViewContainer from './modules/Splash/SplashViewContainer';
@@ -20,6 +20,7 @@ import MainViewContainer from './modules/Main/MainViewContainer';
 import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer';
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView';
 import Phone from './modules/UserOnboarding/pages/Phone';
+import { PayDetails } from './components/PayCard'
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
@@ -114,6 +115,11 @@ export default class Coincast extends React.Component {
               component={Phone}
               key="Phone"
               type="replace"
+              panHandlers={null} />
+
+            <Scene
+              component={PayDetails}
+              key="PaymentDetails"
               panHandlers={null} />
 
           </Scene>

@@ -19,9 +19,10 @@ export default class NoticeBar extends React.Component {
         "retry": "We failed to verify your identity.\nPress to try again",
         "document": "We need additional documents to verify your identity. Please check your email for detailed instructions.",
         "suspended": "We failed to verify your identity and have frozen your account. Please contact support at support@getpayper.io",
-        "documentRecieved": "We have recieved your photo ID" ,
+        "documentReceived": "We have recieved your photo ID" ,
         "documentProcessing": "We are sending your photo ID to our partner, Dwolla, for identify verification",
-        "documentSuccess": "We have verified your identity.\nPress to add your bank account"
+        "documentSuccess": "We have verified your identity.\nPress to add your bank account",
+        "documentFailure": "We were unable to verify your identity with the documents that were submitted. xPlease try uploading again."
       }
     };
   }
@@ -47,7 +48,7 @@ export default class NoticeBar extends React.Component {
   }
 
   handlePress() {
-    if (this.props.dwollaCustomerStatus === "document" || this.props.dwollaCustomerStatus === "suspended" || this.props.dwollaCustomerStatus === "documentRecieved" || this.props.dwollaCustomerStatus === "documentProcessing")
+    if (this.props.dwollaCustomerStatus === "suspended" || this.props.dwollaCustomerStatus === "documentReceived" || this.props.dwollaCustomerStatus === "documentProcessing")
       return;
 
     this.props.onPress();

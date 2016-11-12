@@ -136,24 +136,16 @@ export default class LandingScreenView extends React.Component {
         <StatusBar barStyle="light-content" />
 
         { /* Header */ }
-        <View
-          onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}
-          style={{ flex: 0.1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-
-          <View style={{ width: dimensions.width * 0.333, justifyContent: 'center', alignItems: 'flex-start', paddingLeft: 25 }}>
+        <View onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})} style={{flex: 0.1, width: dimensions.width, flexDirection: 'row'}}>
+          <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
             <Image source={require('../../assets/images/logo.png')} style={{ height: this.state.headerHeight * 0.6, width: (this.state.headerHeight * 0.6) * this.logoAspectRatio }} />
           </View>
-
-          <View style={{ width: dimensions.width * 0.333, justifyContent: 'center', alignItems: 'center' }}>
-            <Image source={require('../../assets/images/logo-with-text.png')} style={{ height: this.state.headerHeight * 0.45, width: (this.state.headerHeight * 0.45) * this.logoTextAspectRatio }} />
-          </View>
-
-          <View style={{ width: dimensions.width * 0.333, justifyContent: 'center', alignItems: 'flex-end', paddingRight: 20 }}>
+          <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'flex-end'}}>
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={'transparent'}
               onPress={() => this.toggleLoginModal()}>
-              <Text style={{ fontSize: 16, color: colors.white, padding: 10, fontWeight: '300', paddingBottom: 15, paddingRight: 0 }}>
+              <Text style={{fontSize: 16, color: colors.white, fontWeight: '300', padding: 20}}>
                 {"Sign in"}
               </Text>
             </TouchableHighlight>
@@ -161,10 +153,10 @@ export default class LandingScreenView extends React.Component {
         </View>
 
         { /* Payment cards */ }
-        <View style={{ flex: 0.9, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white }}>
-          <ScrollView style={{ backgroundColor: colors.lightGrey }}>
-            <PaymentCards />
-            <View style={{ height: dimensions.height * 0.2, width: dimensions.width, backgroundColor: colors.white }} />
+        <View style={{ flex: 0.9, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.mintCream }}>
+          <ScrollView>
+            <PaymentCards key={"preventsRerender"} />
+            <View style={{ height: dimensions.height * 0.2, width: dimensions.width, backgroundColor: colors.mintCream }} />
           </ScrollView>
         </View>
 

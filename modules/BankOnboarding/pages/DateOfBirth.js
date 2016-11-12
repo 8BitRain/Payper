@@ -18,6 +18,10 @@ export default class DateOfBirth extends React.Component {
     this.initalizedFromCache = false;
   }
 
+  componentDidMount() {
+    this.props.induceState(this.refs);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.dob && !this.initalizedFromCache) {
       let buffer = [nextProps.dob.year, nextProps.dob.month, nextProps.dob.date];
@@ -45,9 +49,11 @@ export default class DateOfBirth extends React.Component {
 
         <View style={styles.inputWrap}>
           <DatePicker
+            ref={"dobInput"}
             date={this.state.date}
             mode={"date"}
             format={"YYYY-MM-DD"}
+            delay={150}
             minDate={(new Date().getFullYear() - 200) + "-01-01"}
             maxDate={(new Date().getFullYear() - 10) + "-01-01"}
             confirmBtnText={"Confirm"}
