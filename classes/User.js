@@ -29,7 +29,8 @@ export default class User {
       first_name: this.first_name,
       last_name: this.last_name,
       profile_pic: this.profile_pic,
-      uid: this.uid
+      uid: this.uid,
+      username: this.username
     };
 
     return attributes;
@@ -121,17 +122,39 @@ export default class User {
     firebase.auth().signInWithEmailAndPassword(params.email, params.password)
     .then(() => {
       if (firebase.auth().currentUser) {
-        var firebaseUser = firebase.auth().currentUser.toJSON();
-        this.getUserWithToken({ token: firebaseUser.stsTokenManager.accessToken },
-        (res) => {
-          if (res.errorMessage) {
-            console.log("getUserWithToken failed...", "Lambda error:", res.errorMessage);
-            onLoginFailure("lambda");
-          } else {
-            this.initialize(res);
-            console.log("getUserWithToken succeeded...", "Lambda response:", res);
-            onLoginSuccess();
-          }
+        let user = firebase.auth().currentUser.toJSON();
+        let firebaseToken = user.stsTokenManager.accessToken;
+
+        this.getLoginToken(firebaseToken, (loginToken) => {
+          console.log("ogFirebaseToken:", firebaseToken)
+          console.log("loginToken:", loginToken)
+
+          // Login with loginToken
+          this.loginWithLoginToken(loginToken, (newFirebaseToken) => {
+            this.getUserWithToken({ token: newFirebaseToken },
+            (res) => {
+              if (res.errorMessage) {
+                console.log("getUserWithToken failed...", "Lambda error:", res.errorMessage);
+                onLoginFailure("lambda");
+              } else {
+                console.log("getUserWithToken succeeded...", "Lambda response:", res);
+                // Tack on appFlags
+                firebase.database().ref('appFlags').child(res.uid).once('value', (snapshot) => {
+                  let appFlags = snapshot.val();
+                  res.appFlags = (appFlags) ? appFlags : {};
+                  res.loginToken = loginToken;
+                  this.initialize(res);
+                  onLoginSuccess(res);
+                })
+                .catch((err) => {
+                  console.log("Error getting appFlags:", err);
+                  this.initialize(res);
+                  onLoginSuccess(res);
+                })
+                .done();
+              }
+            });
+          });
         });
       }
     })
@@ -140,10 +163,6 @@ export default class User {
       onLoginFailure(err.code);
     });
   }
-
-
-
-
 
   /**
     1. login with facebook

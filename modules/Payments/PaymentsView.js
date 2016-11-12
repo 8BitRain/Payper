@@ -1,5 +1,6 @@
 // Dependencies
 import React from 'react';
+import moment from 'moment';
 import { View, Text, TouchableHighlight, ListView, DataSource, RecyclerViewBackedScrollView, Dimensions, ActionSheetIOS, Modal, StatusBar, Image, Easing, Animated } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import * as Animatable from 'react-native-animatable';
@@ -18,6 +19,8 @@ import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingView';
 import MicrodepositOnboarding from '../../components/MicrodepositOnboarding/MicrodepositOnboarding';
 import NoticeBar from '../../components/NoticeBar/NoticeBar';
 import Carousel from 'react-native-carousel';
+import { PayCard } from '../../components/PayCard'
+import PhotoUploader from '../../components/PhotoUploader/PhotoUploader'
 
 // Payment card components
 import Active from '../../components/PaymentCards/Active';
@@ -41,7 +44,7 @@ class Payments extends React.Component {
     this.state = {
       modalVisible: false,
       bankModalVisible: false,
-      clock: new Date().getTime()
+      documentUploadModalVisible: false
     }
 
     this.pulseValue_0 = new Animated.Value(1);
@@ -49,20 +52,10 @@ class Payments extends React.Component {
     this.pulseValue_2 = new Animated.Value(1);
   }
 
-  componentWillMount() {
-    this.clockInterval = setInterval(() => {
-      this.setState({ clock: new Date().getTime() });
-    }, 5000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.clockInterval);
-  }
-
   componentDidMount() {
-    // this.pulse_0();
-    // this.pulse_1();
-    // this.pulse_2();
+    this.pulse_0();
+    this.pulse_1();
+    this.pulse_2();
   }
 
   pulse_0() {
@@ -149,122 +142,6 @@ class Payments extends React.Component {
   ]).start()
 }
 
-  cancelPayment(payment) {
-    let params = {
-      token: this.props.currentUser.token,
-      payment_id: payment.pid,
-      type: payment.type,
-      status: payment.status
-    };
-
-    console.log("Cancelling payment with params", params);
-
-    // TODO: Optimistically delete payment card
-    Lambda.cancelPayment(params);
-  }
-
-  confirmPayment(payment) {
-    let params = {
-      token: this.props.currentUser.token,
-      payment_id: payment.pid,
-      type: payment.type,
-      status: payment.status
-    };
-
-    console.log("Confirming payment with params", params);
-
-    // TODO: Optimistically mark payment card as confirmed
-    Lambda.confirmPayment(params);
-
-  }
-
-  rejectPayment(payment) {
-    let params = {
-      token: this.props.currentUser.token,
-      payment_id: payment.pid,
-      type: payment.type,
-      status: payment.status
-    };
-
-    console.log("Rejecting payment with params", params);
-
-    // TODO: Optimistically delete payment card
-    Lambda.rejectPayment(params);
-  }
-
-  _showMenu(payment) {
-    ActionSheetIOS.showActionSheetWithOptions({
-      options: ['Cancel Payment Series', 'Block User', 'Nevermind'],
-      cancelButtonIndex: 2
-    }, (buttonIndex) => {
-      if (buttonIndex == 0) {
-        // Define strings to be displayed in alert
-        var firstName = (this.props.activeFilter == "outgoing") ? payment.recip_name.split(" ")[0] : payment.sender_name.split(" ")[0],
-            purpose = StringMaster5000.formatPurpose(payment.purpose),
-            message;
-
-        // Concatenate strings depending on payment flow direction
-        if (this.props.currentUser.uid == payment.sender_id) message = "You'll stop paying " + firstName + " " + purpose;
-        else message = firstName + " will stop paying you " + purpose;
-
-        // Request confirmation
-        Alert.confirmation({
-          title: "Are you sure you'd like to cancel this payment series?",
-          message: "Payments " + (payment.payments - payment.paymentsMade) + " thru " + (payment.payments) + " will not occur.",
-          cancelMessage: "Nevermind",
-          confirmMessage: "Yes, cancel the payment series",
-          cancel: () => console.log("Nevermind"),
-          confirm: () => this.cancelPayment(payment)
-        });
-      } else if (buttonIndex == 1) {
-        // Extend scope
-        const _this = this;
-
-        var title = "Are you sure you'd like to block " +
-          ((this.props.activeFilter == "outgoing")
-            ? payment.recip_name
-            : payment.sender_name) + "?";
-
-        // Request confirmation
-        Alert.confirmation({
-          title: title,
-          message: "You can always unblock them in the 'My Profile' page.",
-          cancelMessage: "Nevermind",
-          confirmMessage: "Yes, block this user",
-          cancel: () => console.log("Nevermind"),
-          confirm: () => Lambda.blockUser({
-            token: _this.props.currentUser.token,
-            blocked_id: (_this.props.activeFilter == "outgoing") ? payment.recip_id : payment.sender_id,
-          }),
-        });
-      }
-    });
-  }
-
-  _confirmPayment(payment) {
-    var title = "$" + payment.amount + " per month for " + payment.payments + " months - " + payment.purpose;
-    Alert.confirmation({
-      title: title,
-      message: "Would you like to confirm this payment series?",
-      cancelMessage: "Nevermind",
-      confirmMessage: "Yes",
-      cancel: () => console.log("Nevermind"),
-      confirm: () => this.confirmPayment(payment)
-    });
-  }
-
-  _rejectPayment(payment) {
-    var title = "$" + payment.amount + " per month for " + payment.payments + " months - " + payment.purpose;
-    Alert.confirmation({
-      title: title,
-      message: "Would you like to reject this payment series?",
-      cancelMessage: "Nevermind",
-      confirmMessage: "Yes",
-      cancel: () => console.log("Nevermind"),
-      confirm: () => this.rejectPayment(payment)
-    });
-  }
-
   _toggleModal(options) {
     // Don't allow user to create payments if their customer status is not verified
     if (this.props.currentUser.appFlags.customer_status !== "verified")
@@ -275,6 +152,10 @@ class Payments extends React.Component {
 
   toggleBankModal() {
     this.setState({ bankModalVisible: !this.state.bankModalVisible });
+  }
+
+  toggleDocumentUploadModal(){
+    this.setState({ documentUploadModalVisible: !this.state.documentUploadModalVisible});
   }
 
   getBankModalContent(onboardingState, customerStatus) {
@@ -307,12 +188,12 @@ class Payments extends React.Component {
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: colors.white}}>
           {/*Note the static value 165 needs to account for the position that the footer is away from the bottom of the screen*/}
           <View style={{position: "absolute", height: dimensions.height * .16, bottom: 0, left: 0, right: 0,  justifyContent: 'center', alignItems: 'center', borderColor: "black", borderWidth: 0}}>
-          {/*<Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: -((80-64)/2), left: dimensions.width/2 - (80/2), height: pulse_0, width: pulse_0, opacity: this.pulseValue_0}}/>*/}
+
           <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_0}, {scaleY: pulse_0}], opacity: this.pulseValue_0}}/>
           <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_1}, {scaleY: pulse_1}], opacity: this.pulseValue_1}}/>
           <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_2}, {scaleY: pulse_2}], opacity: this.pulseValue_2}}/>
-          {/*<Animated.Image  source={require('../../assets/images/Oval.png')} style={{ position: "absolute", top: -((130-64)/2), left: dimensions.width/2 - (130/2), height: 130, width: 130, opacity: this.pulseValue_1}}/>
-          <Animated.Image  source={require('../../assets/images/Oval.png')} style={{ position: "absolute", top: -((180-64)/2), left: dimensions.width/2 - (180/2), height: 180, width: 180, opacity: this.pulseValue_2}}/>*/}
+
+
           </View>
           <Carousel hideIndicators={true} animate={true} delay={5000}>
             <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 100, width: dimensions.width - 20}}>
@@ -344,7 +225,7 @@ class Payments extends React.Component {
     );
   }
 
-  _renderPaymentList(clock) {
+  _renderPaymentList() {
     // Determine which data source to use for the payment list view
     var ds = (this.props.activeFilter == "incoming") ? this.props.incomingPayments : this.props.outgoingPayments;
 
@@ -377,93 +258,107 @@ class Payments extends React.Component {
     if (payment.nextPayment === 'complete')
       Lambda.archivePayment({ payment_id: payment.pid, token: this.props.currentUser.token });
 
-    var paymentInfo = {
-      amount: payment.amount,
-      purpose: payment.purpose,
+    let user = {
+      name: (payment.flow == "incoming") ? payment.sender_name : payment.recip_name,
+      username: (payment.flow == "incoming") ? payment.sender_username : payment.recip_username,
+      pic: (payment.flow == "incoming") ? payment.sender_pic : payment.recip_pic
+    }
+
+    let frequency = payment.frequency.charAt(0).toUpperCase() + payment.frequency.slice(1).toLowerCase()
+    let formattedTimestamp = moment(payment.nextPayment).format("MMM D")
+    let next = (formattedTimestamp !== "Invalid date") ? formattedTimestamp : "TBD"
+
+    generateTimeline({
+      frequency: payment.frequency,
       payments: payment.payments,
       paymentsMade: payment.paymentsMade,
-      nextPayment: payment.nextPayment,
-      frequency: payment.frequency
-    };
+      nextPayment: payment.nextPayment
+    })
 
-    var user = {
-      name: (payment.flow == "incoming") ? payment.sender_name : payment.recip_name,
-      pic: (payment.flow == "incoming") ? payment.sender_pic : payment.recip_pic
-    };
+    let details = {
+      pic: user.pic,
+      name: user.name,
+      username: user.username,
+      purpose: payment.purpose,
+      amount: payment.amount,
+      frequency: frequency,
+      nextTimestamp: payment.nextPayment,
+      next: next,
+      incoming: payment.flow === "incoming",
+      status: payment.status,
+      payments: payment.payments,
+      paymentsMade: payment.paymentsMade,
+      pid: payment.pid,
+      token: this.props.currentUser.token,
+      paymentType: payment.type,
+      timeline: [
+        {
+          timestamp: "Jan 9th at 1:04pm",
+          amount: 5,
+          bankAccount: "UWCU Checking",
+          transferStatus: "uninitiated",
+          id: "1"
+        }
+      ]
+    }
 
-    switch(payment.status) {
-      case "active":
-        return(
-          <Active
-            user={user}
-            payment={paymentInfo}
-            showMenu={() => this._showMenu(payment)}
-            clock={this.state.clock} />
-        );
-      break;
-      case "pendingInvite":
-        return(
-          <PendingInvite
-            user={user}
-            payment={paymentInfo}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      case "pendingConfirmation":
-        return(
-          <PendingConfirmation
-            user={user}
-            payment={paymentInfo}
-            showButtons={payment.flow == "outgoing"}
-            confirmPayment={() => this._confirmPayment(payment)}
-            rejectPayment={() => this._rejectPayment(payment)}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      case "pendingSenderFundingSource":
-        var message = (payment.sender_id == this.props.currentUser.uid)
-          ? "You must add a bank account."
-          : payment.sender_name.split(" ")[0] + " must add a bank account.";
-        return(
-          <PendingFundingSource
-            user={user}
-            payment={paymentInfo}
-            message={message}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      case "pendingRecipFundingSource":
-        var message = (payment.recip_id == this.props.currentUser.uid)
-          ? "You must add a bank account."
-          : payment.recip_name.split(" ")[0] + " must add a bank account.";
-        return(
-          <PendingFundingSource
-            user={user}
-            payment={paymentInfo}
-            message={message}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      case "pendingBothFundingSources":
-        var message = (payment.flow == "incoming")
-          ? "Neither you nor " + payment.sender_name.split(" ")[0] + " have added a bank account."
-          : "Neither you nor " + payment.recip_name.split(" ")[0] + " have added a bank account.";
-        return(
-          <PendingFundingSource
-            user={user}
-            payment={paymentInfo}
-            message={message}
-            showMenu={() => this._showMenu(payment)} />
-        );
-      break;
-      default:
-        return(
-          <View style={{ justifyContent: 'center', alignItems: 'center', height: 70, backgroundColor: colors.alertRed }}>
-            <Text style={{ fontSize: 16, fontFamily: 'Roboto', color: colors.white }}>
-              Failed to render payment :(
-            </Text>
-          </View>
-        );
+    return <PayCard {...details} />
+
+    function generateTimeline(params) {
+      // let { frequency, payments, paymentsMade, nextPayment } = params
+      // console.log("generateTimeline was invoked with params", params)
+
+      // if (!nextPayment || nextPayment === "" || typeof nextPayment === 'undefined')
+      //   nextPayment =
+      //
+
+      let timeline = []
+
+      let nextPayment = moment().add(3, "w")
+      let frequency = "WEEKLY"
+      let payments = 4
+      let paymentsMade = 3
+      let amount = 10
+
+      console.log("--------------------------------")
+      console.log("nextPayment", nextPayment)
+      console.log("frequency", frequency)
+      console.log("payments", payments)
+      console.log("paymentsMade", paymentsMade)
+
+      // {
+      //   timestamp: "Sep 9th at 1:04pm",
+      //   amount: 5,
+      //   bankAccount: "UWCU Checking",
+      //   transferStatus: "arrived",
+      //   id: "5"
+      // }
+
+      // Determine when the first payment occured
+      let by = (frequency === "MONTHLY") ? "M" : "w"
+      let firstPayment = moment(nextPayment).subtract(paymentsMade, by)
+      console.log("firstPayment", firstPayment)
+
+      timeline.push({
+        timestamp: firstPayment.add(1, by).format("MMM d"),
+        amount: amount,
+        bankAccount: "Unknown"
+      })
+
+      // for (var i = 1; i <= payments; i++) {
+      //   console.log("i:", i)
+      //   console.log("by:", by)
+      //   timeline.push({
+      //     timestamp: firstPayment.add(i, by).format("MMM d"),
+      //     amount: amount,
+      //     bankAccount: "Unknown",
+      //     transferStatus: (i <= paymentsMade) ? "arrived" : "uninitiated",
+      //     id: i
+      //   })
+      // }
+
+      console.log("Timeline:", timeline)
+      console.log("--------------------------------")
     }
   }
 
@@ -477,7 +372,7 @@ class Payments extends React.Component {
             ? <NoticeBar
                 dwollaCustomerStatus={(this.props.currentUser.appFlags.customer_status !== "verified") ? this.props.currentUser.appFlags.customer_status : null}
                 onboardingState={this.props.currentUser.appFlags.onboarding_state}
-                onPress={() => this.toggleBankModal()} />
+                onPress={() => {(this.props.currentUser.appFlags.customer_status == "document" || this.props.currentUser.appFlags.customer_status == "documentFailure") ? this.toggleDocumentUploadModal() : this.toggleBankModal()}} />
             : null }
 
           { /* Payment list (or empty state) */
@@ -503,6 +398,26 @@ class Payments extends React.Component {
           <CreatePayment
             {...this.props}
             toggleModal={(options) => this._toggleModal(options)} />
+
+        </Modal>
+
+        { /* Document Upload modal*/}
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.documentUploadModalVisible}
+          onRequestClose={ () => alert("Closed modal") }>
+
+          <StatusBar barStyle="light-content" />
+
+          {/*<CreatePayment
+            {...this.props}
+            toggleModal={(options) => this._toggleModal(options)} />*/}
+          <PhotoUploader
+            toggleModal={() => this.toggleDocumentUploadModal()}
+            title={"Secure Document Upload"}
+            index={0}
+            currentUser={this.props.currentUser}/>
 
         </Modal>
 
