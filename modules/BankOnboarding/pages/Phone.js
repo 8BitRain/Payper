@@ -32,6 +32,10 @@ export default class Phone extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.props.induceState(this.refs);
+  }
+
   handleSubmit() {
     if (this.state.submitText !== "Continue") return;
     this.props.induceState({ phone: this.state.phone });
@@ -89,6 +93,7 @@ export default class Phone extends React.Component {
 
           <View style={styles.inputWrap}>
             <TextInput
+              ref={"emailInput"}
               style={styles.input}
               defaultValue={this.state.phone}
               placeholder={"e.g. 2623058038"}

@@ -163,9 +163,18 @@ export default class BankOnboardingView extends React.Component {
       ? ['comfort', 'name', 'zip', 'street', 'dob', 'ssn']
       : ['comfort', 'name', 'zip', 'city', 'street', 'dob', 'ssn'];
 
+    if (this.props.onboardEmail) pages.unshift('email');
+    if (this.props.onboardPhone) pages.unshift('phone');
+
     let currPage = pages[this.state.pageIndex];
 
     switch (currPage) {
+      case "phone":
+        this.state.phoneInput.focus();
+      break;
+      case "email":
+        this.state.emailInput.focus();
+      break;
       case "name":
         this.state.firstNameInput.focus();
       break;

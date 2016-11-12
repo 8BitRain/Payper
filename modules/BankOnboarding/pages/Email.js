@@ -24,6 +24,10 @@ export default class Email extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.props.induceState(this.refs);
+  }
+
   handleSubmit() {
     if (this.state.submitText !== "Continue") return;
     this.props.induceState({ email: this.state.email });
@@ -50,6 +54,7 @@ export default class Email extends React.Component {
 
         <View style={styles.inputWrap}>
           <TextInput
+            ref={"emailInput"}
             style={styles.input}
             defaultValue={this.state.email}
             placeholder={"e.g. johndoe@example.com"}
