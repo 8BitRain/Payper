@@ -32,7 +32,7 @@
     "react-native-contacts": "*",
     "react-native-datepicker": "*",
     "react-native-dismiss-keyboard": "*",
-    "react-native-drawer": "*",
+    "react-native-drawer": "^2.3.0",
     "react-native-fabric": "*",
     "react-native-facebook-login": "*",
     "react-native-fbsdk": "*",
