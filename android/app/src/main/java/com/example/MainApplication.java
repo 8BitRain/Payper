@@ -2,6 +2,7 @@ package com.example;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -40,6 +41,7 @@ public class MainApplication extends Application implements ReactApplication {
             return Arrays.<ReactPackage>asList(
                     new RNMixpanel(),
                     new MainReactPackage(),
+            new RNDeviceInfo(),
                     new FabricPackage(),
                     new CodePush("PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3", MainApplication.this, com.example.BuildConfig.DEBUG),
                     new ReactNativeContacts()

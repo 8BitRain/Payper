@@ -52,11 +52,11 @@
    * on the same Wi-Fi network.
    */
 
-//  #ifdef DEBUG
+  #ifdef DEBUG
     jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
-//    #else
-//    jsCodeLocation = [CodePush bundleURL];
-//  #endif
+    #else
+    jsCodeLocation = [CodePush bundleURL];
+    #endif
 
 
   
@@ -67,7 +67,6 @@
    * running the project on an actual device or running the project on the
    * simulator in the "Release"  build configuration.
    */
-
 //  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 
 
