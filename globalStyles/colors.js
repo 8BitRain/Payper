@@ -5,6 +5,7 @@ const colors = {
   maastrichtBlue: "#011936",
   dodgerBlue: "#1098F7",
   deepBlue: "#001021",
+  deeperBlue: "#000a14",
   slateGrey: "#acbdba",
   alertRed: "#FB3640",
   alertYellow: "#f7ca2a",

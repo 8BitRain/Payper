@@ -143,9 +143,9 @@ class NewMainView extends React.Component {
               activeOpacity={0.8}
               underlayColor={colors.deepBlue}
               onPress={() => this.drawer.open()}>
-              <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20, paddingLeft: 6}}>
+              <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 20, paddingLeft: 6, paddingBottom: 15}}>
                 <EvilIcons name={"chevron-left"} size={30} color={colors.gainsboro} style={{marginRight: -5}} />
-                <EvilIcons name={"user"} size={30} color={colors.dodgerBlue} />
+                <EvilIcons name={"user"} size={36} color={colors.dodgerBlue} />
               </View>
             </TouchableHighlight>
           </View>
