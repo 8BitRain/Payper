@@ -178,6 +178,9 @@ export default class BankOnboardingView extends React.Component {
       case "name":
         this.state.firstNameInput.focus();
       break;
+      case "dob":
+        this.state.dateInput.focus();
+      break;
       case "zip":
         this.state.zipInput.focus();
       break;
