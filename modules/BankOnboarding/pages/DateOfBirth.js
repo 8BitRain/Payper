@@ -121,7 +121,7 @@ export default class DateOfBirth extends React.Component {
         <View style={styles.textInputWrap}>
           <TextInput ref="dateInput" defaultValue={this.values[0]} onFocus={() => this.setState({ index: 0, index0Focused: true, validationError: false })} maxLength={2} keyboardType={'number-pad'} placeholder={(this.state.index0Focused) ? null : "Month"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e) } />
           <Text style={styles.dateDash}>-</Text>
-          <TextInput ref="1" defaultValue={this.values[1]} onFocus={() => this.setState({ index: 1, index1Focused: true, validationError: false })} maxLength={2} keyboardType={'number-pad'} placeholder={(this.state.index1Focused) ? null : "Date"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="1" defaultValue={this.values[1]} onFocus={() => this.setState({ index: 1, index1Focused: true, validationError: false })} maxLength={2} keyboardType={'number-pad'} placeholder={(this.state.index1Focused) ? null : "Day"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
           <Text style={styles.dateDash}>-</Text>
           <TextInput ref="2" defaultValue={this.values[2]} onFocus={() => this.setState({ index: 2, index2Focused: true, validationError: false })} maxLength={4} keyboardType={'number-pad'} placeholder={(this.state.index2Focused) ? null : "Year"} placeholderTextColor={colors.lightGrey} style={styles.textInput}  onChangeText={(e) => this.handleChangeText(e)} />
         </View>
