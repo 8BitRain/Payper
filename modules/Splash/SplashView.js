@@ -90,15 +90,16 @@ class SplashView extends React.Component {
             this._handleSignInFailure();
           } else {
             user = JSON.parse(user);
-            console.log("User in asyncstorage is:\n", user);
-            let onboardingState = (user.appFlags) ? user.appFlags.onboarding_state : null;
-            if (onboardingState === "customer" || !user.loginToken) {
-              _this._handleSignInFailure();
-            } else {
-              this.props.currentUser.loginWithCachedToken({ loginToken: user.loginToken },
-                () => _this._handleSignInSuccess(),
-                () => _this._handleSignInFailure());
-            }
+            this.props.currentUser.initialize(user);
+            // _this._handleSignInSuccess();
+            // let onboardingState = (user.appFlags) ? user.appFlags.onboarding_state : null;
+            // if (onboardingState === "customer" || !user.loginToken) {
+            //   _this._handleSignInFailure();
+            // } else {
+            //   this.props.currentUser.loginWithCachedToken({ loginToken: user.loginToken, firebaseToken: user.token },
+            //     () => _this._handleSignInSuccess(),
+            //     () => _this._handleSignInFailure());
+            // }
           }
         });
       } else {

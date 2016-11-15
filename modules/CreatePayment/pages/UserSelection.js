@@ -26,12 +26,21 @@ class UserSelection extends React.Component {
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2
     });
 
-    this.allContactsArray = this.props.currentUser.allContactsArray.concat(this.props.currentUser.nativeContacts);
-    this.allContactsMap = SetMaster5000.arrayToMap(this.allContactsArray);
-    this.filteredContactsArray = [];
-    this.filteredContactsMap= {};
-    this.keyboardOffset = new Animated.Value(0);
-    this.colorInterpolator = new Animated.Value(0);
+    let { payperContacts, nativeContacts, globalUserList } = this.props.currentUser
+
+    // TODO: Filter contacts so they only appear in one list
+    // console.log("payperContacts", payperContacts)
+    // console.log("globalUserList", globalUserList)
+    // for (var i = 0; i < globalUserList.length; i++) {
+    //   let curr = globalUserList[i]
+    //   console.log("curr", curr)
+    // }
+
+    this.allContacts = payperContacts.concat(nativeContacts, globalUserList)
+    this.allContactsMap = SetMaster5000.arrayToMap(this.allContacts)
+
+    this.keyboardOffset = new Animated.Value(0)
+    this.colorInterpolator = new Animated.Value(0)
 
     this.state = {
       query: "",
@@ -140,14 +149,10 @@ class UserSelection extends React.Component {
   }
 
   _filterContacts(query) {
-    // Update this.state.query
-    this.setState({ query: query });
-
-    // Update contacts rendered by ListView
-    var filtered = SetMaster5000.filterContacts(this.allContactsArray, query);
-    this.filteredContactsArray = filtered;
-    this.filteredContactsMap = SetMaster5000.arrayToMap(filtered);
-    if (filtered.length > 0) this.setState({ dataSource: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(this.filteredContactsMap) });
+    this.setState({ query: query })
+    let filtered = SetMaster5000.filterContacts(this.allContacts, query)
+    this.filteredContactsMap = SetMaster5000.arrayToMap(filtered)
+    if (filtered.length > 0) this.setState({ dataSource: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(this.filteredContactsMap) })
   }
 
   _renderSectionHeader(sectionData, sectionTitle) {

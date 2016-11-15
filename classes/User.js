@@ -16,9 +16,9 @@ let baseURL = config.details[config.details.env].lambdaBaseURL;
 export default class User {
   constructor(attributes) {
     if (attributes) for (var i in attributes) this[i] = attributes[i];
-    this.appFlags = {};
-    this.allContactsArray = [];
-    this.nativeContacts = [];
+    this.appFlags = {}
+    this.payperContacts = []
+    this.nativeContacts = []
   }
 
   /**
@@ -54,14 +54,8 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   initialize(user) {
-    this.update(user);
-
-    // Tack on decryptedPhone and decryptedEmail
-    this.decrypt((res) => {
-      if (res) this.update(res);
-    });
-
-    // Refresh Firebase token every 20 minutes
+    this.update(user)
+    this.decrypt((res) => (res) ? this.update(res) : null)
     this.tokenRefreshInterval = setInterval(() => {
       this.refresh();
     }, ((60 * 1000) * 20));
@@ -165,127 +159,6 @@ export default class User {
   }
 
   /**
-    1. login with facebook
-    2. get firebaseToken in response
-    3. exchange firebaseToken for signInToken
-    4. sign in with signInToken
-    5. get new firebaseToken in response
-    6. use this firebaseToken for all operations other than sign-in
-  **/
-
-  getLoginToken(firebaseToken, cb) {
-    let env = config.details.env;
-    let body = { token: firebaseToken, env: env };
-
-    fetch("https://www.getpayper.io/getToken", {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body)
-    })
-    .then((response) => response.json())
-    .then((responseData) => {
-      console.log("Got loginToken " + responseData.substring(responseData.length - 5, responseData.length));
-      cb(responseData);
-    })
-    .done();
-  }
-
-  loginWithLoginToken(loginToken, cb) {
-    firebase.auth().signInWithCustomToken(loginToken)
-    .then((responseData) => {
-      let res = responseData.toJSON();
-      let newFirebaseToken = res.stsTokenManager.accessToken;
-      cb(newFirebaseToken);
-    })
-    .catch(function(err) {
-      var errCode = err.code;
-      var errMessage = err.message;
-      console.log("errCode", errCode);
-      console.log("errMessage", errMessage);
-    });
-  }
-
-  /**
-    *   Log in to Firebase panel via Facebook token
-    *   params: facebookToken (string)
-    *   -----------------------------------------------------------------------
-  **/
-  loginWithFacebook(params, onLoginSuccess, onLoginFailure) {
-    console.log("loginWithFacebook was invoked...");
-
-    var credential = firebase.auth.FacebookAuthProvider.credential(params.facebookToken);
-    firebase.auth().signInWithCredential(credential).then((userData) => {
-      let firebaseUser = userData.toJSON();
-      let firebaseToken = firebaseUser.stsTokenManager.accessToken;
-
-      this.getLoginToken(firebaseToken, (loginToken) => {
-        console.log("ogFirebaseToken:", firebaseToken)
-        console.log("loginToken:", loginToken)
-
-        // Login with loginToken
-        this.loginWithLoginToken(loginToken, (newFirebaseToken) => {
-          console.log("newFirebaseToken:", newFirebaseToken);
-
-          params.user.token = newFirebaseToken;
-          this.getOrCreateFacebookUser(params.user,
-          (res) => {
-            if (res.errorMessage) {
-              console.log("getUserWithToken failed...", "Lambda error:", res.errorMessage);
-              onLoginFailure("lambda");
-            } else {
-              console.log("getUserWithToken succeeded...", "Lambda response:", res.user);
-              // Tack on appFlags
-              firebase.database().ref('appFlags').child(res.user.uid).once('value', (snapshot) => {
-                let appFlags = snapshot.val();
-                res.user.appFlags = (appFlags) ? appFlags : {};
-                res.user.loginToken = loginToken;
-                this.initialize(res.user);
-                onLoginSuccess(res.user);
-              })
-              .catch((err) => {
-                console.log("Error getting appFlags:", err);
-                this.initialize(res.user);
-                onLoginSuccess(res.user);
-              })
-              .done();
-            }
-          });
-        });
-      });
-    })
-    .catch((err) => {
-      console.log("loginWithFacebook failed...", "Code: " + err.code, "Message: " + err.message);
-      onLoginFailure(err.code);
-    });
-  }
-
-  /**
-    *   Log in to Firebase auth via session token
-    *   params: token (string)
-    *   -----------------------------------------------------------------------
-  **/
-  loginWithCachedToken(params, onLoginSuccess, onLoginFailure) {
-    let { loginToken } = params;
-
-    this.loginWithLoginToken(loginToken, (newFirebaseToken) => {
-      this.getUserWithToken({token: newFirebaseToken}, (res) => {
-        if (res.errorMessage) {
-          console.log("getUserWithToken failed...", "Lambda error:", res.errorMessage);
-          onLoginFailure("lambda");
-        } else {
-          res.loginToken = loginToken;
-          this.initialize(res);
-          console.log("getUserWithToken succeeded...", "Lambda response:", res);
-          onLoginSuccess();
-        }
-      });
-    });
-  }
-
-  /**
     *   Log out of Firebase auth
     *   -----------------------------------------------------------------------
   **/
@@ -296,99 +169,6 @@ export default class User {
     this.stopListening();
     this.destroy();
     Actions.LandingScreenViewContainer();
-  }
-
-  /**
-    *   Fetch user object from Lambda
-    *   params: token
-    *   -----------------------------------------------------------------------
-  **/
-  getUserWithToken(params, callback) {
-    try {
-      fetch(baseURL + "auth/get", {method: "POST", body: JSON.stringify(params)})
-      .then((response) => response.json())
-      .then((responseData) => {
-
-        // Tack on user's appFlags
-        let ref = firebase.database().ref('appFlags');
-        ref.once('value')
-        .then((snapshot) => {
-          let appFlags = snapshot.child(responseData.uid).val();
-          responseData.appFlags = appFlags;
-          callback(responseData);
-        })
-        .catch((err) => {
-          console.log("Firebase error getting appFlags:", err);
-          callback(responseData);
-        });
-
-      })
-      .done();
-    } catch (err) {
-      console.log("getUserWithToken failed...", "Lambda error:", err);
-      callback(null);
-    }
-  }
-
-  /**
-    *   Create a Facebook user or, if one already exists, retrieve its user
-    *   object from Lambda
-    *   params: a JSON containing user data and access token (if any)
-    *   -----------------------------------------------------------------------
-  **/
-  getOrCreateFacebookUser(params, callback) {
-    try {
-      fetch(baseURL + "user/facebookCreate", {method: "POST", body: JSON.stringify(params)})
-      .then((response) => response.json())
-      .then((responseData) => callback(responseData))
-      .done();
-    } catch (err) {
-      console.log("getOrCreateFacebookUser failed...", "Lambda error:", err);
-      callback(null);
-    }
-  }
-
-  /**
-    *   Create a user with email and password
-    *   params: email, password, phone, firstName, lastName
-    *   -----------------------------------------------------------------------
-  **/
-  createUserWithEmailAndPassword(params, onSuccess, onFailure) {
-    console.log("createUserWithEmailAndPassword was invoked with params:", params);
-    firebase.auth().createUserWithEmailAndPassword(params.email, params.password).then(() => {
-      firebase.auth().currentUser.getToken(true).then((token) => {
-        params.token = token;
-        params.password = null;
-        var stringifiedParams = JSON.stringify(params);
-        try {
-          fetch(baseURL + "user/create", {method: "POST", body: stringifiedParams})
-          .then((response) => response.json())
-          .then((responseData) => {
-            if (!responseData.errorMessage) {
-              responseData.user.token = token;
-              this.initialize(responseData.user);
-              this.decryptedPhone = params.phone;
-              this.decryptedEmail = params.email;
-              console.log("createUserWithEmailAndPassword succeeded...", "Lambda response:", responseData);
-              onSuccess();
-            } else {
-              onFailure("lambda");
-            }
-          })
-          .done();
-        } catch (err) {
-          console.log("createUserWithEmailAndPassword failed...", "Fetch error:", err);
-          onFailure();
-        }
-      }).catch((err) => {
-        console.log("firebase.auth().currentUser.getToken(true) failed...", "Firebase error:", err);
-        onFailure(err.code);
-      });
-    })
-    .catch((err) => {
-      console.log("firebase.auth().createUserWithEmailAndPassword failed...", "Firebase error:", err);
-      onFailure(err.code);
-    });
   }
 
   /**
@@ -590,9 +370,12 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return;
-          var globalUserListArray = SetMaster5000.globalUserListToArray({ sectionTitle: "Other Payper Users", users: res, uid: this.uid });
-          globalUserListArray.concat(this.nativeContacts);
-          updateViaRedux({ allContactsArray: globalUserListArray });
+          let globalUserList = SetMaster5000.globalUserListToArray({
+            sectionTitle: "Other Payper Users",
+            users: res,
+            uid: this.uid
+          });
+          updateViaRedux({ globalUserList: globalUserList })
         }
       },
       {
@@ -655,6 +438,18 @@ export default class User {
         callback: (res) => {
           if (!res) return;
           updateViaRedux({ blockedUsers: res });
+        }
+      },
+      {
+        endpoint: 'contactList/' + this.uid,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => {
+          console.log("contactList listener res", res)
+          console.log("this.uid", this.uid)
+          if (!res) return;
+          let parsed = SetMaster5000.contactListToArray({ contacts: res })
+          updateViaRedux({ payperContacts: parsed })
         }
       }
     ];

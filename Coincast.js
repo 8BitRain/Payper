@@ -1,5 +1,6 @@
 // Dependencies
 import React from 'react';
+import firebase from 'firebase'
 import { AppState } from 'react-native';
 import { Scene, Reducer, Router, Modal } from 'react-native-router-flux';
 import Mixpanel from 'react-native-mixpanel';
@@ -8,8 +9,8 @@ import Error from './components/Error';
 
 // Uncomment to reset user manually
 import * as Async from './helpers/Async';
-// Async.set('user', '');
-// Async.set('BankOnboardingStateCache', '');
+Async.set('user', '');
+Async.set('BankOnboardingStateCache', '');
 Async.set('betaStatus', 'fullAccess');
 
 // Modules

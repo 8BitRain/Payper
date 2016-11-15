@@ -85,6 +85,8 @@ export function formatNativeContacts(contacts, phoneNumbers) {
 export function contactListToArray(options) {
   var arr = [], curr;
 
+  console.log("contactListToArray was invoked with options", options)
+
   for (var c in options.contacts) {
     curr = options.contacts[c];
     curr.uid = c;
