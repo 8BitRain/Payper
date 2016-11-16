@@ -200,10 +200,15 @@ class Payments extends React.Component {
           <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_2}, {scaleY: pulse_2}], opacity: this.pulseValue_2}}/>
 
           </View>
-          <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 125, width: dimensions.width - 20}}>
-            <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '200', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>
-              { (this.props.activeFilter == "incoming") ? "Your incoming payments will show up here. See what other users are currently splitting!" :  "Your outgoing payments will show up here. See what other users are currently splitting!" }
+          <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 50, width: dimensions.width - 20}}>
+            <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>
+              { (this.props.activeFilter == "incoming") ? "Your incoming payments will show up here." :  "Your outgoing payments will show up here." }
             </Text>
+
+            <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, marginTop: 25, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>
+               {"See what other users are currently splitting!"}
+            </Text>
+
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={'transparent'}

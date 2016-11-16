@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, TouchableHighlight, Animated, Easing, Image, Dimensions } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import GridView from "react-native-easy-grid-view";
 import FlipCard from 'react-native-flip-card'
 
@@ -27,46 +28,97 @@ export default class TrendingPayments extends React.Component {
       index: 0,
       dataSource: ds.cloneWithCells([
         {
-            text: "Spotify",
-            backgroundColor:'#f0f',
-            hasLogo: true,
-            name: 'Spotify',
-            percent: "75%"
+            front: {
+              text: "Spotify",
+              backgroundColor:colors.richBlack,
+              textColor: colors.white,
+              hasLogo: true,
+              name: 'Spotify',
+              percent: "75%"
+            },
+            back:{
+              avgSent: "$7",
+              avgDuration: "3 months",
+              bestSplit: "2"
+            }
         }
         , {
-            text: "Netflix",
-            backgroundColor:colors.white,
-            hasLogo: true,
-            name: "Netflix",
-            percent: "50%"
+            front: {
+              text: "Netflix",
+              backgroundColor:colors.white,
+              textColor: colors.richBlack,
+              hasLogo: true,
+              name: "Netflix",
+              percent: "50%",
+
+            },
+            back:{
+              avgSent: "$3",
+              avgDuration: "12 months",
+              bestSplit: "4"
+            }
+        }, {
+            front:{
+              text: "GameFly",
+              backgroundColor:colors.white,
+              textColor: colors.richBlack,
+              hasLogo: true,
+              name: "GameFly",
+              percent: "23%"
+            },
+            back:{
+              avgSent: "$6.50",
+              avgDuration: "3 months",
+              bestSplit: "2"
+            }
+        }, {
+            front:{
+              text: "Rent",
+              backgroundColor:colors.richBlack,
+              textColor: colors.white,
+              icon: "ios-flame",
+              iconColor: colors.white,
+              hasLogo: false,
+              percent: "40%",
+
+            },
+            back:{
+              avgSent: "$400",
+              avgDuration: "12 months",
+              bestSplit: "2 - 6"
+            }
+        }, {
+            front:{
+              text: "ToiletPaper",
+              backgroundColor:colors.richBlack,
+              textColor: colors.white,
+              icon: "ios-leaf",
+              iconColor: colors.white,
+              hasLogo: false,
+              percent: "20%",
+
+            },
+            back:{
+              avgSent: "$2",
+              avgDuration: "12 months",
+              bestSplit: "2 - 4"
+            }
 
         }, {
-            text: "GameFly",
-            backgroundColor:colors.white,
-            hasLogo: true,
-            name: "GameFly",
-            percent: "23%"
-
-        }, {
-            text: "Rent",
-            backgroundColor:'#f0f',
-            icon: "flame",
-            hasLogo: false,
-            percent: "40%"
-
-        }, {
-            text: "ToiletPaper",
-            backgroundColor:'#f0f',
-            icon: "",
-            hasLogo: false,
-            percent: "20%"
-
-        }, {
-            text: "Internet",
-            backgroundColor:colors.white,
-            icon: "",
-            hasLogo: false,
-            percent: "30%"
+            front:{
+              text: "Internet",
+              backgroundColor:colors.white,
+              textColor: colors.richBlack,
+              icon: "md-globe",
+              iconColor: colors.richBlack,
+              hasLogo: false,
+              percent: "30%"
+            },
+            back:{
+              avgSent: "$5",
+              avgDuration: "12 months",
+              bestSplit: "2 - 4"
+            }
 
         }], 2),
     cellWidth: 0,
@@ -79,7 +131,9 @@ export default class TrendingPayments extends React.Component {
   componentDidMount() {
 
   }
-    _renderLogo(name){
+
+  /* TODO Configure to loop through a json datastructure to remove hardcoded values*/
+  _renderLogo(name){
       switch (name) {
         case "Spotify":
           return(
@@ -110,21 +164,25 @@ export default class TrendingPayments extends React.Component {
           }
         }}>
            <FlipCard
-            style={{padding: 0, margin: 0}}
+            style={{padding: 0, margin: 0, borderWidth: 0}}
             flipHorizontal={true}
             flipVertical={false}
+            alignWidth={true}
 
            >
             { /* Front of card displays a service's Logo, Name, and Percentage of users splitting */}
-             <View style={{width:this.state.cellWidth,height:this.state.cellHeight,justifyContent:'center',backgroundColor:cell.backgroundColor}}
+             <View style={{width:this.state.cellWidth,height:this.state.cellHeight,justifyContent:'center',backgroundColor:cell.front.backgroundColor}}
                     resizeMode={Image.resizeMode.stretch} source={cell.image}>
-                 {cell.hasLogo ? this._renderLogo(cell.name) : null}
-                 <Text style={{textAlign:'center',color:colors.richBlack,fontSize:24}}>{cell.text}</Text>
-                 <Text style={{textAlign:'center',color:colors.richBlack,fontSize:24}}>{cell.percent}</Text>
+                 <Image style={{width: 16, height: 16, alignSelf: "flex-end", marginRight: 4}} source={require('../../assets/images/OvalRed.png')}></Image>
+                 {cell.front.hasLogo ? this._renderLogo(cell.front.name) : <Ionicons style={{alignSelf: "center"}}size={48} color={cell.front.iconColor} name={cell.front.icon}/>}
+                 <Text style={{textAlign:'center',color:cell.front.textColor,fontSize:24}}>{cell.front.text}</Text>
+                 <Text style={{textAlign:'center',color:cell.front.textColor,fontSize:24}}>{cell.front.percent}</Text>
              </View>
             { /* Back of card displays a service's Logo, Name, and Percentage of users splitting */}
-             <View style={{width:this.state.cellWidth,height:this.state.cellHeight,justifyContent:'center',backgroundColor:cell.backgroundColor}} resizeMode={Image.resizeMode.stretch} source={cell.image}>
-              <Text style={{textAlign:'center',color:colors.richBlack,fontSize:24}}>{"Back"}</Text>
+             <View style={{width:this.state.cellWidth,height:this.state.cellHeight,justifyContent:'flex-start', alignItems: 'flex-start', backgroundColor:cell.front.backgroundColor}} resizeMode={Image.resizeMode.stretch} source={cell.image}>
+              <Text style={{textAlign:'left',color:cell.front.textColor,fontSize:16}}>{"Users usually spent " + cell.back.avgSent}</Text>
+              <Text style={{textAlign:'left',color:cell.front.textColor,fontSize:16}}>{"Split service usually lasted " + cell.back.avgDuration}</Text>
+              <Text style={{textAlign:'left',color:cell.front.textColor,fontSize:16}}>{"This service is best split between " + cell.back.bestSplit + " people"}</Text>
              </View>
            </FlipCard>
        </View>)
@@ -138,7 +196,7 @@ export default class TrendingPayments extends React.Component {
           //callback
           callbackClose={() => this.props.toggleModal()}
           callbackBack={() => this.setState({index: this.state.index - 1})}
-          headerProps={Headers.get({ header: "photoUpload", title: this.state.title, index: this.state.index })} />
+          headerProps={Headers.get({ header: "photoUpload", title: "Trending Payments", index: this.state.index })} />
           <GridView dataSource={this.state.dataSource} spacing={0} style={{marginTop:65, padding: 0, backgroundColor: colors.richBlack}} renderCell={this._renderCell.bind(this)}
           />
           { /*Alternate Design With Padding*/ }
