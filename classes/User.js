@@ -1,17 +1,14 @@
-// Dependencies
 import * as firebase from 'firebase';
 import * as Firebase from '../services/Firebase';
 import * as Lambda from '../services/Lambda';
 import * as Async from '../helpers/Async';
 import * as SetMaster5000 from '../helpers/SetMaster5000';
 import * as _ from 'lodash';
-import { Actions } from 'react-native-router-flux';
-import Contacts from 'react-native-contacts';
-const FBSDK = require('react-native-fbsdk');
-const { LoginManager } = FBSDK;
-
 import * as config from '../config';
-let baseURL = config.details[config.details.env].lambdaBaseURL;
+import Contacts from 'react-native-contacts';
+import { Actions } from 'react-native-router-flux';
+import { FBLoginManager } from 'NativeModules'
+const baseURL = config.details[config.details.env].lambdaBaseURL;
 
 export default class User {
   constructor(attributes) {
@@ -42,7 +39,7 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   update(updates) {
-    console.log("Updating User with updates:", updates);
+    console.log("Updating user with updates:", updates);
     for (var k in updates) this[k] = updates[k];
     let userCache = (!this.appFlags || this.appFlags.onboarding_state === 'customer') ? "" : JSON.stringify(this);
     Async.set('user', userCache);
@@ -108,63 +105,12 @@ export default class User {
   }
 
   /**
-    *   Log in to Firebase auth via email and password
-    *   params: email (string), password (string)
-    *   -----------------------------------------------------------------------
-  **/
-  loginWithEmail(params, onLoginSuccess, onLoginFailure) {
-    firebase.auth().signInWithEmailAndPassword(params.email, params.password)
-    .then(() => {
-      if (firebase.auth().currentUser) {
-        let user = firebase.auth().currentUser.toJSON();
-        let firebaseToken = user.stsTokenManager.accessToken;
-
-        this.getLoginToken(firebaseToken, (loginToken) => {
-          console.log("ogFirebaseToken:", firebaseToken)
-          console.log("loginToken:", loginToken)
-
-          // Login with loginToken
-          this.loginWithLoginToken(loginToken, (newFirebaseToken) => {
-            this.getUserWithToken({ token: newFirebaseToken },
-            (res) => {
-              if (res.errorMessage) {
-                console.log("getUserWithToken failed...", "Lambda error:", res.errorMessage);
-                onLoginFailure("lambda");
-              } else {
-                console.log("getUserWithToken succeeded...", "Lambda response:", res);
-                // Tack on appFlags
-                firebase.database().ref('appFlags').child(res.uid).once('value', (snapshot) => {
-                  let appFlags = snapshot.val();
-                  res.appFlags = (appFlags) ? appFlags : {};
-                  res.loginToken = loginToken;
-                  this.initialize(res);
-                  onLoginSuccess(res);
-                })
-                .catch((err) => {
-                  console.log("Error getting appFlags:", err);
-                  this.initialize(res);
-                  onLoginSuccess(res);
-                })
-                .done();
-              }
-            });
-          });
-        });
-      }
-    })
-    .catch((err) => {
-      console.log("loginWithEmail failed...", "Code: " + err.code, "Message: " + err.message);
-      onLoginFailure(err.code);
-    });
-  }
-
-  /**
     *   Log out of Firebase auth
     *   -----------------------------------------------------------------------
   **/
   logout() {
     console.log("Logging out...");
-    if (this.provider === "facebook") LoginManager.logOut();
+    if (this.provider === "facebook") FBLoginManager.logOut();
     firebase.auth().signOut();
     this.stopListening();
     this.destroy();
@@ -181,8 +127,6 @@ export default class User {
     if (!params.email) params.email = this.decryptedEmail;
     if (!params.phone) params.phone = this.decryptedPhone;
     if (!params.token) params.token = this.token;
-
-    console.log("creating dwolla customer w params\n", params);
 
     for (var k in params) if (!params[k]) {
       alert("Tried to create a Dwolla customer but " + k + " is undefined");
@@ -226,8 +170,6 @@ export default class User {
     params.email = this.decryptedEmail;
     params.phone = this.decryptedPhone;
     params.token = this.token;
-
-    console.log("retryDwollaVerification was invoked with params:", params);
 
     try {
       fetch(baseURL + "customer/retryVerification", {method: "POST", body: JSON.stringify(params)})
@@ -445,8 +387,6 @@ export default class User {
         eventType: 'value',
         listener: null,
         callback: (res) => {
-          console.log("contactList listener res", res)
-          console.log("this.uid", this.uid)
           if (!res) return;
           let parsed = SetMaster5000.contactListToArray({ contacts: res })
           updateViaRedux({ payperContacts: parsed })

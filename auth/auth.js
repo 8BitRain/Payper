@@ -38,14 +38,14 @@ exports.requestFacebookUserData = function(token, cb) {
 }
 
 exports.signin = function(params, cb) {
-  let { type, facebookToken, email, password, key } = params
+  let { type, facebookToken, accessToken, email, pass, key } = params
 
   // Determine which signin function to use
   let signin
   switch (type) {
     case "facebook": signin = (cb) => signinFacebook(cb); break;
     case "generic": signin = (cb) => signinGeneric(cb); break;
-    case "cached": signin = () => signinCached(); break;
+    case "cached": signin = (cb) => signinCached(cb); break;
     default: signin = () => cb(null)
   }
 
@@ -58,6 +58,7 @@ exports.signin = function(params, cb) {
     *   (app initialization will occur in signin's callback function)
   **/
   signin((firebaseUser) => {
+    if (!firebaseUser) { cb(null); return; }
     let { accessToken } = firebaseUser.stsTokenManager
 
     getCustomTokenAndKey(accessToken, null, (res) => {
@@ -84,10 +85,20 @@ exports.signin = function(params, cb) {
     *   (1) use cached user key to get new custom token
     *   (2) use new custom token sign in and get new accessToken
     *   (3) attach new customToken and accessToken to user object
-    *   (4) return user to caller
+    *   (4) return firebaseUser to caller
   **/
   function signinCached(cb) {
+    getCustomTokenAndKey(accessToken, key, (res) => {
+      let { customToken, key } = res
 
+      firebase.auth().signInWithCustomToken(customToken).then((user) => {
+        let firebaseUser = user.toJSON()
+        cb(firebaseUser)
+      }).catch((err) => {
+        console.log(err)
+        cb(null)
+      })
+    })
   }
 
   /**
@@ -103,6 +114,9 @@ exports.signin = function(params, cb) {
     firebase.auth().signInWithCredential(cred).then((user) => {
       let firebaseUser = user.toJSON()
       cb(firebaseUser)
+    }).catch((err) => {
+      console.log(err)
+      cb(null)
     })
   }
 
@@ -115,6 +129,9 @@ exports.signin = function(params, cb) {
     firebase.auth().signInWithEmailAndPassword(email, pass).then((user) => {
       let firebaseUser = user.toJSON()
       cb(firebaseUser)
+    }).catch((err) => {
+      console.log(err)
+      cb(null)
     })
   }
 }

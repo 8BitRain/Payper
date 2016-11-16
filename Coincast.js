@@ -8,10 +8,10 @@ import colors from './styles/colors';
 import Error from './components/Error';
 
 // Uncomment to reset user manually
-import * as Async from './helpers/Async';
-Async.set('user', '');
-Async.set('BankOnboardingStateCache', '');
-Async.set('betaStatus', 'fullAccess');
+// import * as Async from './helpers/Async';
+// Async.set('user', '');
+// Async.set('BankOnboardingStateCache', '');
+// Async.set('betaStatus', 'fullAccess');
 
 // Modules
 import SplashViewContainer from './modules/Splash/SplashViewContainer';

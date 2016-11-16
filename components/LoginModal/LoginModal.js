@@ -3,6 +3,7 @@ import React from 'react';
 import { Actions } from 'react-native-router-flux';
 import { View, Text, TextInput, Modal, StyleSheet, TouchableHighlight, Dimensions } from 'react-native';
 import { VibrancyView } from 'react-native-blur';
+import { signin } from '../../auth'
 import User from '../../classes/User';
 import colors from '../../styles/colors';
 import * as Validate from '../../helpers/Validate';
@@ -40,7 +41,19 @@ export default class LoginModal extends React.Component {
 
   login() {
     this.setState({ loading: true });
-    this.User.loginWithEmail(this.state.loginParams, () => this.onLoginSuccess(), (errCode) => this.onLoginFailure(errCode));
+    let { email, password } = this.state.loginParams
+    signin({
+      email,
+      pass: password,
+      type: "generic"
+    }, (user) => {
+      if (user) {
+        this.props.currentUser.initialize(user)
+        this.onLoginSuccess()
+      } else {
+        this.onLoginFailure()
+      }
+    })
   }
 
   onLoginSuccess() {

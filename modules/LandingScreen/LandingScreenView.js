@@ -65,7 +65,7 @@ export default class LandingScreenView extends React.Component {
       if (user) {
         this.props.currentUser.initialize(user)
 
-        if (user.appFlags.onboarding_state === 'customer')
+        if (user.appFlags.onboarding_state === 'customer') {
           Actions.BankOnboardingView({
             currentUser: this.props.currentUser,
             emailFromFacebook: emailFromFacebook,
@@ -73,8 +73,9 @@ export default class LandingScreenView extends React.Component {
             onboardEmail: true,
             onboardPhone: true
           })
-        else
+        } else {
           Actions.MainViewContainer()
+        }
       } else {
         alert("Something went wrong. Please try again later.")
         FBLoginManager.logOut()
@@ -139,8 +140,7 @@ export default class LandingScreenView extends React.Component {
               } else {
                 AccessToken.getCurrentAccessToken().then((data) => {
                   requestFacebookUserData(data.accessToken, (userData) => {
-                    if (userData === null) console.log("Facebook userData is null")
-                    else this.signinWithFacebook(userData)
+                    this.signinWithFacebook(userData)
                   })
                 })
               }
