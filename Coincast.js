@@ -6,6 +6,12 @@ import { Scene, Reducer, Router, Modal } from 'react-native-router-flux';
 import Mixpanel from 'react-native-mixpanel';
 import colors from './styles/colors';
 import Error from './components/Error';
+import {
+  Analytics,
+  Hits as GAHits,
+} from 'react-native-google-analytics';
+import DeviceInfo from 'react-native-device-info';
+
 
 // Uncomment to reset user manually
 // import * as Async from './helpers/Async';
@@ -30,6 +36,7 @@ const reducerCreate = (params) => {
     return defaultReducer(state, action);
   }
 };
+var ga = this.ga = null;
 
 const getSceneStyle = function(props, computedProps) {
   const style = {
@@ -62,9 +69,18 @@ export default class Coincast extends React.Component {
   }
 
   componentWillMount() {
+    let clientId = DeviceInfo.getUniqueID();
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');
     Mixpanel.timeEvent('Session Duration');
     AppState.addEventListener('change', this.handleAppStateChange);
+     ga = new Analytics('UA-87368863-1', clientId, 1, DeviceInfo.getUserAgent());
+     var screenView = new GAHits.ScreenView(
+      'Example App',
+      'Welcome Screen',
+      DeviceInfo.getReadableVersion(),
+      DeviceInfo.getBundleId()
+    );
+    ga.send(screenView);
   }
 
   componentWillUnmount() {

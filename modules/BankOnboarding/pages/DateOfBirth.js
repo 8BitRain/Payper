@@ -14,7 +14,22 @@ const dimensions = Dimensions.get('window');
 export default class DateOfBirth extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { date: (this.props.dob) ? this.props.dob : "1991-01-01" };
+    this.state = {
+      date: (this.props.dob) ? this.props.dob : "01011994",
+      index0Focused: false,
+      index1Focused: false,
+      index2Focused: false,
+      validationError: false,
+      birthdayCake: false,
+      validationError: false,
+      index: 0,
+    };
+
+    this.day = "";
+    this.month = "";
+    this.year = "";
+    this.dates = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    this.values = ["", "", ""];
     this.initalizedFromCache = false;
   }
 
@@ -31,9 +46,65 @@ export default class DateOfBirth extends React.Component {
     }
   }
 
+  handleChangeText(input) {
+  // Handle resetting validation message
+  this.setState({validationError: false})
+  console.log(input);
+  // Update value
+  this.values[this.state.index] = input;
+  switch (this.state.index) {
+    case 0:
+      this.month = input;
+      break;
+    case 1:
+      this.day = input;
+      break;
+    case 2:
+      this.year = input;
+      if (input.length == 4) this.setState({birthdayCake: true});
+      break;
+  }
+
+  //Celebrate Birth!
+
+  }
+
+  validateDate(input, type){
+    console.log(input);
+    console.log(Number(input));
+    if(input.includes(" ")){
+      throw "A blank space is not an acceptable form of input";
+    }
+    if(Number(input) < 1 ){
+      throw "An input value less than 1 was entered";
+    }
+    if(Number(input) < 10 && input.length != 2){
+      console.log("Value: " + input)
+      return "0" + input;
+    }
+    if(type == "year" && input.length != 4){
+      console.log("input length ")
+      throw "Year must be 4 digits"
+    }
+    return input;
+  }
+
+
   handleSubmit() {
-    var splitDate = this.state.date.split("-");
-    var parsedDate = { date: splitDate[2], month: splitDate[1], year: splitDate[0] };
+    //var splitDate = this.state.date.split("-");
+    //Validation on
+    try{
+      var date = this.validateDate(this.day, "day");
+      var month = this.validateDate(this.month, "month");
+      var year = this.validateDate(this.year, "year");
+    }catch(err){
+      console.log(err);
+      this.setState({validationError: true});
+      return;
+    }
+    this.setState({date: date + month + year})
+    var parsedDate = { date: date, month: month, year: year };
+    console.log(parsedDate);
     this.props.induceState({ dob: parsedDate });
     this.props.nextPage();
   }
@@ -47,24 +118,25 @@ export default class DateOfBirth extends React.Component {
           </Text>
         </View>
 
-        <View style={styles.inputWrap}>
-          <DatePicker
-            ref={"dobInput"}
-            date={this.state.date}
-            mode={"date"}
-            format={"YYYY-MM-DD"}
-            delay={150}
-            minDate={(new Date().getFullYear() - 200) + "-01-01"}
-            maxDate={(new Date().getFullYear() - 10) + "-01-01"}
-            confirmBtnText={"Confirm"}
-            cancelBtnText={"Cancel"}
-            customStyles={datePickerStyles}
-            showIcon={false}
-            onDateChange={date => this.setState({ date: date })} />
+        <View style={styles.textInputWrap}>
+          <TextInput ref="dateInput" defaultValue={this.values[0]} onFocus={() => this.setState({ index: 0, index0Focused: true, validationError: false })} maxLength={2} keyboardType={'number-pad'} placeholder={(this.state.index0Focused) ? null : "Month"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e) } />
+          <Text style={styles.dateDash}>-</Text>
+          <TextInput ref="1" defaultValue={this.values[1]} onFocus={() => this.setState({ index: 1, index1Focused: true, validationError: false })} maxLength={2} keyboardType={'number-pad'} placeholder={(this.state.index1Focused) ? null : "Day"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <Text style={styles.dateDash}>-</Text>
+          <TextInput ref="2" defaultValue={this.values[2]} onFocus={() => this.setState({ index: 2, index2Focused: true, validationError: false })} maxLength={4} keyboardType={'number-pad'} placeholder={(this.state.index2Focused) ? null : "Year"} placeholderTextColor={colors.lightGrey} style={styles.textInput}  onChangeText={(e) => this.handleChangeText(e)} />
         </View>
 
+        <View style={{flexDirection: "row"}}>
+         <Text style={styles.birthdayText}>You were born on </Text>
+         {Number(this.month) ? <Text style={styles.birthdayText}> {this.dates[parseInt(this.month)] }</Text> : null}
+         {Number(this.day) ? <Text style={styles.birthdayText}> {parseInt(this.day)}</Text> : null}
+         {Number(this.year) ? <View style={{flexDirection: "row"}}><Text style={styles.birthdayText}> {parseInt(this.year)} </Text></View> : null}
+        </View>
+
+        {this.state.birthdayCake && this.year ?  <Text style={styles.birthdayTextEmoji}>🎉</Text> : null}
+
         <StickyView>
-          <ContinueButton text={"Continue"} onPress={() => this.handleSubmit()} />
+          <ContinueButton text={(this.state.validationError) ? "Please enter a valid date of birth" : "Continue"} onPress={() => this.handleSubmit()} />
         </StickyView>
       </View>
     );
@@ -101,6 +173,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  textInputWrap: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: dimensions.width,
+    paddingTop: 20
+  },
+  textInput: {
+    width: dimensions.width * 0.15,
+    height: dimensions.width * 0.15,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    color: colors.white,
+    textAlign: 'center',
+    marginLeft: 1, marginRight: 1,
+  },
   input: {
     height: 55,
     width: dimensions.width * 0.75,
@@ -108,5 +195,23 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
     textAlign: 'center',
     color: colors.white
+  },
+  dateDash:{
+    color: colors.white,
+    fontSize: 32,
+    marginLeft: 2.5,
+    marginRight: 2.5
+  },
+  birthdayText:{
+    color: colors.white,
+    fontSize: 20,
+    marginTop: 25,
+    textAlign: "center",
+    fontWeight: "100"
+  },
+
+  birthdayTextEmoji:{
+    fontSize: 48,
+    marginTop: 20
   }
 });

@@ -56,6 +56,7 @@
 		214EE68AE7F645E5B9F8288A /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAFBCE85CB2C4C3F9F328602 /* MaterialIcons.ttf */; };
 		8F579C426B444DA380F724DD /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35D907B4EF6A4B77B6CB588E /* Octicons.ttf */; };
 		D57AE96A02A947B99D211D01 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 92ED1C1074084E39B1F33C5B /* Zocial.ttf */; };
+		89C5AEAA001E4740A3E2E9E7 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1389371DB1F0404FB2B44BD6 /* libRNDeviceInfo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -246,6 +247,8 @@
 		DAFBCE85CB2C4C3F9F328602 /* MaterialIcons.ttf */ = {isa = PBXFileReference; name = "MaterialIcons.ttf"; path = "../../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		35D907B4EF6A4B77B6CB588E /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		92ED1C1074084E39B1F33C5B /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CCBB0E109DBA41DD9AAD7BC4 /* RNDeviceInfo.xcodeproj */ = {isa = PBXFileReference; name = "RNDeviceInfo.xcodeproj"; path = "../../node_modules/react-native-device-info/RNDeviceInfo.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		1389371DB1F0404FB2B44BD6 /* libRNDeviceInfo.a */ = {isa = PBXFileReference; name = "libRNDeviceInfo.a"; path = "libRNDeviceInfo.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -285,6 +288,7 @@
 				D8DC359594064301A221336C /* libRNBlur.a in Frameworks */,
 				65EFE153156C486EBCD99BAB /* libCodePush.a in Frameworks */,
 				64CD49A02214452AB0F7C75D /* libz.tbd in Frameworks */,
+				89C5AEAA001E4740A3E2E9E7 /* libRNDeviceInfo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,6 +468,7 @@
 				64207A0DB9C74193B4A219B2 /* SMXCrashlytics.xcodeproj */,
 				0788B20FCAD54AD380A7591C /* RNBlur.xcodeproj */,
 				33407F0458A44F5A8BB933ED /* CodePush.xcodeproj */,
+				CCBB0E109DBA41DD9AAD7BC4 /* RNDeviceInfo.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -972,6 +977,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/Payper\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Payper;
@@ -995,6 +1001,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/Payper\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Payper;
@@ -1023,6 +1030,7 @@
 					"$(SRCROOT)/../../node_modules/react-native-fabric/ios/SMXCrashlytics",
 					"$(SRCROOT)/../../node_modules/react-native-blur/ios",
 					"$(SRCROOT)/../../node_modules/react-native-code-push/ios/CodePush/**",
+					"$(SRCROOT)/../../node_modules/react-native-device-info/RNDeviceInfo",
 				);
 				INFOPLIST_FILE = Coincast/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
@@ -1037,6 +1045,7 @@
 				PROVISIONING_PROFILE = "";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Payper\"",
 				);
 			};
 			name = Debug;
@@ -1061,6 +1070,7 @@
 					"$(SRCROOT)/../../node_modules/react-native-fabric/ios/SMXCrashlytics",
 					"$(SRCROOT)/../../node_modules/react-native-blur/ios",
 					"$(SRCROOT)/../../node_modules/react-native-code-push/ios/CodePush/**",
+					"$(SRCROOT)/../../node_modules/react-native-device-info/RNDeviceInfo",
 				);
 				INFOPLIST_FILE = Coincast/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
@@ -1075,6 +1085,7 @@
 				PROVISIONING_PROFILE = "";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Payper\"",
 				);
 			};
 			name = Release;
@@ -1125,6 +1136,7 @@
 					"$(SRCROOT)/../../node_modules/react-native-fabric/ios/SMXCrashlytics",
 					"$(SRCROOT)/../../node_modules/react-native-blur/ios",
 					"$(SRCROOT)/../../node_modules/react-native-code-push/ios/CodePush/**",
+					"$(SRCROOT)/../../node_modules/react-native-device-info/RNDeviceInfo",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -1133,6 +1145,7 @@
 				SDKROOT = iphoneos;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Payper\"",
 				);
 			};
 			name = Debug;
@@ -1176,6 +1189,7 @@
 					"$(SRCROOT)/../../node_modules/react-native-fabric/ios/SMXCrashlytics",
 					"$(SRCROOT)/../../node_modules/react-native-blur/ios",
 					"$(SRCROOT)/../../node_modules/react-native-code-push/ios/CodePush/**",
+					"$(SRCROOT)/../../node_modules/react-native-device-info/RNDeviceInfo",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -1184,6 +1198,7 @@
 				VALIDATE_PRODUCT = YES;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Payper\"",
 				);
 			};
 			name = Release;
