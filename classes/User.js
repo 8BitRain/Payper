@@ -409,4 +409,47 @@ export default class User {
     }
     this.endpoints = null;
   }
+
+
+  /**
+    *   Create a user with email and password
+    *   params: email, password, phone, firstName, lastName
+    *   -----------------------------------------------------------------------
+  **/
+  createUserWithEmailAndPassword(params, onSuccess, onFailure) {
+    firebase.auth().createUserWithEmailAndPassword(params.email, params.password).then(() => {
+      firebase.auth().currentUser.getToken(true).then((token) => {
+        params.token = token;
+        params.password = null;
+        var stringifiedParams = JSON.stringify(params);
+        try {
+          fetch(baseURL + "user/create", {method: "POST", body: stringifiedParams})
+          .then((response) => response.json())
+          .then((responseData) => {
+            if (!responseData.errorMessage) {
+              responseData.user.token = token;
+              this.initialize(responseData.user);
+              this.decryptedPhone = params.phone;
+              this.decryptedEmail = params.email;
+              console.log("createUserWithEmailAndPassword succeeded...", "Lambda response:", responseData);
+              onSuccess();
+            } else {
+              onFailure("lambda");
+            }
+          })
+          .done();
+        } catch (err) {
+          console.log("createUserWithEmailAndPassword failed...", "Fetch error:", err);
+          onFailure();
+        }
+      }).catch((err) => {
+        console.log("firebase.auth().currentUser.getToken(true) failed...", "Firebase error:", err);
+        onFailure(err.code);
+      });
+    })
+    .catch((err) => {
+      console.log("firebase.auth().createUserWithEmailAndPassword failed...", "Firebase error:", err);
+      onFailure(err.code);
+    });
+  }
 }
