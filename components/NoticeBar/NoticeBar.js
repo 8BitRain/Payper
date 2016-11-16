@@ -59,11 +59,11 @@ export default class NoticeBar extends React.Component {
       <TouchableHighlight
         activeOpacity={0.8}
         underlayColor={colors.richBlack}
-        style={{ borderTopWidth: 1.0, borderBottomWidth: 1.8, borderColor: colors.accent }}
+        style={{ }}
         onPress={() => this.handlePress()}>
 
         <Animated.View style={[styles.wrap, { height: this.height }]}>
-          <FontAwesome name={(this.props.dwollaCustomerStatus) ? "user-secret" : "bank"} size={22} color={colors.accent} style={{ padding: 5 }} />
+          <FontAwesome name={(this.props.dwollaCustomerStatus) ? "user-secret" : "bank"} size={22} color={colors.white} style={{ padding: 5 }} />
 
           <Text style={styles.text}>
             { this.state.messages[(this.props.dwollaCustomerStatus) ? this.props.dwollaCustomerStatus : this.props.onboardingState] }
@@ -71,7 +71,7 @@ export default class NoticeBar extends React.Component {
 
           {(this.props.dwollaCustomerStatus === "suspended" || this.props.dwollaCustomerStatus === "document" || this.props.dwollaCustomerStatus === "documentRecieved" || this.props.dwollaCustomerStatus === "documentProcessing")
             ? null
-            : <Entypo name={"chevron-thin-right"} color={colors.accent} size={16} style={{ padding: 5 }} /> }
+            : <Entypo name={"chevron-thin-right"} color={colors.white} size={16} style={{ padding: 5 }} /> }
         </Animated.View>
       </TouchableHighlight>
     );

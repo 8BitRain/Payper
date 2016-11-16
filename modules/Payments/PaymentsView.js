@@ -18,6 +18,7 @@ import CreatePayment from '../../modules/CreatePayment/CreatePaymentView';
 import BankOnboarding from '../../modules/BankOnboarding/BankOnboardingView';
 import MicrodepositOnboarding from '../../components/MicrodepositOnboarding/MicrodepositOnboarding';
 import NoticeBar from '../../components/NoticeBar/NoticeBar';
+import TrendingPayments from '../../components/TrendingPayments/TrendingPayments';
 import Carousel from 'react-native-carousel';
 import { PayCard } from '../../components/PayCard'
 import PhotoUploader from '../../components/PhotoUploader/PhotoUploader'
@@ -44,7 +45,8 @@ class Payments extends React.Component {
     this.state = {
       modalVisible: false,
       bankModalVisible: false,
-      documentUploadModalVisible: false
+      documentUploadModalVisible: false,
+      trendingPaymentModalVisible: false,
     }
 
     this.pulseValue_0 = new Animated.Value(1);
@@ -158,6 +160,10 @@ class Payments extends React.Component {
     this.setState({ documentUploadModalVisible: !this.state.documentUploadModalVisible});
   }
 
+  toggleTrendingPaymentsModal(){
+    this.setState({ trendingPaymentModalVisible: !this.state.trendingPaymentModalVisible});
+  }
+
   getBankModalContent(onboardingState, customerStatus) {
     if (customerStatus === "retry")
       return(
@@ -193,9 +199,25 @@ class Payments extends React.Component {
           <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_1}, {scaleY: pulse_1}], opacity: this.pulseValue_1}}/>
           <Animated.Image source={require('../../assets/images/Oval.png')} style={{ alignItems: "center", position: "absolute", top: 0, left: dimensions.width/2 - (64/2), width: 64, height: 64, transform: [{scaleX: pulse_2}, {scaleY: pulse_2}], opacity: this.pulseValue_2}}/>
 
-
           </View>
-          <Carousel hideIndicators={true} animate={true} delay={5000}>
+          <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 125, width: dimensions.width - 20}}>
+            <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '200', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>
+              { (this.props.activeFilter == "incoming") ? "Your incoming payments will show up here. See what other users are currently splitting!" :  "Your outgoing payments will show up here. See what other users are currently splitting!" }
+            </Text>
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              onPress={() => this.toggleTrendingPaymentsModal()}>
+
+              <View style={{ height: 60, backgroundColor: colors.accent, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '400', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
+                  { "Explore Trending Payments" }
+                </Text>
+              </View>
+
+            </TouchableHighlight>
+          </View>
+          {/*<Carousel hideIndicators={true} animate={true} delay={5000}>
             <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 100, width: dimensions.width - 20}}>
               <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-thunderstorm-outline" color={'rgba(0, 0, 0, 0.15)'} />
               <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '200', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>
@@ -220,7 +242,7 @@ class Payments extends React.Component {
                 { "The longer you wait, the less you save. Start splitting now!" }
               </Text>
             </View>
-          </Carousel>
+          </Carousel>*/}
       </View>
     );
   }
@@ -420,6 +442,22 @@ class Payments extends React.Component {
             currentUser={this.props.currentUser}/>
 
         </Modal>
+
+        { /* Trending Payments Modal*/ }
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.trendingPaymentModalVisible}
+          onRequestClose={ () => alert("Closed modal") }>
+
+          <StatusBar barStyle="light-content" />
+
+          <TrendingPayments
+            toggleModal={() => this.toggleTrendingPaymentsModal()}
+            currentUser={this.props.currentUser}/>
+
+        </Modal>
+
 
         { /* Bank onboarding modal (if necessary) */
           (this.props.currentUser.appFlags.onboarding_state === "awaitingMicrodepositVerification" || this.props.currentUser.appFlags.onboarding_state === "bank")
