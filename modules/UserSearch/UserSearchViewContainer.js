@@ -58,6 +58,7 @@ function mapDispatchToProps(dispatch) {
           eventType: 'value',
           listener: null,
           callback: (res) => {
+            console.log("contactList listener res", res)
             if (res) {
               // Convert Firebase JSON to array of user objects, tacking on section titles along the way
               var contactListArray = SetMaster5000.contactListToArray({ contacts: res }),
