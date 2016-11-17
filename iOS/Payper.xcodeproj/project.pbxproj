@@ -16,6 +16,19 @@
 		071349021D90529000B3B998 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071349001D90529000B3B998 /* Fabric.framework */; };
 		071349031D90529000B3B998 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071349011D90529000B3B998 /* Crashlytics.framework */; };
 		0730F3921DCBB26600C8076D /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0730F3911DCBB23500C8076D /* libRCTCamera.a */; };
+		0766DF3F1DDD920600E4D548 /* Muller-ExtraBold-DEMO.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0766DF3D1DDD920600E4D548 /* Muller-ExtraBold-DEMO.ttf */; };
+		0766DF401DDD920600E4D548 /* Muller-Thin-DEMO.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0766DF3E1DDD920600E4D548 /* Muller-Thin-DEMO.ttf */; };
+		0766DF601DDD939900E4D548 /* Lato-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0766DF571DDD939900E4D548 /* Lato-Black.ttf */; };
+		0766DF611DDD939900E4D548 /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0766DF581DDD939900E4D548 /* Lato-Bold.ttf */; };
+		0766DF621DDD939900E4D548 /* Lato-Hairline.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0766DF591DDD939900E4D548 /* Lato-Hairline.ttf */; };
+		0766DF631DDD939900E4D548 /* Lato-Heavy.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0766DF5A1DDD939900E4D548 /* Lato-Heavy.ttf */; };
+		0766DF641DDD939900E4D548 /* Lato-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0766DF5B1DDD939900E4D548 /* Lato-Light.ttf */; };
+		0766DF651DDD939900E4D548 /* Lato-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0766DF5C1DDD939900E4D548 /* Lato-Medium.ttf */; };
+		0766DF661DDD939900E4D548 /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0766DF5D1DDD939900E4D548 /* Lato-Regular.ttf */; };
+		0766DF671DDD939900E4D548 /* Lato-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0766DF5E1DDD939900E4D548 /* Lato-Semibold.ttf */; };
+		0766DF681DDD939900E4D548 /* Lato-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0766DF5F1DDD939900E4D548 /* Lato-Thin.ttf */; };
+		0766DF6B1DDD94A700E4D548 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0766DF691DDD94A700E4D548 /* Montserrat-Regular.ttf */; };
+		0766DF6C1DDD94A700E4D548 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0766DF6A1DDD94A700E4D548 /* Montserrat-Bold.ttf */; };
 		076CE2EE1DCA5C2F008C8D96 /* AssetLibraryToBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 076CE2ED1DCA5C2F008C8D96 /* AssetLibraryToBase64.m */; };
 		0788F5851D4306C800C3286E /* libRCTFBLogin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0788F5731D42FEC000C3286E /* libRCTFBLogin.a */; };
 		079D26581D430BD2000F7943 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 079D26551D430BD2000F7943 /* FBSDKCoreKit.framework */; };
@@ -238,6 +251,19 @@
 		071349001D90529000B3B998 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		071349011D90529000B3B998 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		0730F38C1DCBB23500C8076D /* RCTCamera.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RCTCamera.xcodeproj"; sourceTree = "<group>"; };
+		0766DF3D1DDD920600E4D548 /* Muller-ExtraBold-DEMO.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Muller-ExtraBold-DEMO.ttf"; path = "../../../Downloads/muller/TTF (TrueType)/Muller-ExtraBold-DEMO.ttf"; sourceTree = "<group>"; };
+		0766DF3E1DDD920600E4D548 /* Muller-Thin-DEMO.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Muller-Thin-DEMO.ttf"; path = "../../../Downloads/muller/TTF (TrueType)/Muller-Thin-DEMO.ttf"; sourceTree = "<group>"; };
+		0766DF571DDD939900E4D548 /* Lato-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lato-Black.ttf"; path = "../../../Downloads/Lato2OFL/Lato-Black.ttf"; sourceTree = "<group>"; };
+		0766DF581DDD939900E4D548 /* Lato-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lato-Bold.ttf"; path = "../../../Downloads/Lato2OFL/Lato-Bold.ttf"; sourceTree = "<group>"; };
+		0766DF591DDD939900E4D548 /* Lato-Hairline.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lato-Hairline.ttf"; path = "../../../Downloads/Lato2OFL/Lato-Hairline.ttf"; sourceTree = "<group>"; };
+		0766DF5A1DDD939900E4D548 /* Lato-Heavy.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lato-Heavy.ttf"; path = "../../../Downloads/Lato2OFL/Lato-Heavy.ttf"; sourceTree = "<group>"; };
+		0766DF5B1DDD939900E4D548 /* Lato-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lato-Light.ttf"; path = "../../../Downloads/Lato2OFL/Lato-Light.ttf"; sourceTree = "<group>"; };
+		0766DF5C1DDD939900E4D548 /* Lato-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lato-Medium.ttf"; path = "../../../Downloads/Lato2OFL/Lato-Medium.ttf"; sourceTree = "<group>"; };
+		0766DF5D1DDD939900E4D548 /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lato-Regular.ttf"; path = "../../../Downloads/Lato2OFL/Lato-Regular.ttf"; sourceTree = "<group>"; };
+		0766DF5E1DDD939900E4D548 /* Lato-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lato-Semibold.ttf"; path = "../../../Downloads/Lato2OFL/Lato-Semibold.ttf"; sourceTree = "<group>"; };
+		0766DF5F1DDD939900E4D548 /* Lato-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Lato-Thin.ttf"; path = "../../../Downloads/Lato2OFL/Lato-Thin.ttf"; sourceTree = "<group>"; };
+		0766DF691DDD94A700E4D548 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Regular.ttf"; path = "../../../Downloads/Montserrat (1)/Montserrat-Regular.ttf"; sourceTree = "<group>"; };
+		0766DF6A1DDD94A700E4D548 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Bold.ttf"; path = "../../../Downloads/Montserrat (1)/Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		076CE2ED1DCA5C2F008C8D96 /* AssetLibraryToBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AssetLibraryToBase64.m; path = "../node_modules/react-native-asset-library-to-base64/ios/AssetLibraryToBase64.m"; sourceTree = "<group>"; };
 		07759FC31D42CEFC00D30AA2 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../../../FacebookSDKs-iOS-4.14.0/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		079D26551D430BD2000F7943 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../../FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
@@ -607,10 +633,23 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				0766DF691DDD94A700E4D548 /* Montserrat-Regular.ttf */,
+				0766DF6A1DDD94A700E4D548 /* Montserrat-Bold.ttf */,
 				23DE99F51D9EC6E50054D02F /* Payper.entitlements */,
+				0766DF571DDD939900E4D548 /* Lato-Black.ttf */,
+				0766DF581DDD939900E4D548 /* Lato-Bold.ttf */,
+				0766DF591DDD939900E4D548 /* Lato-Hairline.ttf */,
+				0766DF5A1DDD939900E4D548 /* Lato-Heavy.ttf */,
+				0766DF5B1DDD939900E4D548 /* Lato-Light.ttf */,
+				0766DF5C1DDD939900E4D548 /* Lato-Medium.ttf */,
+				0766DF5D1DDD939900E4D548 /* Lato-Regular.ttf */,
+				0766DF5E1DDD939900E4D548 /* Lato-Semibold.ttf */,
+				0766DF5F1DDD939900E4D548 /* Lato-Thin.ttf */,
 				07A813AF1D93084400E432B3 /* RNVibrancy */,
 				07A813AE1D93083A00E432B3 /* RNBlur */,
 				232A65CC1D03D74E0084EA8E /* Roboto-Bold.ttf */,
+				0766DF3D1DDD920600E4D548 /* Muller-ExtraBold-DEMO.ttf */,
+				0766DF3E1DDD920600E4D548 /* Muller-Thin-DEMO.ttf */,
 				232A65CD1D03D74E0084EA8E /* Roboto-Light.ttf */,
 				232A65CE1D03D74E0084EA8E /* Roboto-Medium.ttf */,
 				232A65CF1D03D74E0084EA8E /* Roboto-Thin.ttf */,
@@ -1025,19 +1064,32 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0766DF631DDD939900E4D548 /* Lato-Heavy.ttf in Resources */,
 				232A65D21D03D74E0084EA8E /* Roboto-Medium.ttf in Resources */,
+				0766DF621DDD939900E4D548 /* Lato-Hairline.ttf in Resources */,
+				0766DF651DDD939900E4D548 /* Lato-Medium.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				232A65D31D03D74E0084EA8E /* Roboto-Thin.ttf in Resources */,
+				0766DF6B1DDD94A700E4D548 /* Montserrat-Regular.ttf in Resources */,
+				0766DF401DDD920600E4D548 /* Muller-Thin-DEMO.ttf in Resources */,
+				0766DF641DDD939900E4D548 /* Lato-Light.ttf in Resources */,
 				232A65D11D03D74E0084EA8E /* Roboto-Light.ttf in Resources */,
+				0766DF661DDD939900E4D548 /* Lato-Regular.ttf in Resources */,
 				234F714F1DBC43CF003CE39A /* LaunchScreen.xib in Resources */,
 				232A65D01D03D74E0084EA8E /* Roboto-Bold.ttf in Resources */,
+				0766DF611DDD939900E4D548 /* Lato-Bold.ttf in Resources */,
 				638E12F54994401DB32D7109 /* Entypo.ttf in Resources */,
+				0766DF3F1DDD920600E4D548 /* Muller-ExtraBold-DEMO.ttf in Resources */,
 				44192408B916443E8CA59F4D /* EvilIcons.ttf in Resources */,
 				DE5D275BD2D74B9DA0A67C7E /* FontAwesome.ttf in Resources */,
+				0766DF671DDD939900E4D548 /* Lato-Semibold.ttf in Resources */,
 				CE878DF8EF9242C0BD060B2A /* Foundation.ttf in Resources */,
 				9B887B6147934E829937CAE2 /* Ionicons.ttf in Resources */,
 				B3761CC95BD645DE9BF9D6AD /* MaterialIcons.ttf in Resources */,
 				863BB52B66654FAAA09D1450 /* Octicons.ttf in Resources */,
+				0766DF6C1DDD94A700E4D548 /* Montserrat-Bold.ttf in Resources */,
+				0766DF681DDD939900E4D548 /* Lato-Thin.ttf in Resources */,
+				0766DF601DDD939900E4D548 /* Lato-Black.ttf in Resources */,
 				208812DB690043A981DFF18A /* Zocial.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

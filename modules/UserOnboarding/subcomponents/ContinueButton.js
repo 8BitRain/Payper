@@ -14,8 +14,8 @@ export default class ContinueButton extends React.Component {
         underlayColor={'transparent'}
         onPress={() => this.props.onPress()}>
 
-        <View style={{ height: 60, backgroundColor: colors.accent, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '400', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
+        <View style={{ height: 60, backgroundColor: colors.turqouise, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontFamily: 'Lato', fontSize: 18, fontWeight: '400', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
             { this.props.text }
           </Text>
         </View>

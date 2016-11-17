@@ -47,7 +47,7 @@ export default class Email extends React.Component {
     return (
       <View style={styles.wrap}>
         <View>
-          <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
+          <Text style={{ fontFamily: 'Montserrat', fontSize: 24, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
             { "What's your email?" }
           </Text>
         </View>

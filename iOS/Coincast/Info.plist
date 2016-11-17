@@ -83,6 +83,18 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Bold.ttf</string>
+		<string>Lato-Black.ttf</string>
+		<string>Montserrat-Regular.ttf</string>
+		<string>Montserrat-Bold.ttf</string>
+		<string>Lato-Bold.ttf</string>
+		<string>Lato-Hairline.ttf</string>
+		<string>Lato-Light.ttf</string>
+		<string>Lato-Medium.ttf</string>
+		<string>Lato-Regular.ttf</string>
+		<string>Lato-Semibold.ttf</string>
+		<string>Lato-Thin.ttf</string>
+		<string>Muller-ExtraBold-DEMO.ttf</string>
+		<string>Muller-Thin-DEMO.ttf</string>
 		<string>Roboto-Medium.ttf</string>
 		<string>Roboto-Thin.ttf</string>
 		<string>Roboto-Light.ttf</string>

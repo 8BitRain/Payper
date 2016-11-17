@@ -27,6 +27,13 @@ const colors = {
   obsidianInput: "#1E1F20",
   opaqueRichBlack: "rgba(42, 45, 52, 0.8)",
 
+
+  // color_scheme_i
+  creamWhite: "#FDFFFC",
+  turqouise: "#45B8AC",
+  carminePink: "#E94F37",
+  pastelRed: "#FF6B6B",
+
   // Potential main colors
   malachite: "#20BF55",
 
