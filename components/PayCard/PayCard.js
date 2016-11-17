@@ -46,7 +46,7 @@ class PayCard extends React.Component {
         underlayColor={colors.gainsboroEdit}
         onPress={() => (dummy) ? null : Actions.PaymentDetails(this.props)}>
 
-        <View style={[styles.wrap, {paddingTop: 5, marginBottom: 10, paddingBottom: 5, borderBottomWidth: 0.0, borderBottomColor: colors.turqouise}]}>
+        <View style={[styles.wrap, {paddingTop: 5, marginBottom: 10, paddingBottom: 5, borderBottomWidth: 0.0, borderBottomColor: colors.babyBlue}]}>
           <View style={{flexDirection: 'column', flex: 1.0}}>
             <View style={{flexDirection: 'row'}}>
 
@@ -56,7 +56,7 @@ class PayCard extends React.Component {
                   {(pic)
                     ? <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: pic}} />
                     : <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={{color: colors.turqouise, fontSize: 18, fontWeight: '900', fontFamily: "Montserrat"}}>
+                        <Text style={{color: colors.babyBlue, fontSize: 18, fontWeight: '900', fontFamily: "Montserrat"}}>
                           {this.getInitials()}
                         </Text>
                       </View> }
@@ -65,12 +65,12 @@ class PayCard extends React.Component {
 
               { /* Name and payment purpose */ }
               <View style={{justifyContent: 'center', paddingLeft: 6}}>
-                <Text style={{color: colors.turqouise, fontSize: 22, fontWeight: '800', fontFamily: "Montserrat"}}>
+                <Text style={{color: colors.babyBlue, fontSize: 22, fontWeight: '800', fontFamily: "Montserrat"}}>
                   {name}
                 </Text>
                 <View style={{flexDirection: 'row'}}>
-                  <EvilIcons name={"tag"} size={22} color={colors.slateGrey} />
-                  <Text style={{color: colors.slateGrey, fontSize: 14, fontFamily: 'Montserrat'}}>
+                  <EvilIcons name={"tag"} size={22} color={colors.richBlack} />
+                  <Text style={{color: colors.richBlack, fontSize: 14, fontFamily: 'Montserrat'}}>
                     {purpose}
                   </Text>
                 </View>
@@ -95,11 +95,11 @@ class PayCard extends React.Component {
               <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-end'}}>
                 <View style={{flexDirection: 'row'}}>
                   <View style={styles.freqAndNextPaymentWrap}>
-                    <EvilIcons name={"calendar"} size={22} color={colors.slateGrey} />
+                    <EvilIcons name={"calendar"} size={22} color={colors.richBlack} />
                     <Text style={[styles.freqAndNextPaymentText, {paddingLeft: 3}]}>
                       {frequency}
                     </Text>
-                    <Entypo name={"hour-glass"} size={13} color={colors.slateGrey} style={{paddingLeft: 3}} />
+                    <Entypo name={"hour-glass"} size={13} color={colors.richBlack} style={{paddingLeft: 3}} />
                     <Text style={[styles.freqAndNextPaymentText, {paddingLeft: 3}]}>
                       {next}
                     </Text>
@@ -118,7 +118,7 @@ class PayCard extends React.Component {
 
           { /* Chevron */ }
           <View style={{padding: 25}}>
-            <Entypo name={"chevron-thin-right"} color={colors.slateGrey} size={20} style={{alignSelf: 'flex-start'}} />
+            <Entypo name={"chevron-thin-right"} color={colors.richBlack} size={20} style={{alignSelf: 'flex-start'}} />
           </View>
 
           { /* Notice indiciator (if need be) */ }
@@ -145,9 +145,9 @@ const styles = {
     width: imageDims.width,
     height: imageDims.height,
     borderRadius: imageDims.width / 2,
-    borderBottomColor: colors.slateGrey,
-    backgroundColor: colors.slateGrey,
-    shadowColor: colors.slateGrey,
+    borderBottomColor: colors.richBlack,
+    backgroundColor: colors.richBlack,
+    shadowColor: colors.richBlack,
     shadowOpacity: .2,
     shadowRadius: 2,
     shadowOffset: {
@@ -168,7 +168,7 @@ const styles = {
     paddingBottom: 4
   },
   freqAndNextPaymentText: {
-    color: colors.slateGrey,
+    color: colors.richBlack,
     fontSize: 14,
     fontFamily: 'Montserrat'
   },
@@ -180,7 +180,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: colors.slateGrey,
 
-    shadowColor: colors.slateGrey,
+    shadowColor: colors.richBlack,
     shadowOpacity: 0,
     shadowRadius: 2,
     shadowOffset: {
@@ -189,7 +189,7 @@ const styles = {
     }
   },
   progbarForeground: {
-    backgroundColor: colors.turqouise,
+    backgroundColor: colors.babyBlue,
     borderRadius: 5
   }
 }

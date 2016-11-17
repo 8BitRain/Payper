@@ -50,7 +50,7 @@ export default class Social extends React.Component {
     return (
       <View style={styles.wrap}>
         <View>
-          <Text style={{ fontFamily: 'Montserrat', fontSize: 24, fontWeight: '200', color: colors.creamWhite, textAlign: 'center' }}>
+          <Text style={{ fontFamily: 'Montserrat', fontSize: 24, fontWeight: '200', color: colors.richBlack, textAlign: 'center' }}>
             {(this.props.requireAllDigits) ? "What's your social?" : "What are the last four\ndigits of your social?"}
           </Text>
         </View>
@@ -59,7 +59,7 @@ export default class Social extends React.Component {
           <TextInput
             ref={"ssnInput"}
             placeholder="e.g. 1234"
-            placeholderTextColor={colors.lightGrey}
+            placeholderTextColor={colors.snow}
             style={styles.textInput}
             maxLength={(this.props.requireAllDigits) ? 9 : 4}
             keyboardType={'number-pad'}
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1.0,
     width: dimensions.width,
-    backgroundColor: colors.richBlack,
+    backgroundColor: colors.gainsboroEdit,
     justifyContent: 'flex-start',
     alignItems: 'center'
   },
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     height: 55,
     width: dimensions.width * 0.75,
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    color: colors.creamWhite,
+    color: colors.richBlack,
     fontFamily: 'Lato',
 
     textAlign: 'center'

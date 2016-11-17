@@ -167,7 +167,7 @@ class Payments extends React.Component {
   getBankModalContent(onboardingState, customerStatus) {
     if (customerStatus === "retry")
       return(
-        <View style={{ flex: 1.0, backgroundColor: colors.richBlack }}>
+        <View style={{ flex: 1.0, backgroundColor: colors.gainsboroEdit }}>
           <BankOnboarding retry displayCloseButton currentUser={this.props.currentUser} closeModal={() => this.toggleBankModal()} />
         </View>
       );
@@ -191,7 +191,7 @@ class Payments extends React.Component {
      outputRange: [2.8, 1]
     })
     return(
-      <View style={{flex: 1, flexDirection: 'column', backgroundColor: colors.richBlack}}>
+      <View style={{flex: 1, flexDirection: 'column', backgroundColor: colors.gainsboroEdit}}>
           {/*Note the static value 165 needs to account for the position that the footer is away from the bottom of the screen*/}
           <View style={{position: "absolute", height: dimensions.height * .16, bottom: 0, left: 0, right: 0,  justifyContent: 'center', alignItems: 'center', borderColor: "black", borderWidth: 0}}>
 
@@ -201,11 +201,11 @@ class Payments extends React.Component {
 
           </View>
           <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 50, width: dimensions.width - 20}}>
-            <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>
+            <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.gainsboroEdit, width: dimensions.width - 20, padding: 0}}>
               { (this.props.activeFilter == "incoming") ? "Your incoming payments will show up here." :  "Your outgoing payments will show up here." }
             </Text>
 
-            <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, marginTop: 25, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>
+            <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, marginTop: 25, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.gainsboroEdit, width: dimensions.width - 20, padding: 0}}>
                {"See what other users are currently splitting!"}
             </Text>
 
@@ -225,25 +225,25 @@ class Payments extends React.Component {
           {/*<Carousel hideIndicators={true} animate={true} delay={5000}>
             <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 100, width: dimensions.width - 20}}>
               <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-thunderstorm-outline" color={'rgba(0, 0, 0, 0.15)'} />
-              <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '200', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>
+              <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '200', paddingLeft: 35, paddingRight: 35, color: colors.gainsboroEdit, width: dimensions.width - 20, padding: 0}}>
                 { "There’s a storm brewing. A savings storm." }
               </Text>
             </View>
             <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 100, width: dimensions.width - 20}}>
               <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-heart-outline" color={'rgba(0, 0, 0, 0.15)'} />
-              <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '200', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>
+              <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '200', paddingLeft: 35, paddingRight: 35, color: colors.gainsboroEdit, width: dimensions.width - 20, padding: 0}}>
                 { "Split a Spotify family plan and listen for as low as $3 a month!" }
               </Text>
             </View>
             <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 100, width: dimensions.width - 20}}>
               <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-beer" color={'rgba(0, 0, 0, 0.15)'} />
-              <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '200', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>
+              <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '200', paddingLeft: 35, paddingRight: 35, color: colors.gainsboroEdit, width: dimensions.width - 20, padding: 0}}>
                 { "More savings, more beer money!" }
               </Text>
             </View>
             <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginBottom: 100, width: dimensions.width - 20}}>
               <Ionicons style={{ paddingTop: 1, paddingBottom: 1, paddingLeft: 4, paddingRight: 4, borderRadius: 3}} size={128} name="ios-stopwatch-outline" color={'rgba(0, 0, 0, 0.15)'} />
-              <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '200', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>
+              <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '200', paddingLeft: 35, paddingRight: 35, color: colors.gainsboroEdit, width: dimensions.width - 20, padding: 0}}>
                 { "The longer you wait, the less you save. Start splitting now!" }
               </Text>
             </View>
@@ -391,7 +391,7 @@ class Payments extends React.Component {
 
   render() {
     return(
-      <View style={{flex: 1.0, backgroundColor: colors.richBlack}}>
+      <View style={{flex: 1.0, backgroundColor: colors.gainsboroEdit}}>
 
         <View style={{flex: 1.0}}>
           { /* Bank account notice bar (if necessary) */

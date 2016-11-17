@@ -255,7 +255,7 @@ export default class BankOnboardingView extends React.Component {
 
         { /* Header */ }
         <View style={styles.headerWrap} onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}>
-          <Image source={require('../../assets/images/Payper_logo_turqouise.png')} style={{ height: this.state.headerHeight * 0.8, width: (this.state.headerHeight * 0.8) * this.logoAspectRatio }} />
+          <Image source={require('../../assets/images/Payper_logo_babyblue.png')} style={{ height: this.state.headerHeight * 0.8, width: (this.state.headerHeight * 0.8) * this.logoAspectRatio }} />
         </View>
 
         { /* Cancel or back button */

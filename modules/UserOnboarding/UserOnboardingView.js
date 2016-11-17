@@ -144,12 +144,12 @@ export default class UserOnboardingView extends React.Component {
 
   render() {
     return(
-      <View style={{ flex: 1.0, backgroundColor: colors.richBlack }}>
+      <View style={{ flex: 1.0, backgroundColor: colors.gainsboroEdit }}>
         <StatusBar barStyle='light-content' />
 
         { /* Header */ }
         <View style={styles.headerWrap} onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}>
-          <Image source={require('../../assets/images/Payper_logo_turqouise.png')} style={{ height: this.state.headerHeight * 0.9, width: (this.state.headerHeight * 0.9) * this.logoAspectRatio }} />
+          <Image source={require('../../assets/images/Payper_logo_babyblue.png')} style={{ height: this.state.headerHeight * 0.9, width: (this.state.headerHeight * 0.9) * this.logoAspectRatio }} />
         </View>
 
         { /* Back button */ }
@@ -186,7 +186,7 @@ export default class UserOnboardingView extends React.Component {
 
         { /* Bank onboarding modal */ }
         <Modal animationType={"slide"} visible={this.state.bankOnboardingModalVisible}>
-          <View style={{ backgroundColor: colors.richBlack, flex: 1.0, width: dimensions.width }}>
+          <View style={{ backgroundColor: colors.gainsboroEdit, flex: 1.0, width: dimensions.width }}>
             <BankOnboardingView {...this.props} displayCloseButton={false} />
           </View>
         </Modal>
