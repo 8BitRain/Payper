@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1.0,
     width: dimensions.width,
-    backgroundColor: colors.richBlack,
+    backgroundColor: colors.creamWhite,
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingTop: 20

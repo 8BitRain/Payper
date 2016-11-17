@@ -191,7 +191,7 @@ class Payments extends React.Component {
      outputRange: [2.8, 1]
     })
     return(
-      <View style={{flex: 1, flexDirection: 'column', backgroundColor: colors.white}}>
+      <View style={{flex: 1, flexDirection: 'column', backgroundColor: colors.richBlack}}>
           {/*Note the static value 165 needs to account for the position that the footer is away from the bottom of the screen*/}
           <View style={{position: "absolute", height: dimensions.height * .16, bottom: 0, left: 0, right: 0,  justifyContent: 'center', alignItems: 'center', borderColor: "black", borderWidth: 0}}>
 
@@ -391,7 +391,7 @@ class Payments extends React.Component {
 
   render() {
     return(
-      <View style={{flex: 1.0, backgroundColor: colors.white}}>
+      <View style={{flex: 1.0, backgroundColor: colors.richBlack}}>
 
         <View style={{flex: 1.0}}>
           { /* Bank account notice bar (if necessary) */

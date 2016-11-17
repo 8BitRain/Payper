@@ -43,7 +43,7 @@ class PayCard extends React.Component {
     return(
       <TouchableHighlight
         activeOpacity={0.8}
-        underlayColor={colors.creamWhite}
+        underlayColor={colors.richBlack}
         onPress={() => (dummy) ? null : Actions.PaymentDetails(this.props)}>
 
         <View style={[styles.wrap, {paddingTop: 5, marginBottom: 10, paddingBottom: 5, borderBottomWidth: 0.0, borderBottomColor: colors.turqouise}]}>
@@ -56,7 +56,7 @@ class PayCard extends React.Component {
                   {(pic)
                     ? <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: pic}} />
                     : <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={{color: colors.turqouise, fontSize: 18, fontWeight: '300'}}>
+                        <Text style={{color: colors.turqouise, fontSize: 18, fontWeight: '900', fontFamily: "Montserrat"}}>
                           {this.getInitials()}
                         </Text>
                       </View> }
@@ -69,8 +69,8 @@ class PayCard extends React.Component {
                   {name}
                 </Text>
                 <View style={{flexDirection: 'row'}}>
-                  <EvilIcons name={"tag"} size={22} color={colors.creamWhite} />
-                  <Text style={{color: colors.creamWhite, fontSize: 14, fontFamily: 'Montserrat'}}>
+                  <EvilIcons name={"tag"} size={22} color={colors.snow} />
+                  <Text style={{color: colors.snow, fontSize: 14, fontFamily: 'Montserrat'}}>
                     {purpose}
                   </Text>
                 </View>
@@ -118,7 +118,7 @@ class PayCard extends React.Component {
 
           { /* Chevron */ }
           <View style={{padding: 25}}>
-            <Entypo name={"chevron-thin-right"} color={colors.creamWhite} size={20} style={{alignSelf: 'flex-start'}} />
+            <Entypo name={"chevron-thin-right"} color={colors.snow} size={20} style={{alignSelf: 'flex-start'}} />
           </View>
 
           { /* Notice indiciator (if need be) */ }
@@ -145,9 +145,11 @@ const styles = {
     width: imageDims.width,
     height: imageDims.height,
     borderRadius: imageDims.width / 2,
-    shadowColor: colors.slateGrey,
-    shadowOpacity: 0,
-    shadowRadius: 5,
+    borderBottomColor: colors.slateGrey,
+    backgroundColor: colors.snow,
+    shadowColor: colors.snow,
+    shadowOpacity: .2,
+    shadowRadius: 2,
     shadowOffset: {
       height: 0,
       width: 0

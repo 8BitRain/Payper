@@ -57,7 +57,7 @@ export default class Name extends React.Component {
     return (
       <View style={styles.wrap}>
         <View>
-          <Text style={{ fontFamily: 'Montserrat', fontSize: 24, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
+          <Text style={{ fontFamily: 'Montserrat', fontSize: 24, fontWeight: '200', color: colors.snow, textAlign: 'center' }}>
             { "What's your first and last name?" }
           </Text>
         </View>

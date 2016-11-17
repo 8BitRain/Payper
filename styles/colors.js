@@ -33,6 +33,7 @@ const colors = {
   turqouise: "#45B8AC",
   carminePink: "#E94F37",
   pastelRed: "#FF6B6B",
+  snow: "#FFFBFC",
 
   // Potential main colors
   malachite: "#20BF55",
