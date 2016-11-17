@@ -35,6 +35,9 @@ const colors = {
   pastelRed: "#FF6B6B",
   snow: "#FFFBFC",
 
+  gainsboroEdit: "#DBDBDB",
+  babyBlue: "#85C7F2",
+
   // Potential main colors
   malachite: "#20BF55",
 

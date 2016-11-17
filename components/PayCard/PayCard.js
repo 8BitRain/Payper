@@ -43,7 +43,7 @@ class PayCard extends React.Component {
     return(
       <TouchableHighlight
         activeOpacity={0.8}
-        underlayColor={colors.richBlack}
+        underlayColor={colors.gainsboroEdit}
         onPress={() => (dummy) ? null : Actions.PaymentDetails(this.props)}>
 
         <View style={[styles.wrap, {paddingTop: 5, marginBottom: 10, paddingBottom: 5, borderBottomWidth: 0.0, borderBottomColor: colors.turqouise}]}>
@@ -69,8 +69,8 @@ class PayCard extends React.Component {
                   {name}
                 </Text>
                 <View style={{flexDirection: 'row'}}>
-                  <EvilIcons name={"tag"} size={22} color={colors.snow} />
-                  <Text style={{color: colors.snow, fontSize: 14, fontFamily: 'Montserrat'}}>
+                  <EvilIcons name={"tag"} size={22} color={colors.slateGrey} />
+                  <Text style={{color: colors.slateGrey, fontSize: 14, fontFamily: 'Montserrat'}}>
                     {purpose}
                   </Text>
                 </View>
@@ -118,7 +118,7 @@ class PayCard extends React.Component {
 
           { /* Chevron */ }
           <View style={{padding: 25}}>
-            <Entypo name={"chevron-thin-right"} color={colors.snow} size={20} style={{alignSelf: 'flex-start'}} />
+            <Entypo name={"chevron-thin-right"} color={colors.slateGrey} size={20} style={{alignSelf: 'flex-start'}} />
           </View>
 
           { /* Notice indiciator (if need be) */ }
@@ -136,7 +136,7 @@ class PayCard extends React.Component {
 const styles = {
   wrap: {
     flexDirection: 'row',
-    backgroundColor: colors.richBlack,
+    backgroundColor: colors.gainsboroEdit,
     width: dims.width,
     alignItems: 'center',
     paddingLeft: 15
@@ -146,8 +146,8 @@ const styles = {
     height: imageDims.height,
     borderRadius: imageDims.width / 2,
     borderBottomColor: colors.slateGrey,
-    backgroundColor: colors.snow,
-    shadowColor: colors.snow,
+    backgroundColor: colors.slateGrey,
+    shadowColor: colors.slateGrey,
     shadowOpacity: .2,
     shadowRadius: 2,
     shadowOffset: {

@@ -131,7 +131,7 @@ export default class LandingScreenView extends React.Component {
 
   render() {
     return (
-      <Animated.View style={{ flex: 1.0, backgroundColor: colors.richBlack, opacity: this.pageWrapOpacity, paddingTop: 20 }}>
+      <Animated.View style={{ flex: 1.0, backgroundColor: colors.gainsboroEdit, opacity: this.pageWrapOpacity, paddingTop: 20 }}>
         { /* Lighten status bar text */ }
         <StatusBar barStyle="light-content" />
 
@@ -153,15 +153,15 @@ export default class LandingScreenView extends React.Component {
         </View>
 
         { /* Payment cards */ }
-        <View style={{ flex: 0.9, justifyContent: 'center', alignItems: 'center', paddingLeft: 10, paddingRight: 10, paddingTop: 10, backgroundColor: colors.richBlack }}>
+        <View style={{ flex: 0.9, justifyContent: 'center', alignItems: 'center', paddingLeft: 10, paddingRight: 10, paddingTop: 10, backgroundColor: colors.gainsboroEdit }}>
           <ScrollView>
             <PaymentCards key={"preventsRerender"} />
-            <View style={{ height: dimensions.height * 0.2, width: dimensions.width, backgroundColor: colors.richBlack }} />
+            <View style={{ height: dimensions.height * 0.2, width: dimensions.width, backgroundColor: colors.gainsboroEdit }} />
           </ScrollView>
         </View>
 
         { /* Footer */ }
-        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: dimensions.height * 0.2, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.richBlack }}>
+        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: dimensions.height * 0.2, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.gainsboroEdit }}>
           <LoginButton
             style={{width: dimensions.width - 60, height: 45 }}
             readPermissions={["email", "public_profile", "user_friends"]}
@@ -183,7 +183,7 @@ export default class LandingScreenView extends React.Component {
             underlayColor={'transparent'}
             onPress={() => Actions.UserOnboardingViewContainer()}>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={{ fontFamily: 'Roboto', color: colors.white, fontSize: 18, fontWeight: '100' }}>
+              <Text style={{ fontFamily: 'Lato', color: colors.slateGrey, fontSize: 18, fontWeight: '500' }}>
                 {"or "}
               </Text>
               <Text style={{ fontFamily: 'Roboto', color: colors.turqouise, fontSize: 18, fontWeight: '500', fontFamily: "Lato" }}>
@@ -202,7 +202,7 @@ export default class LandingScreenView extends React.Component {
 
         { /* Facebook login loading view */
           (this.state.loading)
-            ? <Animated.View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.richBlack, opacity: this.loadingOpacity, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            ? <Animated.View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.gainsboroEdit, opacity: this.loadingOpacity, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
                   {"Logging in..."}
                 </Text>
