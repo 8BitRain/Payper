@@ -54,10 +54,10 @@ export default class DateOfBirth extends React.Component {
   this.values[this.state.index] = input;
   switch (this.state.index) {
     case 0:
-      this.day = input;
+      this.month = input;
       break;
     case 1:
-      this.month = input;
+      this.day = input;
       break;
     case 2:
       this.year = input;
@@ -81,6 +81,16 @@ export default class DateOfBirth extends React.Component {
     if(Number(input) < 10 && input.length != 2){
       console.log("Value: " + input)
       return "0" + input;
+    }
+    if(type == "day"){
+      if(Number(input) > 31){
+        throw "Day values must be between 1 and 31"
+      }
+    }
+    if(type == "month"){
+      if(Number(input) > 12){
+        throw "Month values must be between 1 and 12"
+      }
     }
     if(type == "year" && input.length != 4){
       console.log("input length ")
@@ -119,17 +129,17 @@ export default class DateOfBirth extends React.Component {
         </View>
 
         <View style={styles.textInputWrap}>
-          <TextInput ref="dateInput" defaultValue={this.values[0]} onFocus={() => this.setState({ index: 0, index0Focused: true, validationError: false })} maxLength={2} keyboardType={'number-pad'} placeholder={(this.state.index0Focused) ? null : "Date"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e) } />
+          <TextInput ref="dateInput" defaultValue={this.values[0]} onFocus={() => this.setState({ index: 0, index0Focused: true, validationError: false })} maxLength={2} keyboardType={'number-pad'} placeholder={(this.state.index0Focused) ? null : "Month"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e) } />
           <Text style={styles.dateDash}>-</Text>
-          <TextInput ref="1" defaultValue={this.values[1]} onFocus={() => this.setState({ index: 1, index1Focused: true, validationError: false })} maxLength={2} keyboardType={'number-pad'} placeholder={(this.state.index1Focused) ? null : "Month"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="1" defaultValue={this.values[1]} onFocus={() => this.setState({ index: 1, index1Focused: true, validationError: false })} maxLength={2} keyboardType={'number-pad'} placeholder={(this.state.index1Focused) ? null : "Day"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
           <Text style={styles.dateDash}>-</Text>
           <TextInput ref="2" defaultValue={this.values[2]} onFocus={() => this.setState({ index: 2, index2Focused: true, validationError: false })} maxLength={4} keyboardType={'number-pad'} placeholder={(this.state.index2Focused) ? null : "Year"} placeholderTextColor={colors.lightGrey} style={styles.textInput}  onChangeText={(e) => this.handleChangeText(e)} />
         </View>
 
         <View style={{flexDirection: "row"}}>
          <Text style={styles.birthdayText}>You were born on </Text>
-         {Number(this.day) ? <Text style={styles.birthdayText}> {this.dates[parseInt(this.day)] }</Text> : null}
-         {Number(this.month) ? <Text style={styles.birthdayText}> {parseInt(this.month)}</Text> : null}
+         {Number(this.month) ? <Text style={styles.birthdayText}> {this.dates[parseInt(this.month)] }</Text> : null}
+         {Number(this.day) ? <Text style={styles.birthdayText}> {parseInt(this.day)}</Text> : null}
          {Number(this.year) ? <View style={{flexDirection: "row"}}><Text style={styles.birthdayText}> {parseInt(this.year)} </Text></View> : null}
         </View>
 
