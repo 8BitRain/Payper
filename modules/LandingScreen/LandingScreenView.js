@@ -31,21 +31,27 @@ export default class LandingScreenView extends React.Component {
     this.state = {
       headerHeight: 0,
       loginModalVisible: false,
-      signUpModalVisible: false
+      signUpModalVisible: false,
+      loading: false
     }
   }
 
   toggleLoginModal() {
-    this.setState({ loginModalVisible: !this.state.loginModalVisible })
+    this.setState({ loginModalVisible: !this.state.loginModalVisible });
+  }
+
+  toggleLoadingScreen() {
+    this.setState({ loading: !this.state.loading });
+    Animated.timing(this.loadingOpacity, {
+      toValue: (this.loadingOpacity._value === 0) ? 1.0 : 0.0,
+      duration: 325
+    }).start();
   }
 
   toggleSignUpModal() {
     this.setState({ signUpModalVisible: !this.state.signUpModalVisible })
   }
 
-  /**
-    *   TODO: migrate to signInWithEmailAndPassword()
-  **/
   onGenericLoginSuccess() {
     let appFlags = this.props.currentUser.appFlags
     if (appFlags && appFlags.onboarding_state === "customer") {
@@ -57,6 +63,7 @@ export default class LandingScreenView extends React.Component {
 
   signinWithFacebook(userData) {
     let { token } = userData
+    this.toggleLoadingScreen()
 
     signin({
       type: "facebook",
@@ -79,19 +86,8 @@ export default class LandingScreenView extends React.Component {
       } else {
         alert("Something went wrong. Please try again later.")
         FBLoginManager.logOut()
+        this.toggleLoadingScreen()
       }
-    })
-  }
-
-  signInWithEmailAndPassword(params) {
-    let { email, pass } = params
-
-    signin({
-      email, pass,
-      type: "generic"
-    }, (user) => {
-      console.log("signInWithEmailAndPassword callback was invoked...")
-      console.log("Got user", user)
     })
   }
 
@@ -182,6 +178,15 @@ export default class LandingScreenView extends React.Component {
             currentUser={this.props.currentUser} />
 
         </Modal>
+
+        { /* Facebook login loading view */
+        (this.state.loading)
+          ? <Animated.View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.richBlack, opacity: this.loadingOpacity, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
+                Logging in...
+              </Text>
+            </Animated.View>
+          : null }
       </Animated.View>
     )
   }

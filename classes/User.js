@@ -205,7 +205,11 @@ export default class User {
         updateViaRedux({ nativeContacts: c });
 
         Lambda.updateContacts({ token: this.token, phoneNumbers: SetMaster5000.contactsArrayToNumbersArray(c) }, () => {
+          console.log("Lambda.updateContacts callback was invoked")
+
           Firebase.listenUntilFirstValue("existingPhoneContacts/" + this.uid, (res) => {
+            console.log("Firebase.listenUntilFirstValue callback was invoked")
+
             Firebase.scrub("existingPhoneContacts/" + this.uid);
             if (Array.isArray(res) && res.length > 0) {
               var parsedContacts = SetMaster5000.parseNativeContactList({ phoneNumbers: res, contacts: c });
