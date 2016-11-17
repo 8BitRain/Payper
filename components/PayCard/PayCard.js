@@ -46,7 +46,7 @@ class PayCard extends React.Component {
         underlayColor={colors.gainsboroEdit}
         onPress={() => (dummy) ? null : Actions.PaymentDetails(this.props)}>
 
-        <View style={[styles.wrap, {paddingTop: 5, marginBottom: 10, paddingBottom: 5, borderBottomWidth: 0.0, borderBottomColor: colors.babyBlue}]}>
+        <View style={[styles.wrap, {paddingTop: 5, marginBottom: 10, paddingBottom: 5, borderBottomWidth: 0, borderBottomColor: "#F4D06F"}]}>
           <View style={{flexDirection: 'column', flex: 1.0}}>
             <View style={{flexDirection: 'row'}}>
 
@@ -56,7 +56,7 @@ class PayCard extends React.Component {
                   {(pic)
                     ? <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: pic}} />
                     : <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={{color: colors.babyBlue, fontSize: 18, fontWeight: '900', fontFamily: "Montserrat"}}>
+                        <Text style={{color: colors.carribeanGreen, fontSize: 18, fontWeight: '900', fontFamily: "Montserrat"}}>
                           {this.getInitials()}
                         </Text>
                       </View> }
@@ -65,12 +65,12 @@ class PayCard extends React.Component {
 
               { /* Name and payment purpose */ }
               <View style={{justifyContent: 'center', paddingLeft: 6}}>
-                <Text style={{color: colors.babyBlue, fontSize: 22, fontWeight: '800', fontFamily: "Montserrat"}}>
+                <Text style={{color: colors.carribeanGreen, fontSize: 22, fontWeight: '800', fontFamily: "Montserrat"}}>
                   {name}
                 </Text>
                 <View style={{flexDirection: 'row'}}>
-                  <EvilIcons name={"tag"} size={22} color={colors.richBlack} />
-                  <Text style={{color: colors.richBlack, fontSize: 14, fontFamily: 'Montserrat'}}>
+                  <EvilIcons name={"tag"} size={22} color={"#995D81"} />
+                  <Text style={{color: "#995D81", fontSize: 14, fontFamily: 'Montserrat'}}>
                     {purpose}
                   </Text>
                 </View>
@@ -118,7 +118,7 @@ class PayCard extends React.Component {
 
           { /* Chevron */ }
           <View style={{padding: 25}}>
-            <Entypo name={"chevron-thin-right"} color={colors.richBlack} size={20} style={{alignSelf: 'flex-start'}} />
+            <Entypo name={"chevron-thin-right"} color={colors.slateGrey} size={20} style={{alignSelf: 'flex-start'}} />
           </View>
 
           { /* Notice indiciator (if need be) */ }
@@ -145,10 +145,10 @@ const styles = {
     width: imageDims.width,
     height: imageDims.height,
     borderRadius: imageDims.width / 2,
-    borderBottomColor: colors.richBlack,
-    backgroundColor: colors.richBlack,
-    shadowColor: colors.richBlack,
-    shadowOpacity: .2,
+    borderBottomColor: colors.gainsboroEdit,
+    backgroundColor: colors.snow,
+    shadowColor: colors.gainsboroEdit,
+    shadowOpacity: 0,
     shadowRadius: 2,
     shadowOffset: {
       height: 0,
@@ -180,7 +180,7 @@ const styles = {
     borderRadius: 5,
     backgroundColor: colors.slateGrey,
 
-    shadowColor: colors.richBlack,
+    shadowColor: colors.gainsboroEdit,
     shadowOpacity: 0,
     shadowRadius: 2,
     shadowOffset: {
@@ -189,7 +189,7 @@ const styles = {
     }
   },
   progbarForeground: {
-    backgroundColor: colors.babyBlue,
+    backgroundColor: colors.carribeanGreen,
     borderRadius: 5
   }
 }

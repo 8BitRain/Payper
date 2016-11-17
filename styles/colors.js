@@ -34,6 +34,8 @@ const colors = {
   carminePink: "#E94F37",
   pastelRed: "#FF6B6B",
   snow: "#FFFBFC",
+  carribeanGreen: "#06D6A0",
+  antiqueFuschia: "#995D81",
 
   gainsboroEdit: "#DBDBDB",
   babyBlue: "#85C7F2",

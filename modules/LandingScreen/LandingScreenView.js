@@ -138,14 +138,14 @@ export default class LandingScreenView extends React.Component {
         { /* Header */ }
         <View onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})} style={{flex: 0.1, width: dimensions.width, flexDirection: 'row'}}>
           <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-            <Image source={require('../../assets/images/Payper_logo_babyblue.png')} style={{ height: this.state.headerHeight * 1.4, width: (this.state.headerHeight * 1.4) * this.logoAspectRatio }} />
+            <Image source={require('../../assets/images/Payper_logo_turqouise.png')} style={{ height: this.state.headerHeight * 1.4, width: (this.state.headerHeight * 1.4) * this.logoAspectRatio }} />
           </View>
           <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'flex-end'}}>
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={'transparent'}
               onPress={() => this.toggleLoginModal()}>
-              <Text style={{fontSize: 18, color: colors.babyBlue, fontWeight: '500', padding: 20, fontFamily: "Lato"}}>
+              <Text style={{fontSize: 18, color: colors.carribeanGreen, fontWeight: '500', padding: 20, fontFamily: "Lato"}}>
                 {"Sign in"}
               </Text>
             </TouchableHighlight>
@@ -153,7 +153,7 @@ export default class LandingScreenView extends React.Component {
         </View>
 
         { /* Payment cards */ }
-        <View style={{ flex: 0.9, justifyContent: 'center', alignItems: 'center', paddingLeft: 10, paddingRight: 10, paddingTop: 10, backgroundColor: colors.gainsboroEdit }}>
+        <View style={{ flex: 0.9, justifyContent: 'center', alignItems: 'center', paddingLeft: 10, paddingRight: 0, paddingTop: 10, backgroundColor: colors.gainsboroEdit }}>
           <ScrollView>
             <PaymentCards key={"preventsRerender"} />
             <View style={{ height: dimensions.height * 0.2, width: dimensions.width, backgroundColor: colors.gainsboroEdit }} />
@@ -183,10 +183,10 @@ export default class LandingScreenView extends React.Component {
             underlayColor={'transparent'}
             onPress={() => Actions.UserOnboardingViewContainer()}>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={{ fontFamily: 'Lato', color: colors.slateGrey, fontSize: 18, fontWeight: '500' }}>
+              <Text style={{ fontFamily: 'Lato', color: colors.gainsboroEdit, fontSize: 18, fontWeight: '500' }}>
                 {"or "}
               </Text>
-              <Text style={{ fontFamily: 'Roboto', color: colors.babyBlue, fontSize: 18, fontWeight: '500', fontFamily: "Lato" }}>
+              <Text style={{ fontFamily: 'Roboto', color: colors.carribeanGreen, fontSize: 18, fontWeight: '500', fontFamily: "Lato" }}>
                 {"sign up with email"}
               </Text>
             </View>

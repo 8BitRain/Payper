@@ -149,7 +149,7 @@ export default class UserOnboardingView extends React.Component {
 
         { /* Header */ }
         <View style={styles.headerWrap} onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}>
-          <Image source={require('../../assets/images/Payper_logo_babyblue.png')} style={{ height: this.state.headerHeight * 0.9, width: (this.state.headerHeight * 0.9) * this.logoAspectRatio }} />
+          <Image source={require('../../assets/images/Payper_logo_turqouise.png')} style={{ height: this.state.headerHeight * 0.9, width: (this.state.headerHeight * 0.9) * this.logoAspectRatio }} />
         </View>
 
         { /* Back button */ }

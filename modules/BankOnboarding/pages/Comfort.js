@@ -22,7 +22,7 @@ export default class Comfort extends React.Component {
           <Text style={{ fontFamily: 'Montserrat', fontSize: 28, fontWeight: '200', color: colors.richBlack, textAlign: 'center' }}>
             { "Let's verify your identity" }
             { "\n\n" }
-            <FontAwesome name={"user-secret"} color={colors.babyBlue} size={48} />
+            <FontAwesome name={"user-secret"} color={colors.turqouise} size={48} />
             { "\n" }
           </Text>
           <Text style={{ fontFamily: 'Lato', fontSize: 18, fontWeight: '400', color: colors.richBlack, width: dimensions.width * 1.0, textAlign: 'center', paddingLeft: 25, paddingRight: 25 }}>
