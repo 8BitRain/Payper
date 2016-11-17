@@ -263,7 +263,7 @@ class Header extends React.Component {
         { /* Filler */ }
         <View style={[styles.chunkQuo, { alignItems: 'center' }]}>
           { this.props.headerProps.types.closeIconTopRight ? getCloseIcon(this.props.callbackClose) : null }
-          { this.props.headerProps.types.notificationsIcon ? getNotificationsIcon(this.props.headerProps.callbackNotifications, this.props.headerProps.opacity, (this.props.currentUser.appFlags) ? this.props.currentUser.appFlags.numUnseenNotifications : 0) : null }
+          { this.props.headerProps.types.notificationsIcon ? getNotificationsIcon(this.props.headerProps.callbackNotifications, this.props.headerProps.opacity, (this.props.currentUser.appFlags) ? this.props.currentUser.appFlags.numUnseenNotifications : 0) }
         </View>
       </View>
     );
