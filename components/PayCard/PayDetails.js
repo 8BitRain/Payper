@@ -218,7 +218,7 @@ class paydetails extends React.Component {
 
         {(splitVal.length > 1)
           ? <View style={{flexDirection: 'row', alignItems: 'center', padding: 10, paddingTop: 0}}>
-              <EvilIcons name={"exclamation"} size={20} color={colors.alertYellow} style={{paddingRight: 5}} />
+              <EvilIcons name={"exclamation"} size={20} color={colors.alertRed} style={{paddingRight: 5}} />
               <Text style={{color: colors.deepBlue, width: dims.width * 0.8}}>
                 {splitVal[1]}
               </Text>

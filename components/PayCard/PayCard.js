@@ -98,7 +98,7 @@ class PayCard extends React.Component {
                     <Text style={[styles.freqAndNextPaymentText, {paddingLeft: 3}]}>
                       {frequency}
                     </Text>
-                    <Entypo name={"hour-glass"} size={13} color={colors.maastrichtBlue} style={{paddingLeft: 3}} />
+                    <Entypo name={"hour-glass"} size={13} color={colors.maastrichtBlue} style={{paddingLeft: 3, paddingTop: 1}} />
                     <Text style={[styles.freqAndNextPaymentText, {paddingLeft: 3}]}>
                       {next}
                     </Text>
@@ -122,9 +122,11 @@ class PayCard extends React.Component {
 
           { /* Notice indiciator (if need be) */ }
           <View style={{position: 'absolute', top: 0, right: 0, padding: 8}}>
-            {(status.indexOf("pending") === -1)
-              ? null
-              : <EvilIcons name={"exclamation"} color={colors.alertYellow} size={24} /> }
+            {(paymentsMade === payments)
+              ? <EvilIcons name={"check"} color={colors.alertGreen} size={24} />
+              : (status.indexOf("pending") === -1)
+                ? null
+                : <EvilIcons name={"exclamation"} color={colors.alertRed} size={24} /> }
           </View>
         </View>
       </TouchableHighlight>
@@ -146,7 +148,7 @@ const styles = {
     borderRadius: imageDims.width / 2,
     shadowColor: colors.slateGrey,
     shadowOpacity: 1.0,
-    shadowRadius: 5,
+    shadowRadius: 3,
     shadowOffset: {
       height: 0,
       width: 0
