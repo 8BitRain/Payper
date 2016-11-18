@@ -169,7 +169,7 @@ class NewMainView extends React.Component {
         onCloseStart={() => this.rotateToPlus()}
         content={<SideMenu />}>
 
-        <View style={{flex: 1.0, backgroundColor: colors.mintCream}}>
+        <View style={{flex: 1.0, backgroundColor: colors.lightGrey}}>
           <StatusBar barStyle={"default"} />
 
           { /* Header */ }
@@ -177,14 +177,25 @@ class NewMainView extends React.Component {
             activeOpacity={0.8}
             underlayColor={'transparent'}
             onPress={() => this.toggleFilterMenu()}>
-            <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: colors.mintCream}}>
-              <Text style={{color: colors.deepBlue, fontSize: 17}}>
+            <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: colors.accent,
+
+
+            shadowColor: colors.medGrey,
+            shadowOpacity: 1.0,
+            shadowRadius: 1,
+            shadowOffset: {
+              height: 1,
+              width: 0
+            }
+
+          }}>
+              <Text style={{color: colors.lightGrey, fontSize: 17}}>
                 {this.state.activeFilter + " Payments"}
               </Text>
 
               <Animated.View style={{position: 'absolute', top: 0, right: 6, paddingTop: 24}}>
                 <Animated.View style={{ transform: [{ rotate: this.animatedValues.chevronAngle }] }}>
-                  <EvilIcons name={"chevron-down"} size={34} color={colors.deepBlue} />
+                  <EvilIcons name={"chevron-down"} size={34} color={colors.lightGrey} />
                 </Animated.View>
               </Animated.View>
             </View>
@@ -201,7 +212,7 @@ class NewMainView extends React.Component {
                       underlayColor={colors.maastrichtBlue}
                       onPress={() => this.toggleFilter('All')}>
                       <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                        <EvilIcons name={"eye"} size={38} color={colors.dodgerBlue} />
+                        <EvilIcons name={"eye"} size={38} color={colors.accent} />
                         <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
                           {"All"}
                         </Text>
@@ -214,7 +225,7 @@ class NewMainView extends React.Component {
                       underlayColor={colors.maastrichtBlue}
                       onPress={() => this.toggleFilter('Outgoing')}>
                       <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                        <EvilIcons name={"arrow-up"} size={38} color={colors.dodgerBlue} />
+                        <EvilIcons name={"arrow-up"} size={38} color={colors.accent} />
                         <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
                           {"Outgoing"}
                         </Text>
@@ -259,7 +270,7 @@ class NewMainView extends React.Component {
             enableEmptySections />
 
           { /* Footer */ }
-          <View style={{position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row', borderTopWidth: 1.0, borderColor: colors.lightGrey, justifyContent: 'space-between'}}>
+          <View style={{position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row', borderTopWidth: 1.0, borderColor: colors.lightGrey, backgroundColor: 'rgba(255, 255, 255, 0.64)', justifyContent: 'space-between'}}>
             <VibrancyView blurType="light" style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} />
 
             { /* User button */ }
@@ -270,7 +281,7 @@ class NewMainView extends React.Component {
                 onPress={() => this.drawer.open()}>
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 14, paddingRight: 20}}>
                   <EvilIcons name={"chevron-left"} size={30} color={colors.slateGrey} style={{marginRight: -5}} />
-                  <EvilIcons name={"user"} size={40} color={colors.dodgerBlue} />
+                  <EvilIcons name={"user"} size={40} color={colors.accent} />
                 </View>
               </TouchableHighlight>
             </View>
@@ -282,7 +293,7 @@ class NewMainView extends React.Component {
               onPress={() => alert("Would open create payment flow")}
               style={{padding: 14, paddingRight: 20}}>
               <Animated.View style={{justifyContent: 'center', alignItems: 'center', transform: [{ rotate: this.animatedValues.plusAngle }]}}>
-                <EvilIcons name={"plus"} size={40} color={colors.dodgerBlue} />
+                <EvilIcons name={"plus"} size={40} color={colors.accent} />
               </Animated.View>
             </TouchableHighlight>
           </View>
