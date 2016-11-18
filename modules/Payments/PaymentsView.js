@@ -202,11 +202,11 @@ class Payments extends React.Component {
           </View>
           <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 50, width: dimensions.width - 20}}>
             <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>
-              { (this.props.activeFilter == "incoming") ? "Your incoming payments will show up here." :  "Your outgoing payments will show up here." }
+              { "Your Payments" }
             </Text>
 
             <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, marginTop: 25, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dimensions.width - 20, padding: 0}}>
-               {"See what other users are currently splitting!"}
+               {"When you make a payment, it will show up here."}
             </Text>
 
             <TouchableHighlight
