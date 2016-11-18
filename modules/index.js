@@ -1,1 +1,1 @@
-exports.NewMainView = require('./NewMainView/NewMainView')
+exports.MainViewContainer = require('./Main/MainViewContainer')

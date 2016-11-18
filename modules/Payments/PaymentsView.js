@@ -268,12 +268,12 @@ class Payments extends React.Component {
     let formattedTimestamp = moment(payment.nextPayment).format("MMM D")
     let next = (formattedTimestamp !== "Invalid date") ? formattedTimestamp : "TBD"
 
-    generateTimeline({
-      frequency: payment.frequency,
-      payments: payment.payments,
-      paymentsMade: payment.paymentsMade,
-      nextPayment: payment.nextPayment
-    })
+    // generateTimeline({
+    //   frequency: payment.frequency,
+    //   payments: payment.payments,
+    //   paymentsMade: payment.paymentsMade,
+    //   nextPayment: payment.nextPayment
+    // })
 
     let details = {
       pic: user.pic,
@@ -304,62 +304,47 @@ class Payments extends React.Component {
 
     return <PayCard {...details} />
 
-    function generateTimeline(params) {
-      // let { frequency, payments, paymentsMade, nextPayment } = params
-      // console.log("generateTimeline was invoked with params", params)
-
-      // if (!nextPayment || nextPayment === "" || typeof nextPayment === 'undefined')
-      //   nextPayment =
-      //
-
-      let timeline = []
-
-      let nextPayment = moment().add(3, "w")
-      let frequency = "WEEKLY"
-      let payments = 4
-      let paymentsMade = 3
-      let amount = 10
-
-      console.log("--------------------------------")
-      console.log("nextPayment", nextPayment)
-      console.log("frequency", frequency)
-      console.log("payments", payments)
-      console.log("paymentsMade", paymentsMade)
-
-      // {
-      //   timestamp: "Sep 9th at 1:04pm",
-      //   amount: 5,
-      //   bankAccount: "UWCU Checking",
-      //   transferStatus: "arrived",
-      //   id: "5"
-      // }
-
-      // Determine when the first payment occured
-      let by = (frequency === "MONTHLY") ? "M" : "w"
-      let firstPayment = moment(nextPayment).subtract(paymentsMade, by)
-      console.log("firstPayment", firstPayment)
-
-      timeline.push({
-        timestamp: firstPayment.add(1, by).format("MMM d"),
-        amount: amount,
-        bankAccount: "Unknown"
-      })
-
-      // for (var i = 1; i <= payments; i++) {
-      //   console.log("i:", i)
-      //   console.log("by:", by)
-      //   timeline.push({
-      //     timestamp: firstPayment.add(i, by).format("MMM d"),
-      //     amount: amount,
-      //     bankAccount: "Unknown",
-      //     transferStatus: (i <= paymentsMade) ? "arrived" : "uninitiated",
-      //     id: i
-      //   })
-      // }
-
-      console.log("Timeline:", timeline)
-      console.log("--------------------------------")
-    }
+    // function generateTimeline(params) {
+    //   let { frequency, payments, paymentsMade, nextPayment } = params
+    //   console.log("generateTimeline was invoked with params", params)
+    //
+    //   let timeline = []
+    //   let nextPayment = moment().add(3, "w")
+    //   let frequency = "WEEKLY"
+    //   let payments = 4
+    //   let paymentsMade = 3
+    //   let amount = 10
+    //
+    //   {
+    //     timestamp: "Sep 9th at 1:04pm",
+    //     amount: 5,
+    //     bankAccount: "UWCU Checking",
+    //     transferStatus: "arrived",
+    //     id: "5"
+    //   }
+    //
+    //   // Determine when the first payment occured
+    //   let by = (frequency === "MONTHLY") ? "M" : "w"
+    //   let firstPayment = moment(nextPayment).subtract(paymentsMade, by)
+    //
+    //   timeline.push({
+    //     timestamp: firstPayment.add(1, by).format("MMM d"),
+    //     amount: amount,
+    //     bankAccount: "Unknown"
+    //   })
+    //
+    //   for (var i = 1; i <= payments; i++) {
+    //     console.log("i:", i)
+    //     console.log("by:", by)
+    //     timeline.push({
+    //       timestamp: firstPayment.add(i, by).format("MMM d"),
+    //       amount: amount,
+    //       bankAccount: "Unknown",
+    //       transferStatus: (i <= paymentsMade) ? "arrived" : "uninitiated",
+    //       id: i
+    //     })
+    //   }
+    // }
   }
 
   render() {

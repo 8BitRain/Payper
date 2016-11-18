@@ -18,7 +18,7 @@ export default class IAV extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.currentUser.fundingSourceAdded) Actions.MainViewContainer();
+    if (nextProps.currentUser.fundingSourceAdded) Actions.NewMainView();
   }
 
   render() {

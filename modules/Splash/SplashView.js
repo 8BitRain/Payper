@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, Image, NetInfo, TouchableHighlight, Animated, Easing, Dimensions } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import { signin } from '../../auth'
 import Mixpanel from 'react-native-mixpanel';
 import Entypo from 'react-native-vector-icons/Entypo';
 var FBLoginManager = require('NativeModules').FBLoginManager;
@@ -84,27 +85,31 @@ class SplashView extends React.Component {
 
     // Check beta status
     Async.get('betaStatus', (val) => {
-      if (val == "fullAccess") {
+      if (val === "fullAccess") {
         Async.get('user', (user) => {
           if (!user) {
-            this._handleSignInFailure();
+            this._handleSignInFailure()
           } else {
-            user = JSON.parse(user);
-            console.log("User in asyncstorage is:\n", user);
-            let onboardingState = (user.appFlags) ? user.appFlags.onboarding_state : null;
-            if (onboardingState === "customer" || !user.loginToken) {
-              _this._handleSignInFailure();
-            } else {
-              this.props.currentUser.loginWithCachedToken({ loginToken: user.loginToken },
-                () => _this._handleSignInSuccess(),
-                () => _this._handleSignInFailure());
-            }
+            let { key, token } = JSON.parse(user)
+
+            signin({
+              key,
+              accessToken: token,
+              type: "cached"
+            }, (userDetails) => {
+              if (userDetails === null) {
+                this._handleSignInFailure()
+              } else {
+                this.props.currentUser.initialize(userDetails)
+                this._handleSignInSuccess()
+              }
+            })
           }
-        });
+        })
       } else {
         Actions.BetaLandingScreenView();
       }
-    });
+    })
   }
 
   _onDisconnect() {

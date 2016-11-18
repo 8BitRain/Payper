@@ -8,7 +8,7 @@ import Error from './components/Error';
 
 // Uncomment to reset user manually
 import * as Async from './helpers/Async';
-// Async.set('user', '');
+Async.set('user', '');
 // Async.set('BankOnboardingStateCache', '');
 Async.set('betaStatus', 'fullAccess');
 
@@ -16,12 +16,13 @@ Async.set('betaStatus', 'fullAccess');
 import SplashViewContainer from './modules/Splash/SplashViewContainer';
 import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreenView';
 import LandingScreenViewContainer from './modules/LandingScreen/LandingScreenViewContainer';
-import MainViewContainer from './modules/Main/MainViewContainer';
 import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer';
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView';
 import Phone from './modules/UserOnboarding/pages/Phone';
+
+// New modules
 import { PayDetails } from './components/PayCard'
-import { NewMainView } from './modules'
+import { MainViewContainer } from './modules'
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
@@ -38,7 +39,7 @@ const getSceneStyle = function(props, computedProps) {
     shadowOffset: null,
     shadowOpacity: null,
     shadowRadius: null,
-    backgroundColor: colors.deepBlue
+    backgroundColor: colors.mintCream
   };
 
   if (computedProps.isActive) {
@@ -78,12 +79,6 @@ export default class Coincast extends React.Component {
           <Scene key="root" hideNavBar hideTabBar>
 
             <Scene initial
-              component={NewMainView}
-              key="NewMainView"
-              type="replace"
-              panHandlers={null} />
-
-            <Scene
               component={SplashViewContainer}
               key="SplashViewContainer"
               type="replace"
