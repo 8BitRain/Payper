@@ -141,7 +141,7 @@ class NewMainView extends React.Component {
           easing: Easing.elastic(0.4)
         }),
         Animated.timing(filterMenuHeight, {
-          toValue: (this.state.filterMenuOpen) ? 75 : 0,
+          toValue: (this.state.filterMenuOpen) ? 75 : 1,
           duration: 150,
           easing: Easing.elastic(0.4)
         })
@@ -170,31 +170,31 @@ class NewMainView extends React.Component {
         content={<SideMenu />}>
 
         <View style={{flex: 1.0, backgroundColor: colors.mintCream}}>
-          <StatusBar barStyle={"light-content"} />
+          <StatusBar barStyle={"default"} />
 
           { /* Header */ }
           <TouchableHighlight
             activeOpacity={0.8}
-            underlayColor={colors.deepBlue}
+            underlayColor={'transparent'}
             onPress={() => this.toggleFilterMenu()}>
-            <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: colors.deepBlue}}>
-              <Text style={{color: colors.mintCream, fontSize: 17}}>
+            <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: colors.mintCream}}>
+              <Text style={{color: colors.deepBlue, fontSize: 17}}>
                 {this.state.activeFilter + " Payments"}
               </Text>
 
               <Animated.View style={{position: 'absolute', top: 0, right: 6, paddingTop: 24}}>
                 <Animated.View style={{ transform: [{ rotate: this.animatedValues.chevronAngle }] }}>
-                  <EvilIcons name={"chevron-down"} size={34} color={colors.mintCream} />
+                  <EvilIcons name={"chevron-down"} size={34} color={colors.deepBlue} />
                 </Animated.View>
               </Animated.View>
             </View>
           </TouchableHighlight>
 
-          <Animated.View style={{height: this.animatedValues.filterMenuHeight, backgroundColor: colors.maastrichtBlue}}>
+          <Animated.View style={{height: this.animatedValues.filterMenuHeight, backgroundColor: colors.lightGrey}}>
             {(!this.state.filterMenuOpen)
               ? null
               : <View>
-                  <ScrollView indicatorStyle={"white"} horizontal contentContainerStyle={{paddingLeft: 12, paddingRight: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                  <ScrollView indicatorStyle={"black"} horizontal contentContainerStyle={{paddingLeft: 12, paddingRight: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                     { /* All */ }
                     <TouchableHighlight
                       activeOpacity={0.8}
@@ -202,7 +202,7 @@ class NewMainView extends React.Component {
                       onPress={() => this.toggleFilter('All')}>
                       <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
                         <EvilIcons name={"eye"} size={38} color={colors.dodgerBlue} />
-                        <Text style={{color: colors.mintCream, fontSize: 16}}>
+                        <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
                           {"All"}
                         </Text>
                       </View>
@@ -215,7 +215,7 @@ class NewMainView extends React.Component {
                       onPress={() => this.toggleFilter('Outgoing')}>
                       <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
                         <EvilIcons name={"arrow-up"} size={38} color={colors.dodgerBlue} />
-                        <Text style={{color: colors.mintCream, fontSize: 16}}>
+                        <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
                           {"Outgoing"}
                         </Text>
                       </View>
@@ -228,7 +228,7 @@ class NewMainView extends React.Component {
                       onPress={() => this.toggleFilter('Incoming')}>
                       <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
                         <EvilIcons name={"arrow-down"} size={38} color={colors.dodgerBlue} />
-                        <Text style={{color: colors.mintCream, fontSize: 16}}>
+                        <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
                           {"Incoming"}
                         </Text>
                       </View>
@@ -241,7 +241,7 @@ class NewMainView extends React.Component {
                       onPress={() => this.toggleFilter('Soonest')}>
                       <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
                         <EvilIcons name={"calendar"} size={38} color={colors.dodgerBlue} />
-                        <Text style={{color: colors.mintCream, fontSize: 16}}>
+                        <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
                           {"Soonest"}
                         </Text>
                       </View>
@@ -259,17 +259,17 @@ class NewMainView extends React.Component {
             enableEmptySections />
 
           { /* Footer */ }
-          <View style={{position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: colors.deepBlueOpaque}}>
-            <VibrancyView blurType="dark" style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} />
+          <View style={{position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row', borderTopWidth: 1.0, borderColor: colors.lightGrey, justifyContent: 'space-between'}}>
+            <VibrancyView blurType="light" style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} />
 
             { /* User button */ }
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <TouchableHighlight
                 activeOpacity={0.8}
-                underlayColor={colors.deepBlue}
+                underlayColor={'transparent'}
                 onPress={() => this.drawer.open()}>
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 14, paddingRight: 20}}>
-                  <EvilIcons name={"chevron-left"} size={30} color={colors.gainsboro} style={{marginRight: -5}} />
+                  <EvilIcons name={"chevron-left"} size={30} color={colors.slateGrey} style={{marginRight: -5}} />
                   <EvilIcons name={"user"} size={40} color={colors.dodgerBlue} />
                 </View>
               </TouchableHighlight>

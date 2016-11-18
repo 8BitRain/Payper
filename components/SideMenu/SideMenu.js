@@ -18,7 +18,10 @@ class SideMenu extends React.Component {
   render() {
     return(
       <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', backgroundColor: colors.deeperBlue, paddingTop: 40}}>
-        { /* Header */ }
+
+        
+
+
 
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, borderWidth: 1, borderColor: colors.dodgerBlue, padding: 6}} source={{uri: "https://scontent-yyz1-1.xx.fbcdn.net/v/t1.0-9/14962557_1250241661662960_1895438605245811540_n.jpg?oh=ec9e68d2762b6306578dd0a50f401221&oe=58D4F092"}} />
