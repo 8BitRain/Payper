@@ -13,12 +13,12 @@ const colors = {
   alertYellow: "#f7ca2a",
   alertGreen: "#10bf5a",
 
-
   snowWhite: "#FFFBFC",
   medGrey: "#E8E5E6",
   lightGrey: "#F6F5F5",
-  accent: "#6369D1",
-  deepBlue: "#000a14"
+  accent: "#00CEB3",
+  deepBlue: "#000a14",
+  gradientGreen: "#23CE6B"
 }
 
 module.exports = colors

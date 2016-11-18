@@ -1,6 +1,6 @@
 import React from 'react'
 import moment from 'moment'
-import { View, TouchableHighlight, ListView, ScrollView, RecyclerViewBackedScrollView, Dimensions, Animated, Easing, StatusBar, Text } from 'react-native'
+import { View, TouchableHighlight, ListView, ScrollView, RecyclerViewBackedScrollView, Dimensions, Animated, Easing, StatusBar, Text, Image } from 'react-native'
 import { VibrancyView } from "react-native-blur"
 import { colors } from '../../globalStyles'
 import { SideMenu, PayCard } from '../../components'
@@ -170,30 +170,22 @@ class NewMainView extends React.Component {
         content={<SideMenu />}>
 
         <View style={{flex: 1.0, backgroundColor: colors.lightGrey}}>
-          <StatusBar barStyle={"default"} />
+          <StatusBar barStyle={"light-content"} />
 
           { /* Header */ }
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
             onPress={() => this.toggleFilterMenu()}>
-            <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: colors.accent,
+            <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent', overflow: 'hidden'}}>
 
+            <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
 
-            shadowColor: colors.medGrey,
-            shadowOpacity: 1.0,
-            shadowRadius: 1,
-            shadowOffset: {
-              height: 1,
-              width: 0
-            }
-
-          }}>
-              <Text style={{color: colors.lightGrey, fontSize: 17}}>
+              <Text style={{color: colors.lightGrey, fontSize: 17, backgroundColor: 'transparent'}}>
                 {this.state.activeFilter + " Payments"}
               </Text>
 
-              <Animated.View style={{position: 'absolute', top: 0, right: 6, paddingTop: 24}}>
+              <Animated.View style={{position: 'absolute', top: 0, right: 6, paddingTop: 24, backgroundColor: 'transparent'}}>
                 <Animated.View style={{ transform: [{ rotate: this.animatedValues.chevronAngle }] }}>
                   <EvilIcons name={"chevron-down"} size={34} color={colors.lightGrey} />
                 </Animated.View>
@@ -238,7 +230,7 @@ class NewMainView extends React.Component {
                       underlayColor={colors.maastrichtBlue}
                       onPress={() => this.toggleFilter('Incoming')}>
                       <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                        <EvilIcons name={"arrow-down"} size={38} color={colors.dodgerBlue} />
+                        <EvilIcons name={"arrow-down"} size={38} color={colors.accent} />
                         <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
                           {"Incoming"}
                         </Text>
@@ -251,7 +243,7 @@ class NewMainView extends React.Component {
                       underlayColor={colors.maastrichtBlue}
                       onPress={() => this.toggleFilter('Soonest')}>
                       <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                        <EvilIcons name={"calendar"} size={38} color={colors.dodgerBlue} />
+                        <EvilIcons name={"calendar"} size={38} color={colors.accent} />
                         <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
                           {"Soonest"}
                         </Text>
