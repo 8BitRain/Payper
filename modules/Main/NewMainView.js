@@ -42,6 +42,8 @@ class NewMainView extends React.Component {
       drawerOpen: false,
       filterMenuOpen: false,
       createPaymentModalVisible: false,
+      sideMenuSubpageModalVisible: false,
+      acitveSideMenuSubpage: null,
       activeFilter: "All"
     }
   }
@@ -146,6 +148,13 @@ class NewMainView extends React.Component {
     })
   }
 
+  toggleSideMenuSubpage(p) {
+    this.setState({
+      activeSideMenuSubpage: p,
+      sideMenuSubpageModalVisible: (p) ? true : false
+    })
+  }
+
   render() {
     let { activeFilter } = this.state
     let dataSource = []
@@ -164,7 +173,7 @@ class NewMainView extends React.Component {
         tweenDuration={150}
         onOpenStart={() => this.rotateToX()}
         onCloseStart={() => this.rotateToPlus()}
-        content={<SideMenu {...this.props} />}>
+        content={<SideMenu {...this.props} toggleSideMenuSubpage={(p) => this.toggleSideMenuSubpage(p)} />}>
 
         <View style={{flex: 1.0, backgroundColor: colors.lightGrey}}>
           <StatusBar barStyle={"light-content"} />
@@ -286,12 +295,33 @@ class NewMainView extends React.Component {
 
           { /* Create payment modal */ }
           <Modal animationType={"slide"} visible={this.state.createPaymentModalVisible}>
-
             <CreatePaymentView
               {...this.props}
               toggleModal={() => this.setState({createPaymentModalVisible: false})} />
-
           </Modal>
+
+          { /* Side menu page modal */ }
+          <Modal animationType={"slide"} visible={this.state.sideMenuSubpageModalVisible}>
+            <View style={{flex: 1.0}}>
+              <View style={{overflow: 'hidden'}}>
+                <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
+                <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
+                  <Text style={{color: colors.lightGrey, fontSize: 17, backgroundColor: 'transparent'}}>
+                    {this.state.activeSideMenuSubpage}
+                  </Text>
+
+                  <TouchableHighlight
+                    activeOpacity={0.75}
+                    underlayColor={'transparent'}
+                    style={{position: 'absolute', left: 15}}
+                    onPress={() => this.toggleSideMenuSubpage(null)}>
+                    <EvilIcons name={"close"} color={colors.snowWhite} size={24} />
+                  </TouchableHighlight>
+                </View>
+              </View>
+            </View>
+          </Modal>
+
         </View>
       </Drawer>
     )

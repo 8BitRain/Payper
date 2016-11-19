@@ -106,19 +106,6 @@ export default class User {
   }
 
   /**
-    *   Log out of Firebase auth
-    *   -----------------------------------------------------------------------
-  **/
-  logout() {
-    console.log("Logging out...");
-    if (this.provider === "facebook") FBLoginManager.logOut();
-    firebase.auth().signOut();
-    this.stopListening();
-    this.destroy();
-    Actions.LandingScreenViewContainer();
-  }
-
-  /**
     *   Create a Dwolla customer for this user
     *   params: firstName, lastName, address, city, state, zip, dob, ssn
     *   tacked on params: email, phone, token

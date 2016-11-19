@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, TouchableHighlight, Image, Dimensions, StyleSheet } from 'react-native'
 import { colors } from '../../globalStyles'
 import { VibrancyView } from 'react-native-blur'
+import { signout } from '../../auth'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 let dims = Dimensions.get('window')
@@ -38,43 +39,46 @@ class SideMenu extends React.Component {
   constructor(props) {
     super(props)
 
+    let { toggleSideMenuSubpage } = this.props
+
     this.state = {
       options: [
         {
           title: 'Bank Accounts',
           icon: 'archive',
-          destination: () => alert("Would open bank accounts page")
+          destination: () => toggleSideMenuSubpage("Bank Accounts")
         },
         {
           title: 'Notifications',
           icon: 'bell',
-          destination: () => alert("Would open notifications page")
+          destination: () => toggleSideMenuSubpage("Notifications")
         },
         {
           title: 'Invite a Friend',
           icon: 'envelope',
-          destination: () => alert("Would open invite page")
+          destination: () => toggleSideMenuSubpage("Invite a Friend")
         },
         {
           title: 'Settings',
           icon: 'gear',
-          destination: () => alert("Would open settings page")
+          destination: () => toggleSideMenuSubpage("Settings")
         },
         {
           title: 'FAQ',
           icon: 'question',
-          destination: () => alert("Would open FAQ page")
+          destination: () => toggleSideMenuSubpage("FAQ")
         },
         {
           title: 'Signout',
           icon: 'chevron-left',
-          destination: () => alert("Would sign out")
+          destination: () => signout(this.props.currentUser)
         }
       ]
     }
   }
 
   render() {
+    let { toggleSideMenuSubpage } = this.props
     let { first_name, last_name, username, profile_pic } = this.props.currentUser
     let name = first_name + " " + last_name
     let initialsBuffer = name.split(" ").map((name) => name.charAt(0))
@@ -88,7 +92,7 @@ class SideMenu extends React.Component {
         <TouchableHighlight
           activeOpacity={0.75}
           underlayColor={'transparent'}
-          onPress={() => alert("Would open profile page")}>
+          onPress={() => toggleSideMenuSubpage("My Profile")}>
           <View style={{flexDirection: 'row', padding: 20, alignItems: 'center'}}>
             <View style={styles.imageWrap}>
               {(profile_pic)
@@ -114,8 +118,7 @@ class SideMenu extends React.Component {
         </TouchableHighlight>
 
         { /* Rows */ }
-        { this.state.options.map((o) => <Row {...o} key={Math.random()} />) }
-
+        { this.state.options.map((o) => <Row {...o} {...this.props} key={Math.random()} />) }
       </View>
     )
   }

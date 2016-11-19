@@ -2,6 +2,8 @@ import Mixpanel from 'react-native-mixpanel'
 import firebase from 'firebase'
 import * as config from '../config'
 import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk'
+import { FBLoginManager } from 'NativeModules'
+import { Actions } from 'react-native-router-flux'
 
 /**
   *   Given a Facebook Graph API access token ('token'), retrieve the corresponding
@@ -35,6 +37,13 @@ exports.requestFacebookUserData = function(token, cb) {
     Mixpanel.trackWithProperties('Failed Facebook Signin', { err: err });
     cb(null)
   }
+}
+
+exports.signout = function(currentUser) {
+  Actions.LandingScreenViewContainer()
+  firebase.auth().signOut()
+  FBLoginManager.logOut()
+  currentUser.destroy()
 }
 
 exports.signin = function(params, cb) {

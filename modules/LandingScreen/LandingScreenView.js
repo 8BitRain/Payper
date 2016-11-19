@@ -117,7 +117,7 @@ export default class LandingScreenView extends React.Component {
         { /* Payment cards */ }
         <View style={{ flex: 0.9, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.mintCream }}>
           <ScrollView>
-            <PaymentCards />
+            {/*<PaymentCards />*/}
             <View style={{ height: dimensions.height * 0.2, width: dimensions.width, backgroundColor: colors.mintCream }} />
           </ScrollView>
         </View>
