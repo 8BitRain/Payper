@@ -38,7 +38,9 @@ class NewMainView extends React.Component {
     }
 
     this.state = {
-      ds: this.EMPTY_DATA_SOURCE.cloneWithRows({}),
+      all: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
+      inc: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
+      out: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
       drawerOpen: false,
       filterMenuOpen: false,
       createPaymentModalVisible: false,
@@ -73,7 +75,9 @@ class NewMainView extends React.Component {
     let all = inc.concat(out)
 
     this.setState({
-      ds: this.EMPTY_DATA_SOURCE.cloneWithRows(all)
+      all: this.EMPTY_DATA_SOURCE.cloneWithRows(all),
+      inc: this.EMPTY_DATA_SOURCE.cloneWithRows(inc),
+      out: this.EMPTY_DATA_SOURCE.cloneWithRows(out)
     })
   }
 
@@ -169,7 +173,13 @@ class NewMainView extends React.Component {
   }
 
   render() {
-    let { ds } = this.state
+    let { activeFilter } = this.state
+    let dataSource = []
+    switch (activeFilter) {
+      case "Outgoing": dataSource = this.state.out; break;
+      case "Incoming": dataSource = this.state.inc; break;
+      case "All": dataSource = this.state.all; break;
+    }
 
     return(
       <Drawer
@@ -186,89 +196,86 @@ class NewMainView extends React.Component {
           <StatusBar barStyle={"light-content"} />
 
           { /* Header */ }
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            onPress={() => this.toggleFilterMenu()}>
-            <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent', overflow: 'hidden'}}>
-
+          <View style={{overflow: 'hidden'}}>
             <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
 
-              <Text style={{color: colors.lightGrey, fontSize: 17, backgroundColor: 'transparent'}}>
-                {this.state.activeFilter + " Payments"}
-              </Text>
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              onPress={() => this.toggleFilterMenu()}>
+              <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
+                <Text style={{color: colors.lightGrey, fontSize: 17, backgroundColor: 'transparent'}}>
+                  {this.state.activeFilter + " Payments"}
+                </Text>
 
-              <Animated.View style={{position: 'absolute', top: 0, right: 6, paddingTop: 24, backgroundColor: 'transparent'}}>
-                <Animated.View style={{ transform: [{ rotate: this.animatedValues.chevronAngle }] }}>
-                  <EvilIcons name={"chevron-down"} size={34} color={colors.lightGrey} />
+                <Animated.View style={{position: 'absolute', top: 0, right: 6, paddingTop: 24, backgroundColor: 'transparent'}}>
+                  <Animated.View style={{ transform: [{ rotate: this.animatedValues.chevronAngle }] }}>
+                    <EvilIcons name={"chevron-down"} size={34} color={colors.lightGrey} />
+                  </Animated.View>
                 </Animated.View>
-              </Animated.View>
-            </View>
-          </TouchableHighlight>
+              </View>
+            </TouchableHighlight>
+          </View>
 
-          <Animated.View style={{height: this.animatedValues.filterMenuHeight, backgroundColor: colors.lightGrey}}>
-            {(!this.state.filterMenuOpen)
-              ? null
-              : <View>
-                  <ScrollView indicatorStyle={"black"} horizontal contentContainerStyle={{paddingLeft: 12, paddingRight: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                    { /* All */ }
-                    <TouchableHighlight
-                      activeOpacity={0.8}
-                      underlayColor={colors.maastrichtBlue}
-                      onPress={() => this.toggleFilter('All')}>
-                      <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                        <EvilIcons name={"eye"} size={38} color={colors.accent} />
-                        <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
-                          {"All"}
-                        </Text>
-                      </View>
-                    </TouchableHighlight>
+          <Animated.View style={{height: this.animatedValues.filterMenuHeight, backgroundColor: colors.snowWhite, overflow: 'hidden'}}>
+            <ScrollView horizontal contentContainerStyle={{flex: 1.0, paddingLeft: 12, paddingRight: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+              { /* All */ }
+              <TouchableHighlight
+                activeOpacity={0.8}
+                underlayColor={'transparent'}
+                onPress={() => this.toggleFilter('All')}>
+                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
+                  <EvilIcons name={"eye"} size={38} color={colors.accent} />
+                  <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
+                    {"All"}
+                  </Text>
+                </View>
+              </TouchableHighlight>
 
-                    { /* Outgoing */ }
-                    <TouchableHighlight
-                      activeOpacity={0.8}
-                      underlayColor={colors.maastrichtBlue}
-                      onPress={() => this.toggleFilter('Outgoing')}>
-                      <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                        <EvilIcons name={"arrow-up"} size={38} color={colors.accent} />
-                        <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
-                          {"Outgoing"}
-                        </Text>
-                      </View>
-                    </TouchableHighlight>
+              { /* Outgoing */ }
+              <TouchableHighlight
+                activeOpacity={0.8}
+                underlayColor={'transparent'}
+                onPress={() => this.toggleFilter('Outgoing')}>
+                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
+                  <EvilIcons name={"arrow-up"} size={38} color={colors.accent} />
+                  <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
+                    {"Outgoing"}
+                  </Text>
+                </View>
+              </TouchableHighlight>
 
-                    { /* Incoming */ }
-                    <TouchableHighlight
-                      activeOpacity={0.8}
-                      underlayColor={colors.maastrichtBlue}
-                      onPress={() => this.toggleFilter('Incoming')}>
-                      <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                        <EvilIcons name={"arrow-down"} size={38} color={colors.accent} />
-                        <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
-                          {"Incoming"}
-                        </Text>
-                      </View>
-                    </TouchableHighlight>
+              { /* Incoming */ }
+              <TouchableHighlight
+                activeOpacity={0.8}
+                underlayColor={'transparent'}
+                onPress={() => this.toggleFilter('Incoming')}>
+                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
+                  <EvilIcons name={"arrow-down"} size={38} color={colors.accent} />
+                  <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
+                    {"Incoming"}
+                  </Text>
+                </View>
+              </TouchableHighlight>
 
-                    { /* Soonest */ }
-                    <TouchableHighlight
-                      activeOpacity={0.8}
-                      underlayColor={colors.maastrichtBlue}
-                      onPress={() => this.toggleFilter('Soonest')}>
-                      <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                        <EvilIcons name={"calendar"} size={38} color={colors.accent} />
-                        <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
-                          {"Soonest"}
-                        </Text>
-                      </View>
-                    </TouchableHighlight>
-                  </ScrollView>
-                </View> }
+              { /* Soonest
+              <TouchableHighlight
+                activeOpacity={0.8}
+                underlayColor={colors.maastrichtBlue}
+                onPress={() => this.toggleFilter('Soonest')}>
+                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
+                  <EvilIcons name={"calendar"} size={38} color={colors.accent} />
+                  <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
+                    {"Soonest"}
+                  </Text>
+                </View>
+              </TouchableHighlight> */ }
+            </ScrollView>
           </Animated.View>
 
           { /* Banner info and payment list */ }
           <ListView
-            dataSource={ds}
+            dataSource={dataSource}
             renderRow={this.renderRow.bind(this)}
             renderFooter={() => <View style={{height: 90}} />}
             renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
