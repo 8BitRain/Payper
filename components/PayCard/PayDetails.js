@@ -5,7 +5,7 @@ import * as Lambda from '../../services/Lambda'
 import moment from 'moment'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
-import colors from '../../styles/colors'
+import { colors } from '../../globalStyles'
 
 const dims = Dimensions.get('window')
 let imageDims = {
@@ -108,7 +108,7 @@ class paydetails extends React.Component {
   rejectRequest(payment) {
     let { token, pid, paymentType, status } = this.props
 
-    // TODO: Optimistically mark payment card as confirmed
+    // TODO: Optimistically delete payment card
     Lambda.rejectPayment({
       token: token,
       payment_id: pid,
@@ -175,8 +175,8 @@ class paydetails extends React.Component {
         height: height,
         textColorInterpolator: textColorInterpolator,
         textColor: textColorInterpolator.interpolate({
-          inputRange: [0, 125], // deepBlue, dodgerBlue
-          outputRange: ['rgba(0, 16, 33, 1.0)', 'rgba(16, 152, 247, 1.0)'],
+          inputRange: [0, 125], // deepBlue, accent
+          outputRange: ['rgba(0, 16, 33, 1.0)', 'rgba(0, 207, 179, 1.0)'],
         }),
         chevronAngleInterpolator: chevronAngleInterpolator,
         chevronAngle: chevronAngleInterpolator.interpolate({
@@ -192,11 +192,9 @@ class paydetails extends React.Component {
   }
 
   renderRow(rowData, sectionTitle) {
-    console.log("rowData", rowData)
     if (sectionTitle === "" && rowData.key === "Accept or Reject Request") return this.renderAcceptRejectRow()
     if (sectionTitle === 'Payment Timeline') return this.renderTimelineRow(rowData)
     if (sectionTitle === 'Payment Details') return this.renderDetailRow(rowData)
-
     return <View style={{height: 0}} />
   }
 
@@ -235,7 +233,7 @@ class paydetails extends React.Component {
     return(
       <TouchableHighlight
         activeOpacity={0.8}
-        underlayColor={colors.mintCream}
+        underlayColor={colors.snowWhite}
         onPress={() => (this.animatedValues[id].height._value === 1) ? this.expand(id) : this.shrink(id)}>
         <View style={{borderColor: colors.slateGrey, borderBottomWidth: 1.0}}>
           <View>
@@ -282,10 +280,10 @@ class paydetails extends React.Component {
         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flex: 1.0}}>
           <TouchableHighlight
             activeOpacity={0.8}
-            underlayColor={colors.mintCream}
+            underlayColor={colors.snowWhite}
             onPress={() => this.acceptRequest()}>
             <View style={{padding: 20, alignItems: 'center'}}>
-              <EvilIcons name={"like"} size={80} color={colors.dodgerBlue} />
+              <EvilIcons name={"like"} size={80} color={colors.accent} />
               <Text style={{color: colors.deepBlue, fontSize: 16, textAlign: 'center', fontWeight: '300'}}>
                 {"Accept\nRequest"}
               </Text>
@@ -293,7 +291,7 @@ class paydetails extends React.Component {
           </TouchableHighlight>
           <TouchableHighlight
             activeOpacity={0.8}
-            underlayColor={colors.mintCream}
+            underlayColor={colors.snowWhite}
             onPress={() => this.rejectRequest()}>
             <View style={{padding: 20, alignItems: 'center'}}>
               <EvilIcons name={"like"} size={80} color={colors.alertRed} style={{transform: [{rotate: '180deg'}]}} />
@@ -314,7 +312,7 @@ class paydetails extends React.Component {
       )
     } else {
       return(
-        <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', padding: 8, backgroundColor: colors.gainsboro}}>
+        <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', padding: 8, backgroundColor: colors.medGrey}}>
           <Text style={{color: colors.deepBlue}}>{ sectionTitle }</Text>
         </View>
       )
@@ -381,7 +379,7 @@ class paydetails extends React.Component {
         <View style={{flexDirection: 'row', justifyContent: 'space-between', width: dims.width, paddingTop: 15, paddingBottom: 15}}>
           <TouchableHighlight
             activeOpacity={0.8}
-            underlayColor={colors.mintCream}
+            underlayColor={colors.snowWhite}
             style={{padding: 25, paddingTop: 0}}
             onPress={() => Actions.pop()}>
             <Entypo name={"chevron-thin-left"} size={22} color={colors.deepBlue} />
@@ -400,14 +398,14 @@ class paydetails extends React.Component {
             <Text style={{color: colors.deepBlue, fontSize: 22, fontWeight: '200', paddingTop: 8, textAlign: 'center', backgroundColor: 'transparent'}}>
               {name}
             </Text>
-            <Text style={{color: colors.dodgerBlue, fontSize: 16, fontWeight: '200', paddingTop: 4, textAlign: 'center', backgroundColor: 'transparent'}}>
+            <Text style={{color: colors.accent, fontSize: 16, fontWeight: '200', paddingTop: 4, textAlign: 'center', backgroundColor: 'transparent'}}>
               {username}
             </Text>
           </View>
 
           <TouchableHighlight
             activeOpacity={0.8}
-            underlayColor={colors.mintCream}
+            underlayColor={colors.snowWhite}
             style={{padding: 25, paddingTop: 0}}
             onPress={() => this.showActionSheet()}>
             <Entypo name={"dots-three-horizontal"} size={22} color={colors.deepBlue} />
@@ -430,7 +428,7 @@ class paydetails extends React.Component {
 
 const styles = {
   wrap: {
-    backgroundColor: colors.mintCream,
+    backgroundColor: colors.snowWhite,
     paddingTop: 20,
     flex: 1.0,
     flexDirection: 'column',
@@ -443,7 +441,7 @@ const styles = {
     borderRadius: imageDims.width / 2,
     shadowColor: colors.slateGrey,
     shadowOpacity: 1.0,
-    shadowRadius: 5,
+    shadowRadius: 2.4,
     shadowOffset: {
       height: 0,
       width: 0

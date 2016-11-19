@@ -13,6 +13,7 @@ const baseURL = config.details[config.details.env].lambdaBaseURL;
 export default class User {
   constructor(attributes) {
     if (attributes) for (var i in attributes) this[i] = attributes[i];
+    this.paymentFlow = {}
     this.appFlags = {}
     this.payperContacts = []
     this.nativeContacts = []

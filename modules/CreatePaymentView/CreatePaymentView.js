@@ -91,9 +91,6 @@ class CreatePaymentView extends React.Component {
     options.paymentInfo.sender = (options.paymentInfo.type == "request") ? otherUser : thisUser;
     options.paymentInfo.recip = (options.paymentInfo.type == "request") ? thisUser : otherUser;
 
-    // Change active filter for when user is returned to payments view
-    this.props.setActiveFilter((options.paymentInfo.type == "request") ? "incoming" : "outgoing");
-
     if (options.user.uid) {
       options.paymentInfo.invite = false;
       console.log("Sending payment:", options.paymentInfo);
@@ -192,4 +189,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CreatePaymentView;
+module.exports = CreatePaymentView;

@@ -136,8 +136,7 @@ export default class Coincast extends React.Component {
 
             <Scene
               component={PayDetails}
-              key="PaymentDetails"
-              panHandlers={null} />
+              key="PaymentDetails" />
 
           </Scene>
           <Scene key="error" component={Error}/>

@@ -3,7 +3,7 @@ import { Actions } from 'react-native-router-flux'
 import { View, Text, TouchableHighlight, Dimensions, Image } from 'react-native'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
-import colors from '../../styles/colors'
+import { colors } from '../../globalStyles'
 const dims = Dimensions.get('window')
 
 let imageDims = {
@@ -42,10 +42,10 @@ class PayCard extends React.Component {
     return(
       <TouchableHighlight
         activeOpacity={0.8}
-        underlayColor={colors.mintCream}
+        underlayColor={'transparent'}
         onPress={() => (dummy) ? null : Actions.PaymentDetails(this.props)}>
 
-        <View style={[styles.wrap, {paddingTop: 5, paddingBottom: 5, borderBottomWidth: 1.0, borderBottomColor: colors.gainsboro}]}>
+        <View style={[styles.wrap, {paddingTop: 5, paddingBottom: 5}]}>
           <View style={{flexDirection: 'column', flex: 1.0}}>
             <View style={{flexDirection: 'row'}}>
 
@@ -64,7 +64,7 @@ class PayCard extends React.Component {
 
               { /* Name and payment purpose */ }
               <View style={{justifyContent: 'center', paddingLeft: 6}}>
-                <Text style={{color: colors.deepBlue, fontSize: 22, fontWeight: '200'}}>
+                <Text style={{color: colors.deepBlue, fontSize: 22, fontWeight: '400'}}>
                   {name}
                 </Text>
                 <View style={{flexDirection: 'row'}}>
@@ -78,14 +78,14 @@ class PayCard extends React.Component {
             <View style={{flexDirection: 'row', paddingBottom: 10}}>
 
               { /* Payment amount */ }
-              <View style={{width: this.state.profPicDims.width || null, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}} onLayout={(e) => this.layoutAmount(e)}>
-                <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.alertRed, fontSize: 14}]}>
+              <View style={{flex: 0.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}} onLayout={(e) => this.layoutAmount(e)}>
+                <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.carminePink, fontSize: 14}]}>
                   {(incoming) ? "+" : "-"}
                 </Text>
-                <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.alertRed, fontSize: 14, alignSelf: 'flex-start', paddingTop: 3}]}>
+                <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.carminePink, fontSize: 14, alignSelf: 'flex-start', paddingTop: 3}]}>
                   {"$"}
                 </Text>
-                <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.alertRed, fontSize: (amount > 999) ? 16 : 20}]}>
+                <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.carminePink, fontSize: (amount > 999) ? 16 : 20}]}>
                   {amount}
                 </Text>
               </View>
@@ -137,10 +137,20 @@ class PayCard extends React.Component {
 const styles = {
   wrap: {
     flexDirection: 'row',
-    backgroundColor: colors.mintCream,
-    width: dims.width,
+    backgroundColor: colors.snowWhite,
+    width: dims.width * 0.94,
     alignItems: 'center',
-    paddingLeft: 15
+    paddingLeft: 15,
+    borderRadius: 4,
+    alignSelf: 'center',
+    marginTop: 10,
+    shadowColor: colors.medGrey,
+    shadowOpacity: 1.0,
+    shadowRadius: 1,
+    shadowOffset: {
+      height: 0.25,
+      width: 0.25
+    }
   },
   imageWrap: {
     width: imageDims.width,
@@ -148,7 +158,7 @@ const styles = {
     borderRadius: imageDims.width / 2,
     shadowColor: colors.slateGrey,
     shadowOpacity: 1.0,
-    shadowRadius: 3,
+    shadowRadius: 1.5,
     shadowOffset: {
       height: 0,
       width: 0
@@ -157,9 +167,8 @@ const styles = {
   amountText: {
     color: colors.alertGreen,
     fontSize: 20,
-    fontWeight: '200'
+    fontWeight: '400'
   },
-
   freqAndNextPaymentWrap: {
     flexDirection: 'row',
     flex: 0.9,
@@ -169,24 +178,15 @@ const styles = {
     color: colors.maastrichtBlue,
     fontSize: 14
   },
-
   progbarBackground: {
     flexDirection: 'row',
     flex: 0.9,
     height: 7,
     borderRadius: 5,
-    backgroundColor: colors.slateGrey,
-
-    shadowColor: colors.slateGrey,
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    shadowOffset: {
-      height: 0,
-      width: 0
-    }
+    backgroundColor: colors.medGrey
   },
   progbarForeground: {
-    backgroundColor: colors.maastrichtBlue,
+    backgroundColor: colors.accent,
     borderRadius: 5
   }
 }

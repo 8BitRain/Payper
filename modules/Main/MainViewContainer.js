@@ -1,7 +1,7 @@
 // Dependencies
 import { connect } from 'react-redux';
 import * as d from './MainState';
-import MainView from './MainView';
+import NewMainView from './NewMainView';
 
 function mapStateToProps(state) {
   return {
@@ -16,4 +16,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect( mapStateToProps, mapDispatchToProps )( MainView );
+export default connect( mapStateToProps, mapDispatchToProps )( NewMainView );
