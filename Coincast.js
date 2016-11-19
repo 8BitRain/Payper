@@ -15,8 +15,8 @@ import DeviceInfo from 'react-native-device-info';
 
 // Uncomment to reset user manually
 import * as Async from './helpers/Async';
-Async.set('user', '');
-Async.set('BankOnboardingStateCache', '');
+// Async.set('user', '');
+// Async.set('BankOnboardingStateCache', '');
 Async.set('betaStatus', 'fullAccess');
 
 // Modules
