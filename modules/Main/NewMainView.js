@@ -164,7 +164,7 @@ class NewMainView extends React.Component {
         tweenDuration={150}
         onOpenStart={() => this.rotateToX()}
         onCloseStart={() => this.rotateToPlus()}
-        content={<SideMenu />}>
+        content={<SideMenu {...this.props} />}>
 
         <View style={{flex: 1.0, backgroundColor: colors.lightGrey}}>
           <StatusBar barStyle={"light-content"} />
