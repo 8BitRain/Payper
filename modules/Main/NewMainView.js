@@ -3,15 +3,13 @@ import moment from 'moment'
 import { Actions } from 'react-native-router-flux'
 import { View, TouchableHighlight, ListView, ScrollView, RecyclerViewBackedScrollView, Dimensions, Animated, Easing, StatusBar, Text, Image, Modal } from 'react-native'
 import { VibrancyView } from "react-native-blur"
+import Drawer from 'react-native-drawer'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
+
 import { colors } from '../../globalStyles'
 import { SideMenu, PayCard } from '../../components'
 import { CreatePaymentView } from '../../modules'
-import Drawer from 'react-native-drawer'
-import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const dims = Dimensions.get('window')
-
-// TODO: Remove import
-import { sampleSnapshot } from '../../db'
 
 class NewMainView extends React.Component {
   constructor(props) {
@@ -63,16 +61,31 @@ class NewMainView extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.currentUser.paymentFlow)
       this.generatePayCards(nextProps.currentUser.paymentFlow)
+
   }
 
-  generateRecentActivity() {
-    return {}
+  generatePriorityContent() {
+    let priorityContent = [
+      {
+        type: "priorityContent",
+        reactComponent: <Text style={{color: 'red', padding: 15}}>{"An example of priority content"}</Text>
+      }
+    ]
+
+    return priorityContent
   }
 
   generatePayCards(payFlow) {
     let inc = (payFlow.in) ? payFlow.in : []
     let out = (payFlow.out) ? payFlow.out : []
     let all = inc.concat(out)
+
+    // Render priority content if need be
+    if (false) {
+      inc = this.generatePriorityContent().concat(inc)
+      out = this.generatePriorityContent().concat(out)
+      all = this.generatePriorityContent().concat(all)
+    }
 
     this.setState({
       all: this.EMPTY_DATA_SOURCE.cloneWithRows(all),
@@ -82,54 +95,15 @@ class NewMainView extends React.Component {
   }
 
   renderRow(rowData) {
-    return this.renderPayCard(rowData)
-  }
-
-  renderPayCard(payment) {
-    let user = {
-      name: (payment.flow == "incoming") ? payment.sender_name : payment.recip_name,
-      username: (payment.flow == "incoming") ? payment.sender_username : payment.recip_username,
-      pic: (payment.flow == "incoming") ? payment.sender_pic : payment.recip_pic
+    switch (rowData.type) {
+      case "priorityContent": return rowData.reactComponent
+      default: return <PayCard payment={rowData} currentUser={this.props.currentUser} />
     }
-
-    // TODO: Switch this back!
-    // let frequency = payment.frequency.charAt(0).toUpperCase() + payment.frequency.slice(1).toLowerCase()
-    let frequency = "Weekly"
-    let formattedTimestamp = moment(payment.nextPayment).format("MMM D")
-    let next = (formattedTimestamp !== "Invalid date") ? formattedTimestamp : "TBD"
-
-    let details = {
-      pic: user.pic,
-      name: user.name,
-      username: user.username,
-      purpose: payment.purpose,
-      amount: payment.amount,
-      frequency: frequency,
-      nextTimestamp: payment.nextPayment,
-      next: next,
-      incoming: payment.flow === "incoming",
-      status: payment.status,
-      payments: payment.payments,
-      paymentsMade: payment.paymentsMade,
-      pid: payment.pid,
-      token: this.props.currentUser.token,
-      paymentType: payment.type,
-      timeline: [
-        {
-          timestamp: "Jan 9th at 1:04pm",
-          amount: 5,
-          bankAccount: "UWCU Checking",
-          transferStatus: "uninitiated",
-          id: "1"
-        }
-      ]
-    }
-
-    return <PayCard {...details} />
   }
 
   rotateToX() {
     let { plusAngleInterpolator } = this.animatedValues
+
     Animated.timing(plusAngleInterpolator, {
       toValue: 150,
       duration: 320,

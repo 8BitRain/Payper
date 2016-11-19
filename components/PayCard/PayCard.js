@@ -3,6 +3,8 @@ import { Actions } from 'react-native-router-flux'
 import { View, Text, TouchableHighlight, Dimensions, Image } from 'react-native'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+
+import { parsePaymentDetails } from './helpers'
 import { colors } from '../../globalStyles'
 const dims = Dimensions.get('window')
 
@@ -29,21 +31,17 @@ class PayCard extends React.Component {
     this.setState({ amountDims: e.nativeEvent.layout })
   }
 
-  getInitials() {
-    let { name } = this.props
-    let buffer = name.split(" ").map((name) => name.charAt(0))
-    let initials = buffer.join("")
-    return initials
-  }
-
   render() {
-    let { dummy, pic, name, purpose, amount, frequency, next, incoming, status, payments, paymentsMade } = this.props
+    let details = parsePaymentDetails(this.props)
+    let { dummy, pic, name, purpose, amount, frequency, next, incoming, status, payments, paymentsMade } = details
+    let initialsBuffer = name.split(" ").map((name) => name.charAt(0))
+    let initials = initialsBuffer.join("")
 
     return(
       <TouchableHighlight
         activeOpacity={0.8}
         underlayColor={'transparent'}
-        onPress={() => (dummy) ? null : Actions.PaymentDetails(this.props)}>
+        onPress={() => (dummy) ? null : Actions.PaymentDetails(details)}>
 
         <View style={[styles.wrap, {paddingTop: 5, paddingBottom: 5}]}>
           <View style={{flexDirection: 'column', flex: 1.0}}>
@@ -56,7 +54,7 @@ class PayCard extends React.Component {
                     ? <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: pic}} />
                     : <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center'}}>
                         <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
-                          {this.getInitials()}
+                          {initials}
                         </Text>
                       </View> }
                 </View>
@@ -78,7 +76,7 @@ class PayCard extends React.Component {
             <View style={{flexDirection: 'row', paddingBottom: 10}}>
 
               { /* Payment amount */ }
-              <View style={{flex: 0.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}} onLayout={(e) => this.layoutAmount(e)}>
+              <View style={{width: dims.width * 0.22, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}} onLayout={(e) => this.layoutAmount(e)}>
                 <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.carminePink, fontSize: 14}]}>
                   {(incoming) ? "+" : "-"}
                 </Text>

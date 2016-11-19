@@ -1,0 +1,1 @@
+exports.parsePaymentDetails = require('./parsePaymentDetails')
