@@ -4,6 +4,7 @@ import * as config from '../config'
 import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk'
 import { FBLoginManager } from 'NativeModules'
 import { Actions } from 'react-native-router-flux'
+import { Alert } from 'react-native'
 
 /**
   *   Given a Facebook Graph API access token ('token'), retrieve the corresponding
@@ -40,10 +41,25 @@ exports.requestFacebookUserData = function(token, cb) {
 }
 
 exports.signout = function(currentUser) {
-  Actions.LandingScreenViewContainer()
-  firebase.auth().signOut()
-  FBLoginManager.logOut()
-  currentUser.destroy()
+  Alert.alert(
+    'Wait!',
+    "Are you sure you'd like to sign out?",
+    [
+      {text: 'Cancel', onPress: () => cancel(), style: 'cancel'},
+      {text: 'Yes', onPress: () => yes()},
+    ]
+  )
+
+  function yes() {
+    Actions.LandingScreenViewContainer()
+    firebase.auth().signOut()
+    FBLoginManager.logOut()
+    currentUser.destroy()
+  }
+
+  function cancel() {
+    console.log("Cancelled signout")
+  }
 }
 
 exports.signin = function(params, cb) {

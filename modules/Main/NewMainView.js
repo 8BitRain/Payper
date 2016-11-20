@@ -8,6 +8,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 import { colors } from '../../globalStyles'
 import { SideMenu, PayCard } from '../../components'
+import { MyProfile, BankAccounts, Notifications, Invite, Settings } from '../../components/SideMenuSubpages'
 import { CreatePaymentView } from '../../modules'
 const dims = Dimensions.get('window')
 
@@ -155,9 +156,22 @@ class NewMainView extends React.Component {
     })
   }
 
+  getSideMenuSubpage(sp) {
+    switch (sp) {
+      case "My Profile": return <MyProfile currentUser={this.props.currentUser} />
+      case "Bank Accounts": return <BankAccounts {...this.props} />
+      case "Notifications": return <Notifications {...this.props} />
+      case "Invite a Friend": return <Invite {...this.props} />
+      case "Settings": return <Settings {...this.props} />
+      case "FAQ": return <View><Text>{"FAQ"}</Text></View>
+      default: return <View><Text>{"DEFAULT"}</Text></View>
+    }
+  }
+
   render() {
     let { activeFilter } = this.state
     let dataSource = []
+
     switch (activeFilter) {
       case "Outgoing": dataSource = this.state.out; break;
       case "Incoming": dataSource = this.state.inc; break;
@@ -303,6 +317,8 @@ class NewMainView extends React.Component {
           { /* Side menu page modal */ }
           <Modal animationType={"slide"} visible={this.state.sideMenuSubpageModalVisible}>
             <View style={{flex: 1.0}}>
+
+              { /* Header */ }
               <View style={{overflow: 'hidden'}}>
                 <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
                 <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
@@ -313,15 +329,19 @@ class NewMainView extends React.Component {
                   <TouchableHighlight
                     activeOpacity={0.75}
                     underlayColor={'transparent'}
-                    style={{position: 'absolute', left: 15}}
+                    style={{position: 'absolute', top: 0, left: 0, bottom: 0, padding: 14, paddingTop: 30, justifyContent: 'center'}}
                     onPress={() => this.toggleSideMenuSubpage(null)}>
                     <EvilIcons name={"close"} color={colors.snowWhite} size={24} />
                   </TouchableHighlight>
                 </View>
               </View>
+
+              { /* Inner content */ }
+              <View style={{flex: 1.0}}>
+                {this.getSideMenuSubpage(this.state.activeSideMenuSubpage)}
+              </View>
             </View>
           </Modal>
-
         </View>
       </Drawer>
     )
