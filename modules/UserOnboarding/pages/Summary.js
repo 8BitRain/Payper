@@ -61,7 +61,7 @@ export default class Summary extends React.Component {
               <Entypo name={"user"} color={colors.accent} size={24} />
               <TextInput
                 placeholder={"e.g. John Doe"}
-                placeholderTextColor={colors.lightGrey}
+                placeholderTextColor={colors.deepBlue}
                 autoCapitalize={"words"} autoCorrect={false}
                 onChangeText={input => this.props.induceState({ name: input.trim() })}
                 defaultValue={this.props.user.firstName + " " + this.props.user.lastName}
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1.0,
-    color: colors.white,
+    color: colors.deepBlue,
     paddingLeft: 30
   },
   attributesWrap: {

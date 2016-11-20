@@ -7,7 +7,7 @@ import StickyView from '../../../classes/StickyView';
 import ContinueButton from '../subcomponents/ContinueButton';
 
 // Stylesheets
-import colors from '../../../styles/colors';
+import {colors} from '../../../globalStyles';
 const dimensions = Dimensions.get('window');
 
 export default class Social extends React.Component {
@@ -59,7 +59,7 @@ export default class Social extends React.Component {
           <TextInput
             ref={"ssnInput"}
             placeholder="e.g. 1234"
-            placeholderTextColor={colors.lightGrey}
+            placeholderTextColor={colors.deepBlue}
             style={styles.textInput}
             maxLength={(this.props.requireAllDigits) ? 9 : 4}
             keyboardType={'number-pad'}
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     height: 55,
     width: dimensions.width * 0.75,
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    color: colors.white,
+    color: colors.deepBlue,
     textAlign: 'center'
   }
 });

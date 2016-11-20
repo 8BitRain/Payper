@@ -11,7 +11,7 @@ import StickyView from '../../../classes/StickyView';
 import ContinueButton from '../subcomponents/ContinueButton';
 
 // Stylesheets
-import colors from '../../../styles/colors';
+import {colors} from '../../../globalStyles';
 const dimensions = Dimensions.get('window');
 
 export default class LegalName extends React.Component {
@@ -106,6 +106,6 @@ const styles = StyleSheet.create({
     marginRight: 6,
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
     textAlign: 'center',
-    color: colors.white
+    color: colors.deepBlue
   }
 });

@@ -156,7 +156,7 @@ export default class ZIPCode extends React.Component {
           <TextInput
             ref={"zipInput"}
             placeholder="e.g. 53715"
-            placeholderTextColor={colors.lightGrey}
+            placeholderTextColor={colors.deepBlue}
             defaultValue={this.state.zip}
             maxLength={5}
             keyboardType={'number-pad'}
@@ -165,14 +165,14 @@ export default class ZIPCode extends React.Component {
         </View>
 
         { (this.state.city && this.state.state)
-            ? <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: '200', color: colors.white, textAlign: 'center', paddingTop: 15 }}>
-                <Entypo name={"location-pin"} size={20} color={colors.white} />
+            ? <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: '400', color: colors.deepBlue, textAlign: 'center', paddingTop: 15 }}>
+                <Entypo name={"location-pin"} size={20} color={colors.accent} />
                 { "  " + this.state.city + ", " + this.state.state }
               </Text>
             : null }
 
         { (this.state.loading)
-            ? <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, textAlign: 'center', paddingTop: 15 }}>
+            ? <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '400', color: colors.deepBlue, textAlign: 'center', paddingTop: 15 }}>
                 { "Searching..." }
               </Text>
             : null }
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1.0,
     width: dimensions.width,
-    backgroundColor: colors.richBlack,
+    backgroundColor: colors.snowWhite,
     justifyContent: 'flex-start',
     alignItems: 'center'
   },
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     height: 55,
     width: dimensions.width * 0.75,
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    color: colors.white,
+    color: colors.deepBlue,
     textAlign: 'center',
     marginLeft: 1, marginRight: 1,
   }

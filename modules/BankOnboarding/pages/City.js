@@ -14,7 +14,7 @@ import StickyView from '../../../classes/StickyView';
 import ContinueButton from '../subcomponents/ContinueButton';
 
 // Stylesheets
-import colors from '../../../styles/colors';
+import {colors} from '../../../globalStyles';
 const dimensions = Dimensions.get('window');
 
 export default class City extends React.Component {
@@ -57,8 +57,9 @@ export default class City extends React.Component {
         <GooglePlacesAutocomplete
           ref={"cityInput"}
           styles={autocompleteStyles}
-          textInputProps={{ onChangeText: (text) => this.handleChangeText(text), placeholderTextColor: colors.white, autoCorrect: false }}
+          textInputProps={{ onChangeText: (text) => this.handleChangeText(text), autoCorrect: false }}
           placeholder={"What's your billing address' city?"}
+          placeholderTextColor={colors.deepBlue}
           minLength={1}
           listViewDisplayed={true}
           fetchDetails={true}
@@ -78,7 +79,8 @@ export default class City extends React.Component {
 const autocompleteStyles = StyleSheet.create({
   container: {
     flex: 1.0,
-    width: dimensions.width
+    width: dimensions.width,
+    backgroundColor: colors.snowWhite
   },
   textInputContainer: {
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
@@ -89,7 +91,22 @@ const autocompleteStyles = StyleSheet.create({
     backgroundColor: 'transparent',
     color: colors.white
   },
-  description: { color: colors.white },
+  predefinedPlacesDescription: {
+    backgroundColor: colors.snowWhite,
+    color: colors.snowWhite
+  },
+  listView: {
+    backgroundColor: colors.snowWhite,
+    color: colors.snowWhite
+  },
+  poweredContainer: {
+    backgroundColor: colors.snowWhite
+  },
+  loader: {
+    backgroundColor: colors.snowWhite,
+    color: colors.snowWhite
+  },
+  description: { color: colors.white, backgroundColor: colors.snowWhite},
   poweredContainer: { opacity: 0 }
 });
 
@@ -97,7 +114,7 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1.0,
     width: dimensions.width,
-    backgroundColor: colors.richBlack,
+    backgroundColor: colors.snowWhite,
     justifyContent: 'flex-start',
     alignItems: 'center'
   }
