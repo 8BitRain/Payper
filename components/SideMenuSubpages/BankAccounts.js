@@ -23,10 +23,6 @@ class BankAccounts extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // Close the IAV modal if a new bank account has been linked
-    this.setState({modalVisible: (this.state.IAVModalVisible && nextProps.currentUser.bankAccount) ? false : this.state.IAVModalVisible})
-
-    // Generate bank account info rows if a new bank acount has been linked
     if (nextProps.currentUser.bankAccount !== this.props.currentUser.bankAccount)
       this.generateRows(nextProps.currentUser)
   }
@@ -42,7 +38,6 @@ class BankAccounts extends React.Component {
 
   deleteBankAccount(bankAccount) {
     let { token } = this.props.currentUser
-    // this.setState({rows: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections({})})
     this.props.updateCurrentUser({bankAccount: null})
     Lambda.removeFundingSource({token: token})
   }
