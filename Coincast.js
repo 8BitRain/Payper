@@ -1,5 +1,6 @@
 // Dependencies
 import React from 'react';
+import firebase from 'firebase'
 import { AppState } from 'react-native';
 import { Scene, Reducer, Router, Modal } from 'react-native-router-flux';
 import Mixpanel from 'react-native-mixpanel';

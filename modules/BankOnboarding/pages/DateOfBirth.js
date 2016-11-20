@@ -82,6 +82,16 @@ export default class DateOfBirth extends React.Component {
       console.log("Value: " + input)
       return "0" + input;
     }
+    if(type == "day"){
+      if(Number(input) > 31){
+        throw "Day values must be between 1 and 31"
+      }
+    }
+    if(type == "month"){
+      if(Number(input) > 12){
+        throw "Month values must be between 1 and 12"
+      }
+    }
     if(type == "year" && input.length != 4){
       console.log("input length ")
       throw "Year must be 4 digits"
