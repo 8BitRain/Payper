@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableHighlight, Image, Dimensions, StyleSheet } from 'react-native'
+import { View, Text, TouchableHighlight, Image, Dimensions, StyleSheet, Linking, Alert } from 'react-native'
 import { colors } from '../../globalStyles'
 import { VibrancyView } from 'react-native-blur'
 import { signout } from '../../auth'
@@ -66,7 +66,13 @@ class SideMenu extends React.Component {
         {
           title: 'FAQ',
           icon: 'question',
-          destination: () => toggleSideMenuSubpage("FAQ")
+          destination: () => {
+            let message = "Payper would like to open your web browser. Is that OK?"
+            Alert.alert("Wait!", message, [
+              {text: 'Cancel', onPress: () => null, style: 'cancel'},
+              {text: 'Yes', onPress: () => Linking.openURL("https://www.getpayper.io/faq").catch(err => null)},
+            ])
+          }
         },
         {
           title: 'Signout',
