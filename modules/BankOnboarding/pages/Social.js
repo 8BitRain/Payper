@@ -50,7 +50,7 @@ export default class Social extends React.Component {
     return (
       <View style={styles.wrap}>
         <View>
-          <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
+          <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '400', color: colors.deepBlue, textAlign: 'center' }}>
             {(this.props.requireAllDigits) ? "What's your social?" : "What are the last four\ndigits of your social?"}
           </Text>
         </View>
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1.0,
     width: dimensions.width,
-    backgroundColor: colors.richBlack,
+    backgroundColor: colors.snowWhite,
     justifyContent: 'flex-start',
     alignItems: 'center'
   },

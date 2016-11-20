@@ -11,7 +11,7 @@ import StickyView from '../../../classes/StickyView';
 import ContinueButton from '../subcomponents/ContinueButton';
 
 // Stylesheets
-import colors from '../../../styles/colors';
+import {colors} from '../../../globalStyles';
 const dimensions = Dimensions.get('window');
 
 export default class Password extends React.Component {
@@ -69,7 +69,7 @@ export default class Password extends React.Component {
       const key = k;
       const valid = this.state.validations[k];
       arr.push(
-        <Text key={Math.random()} style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '200', color: (valid) ? colors.alertGreen : colors.alertRed }}>
+        <Text key={Math.random()} style={{  fontSize: 16, fontWeight: '300', color: (valid) ? colors.alertGreen : colors.alertRed }}>
           <Entypo name={(valid) ? "thumbs-up" : "thumbs-down"} color={(valid) ? colors.alertGreen : colors.alertRed} size={14} />
           { "  " + this.validationMessages[key] }
         </Text>
@@ -83,7 +83,7 @@ export default class Password extends React.Component {
     return (
       <View style={styles.wrap}>
         <View>
-          <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
+          <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '400', color: colors.deepBlue, textAlign: 'center' }}>
             { "Enter a secure password" }
           </Text>
         </View>
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1.0,
     width: dimensions.width,
-    backgroundColor: colors.richBlack,
+    backgroundColor: colors.snowWhite,
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingTop: 20

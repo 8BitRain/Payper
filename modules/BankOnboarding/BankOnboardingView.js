@@ -25,7 +25,7 @@ import Social from './pages/Social';
 import IAV from './pages/IAV';
 
 // Stylesheets
-import colors from '../../styles/colors';
+import {colors} from '../../globalStyles/';
 const dimensions = Dimensions.get('window');
 
 export default class BankOnboardingView extends React.Component {
@@ -263,7 +263,7 @@ export default class BankOnboardingView extends React.Component {
                 activeOpacity={0.8}
                 underlayColor={'transparent'}
                 onPress={() => (this.state.closeButtonVisible) ? (this.props.closeModal) ? this.handleCancel() : console.log("BankOnboardingView was not supplied with a closeModal function") : this.prevPage()}>
-                <Entypo color={colors.white} size={30} name={(this.state.closeButtonVisible) ? "cross" : "chevron-thin-left"} />
+                <Entypo color={colors.deepBlue} size={30} name={(this.state.closeButtonVisible) ? "cross" : "chevron-thin-left"} />
               </TouchableHighlight> }
 
         { /* Inner content */ }

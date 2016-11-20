@@ -77,7 +77,7 @@ export default class Coincast extends React.Component {
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 
-            <Scene initial
+            <Scene
               component={NewMainView}
               key="NewMainView"
               type="replace"
@@ -95,7 +95,7 @@ export default class Coincast extends React.Component {
               type="replace"
               panHandlers={null} />
 
-            <Scene
+            <Scene  initial
               component={LandingScreenViewContainer}
               key="LandingScreenViewContainer"
               type="replace"

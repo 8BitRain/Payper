@@ -4,6 +4,7 @@ import { View, Text, TouchableHighlight, StyleSheet, Animated, Easing, Dimension
 import { Actions } from 'react-native-router-flux';
 import Mixpanel from 'react-native-mixpanel';
 import Entypo from 'react-native-vector-icons/Entypo';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 
 // Pages
@@ -15,7 +16,7 @@ import Summary from './pages/Summary';
 import BankOnboardingView from '../BankOnboarding/BankOnboardingView';
 
 // Stylesheets
-import colors from '../../styles/colors';
+import {colors} from '../../globalStyles';
 const dimensions = Dimensions.get('window');
 
 export default class UserOnboardingView extends React.Component {
@@ -158,7 +159,7 @@ export default class UserOnboardingView extends React.Component {
           activeOpacity={0.8}
           underlayColor={'transparent'}
           onPress={() => (this.state.pageIndex === 0) ? this.handleCancel() : this.prevPage()}>
-          <Entypo color={colors.white} size={30} name={(this.state.pageIndex === 0) ? "cross" : "chevron-thin-left"} />
+          <EvilIcons color={colors.accent} size={48} name={(this.state.pageIndex === 0) ? "close-o" : "chevron-left"} />
         </TouchableHighlight>
 
         { /* Inner content */ }
@@ -206,7 +207,8 @@ const styles = StyleSheet.create({
     width: dimensions.width,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 20
+    paddingTop: 20,
+    backgroundColor: colors.snowWhite
   },
   backButton: {
     position: 'absolute',

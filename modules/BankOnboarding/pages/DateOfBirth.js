@@ -8,7 +8,7 @@ import StickyView from '../../../classes/StickyView';
 import ContinueButton from '../subcomponents/ContinueButton';
 
 // Stylesheets
-import colors from '../../../styles/colors';
+import {colors} from '../../../globalStyles';
 const dimensions = Dimensions.get('window');
 
 export default class DateOfBirth extends React.Component {
@@ -42,7 +42,7 @@ export default class DateOfBirth extends React.Component {
     return (
       <View style={styles.wrap}>
         <View>
-          <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
+          <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '400', color: colors.deepBlue, textAlign: 'center' }}>
             { "When were you born?" }
           </Text>
         </View>
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1.0,
     width: dimensions.width,
-    backgroundColor: colors.richBlack,
+    backgroundColor: colors.snowWhite,
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingTop: 20

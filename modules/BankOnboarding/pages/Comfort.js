@@ -19,13 +19,13 @@ export default class Comfort extends React.Component {
     return (
       <View style={styles.wrap}>
         <View>
-          <Text style={{ fontFamily: 'Roboto', fontSize: 28, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
+          <Text style={{ fontSize: 28, fontWeight: '400', color: colors.deepBlue, textAlign: 'center' }}>
             { "Let's verify your identity" }
             { "\n\n" }
             <FontAwesome name={"user-secret"} color={colors.accent} size={38} />
             { "\n" }
           </Text>
-          <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, width: dimensions.width * 1.0, textAlign: 'center', paddingLeft: 25, paddingRight: 25 }}>
+          <Text style={{ fontSize: 18, fontWeight: '400', color: colors.deepBlue, width: dimensions.width * 1.0, textAlign: 'center', paddingLeft: 25, paddingRight: 25 }}>
             {(this.props.retry)
               ? "Your first identity verification failed. Please double check your information for accuracy and try again.\n\n(Hint: be sure to enter your billing address)"
               : "To ensure you're not being impersonated, we'll need to collect your legal name, billing address, date of birth, and the last four digits of your social." }
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1.0,
     width: dimensions.width,
-    backgroundColor: colors.richBlack,
+    backgroundColor: colors.snowWhite,
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingTop: 65
