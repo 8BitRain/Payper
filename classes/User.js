@@ -265,6 +265,7 @@ export default class User {
       fetch(baseURL + "utils/getIAV", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
+        console.log("User.getIAVToken responseData is", responseData)
         if (!responseData.errorMessage) {
           if (responseData.token)
             updateViaRedux({ IAVToken: responseData.token });

@@ -7,7 +7,7 @@ import * as config from '../../config';
 import colors from '../../styles/colors';
 const dimensions = Dimensions.get('window');
 
-export default class IAVWebView extends React.Component {
+class IAVWebView extends React.Component {
   constructor(props) {
     super(props);
 
@@ -122,3 +122,5 @@ export default class IAVWebView extends React.Component {
     );
   }
 }
+
+module.exports = IAVWebView

@@ -64,7 +64,6 @@ class NewMainView extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.currentUser.paymentFlow)
       this.generatePayCards(nextProps.currentUser.paymentFlow)
-
   }
 
   generatePriorityContent() {
