@@ -49,7 +49,7 @@ export default class Summary extends React.Component {
     return (
       <View style={styles.wrap}>
         <View>
-          <Text style={{  fontSize: 24, fontWeight: '400', color: colors.white, textAlign: 'center' }}>
+          <Text style={{  fontFamily: "Roboto", fontSize: 24, fontWeight: '400', color: colors.white, textAlign: 'center' }}>
             { "Does this look correct?" }
           </Text>
         </View>

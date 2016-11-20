@@ -94,7 +94,7 @@ export default class Password extends React.Component {
             style={styles.input}
             defaultValue={this.state.name}
             placeholder={"e.g. SeCur1ty!"}
-            placeholderTextColor={colors.lightGrey}
+            placeholderTextColor={colors.deepBlue}
             autoCapitalize={"none"} autoCorrect={false}
             secureTextEntry={this.state.passwordIsHidden}
             onChangeText={(input) => this.handleChangeText(input)}
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
     textAlign: 'center',
-    color: colors.white
+    color: colors.deepBlue
   },
   validationsWrap: {
     width: dimensions.width * 1.0,

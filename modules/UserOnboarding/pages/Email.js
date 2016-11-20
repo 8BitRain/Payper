@@ -58,7 +58,7 @@ export default class Email extends React.Component {
             style={styles.input}
             defaultValue={this.state.name}
             placeholder={"e.g. johndoe@example.com"}
-            placeholderTextColor={colors.lightGrey}
+            placeholderTextColor={colors.deepBlue}
             autoCapitalize={"none"} autoCorrect={false}
             keyboardType={"email-address"}
             onChangeText={(input) => this.handleChangeText(input)}
@@ -93,6 +93,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
     textAlign: 'center',
-    color: colors.white
+    color: colors.deepBlue
   }
 });

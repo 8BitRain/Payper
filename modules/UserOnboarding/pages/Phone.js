@@ -97,7 +97,7 @@ export default class Phone extends React.Component {
               style={styles.input}
               defaultValue={this.state.name}
               placeholder={"e.g. 2623058038"}
-              placeholderTextColor={colors.lightGrey}
+              placeholderTextColor={colors.deepBlue}
               autoCapitalize={"none"} autoCorrect={false}
               keyboardType={"number-pad"}
               onChangeText={(input) => this.handleChangeText(input)}
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
     textAlign: 'center',
-    color: colors.white
+    color: colors.deepBlue
   },
   validationsWrap: {
     width: dimensions.width * 1.0,

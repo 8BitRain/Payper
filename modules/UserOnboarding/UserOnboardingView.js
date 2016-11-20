@@ -159,7 +159,7 @@ export default class UserOnboardingView extends React.Component {
           activeOpacity={0.8}
           underlayColor={'transparent'}
           onPress={() => (this.state.pageIndex === 0) ? this.handleCancel() : this.prevPage()}>
-          <EvilIcons color={colors.accent} size={48} name={(this.state.pageIndex === 0) ? "close-o" : "chevron-left"} />
+          <EvilIcons color={colors.accent} size={48} name={(this.state.pageIndex === 0) ? "chevron-left" : "chevron-left"} />
         </TouchableHighlight>
 
         { /* Inner content */ }
