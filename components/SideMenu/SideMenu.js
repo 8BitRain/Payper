@@ -24,7 +24,7 @@ class Row extends React.Component {
         activeOpacity={0.75}
         underlayColor={'transparent'}
         onPress={destination}>
-        <View style={{padding: 7, paddingLeft: 14, backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{width: dims.width * 0.725, padding: 10, paddingLeft: 14, backgroundColor: 'transparent', flexDirection: 'row', alignItems: 'center'}}>
           <EvilIcons name={icon} size={30} color={colors.accent} />
           <Text style={{color: colors.accent, fontWeight: '400', fontSize: 17, paddingLeft: 10, paddingBottom: 2}}>
             {title}
