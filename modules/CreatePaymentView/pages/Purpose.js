@@ -89,8 +89,10 @@ class Purpose extends React.Component {
     var curr;
     for (var i = 0; i < this.props.payment.users.length; i++) {
       curr = this.props.payment.users[i];
+
       this.props.sendPayment({
         user: curr,
+        phoneNumber: curr.phone,
         paymentInfo: {
           amount: this.props.payment.amount,
           frequency: this.props.payment.frequency,

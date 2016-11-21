@@ -91,17 +91,19 @@ class CreatePaymentView extends React.Component {
 
     if (options.user.uid) {
       options.paymentInfo.invite = false;
-      console.log("Sending payment:", options.paymentInfo);
       Lambda.createPayment(options.paymentInfo);
     } else {
       options.paymentInfo.invite = true;
       if (!options.paymentInfo.sender.uid) {
         options.paymentInfo.invitee = "sender";
-        options.paymentInfo.phoneNumber = options.paymentInfo.sender.phone;
+        options.paymentInfo.phoneNumber = options.user.phone;
       } else {
         options.paymentInfo.invitee = "recip";
-        options.paymentInfo.phoneNumber = options.paymentInfo.recip.phone;
+        options.paymentInfo.phoneNumber = options.user.phone;
       }
+
+      console.log("inviteViaPayment with params:", options.paymentInfo)
+
       Lambda.inviteViaPayment(options.paymentInfo);
     }
   }
