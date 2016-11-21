@@ -7,6 +7,7 @@ const FBSDK = require('react-native-fbsdk')
 const { LoginButton, AccessToken } = FBSDK
 import { FBLoginManager } from 'NativeModules'
 import { signin, requestFacebookUserData } from '../../auth'
+import CodePush from 'react-native-code-push';
 
 // Helpers
 import * as Lambda from '../../services/Lambda'
@@ -37,6 +38,7 @@ export default class LandingScreenView extends React.Component {
   }
 
   toggleLoginModal() {
+    CodePush.sync();
     this.setState({ loginModalVisible: !this.state.loginModalVisible });
   }
 

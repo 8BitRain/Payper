@@ -11,7 +11,7 @@ import {
   Hits as GAHits,
 } from 'react-native-google-analytics';
 import DeviceInfo from 'react-native-device-info';
-
+import CodePush from 'react-native-code-push';
 
 // Uncomment to reset user manually
 import * as Async from './helpers/Async';
@@ -70,6 +70,7 @@ export default class Coincast extends React.Component {
 
   componentWillMount() {
     let clientId = DeviceInfo.getUniqueID();
+    CodePush.sync();
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');
     Mixpanel.timeEvent('Session Duration');
     AppState.addEventListener('change', this.handleAppStateChange);
