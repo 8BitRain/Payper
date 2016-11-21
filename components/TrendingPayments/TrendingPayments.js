@@ -48,7 +48,7 @@ export default class TrendingPayments extends React.Component {
         , {
             front: {
               text: "Netflix",
-              backgroundColor:colors.snowWhite,
+              backgroundColor:colors.medGrey,
               textColor: colors.richBlack,
               hasLogo: true,
               name: "Netflix",
@@ -65,7 +65,7 @@ export default class TrendingPayments extends React.Component {
         }, {
             front:{
               text: "GameFly",
-              backgroundColor:colors.snowWhite,
+              backgroundColor:colors.medGrey,
               textColor: colors.richBlack,
               hasLogo: true,
               name: "GameFly",
@@ -118,7 +118,7 @@ export default class TrendingPayments extends React.Component {
         }, {
             front:{
               text: "Internet",
-              backgroundColor:colors.snowWhite,
+              backgroundColor:colors.medGrey,
               textColor: colors.richBlack,
               icon: "md-globe",
               iconColor: colors.accent,
@@ -246,7 +246,7 @@ export default class TrendingPayments extends React.Component {
           callbackClose={() => this.props.toggleModal()}
           callbackBack={() => this.setState({index: this.state.index - 1})}
           headerProps={Headers.get({ header: "trendingPurpose", title: "Trending Payments", index: this.state.index })} />
-          <GridView dataSource={this.state.dataSource} spacing={0} style={{marginTop:65, padding: 0, backgroundColor: colors.snowWhite}} renderCell={this._renderCell.bind(this)}
+          <GridView dataSource={this.state.dataSource} spacing={0} style={{marginTop:65, padding: 0, backgroundColor: colors.medGrey}} renderCell={this._renderCell.bind(this)}
           />
           { /*Alternate Design With Padding*/ }
           { /*<GridView dataSource={this.state.dataSource} spacing={8} style={{marginTop:65, padding: 5, backgroundColor: colors.richBlack}} renderCell={this._renderCell.bind(this)}
