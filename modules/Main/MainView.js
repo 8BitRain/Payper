@@ -78,6 +78,7 @@ class MainView extends React.Component {
     let awaitingBankAccount = appFlags.onboarding_state === "bank" || appFlags.customer_status === "documentSuccess"
     let awaitingDocumentUpload = appFlags.customer_status === "document" || appFlags.customer_status === "documentFailure"
     let shouldRenderNoticeBar = awaitingCustomerVerification || awaitingMicrodepositVerification || awaitingBankAccount
+    let shouldRenderTrendingPayments = currentUser.paymentFlow.in.length === 0 || currentUser.paymentFlow.out.length === 0
 
     if (shouldRenderNoticeBar) {
       priorityContent.push({
@@ -91,6 +92,34 @@ class MainView extends React.Component {
               else if (awaitingBankAccount) this.toggleSideMenuSubpage("Bank Accounts")
               else if (awaitingCutomerRetry) this.toggleSideMenuSubpage("retry")
             }} />
+      })
+    }
+
+    if( shouldRenderTrendingPayments){
+      priorityContent.push({
+        type: "priorityContent",
+        reactComponent: <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 50, width: dims.width - 20}}>
+            <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dims.width - 20, padding: 0}}>
+              { "Your Payments" }
+            </Text>
+
+            <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, marginTop: 5, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dims.width - 20, padding: 0}}>
+               {"When you make a payment, it will show up here."}
+            </Text>
+
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              >
+
+              <View style={{ height: 60, backgroundColor: colors.accent, borderRadius: 4, marginTop: 5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dims.width/2 }}>
+                <Text style={{ fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
+                  { "Explore Trending Payments" }
+                </Text>
+              </View>
+
+            </TouchableHighlight>
+          </View>
       })
     }
 
