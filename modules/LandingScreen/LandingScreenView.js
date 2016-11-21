@@ -107,7 +107,7 @@ export default class LandingScreenView extends React.Component {
             <Image source={require('../../assets/images/logo.png')} style={{height: dims.width * 0.22, width: (dims.width * 0.22) * this.logoAspectRatio}} />
 
             { /* Welcome message */ }
-            <Text style={{fontWeight: '500', fontSize: 24, color: colors.accent, width: dims.width - 80, marginTop: 20}}>
+            <Text style={{fontWeight: '500', fontSize: 26, color: colors.accent, width: dims.width - 80, marginTop: 20}}>
               {"Welcome to Payper,"}
             </Text>
             <Text style={{fontSize: 18, color: colors.accent, width: dims.width - 80}}>

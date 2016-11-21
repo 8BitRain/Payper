@@ -2,8 +2,10 @@
 import React from 'react';
 import { View, Text, Animated, Image, Dimensions, Linking, StatusBar, StyleSheet, TouchableHighlight, Modal, TextInput, Keyboard } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import Entypo from 'react-native-vector-icons/Entypo'
-import colors from '../../styles/colors';
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import Hyperlink from 'react-native-hyperlink'
+import { colors } from '../../globalStyles'
+import { VibrancyView } from 'react-native-blur'
 
 // Helpers
 import * as Validators from '../../helpers/validators';
@@ -13,8 +15,8 @@ import * as Async from '../../helpers/Async';
 // Should we show container borders?
 const borders = false;
 
-// Window dimensions
-const dimensions = Dimensions.get('window');
+// Window dims
+const dims = Dimensions.get('window');
 
 class BetaLandingScreenView extends React.Component {
   constructor(props) {
@@ -22,7 +24,6 @@ class BetaLandingScreenView extends React.Component {
 
     this.logoAspectRatio = 377 / 568;
     this.keyboardOffset = new Animated.Value(0);
-    this.colorInterpolator = new Animated.Value(0);
 
     this.state = {
       modalVisible: false,
@@ -30,11 +31,7 @@ class BetaLandingScreenView extends React.Component {
       onboarding: "",
       phoneInput: "",
       phoneValid: false,
-      buttonText: "",
-      backgroundColor: this.colorInterpolator.interpolate({
-        inputRange: [0, 350, 700], // Green, transparent, red
-        outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(0, 0, 0, 0.0)', 'rgba(251, 54, 64, 1.0)'],
-      }),
+      buttonText: ""
     };
   }
 
@@ -48,12 +45,6 @@ class BetaLandingScreenView extends React.Component {
     // Unsubscribe from keyboard events
     _keyboardWillShowSubscription.remove();
     _keyboardWillHideSubscription.remove();
-  }
-
-  _interpolateButtonColor(options) {
-    Animated.spring(this.colorInterpolator, {
-      toValue: options.toValue
-    }).start();
   }
 
   _keyboardWillShow(e) {
@@ -75,16 +66,7 @@ class BetaLandingScreenView extends React.Component {
       modalVisible: !this.state.modalVisible,
       phoneInput: "",
       emailInput: "",
-      attempts: 0,
-      backgroundColor: this.colorInterpolator.interpolate({
-        inputRange: [0, 350, 700], // Green, transparent, red
-        outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(0, 0, 0, 0.0)', 'rgba(251, 54, 64, 1.0)'],
-      }),
-    });
-
-    // Reset button color
-    this._interpolateButtonColor({
-      toValue: 350,
+      attempts: 0
     });
   }
 
@@ -108,7 +90,6 @@ class BetaLandingScreenView extends React.Component {
 
   _onVerificationFailure() {
     this.setState({ buttonText: "No match 😕\nIs there a typo?" });
-    this._interpolateButtonColor({ toValue: 700 });
   }
 
   _handleSubmit(e) {
@@ -135,26 +116,22 @@ class BetaLandingScreenView extends React.Component {
       }
      }
 
-     // If invalid, interpolate 'Continue' button color to red and display error
+     // If invalid, display error
      else {
-      this._interpolateButtonColor({ toValue: 700 });
       this.setState({ buttonText: "Please enter a valid phone number." });
     }
   }
 
   _handleChangeText(input) {
-
     this.setState({ phoneInput: input });
 
     // Determine if the input is valid
     let valid = Validators.validatePhone(input).valid;
 
-    // Interpolate background color of 'Continue' button
+    // tovalue: 350 background color of 'Continue' button
     if (valid) {
-      this._interpolateButtonColor({ toValue: 0 });
       this.setState({ buttonText: "Continue" });
     } else {
-      this._interpolateButtonColor({ toValue: 350 });
       this.setState({ buttonText: "Please enter a valid phone number" });
     }
   }
@@ -162,6 +139,7 @@ class BetaLandingScreenView extends React.Component {
   _getPhoneOnboarding() {
     return(
       <View style={wrappers.modalWrap}>
+        <VibrancyView blurType={"light"} style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} />
 
         { /* Header */ }
         <View style={wrappers.modalHeader}>
@@ -170,19 +148,19 @@ class BetaLandingScreenView extends React.Component {
             underlayColor={'transparent'}
             onPress={() => { this.setState({ onboarding: "" }); this._toggleModal(); }}>
 
-            <Entypo style={icons.closeModal} name={"cross"} size={24} color={colors.white} />
+            <EvilIcons style={icons.closeModal} name={"close"} size={24} color={colors.white} />
 
           </TouchableHighlight>
         </View>
 
         { /* Rest of modal */ }
         <View style={wrappers.modalContent}>
-          <Text style={typography.modalTitle}>
+          <Text style={{fontSize: 22, color: colors.deepBlue, width: dims.width - 80, textAlign: 'center'}}>
             { "What's your number?" }
           </Text>
 
           {(this.state.onboarding === "invite-request")
-            ? <Text style={{ fontFamily: 'Roboto', fontSize: 16, color: colors.white, textAlign: 'center', padding: 20, fontWeight: '200' }}>
+            ? <Text style={{fontSize: 18, color: colors.deepBlue, textAlign: 'center', padding: 20, width: dims.width - 80, textAlign: 'center'}}>
                 { "We'll send you an invite when a spot opens up!" }
               </Text>
             : null }
@@ -206,7 +184,7 @@ class BetaLandingScreenView extends React.Component {
               underlayColor={'transparent'}
               onPress={() => this._handleSubmit()}>
 
-              <Animated.View style={{ height: 70, backgroundColor: this.state.backgroundColor, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+              <Animated.View style={{ height: 70, backgroundColor: colors.gradientGreen, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={[typography.button, { alignSelf: 'center', textAlign: 'center' }]}>
                   { this.state.buttonText }
                 </Text>
@@ -222,70 +200,67 @@ class BetaLandingScreenView extends React.Component {
 
   render() {
     return(
-      <View style={wrappers.page}>
+      <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.snowWhite}}>
+        <StatusBar barStyle="default" />
 
-        { /* Lighten status bar text */ }
-        <StatusBar barStyle="light-content" />
+        <View style={{flex: 0.9, justifyContent: 'center', alignItems: 'center'}}>
+          { /* Logo */ }
+          <Image source={require('../../assets/images/logo.png')} style={{height: dims.width * 0.22, width: (dims.width * 0.22) * this.logoAspectRatio}} />
 
-        <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }} onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}>
-          <Image source={require('../../assets/images/logo.png')} style={{ height: this.state.headerHeight * 0.4, width: (this.state.headerHeight * 0.4) * this.logoAspectRatio }} />
-        </View>
-
-        { /* Title */ }
-        <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={[typography.title, { color: colors.white }]}>Welcome to</Text>
-          <Text style={typography.title}>Payper</Text>
-        </View>
-
-        { /* Subtitle */ }
-        <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center', padding: 15 }}>
-          <Text style={typography.subtitle}>
-            { "The app that makes recurring peer-to-peer payments simple." }
+          { /* Welcome message */ }
+          <Text style={{fontWeight: '500', fontSize: 26, color: colors.accent, width: dims.width - 80, marginTop: 20}}>
+            {"Welcome to Payper,"}
           </Text>
+          <Text style={{fontSize: 18, color: colors.accent, width: dims.width - 80}}>
+            {"the app that makes recurring payments easy."}
+          </Text>
+
+          { /*
+          <Text style={{fontSize: 16, color: colors.deepBlue, width: dims.width - 100, marginTop: 20, textAlign: 'center'}}>
+            {"Payper is invite-only. Request an invite from us, or ask a friend who already has access to invite you."}
+          </Text>
+          */ }
+
+          { /* "I received an invite" button */ }
+          <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={() => {
+            this.setState({ onboarding: "invite-request", buttonText: "Please enter a valid phone number." });
+            this._toggleModal();
+          }}>
+            <View style={{width: dims.width - 60, height: 45, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.gradientGreen, borderRadius: 4, marginTop: 20}}>
+              <Text style={{fontSize: 16, color: colors.snowWhite}}>
+                {"I received an invite"}
+              </Text>
+            </View>
+          </TouchableHighlight>
+
+          { /* "Request an invite" button */ }
+          <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={() => {
+            this.setState({ onboarding: "invite-verification", buttonText: "Please enter a valid phone number." });
+            this._toggleModal();
+          }}>
+            <View style={{width: dims.width - 60, height: 45, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent, borderRadius: 4, marginTop: 6}}>
+              <Text style={{fontSize: 16, color: colors.snowWhite}}>
+                {"Request an invite"}
+              </Text>
+            </View>
+          </TouchableHighlight>
         </View>
 
-        { /* Invite button */ }
-        <View style={{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            onPress={() => { this.setState({ onboarding: "invite-verification", buttonText: "Please enter a valid phone number." }); this._toggleModal(); }}>
-
-            <View style={[wrappers.button, { backgroundColor: 'rgba(255, 255, 255, 0.1)', }]}>
-              { /* Text */ }
-              <View style={{ flex: 0.9, paddingLeft: 15 }}>
-                <Text style={typography.button}>
-                  { "I received an invite" }
-                </Text>
-              </View>
-
-              { /* Chevron */ }
-              <View style={{ flex: 0.1, paddingRight: 22.5 }}>
-                <Entypo style={icons.chevron} name={"user"} size={20} color={colors.accent} />
-              </View>
-            </View>
-          </TouchableHighlight>
-
-          { /* Beta list button */ }
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            onPress={() => { this.setState({ onboarding: "invite-request", buttonText: "Please enter a valid phone number." }); this._toggleModal(); }}>
-
-            <View style={[wrappers.button, { backgroundColor: 'rgba(255, 255, 255, 0.06)', }]}>
-              { /* Text */ }
-              <View style={{ flex: 0.9, paddingLeft: 15 }}>
-                <Text style={typography.button}>
-                  { "Request an invite" }
-                </Text>
-              </View>
-
-              { /* Chevron */ }
-              <View style={{ flex: 0.1, paddingRight: 22.5 }}>
-                <Entypo style={icons.chevron} name={"chevron-thin-right"} size={22} color={colors.accent} />
-              </View>
-            </View>
-          </TouchableHighlight>
+        { /* Footer */ }
+        <View style={{flex: 0.1, alignItems: 'center', justifyContent: 'flex-end', padding: 15}}>
+          <Hyperlink
+            onPress={(url) => this.handleURLClick(url)}
+            linkStyle={{color:'#2980b9', fontSize:14}}
+            linkText={(url) => {
+              if (url === 'https://www.getpayper.io/terms')
+                return 'Terms of Service';
+              else if (url === 'https://www.getpayper.io/privacy')
+                return 'Privacy Policy';
+            }}>
+            <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: colors.white, fontWeight: '100' }}>
+              { "By creating an account or logging in, you agree to Payper's https://www.getpayper.io/terms and https://www.getpayper.io/privacy." }
+            </Text>
+          </Hyperlink>
         </View>
 
         { /* Modal containing edit panel */ }
@@ -294,9 +269,7 @@ class BetaLandingScreenView extends React.Component {
           transparent={true}
           visible={this.state.modalVisible}
           onRequestClose={ () => alert("Closed modal") }>
-
           { this._getPhoneOnboarding() }
-
         </Modal>
       </View>
     );
@@ -309,11 +282,11 @@ const wrappers = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.richBlack,
+    backgroundColor: colors.snowWhite,
     paddingTop: 25,
   },
   button: {
-    width: dimensions.width,
+    width: dims.width,
     flexDirection: 'row',
     alignItems: 'center',
     height: 60,
@@ -324,8 +297,8 @@ const wrappers = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-    width: dimensions.width,
+    backgroundColor: colors.snowWhiteOpaque,
+    width: dims.width,
   },
   modalHeader: {
     flex: 0.125,
@@ -335,7 +308,7 @@ const wrappers = StyleSheet.create({
     borderWidth: (borders) ? 1.0 : 0.0,
     borderColor: 'blue',
     paddingTop: 10,
-    width: dimensions.width,
+    width: dims.width,
   },
   modalContent: {
     flex: 0.875,
@@ -344,20 +317,20 @@ const wrappers = StyleSheet.create({
     alignItems: 'center',
     borderWidth: (borders) ? 1.0 : 0.0,
     borderColor: 'red',
-    width: dimensions.width,
+    width: dims.width,
   },
   modalInputPhone: {
-    width: dimensions.width * 0.6,
-    marginLeft: dimensions.width * 0.2,
-    marginTop: 25,
-    backgroundColor: 'rgba(255, 255, 255, 0.09)',
+    width: dims.width * 0.6,
+    marginLeft: dims.width * 0.2,
+    marginTop: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
     height: 50,
     textAlign: 'center',
     color: colors.white,
   },
   modalInputEmail: {
-    width: dimensions.width * 0.7,
-    marginLeft: dimensions.width * 0.15,
+    width: dims.width * 0.7,
+    marginLeft: dims.width * 0.15,
     marginTop: 25,
     backgroundColor: 'rgba(255, 255, 255, 0.09)',
     height: 50,
@@ -368,24 +341,20 @@ const wrappers = StyleSheet.create({
 
 const typography = StyleSheet.create({
   title: {
-    fontFamily: 'Roboto',
     fontSize: 36,
-    fontWeight: '200',
+    fontWeight: '300',
     color: colors.accent,
     textAlign: 'center',
   },
   subtitle: {
     fontFamily: 'Roboto',
     fontSize: 24,
-    fontWeight: '200',
-    color: colors.white,
+    color: colors.deepBlue,
     textAlign: 'center',
   },
   button: {
-    fontFamily: 'Roboto',
     fontSize: 18,
-    fontWeight: '200',
-    color: colors.white,
+    color: colors.snowWhite,
     alignSelf: 'flex-start',
   },
   modalTitle: {
