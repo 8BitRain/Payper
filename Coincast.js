@@ -28,6 +28,7 @@ import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboarding
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView';
 import Phone from './modules/UserOnboarding/pages/Phone';
 import { PayDetails } from './components/PayCard'
+import { NewMainView } from './modules'
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
@@ -45,7 +46,7 @@ const getSceneStyle = function(props, computedProps) {
     shadowOffset: null,
     shadowOpacity: null,
     shadowRadius: null,
-    backgroundColor: colors.richBlack
+    backgroundColor: colors.deepBlue
   };
 
   if (computedProps.isActive) {
@@ -94,7 +95,13 @@ export default class Coincast extends React.Component {
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 
-            <Scene initial
+            <Scene
+              component={NewMainView}
+              key="NewMainView"
+              type="replace"
+              panHandlers={null} />
+
+            <Scene
               component={SplashViewContainer}
               key="SplashViewContainer"
               type="replace"
@@ -106,7 +113,7 @@ export default class Coincast extends React.Component {
               type="replace"
               panHandlers={null} />
 
-            <Scene
+            <Scene  initial
               component={LandingScreenViewContainer}
               key="LandingScreenViewContainer"
               type="replace"
@@ -137,8 +144,7 @@ export default class Coincast extends React.Component {
 
             <Scene
               component={PayDetails}
-              key="PaymentDetails"
-              panHandlers={null} />
+              key="PaymentDetails" />
 
           </Scene>
           <Scene key="error" component={Error}/>
