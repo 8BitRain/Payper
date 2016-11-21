@@ -83,7 +83,9 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Bold.ttf</string>
+		<string>Montserrat-Regular.ttf</string>
 		<string>Roboto-Medium.ttf</string>
+		<string>Montserrat-Bold.ttf</string>
 		<string>Roboto-Thin.ttf</string>
 		<string>Roboto-Light.ttf</string>
 		<string>Entypo.ttf</string>

@@ -4,6 +4,7 @@ import { View, Text, TouchableHighlight, StyleSheet, Animated, Easing, Dimension
 import { Actions } from 'react-native-router-flux';
 import Mixpanel from 'react-native-mixpanel';
 import Entypo from 'react-native-vector-icons/Entypo';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
 
 // Helpers
@@ -25,7 +26,7 @@ import Social from './pages/Social';
 import IAV from './pages/IAV';
 
 // Stylesheets
-import colors from '../../styles/colors';
+import {colors} from '../../globalStyles/';
 const dimensions = Dimensions.get('window');
 
 export default class BankOnboardingView extends React.Component {
@@ -266,7 +267,7 @@ export default class BankOnboardingView extends React.Component {
                 activeOpacity={0.8}
                 underlayColor={'transparent'}
                 onPress={() => (this.state.closeButtonVisible) ? (this.props.closeModal) ? this.handleCancel() : console.log("BankOnboardingView was not supplied with a closeModal function") : this.prevPage()}>
-                <Entypo color={colors.white} size={30} name={(this.state.closeButtonVisible) ? "cross" : "chevron-thin-left"} />
+                <EvilIcons color={colors.accent} size={48} name={(this.state.closeButtonVisible) ? "chevron-left" : "chevron-left"} />
               </TouchableHighlight> }
 
         { /* Inner content */ }
@@ -326,7 +327,8 @@ const styles = StyleSheet.create({
     width: dimensions.width,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 20
+    paddingTop: 20,
+    backgroundColor: colors.snowWhite
   },
   backButton: {
     position: 'absolute',

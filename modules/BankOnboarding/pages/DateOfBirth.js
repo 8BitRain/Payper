@@ -8,7 +8,7 @@ import StickyView from '../../../classes/StickyView';
 import ContinueButton from '../subcomponents/ContinueButton';
 
 // Stylesheets
-import colors from '../../../styles/colors';
+import {colors} from '../../../globalStyles';
 const dimensions = Dimensions.get('window');
 
 export default class DateOfBirth extends React.Component {
@@ -123,17 +123,17 @@ export default class DateOfBirth extends React.Component {
     return (
       <View style={styles.wrap}>
         <View>
-          <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
+          <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '400', color: colors.deepBlue, textAlign: 'center' }}>
             { "When were you born?" }
           </Text>
         </View>
 
         <View style={styles.textInputWrap}>
-          <TextInput ref="dateInput" defaultValue={this.values[0]} onFocus={() => this.setState({ index: 0, index0Focused: true, validationError: false })} maxLength={2} keyboardType={'number-pad'} placeholder={(this.state.index0Focused) ? null : "Month"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e) } />
+          <TextInput ref="dateInput" defaultValue={this.values[0]} onFocus={() => this.setState({ index: 0, index0Focused: true, validationError: false })} maxLength={2} keyboardType={'number-pad'} placeholder={(this.state.index0Focused) ? null : "Month"} placeholderTextColor={colors.deepBlue} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e) } />
           <Text style={styles.dateDash}>-</Text>
-          <TextInput ref="1" defaultValue={this.values[1]} onFocus={() => this.setState({ index: 1, index1Focused: true, validationError: false })} maxLength={2} keyboardType={'number-pad'} placeholder={(this.state.index1Focused) ? null : "Day"} placeholderTextColor={colors.lightGrey} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="1" defaultValue={this.values[1]} onFocus={() => this.setState({ index: 1, index1Focused: true, validationError: false })} maxLength={2} keyboardType={'number-pad'} placeholder={(this.state.index1Focused) ? null : "Day"} placeholderTextColor={colors.deepBlue} style={styles.textInput} onChangeText={(e) => this.handleChangeText(e)} />
           <Text style={styles.dateDash}>-</Text>
-          <TextInput ref="2" defaultValue={this.values[2]} onFocus={() => this.setState({ index: 2, index2Focused: true, validationError: false })} maxLength={4} keyboardType={'number-pad'} placeholder={(this.state.index2Focused) ? null : "Year"} placeholderTextColor={colors.lightGrey} style={styles.textInput}  onChangeText={(e) => this.handleChangeText(e)} />
+          <TextInput ref="2" defaultValue={this.values[2]} onFocus={() => this.setState({ index: 2, index2Focused: true, validationError: false })} maxLength={4} keyboardType={'number-pad'} placeholder={(this.state.index2Focused) ? null : "Year"} placeholderTextColor={colors.deepBlue} style={styles.textInput}  onChangeText={(e) => this.handleChangeText(e)} />
         </View>
 
         <View style={{flexDirection: "row"}}>
@@ -165,7 +165,7 @@ const datePickerStyles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: '400',
     fontSize: 16,
-    color: colors.white
+    color: colors.deepBlue
   }
 });
 
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1.0,
     width: dimensions.width,
-    backgroundColor: colors.richBlack,
+    backgroundColor: colors.snowWhite,
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingTop: 20
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     width: dimensions.width * 0.15,
     height: dimensions.width * 0.15,
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    color: colors.white,
+    color: colors.deepBlue,
     textAlign: 'center',
     marginLeft: 1, marginRight: 1,
   },
@@ -204,20 +204,21 @@ const styles = StyleSheet.create({
     marginTop: 15,
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
     textAlign: 'center',
-    color: colors.white
+    color: colors.deepBlue
   },
   dateDash:{
-    color: colors.white,
+    color: colors.deepBlue,
     fontSize: 32,
     marginLeft: 2.5,
     marginRight: 2.5
   },
   birthdayText:{
-    color: colors.white,
+    color: colors.deepBlue,
     fontSize: 20,
     marginTop: 25,
     textAlign: "center",
-    fontWeight: "100"
+    fontFamily: "Roboto",
+    fontWeight: "400"
   },
 
   birthdayTextEmoji:{

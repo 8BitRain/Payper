@@ -14,6 +14,7 @@ const colors = {
   alertGreen: "#10bf5a",
   richBlack: "#2A2D34",
 
+
   snowWhite: "#FFFBFC",
   medGrey: "#E8E5E6",
   lightGrey: "#F6F5F5",
@@ -23,7 +24,8 @@ const colors = {
 
   //old colors
   obisdian: "#08090A",
-  white: "#fefeff"
+  white: "#fefeff",
+  gradientGreen: "#23CE6B"
 }
 
 module.exports = colors
