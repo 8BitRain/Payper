@@ -196,7 +196,7 @@ export default class TrendingPayments extends React.Component {
               {/*<Text style={{textAlign:'left',color:cell.front.textColor,fontSize:16}}>{"Users usually spent " + cell.back.avgSent}</Text>
               <Text style={{textAlign:'left',color:cell.front.textColor,fontSize:16}}>{"Split service usually lasted " + cell.back.avgDuration}</Text>
               <Text style={{textAlign:'left',color:cell.front.textColor,fontSize:16}}>{"This service is best split between " + cell.back.avgSplit + " people"}</Text>*/}
-              <Text style={{fontFamily: "Roboto", fontWeight: "400", fontSize: 16, color: cell.back.textColor}}>On Average Users..</Text>
+              <Text style={{fontFamily: "Roboto", fontWeight: "400", fontSize: 16, color: cell.back.textColor, paddingBottom: 10}}>On Average Users..</Text>
               <View style={{flexDirection: "row"}}>
                 <View style={{flexDirection: "column"}}>
 
@@ -246,7 +246,7 @@ export default class TrendingPayments extends React.Component {
           callbackClose={() => this.props.toggleModal()}
           callbackBack={() => this.setState({index: this.state.index - 1})}
           headerProps={Headers.get({ header: "trendingPurpose", title: "Trending Payments", index: this.state.index })} />
-          <GridView dataSource={this.state.dataSource} spacing={0} style={{marginTop:65, padding: 0, backgroundColor: colors.snowWhite}} renderCell={this._renderCell.bind(this)}
+          <GridView dataSource={this.state.dataSource} spacing={0} style={{marginTop:65, padding: 0, backgroundColor: colors.accent}} renderCell={this._renderCell.bind(this)}
           />
           { /*Alternate Design With Padding*/ }
           { /*<GridView dataSource={this.state.dataSource} spacing={8} style={{marginTop:65, padding: 5, backgroundColor: colors.richBlack}} renderCell={this._renderCell.bind(this)}
