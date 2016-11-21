@@ -61,6 +61,17 @@ class MainView extends React.Component {
     let priorityContent = []
     let { appFlags } = currentUser
 
+    /**
+      NOTE: Priority content generation example:
+            priorityContent.push({
+              type: 'priorityContent',
+              reactComponent: <MyCustomComponent />
+            })
+
+      NOTE: Content will appear in the order in which it's pushed to the
+            priorityContent array
+    **/
+
     let awaitingCustomerVerification = appFlags.customer_status !== "verified"
     let awaitingCutomerRetry = appFlags.customer_status === "retry"
     let awaitingMicrodepositVerification = appFlags.onboarding_state === "awaitingMicrodepositVerification"
