@@ -5,7 +5,7 @@ import Button from 'react-native-button';
 import Entypo from 'react-native-vector-icons/Entypo'
 
 // Styles
-import colors from '../../styles/colors';
+import {colors} from '../../globalStyles';
 
 // Helper functions
 import * as Async from '../../helpers/Async';
