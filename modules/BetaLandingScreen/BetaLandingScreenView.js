@@ -228,7 +228,7 @@ class BetaLandingScreenView extends React.Component {
           }}>
             <View style={{width: dims.width - 60, height: 45, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.gradientGreen, borderRadius: 4, marginTop: 20}}>
               <Text style={{fontSize: 16, color: colors.snowWhite}}>
-                {"I received an invite"}
+                {"Request an invite"}
               </Text>
             </View>
           </TouchableHighlight>
@@ -240,7 +240,7 @@ class BetaLandingScreenView extends React.Component {
           }}>
             <View style={{width: dims.width - 60, height: 45, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent, borderRadius: 4, marginTop: 6}}>
               <Text style={{fontSize: 16, color: colors.snowWhite}}>
-                {"Request an invite"}
+                {"I received an invite"}
               </Text>
             </View>
           </TouchableHighlight>

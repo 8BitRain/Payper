@@ -69,16 +69,13 @@
    * running the project on an actual device or running the project on the
    * simulator in the "Release"  build configuration.
    */
-//  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Coincast"
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
-  
-  // Customize root view background color
-  rootView.backgroundColor = [[UIColor alloc] initWithRed:.42f green:.45f blue:.52f alpha:1];
   
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
