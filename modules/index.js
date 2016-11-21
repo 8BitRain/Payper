@@ -1,3 +1,3 @@
 exports.CreatePaymentView = require('./CreatePaymentView/CreatePaymentView')
-exports.NewMainView = require('./NewMainView/NewMainView')
+exports.MainView = require('./Main/MainView')
 exports.BankOnboarding = require('./BankOnboarding/BankOnboardingView')
