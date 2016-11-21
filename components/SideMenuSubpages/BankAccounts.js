@@ -130,7 +130,9 @@ class BankAccounts extends React.Component {
 
         { /* IAVWebView modal */ }
         <Modal animationType={"slide"} visible={this.state.IAVModalVisible}>
-          <IAVWebView refreshable currentUser={this.props.currentUser} toggleModal={() => this.toggleIAVModal()} />
+          <View style={{flex: 1.0, backgroundColor: colors.accent}}>
+            <IAVWebView refreshable currentUser={this.props.currentUser} toggleModal={() => this.toggleIAVModal()} />
+          </View>
         </Modal>
       </View>
     )

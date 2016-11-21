@@ -44,7 +44,7 @@ const getSceneStyle = function(props, computedProps) {
     shadowOffset: null,
     shadowOpacity: null,
     shadowRadius: null,
-    backgroundColor: colors.richBlack
+    backgroundColor: colors.accent
   };
 
   if (computedProps.isActive) {

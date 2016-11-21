@@ -58,11 +58,11 @@ class SideMenu extends React.Component {
           icon: 'envelope',
           destination: () => toggleSideMenuSubpage("Invite a Friend")
         },
-        {
-          title: 'Settings',
-          icon: 'gear',
-          destination: () => toggleSideMenuSubpage("Settings")
-        },
+        // {
+        //   title: 'Settings',
+        //   icon: 'gear',
+        //   destination: () => toggleSideMenuSubpage("Settings")
+        // },
         {
           title: 'FAQ',
           icon: 'question',
@@ -76,7 +76,7 @@ class SideMenu extends React.Component {
         },
         {
           title: 'Signout',
-          icon: 'chevron-left',
+          icon: 'arrow-left',
           destination: () => {
             let message = "Are you sure you'd like to sign out?"
             Alert.alert("Wait!", message, [

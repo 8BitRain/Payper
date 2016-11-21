@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, Image, NetInfo, TouchableHighlight, Animated, Easing, Dimensions } from 'react-native';
+import { View, Text, Image, NetInfo, TouchableHighlight, Animated, Easing, Dimensions, StatusBar } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { signin } from '../../auth'
 import Mixpanel from 'react-native-mixpanel';
@@ -120,6 +120,8 @@ class SplashView extends React.Component {
   render() {
     return(
       <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.snowWhite}}>
+        <StatusBar barStyle="default" />
+
         { (this.state.connected)
             ? <Image source={require('../../assets/images/logo.png')} style={{ width: dimensions.width * (117/635), height: (dimensions.width * (117/635) * (568/377)) }} />
             : <View>
