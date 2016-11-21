@@ -170,13 +170,9 @@ class NewMainView extends React.Component {
       case "Notifications": return <Notifications {...this.props} />
       case "Invite a Friend": return <Invite {...this.props} />
       case "Settings": return <Settings {...this.props} />
-      case "Document Uploader": return <PhotoUploader {...this.props} />
+      case "Document Uploader": return <PhotoUploader toggleModal={() => this.toggleSideMenuSubpage(null)} title={"Secure Document Upload"} index={0} {...this.props} />
       case "Microdeposit Verification": return <MicrodepositOnboarding {...this.props} />
-      case "retry": return(
-        <View style={{ flex: 1.0, backgroundColor: colors.richBlack }}>
-          <BankOnboarding retry displayCloseButton currentUser={this.props.currentUser} closeModal={() => this.toggleSideMenuSubpage(null)} />
-        </View>
-      )
+      case "retry": <BankOnboarding retry displayCloseButton currentUser={this.props.currentUser} closeModal={() => this.toggleSideMenuSubpage(null)} />
       default: return <View><Text>{"DEFAULT"}</Text></View>
     }
   }
@@ -332,7 +328,7 @@ class NewMainView extends React.Component {
             <View style={{flex: 1.0}}>
 
               { /* Header */
-                (this.state.activeSideMenuSubpage === "retry")
+                (this.state.activeSideMenuSubpage === "retry" || this.state.activeSideMenuSubpage === "Document Uploader")
                 ? null
                 : <View style={{overflow: 'hidden'}}>
                     <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
