@@ -160,7 +160,7 @@ export default class TrendingPayments extends React.Component {
           break;
         case "GameFly":
           return(
-            <Image style={{width: 48, height: 48, alignSelf: "center"}} source={require('../../assets/images/GameFlyLogo.png')}></Image>
+            <Image style={{width: 48, height: 48, alignSelf: "center", backgroundColor: "transparent", padding: 0, margin: 0}} source={require('../../assets/images/Gamefly_logo_notext.png')}></Image>
           );
           break;
       }
@@ -246,7 +246,7 @@ export default class TrendingPayments extends React.Component {
           callbackClose={() => this.props.toggleModal()}
           callbackBack={() => this.setState({index: this.state.index - 1})}
           headerProps={Headers.get({ header: "trendingPurpose", title: "Trending Payments", index: this.state.index })} />
-          <GridView dataSource={this.state.dataSource} spacing={0} style={{marginTop:65, padding: 0, backgroundColor: colors.accent}} renderCell={this._renderCell.bind(this)}
+          <GridView dataSource={this.state.dataSource} spacing={0} style={{marginTop:65, padding: 0, backgroundColor: colors.snowWhite}} renderCell={this._renderCell.bind(this)}
           />
           { /*Alternate Design With Padding*/ }
           { /*<GridView dataSource={this.state.dataSource} spacing={8} style={{marginTop:65, padding: 5, backgroundColor: colors.richBlack}} renderCell={this._renderCell.bind(this)}
