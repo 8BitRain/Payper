@@ -17,7 +17,7 @@ class Row extends React.Component {
   }
 
   render() {
-    let { title, icon, destination } = this.props
+    let { title, icon, destination, numericIndicator } = this.props
 
     return(
       <TouchableHighlight
@@ -29,6 +29,15 @@ class Row extends React.Component {
           <Text style={{color: colors.accent, fontWeight: '400', fontSize: 17, paddingLeft: 10, paddingBottom: 2}}>
             {title}
           </Text>
+
+          { /* Numeric indicator */
+            (numericIndicator)
+              ? <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, paddingRight: 15, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={{fontSize: 14, padding: 2, paddingLeft: 8, paddingRight: 8, borderRadius: 4, backgroundColor: colors.gradientGreen, color: colors.snowWhite, overflow: 'hidden'}}>
+                    {numericIndicator}
+                  </Text>
+                </View>
+              : null }
         </View>
       </TouchableHighlight>
     )
@@ -39,7 +48,7 @@ class SideMenu extends React.Component {
   constructor(props) {
     super(props)
 
-    let { toggleSideMenuSubpage } = this.props
+    let { toggleSideMenuSubpage, currentUser } = this.props
 
     this.state = {
       options: [
@@ -51,6 +60,7 @@ class SideMenu extends React.Component {
         {
           title: 'Notifications',
           icon: 'bell',
+          numericIndicator: currentUser.appFlags.numUnseenNotifications,
           destination: () => toggleSideMenuSubpage("Notifications")
         },
         {
@@ -87,6 +97,10 @@ class SideMenu extends React.Component {
         }
       ]
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("<SideMenu /> will receive props", nextProps)
   }
 
   render() {

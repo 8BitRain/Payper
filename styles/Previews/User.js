@@ -1,8 +1,5 @@
-import { StyleSheet, Dimensions } from 'react-native';
-
-import colors from '../colors';
-var dimensions = Dimensions.get('window');
-
+import { StyleSheet } from 'react-native'
+import { colors } from '../../globalStyles'
 
 const styles = StyleSheet.create({
 
@@ -11,7 +8,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 60,
     flexDirection: 'row',
-    backgroundColor: colors.white,
+    backgroundColor: colors.snowWhite,
   },
 
   // Wrap for the image portion of the preview
@@ -49,7 +46,7 @@ const styles = StyleSheet.create({
   fullnameText: {
     fontSize: 20,
     fontWeight: '600',
-    color: colors.richBlack,
+    color: colors.deepBlue,
   },
 
   // Username text
@@ -58,6 +55,6 @@ const styles = StyleSheet.create({
     color: colors.accent,
   },
 
-});
+})
 
-export default styles;
+export default styles

@@ -1,7 +1,7 @@
 // Dependencies
 import React from 'react';
 import { View, Text, TouchableHighlight, StyleSheet, Dimensions } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 // Components
 import ContinueButton from '../subcomponents/ContinueButton';
@@ -22,7 +22,7 @@ export default class Comfort extends React.Component {
           <Text style={{ fontFamily: 'Roboto', fontSize: 28, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
             { "Let's verify your identity" }
             { "\n\n" }
-            <FontAwesome name={"user-secret"} color={colors.accent} size={38} />
+            <EvilIcons name={"lock"} color={colors.accent} size={38} />
             { "\n" }
           </Text>
           <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, width: dimensions.width * 1.0, textAlign: 'center', paddingLeft: 25, paddingRight: 25 }}>
