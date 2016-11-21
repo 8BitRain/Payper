@@ -4,7 +4,7 @@ import firebase from 'firebase'
 import { AppState } from 'react-native';
 import { Scene, Reducer, Router, Modal } from 'react-native-router-flux';
 import Mixpanel from 'react-native-mixpanel';
-import colors from './styles/colors';
+import { colors } from './globalStyles'
 import Error from './components/Error';
 import {
   Analytics,
@@ -44,7 +44,7 @@ const getSceneStyle = function(props, computedProps) {
     shadowOffset: null,
     shadowOpacity: null,
     shadowRadius: null,
-    backgroundColor: colors.accent
+    backgroundColor: colors.snowWhite
   };
 
   if (computedProps.isActive) {

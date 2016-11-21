@@ -8,15 +8,13 @@ const { State: TextInputState } = TextInput;
 // Helpers
 import * as Lambda from '../../services/Lambda';
 import * as Headers from '../../helpers/Headers';
+import { colors } from '../../globalStyles'
 
 // Components
 import Header from '../../components/Header/Header';
 import UserSelection from './pages/UserSelection';
 import AmountFrequencyDuration from './pages/AmountFrequencyDuration';
 import Purpose from './pages/Purpose';
-
-// Stylesheets
-import colors from '../../styles/colors';
 
 // Used to size user previews
 const dimensions = Dimensions.get('window');
@@ -128,6 +126,7 @@ class CreatePaymentView extends React.Component {
         { /* Header */ }
         <View style={{ flex: (dimensions.height < 667) ? 0.12 : 0.1 }}>
           <Header
+            backgroundColor={colors.accent}
             callbackClose={() => this.handleCancel()}
             callbackBack={() => this._prevPage()}
             numUnseenNotifications={this.props.numUnseenNotifications}

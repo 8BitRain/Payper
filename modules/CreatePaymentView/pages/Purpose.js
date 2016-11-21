@@ -7,7 +7,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import DynamicHorizontalUserList from '../../../components/DynamicHorizontalUserList/DynamicHorizontalUserList';
 
 // Stylesheets
-import colors from '../../../styles/colors';
+import { colors } from '../../../globalStyles'
 const dimensions = Dimensions.get('window');
 
 class Purpose extends React.Component {
@@ -209,7 +209,7 @@ class Purpose extends React.Component {
           ref="purposeInput"
           style={styles.purposeInput}
           placeholderFontFamily={"Roboto"}
-          placeholderTextColor={colors.lightGrey}
+          placeholderTextColor={colors.maastrichtBlue}
           placeholder={"Toilet paper"}
           defaultValue={this.state.purpose}
           autoCorrect={false} autoFocus={false} autoCapitalize={"sentences"}
@@ -227,7 +227,7 @@ class Purpose extends React.Component {
             onPress={() => this._showConfirmButton("request")}>
 
             <Animated.View style={{ width: dimensions.width / 2, height: 60, backgroundColor: '#11ac53', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '400', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
+              <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
                 { "Request" }
               </Text>
             </Animated.View>
@@ -241,7 +241,7 @@ class Purpose extends React.Component {
             onPress={() => this._showConfirmButton("payment")}>
 
             <Animated.View style={{ width: dimensions.width / 2, height: 60, backgroundColor: colors.alertGreen, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '400', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
+              <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
                 { "Pay" }
               </Text>
             </Animated.View>
@@ -257,7 +257,7 @@ class Purpose extends React.Component {
             onPress={() => this._handleSubmit()}>
 
             <View style={{ width: dimensions.width * 0.8, height: 60, backgroundColor: colors.alertGreen, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontFamily: 'Roboto', fontSize: (this.props.activeFundingSource) ? 16 : 18, fontWeight: '400', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
+              <Text style={{ fontFamily: 'Roboto', fontSize: (this.props.activeFundingSource) ? 16 : 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
                 { this.state.confirmText }
                 {(this.props.activeFundingSource) ? "\n(" + this.props.activeFundingSource.name + ")" : null }
               </Text>
@@ -271,7 +271,7 @@ class Purpose extends React.Component {
             onPress={() => this._hideConfirmButton()}>
 
             <View style={{ width: dimensions.width * 0.2, height: 60, backgroundColor: colors.alertRed, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <Entypo name={"cross"} size={20} color={colors.white} />
+              <Entypo name={"cross"} size={20} color={colors.snowWhite} />
             </View>
 
           </TouchableHighlight>
@@ -279,7 +279,7 @@ class Purpose extends React.Component {
 
         { /* Success alert */ }
         <Animated.View style={[styles.successBox, { right: this.successOffsetRight }]}>
-          <Entypo name={"check"} size={36} color={colors.white} />
+          <Entypo name={"check"} size={36} color={colors.snowWhite} />
         </Animated.View>
       </View>
     );
@@ -291,14 +291,14 @@ const styles = StyleSheet.create({
     flex: 1.0,
     justifyContent: 'flex-start',
     width: dimensions.width,
-    backgroundColor: colors.white,
+    backgroundColor: colors.snowWhite,
     paddingTop: 20,
   },
   purposeInput: {
     fontFamily: 'Roboto',
     fontSize: 18,
     fontWeight: '200',
-    color: colors.richBlack,
+    color: colors.deepBlue,
     textAlign: 'center',
     width: dimensions.width * 0.7,
     marginLeft: dimensions.width * 0.15,
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 22,
     fontWeight: '200',
-    color: colors.richBlack,
+    color: colors.deepBlue,
     padding: 6,
     textAlign: 'center',
   },
