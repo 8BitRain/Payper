@@ -12,12 +12,11 @@ import {
 } from 'react-native-google-analytics';
 import DeviceInfo from 'react-native-device-info';
 
-
-// Uncomment to reset user manually
-import * as Async from './helpers/Async';
-Async.set('user', '');
-Async.set('BankOnboardingStateCache', '');
-Async.set('betaStatus', 'fullAccess');
+// Uncomment to reset user cache
+// import * as Async from './helpers/Async';
+// Async.set('user', '');
+// Async.set('BankOnboardingStateCache', '');
+// Async.set('betaStatus', 'fullAccess');
 
 // Modules
 import SplashViewContainer from './modules/Splash/SplashViewContainer';

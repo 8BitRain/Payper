@@ -22,18 +22,13 @@ class NewMainView extends React.Component {
 
     let plusAngleInterpolator = new Animated.Value(0)
     let chevronAngleInterpolator = new Animated.Value(0)
+
     this.animatedValues = {
+      filterMenuHeight: new Animated.Value(1),
       chevronAngleInterpolator: chevronAngleInterpolator,
-      chevronAngle: chevronAngleInterpolator.interpolate({
-        inputRange: [0, 150],
-        outputRange: ['0deg', '180deg']
-      }),
+      chevronAngle: chevronAngleInterpolator.interpolate({inputRange: [0, 150], outputRange: ['0deg', '180deg']}),
       plusAngleInterpolator: plusAngleInterpolator,
-      plusAngle: plusAngleInterpolator.interpolate({
-        inputRange: [0, 150],
-        outputRange: ['0deg', '135deg']
-      }),
-      filterMenuHeight: new Animated.Value(1)
+      plusAngle: plusAngleInterpolator.interpolate({inputRange: [0, 150], outputRange: ['0deg', '135deg']})
     }
 
     this.state = {
@@ -50,14 +45,9 @@ class NewMainView extends React.Component {
   }
 
   componentWillMount() {
-    // Reattach listeners if they're already active
     if (this.props.currentUser.endpoints) this.props.currentUser.stopListening()
     this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates))
-
-    // Get decrypted email and phone attributes
     this.props.currentUser.decrypt((updates) => this.props.updateCurrentUser(updates))
-
-    // Prompt user for contact access
     this.props.currentUser.getNativeContacts((updates) => this.props.updateCurrentUser(updates))
   }
 
