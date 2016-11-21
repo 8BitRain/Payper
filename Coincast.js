@@ -11,7 +11,7 @@ import {
   Hits as GAHits,
 } from 'react-native-google-analytics';
 import DeviceInfo from 'react-native-device-info';
-
+import CodePush from 'react-native-code-push';
 
 // Uncomment to reset user manually
 import * as Async from './helpers/Async';
@@ -28,6 +28,7 @@ import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboarding
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView';
 import Phone from './modules/UserOnboarding/pages/Phone';
 import { PayDetails } from './components/PayCard'
+import { NewMainView } from './modules'
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
@@ -45,7 +46,7 @@ const getSceneStyle = function(props, computedProps) {
     shadowOffset: null,
     shadowOpacity: null,
     shadowRadius: null,
-    backgroundColor: colors.richBlack
+    backgroundColor: colors.deepBlue
   };
 
   if (computedProps.isActive) {
@@ -70,6 +71,7 @@ export default class Coincast extends React.Component {
 
   componentWillMount() {
     let clientId = DeviceInfo.getUniqueID();
+    CodePush.sync();
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');
     Mixpanel.timeEvent('Session Duration');
     AppState.addEventListener('change', this.handleAppStateChange);
@@ -93,7 +95,13 @@ export default class Coincast extends React.Component {
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 
-            <Scene initial
+            <Scene
+              component={NewMainView}
+              key="NewMainView"
+              type="replace"
+              panHandlers={null} />
+
+            <Scene
               component={SplashViewContainer}
               key="SplashViewContainer"
               type="replace"
@@ -105,7 +113,7 @@ export default class Coincast extends React.Component {
               type="replace"
               panHandlers={null} />
 
-            <Scene
+            <Scene  initial
               component={LandingScreenViewContainer}
               key="LandingScreenViewContainer"
               type="replace"

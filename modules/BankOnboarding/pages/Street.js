@@ -11,7 +11,7 @@ import StickyView from '../../../classes/StickyView';
 import ContinueButton from '../subcomponents/ContinueButton';
 
 // Stylesheets
-import colors from '../../../styles/colors';
+import {colors} from '../../../globalStyles';
 const dimensions = Dimensions.get('window');
 
 export default class City extends React.Component {
@@ -46,11 +46,11 @@ export default class City extends React.Component {
     return (
       <View style={styles.wrap}>
         <View>
-          <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
+          <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '400', color: colors.deepBlue, textAlign: 'center' }}>
             { "Enter your billing street address" }
           </Text>
-          <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, textAlign: 'center', paddingTop: 15 }}>
-            <Entypo name={"location-pin"} size={20} color={colors.white} />
+          <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '400', color: colors.deepBlue, textAlign: 'center', paddingTop: 15 }}>
+            <Entypo name={"location-pin"} size={20} color={colors.accent} />
             { "  " + this.props.city + ", " + this.props.state }
           </Text>
         </View>
@@ -60,7 +60,7 @@ export default class City extends React.Component {
             ref={"streetInput"}
             style={styles.input}
             placeholder={"e.g. 1 North Avenue"}
-            placeholderTextColor={colors.lightGrey}
+            placeholderTextColor={colors.deepBlue}
             defaultValue={this.state.street}
             autoCapitalize={"words"} autofocus autoCorrect={false}
             onChangeText={(input) => this.handleChangeText(input)} />
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1.0,
     width: dimensions.width,
-    backgroundColor: colors.richBlack,
+    backgroundColor: colors.snowWhite,
     justifyContent: 'flex-start',
     alignItems: 'center'
   },
@@ -93,6 +93,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
     textAlign: 'center',
-    color: colors.white
+    color: colors.deepBlue
   }
 });

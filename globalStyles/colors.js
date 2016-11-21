@@ -18,9 +18,8 @@ const colors = {
   lightGrey: "#F6F5F5",
   accent: "#00CEB3",
   deepBlue: "#000a14",
-  gradientGreen: "#23CE6B",
-
-  snowWhiteOpaque: "rgba(255, 251, 252, 0.5)"
+  snowWhiteOpaque: "rgba(255, 251, 252, 0.5)",
+  gradientGreen: "#23CE6B"
 }
 
 module.exports = colors

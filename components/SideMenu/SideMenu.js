@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
       height: 0,
       width: 0
     }
-  },
+  }
 })
 
 module.exports = SideMenu

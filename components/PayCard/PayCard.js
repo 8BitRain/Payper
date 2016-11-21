@@ -3,7 +3,6 @@ import { Actions } from 'react-native-router-flux'
 import { View, Text, TouchableHighlight, Dimensions, Image } from 'react-native'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
-
 import { parsePaymentDetails } from './helpers'
 import { colors } from '../../globalStyles'
 const dims = Dimensions.get('window')
@@ -76,7 +75,7 @@ class PayCard extends React.Component {
             <View style={{flexDirection: 'row', paddingBottom: 10}}>
 
               { /* Payment amount */ }
-              <View style={{width: dims.width * 0.22, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}} onLayout={(e) => this.layoutAmount(e)}>
+              <View style={{flex: 0.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}} onLayout={(e) => this.layoutAmount(e)}>
                 <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.carminePink, fontSize: 14}]}>
                   {(incoming) ? "+" : "-"}
                 </Text>
@@ -156,7 +155,7 @@ const styles = {
     borderRadius: imageDims.width / 2,
     shadowColor: colors.slateGrey,
     shadowOpacity: 1.0,
-    shadowRadius: 1.5,
+    shadowRadius: 1,
     shadowOffset: {
       height: 0,
       width: 0
