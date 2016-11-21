@@ -12,7 +12,7 @@ import * as Init from '../../_init';
 import * as Async from '../../helpers/Async';
 
 // Custom styles
-import colors from '../../styles/colors';
+import { colors } from '../../globalStyles'
 const dimensions = Dimensions.get('window');
 
 class SplashView extends React.Component {
@@ -119,11 +119,11 @@ class SplashView extends React.Component {
 
   render() {
     return(
-      <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.richBlack}}>
+      <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: colors.snowWhite}}>
         { (this.state.connected)
             ? <Image source={require('../../assets/images/logo.png')} style={{ width: dimensions.width * (117/635), height: (dimensions.width * (117/635) * (568/377)) }} />
             : <View>
-                <Text style={{fontFamily: 'Roboto', fontSize: 24, fontWeight: '300', color: colors.white, padding: 15, textAlign: 'center'}}>
+                <Text style={{fontFamily: 'Roboto', fontSize: 24, fontWeight: '300', color: colors.deepBlue, padding: 15, textAlign: 'center'}}>
                   { (this.state.reconnecting)
                       ? "Reconnecting..."
                       : "Error establishing\nconnection 🙄" }
@@ -136,12 +136,12 @@ class SplashView extends React.Component {
 
                   <View>
                     <Animated.View style={{ transform: [{ rotate: this.state.refreshIconAngle }] }}>
-                      <Entypo style={{ alignSelf: 'center' }} name={"cycle"} size={32} color={colors.white} />
+                      <Entypo style={{ alignSelf: 'center' }} name={"cycle"} size={32} color={colors.deepBlue} />
                     </Animated.View>
 
                     { (this.state.reconnecting)
                         ? null
-                        : <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '300', color: colors.white, padding: 8, textAlign: 'center' }}>
+                        : <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '300', color: colors.deepBlue, padding: 8, textAlign: 'center' }}>
                             { "Tap to retry" }
                           </Text> }
                   </View>

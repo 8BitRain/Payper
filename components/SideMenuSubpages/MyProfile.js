@@ -71,6 +71,8 @@ class MyProfile extends React.Component {
   render() {
     let { first_name, last_name, username, profile_pic } = this.props.currentUser
     let name = first_name + " " + last_name
+    let initialsBuffer = name.split(" ").map((name) => name.charAt(0))
+    let initials = initialsBuffer.join("")
 
     return(
       <View style={styles.wrap}>
@@ -82,7 +84,7 @@ class MyProfile extends React.Component {
               ? <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: profile_pic}} />
               : <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center'}}>
                   <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
-                    {this.getInitials()}
+                    {initials}
                   </Text>
                 </View> }
           </View>

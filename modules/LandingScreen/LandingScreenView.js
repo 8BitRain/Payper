@@ -3,6 +3,8 @@ import React from 'react'
 import { View, ScrollView, Text, TouchableHighlight, Modal, Animated, Easing, Dimensions, Linking, StatusBar, Image } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import Mixpanel from 'react-native-mixpanel'
+import Hyperlink from 'react-native-hyperlink'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const FBSDK = require('react-native-fbsdk')
 const { LoginButton, AccessToken } = FBSDK
 import { FBLoginManager } from 'NativeModules'
@@ -17,10 +19,10 @@ import PaymentCards from './subcomponents/PaymentCards'
 import LoginModal from '../../components/LoginModal/LoginModal'
 
 // Stylesheets
-import colors from '../../styles/colors'
+const dims = Dimensions.get('window')
+import { colors } from '../../globalStyles'
 import typography from './styles/typography'
 import container from './styles/container'
-const dimensions = Dimensions.get('window')
 
 export default class LandingScreenView extends React.Component {
   constructor(props) {
@@ -34,6 +36,10 @@ export default class LandingScreenView extends React.Component {
       signUpModalVisible: false,
       loading: false
     }
+  }
+
+  handleURLClick = (url) =>{
+    Linking.openURL(url).catch(err => console.error('An error occurred', err));
   }
 
   toggleLoginModal() {
@@ -63,7 +69,6 @@ export default class LandingScreenView extends React.Component {
 
   signinWithFacebook(userData) {
     let { token } = userData
-    this.toggleLoadingScreen()
 
     signin({
       type: "facebook",
@@ -93,70 +98,79 @@ export default class LandingScreenView extends React.Component {
 
   render() {
     return (
-      <Animated.View style={{ flex: 1.0, backgroundColor: colors.richBlack, opacity: this.pageWrapOpacity, paddingTop: 20 }}>
-        { /* Lighten status bar text */ }
-        <StatusBar barStyle="light-content" />
+      <Animated.View style={{flex: 1.0, backgroundColor: colors.snowWhite, opacity: this.pageWrapOpacity, paddingTop: 20}}>
+        <StatusBar barStyle="default" />
 
-        { /* Header */ }
-        <View onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})} style={{flex: 0.1, width: dimensions.width, flexDirection: 'row'}}>
-          <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-            <Image source={require('../../assets/images/logo.png')} style={{ height: this.state.headerHeight * 0.6, width: (this.state.headerHeight * 0.6) * this.logoAspectRatio }} />
+        <View style={{flex: 1.0, justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{flex: 1.0, justifyContent: 'flex-end', alignItems: 'center'}}>
+            { /* Logo */ }
+            <Image source={require('../../assets/images/logo.png')} style={{height: dims.width * 0.22, width: (dims.width * 0.22) * this.logoAspectRatio}} />
+
+            { /* Welcome message */ }
+            <Text style={{fontWeight: '500', fontSize: 24, color: colors.accent, width: dims.width - 80, marginTop: 20}}>
+              {"Welcome to Payper,"}
+            </Text>
+            <Text style={{fontSize: 18, color: colors.accent, width: dims.width - 80}}>
+              {"the app that makes recurring payments easy."}
+            </Text>
           </View>
-          <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'flex-end'}}>
-            <TouchableHighlight
-              activeOpacity={0.8}
-              underlayColor={'transparent'}
-              onPress={() => this.toggleLoginModal()}>
-              <Text style={{fontSize: 16, color: colors.white, fontWeight: '300', padding: 20}}>
-                {"Sign in"}
-              </Text>
+
+
+          <View style={{flex: 1.0, justifyContent: 'center', alignItems: 'center'}}>
+            { /* "Sign in with Facebook" button */ }
+            <LoginButton
+              style={{width: dims.width - 60, height: 45, marginTop: 20}}
+              readPermissions={["email", "public_profile", "user_friends"]}
+              onLoginFinished={(err, res) => {
+                if (err) {
+                  console.log("Facebook login failed...", JSON.stringify(err));
+                } else if (res.isCancelled) {
+                  console.log("Facebook login was cancelled...");
+                } else {
+                  this.toggleLoadingScreen()
+                  AccessToken.getCurrentAccessToken().then((data) => {
+                    requestFacebookUserData(data.accessToken, (userData) => {
+                      this.signinWithFacebook(userData)
+                    })
+                  })
+                }
+              }} />
+
+            { /* "Sign up with email" button */ }
+            <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={() => Actions.UserOnboardingViewContainer()}>
+              <View style={{width: dims.width - 60, height: 45, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent, borderRadius: 4, marginTop: 6}}>
+                <Text style={{fontSize: 16, color: colors.snowWhite}}>
+                  {"Sign up with email"}
+                </Text>
+              </View>
+            </TouchableHighlight>
+
+            { /* "Sign in with email" button */ }
+            <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={this.toggleLoginModal.bind(this)}>
+              <View style={{width: dims.width - 60, height: 45, justifyContent: 'flex-start', alignItems: 'center', borderRadius: 4, marginTop: 6, paddingTop: 6}}>
+                <Text style={{fontSize: 16, color: colors.deepBlue}}>
+                  {"Sign in with email"}
+                </Text>
+              </View>
             </TouchableHighlight>
           </View>
         </View>
 
-        { /* Payment cards */ }
-        <View style={{ flex: 0.9, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.mintCream }}>
-          <ScrollView>
-            {/*<PaymentCards />*/}
-            <View style={{ height: dimensions.height * 0.2, width: dimensions.width, backgroundColor: colors.mintCream }} />
-          </ScrollView>
-        </View>
-
         { /* Footer */ }
-        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: dimensions.height * 0.2, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.9)' }}>
-          <LoginButton
-            style={{width: dimensions.width - 60, height: 45 }}
-            readPermissions={["email", "public_profile", "user_friends"]}
-            onLoginFinished={(err, res) => {
-              if (err) {
-                alert("Something went wrong. Please try again later.")
-                Mixpanel.trackWithProperties('Failed Facebook Signin', { err: err })
-              } else if (res.isCancelled) {
-                Mixpanel.trackWithProperties('Cancelled Facebook Signin')
-              } else {
-                AccessToken.getCurrentAccessToken().then((data) => {
-                  requestFacebookUserData(data.accessToken, (userData) => {
-                    this.signinWithFacebook(userData)
-                  })
-                })
-              }
-            }} />
-
-          { /* 'Continue without Facebook' button */ }
-          <TouchableHighlight
-            style={{ paddingTop: 10 }}
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            onPress={() => Actions.UserOnboardingViewContainer()}>
-            <View style={{ flexDirection: 'row' }}>
-              <Text style={{ fontFamily: 'Roboto', color: colors.white, fontSize: 18, fontWeight: '100' }}>
-                {"or "}
-              </Text>
-              <Text style={{ fontFamily: 'Roboto', color: colors.accent, fontSize: 18, fontWeight: '100' }}>
-                {"sign up with email"}
-              </Text>
-            </View>
-          </TouchableHighlight>
+        <View style={{alignItems: 'center', justifyContent: 'flex-end', padding: 15}}>
+          <Hyperlink
+            onPress={(url) => this.handleURLClick(url)}
+            linkStyle={{color:'#2980b9', fontSize:14}}
+            linkText={(url) => {
+              if (url === 'https://www.getpayper.io/terms')
+                return 'Terms of Service';
+              else if (url === 'https://www.getpayper.io/privacy')
+                return 'Privacy Policy';
+            }}>
+            <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: colors.white, fontWeight: '100' }}>
+              { "By creating an account or logging in, you agree to Payper's https://www.getpayper.io/terms and https://www.getpayper.io/privacy." }
+            </Text>
+          </Hyperlink>
         </View>
 
         { /* Non-Facebook login modal */ }
@@ -181,10 +195,8 @@ export default class LandingScreenView extends React.Component {
 
         { /* Facebook login loading view */
         (this.state.loading)
-          ? <Animated.View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.richBlack, opacity: this.loadingOpacity, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
-                Logging in...
-              </Text>
+          ? <Animated.View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.accent, opacity: this.loadingOpacity, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+              <EvilIcons name={"spinner"} color={colors.snowWhite} size={32} />
             </Animated.View>
           : null }
       </Animated.View>

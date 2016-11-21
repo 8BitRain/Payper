@@ -77,7 +77,13 @@ class SideMenu extends React.Component {
         {
           title: 'Signout',
           icon: 'chevron-left',
-          destination: () => signout(this.props.currentUser)
+          destination: () => {
+            let message = "Are you sure you'd like to sign out?"
+            Alert.alert("Wait!", message, [
+              {text: 'Cancel', onPress: () => null, style: 'cancel'},
+              {text: 'Yes', onPress: () => signout(this.props.currentUser)},
+            ])
+          }
         }
       ]
     }
