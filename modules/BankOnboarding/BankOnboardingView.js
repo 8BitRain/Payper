@@ -29,7 +29,7 @@ import IAV from './pages/IAV';
 import {colors} from '../../globalStyles/';
 const dimensions = Dimensions.get('window');
 
-export default class BankOnboardingView extends React.Component {
+class BankOnboardingView extends React.Component {
   constructor(props) {
     super(props);
     this.offsetX = new Animated.Value(0);
@@ -252,7 +252,7 @@ export default class BankOnboardingView extends React.Component {
   render() {
     return(
       <View style={{ flex: 1.0 }}>
-        <StatusBar barStyle='light-content' />
+        <StatusBar barStyle='default' />
 
         { /* Header */ }
         <View style={styles.headerWrap} onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}>
@@ -347,3 +347,5 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }
 });
+
+module.exports = BankOnboardingView

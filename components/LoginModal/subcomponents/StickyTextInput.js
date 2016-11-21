@@ -1,27 +1,27 @@
 // Dependencies
-import React from 'react';
-import { Actions } from 'react-native-router-flux';
-import { View, Text, TextInput, TouchableHighlight, StyleSheet, Dimensions, Animated, Easing, Keyboard } from 'react-native';
-import { VibrancyView } from 'react-native-blur';
-import Entypo from 'react-native-vector-icons/Entypo';
-import colors from '../../../styles/colors';
+import React from 'react'
+import { Actions } from 'react-native-router-flux'
+import { View, Text, TextInput, TouchableHighlight, StyleSheet, Dimensions, Animated, Easing, Keyboard } from 'react-native'
+import { VibrancyView } from 'react-native-blur'
+import Entypo from 'react-native-vector-icons/Entypo'
+import { colors } from '../../../globalStyles'
 
 // Screen dimensions
-const dims = Dimensions.get('window');
-const AnimatedTouchableHighlight = Animated.createAnimatedComponent(TouchableHighlight);
+const dims = Dimensions.get('window')
+const AnimatedTouchableHighlight = Animated.createAnimatedComponent(TouchableHighlight)
 
 export default class StickyTextInput extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.offsetBottom = new Animated.Value(0);
-    this.loadingOpacity = new Animated.Value(0);
+    this.offsetBottom = new Animated.Value(0)
+    this.loadingOpacity = new Animated.Value(0)
 
-    this.submitColorInterpolator = new Animated.Value(0);
+    this.submitColorInterpolator = new Animated.Value(0)
     this.submitColor = this.submitColorInterpolator.interpolate({
       inputRange: [0, 350],
       outputRange: ['rgba(251, 54, 64, 1.0)', 'rgba(16, 191, 90, 1.0)'] // Red, green
-    });
+    })
 
     this.state = {
       submitText: "Please enter a valid email and password",
@@ -31,31 +31,31 @@ export default class StickyTextInput extends React.Component {
         email: "",
         password: ""
       }
-    };
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     // Update loading message
     if (nextProps.loading != this.state.loading) {
-      this.setState({ loading: nextProps.loading });
-      this.animate({ target: this.loadingOpacity, toValue: (nextProps.loading) ? 1.0 : 0.0 });
+      this.setState({ loading: nextProps.loading })
+      this.animate({ target: this.loadingOpacity, toValue: (nextProps.loading) ? 1.0 : 0.0 })
 
       // Update error message
       if (nextProps.errorMessage != this.state.errorMessage) {
-        this.setState({ errorMessage: nextProps.errorMessage });
-        this.animate({ target: this.submitColorInterpolator, toValue: 0 });
+        this.setState({ errorMessage: nextProps.errorMessage })
+        this.animate({ target: this.submitColorInterpolator, toValue: 0 })
       }
     } else {
-      this.animate({ target: this.loadingOpacity, toValue: (nextProps.loading) ? 1.0 : 0.0 });
+      this.animate({ target: this.loadingOpacity, toValue: (nextProps.loading) ? 1.0 : 0.0 })
     }
 
     // Update submit button
     if (nextProps.validations.email && nextProps.validations.password) {
-      this.animate({ target: this.submitColorInterpolator, toValue: 350 });
-      this.setState({ submitText: "Log in" });
+      this.animate({ target: this.submitColorInterpolator, toValue: 350 })
+      this.setState({ submitText: "Log in" })
     } else {
-      this.animate({ target: this.submitColorInterpolator, toValue: 0 });
-      this.setState({ submitText: "Please enter a valid email and password" });
+      this.animate({ target: this.submitColorInterpolator, toValue: 0 })
+      this.setState({ submitText: "Please enter a valid email and password" })
     }
   }
 
@@ -63,17 +63,17 @@ export default class StickyTextInput extends React.Component {
     Animated.timing(params.target, {
       toValue: params.toValue,
       duration: 125
-    }).start();
+    }).start()
   }
 
   componentDidMount() {
-    _keyboardWillShowSubscription = Keyboard.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
-    _keyboardWillHideSubscription = Keyboard.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+    _keyboardWillShowSubscription = Keyboard.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e))
+    _keyboardWillHideSubscription = Keyboard.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e))
   }
 
   componentWillUnmount() {
-    _keyboardWillShowSubscription.remove();
-    _keyboardWillHideSubscription.remove();
+    _keyboardWillShowSubscription.remove()
+    _keyboardWillHideSubscription.remove()
   }
 
   _keyboardWillShow(e) {
@@ -82,7 +82,7 @@ export default class StickyTextInput extends React.Component {
       duration: 350,
       easing: Easing.elastic(1),
       friction: 5
-    }).start();
+    }).start()
   }
 
   _keyboardWillHide(e) {
@@ -91,14 +91,14 @@ export default class StickyTextInput extends React.Component {
       duration: 350,
       easing: Easing.elastic(1),
       friction: 5
-    }).start();
+    }).start()
   }
 
   render() {
     return(
-      <View style={{ flex: 1.0, backgroundColor: 'transparent' }}>
-        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.4)' }} />
-        <VibrancyView blurType="dark" style={styles.blur} />
+      <View style={{ flex: 1.0, backgroundColor: colors.snowWhiteOpaque }}>
+        <VibrancyView blurType="light" style={styles.blur} />
+
         <Animated.View style={[styles.wrap, { bottom: this.offsetBottom }]}>
           <View style={styles.optionsWrap}>
             { /* Cancel login */ }
@@ -108,7 +108,7 @@ export default class StickyTextInput extends React.Component {
               onPress={() => this.props.toggleModal()}
               style={styles.cancel}>
                 <View>
-                  <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: '300', color: colors.alertRed }}>
+                  <Text style={{fontSize: 20, color: colors.carminePink}}>
                     Cancel
                   </Text>
                 </View>
@@ -130,11 +130,11 @@ export default class StickyTextInput extends React.Component {
 
           { /* Email input */ }
           <TextInput
-            style={[styles.input, { backgroundColor: 'rgba(255, 255, 255, 0.06)' }]}
+            style={[styles.input, { backgroundColor: 'rgba(0, 0, 0, 0.08)' }]}
             ref="emailInput"
-            placeholderTextColor={colors.white}
-            onChangeText={(v) => { if (this.state.errorMessage) this.setState({ errorMessage: null }); this.props.updateEmail(v); }}
-            onKeyPress={(e) => { if (e.nativeEvent.key === 'Enter') this.refs.passwordInput.focus(); }}
+            placeholderTextColor={colors.maastrichtBlue}
+            onChangeText={(v) => { if (this.state.errorMessage) this.setState({ errorMessage: null }); this.props.updateEmail(v) }}
+            onKeyPress={(e) => { if (e.nativeEvent.key === 'Enter') this.refs.passwordInput.focus() }}
             placeholder="Email"
             keyboardType="email-address"
             returnKeyType="next"
@@ -142,11 +142,11 @@ export default class StickyTextInput extends React.Component {
 
           { /* Password input */ }
           <TextInput
-            style={[styles.input, { backgroundColor: 'rgba(255, 255, 255, 0.07)' }]}
+            style={[styles.input, { backgroundColor: 'rgba(0, 0, 0, 0.1)' }]}
             ref="passwordInput"
-            placeholderTextColor={colors.white}
-            onChangeText={(v) => { if (this.state.errorMessage) this.setState({ errorMessage: null }); this.props.updatePassword(v); }}
-            onKeyPress={(e) => { if (e.nativeEvent.key === 'Enter') this.props.onSubmit(); }}
+            placeholderTextColor={colors.maastrichtBlue}
+            onChangeText={(v) => { if (this.state.errorMessage) this.setState({ errorMessage: null }); this.props.updatePassword(v) }}
+            onKeyPress={(e) => { if (e.nativeEvent.key === 'Enter') this.props.onSubmit() }}
             placeholder="Password"
             returnKeyType="go"
             secureTextEntry
@@ -161,7 +161,7 @@ export default class StickyTextInput extends React.Component {
 
             { (this.state.loading)
                 ? <Animated.View style={[styles.loading, { opacity: this.loadingOpacity }]}>
-                    <Text style={[styles.submitText, { color: colors.richBlack }]}>
+                    <Text style={[styles.submitText, { color: colors.deepBlue }]}>
                       Loading...
                     </Text>
                   </Animated.View>
@@ -172,7 +172,7 @@ export default class StickyTextInput extends React.Component {
           </AnimatedTouchableHighlight>
         </Animated.View>
       </View>
-    );
+    )
   }
 }
 
@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     flex: 0.25,
     width: dims.width,
     paddingLeft: 35,
-    color: colors.white
+    color: colors.deepBlue
   },
   submitButton: {
     flex: 0.25,
@@ -220,7 +220,6 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   submitText: {
-    fontFamily: 'Roboto',
     fontSize: 16,
     color: 'white',
     textAlign: 'center'
@@ -228,8 +227,8 @@ const styles = StyleSheet.create({
   loading: {
     position: 'absolute',
     top: 0, left: 0, right: 0, bottom: 0,
-    backgroundColor: colors.white,
+    backgroundColor: colors.snowWhite,
     justifyContent: 'center',
     alignItems: 'center'
   }
-});
+})

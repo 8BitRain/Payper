@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableHighlight, Image, Dimensions, StyleSheet } from 'react-native'
+import { View, Text, TouchableHighlight, Image, Dimensions, StyleSheet, Linking, Alert } from 'react-native'
 import { colors } from '../../globalStyles'
 import { VibrancyView } from 'react-native-blur'
 import { signout } from '../../auth'
@@ -17,18 +17,27 @@ class Row extends React.Component {
   }
 
   render() {
-    let { title, icon, destination } = this.props
+    let { title, icon, destination, numericIndicator } = this.props
 
     return(
       <TouchableHighlight
         activeOpacity={0.75}
         underlayColor={'transparent'}
         onPress={destination}>
-        <View style={{padding: 7, paddingLeft: 14, backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{width: dims.width * 0.725, padding: 10, paddingLeft: 14, backgroundColor: 'transparent', flexDirection: 'row', alignItems: 'center'}}>
           <EvilIcons name={icon} size={30} color={colors.accent} />
           <Text style={{color: colors.accent, fontWeight: '400', fontSize: 17, paddingLeft: 10, paddingBottom: 2}}>
             {title}
           </Text>
+
+          { /* Numeric indicator */
+            (numericIndicator)
+              ? <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, paddingRight: 15, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={{fontSize: 14, padding: 2, paddingLeft: 8, paddingRight: 8, borderRadius: 4, backgroundColor: colors.gradientGreen, color: colors.snowWhite, overflow: 'hidden'}}>
+                    {numericIndicator}
+                  </Text>
+                </View>
+              : null }
         </View>
       </TouchableHighlight>
     )
@@ -39,7 +48,7 @@ class SideMenu extends React.Component {
   constructor(props) {
     super(props)
 
-    let { toggleSideMenuSubpage } = this.props
+    let { toggleSideMenuSubpage, currentUser } = this.props
 
     this.state = {
       options: [
@@ -51,6 +60,7 @@ class SideMenu extends React.Component {
         {
           title: 'Notifications',
           icon: 'bell',
+          numericIndicator: currentUser.appFlags.numUnseenNotifications,
           destination: () => toggleSideMenuSubpage("Notifications")
         },
         {
@@ -58,23 +68,39 @@ class SideMenu extends React.Component {
           icon: 'envelope',
           destination: () => toggleSideMenuSubpage("Invite a Friend")
         },
-        {
-          title: 'Settings',
-          icon: 'gear',
-          destination: () => toggleSideMenuSubpage("Settings")
-        },
+        // {
+        //   title: 'Settings',
+        //   icon: 'gear',
+        //   destination: () => toggleSideMenuSubpage("Settings")
+        // },
         {
           title: 'FAQ',
           icon: 'question',
-          destination: () => toggleSideMenuSubpage("FAQ")
+          destination: () => {
+            let message = "Payper would like to open your web browser. Is that OK?"
+            Alert.alert("Wait!", message, [
+              {text: 'Cancel', onPress: () => null, style: 'cancel'},
+              {text: 'Yes', onPress: () => Linking.openURL("https://www.getpayper.io/faq").catch(err => null)},
+            ])
+          }
         },
         {
           title: 'Signout',
-          icon: 'chevron-left',
-          destination: () => signout(this.props.currentUser)
+          icon: 'arrow-left',
+          destination: () => {
+            let message = "Are you sure you'd like to sign out?"
+            Alert.alert("Wait!", message, [
+              {text: 'Cancel', onPress: () => null, style: 'cancel'},
+              {text: 'Yes', onPress: () => signout(this.props.currentUser)},
+            ])
+          }
         }
       ]
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("<SideMenu /> will receive props", nextProps)
   }
 
   render() {

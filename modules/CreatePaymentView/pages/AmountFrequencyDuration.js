@@ -7,7 +7,7 @@ import dismissKeyboard from 'react-native-dismiss-keyboard';
 import DynamicHorizontalUserList from '../../../components/DynamicHorizontalUserList/DynamicHorizontalUserList';
 
 // Stylesheets
-import colors from '../../../styles/colors';
+import { colors } from '../../../globalStyles'
 const dimensions = Dimensions.get('window');
 
 export default class AmountFrequencyDuration extends React.Component {
@@ -260,15 +260,15 @@ export default class AmountFrequencyDuration extends React.Component {
             onPress={() => this.handleSubmit()}>
               { /* Continue button */ }
               <Animated.View style={{ height: 60, backgroundColor: this.state.submitBackgroundColor, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '400', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
+                <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
                   { this.state.submitText }
                 </Text>
               </Animated.View>
           </TouchableHighlight>
 
-          <Animated.View style={[styles.frequencyPicker, { bottom: this.frequencyPickerOffsetBottom, backgroundColor: colors.richBlack }]}>
+          <Animated.View style={[styles.frequencyPicker, { bottom: this.frequencyPickerOffsetBottom, backgroundColor: colors.deepBlue }]}>
             <View style={{ justifyContent: 'center', alignItems: 'center', flex: 0.4, width: dimensions.width * 1.0, backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
-              <Text style={[styles.text, { color: colors.white, fontSize: 20, fontWeight: "400" }]}>
+              <Text style={[styles.text, { color: colors.snowWhite, fontSize: 20, fontWeight: "400" }]}>
                 Select a payment frequency
               </Text>
             </View>
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     flex: 1.0,
     justifyContent: 'flex-start',
     width: dimensions.width,
-    backgroundColor: colors.white,
+    backgroundColor: colors.snowWhite,
     paddingTop: 0,
   },
   inputWrap: {
@@ -326,7 +326,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 20,
     fontWeight: '200',
-    color: colors.richBlack
+    color: colors.deepBlue
   },
   textInput: {
     width: 70,

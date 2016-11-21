@@ -54,10 +54,7 @@
 
 
   #ifdef DEBUG
-  
-  //jsCodeLocation = [CodePush bundleURL];
-
-  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
+    jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
   #else
     jsCodeLocation = [CodePush bundleURL];
   #endif
@@ -79,9 +76,6 @@
                                                       moduleName:@"Coincast"
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
-  
-  // Customize root view background color
-  rootView.backgroundColor = [[UIColor alloc] initWithRed:.42f green:.45f blue:.52f alpha:1];
   
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];

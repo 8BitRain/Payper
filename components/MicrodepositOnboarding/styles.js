@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
-import colors from '../../styles/colors';
-const dimensions = Dimensions.get('window');
+import { colors } from '../../globalStyles'
+const dims = Dimensions.get('window');
 
 const styles = {
   blur: {
@@ -9,14 +9,14 @@ const styles = {
   },
   wrap: {
     flex: 1.0,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)'
+    backgroundColor: colors.snowWhiteOpaque
   },
   headerWrap: {
     flex: 0.15,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
-    width: dimensions.width,
+    width: dims.width,
     paddingLeft: 20,
     paddingBottom: 20
   },
@@ -24,7 +24,7 @@ const styles = {
     height: 55,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.alertGreen
+    backgroundColor: colors.accent
   },
   textWrap: {
     flex: 0.2,
@@ -41,10 +41,8 @@ const styles = {
     alignItems: 'center'
   },
   text: {
-    fontFamily: 'Roboto',
     fontSize: 18,
-    fontWeight: '200',
-    color: colors.white,
+    color: colors.deepBlue,
     textAlign: 'center'
   },
   amountWrap: {
@@ -54,11 +52,11 @@ const styles = {
     margin: 5,
     marginRight: 0,
     padding: 7,
-    backgroundColor: 'rgba(150, 150, 150, 0.08)',
+    backgroundColor: 'rgba(0, 0, 0, 0.04)',
   },
   input: {
     width: 70, height: 40,
-    backgroundColor: 'rgba(150, 150, 150, 0.03)',
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
     margin: 5,
     marginLeft: 0
   }

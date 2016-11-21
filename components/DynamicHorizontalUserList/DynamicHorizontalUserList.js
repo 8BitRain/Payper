@@ -8,7 +8,6 @@ import DynamicThumbnail from '../DynamicThumbnail/DynamicThumbnail';
 
 // Styles
 import styles from './assets/styles';
-import colors from '../../styles/colors';
 
 // Window dimensions
 const dimensions = Dimensions.get('window');

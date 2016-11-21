@@ -7,7 +7,7 @@ const colors = {
   deeperBlue: "#000a14",
   slateGrey: "#acbdba",
 
-  // Red green and yellow
+  // Alert colors
   carminePink: "#FF6B6B",
   alertRed: "#FB3640",
   alertYellow: "#f7ca2a",
@@ -18,8 +18,10 @@ const colors = {
   lightGrey: "#F6F5F5",
   accent: "#00CEB3",
   deepBlue: "#000a14",
+  gradientGreen: "#23CE6B",
+
   snowWhiteOpaque: "rgba(255, 251, 252, 0.5)",
-  gradientGreen: "#23CE6B"
+  accentOpaque: "rgba(0, 207, 179, 0.5)"
 }
 
 module.exports = colors

@@ -42,7 +42,7 @@ export default class User {
   update(updates) {
     console.log("Updating user with updates:", updates);
     for (var k in updates) this[k] = updates[k];
-    let userCache = (!this.appFlags || this.appFlags.onboarding_state === 'customer') ? "" : JSON.stringify(this);
+    let userCache = (this.appFlags.onboarding_state === "customer" && !this.appFlags.customer_status) ? "" : JSON.stringify(this);
     Async.set('user', userCache);
   }
 
@@ -265,6 +265,7 @@ export default class User {
       fetch(baseURL + "utils/getIAV", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
+        console.log("User.getIAVToken responseData is", responseData)
         if (!responseData.errorMessage) {
           if (responseData.token)
             updateViaRedux({ IAVToken: responseData.token });

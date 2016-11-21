@@ -4,7 +4,7 @@ import firebase from 'firebase'
 import { AppState } from 'react-native';
 import { Scene, Reducer, Router, Modal } from 'react-native-router-flux';
 import Mixpanel from 'react-native-mixpanel';
-import colors from './styles/colors';
+import { colors } from './globalStyles'
 import Error from './components/Error';
 import {
   Analytics,
@@ -13,11 +13,11 @@ import {
 import DeviceInfo from 'react-native-device-info';
 import CodePush from 'react-native-code-push';
 
-// Uncomment to reset user manually
-import * as Async from './helpers/Async';
-Async.set('user', '');
-Async.set('BankOnboardingStateCache', '');
-Async.set('betaStatus', 'fullAccess');
+// Uncomment to reset user cache
+// import * as Async from './helpers/Async';
+// Async.set('user', '');
+// Async.set('BankOnboardingStateCache', '');
+// Async.set('betaStatus', 'fullAccess');
 
 // Modules
 import SplashViewContainer from './modules/Splash/SplashViewContainer';
@@ -46,7 +46,7 @@ const getSceneStyle = function(props, computedProps) {
     shadowOffset: null,
     shadowOpacity: null,
     shadowRadius: null,
-    backgroundColor: colors.deepBlue
+    backgroundColor: colors.snowWhite
   };
 
   if (computedProps.isActive) {
@@ -101,7 +101,7 @@ export default class Coincast extends React.Component {
               type="replace"
               panHandlers={null} />
 
-            <Scene
+            <Scene initial
               component={SplashViewContainer}
               key="SplashViewContainer"
               type="replace"
@@ -113,7 +113,7 @@ export default class Coincast extends React.Component {
               type="replace"
               panHandlers={null} />
 
-            <Scene  initial
+            <Scene
               component={LandingScreenViewContainer}
               key="LandingScreenViewContainer"
               type="replace"

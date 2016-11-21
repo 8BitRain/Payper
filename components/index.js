@@ -1,2 +1,6 @@
 exports.SideMenu = require('./SideMenu/SideMenu')
 exports.PayCard = require('./PayCard/PayCard')
+exports.IAVWebView = require('./IAVWebView/IAVWebView')
+exports.NoticeBar = require('./NoticeBar/NoticeBar')
+exports.PhotoUploader = require('./PhotoUploader/PhotoUploader')
+exports.MicrodepositOnboarding = require('./MicrodepositOnboarding/MicrodepositOnboarding')

@@ -1,37 +1,37 @@
 // Dependencies
-import React from 'react';
-import { Dimensions, StyleSheet, View, Text, TextInput, TouchableHighlight, ListView, RecyclerViewBackedScrollView, Animated, Easing, Keyboard } from 'react-native';
+import React from 'react'
+import { Dimensions, StyleSheet, View, Text, TextInput, TouchableHighlight, ListView, RecyclerViewBackedScrollView, Animated, Easing, Keyboard } from 'react-native'
 
 // Helpers
-import * as Async from '../../../helpers/Async';
-import * as StringMaster5000 from '../../../helpers/StringMaster5000';
-import * as SetMaster5000 from '../../../helpers/SetMaster5000';
-import * as Lambda from '../../../services/Lambda';
-import * as Validators from '../../../helpers/validators';
+import * as Async from '../../../helpers/Async'
+import * as StringMaster5000 from '../../../helpers/StringMaster5000'
+import * as SetMaster5000 from '../../../helpers/SetMaster5000'
+import * as Lambda from '../../../services/Lambda'
+import * as Validators from '../../../helpers/validators'
 
 // Components
-import DynamicUserPreview from '../../../components/DynamicUserPreview/DynamicUserPreview';
-import DynamicHorizontalUserList from '../../../components/DynamicHorizontalUserList/DynamicHorizontalUserList';
+import DynamicUserPreview from '../../../components/DynamicUserPreview/DynamicUserPreview'
+import DynamicHorizontalUserList from '../../../components/DynamicHorizontalUserList/DynamicHorizontalUserList'
 
 // Stylesheets
-import colors from '../../../styles/colors';
-const dimensions = Dimensions.get('window');
+import { colors } from '../../../globalStyles'
+const dimensions = Dimensions.get('window')
 
 class UserSelection extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.EMPTY_DATA_SOURCE = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2,
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2
-    });
+    })
 
     let { payperContacts, nativeContacts, globalUserList } = this.props.currentUser
 
     // TODO: Filter contacts so they only appear in one list
     // console.log("payperContacts", payperContacts)
     // console.log("globalUserList", globalUserList)
-    // for (var i = 0; i < globalUserList.length; i++) {
+    // for (var i = 0 i < globalUserList.length i++) {
     //   let curr = globalUserList[i]
     //   console.log("curr", curr)
     // }
@@ -52,23 +52,23 @@ class UserSelection extends React.Component {
         outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(251, 54, 64, 1.0)'],
       }),
       dataSource: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(this.allContactsMap),
-    };
+    }
   }
 
   componentDidMount() {
     // Subscribe to keyboard events
-    _keyboardWillShowSubscription = Keyboard.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e));
-    _keyboardWillHideSubscription = Keyboard.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e));
+    _keyboardWillShowSubscription = Keyboard.addListener('keyboardWillShow', (e) => this._keyboardWillShow(e))
+    _keyboardWillHideSubscription = Keyboard.addListener('keyboardWillHide', (e) => this._keyboardWillHide(e))
   }
 
   componentWillUnmount() {
     // Unsubscribe from keyboard events
-    _keyboardWillShowSubscription.remove();
-    _keyboardWillHideSubscription.remove();
+    _keyboardWillShowSubscription.remove()
+    _keyboardWillHideSubscription.remove()
   }
 
   componentWillMount() {
-    this._interpolateSubmitColor({ toValue: 350 });
+    this._interpolateSubmitColor({ toValue: 350 })
   }
 
   _reset() {
@@ -82,29 +82,29 @@ class UserSelection extends React.Component {
         outputRange: ['rgba(16, 191, 90, 1.0)', 'rgba(251, 54, 64, 1.0)'],
       }),
       listViewRenderTrigger: Math.random(),
-    });
-    this._interpolateSubmitColor({ toValue: 350 });
-    this.refs.textInput.setNativeProps({text: ''});
+    })
+    this._interpolateSubmitColor({ toValue: 350 })
+    this.refs.textInput.setNativeProps({text: ''})
   }
 
   _keyboardWillShow(e) {
     Animated.spring(this.keyboardOffset, {
       toValue: e.endCoordinates.height,
       friction: 6
-    }).start();
+    }).start()
   }
 
   _keyboardWillHide(e) {
     Animated.spring(this.keyboardOffset, {
       toValue: 0,
       friction: 6
-    }).start();
+    }).start()
   }
 
   _interpolateSubmitColor(options) {
     Animated.spring(this.colorInterpolator, {
       toValue: options.toValue,
-    }).start();
+    }).start()
   }
 
   /**
@@ -115,15 +115,15 @@ class UserSelection extends React.Component {
   **/
   _handleSelect(user) {
     // (1) Update this.state.selectionMap
-    var identifier = user.uid || user.phone;
-    this.state.selectionMap[identifier] = !this.state.selectionMap[identifier];
+    var identifier = user.uid || user.phone
+    this.state.selectionMap[identifier] = !this.state.selectionMap[identifier]
 
     // (2) Update this.state.selectedContacts
     if (this.state.selectionMap[identifier]) {
-      this.state.selectedContacts.push(user);
+      this.state.selectedContacts.push(user)
     } else {
-      var i = this.state.selectedContacts.indexOf(user);
-      this.state.selectedContacts.splice(i, 1);
+      var i = this.state.selectedContacts.indexOf(user)
+      this.state.selectedContacts.splice(i, 1)
     }
 
     // (3) Explicitly trigger re-render
@@ -132,20 +132,20 @@ class UserSelection extends React.Component {
       selectedContacts: this.state.selectedContacts,
       submitText: (this.state.selectedContacts.length > 0) ? "Continue" : "No contacts are selected",
       listViewRenderTrigger: Math.random(),
-    });
+    })
 
      // (4) Interpolate submit button's background color
-     this._interpolateSubmitColor({ toValue: (this.state.selectedContacts.length > 0) ? 0 : 350 });
+     this._interpolateSubmitColor({ toValue: (this.state.selectedContacts.length > 0) ? 0 : 350 })
 
      // (5) Pass selectedContacts up to caller so that the array is available on
      //     the next two pages
-     this.props.induceState({ selectedContacts: this.state.selectedContacts });
+     this.props.induceState({ selectedContacts: this.state.selectedContacts })
   }
 
   _handleSubmit() {
-    this.props.dismissKeyboard();
-    if (this.state.selectedContacts.length > 0) this.props.nextPage();
-    else console.log("No contacts are selected...");
+    this.props.dismissKeyboard()
+    if (this.state.selectedContacts.length > 0) this.props.nextPage()
+    else console.log("No contacts are selected...")
   }
 
   _filterContacts(query) {
@@ -157,10 +157,10 @@ class UserSelection extends React.Component {
 
   _renderSectionHeader(sectionData, sectionTitle) {
     return(
-      <View style={{height: 30, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', padding: 10, paddingLeft: 20, backgroundColor: colors.offWhite}}>
+      <View style={{height: 30, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', padding: 10, paddingLeft: 20, backgroundColor: colors.medGrey}}>
         <Text>{ sectionTitle }</Text>
       </View>
-    );
+    )
   }
 
   _renderRow(user) {
@@ -169,7 +169,7 @@ class UserSelection extends React.Component {
         user={user}
         selected={this.state.selectionMap[user.uid || user.phone]}
         callbackSelect={() => this._handleSelect(user)} />
-    );
+    )
   }
 
   render() {
@@ -211,7 +211,7 @@ class UserSelection extends React.Component {
             onPress={() => this._handleSubmit()}>
 
             <Animated.View style={{ height: 60, backgroundColor: this.state.submitBackgroundColor, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '400', color: colors.white, alignSelf: 'center', textAlign: 'center' }}>
+              <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
                 { this.state.submitText }
               </Text>
             </Animated.View>
@@ -219,16 +219,16 @@ class UserSelection extends React.Component {
           </TouchableHighlight>
         </Animated.View>
       </View>
-    );
+    )
   }
-};
+}
 
 const styles = StyleSheet.create({
   wrap: {
     flex: 1.0,
     justifyContent: 'center',
     width: dimensions.width,
-    backgroundColor: colors.white,
+    backgroundColor: colors.snowWhite,
   },
   textInput: {
     height: 60,
@@ -236,9 +236,9 @@ const styles = StyleSheet.create({
     paddingRight: 25,
     paddingTop: 10,
     paddingBottom: 10,
-    backgroundColor: colors.white,
-    color: colors.richBlack,
+    backgroundColor: colors.snowWhite,
+    color: colors.deepBlue,
   },
-});
+})
 
-export default UserSelection;
+export default UserSelection

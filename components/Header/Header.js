@@ -3,6 +3,7 @@ import React from 'react';
 import {View, Text, TextInput, StyleSheet, Image, TouchableHighlight} from 'react-native';
 import Button from 'react-native-button';
 import Entypo from 'react-native-vector-icons/Entypo'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 // Styles
 import colors from '../../styles/colors';
@@ -133,7 +134,7 @@ import notificationStyles from '../../styles/Notifications/Preview';
 function getBackIcon(callback) {
   return(
     <Button onPress={() => callback()}>
-      <Entypo style={styles.iconClose} name="chevron-small-left" size={28} color={colors.white}/>
+      <EvilIcons style={styles.iconClose} name="chevron-left" size={30} color={colors.white}/>
     </Button>
   );
 };
@@ -142,7 +143,7 @@ function getBackIcon(callback) {
 function getCloseIcon(callback) {
   return(
     <Button onPress={() => {callback()}}>
-      <Entypo style={styles.iconClose} name="cross" size={25} color={colors.white}/>
+      <EvilIcons style={[styles.iconClose, {paddingTop: 4}]} name="close" size={25} color={colors.white}/>
     </Button>
   );
 };
@@ -160,9 +161,9 @@ function getSettingsIcon(callback) {
 function getPaymentIcons(index) {
   return(
     <View style={styles.iconWrap}>
-      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 0) ? styles.iconActive : null]} name="user" size={20} color={colors.white}/>
-      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 1) ? styles.iconActive : null]} name="credit" size={20} color={colors.white}/>
-      <Entypo style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.5}, (index == 2) ? styles.iconActive : null]} name="new-message" size={20} color={colors.white}/>
+      <EvilIcons style={[{marginLeft: 2.5, marginRight: 2.5, opacity: 0.7}, (index == 0) ? styles.iconActive : null]} name={"user"} size={26} color={colors.white}/>
+      <Entypo style={[{marginLeft: 2.5, marginRight: 1, opacity: 0.7}, (index == 1) ? styles.iconActive : null]} name={"credit"} size={20} color={colors.white}/>
+      <EvilIcons style={[{marginLeft: 1, marginRight: 2.5, opacity: 0.7}, (index == 2) ? styles.iconActive : null]} name={"pencil"} size={27} color={colors.white}/>
     </View>
   );
 };
@@ -243,7 +244,7 @@ class Header extends React.Component {
 
   render() {
     return(
-      <View style={[styles.headerWrap, {backgroundColor: (this.props.transparent) ? 'transparent' : (this.props.headerProps.accent) ? colors.accent : (this.props.headerProps.obsidian) ? colors.obisdian : colors.richBlack}]}>
+      <View style={[styles.headerWrap, {backgroundColor: (this.props.backgroundColor) ? this.props.backgroundColor : (this.props.transparent) ? 'transparent' : (this.props.headerProps.accent) ? colors.accent : (this.props.headerProps.obsidian) ? colors.obisdian : colors.richBlack}]}>
         { /* Contains 'X' or 'Settings' icons if specified */ }
         <View style={styles.chunkQuo}>
           { this.props.headerProps.types.closeIcon ? getCloseIcon(this.props.callbackClose) : null }
