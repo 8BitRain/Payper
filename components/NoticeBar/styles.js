@@ -1,24 +1,31 @@
-import { Dimensions } from 'react-native';
-import colors from '../../styles/colors';
-const dimensions = Dimensions.get('window');
+import { Dimensions } from 'react-native'
+import { colors } from '../../globalStyles'
+const dims = Dimensions.get('window')
 
 const styles = {
   wrap: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    overflow: 'hidden',
-    width: dimensions.width,
-    backgroundColor: colors.richBlack
+    backgroundColor: colors.accent,
+    width: dims.width * 0.94,
+    padding: 10,
+    borderRadius: 4,
+    alignSelf: 'center',
+    marginTop: 10,
+    shadowColor: colors.medGrey,
+    shadowOpacity: 1.0,
+    shadowRadius: 1,
+    shadowOffset: {
+      height: 0.25,
+      width: 0.25
+    }
   },
   text: {
-    fontFamily: 'Roboto',
-    fontSize: 16,
-    fontWeight: '200',
-    color: colors.white,
-    paddingTop: 5, paddingBottom: 5, paddingLeft: 15, paddingRight: 15,
-    textAlign: 'center'
+    fontSize: 18,
+    color: colors.snowWhite,
+    padding: 2
   }
-};
+}
 
-module.exports = styles;
+module.exports = styles

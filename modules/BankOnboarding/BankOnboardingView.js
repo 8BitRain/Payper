@@ -28,7 +28,7 @@ import IAV from './pages/IAV';
 import colors from '../../styles/colors';
 const dimensions = Dimensions.get('window');
 
-export default class BankOnboardingView extends React.Component {
+class BankOnboardingView extends React.Component {
   constructor(props) {
     super(props);
     this.offsetX = new Animated.Value(0);
@@ -345,3 +345,5 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }
 });
+
+module.exports = BankOnboardingView

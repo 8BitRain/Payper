@@ -1,96 +1,67 @@
-// Dependencies
-import React from 'react';
-import { View, Text, TextInput, TouchableHighlight, Image, Dimensions, StatusBar } from 'react-native';
-import { VibrancyView } from 'react-native-blur';
-import Entypo from 'react-native-vector-icons/Entypo';
+import React from 'react'
+import { View, Text, TextInput, TouchableHighlight, Image, Dimensions, StatusBar } from 'react-native'
+import { VibrancyView } from 'react-native-blur'
+import Entypo from 'react-native-vector-icons/Entypo'
+import * as Lambda from '../../services/Lambda'
+import StickyView from '../../classes/StickyView'
+import { colors } from '../../globalStyles'
+import styles from './styles'
+const dims = Dimensions.get('window')
 
-// Helpers
-import * as Lambda from '../../services/Lambda';
-
-// Components
-import StickyView from '../../classes/StickyView';
-
-// Stylesheets
-import colors from '../../styles/colors';
-import styles from './styles';
-const dimensions = Dimensions.get('window');
-
-export default class MicrodepositOnboarding extends React.Component {
+class MicrodepositOnboarding extends React.Component {
   constructor(props) {
-    super(props);
-    this.logoAspectRatio = 377 / 568;
+    super(props)
+    this.logoAspectRatio = 377 / 568
     this.state = {
       submitText: "Next",
       amountOne: "",
       amountTwo: "",
       headerHeight: 0
-    };
+    }
   }
 
   handleSubmit() {
-    let valid = Number.parseFloat(this.state.amountOne) > 0 && Number.parseFloat(this.state.amountTwo) > 0;
+    let valid = Number.parseFloat(this.state.amountOne) > 0 && Number.parseFloat(this.state.amountTwo) > 0
 
     if (valid) {
       let params = {
         amount1: Number.parseFloat(this.state.amountOne),
         amount2: Number.parseFloat(this.state.amountTwo),
         token: this.props.currentUser.token
-      };
+      }
 
-      this.setState({ submitText: "Verifying..." });
+      this.setState({ submitText: "Verifying..." })
 
       Lambda.verifyMicrodeposits(params, (success) => {
-        this.setState({ submitText: (success) ? "Verified!" : "We couldn't verify those amounts. Is there a typo?" });
-        if (success) setTimeout(() => this.handleCancel(), 750);
-      });
+        this.setState({ submitText: (success) ? "Verified!" : "We couldn't verify those amounts. Is there a typo?" })
+        if (success) setTimeout(() => this.handleCancel(), 750)
+      })
     } else {
-      this.setState({ submitText: "Enter two valid amounts" });
+      this.setState({ submitText: "Enter two valid amounts" })
     }
-  }
-
-  handleCancel() {
-    if (typeof this.props.toggleModal === 'function') this.props.toggleModal();
-    else console.log("<MicrodepositOnboarding /> was not supplied with a toggleModal() function.");
   }
 
   handleChangeText(input, whichAmount) {
     let valid = Number.parseFloat(input) > 0 && Number.parseFloat((whichAmount === 1) ? this.state.amountTwo : this.state.amountOne),
-        newState = {};
+        newState = {}
 
-    newState.submitText = (valid) ? "Continue" : "Enter two valid amounts";
+    newState.submitText = (valid) ? "Continue" : "Enter two valid amounts"
     if (whichAmount === 1) newState.amountOne = input
-    else newState.amountTwo = input;
+    else newState.amountTwo = input
 
-    this.setState(newState, () => console.log(this.state));
+    this.setState(newState, () => console.log(this.state))
   }
 
   render() {
     return(
       <View style={styles.wrap}>
         <StatusBar barStyle='light-content' />
-        <VibrancyView blurType="dark" style={styles.blur} />
-
-        { /* Logo */ }
-        <View style={{ justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 0, left: 0, right: 0, height: dimensions.height * 0.2 }} onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}>
-          <Image source={require('../../assets/images/logo.png')} style={{ height: this.state.headerHeight * 0.4, width: (this.state.headerHeight * 0.4) * this.logoAspectRatio }} />
-        </View>
-
-        { /* Header */ }
-        <View style={styles.headerWrap}>
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            onPress={() => this.handleCancel()}>
-
-            <Entypo name={"cross"} size={24} color={colors.white} />
-
-          </TouchableHighlight>
-        </View>
+        <VibrancyView blurType={"light"} style={styles.blur} />
 
         { /* Instructions */ }
         <View style={styles.textWrap}>
-          <Text style={styles.text}>
-            { "We made two small deposits to your bank account.\n\nEnter the amounts below." }
+          <Text style={[styles.text, {width: dims.width - 60}]}>
+            { "We made two small deposits to your bank account. Enter the amounts below." }
           </Text>
         </View>
 
@@ -104,7 +75,7 @@ export default class MicrodepositOnboarding extends React.Component {
 
           <TextInput autoFocus
             style={[styles.input, styles.text]}
-            placeholderTextColor={colors.white}
+            placeholderTextColor={colors.slateGrey}
             placeholder={"$0.00"}
             keyboardType={"numeric"}
             onChangeText={(text) => this.handleChangeText(text, 1)} />
@@ -117,7 +88,7 @@ export default class MicrodepositOnboarding extends React.Component {
 
           <TextInput
             style={[styles.input, styles.text]}
-            placeholderTextColor={colors.white}
+            placeholderTextColor={colors.slateGrey}
             placeholder={"$0.00"}
             keyboardType={"numeric"}
             onChangeText={(text) => this.handleChangeText(text, 2)} />
@@ -131,7 +102,7 @@ export default class MicrodepositOnboarding extends React.Component {
             onPress={() => this.handleSubmit()}>
 
             <View style={styles.submitWrap}>
-              <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '200', color: colors.white, textAlign: 'center' }}>
+              <Text style={{ fontSize: 18, color: colors.snowWhite, textAlign: 'center' }}>
                 { this.state.submitText }
               </Text>
             </View>
@@ -139,6 +110,8 @@ export default class MicrodepositOnboarding extends React.Component {
           </TouchableHighlight>
         </StickyView>
       </View>
-    );
+    )
   }
 }
+
+module.exports = MicrodepositOnboarding

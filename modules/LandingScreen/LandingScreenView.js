@@ -60,7 +60,7 @@ export default class LandingScreenView extends React.Component {
 
   onGenericLoginSuccess() {
     let appFlags = this.props.currentUser.appFlags
-    if (appFlags && appFlags.onboarding_state === "customer") {
+    if (appFlags.onboarding_state === "customer" && !appFlags.customer_status) {
       Actions.BankOnboardingView({ currentUser: this.props.currentUser })
     } else {
       Actions.MainViewContainer()
@@ -68,20 +68,21 @@ export default class LandingScreenView extends React.Component {
   }
 
   signinWithFacebook(userData) {
-    let { token } = userData
+    let { token, email, phone } = userData
 
     signin({
       type: "facebook",
       facebookToken: token
     }, (user) => {
       if (user) {
+        let { appFlags } = user
         this.props.currentUser.initialize(user)
 
-        if (user.appFlags.onboarding_state === 'customer') {
+        if (appFlags.onboarding_state === "customer" && !appFlags.customer_status) {
           Actions.BankOnboardingView({
             currentUser: this.props.currentUser,
-            emailFromFacebook: emailFromFacebook,
-            phoneFromFacebook: phoneFromFacebook,
+            emailFromFacebook: email,
+            phoneFromFacebook: phone,
             onboardEmail: true,
             onboardPhone: true
           })

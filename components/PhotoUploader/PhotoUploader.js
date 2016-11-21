@@ -415,4 +415,4 @@ class PhotoUploader extends React.Component {
   }
 };
 
-export default PhotoUploader;
+module.exports = PhotoUploader;

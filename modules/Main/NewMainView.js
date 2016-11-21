@@ -7,9 +7,9 @@ import Drawer from 'react-native-drawer'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 import { colors } from '../../globalStyles'
-import { SideMenu, PayCard } from '../../components'
+import { SideMenu, PayCard, NoticeBar, PhotoUploader, MicrodepositOnboarding } from '../../components'
 import { MyProfile, BankAccounts, Notifications, Invite, Settings } from '../../components/SideMenuSubpages'
-import { CreatePaymentView } from '../../modules'
+import { CreatePaymentView, BankOnboarding } from '../../modules'
 const dims = Dimensions.get('window')
 
 class NewMainView extends React.Component {
@@ -52,31 +52,50 @@ class NewMainView extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.currentUser.paymentFlow) this.generatePayCards(nextProps.currentUser.paymentFlow)
+    let payFlowChanged = nextProps.currentUser.paymentFlow !== this.props.currentUser.paymentFlow
+    let appFlagsChanged = nextProps.currentUser.appFlags !== this.props.currentUser.appFlags
+    if (payFlowChanged || appFlagsChanged) this.generatePayCards(nextProps.currentUser)
   }
 
-  generatePriorityContent() {
-    let priorityContent = [
-      {
+  generatePriorityContent(currentUser) {
+    let priorityContent = []
+    let { appFlags } = currentUser
+
+    let awaitingCustomerVerification = appFlags.customer_status !== "verified"
+    let awaitingCutomerRetry = appFlags.customer_status === "retry"
+    let awaitingMicrodepositVerification = appFlags.onboarding_state === "awaitingMicrodepositVerification"
+    let awaitingBankAccount = appFlags.onboarding_state === "bank" || appFlags.customer_status === "documentSuccess"
+    let awaitingDocumentUpload = appFlags.customer_status === "document" || appFlags.customer_status === "documentFailure"
+    let shouldRenderNoticeBar = awaitingCustomerVerification || awaitingMicrodepositVerification || awaitingBankAccount
+
+    if (shouldRenderNoticeBar) {
+      priorityContent.push({
         type: "priorityContent",
-        reactComponent: <Text style={{color: 'red', padding: 15}}>{"An example of priority content"}</Text>
-      }
-    ]
+        reactComponent: <NoticeBar
+            dwollaCustomerStatus={appFlags.customer_status}
+            onboardingState={appFlags.onboarding_state}
+            onPress={() => {
+              if (awaitingDocumentUpload) this.toggleSideMenuSubpage("Document Uploader")
+              else if (awaitingMicrodepositVerification) this.toggleSideMenuSubpage("Microdeposit Verification")
+              else if (awaitingBankAccount) this.toggleSideMenuSubpage("Bank Accounts")
+              else if (awaitingCutomerRetry) this.toggleSideMenuSubpage("retry")
+            }} />
+      })
+    }
 
     return priorityContent
   }
 
-  generatePayCards(payFlow) {
+  generatePayCards(currentUser) {
+    let payFlow = currentUser.paymentFlow
+
     let inc = (payFlow.in) ? payFlow.in : []
     let out = (payFlow.out) ? payFlow.out : []
     let all = inc.concat(out)
 
-    // Render priority content if need be
-    if (false) {
-      inc = this.generatePriorityContent().concat(inc)
-      out = this.generatePriorityContent().concat(out)
-      all = this.generatePriorityContent().concat(all)
-    }
+    inc = this.generatePriorityContent(currentUser).concat(inc)
+    out = this.generatePriorityContent(currentUser).concat(out)
+    all = this.generatePriorityContent(currentUser).concat(all)
 
     this.setState({
       all: this.EMPTY_DATA_SOURCE.cloneWithRows(all),
@@ -151,7 +170,13 @@ class NewMainView extends React.Component {
       case "Notifications": return <Notifications {...this.props} />
       case "Invite a Friend": return <Invite {...this.props} />
       case "Settings": return <Settings {...this.props} />
-      case "FAQ": return <View><Text>{"FAQ"}</Text></View>
+      case "Document Uploader": return <PhotoUploader {...this.props} />
+      case "Microdeposit Verification": return <MicrodepositOnboarding {...this.props} />
+      case "retry": return(
+        <View style={{ flex: 1.0, backgroundColor: colors.richBlack }}>
+          <BankOnboarding retry displayCloseButton currentUser={this.props.currentUser} closeModal={() => this.toggleSideMenuSubpage(null)} />
+        </View>
+      )
       default: return <View><Text>{"DEFAULT"}</Text></View>
     }
   }
@@ -303,26 +328,29 @@ class NewMainView extends React.Component {
           </Modal>
 
           { /* Side menu page modal */ }
-          <Modal animationType={"slide"} visible={this.state.sideMenuSubpageModalVisible}>
+          <Modal animationType={"slide"} transparent={true} visible={this.state.sideMenuSubpageModalVisible}>
             <View style={{flex: 1.0}}>
 
-              { /* Header */ }
-              <View style={{overflow: 'hidden'}}>
-                <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
-                <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
-                  <Text style={{color: colors.lightGrey, fontSize: 17, backgroundColor: 'transparent'}}>
-                    {this.state.activeSideMenuSubpage}
-                  </Text>
+              { /* Header */
+                (this.state.activeSideMenuSubpage === "retry")
+                ? null
+                : <View style={{overflow: 'hidden'}}>
+                    <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
+                    <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
+                      <Text style={{color: colors.lightGrey, fontSize: 17, backgroundColor: 'transparent'}}>
+                        {this.state.activeSideMenuSubpage}
+                      </Text>
 
-                  <TouchableHighlight
-                    activeOpacity={0.75}
-                    underlayColor={'transparent'}
-                    style={{position: 'absolute', top: 0, left: 0, bottom: 0, padding: 14, paddingTop: 30, justifyContent: 'center'}}
-                    onPress={() => this.toggleSideMenuSubpage(null)}>
-                    <EvilIcons name={"close"} color={colors.snowWhite} size={24} />
-                  </TouchableHighlight>
-                </View>
-              </View>
+                      <TouchableHighlight
+                        activeOpacity={0.75}
+                        underlayColor={'transparent'}
+                        style={{position: 'absolute', top: 0, left: 0, bottom: 0, padding: 14, paddingTop: 30, justifyContent: 'center'}}
+                        onPress={() => this.toggleSideMenuSubpage(null)}>
+                        <EvilIcons name={"close"} color={colors.snowWhite} size={24} />
+                      </TouchableHighlight>
+                    </View>
+                  </View>
+              }
 
               { /* Inner content */ }
               <View style={{flex: 1.0}}>
