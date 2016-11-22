@@ -73,6 +73,7 @@ class NoticeBar extends React.Component {
         <View style={styles.wrap}>
           <View style={{flex: 1.0, alignItems: 'center'}}>
 
+
             { /* Icon*/ }
             <FontAwesome name={(this.props.dwollaCustomerStatus) ? "shield" : "bank"} size={26} color={colors.snowWhite} style={{padding: 5, alignSelf: 'center'}} />
 
@@ -81,6 +82,7 @@ class NoticeBar extends React.Component {
               { this.messages[(this.props.dwollaCustomerStatus !== "verified") ? this.props.dwollaCustomerStatus : this.props.onboardingState] }
             </Text>
 
+
             { /* Chevron */
               (this.state.notPressable)
                 ? null
@@ -88,6 +90,7 @@ class NoticeBar extends React.Component {
 
           </View>
         </View>
+
       </TouchableHighlight>
     )
   }

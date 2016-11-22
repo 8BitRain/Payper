@@ -7,7 +7,7 @@ import Drawer from 'react-native-drawer'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 import { colors } from '../../globalStyles'
-import { SideMenu, PayCard, NoticeBar, PhotoUploader, MicrodepositOnboarding } from '../../components'
+import { SideMenu, PayCard, NoticeBar, PhotoUploader, MicrodepositOnboarding, TrendingPayments } from '../../components'
 import { MyProfile, BankAccounts, Notifications, Invite, Settings } from '../../components/SideMenuSubpages'
 import { CreatePaymentView, BankOnboarding } from '../../modules'
 const dims = Dimensions.get('window')
@@ -39,6 +39,7 @@ class MainView extends React.Component {
       filterMenuOpen: false,
       createPaymentModalVisible: false,
       sideMenuSubpageModalVisible: false,
+      trendingPaymentModalVisible: false,
       acitveSideMenuSubpage: null,
       activeFilter: "All"
     }
@@ -110,8 +111,8 @@ class MainView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={'transparent'}
+              onPress={ () => {this.toggleSideMenuSubpage("Trending Payments")}}
               >
-
               <View style={{ height: 60, backgroundColor: colors.accent, borderRadius: 4, marginTop: 5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dims.width/2 }}>
                 <Text style={{ fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
                   { "Explore Trending Payments" }
@@ -203,6 +204,10 @@ class MainView extends React.Component {
     })
   }
 
+  toggleTrendingPaymentsModal(){
+   this.setState({ trendingPaymentModalVisible: !this.state.trendingPaymentModalVisible});
+ }
+
   getSideMenuSubpage(sp) {
     switch (sp) {
       case "My Profile": return <MyProfile currentUser={this.props.currentUser} />
@@ -210,6 +215,7 @@ class MainView extends React.Component {
       case "Notifications": return <Notifications {...this.props} />
       case "Invite a Friend": return <Invite {...this.props} />
       case "Settings": return <Settings {...this.props} />
+      case "Trending Payments": return <TrendingPayments toggleModal={() => this.toggleSideMenuSubpage(null)} title={"Trending Payments"} index={0} currentUser={this.props.currentUser}/>
       case "Document Uploader": return <PhotoUploader toggleModal={() => this.toggleSideMenuSubpage(null)} title={"Secure Document Upload"} index={0} {...this.props} />
       case "Microdeposit Verification": return <MicrodepositOnboarding {...this.props} />
       case "retry": <BankOnboarding retry displayCloseButton currentUser={this.props.currentUser} closeModal={() => this.toggleSideMenuSubpage(null)} />
@@ -362,6 +368,7 @@ class MainView extends React.Component {
               {...this.props}
               toggleModal={() => this.setState({createPaymentModalVisible: false})} />
           </Modal>
+
 
           { /* Side menu page modal */ }
           <Modal animationType={"slide"} transparent={true} visible={this.state.sideMenuSubpageModalVisible}>

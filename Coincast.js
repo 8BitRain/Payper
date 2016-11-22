@@ -13,11 +13,11 @@ import {
 import DeviceInfo from 'react-native-device-info';
 import CodePush from 'react-native-code-push';
 
-// Uncomment to reset user cache
-// import * as Async from './helpers/Async';
-// Async.set('user', '');
-// Async.set('BankOnboardingStateCache', '');
-// Async.set('betaStatus', 'fullAccess');
+//Uncomment to reset user cache
+import * as Async from './helpers/Async';
+//Async.set('user', '');
+//Async.set('BankOnboardingStateCache', '');
+Async.set('betaStatus', 'fullAccess');
 
 // Modules
 import SplashViewContainer from './modules/Splash/SplashViewContainer';
@@ -28,7 +28,9 @@ import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboarding
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView';
 import Phone from './modules/UserOnboarding/pages/Phone';
 import { PayDetails } from './components/PayCard'
+
 import { MainView } from './modules'
+
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params);
@@ -89,11 +91,14 @@ export default class Coincast extends React.Component {
     AppState.removeEventListener('change', this.handleAppStateChange);
   }
 
+
+
   render() {
     return (
       <Router key={Math.random()} createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
+
 
             <Scene
               component={MainView}
@@ -144,7 +149,8 @@ export default class Coincast extends React.Component {
 
             <Scene
               component={PayDetails}
-              key="PaymentDetails" />
+              key="PaymentDetails"
+              panHandlers={null} />
 
           </Scene>
           <Scene key="error" component={Error}/>

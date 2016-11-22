@@ -165,7 +165,7 @@ const datePickerStyles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: '400',
     fontSize: 16,
-    color: colors.white
+    color: colors.deepBlue
   }
 });
 
