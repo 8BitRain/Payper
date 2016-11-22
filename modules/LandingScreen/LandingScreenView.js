@@ -74,13 +74,17 @@ export default class LandingScreenView extends React.Component {
 
     signin({
       type: "facebook",
-      facebookToken: token
+      facebookToken: token,
+      facebookUserData: userData
     }, (user) => {
       if (user) {
         let { appFlags } = user
         this.props.currentUser.initialize(user)
+        
+        let appFlagsAreUndefined = typeof appFlags === 'undefined'
+        let onboardingStateIsCustomer = appFlags && appFlags.onboarding_state === "customer" && !appFlags.customer_status
 
-        if (appFlags && appFlags.onboarding_state === "customer" && !appFlags.customer_status) {
+        if (appFlagsAreUndefined || onboardingStateIsCustomer) {
           Actions.BankOnboardingView({
             currentUser: this.props.currentUser,
             emailFromFacebook: email,

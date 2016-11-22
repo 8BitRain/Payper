@@ -5,6 +5,8 @@ import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk'
 import { FBLoginManager } from 'NativeModules'
 import { Actions } from 'react-native-router-flux'
 
+const baseURL = config.details[config.details.env].lambdaBaseURL;
+
 /**
   *   Given a Facebook Graph API access token ('token'), retrieve the corresponding
   *   Facebook user's data and return it via callback function. Return null if
@@ -34,7 +36,7 @@ exports.requestFacebookUserData = function(token, cb) {
   // Handle failure
   function onFailure(err) {
     alert("Something went wrong. Please try again later.")
-    Mixpanel.trackWithProperties('Failed Facebook Signin', { err: err });
+    Mixpanel.trackWithProperties('Failed Facebook Signin', { err: err })
     cb(null)
   }
 }
@@ -47,7 +49,7 @@ exports.signout = function(currentUser) {
 }
 
 exports.signin = function(params, cb) {
-  let { type, facebookToken, accessToken, email, pass, key } = params
+  let { type, facebookToken, facebookUserData, accessToken, email, pass, key } = params
 
   // Determine which signin function to use
   let signin
@@ -66,22 +68,40 @@ exports.signin = function(params, cb) {
     *   (4) return user details
     *   (app initialization will occur in signin's callback function)
   **/
-  signin((firebaseUser) => {
-    if (!firebaseUser) { cb(null); return; }
+  signin((firebaseUser, isNewFacebookUser) => {
+    if (!firebaseUser) { cb(null); return }
     let { accessToken } = firebaseUser.stsTokenManager
 
     getCustomTokenAndKey(accessToken, null, (res) => {
       let { customToken, key } = res
 
       firebase.auth().signInWithCustomToken(customToken).then((responseData) => {
-        let { uid } = responseData.toJSON()
+        let { uid, providerData, stsTokenManager } = responseData.toJSON()
+        let accessToken = stsTokenManager.accessToken
 
-        getUserDetails(uid, (userDetails) => {
-          userDetails.token = accessToken
-          userDetails.customToken = customToken
-          userDetails.key = key
-          cb(userDetails)
-        })
+        if (isNewFacebookUser) {
+          facebookUserData.token = accessToken
+          
+          try {
+            fetch(baseURL + "user/facebookCreate", {method: "POST", body: JSON.stringify(facebookUserData)})
+            .then((response) => response.json())
+            .then((responseData) => {
+              console.log("user/facebookCreate responseData", responseData)
+              cb(responseData.user)
+            })
+            .done()
+          } catch (err) {
+            console.log("user/facebookCreate failed...", "err:", err)
+            cb(null)
+          }
+        } else {
+          getUserDetails(uid, (userDetails) => {
+            userDetails.token = accessToken
+            userDetails.customToken = customToken
+            userDetails.key = key
+            cb(userDetails)
+          })
+        }
       }).catch((err) => {
         console.log(err)
         cb(null)
@@ -98,7 +118,10 @@ exports.signin = function(params, cb) {
   **/
   function signinCached(cb) {
     getCustomTokenAndKey(accessToken, key, (res) => {
-      if (!res) cb(null)
+      if (!res) {
+        cb(null)
+        return
+      }
 
       let { customToken, key } = res
 
@@ -124,7 +147,12 @@ exports.signin = function(params, cb) {
 
     firebase.auth().signInWithCredential(cred).then((user) => {
       let firebaseUser = user.toJSON()
-      cb(firebaseUser)
+
+      // Check if this is a new Facebook user
+      firebase.database().ref('/users').child(firebaseUser.uid).once('value', (snapshot) => {
+        let isNewFacebookUser = snapshot.val() === null
+        cb(firebaseUser, isNewFacebookUser)
+      })
     }).catch((err) => {
       console.log(err)
       cb(null)
@@ -171,7 +199,7 @@ function getCustomTokenAndKey(firebaseToken, key, cb) {
 /**
   *   Fetch a user's details and appFlags from Firebase
 **/
-function getUserDetails(uid, cb) {
+function getUserDetails(uid, cb, isFacebookUser) {
   let detailsRef = firebase.database().ref('/users')
   let appFlagsRef = firebase.database().ref('/appFlags')
 
