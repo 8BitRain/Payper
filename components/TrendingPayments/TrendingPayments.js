@@ -35,12 +35,12 @@ class TrendingPayments extends React.Component {
               textColor: colors.snowWhite,
               hasLogo: true,
               name: 'Spotify',
-              percent: "75% of users"
+              percent: ""
             },
             back:{
               avgSent: "$7",
               avgDuration: "3 mos.",
-              avgSaved: "$8",
+              avgSaved: "month",
               avgSplit: "2",
               textColor: colors.snowWhite,
             }
@@ -52,7 +52,7 @@ class TrendingPayments extends React.Component {
               textColor: colors.richBlack,
               hasLogo: true,
               name: "Netflix",
-              percent: "50% of users",
+              percent: "",
 
             },
             back:{
@@ -69,12 +69,12 @@ class TrendingPayments extends React.Component {
               textColor: colors.richBlack,
               hasLogo: true,
               name: "GameFly",
-              percent: "23% of users"
+              percent: ""
             },
             back:{
               avgSent: "$6.50",
               avgDuration: "3 mos.",
-              avgSaved: "$6.50",
+              avgSaved: "month",
               avgSplit: "2",
               textColor: colors.richBlack
             }
@@ -86,32 +86,31 @@ class TrendingPayments extends React.Component {
               icon: "ios-flame",
               iconColor: colors.accent,
               hasLogo: false,
-              percent: "40% of users",
+              percent: "",
 
             },
             back:{
               avgSent: "$400",
               avgDuration: "12 mos.",
-              avgSaved: "$2000",
+              avgSaved: "month",
               avgSplit: "6",
               textColor: colors.snowWhite
             }
         }, {
             front:{
-              text: "ToiletPaper",
+              text: "Amazon Prime",
+              name: "Amazon Prime",
               backgroundColor:colors.richBlack,
               textColor: colors.snowWhite,
-              icon: "ios-leaf",
-              iconColor: colors.accent,
-              hasLogo: false,
-              percent: "20% of users",
+              hasLogo: true,
+              percent: "",
 
             },
             back:{
-              avgSent: "$2",
-              avgDuration: "12 wks.",
+              avgSent: "$11",
+              avgDuration: "12 mos.",
               avgSplit: "2",
-              avgSaved: "$2",
+              avgSaved: "month",
               textColor: colors.snowWhite
             }
 
@@ -123,13 +122,13 @@ class TrendingPayments extends React.Component {
               icon: "md-globe",
               iconColor: colors.accent,
               hasLogo: false,
-              percent: "30% of users"
+              percent: ""
             },
             back:{
               avgSent: "$5",
               avgDuration: "12 mos.",
               avgSplit: "4",
-              avgSaved: "$35",
+              avgSaved: "month",
               textColor: colors.richBlack
             }
 
@@ -155,12 +154,17 @@ class TrendingPayments extends React.Component {
           break;
         case "Netflix":
           return(
-            <Image style={{width: 48, height: 48, alignSelf: "center"}} source={require('../../assets/images/Netflix-logo.jpg')}></Image>
+            <Image style={{width: 48, height: 48, alignSelf: "center", borderRadius: 4}} source={require('../../assets/images/Netflix-logo.jpg')}></Image>
           );
           break;
         case "GameFly":
           return(
             <Image style={{width: 48, height: 48, alignSelf: "center", backgroundColor: "transparent", padding: 0, margin: 0}} source={require('../../assets/images/Gamefly_logo_notext.png')}></Image>
+          );
+          break;
+        case "Amazon Prime":
+          return(
+            <Image style={{width: 48, height: 48, alignSelf: "center", backgroundColor: "transparent", borderRadius: 4}} source={require('../../assets/images/amazon_prime_logo.jpg')}></Image>
           );
           break;
       }
@@ -208,7 +212,7 @@ class TrendingPayments extends React.Component {
                 <View style={{flexDirection: "column"}}>
 
                 <View style={styles.imageWrap}>
-                  <Text style={{fontFamily: "Roboto", fontWeight: "400", fontSize: 16, color: cell.back.textColor, backgroundColor: "transparent", alignSelf: "center"}}>Saved</Text>
+                  <Text style={{fontFamily: "Roboto", fontWeight: "400", fontSize: 16, color: cell.back.textColor, backgroundColor: "transparent", alignSelf: "center"}}>Per</Text>
                   <Text style={{fontFamily: "Roboto", fontWeight: "400", fontSize: 16, color: cell.back.textColor, backgroundColor: "transparent", color: colors.accent}}>{cell.back.avgSaved}</Text>
                 </View>
                 </View>

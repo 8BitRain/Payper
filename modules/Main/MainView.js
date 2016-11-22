@@ -94,9 +94,6 @@ class MainView extends React.Component {
       emptyState.push({
         type: "priorityContent",
         reactComponent: <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 50, width: dims.width - 20}}>
-            <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dims.width - 20, padding: 0}}>
-              { "Your Payments" }
-            </Text>
 
             <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, marginTop: 5, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dims.width - 20, padding: 0}}>
                {"When you make a payment, it will show up here."}
