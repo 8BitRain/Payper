@@ -118,6 +118,21 @@ export function get(params) {
         callbackOut: null,
       };
     break;
+    case "trendingPurpose":
+      return {
+        types: {
+          "backIcon": (params.index > 0) ? true : false,
+          "closeIcon": (params.index == 0 ) ? true : false
+        },
+        index: params.index,
+        numCircles: null,
+        title: params.title,
+        callbackIn: null,
+        callbackOut: null,
+        accent: true,
+        obsidian: false
+      };
+    break;
     case "editProfile":
       return {
         types: {

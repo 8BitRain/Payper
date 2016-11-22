@@ -7,7 +7,7 @@ import Drawer from 'react-native-drawer'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 import { colors } from '../../globalStyles'
-import { SideMenu, PayCard, NoticeBar, PhotoUploader, MicrodepositOnboarding } from '../../components'
+import { SideMenu, PayCard, NoticeBar, PhotoUploader, MicrodepositOnboarding, TrendingPayments } from '../../components'
 import { MyProfile, BankAccounts, Notifications, Invite, Settings } from '../../components/SideMenuSubpages'
 import { CreatePaymentView, BankOnboarding } from '../../modules'
 const dims = Dimensions.get('window')
@@ -70,6 +70,7 @@ class MainView extends React.Component {
     let awaitingDocumentUpload = appFlags.customer_status === "document" || appFlags.customer_status === "documentFailure"
     let shouldRenderNoticeBar = awaitingCustomerVerification || awaitingMicrodepositVerification || awaitingBankAccount
 
+
     if (shouldRenderNoticeBar) {
       noticeBar.push({
         type: "priorityContent",
@@ -90,6 +91,33 @@ class MainView extends React.Component {
 
   generateEmptyState() {
     let emptyState = []
+      emptyState.push({
+        type: "priorityContent",
+        reactComponent: <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 50, width: dims.width - 20}}>
+            <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dims.width - 20, padding: 0}}>
+              { "Your Payments" }
+            </Text>
+
+            <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, marginTop: 5, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dims.width - 20, padding: 0}}>
+               {"When you make a payment, it will show up here."}
+            </Text>
+
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              onPress={ () => {this.toggleSideMenuSubpage("Trending Payments")}}
+              >
+              <View style={{ height: 60, backgroundColor: colors.accent, borderRadius: 4, marginTop: 5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dims.width/2 }}>
+                <Text style={{ fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
+                  { "Explore Trending Payments" }
+                </Text>
+              </View>
+
+            </TouchableHighlight>
+          </View>
+      })
+
+
     return emptyState
   }
 
@@ -188,6 +216,7 @@ class MainView extends React.Component {
     })
   }
 
+
   getSideMenuSubpage(sp) {
     switch (sp) {
       case "My Profile": return <MyProfile currentUser={this.props.currentUser} />
@@ -195,6 +224,7 @@ class MainView extends React.Component {
       case "Notifications": return <Notifications {...this.props} />
       case "Invite a Friend": return <Invite {...this.props} />
       case "Settings": return <Settings {...this.props} />
+      case "Trending Payments": return <TrendingPayments toggleModal={() => this.toggleSideMenuSubpage(null)} title={"Trending Payments"} index={0} currentUser={this.props.currentUser}/>
       case "Document Uploader": return <PhotoUploader toggleModal={() => this.toggleSideMenuSubpage(null)} title={"Secure Document Upload"} index={0} {...this.props} />
       case "Microdeposit Verification": return <MicrodepositOnboarding {...this.props} />
       case "retry": return <BankOnboarding retry displayCloseButton currentUser={this.props.currentUser} closeModal={() => this.toggleSideMenuSubpage(null)} />
@@ -347,6 +377,7 @@ class MainView extends React.Component {
               {...this.props}
               toggleModal={() => this.setState({createPaymentModalVisible: false})} />
           </Modal>
+
 
           { /* Side menu page modal */ }
           <Modal animationType={"slide"} transparent={true} visible={this.state.sideMenuSubpageModalVisible}>
