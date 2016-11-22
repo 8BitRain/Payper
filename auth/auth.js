@@ -4,8 +4,7 @@ import * as config from '../config'
 import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk'
 import { FBLoginManager } from 'NativeModules'
 import { Actions } from 'react-native-router-flux'
-
-const baseURL = config.details[config.details.env].lambdaBaseURL;
+const baseURL = config.details[config.details.env].lambdaBaseURL
 
 /**
   *   Given a Facebook Graph API access token ('token'), retrieve the corresponding
@@ -81,7 +80,7 @@ exports.signin = function(params, cb) {
 
         if (isNewFacebookUser) {
           facebookUserData.token = accessToken
-          
+
           try {
             fetch(baseURL + "user/facebookCreate", {method: "POST", body: JSON.stringify(facebookUserData)})
             .then((response) => response.json())

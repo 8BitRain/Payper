@@ -30,6 +30,8 @@ Async.get('build_version', (cached_build_version) => {
   }
 })
 
+// Async.set('betaStatus', 'fullAccess');
+
 // Modules
 import SplashViewContainer from './modules/Splash/SplashViewContainer';
 import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreenView';

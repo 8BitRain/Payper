@@ -1,13 +1,10 @@
 // Dependencies
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, TextInput } from 'react-native';
-
-// Components
 import StickyView from '../../../classes/StickyView';
 import ContinueButton from '../subcomponents/ContinueButton';
-
-// Stylesheets
 import {colors} from '../../../globalStyles';
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const dimensions = Dimensions.get('window');
 
 export default class Social extends React.Component {
@@ -50,12 +47,18 @@ export default class Social extends React.Component {
     return (
       <View style={styles.wrap}>
         <View>
-          <Text style={{ fontFamily: 'Roboto', fontSize: 24, fontWeight: '400', color: colors.deepBlue, textAlign: 'center' }}>
-            {(this.props.requireAllDigits) ? "What's your social?" : "What are the last four\ndigits of your social?"}
+          <Text style={{fontFamily: 'Roboto', fontSize: 18, fontWeight: '400', color: colors.deepBlue, textAlign: 'center', width: dimensions.width - 40, paddingBottom: 5}}>
+            {(this.props.requireAllDigits) ? "What's your social security number?" : "What are the last four digits of your social security number?"}
           </Text>
+          <View style={{flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+            <EvilIcons name={"lock"} size={32} color={colors.accent} style={{padding: 3}} />
+            <Text style={{fontSize: 16, color: colors.deepBlue, textAlign: 'center', width: dimensions.width - 60}}>
+              {"We need this to finalize your identification."}
+            </Text>
+          </View>
         </View>
 
-        <View style={styles.textInputWrap}>
+        <View style={[styles.textInputWrap, {paddingTop: 8}]}>
           <TextInput
             ref={"ssnInput"}
             placeholder="e.g. 1234"
@@ -92,7 +95,7 @@ const styles = StyleSheet.create({
   textInput: {
     height: 55,
     width: dimensions.width * 0.75,
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backgroundColor: colors.medGrey,
     color: colors.deepBlue,
     textAlign: 'center'
   }

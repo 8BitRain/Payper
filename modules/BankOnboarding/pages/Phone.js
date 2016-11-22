@@ -93,7 +93,7 @@ export default class Phone extends React.Component {
 
           <View style={styles.inputWrap}>
             <TextInput
-              ref={"emailInput"}
+              ref={"phoneInput"}
               style={styles.input}
               defaultValue={this.state.phone}
               placeholder={"e.g. 2623058038"}
