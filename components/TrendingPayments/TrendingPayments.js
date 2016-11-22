@@ -19,7 +19,7 @@ import * as Headers from '../../helpers/Headers';
 //Custom
 const dimensions = Dimensions.get('window');
 
-export default class TrendingPayments extends React.Component {
+class TrendingPayments extends React.Component {
   constructor(props) {
     super(props);
     this.height = new Animated.Value(0);
@@ -241,12 +241,7 @@ export default class TrendingPayments extends React.Component {
   render() {
     return(
       <View style={{backgroundColor: colors.snowWhite, width: dimensions.width, height: dimensions.height}}>
-        <Header
-          //callback
-          callbackClose={() => this.props.toggleModal()}
-          callbackBack={() => this.setState({index: this.state.index - 1})}
-          headerProps={Headers.get({ header: "trendingPurpose", title: "Trending Payments", index: this.state.index })} />
-          <GridView dataSource={this.state.dataSource} spacing={0} style={{marginTop:65, padding: 0, backgroundColor: colors.medGrey}} renderCell={this._renderCell.bind(this)}
+          <GridView dataSource={this.state.dataSource} spacing={0} style={{marginTop:0, padding: 0, backgroundColor: colors.medGrey}} renderCell={this._renderCell.bind(this)}
           />
           { /*Alternate Design With Padding*/ }
           { /*<GridView dataSource={this.state.dataSource} spacing={8} style={{marginTop:65, padding: 5, backgroundColor: colors.richBlack}} renderCell={this._renderCell.bind(this)}
@@ -255,3 +250,5 @@ export default class TrendingPayments extends React.Component {
     );
   }
 }
+
+module.exports = TrendingPayments
