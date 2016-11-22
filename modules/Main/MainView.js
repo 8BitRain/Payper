@@ -62,7 +62,6 @@ class MainView extends React.Component {
   generateNoticeBar(currentUser) {
     let noticeBar = []
     let { appFlags } = currentUser
-
     let awaitingCustomerVerification = appFlags.customer_status !== "verified"
     let awaitingCutomerRetry = appFlags.customer_status === "retry"
     let awaitingMicrodepositVerification = appFlags.onboarding_state === "awaitingMicrodepositVerification"
@@ -70,11 +69,11 @@ class MainView extends React.Component {
     let awaitingDocumentUpload = appFlags.customer_status === "document" || appFlags.customer_status === "documentFailure"
     let shouldRenderNoticeBar = awaitingCustomerVerification || awaitingMicrodepositVerification || awaitingBankAccount
 
-
     if (shouldRenderNoticeBar) {
       noticeBar.push({
         type: "priorityContent",
-        reactComponent: <NoticeBar
+        reactComponent:
+          <NoticeBar
             dwollaCustomerStatus={appFlags.customer_status}
             onboardingState={appFlags.onboarding_state}
             onPress={() => {
@@ -91,29 +90,26 @@ class MainView extends React.Component {
 
   generateEmptyState() {
     let emptyState = []
-      emptyState.push({
-        type: "priorityContent",
-        reactComponent: <View style={{ alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 50, width: dims.width - 20}}>
+    emptyState.push({
+      type: "priorityContent",
+      reactComponent:
+        <View style={{alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 50}}>
+          <Text style={{backgroundColor: 'transparent', textAlign: 'center', fontSize: 18, fontWeight: '400', color: colors.richBlack, width: dims.width - 30}}>
+             {"When you set up a payment series, it will show up here."}
+          </Text>
 
-            <Text style={{ backgroundColor: 'transparent', textAlign: 'center', fontSize: 20, marginTop: 5, fontWeight: '400', paddingLeft: 35, paddingRight: 35, color: colors.richBlack, width: dims.width - 20, padding: 0}}>
-               {"When you make a payment, it will show up here."}
-            </Text>
-
-            <TouchableHighlight
-              activeOpacity={0.8}
-              underlayColor={'transparent'}
-              onPress={ () => {this.toggleSideMenuSubpage("Trending Payments")}}
-              >
-              <View style={{ height: 60, backgroundColor: colors.accent, borderRadius: 4, marginTop: 5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dims.width/2 }}>
-                <Text style={{ fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
-                  { "Explore Trending Payments" }
-                </Text>
-              </View>
-
-            </TouchableHighlight>
-          </View>
-      })
-
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => {this.toggleSideMenuSubpage("Trending Payments")}}>
+            <View style={{height: 60, backgroundColor: colors.accent, borderRadius: 4, marginTop: 15, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dims.width / 2}}>
+              <Text style={{ fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
+                {"Explore Trending Payments"}
+              </Text>
+            </View>
+          </TouchableHighlight>
+        </View>
+    })
 
     return emptyState
   }
