@@ -40,7 +40,7 @@ class TrendingPayments extends React.Component {
             back:{
               avgSent: "$7",
               avgDuration: "3 mos.",
-              avgSaved: "month",
+              per: "month",
               avgSplit: "2",
               textColor: colors.snowWhite,
             }
@@ -58,7 +58,7 @@ class TrendingPayments extends React.Component {
             back:{
               avgSent: "$3",
               avgDuration: "12 mos.",
-              avgSaved: "$5",
+              per: "month",
               avgSplit: "4",
               textColor: colors.richBlack,
             }
@@ -74,7 +74,7 @@ class TrendingPayments extends React.Component {
             back:{
               avgSent: "$6.50",
               avgDuration: "3 mos.",
-              avgSaved: "month",
+              per: "month",
               avgSplit: "2",
               textColor: colors.richBlack
             }
@@ -92,7 +92,7 @@ class TrendingPayments extends React.Component {
             back:{
               avgSent: "$400",
               avgDuration: "12 mos.",
-              avgSaved: "month",
+              per: "month",
               avgSplit: "6",
               textColor: colors.snowWhite
             }
@@ -110,7 +110,7 @@ class TrendingPayments extends React.Component {
               avgSent: "$11",
               avgDuration: "12 mos.",
               avgSplit: "2",
-              avgSaved: "month",
+              per: "month",
               textColor: colors.snowWhite
             }
 
@@ -128,7 +128,7 @@ class TrendingPayments extends React.Component {
               avgSent: "$5",
               avgDuration: "12 mos.",
               avgSplit: "4",
-              avgSaved: "month",
+              per: "month",
               textColor: colors.richBlack
             }
 
@@ -213,7 +213,7 @@ class TrendingPayments extends React.Component {
 
                 <View style={styles.imageWrap}>
                   <Text style={{fontFamily: "Roboto", fontWeight: "400", fontSize: 16, color: cell.back.textColor, backgroundColor: "transparent", alignSelf: "center"}}>Per</Text>
-                  <Text style={{fontFamily: "Roboto", fontWeight: "400", fontSize: 16, color: cell.back.textColor, backgroundColor: "transparent", color: colors.accent}}>{cell.back.avgSaved}</Text>
+                  <Text style={{fontFamily: "Roboto", fontWeight: "400", fontSize: 16, color: cell.back.textColor, backgroundColor: "transparent", color: colors.accent}}>{cell.back.per}</Text>
                 </View>
                 </View>
               </View>
