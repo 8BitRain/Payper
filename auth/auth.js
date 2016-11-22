@@ -98,6 +98,8 @@ exports.signin = function(params, cb) {
   **/
   function signinCached(cb) {
     getCustomTokenAndKey(accessToken, key, (res) => {
+      if (!res) cb(null)
+
       let { customToken, key } = res
 
       firebase.auth().signInWithCustomToken(customToken).then((user) => {
@@ -178,7 +180,7 @@ function getUserDetails(uid, cb) {
     details.uid = uid
 
     appFlagsRef.child(uid).once('value', (snapshot) => {
-      let val = snapshot.val() || null
+      let val = snapshot.val() || {}
       details.appFlags = val
       cb(details)
     })

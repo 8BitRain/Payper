@@ -99,10 +99,6 @@ class SideMenu extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log("<SideMenu /> will receive props", nextProps)
-  }
-
   render() {
     let { toggleSideMenuSubpage } = this.props
     let { first_name, last_name, username, profile_pic } = this.props.currentUser

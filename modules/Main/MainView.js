@@ -31,6 +31,8 @@ class MainView extends React.Component {
       plusAngle: plusAngleInterpolator.interpolate({inputRange: [0, 150], outputRange: ['0deg', '135deg']})
     }
 
+    this.headerlessModalTitles = ["retry", "Document Uploader"]
+
     this.state = {
       all: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
       inc: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
@@ -39,7 +41,7 @@ class MainView extends React.Component {
       filterMenuOpen: false,
       createPaymentModalVisible: false,
       sideMenuSubpageModalVisible: false,
-      acitveSideMenuSubpage: null,
+      activeSideMenuSubpage: null,
       activeFilter: "All"
     }
   }
@@ -57,20 +59,19 @@ class MainView extends React.Component {
     if (payFlowChanged || appFlagsChanged) this.generatePayCards(nextProps.currentUser)
   }
 
-  generatePriorityContent(currentUser) {
-    let priorityContent = []
+  /**
+    NOTE: Priority content generation example:
+          priorityContent.push({
+            type: 'priorityContent',
+            reactComponent: <MyCustomComponent />
+          })
+
+    NOTE: Content will appear in the order in which it's pushed to the
+          priorityContent array
+  **/
+  generateNoticeBar(currentUser) {
+    let noticeBar = []
     let { appFlags } = currentUser
-
-    /**
-      NOTE: Priority content generation example:
-            priorityContent.push({
-              type: 'priorityContent',
-              reactComponent: <MyCustomComponent />
-            })
-
-      NOTE: Content will appear in the order in which it's pushed to the
-            priorityContent array
-    **/
 
     let awaitingCustomerVerification = appFlags.customer_status !== "verified"
     let awaitingCutomerRetry = appFlags.customer_status === "retry"
@@ -80,7 +81,7 @@ class MainView extends React.Component {
     let shouldRenderNoticeBar = awaitingCustomerVerification || awaitingMicrodepositVerification || awaitingBankAccount
 
     if (shouldRenderNoticeBar) {
-      priorityContent.push({
+      noticeBar.push({
         type: "priorityContent",
         reactComponent: <NoticeBar
             dwollaCustomerStatus={appFlags.customer_status}
@@ -94,24 +95,60 @@ class MainView extends React.Component {
       })
     }
 
-    return priorityContent
+    return noticeBar
+  }
+
+  /**
+    NOTE: Empty state content generation example:
+          priorityContent.push({
+            type: 'priorityContent',
+            reactComponent: <MyCustomComponent />
+          })
+
+    NOTE: Content will appear in the order in which it's pushed to the
+          priorityContent array
+  **/
+  generateEmptyState() {
+    let emptyState = [{
+      type: "priorityContent",
+      reactComponent: <View style={{width: 60, height: 60, backgroundColor: colors.alertRed}} />
+    }]
+    return emptyState
   }
 
   generatePayCards(currentUser) {
     let payFlow = currentUser.paymentFlow
+    let noticeBar = this.generateNoticeBar(currentUser)
+    let emptyState = this.generateEmptyState()
 
     let inc = (payFlow.in) ? payFlow.in : []
     let out = (payFlow.out) ? payFlow.out : []
     let all = inc.concat(out)
 
-    inc = this.generatePriorityContent(currentUser).concat(inc)
-    out = this.generatePriorityContent(currentUser).concat(out)
-    all = this.generatePriorityContent(currentUser).concat(all)
+    let filteredPayFlows = {
+      inc: inc,
+      out: out,
+      all: all
+    }
 
+    // Render empty state if payFlow is empty
+    for (var k of Object.keys(filteredPayFlows)) {
+      let curr = filteredPayFlows[k]
+      if (curr.length === 0) filteredPayFlows[k] = emptyState.concat(curr)
+    }
+
+    // Render noticeBar
+    if (noticeBar.length > 0) {
+      filteredPayFlows.inc = noticeBar.concat(filteredPayFlows.inc)
+      filteredPayFlows.out = noticeBar.concat(filteredPayFlows.out)
+      filteredPayFlows.all = noticeBar.concat(filteredPayFlows.all)
+    }
+
+    // Trigger re-render
     this.setState({
-      all: this.EMPTY_DATA_SOURCE.cloneWithRows(all),
-      inc: this.EMPTY_DATA_SOURCE.cloneWithRows(inc),
-      out: this.EMPTY_DATA_SOURCE.cloneWithRows(out)
+      all: this.EMPTY_DATA_SOURCE.cloneWithRows(filteredPayFlows.all),
+      inc: this.EMPTY_DATA_SOURCE.cloneWithRows(filteredPayFlows.inc),
+      out: this.EMPTY_DATA_SOURCE.cloneWithRows(filteredPayFlows.out)
     })
   }
 
@@ -167,10 +204,10 @@ class MainView extends React.Component {
     })
   }
 
-  toggleSideMenuSubpage(p) {
+  toggleSideMenuSubpage(sp) {
     this.setState({
-      activeSideMenuSubpage: p,
-      sideMenuSubpageModalVisible: (p) ? true : false
+      activeSideMenuSubpage: sp,
+      sideMenuSubpageModalVisible: (sp) ? true : false
     })
   }
 
@@ -183,8 +220,8 @@ class MainView extends React.Component {
       case "Settings": return <Settings {...this.props} />
       case "Document Uploader": return <PhotoUploader toggleModal={() => this.toggleSideMenuSubpage(null)} title={"Secure Document Upload"} index={0} {...this.props} />
       case "Microdeposit Verification": return <MicrodepositOnboarding {...this.props} />
-      case "retry": <BankOnboarding retry displayCloseButton currentUser={this.props.currentUser} closeModal={() => this.toggleSideMenuSubpage(null)} />
-      default: return <View><Text>{"DEFAULT"}</Text></View>
+      case "retry": return <BankOnboarding retry displayCloseButton currentUser={this.props.currentUser} closeModal={() => this.toggleSideMenuSubpage(null)} />
+      default: return <View style={{flex: 1.0, justifyContent: 'center', alignItems: 'center'}}><Text style={{width: dims.width - 80, fontSize: 18, color: colors.accent}}>{"Oops, there's a bug in our code. Let us know at support@getpayper.io"}</Text></View>
     }
   }
 
@@ -339,7 +376,7 @@ class MainView extends React.Component {
             <View style={{flex: 1.0}}>
 
               { /* Header */
-                (this.state.activeSideMenuSubpage === "retry" || this.state.activeSideMenuSubpage === "Document Uploader")
+                (this.headerlessModalTitles.includes(this.state.activeSideMenuSubpage))
                 ? null
                 : <View style={{overflow: 'hidden'}}>
                     <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />

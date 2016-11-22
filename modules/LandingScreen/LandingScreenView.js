@@ -80,7 +80,7 @@ export default class LandingScreenView extends React.Component {
         let { appFlags } = user
         this.props.currentUser.initialize(user)
 
-        if (appFlags.onboarding_state === "customer" && !appFlags.customer_status) {
+        if (appFlags && appFlags.onboarding_state === "customer" && !appFlags.customer_status) {
           Actions.BankOnboardingView({
             currentUser: this.props.currentUser,
             emailFromFacebook: email,
