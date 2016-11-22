@@ -59,16 +59,6 @@ class MainView extends React.Component {
     if (payFlowChanged || appFlagsChanged) this.generatePayCards(nextProps.currentUser)
   }
 
-  /**
-    NOTE: Priority content generation example:
-          priorityContent.push({
-            type: 'priorityContent',
-            reactComponent: <MyCustomComponent />
-          })
-
-    NOTE: Content will appear in the order in which it's pushed to the
-          priorityContent array
-  **/
   generateNoticeBar(currentUser) {
     let noticeBar = []
     let { appFlags } = currentUser
@@ -98,21 +88,8 @@ class MainView extends React.Component {
     return noticeBar
   }
 
-  /**
-    NOTE: Empty state content generation example:
-          priorityContent.push({
-            type: 'priorityContent',
-            reactComponent: <MyCustomComponent />
-          })
-
-    NOTE: Content will appear in the order in which it's pushed to the
-          priorityContent array
-  **/
   generateEmptyState() {
-    let emptyState = [{
-      type: "priorityContent",
-      reactComponent: <View style={{width: 60, height: 60, backgroundColor: colors.alertRed}} />
-    }]
+    let emptyState = []
     return emptyState
   }
 

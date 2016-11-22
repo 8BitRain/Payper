@@ -1,4 +1,4 @@
-### **MainView.js**
+# **MainView.js**
 
 ## Adding a modal
 `MainView.js` contains a generic modal that we can easily add pages to. To add a modal, add a case to the switch statement found in the getSideMenuSubpage function like this:
