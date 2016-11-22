@@ -148,7 +148,7 @@ class BetaLandingScreenView extends React.Component {
             underlayColor={'transparent'}
             onPress={() => { this.setState({ onboarding: "" }); this._toggleModal(); }}>
 
-            <EvilIcons style={icons.closeModal} name={"close"} size={24} color={colors.snowWhite} />
+            <EvilIcons style={icons.closeModal} name={"close"} size={24} color={colors.deepBlue} />
 
           </TouchableHighlight>
         </View>

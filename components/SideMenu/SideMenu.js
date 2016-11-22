@@ -107,7 +107,7 @@ class SideMenu extends React.Component {
     let initials = initialsBuffer.join("")
 
     return(
-      <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', paddingTop: 10, backgroundColor: colors.snowWhiteOpaque}}>
+      <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', paddingTop: 10, backgroundColor: "rgba(255, 251, 252, 0.8)"}}>
         <VibrancyView blurType={"light"} style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} />
 
         { /* Header (opens profile page) */ }

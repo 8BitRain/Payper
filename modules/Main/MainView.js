@@ -245,10 +245,10 @@ class MainView extends React.Component {
     return(
       <Drawer
         type={"overlay"}
-        openDrawerOffset={dims.width * 0.275}
+        openDrawerOffset={80}
         ref={(ref) => this.drawer = ref}
         tapToClose
-        tweenDuration={150}
+        tweenDuration={100}
         onOpenStart={() => this.rotateToX()}
         onCloseStart={() => this.rotateToPlus()}
         content={<SideMenu {...this.props} toggleSideMenuSubpage={(p) => this.toggleSideMenuSubpage(p)} />}>
