@@ -4,7 +4,7 @@ import {   AppRegistry, Dimensions, Platform,  StyleSheet, Text,TouchableHighlig
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import colors from '../../styles/colors';
+import {colors} from '../../globalStyles';
 import * as Headers from '../../helpers/Headers';
 
 // Modules
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     flex: dimensions.height,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: '#fff',
+    backgroundColor: colors.medGrey,
     borderRadius: 0,
     color: '#000',
     padding: 10
@@ -67,13 +67,13 @@ const styles = StyleSheet.create({
   },
   generalText: {
     fontSize: 24,
-    color: colors.white,
+    color: colors.deepBlue,
     margin: 15,
     marginLeft: dimensions.width * .05
   },
   generalTextBold: {
     fontSize: 24,
-    color: colors.white,
+    color: colors.deepBlue,
     fontWeight: "bold",
     margin: 15,
     marginBottom: 0,
@@ -90,10 +90,10 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1.0,
     width: dimensions.width,
-    backgroundColor: colors.richBlack,
+    backgroundColor: colors.snowWhite,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    paddingTop: 65
+    paddingTop: 20
   }
 
 });
@@ -190,10 +190,11 @@ class PhotoUploader extends React.Component {
            batchSize={5}
            maximum={1}
            selected={this.state.selected}
+           selectedMarker={<Ionicons style={{ backgroundColor: "transparent", alignSelf:"center", justifyContent:"center", paddingTop:35}} size={48} name="ios-eye" color={colors.accent} />}
            assetType='Photos'
            imagesPerRow={3}
            imageMargin={5}
-           backgroundColor={colors.richBlack}
+           backgroundColor={colors.medGrey}
            callback={this.getSelectedImages.bind(this)}
           />
       </View>
@@ -224,7 +225,7 @@ class PhotoUploader extends React.Component {
               onPress={this.takePicture.bind(this)}
               style={{width: dimensions.width}}>
               <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <Ionicons style={{}} size={48} name="ios-camera" color={"black"} />
+                <Ionicons style={{}} size={48} name="ios-camera" color={colors.accent} />
               </View>
             </TouchableHighlight>
           </View>
@@ -247,7 +248,7 @@ class PhotoUploader extends React.Component {
     return(
       <View style={styles.wrap}>
         <View style={{alignSelf: "center"}}>
-          <FontAwesome name={"user-secret"} color={colors.accent} size={64} />
+          <Ionicons name={"md-lock"} color={colors.accent} size={64} />
         </View>
         {(this.props.currentUser.appFlags.customer_status == "document") ? <Text style={styles.generalText}>We need additional documents to verify your identity. Please upload a photo of a valid form of ID</Text> : <Text style={styles.generalText}>There was an issue with the original documents you sent to us. Please reupload a valid form of ID.</Text>}
         {(this.props.currentUser.appFlags.customer_status == "document") ? <Text style={styles.generalText}>Valid forms of id include... </Text> : <Text style={styles.generalText}>Common reasons we see document submissions fail...</Text>}
@@ -271,14 +272,14 @@ class PhotoUploader extends React.Component {
         break;
       case 1:
         return(
-          <View style={{flex: (dimensions.height < 667) ? 0.12 : 0.1, width: dimensions.width, flexDirection: 'row', justifyContent:"center", backgroundColor: "black"}}>
+          <View style={{flex: (dimensions.height < 667) ? 0.12 : 0.1, width: dimensions.width, flexDirection: 'row', justifyContent:"center", backgroundColor: colors.snowWhite}}>
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
             onPress={() => this.setState({mode: "library", selectedImage: null})}>
             <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dimensions.width * .5}}>
-              <Text style={{fontSize: 18, color: "white"}}>Library</Text>
-              <Ionicons style={{}} size={32} name="ios-images" color={colors.white} />
+              <Text style={{fontSize: 18, color: colors.accent}}>Library</Text>
+              <Ionicons style={{}} size={32} name="ios-images" color={colors.accent} />
             </View>
           </TouchableHighlight>
 
@@ -287,8 +288,8 @@ class PhotoUploader extends React.Component {
             underlayColor={'transparent'}
             onPress={() => this.setState({mode: "photo", selectedImage: null})}>
             <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dimensions.width * .5}}>
-              <Text style={{fontSize: 18, color: "white"}} >Photo</Text>
-              <Ionicons style={{}} size={32} name="ios-camera" color={colors.white} />
+              <Text style={{fontSize: 18, color: colors.accent}} >Photo</Text>
+              <Ionicons style={{}} size={32} name="ios-camera" color={colors.accent} />
             </View>
           </TouchableHighlight>
 
@@ -391,18 +392,8 @@ class PhotoUploader extends React.Component {
 
   render() {
     return(
-      <View style={{flex: 1, backgroundColor: colors.richBlack}}>
-      <View style={{flex: (dimensions.height < 667) ? 0.12 : 0.1}}>
-      <View style={styles.headerWrap}>
-        <Image source={require('../../assets/images/logo.png')} style={{ height: 32, width: 32}} />
-      </View>
-        <Header
-          //callback
-          callbackClose={() => this.props.toggleModal()}
-          callbackBack={() => this.setState({index: this.state.index - 1})}
-          headerProps={Headers.get({ header: "photoUpload", title: this.state.title, index: this.state.index })} />
+      <View style={{flex: 1, backgroundColor: colors.snowWhite}}>
 
-      </View>
 
       <View style={{flex: .8}}>
         {(this.state.index == 0) && (this.state.title == "Secure Document Upload") ? this._renderDocumentUploadExplanation() : null}

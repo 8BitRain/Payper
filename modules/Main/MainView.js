@@ -31,7 +31,7 @@ class MainView extends React.Component {
       plusAngle: plusAngleInterpolator.interpolate({inputRange: [0, 150], outputRange: ['0deg', '135deg']})
     }
 
-    this.headerlessModalTitles = ["retry", "Document Uploader"]
+    this.headerlessModalTitles = ["retry"]
 
     this.state = {
       all: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
