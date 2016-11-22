@@ -80,7 +80,7 @@ export default class LandingScreenView extends React.Component {
       if (user) {
         let { appFlags } = user
         this.props.currentUser.initialize(user)
-        
+
         let appFlagsAreUndefined = typeof appFlags === 'undefined'
         let onboardingStateIsCustomer = appFlags && appFlags.onboarding_state === "customer" && !appFlags.customer_status
 
@@ -174,7 +174,7 @@ export default class LandingScreenView extends React.Component {
               else if (url === 'https://www.getpayper.io/privacy')
                 return 'Privacy Policy';
             }}>
-            <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: colors.white, fontWeight: '100' }}>
+            <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: colors.deepBlue, fontWeight: '100' }}>
               { "By creating an account or logging in, you agree to Payper's https://www.getpayper.io/terms and https://www.getpayper.io/privacy." }
             </Text>
           </Hyperlink>

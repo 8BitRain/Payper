@@ -148,7 +148,7 @@ class BetaLandingScreenView extends React.Component {
             underlayColor={'transparent'}
             onPress={() => { this.setState({ onboarding: "" }); this._toggleModal(); }}>
 
-            <EvilIcons style={icons.closeModal} name={"close"} size={24} color={colors.white} />
+            <EvilIcons style={icons.closeModal} name={"close"} size={24} color={colors.snowWhite} />
 
           </TouchableHighlight>
         </View>
@@ -257,7 +257,7 @@ class BetaLandingScreenView extends React.Component {
               else if (url === 'https://www.getpayper.io/privacy')
                 return 'Privacy Policy';
             }}>
-            <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: colors.white, fontWeight: '100' }}>
+            <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: colors.deepBlue, fontWeight: '100' }}>
               { "By creating an account or logging in, you agree to Payper's https://www.getpayper.io/terms and https://www.getpayper.io/privacy." }
             </Text>
           </Hyperlink>
@@ -326,7 +326,7 @@ const wrappers = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     height: 50,
     textAlign: 'center',
-    color: colors.white,
+    color: colors.deepBlue,
   },
   modalInputEmail: {
     width: dims.width * 0.7,
@@ -335,7 +335,7 @@ const wrappers = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.09)',
     height: 50,
     textAlign: 'center',
-    color: colors.white,
+    color: colors.deepBlue,
   },
 });
 
@@ -361,7 +361,7 @@ const typography = StyleSheet.create({
     fontFamily: 'Roboto',
     fontSize: 24,
     fontWeight: '200',
-    color: colors.white,
+    color: colors.snowWhite,
     textAlign: 'center',
   },
 });

@@ -12,12 +12,23 @@ import {
 } from 'react-native-google-analytics';
 import DeviceInfo from 'react-native-device-info';
 import CodePush from 'react-native-code-push';
-
-//Uncomment to reset user cache
 import * as Async from './helpers/Async';
-//Async.set('user', '');
-//Async.set('BankOnboardingStateCache', '');
-Async.set('betaStatus', 'fullAccess');
+
+// Get build and version numbers
+let build = DeviceInfo.getBuildNumber()
+let version = DeviceInfo.getVersion()
+let build_version = build + "_" + version
+// build_version = '' // NOTE: uncomment this line to reset cache
+
+// Reset user cache if this is the first app session post-update
+Async.get('build_version', (cached_build_version) => {
+  if (cached_build_version !== build_version) {
+    Async.set('user', '')
+    Async.set('BankOnboardingStateCache', '')
+    Async.set('betaStatus', '');
+    Async.set('build_version', build_version)
+  }
+})
 
 // Modules
 import SplashViewContainer from './modules/Splash/SplashViewContainer';
