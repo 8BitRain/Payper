@@ -7,7 +7,6 @@ import Entypo from 'react-native-vector-icons/Entypo';
 // Helper functions
 import * as Alert from "../../helpers/Alert";
 import * as Lambda from "../../services/Lambda";
-import * as Init from '../../_init';
 
 // Components
 import FundingSource from '../../components/FundingSource/FundingSource.js';

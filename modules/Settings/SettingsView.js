@@ -8,7 +8,6 @@ const { LoginButton } = FBSDK;
 import * as Async from '../../helpers/Async';
 import * as Partials from '../../helpers/Partials';
 import * as Alert from '../../helpers/Alert';
-import * as Init from '../../_init';
 
 // Custom stylesheets
 import colors from '../../styles/colors';

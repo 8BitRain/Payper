@@ -8,7 +8,6 @@ import * as Animatable from 'react-native-animatable';
 // Helpers
 import * as Alert from '../../helpers/Alert';
 import * as StringMaster5000 from '../../helpers/StringMaster5000';
-import * as Init from '../../_init';
 import * as Lambda from '../../services/Lambda';
 
 // Components

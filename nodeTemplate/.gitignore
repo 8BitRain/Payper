@@ -1,6 +1,0 @@
-#
-node_modules/
-
-# Static files that are related to the repo, but should not be deployed.
-# ex. mockups, reference docs, etc.
-NO_DEPLOY/

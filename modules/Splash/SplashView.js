@@ -8,7 +8,6 @@ import Entypo from 'react-native-vector-icons/Entypo';
 var FBLoginManager = require('NativeModules').FBLoginManager;
 
 // Helpers
-import * as Init from '../../_init';
 import * as Async from '../../helpers/Async';
 
 // Custom styles
