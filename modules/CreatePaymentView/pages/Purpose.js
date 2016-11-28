@@ -129,20 +129,6 @@ class Purpose extends React.Component {
   _handleChangeText(purpose) {
     // Update input values in state
     this.setState({ purpose: purpose });
-
-    // Update submit button
-    // if (purpose) {
-    //   if (purpose.length <= 30) {
-    //     this._interpolateSubmitColor({ toValue: 0 });
-    //     this.setState({ submitText: "Continue", submittable: true });
-    //   } else {
-    //     this._interpolateSubmitColor({ toValue: 350 });
-    //     this.setState({ submitText: "Payment purposes are capped at 50 characters", submittable: false });
-    //   }
-    // } else {
-    //   this._interpolateSubmitColor({ toValue: 350 });
-    //   this.setState({ submitText: "Please enter a payment purpose", submittable: false });
-    // }
   }
 
   _showConfirmButton(type) {
@@ -211,8 +197,8 @@ class Purpose extends React.Component {
           ref="purposeInput"
           style={styles.purposeInput}
           placeholderFontFamily={"Roboto"}
-          placeholderTextColor={colors.maastrichtBlue}
-          placeholder={"Toilet paper"}
+          placeholderTextColor={colors.slateGrey}
+          placeholder={"e.g. Cable"}
           defaultValue={this.state.purpose}
           autoCorrect={false} autoFocus={false} autoCapitalize={"sentences"}
           onChangeText={(text) => this._handleChangeText(text)}
@@ -228,7 +214,7 @@ class Purpose extends React.Component {
             underlayColor={'transparent'}
             onPress={() => this._showConfirmButton("request")}>
 
-            <Animated.View style={{ width: dimensions.width / 2, height: 60, backgroundColor: '#11ac53', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <Animated.View style={{ width: dimensions.width / 2, height: 60, backgroundColor: colors.alertGreen, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
               <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
                 { "Request" }
               </Text>
@@ -242,7 +228,7 @@ class Purpose extends React.Component {
             underlayColor={'transparent'}
             onPress={() => this._showConfirmButton("payment")}>
 
-            <Animated.View style={{ width: dimensions.width / 2, height: 60, backgroundColor: colors.alertGreen, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <Animated.View style={{ width: dimensions.width / 2, height: 60, backgroundColor: colors.gradientGreen, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
               <Text style={{ fontFamily: 'Roboto', fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
                 { "Pay" }
               </Text>
