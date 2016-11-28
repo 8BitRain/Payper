@@ -1,11 +1,9 @@
 import { Map } from 'immutable';
 import { combineReducers } from 'redux-loop';
-import UserSearchReducer from '../modules/UserSearch/UserSearchState';
 import MainReducer from '../modules/Main/MainState';
 
 const reducers = {
-  main: MainReducer,
-  userSearch: UserSearchReducer
+  main: MainReducer
 };
 
 const immutableStateContainer = Map();
