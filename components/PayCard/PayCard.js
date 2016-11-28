@@ -68,7 +68,7 @@ class PayCard extends React.Component {
     Animated.spring(progbarWidth, {
       toValue: toValue,
       duration: 200
-    }).start(() => console.log("--> purpose is", this.state.details.purpose, "\n--> progbarWidth is", this.state.animatedValues.progbarWidth._value))
+    }).start()
   }
 
   render() {

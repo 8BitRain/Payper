@@ -15,6 +15,7 @@ class Notification extends React.Component {
   }
 
   render() {
+    console.log("will render notification:", this.props.notification)
     const n = StringMaster5000.formatNotification(this.props.notification)
 
     return(
