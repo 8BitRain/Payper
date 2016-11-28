@@ -33,6 +33,7 @@ class SplashView extends React.Component {
 
   componentWillMount() {
     const _this = this;
+    FBLoginManager.logOut();
     Mixpanel.timeEvent('Load Time: Splash View');
 
     this.ConnectivityListener = NetInfo.isConnected.addEventListener('change', (isConnected) => {

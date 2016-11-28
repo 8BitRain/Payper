@@ -1,6 +1,6 @@
 import React from 'react'
 import { Actions } from 'react-native-router-flux'
-import { View, Text, TouchableHighlight, Dimensions, Image } from 'react-native'
+import { View, Text, TouchableHighlight, Dimensions, Image, Animated, Easing } from 'react-native'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import { parsePaymentDetails } from './helpers'
@@ -15,11 +15,28 @@ let imageDims = {
 class PayCard extends React.Component {
   constructor(props) {
     super(props)
+
     this.state = {
+      details: parsePaymentDetails(this.props),
       progbarDims: {},
       profPicDims: {},
-      amountDims: {}
+      amountDims: {},
+      animatedValues: {
+        progbarWidth: new Animated.Value(0)
+      }
     }
+
+    this.layoutProgbarForeground = this.layoutProgbarForeground.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps === this.props) return
+    let details = parsePaymentDetails(nextProps)
+
+    // '(this.state.progbarDims.width)' ternary conditional is needed because,
+    // without it, the progbar width value is overwritten when layoutProgbar is
+    // called from within the render function
+    this.setState({details}, () => (this.state.progbarDims.width) ? this.layoutProgbarForeground() : null)
   }
 
   layoutProfPic(e) {
@@ -30,9 +47,33 @@ class PayCard extends React.Component {
     this.setState({ amountDims: e.nativeEvent.layout })
   }
 
+  layoutProgbarBackground(e) {
+    this.setState({ progbarDims: e.nativeEvent.layout }, () => {
+      setTimeout(() => this.layoutProgbarForeground(), Math.random() * 250)
+    })
+  }
+
+  layoutProgbarForeground() {
+    let { purpose, payments, paymentsMade } = this.state.details
+    let { progbarDims } = this.state
+    let percentageComplete = (paymentsMade > 0) ? (paymentsMade / payments) : 0
+    let foregroundWidth = (percentageComplete > 0) ? progbarDims.width * percentageComplete : 0
+    if (typeof foregroundWidth === 'number') this.animateProgbar({toValue: foregroundWidth})
+  }
+
+  animateProgbar(config) {
+    let { toValue } = config
+    let { progbarWidth } = this.state.animatedValues
+
+    Animated.spring(progbarWidth, {
+      toValue: toValue,
+      duration: 200
+    }).start(() => console.log("--> purpose is", this.state.details.purpose, "\n--> progbarWidth is", this.state.animatedValues.progbarWidth._value))
+  }
+
   render() {
-    let details = parsePaymentDetails(this.props)
-    let { dummy, pic, name, purpose, amount, frequency, next, incoming, status, payments, paymentsMade } = details
+    let { dummy, pic, name, purpose, amount, frequency, next, incoming, status, payments, paymentsMade } = this.state.details
+    let { progbarWidth } = this.state.animatedValues
     let initialsBuffer = name.split(" ").map((name) => name.charAt(0))
     let initials = initialsBuffer.join("")
 
@@ -40,7 +81,7 @@ class PayCard extends React.Component {
       <TouchableHighlight
         activeOpacity={0.8}
         underlayColor={'transparent'}
-        onPress={() => (dummy) ? null : Actions.PaymentDetails(details)}>
+        onPress={() => (dummy) ? null : Actions.PaymentDetails(this.state.details)}>
 
         <View style={[styles.wrap, {paddingTop: 5, paddingBottom: 5}]}>
           <View style={{flexDirection: 'column', flex: 1.0}}>
@@ -104,8 +145,8 @@ class PayCard extends React.Component {
 
                 { /* Progress bar */ }
                 <View style={{flexDirection: 'row'}}>
-                  <View style={[styles.progbarBackground, styles.shadow]} onLayout={(e) => this.setState({ progbarDims: e.nativeEvent.layout })}>
-                    <View style={[styles.progbarForeground, {width: this.state.progbarDims.width * ((paymentsMade > 0) ? (paymentsMade / payments) : 0) || 0}]} />
+                  <View style={[styles.progbarBackground, styles.shadow]} onLayout={(e) => this.layoutProgbarBackground(e)}>
+                    <Animated.View style={[styles.progbarForeground, {width: progbarWidth}]} />
                   </View>
                 </View>
               </View>

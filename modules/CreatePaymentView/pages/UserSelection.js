@@ -28,13 +28,16 @@ class UserSelection extends React.Component {
 
     let { payperContacts, nativeContacts, globalUserList } = this.props.currentUser
 
+
     // TODO: Filter contacts so they only appear in one list
+    //
     // console.log("payperContacts", payperContacts)
     // console.log("globalUserList", globalUserList)
     // for (var i = 0 i < globalUserList.length i++) {
     //   let curr = globalUserList[i]
     //   console.log("curr", curr)
     // }
+    
 
     this.allContacts = payperContacts.concat(nativeContacts, globalUserList)
     this.allContactsMap = SetMaster5000.arrayToMap(this.allContacts)
