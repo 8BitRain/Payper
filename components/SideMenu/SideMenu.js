@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableHighlight, Image, Dimensions, StyleSheet, Linking, Alert } from 'react-native'
+import { View, Text, TouchableHighlight, Image, Dimensions, StyleSheet, Linking, Alert, ActionSheetIOS, Platform } from 'react-native'
 import { colors } from '../../globalStyles'
 import { VibrancyView } from 'react-native-blur'
 import { signout } from '../../auth'
@@ -85,14 +85,23 @@ class SideMenu extends React.Component {
           }
         },
         {
-          title: 'Signout',
+          title: 'Sign Out',
           icon: 'arrow-left',
           destination: () => {
-            let message = "Are you sure you'd like to sign out?"
-            Alert.alert("Wait!", message, [
-              {text: 'Cancel', onPress: () => null, style: 'cancel'},
-              {text: 'Yes', onPress: () => signout(this.props.currentUser)},
-            ])
+            if (Platform.OS === 'ios') {
+              ActionSheetIOS.showActionSheetWithOptions({
+                title: "Signed in as " + this.props.currentUser.first_name + " " + this.props.currentUser.last_name,
+                options: ['Sign out', 'Cancel'],
+                cancelButtonIndex: 1,
+                destructiveButtonIndex: 1
+              }, (buttonIndex) => (buttonIndex === 0) ? signout(this.props.currentUser) : null)
+            } else {
+              let message = "Are you sure you'd like to sign out?"
+              Alert.alert("Wait!", message, [
+                {text: 'Cancel', onPress: () => null, style: 'cancel'},
+                {text: 'Yes', onPress: () => Linking.openURL("https://www.getpayper.io/faq").catch(err => null)},
+              ])
+            }
           }
         }
       ]
