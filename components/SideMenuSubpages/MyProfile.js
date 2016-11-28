@@ -118,6 +118,18 @@ const styles = {
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center'
+  },
+  imageWrap: {
+    width: imageDims.width,
+    height: imageDims.height,
+    borderRadius: imageDims.width / 2,
+    shadowColor: colors.slateGrey,
+    shadowOpacity: 1.0,
+    shadowRadius: 1,
+    shadowOffset: {
+      height: 0,
+      width: 0
+    }
   }
 }
 

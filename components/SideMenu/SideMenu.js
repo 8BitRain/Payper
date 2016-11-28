@@ -160,13 +160,8 @@ const styles = StyleSheet.create({
     width: imageDims.width,
     height: imageDims.height,
     borderRadius: imageDims.width / 2,
-    shadowColor: colors.medGrey,
-    shadowOpacity: 1.0,
-    shadowRadius: 3,
-    shadowOffset: {
-      height: 0,
-      width: 0
-    }
+    borderWidth: 1,
+    borderColor: colors.slateGrey
   }
 })
 
