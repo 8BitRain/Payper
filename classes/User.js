@@ -6,6 +6,7 @@ import * as SetMaster5000 from '../helpers/SetMaster5000';
 import * as _ from 'lodash';
 import * as config from '../config';
 import Contacts from 'react-native-contacts';
+import Mixpanel from 'react-native-mixpanel';
 import { Actions } from 'react-native-router-flux';
 import { FBLoginManager } from 'NativeModules'
 const baseURL = config.details[config.details.env].lambdaBaseURL;
@@ -184,16 +185,30 @@ export default class User {
   **/
   getNativeContacts(updateViaRedux) {
     Contacts.getAll((err, contacts) => {
-      if (err && err.type === 'permissionDenied') {
+      if (err) {
+        Mixpanel.trackWithProperties('Error getting contacts', { err: JSON.stringify(err) });
         console.log("Error getting contacts", err);
       } else {
         const _this = this;
 
-        var c = SetMaster5000.formatNativeContacts(contacts);
+        var c = [];
+        try {
+          c = SetMaster5000.formatNativeContacts(contacts);
+        } catch (err) {
+          Mixpanel.trackWithProperties('Error formatting native contacts', { err: JSON.stringify(err) });
+        }
+
         updateViaRedux({ nativeContacts: c });
 
-        Lambda.updateContacts({ token: this.token, phoneNumbers: SetMaster5000.contactsArrayToNumbersArray(c) }, () => {
-          console.log("Lambda.updateContacts callback was invoked")
+        var numbersArray = [];
+        try {
+          numbersArray = SetMaster5000.contactsArrayToNumbersArray(c);
+        } catch (err) {
+          Mixpanel.trackWithProperties('Error extracting native contacts', { err: JSON.stringify(err) });
+        }
+
+        Lambda.updateContacts({ token: this.token, phoneNumbers: numbersArray }, () => {
+          console.log("Lambda.updateContacts callback was invoked");
 
           Firebase.listenUntilFirstValue("existingPhoneContacts/" + this.uid, (res) => {
             console.log("Firebase.listenUntilFirstValue callback was invoked")
@@ -384,6 +399,7 @@ export default class User {
         callback: (res) => {
           if (!res) return;
           let parsed = SetMaster5000.contactListToArray({ contacts: res })
+          if (!parsed) parsed = []
           updateViaRedux({ payperContacts: parsed })
         }
       }
