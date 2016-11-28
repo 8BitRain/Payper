@@ -73,8 +73,6 @@ export default class Phone extends React.Component {
   render() {
     return (
       <View style={styles.wrap}>
-        <StatusBar barStyle='light-content' />
-
         { /* Header is rendered if we're onboarding phone number by itself
           (outside of the full user onboarding flow) */
           (this.props.showHeader)

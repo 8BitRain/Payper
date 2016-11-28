@@ -101,31 +101,31 @@ export default class StickyTextInput extends React.Component {
 
         <Animated.View style={[styles.wrap, { bottom: this.offsetBottom }]}>
           <View style={styles.optionsWrap}>
+            { /* Forgot password */ }
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={"transparent"}
+              onPress={() => this.props.togglePasswordResetModal()}
+              style={{paddingLeft: 22, paddingBottom: 0, overflow: 'visible'}}>
+              <View>
+                <Text style={{fontSize: 18, color: colors.alertGreen}}>
+                  {"Forgot password?"}
+                </Text>
+              </View>
+            </TouchableHighlight>
+
             { /* Cancel login */ }
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={"transparent"}
               onPress={() => this.props.toggleModal()}
-              style={styles.cancel}>
+              style={{paddingRight: 22, paddingBottom: 0, overflow: 'visible'}}>
                 <View>
-                  <Text style={{fontSize: 20, color: colors.carminePink}}>
-                    Cancel
+                  <Text style={{fontSize: 18, color: colors.carminePink}}>
+                    {"Cancel"}
                   </Text>
                 </View>
             </TouchableHighlight>
-
-            { /* Sign up
-            <TouchableHighlight
-              activeOpacity={0.8}
-              underlayColor={"transparent"}
-              onPress={() => Actions.UserOnboardingViewContainer()}
-              style={styles.signup}>
-              <View>
-                <Text style={{ fontFamily: 'Roboto', fontSize: 20, fontWeight: '200', color: colors.accent }}>
-                  Sign up
-                </Text>
-              </View>
-            </TouchableHighlight> */ }
           </View>
 
           { /* Email input */ }
@@ -191,20 +191,8 @@ const styles = StyleSheet.create({
   optionsWrap: {
     flex: 0.25,
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center'
-  },
-  cancel: {
-    paddingRight: 25,
-    paddingBottom: 9,
-    overflow: 'visible'
-  },
-  signup: {
-    flex: 0.5,
-    paddingRight: 35,
-    paddingBottom: 9,
-    overflow: 'visible',
-    alignItems: 'flex-end'
   },
   input: {
     flex: 0.25,

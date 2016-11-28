@@ -1,46 +1,43 @@
-// Dependencies
-import React from 'react';
-import { Actions } from 'react-native-router-flux';
-import { View, Text, TextInput, Modal, StyleSheet, TouchableHighlight, Dimensions } from 'react-native';
-import { VibrancyView } from 'react-native-blur';
+import React from 'react'
+import { Actions } from 'react-native-router-flux'
+import { View, Text, TextInput, Modal, StyleSheet, TouchableHighlight, Dimensions } from 'react-native'
+import { VibrancyView } from 'react-native-blur'
 import { signin } from '../../auth'
-import User from '../../classes/User';
-import colors from '../../styles/colors';
-import * as Validate from '../../helpers/Validate';
-
-// Components
-import StickyTextInput from './subcomponents/StickyTextInput';
-
-// Screen dimensions
-const dims = Dimensions.get('window');
+import { PasswordReset } from '../../components'
+import User from '../../classes/User'
+import { colors } from '../../globalStyles'
+import * as Validate from '../../helpers/Validate'
+import StickyTextInput from './subcomponents/StickyTextInput'
+const dims = Dimensions.get('window')
 
 export default class LoginModal extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       loginParams: { email: "", password: "" },
       validations: { email: false, password: false },
-      errorMessage: null
-    };
+      errorMessage: null,
+      passwordResetModalVisible: false
+    }
 
-    this.User = this.props.currentUser;
+    this.User = this.props.currentUser
   }
 
   updateEmail(v) {
-    this.state.loginParams.email = v;
-    this.state.validations.email = Validate.email(v);
-    this.setState({ loginParams: this.state.loginParams, validations: this.state.validations });
+    this.state.loginParams.email = v
+    this.state.validations.email = Validate.email(v)
+    this.setState({ loginParams: this.state.loginParams, validations: this.state.validations })
   }
 
   updatePassword(v) {
-    this.state.loginParams.password = v;
-    this.state.validations.password = Validate.password(v);
-    this.setState({ loginParams: this.state.loginParams, validations: this.state.validations });
+    this.state.loginParams.password = v
+    this.state.validations.password = Validate.password(v)
+    this.setState({ loginParams: this.state.loginParams, validations: this.state.validations })
   }
 
   login() {
-    this.setState({ loading: true });
+    this.setState({ loading: true })
     let { email, password } = this.state.loginParams
     signin({
       email,
@@ -57,41 +54,41 @@ export default class LoginModal extends React.Component {
   }
 
   onLoginSuccess() {
-    this.setState({ loading: false, errorMessage: null });
-    this.props.onLoginSuccess();
+    this.setState({ loading: false, errorMessage: null })
+    this.props.onLoginSuccess()
   }
 
   onLoginFailure(errCode) {
-    var errorMessage = null;
+    var errorMessage = null
     switch (errCode) {
       case "auth/wrong-password":
-        errorMessage = "Incorrect password";
-      break;
+        errorMessage = "Incorrect password"
+      break
       case "auth/user-not-found":
-        errorMessage = "No user was found with that email address";
-      break;
+        errorMessage = "No user was found with that email address"
+      break
       case "auth/invalid-email":
-        errorMessage = "Invalid email address";
-      break;
+        errorMessage = "Invalid email address"
+      break
       case "auth/too-many-requests":
         errorMessage = "Too many login attempts. Please try again later"
-      break;
+      break
       case "lambda/exited-before-completion":
       case "lambda/timed-out":
       default:
-        errorMessage = "There was an issue on our end 🙄\nPlease try again";
+        errorMessage = "There was an issue on our end 🙄\nPlease try again"
     }
-    alert(errorMessage);
-    this.setState({ loading: false, errorMessage: errorMessage });
+    alert(errorMessage)
+    this.setState({ loading: false, errorMessage: errorMessage })
+  }
+
+  togglePasswordResetModal() {
+    this.setState({passwordResetModalVisible: !this.state.passwordResetModalVisible})
   }
 
   render() {
     return(
-      <Modal
-        animationType={"slide"}
-        transparent={true}
-        visible={this.props.modalVisible}>
-
+      <Modal animationType={"slide"} transparent={true} visible={this.props.modalVisible}>
         <StickyTextInput
           updateEmail={(v) => this.updateEmail(v)}
           updatePassword={(v) => this.updatePassword(v)}
@@ -99,9 +96,13 @@ export default class LoginModal extends React.Component {
           toggleModal={() => this.props.toggleModal()}
           validations={this.state.validations}
           loading={this.state.loading}
-          errorMessage={this.state.errorMessage} />
+          errorMessage={this.state.errorMessage}
+          togglePasswordResetModal={() => this.togglePasswordResetModal()} />
 
+        <Modal animationType={"slide"} visible={this.state.passwordResetModalVisible}>
+          <PasswordReset close={() => this.togglePasswordResetModal()} />
+        </Modal>
       </Modal>
-    );
+    )
   }
 }

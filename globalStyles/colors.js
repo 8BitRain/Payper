@@ -14,14 +14,12 @@ const colors = {
   alertGreen: "#10bf5a",
   richBlack: "#2A2D34",
 
-
   snowWhite: "#FFFBFC",
   medGrey: "#E8E5E6",
   lightGrey: "#F6F5F5",
   accent: "#00CEB3",
   deepBlue: "#000a14",
   gradientGreen: "#23CE6B",
-
 
   snowWhiteOpaque: "rgba(255, 251, 252, 0.5)",
   accentOpaque: "rgba(0, 207, 179, 0.5)",

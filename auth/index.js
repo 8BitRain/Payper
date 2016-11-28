@@ -2,3 +2,6 @@
 exports.signin = require('./auth').signin
 exports.signout = require('./auth').signout
 exports.requestFacebookUserData = require('./auth').requestFacebookUserData
+
+// email.js
+exports.sendPasswordResetEmail = require('./email').sendPasswordResetEmail
