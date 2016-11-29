@@ -19,6 +19,7 @@ export default class User {
     this.appFlags = {}
     this.payperContacts = []
     this.nativeContacts = []
+    this.handleAppStateChange = this.handleAppStateChange.bind(this)
   }
 
   /**
@@ -59,6 +60,11 @@ export default class User {
     this.tokenRefreshInterval = setInterval(() => {
       this.refresh()
     }, ((60 * 1000) * 20))
+    AppState.addEventListener('change', this.handleAppStateChange)
+  }
+
+  handleAppStateChange(state) {
+    if (state === 'active') this.refresh()
   }
 
   /**

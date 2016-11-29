@@ -45,7 +45,7 @@ export default class LoginModal extends React.Component {
       type: "generic"
     }, (res) => {
       if (!res.errCode) {
-        this.props.currentUser.initialize(user)
+        this.props.currentUser.initialize(res)
         this.onLoginSuccess()
       } else {
         this.onLoginFailure(res.errCode)
@@ -60,8 +60,6 @@ export default class LoginModal extends React.Component {
 
   onLoginFailure(errCode) {
     var errorMessage = null
-
-    console.log("onLoginFailure received errCode", errCode)
 
     switch (errCode) {
       case "auth/wrong-password":
@@ -81,6 +79,7 @@ export default class LoginModal extends React.Component {
       default:
         errorMessage = "There was an issue on our end 🙄\nPlease try again"
     }
+
     alert(errorMessage)
     this.setState({ loading: false, errorMessage: errorMessage })
   }
