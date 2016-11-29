@@ -1,19 +1,20 @@
-import * as firebase from 'firebase';
-import * as Firebase from '../services/Firebase';
-import * as Lambda from '../services/Lambda';
-import * as Async from '../helpers/Async';
-import * as SetMaster5000 from '../helpers/SetMaster5000';
-import * as _ from 'lodash';
-import * as config from '../config';
-import Contacts from 'react-native-contacts';
-import Mixpanel from 'react-native-mixpanel';
-import { Actions } from 'react-native-router-flux';
+import * as firebase from 'firebase'
+import * as Firebase from '../services/Firebase'
+import * as Lambda from '../services/Lambda'
+import * as Async from '../helpers/Async'
+import * as SetMaster5000 from '../helpers/SetMaster5000'
+import * as _ from 'lodash'
+import * as config from '../config'
+import Contacts from 'react-native-contacts'
+import Mixpanel from 'react-native-mixpanel'
+import { Actions } from 'react-native-router-flux'
 import { FBLoginManager } from 'NativeModules'
-const baseURL = config.details[config.details.env].lambdaBaseURL;
+import { AppState } from 'react-native'
+const baseURL = config.details[config.details.env].lambdaBaseURL
 
 export default class User {
   constructor(attributes) {
-    if (attributes) for (var i in attributes) this[i] = attributes[i];
+    if (attributes) for (var i in attributes) this[i] = attributes[i]
     this.paymentFlow = {}
     this.appFlags = {}
     this.payperContacts = []
@@ -30,9 +31,9 @@ export default class User {
       profile_pic: this.profile_pic,
       uid: this.uid,
       username: this.username
-    };
+    }
 
-    return attributes;
+    return attributes
   }
 
   /**
@@ -41,10 +42,10 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   update(updates) {
-    console.log("Updating user with updates:", updates);
-    for (var k in updates) this[k] = updates[k];
-    let userCache = (this.appFlags && this.appFlags.onboarding_state === "customer" && !this.appFlags.customer_status) ? "" : JSON.stringify(this);
-    Async.set('user', userCache);
+    console.log("Updating user with updates:", updates)
+    for (var k in updates) this[k] = updates[k]
+    let userCache = (this.appFlags && this.appFlags.onboarding_state === "customer" && !this.appFlags.customer_status) ? "" : JSON.stringify(this)
+    Async.set('user', userCache)
   }
 
   /**
@@ -56,21 +57,21 @@ export default class User {
     this.update(user)
     this.decrypt((res) => (res) ? this.update(res) : null)
     this.tokenRefreshInterval = setInterval(() => {
-      this.refresh();
-    }, ((60 * 1000) * 20));
+      this.refresh()
+    }, ((60 * 1000) * 20))
   }
 
   /**
     *   Delete this user
   **/
   delete(cb) {
-    const _this = this;
+    const _this = this
 
     // Delete user from Firebase auth
-    let user = firebase.auth().currentUser;
+    let user = firebase.auth().currentUser
     user.delete().then(
     () => {
-      cb(true);
+      cb(true)
 
       // Delete user data via Lambda endpoint
       try {
@@ -78,21 +79,21 @@ export default class User {
         .then((response) => response.json())
         .then((responseData) => {
           if (!responseData.errorMessage) {
-            console.log("Delete user Lambda response:", responseData);
-            _this.destroy();
+            console.log("Delete user Lambda response:", responseData)
+            _this.destroy()
           } else {
-            console.log("Error deleting user:", responseData.errorMessage);
+            console.log("Error deleting user:", responseData.errorMessage)
           }
         })
-        .done();
+        .done()
       } catch (err) {
-        console.log("getUserWithToken failed...", "Lambda error:", err);
+        console.log("getUserWithToken failed...", "Lambda error:", err)
       }
     },
     (err) => {
-      console.log("Error deleting user from Firebase auth:", err);
-      cb(false);
-    });
+      console.log("Error deleting user from Firebase auth:", err)
+      cb(false)
+    })
   }
 
   /**
@@ -100,10 +101,10 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   destroy() {
-    Async.set('user', '');
-    this.stopListening();
-    clearInterval(this.tokenRefreshInterval);
-    for (var i in this) if (typeof this[i] !== 'function') this[i] = null;
+    Async.set('user', '')
+    this.stopListening()
+    clearInterval(this.tokenRefreshInterval)
+    for (var i in this) if (typeof this[i] !== 'function') this[i] = null
   }
 
   /**
@@ -113,14 +114,14 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   createDwollaCustomer(params, onSuccess, onFailure) {
-    if (!params.email) params.email = this.decryptedEmail;
-    if (!params.phone) params.phone = this.decryptedPhone;
-    if (!params.token) params.token = this.token;
+    if (!params.email) params.email = this.decryptedEmail
+    if (!params.phone) params.phone = this.decryptedPhone
+    if (!params.token) params.token = this.token
 
     for (var k in params) if (!params[k]) {
-      alert("Tried to create a Dwolla customer but " + k + " is undefined");
-      onFailure("undefined " + k);
-      return;
+      alert("Tried to create a Dwolla customer but " + k + " is undefined")
+      onFailure("undefined " + k)
+      return
     }
 
     try {
@@ -128,24 +129,24 @@ export default class User {
       .then((response) => response.json())
       .then((responseData) => {
         if (!responseData.errorMessage) {
-          console.log("createDwollaCustomer succeeded...", "Response data:", responseData);
-          onSuccess(responseData.status);
+          console.log("createDwollaCustomer succeeded...", "Response data:", responseData)
+          onSuccess(responseData.status)
         } else {
-          console.log("createDwollaCustomer failed...", "Error:", responseData);
+          console.log("createDwollaCustomer failed...", "Error:", responseData)
           try {
-            let str = responseData.errorMessage;
-            let buffer = JSON.parse(str);
-            let code = buffer[0].code;
-            onFailure(code);
+            let str = responseData.errorMessage
+            let buffer = JSON.parse(str)
+            let code = buffer[0].code
+            onFailure(code)
           } catch(err) {
-            onFailure("timed out");
+            onFailure("timed out")
           }
         }
       })
-      .done();
+      .done()
     } catch (err) {
-      console.log("createDwollaCustomer failed...", "Try/catch threw:", err);
-      onFailure(err);
+      console.log("createDwollaCustomer failed...", "Try/catch threw:", err)
+      onFailure(err)
     }
   }
 
@@ -156,26 +157,26 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   retryDwollaVerification(params, onSuccess, onFailure) {
-    params.email = this.decryptedEmail;
-    params.phone = this.decryptedPhone;
-    params.token = this.token;
+    params.email = this.decryptedEmail
+    params.phone = this.decryptedPhone
+    params.token = this.token
 
     try {
       fetch(baseURL + "customer/retryVerification", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
         if (!responseData.errorMessage) {
-          console.log("retryDwollaVerification succeeded...", "Response data:", responseData);
-          onSuccess(responseData.status);
+          console.log("retryDwollaVerification succeeded...", "Response data:", responseData)
+          onSuccess(responseData.status)
         } else {
-          console.log("retryDwollaVerification failed...", "Error:", responseData.errorMessage);
-          onFailure(responseData.errorMessage);
+          console.log("retryDwollaVerification failed...", "Error:", responseData.errorMessage)
+          onFailure(responseData.errorMessage)
         }
       })
-      .done();
+      .done()
     } catch (err) {
-      console.log("retryDwollaVerification failed...", "Try/catch threw:", err);
-      onFailure(err);
+      console.log("retryDwollaVerification failed...", "Try/catch threw:", err)
+      onFailure(err)
     }
   }
 
@@ -186,42 +187,42 @@ export default class User {
   getNativeContacts(updateViaRedux) {
     Contacts.getAll((err, contacts) => {
       if (err) {
-        Mixpanel.trackWithProperties('Error getting contacts', { err: JSON.stringify(err) });
-        console.log("Error getting contacts", err);
+        Mixpanel.trackWithProperties('Error getting contacts', { err: JSON.stringify(err) })
+        console.log("Error getting contacts", err)
       } else {
-        const _this = this;
+        const _this = this
 
-        var c = [];
+        var c = []
         try {
-          c = SetMaster5000.formatNativeContacts(contacts);
+          c = SetMaster5000.formatNativeContacts(contacts)
         } catch (err) {
-          Mixpanel.trackWithProperties('Error formatting native contacts', { err: JSON.stringify(err) });
+          Mixpanel.trackWithProperties('Error formatting native contacts', { err: JSON.stringify(err) })
         }
 
-        updateViaRedux({ nativeContacts: c });
+        updateViaRedux({ nativeContacts: c })
 
-        var numbersArray = [];
+        var numbersArray = []
         try {
-          numbersArray = SetMaster5000.contactsArrayToNumbersArray(c);
+          numbersArray = SetMaster5000.contactsArrayToNumbersArray(c)
         } catch (err) {
-          Mixpanel.trackWithProperties('Error extracting native contacts', { err: JSON.stringify(err) });
+          Mixpanel.trackWithProperties('Error extracting native contacts', { err: JSON.stringify(err) })
         }
 
         Lambda.updateContacts({ token: this.token, phoneNumbers: numbersArray }, () => {
-          console.log("Lambda.updateContacts callback was invoked");
+          console.log("Lambda.updateContacts callback was invoked")
 
           Firebase.listenUntilFirstValue("existingPhoneContacts/" + this.uid, (res) => {
             console.log("Firebase.listenUntilFirstValue callback was invoked")
 
-            Firebase.scrub("existingPhoneContacts/" + this.uid);
+            Firebase.scrub("existingPhoneContacts/" + this.uid)
             if (Array.isArray(res) && res.length > 0) {
-              var parsedContacts = SetMaster5000.parseNativeContactList({ phoneNumbers: res, contacts: c });
-              updateViaRedux({ nativeContacts: parsedContacts });
+              var parsedContacts = SetMaster5000.parseNativeContactList({ phoneNumbers: res, contacts: c })
+              updateViaRedux({ nativeContacts: parsedContacts })
             }
-          });
-        });
+          })
+        })
       }
-    });
+    })
   }
 
   /**
@@ -229,24 +230,24 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   getFundingSource(cb) {
-    var params = { token: this.token };
+    var params = { token: this.token }
 
     try {
       fetch(baseURL + "customer/getFundingSource", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
-        console.log("\n\ngetFundingSource res:", responseData);
+        console.log("\n\ngetFundingSource res:", responseData)
 
         if (!responseData) {
-          console.log("getFundingSource response was null");
-          return;
+          console.log("getFundingSource response was null")
+          return
         }
-        if (responseData && !responseData.errorMessage) cb({ bankAccount: responseData });
-        else console.log("Error getting funding source", responseData.errorMessage);
+        if (responseData && !responseData.errorMessage) cb({ bankAccount: responseData })
+        else console.log("Error getting funding source", responseData.errorMessage)
       })
-      .done();
+      .done()
     } catch (err) {
-      console.log("Error getting funding source", err);
+      console.log("Error getting funding source", err)
     }
   }
 
@@ -255,18 +256,18 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   decrypt(cb) {
-    var params = { token: this.token, uid: this.uid };
+    var params = { token: this.token, uid: this.uid }
 
     try {
       fetch(baseURL + "user/getPersonal", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
-        if (!responseData.errorMessage) cb({ decryptedEmail: responseData.email, decryptedPhone: responseData.phone });
-        else console.log("Error decrypting user", responseData.errorMessage);
+        if (!responseData.errorMessage) cb({ decryptedEmail: responseData.email, decryptedPhone: responseData.phone })
+        else console.log("Error decrypting user", responseData.errorMessage)
       })
-      .done();
+      .done()
     } catch (err) {
-      console.log("Error decrypting user", err);
+      console.log("Error decrypting user", err)
     }
   }
 
@@ -283,31 +284,31 @@ export default class User {
         console.log("User.getIAVToken responseData is", responseData)
         if (!responseData.errorMessage) {
           if (responseData.token)
-            updateViaRedux({ IAVToken: responseData.token });
+            updateViaRedux({ IAVToken: responseData.token })
           else
-            console.log("getIAVToken received an undefined token.");
+            console.log("getIAVToken received an undefined token.")
         }
         else
-          console.log("Error getting IAV token:", responseData.errorMessage);
+          console.log("Error getting IAV token:", responseData.errorMessage)
       })
-      .done();
+      .done()
     } catch (err) {
-      console.log("Error getting IAV token:", responseData.errorMessage);
+      console.log("Error getting IAV token:", responseData.errorMessage)
     }
-  };
+  }
 
   /**
     *   Cycle this user's access and refresh tokens
     *   -----------------------------------------------------------------------
   **/
   refresh() {
-    const _this = this;
+    const _this = this
     firebase.auth().currentUser.getToken(true)
     .then(function(tkn) {
-      _this.update({ token: tkn });
+      _this.update({ token: tkn })
     }).catch(function(err) {
-      console.log("Error getting new token:", err);
-    });
+      console.log("Error getting new token:", err)
+    })
   }
 
   /**
@@ -321,12 +322,12 @@ export default class User {
         eventType: 'value',
         listener: null,
         callback: (res) => {
-          if (!res) return;
+          if (!res) return
           let globalUserList = SetMaster5000.globalUserListToArray({
             sectionTitle: "Other Payper Users",
             users: res,
             uid: this.uid
-          });
+          })
           updateViaRedux({ globalUserList: globalUserList })
         }
       },
@@ -335,15 +336,15 @@ export default class User {
         eventType: 'value',
         listener: null,
         callback: (res) => {
-          if (!res) return;
+          if (!res) return
 
           // Update user attributes
-          updateViaRedux(res);
+          updateViaRedux(res)
 
           // If user has a funding source, fetch its bank account info
           if (res.fundingSource) {
-            res.fundingSource.active = true;
-            this.getFundingSource((fs) => updateViaRedux(fs));
+            res.fundingSource.active = true
+            this.getFundingSource((fs) => updateViaRedux(fs))
           }
         }
       },
@@ -353,13 +354,13 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) {
-            res = { in: [], out: [] };
+            res = { in: [], out: [] }
           } else {
-            if (res.out) res.out = SetMaster5000.processPayments({ payments: res.out, flow: "outgoing" });
-            if (res.in) res.in = SetMaster5000.processPayments({ payments: res.in, flow: "incoming" });
+            if (res.out) res.out = SetMaster5000.processPayments({ payments: res.out, flow: "outgoing" })
+            if (res.in) res.in = SetMaster5000.processPayments({ payments: res.in, flow: "incoming" })
           }
 
-          updateViaRedux({ paymentFlow: res });
+          updateViaRedux({ paymentFlow: res })
         }
       },
       {
@@ -367,10 +368,10 @@ export default class User {
         eventType: 'value',
         listener: null,
         callback: (res) => {
-          if (!res) return;
+          if (!res) return
           if (res.onboarding_state === "bank")
-            this.getIAVToken({ token: this.token }, updateViaRedux);
-          updateViaRedux({ appFlags: res });
+            this.getIAVToken({ token: this.token }, updateViaRedux)
+          updateViaRedux({ appFlags: res })
         }
       },
       {
@@ -378,9 +379,9 @@ export default class User {
         eventType: 'value',
         listener: null,
         callback: (res) => {
-          if (!res) return;
-          SetMaster5000.tackOnKeys(res, "timestamp");
-          updateViaRedux({ notifications: res });
+          if (!res) return
+          SetMaster5000.tackOnKeys(res, "timestamp")
+          updateViaRedux({ notifications: res })
         }
       },
       {
@@ -388,8 +389,8 @@ export default class User {
         eventType: 'value',
         listener: null,
         callback: (res) => {
-          if (!res) return;
-          updateViaRedux({ blockedUsers: res });
+          if (!res) return
+          updateViaRedux({ blockedUsers: res })
         }
       },
       {
@@ -397,16 +398,16 @@ export default class User {
         eventType: 'value',
         listener: null,
         callback: (res) => {
-          if (!res) return;
+          if (!res) return
           let parsed = SetMaster5000.contactListToArray({ contacts: res })
           if (!parsed) parsed = []
           updateViaRedux({ payperContacts: parsed })
         }
       }
-    ];
+    ]
 
     for (var e in this.endpoints) {
-      Firebase.listenTo(this.endpoints[e]);
+      Firebase.listenTo(this.endpoints[e])
     }
   }
 
@@ -416,9 +417,9 @@ export default class User {
   **/
   stopListening() {
     for (var e in this.endpoints) {
-      Firebase.stopListeningTo(this.endpoints[e]);
+      Firebase.stopListeningTo(this.endpoints[e])
     }
-    this.endpoints = null;
+    this.endpoints = null
   }
 
 
@@ -430,37 +431,37 @@ export default class User {
   createUserWithEmailAndPassword(params, onSuccess, onFailure) {
     firebase.auth().createUserWithEmailAndPassword(params.email, params.password).then(() => {
       firebase.auth().currentUser.getToken(true).then((token) => {
-        params.token = token;
-        params.password = null;
-        var stringifiedParams = JSON.stringify(params);
+        params.token = token
+        params.password = null
+        var stringifiedParams = JSON.stringify(params)
         try {
           fetch(baseURL + "user/create", {method: "POST", body: stringifiedParams})
           .then((response) => response.json())
           .then((responseData) => {
             if (!responseData.errorMessage) {
-              responseData.user.token = token;
-              this.initialize(responseData.user);
-              this.decryptedPhone = params.phone;
-              this.decryptedEmail = params.email;
-              console.log("createUserWithEmailAndPassword succeeded...", "Lambda response:", responseData);
-              onSuccess();
+              responseData.user.token = token
+              this.initialize(responseData.user)
+              this.decryptedPhone = params.phone
+              this.decryptedEmail = params.email
+              console.log("createUserWithEmailAndPassword succeeded...", "Lambda response:", responseData)
+              onSuccess()
             } else {
-              onFailure("lambda");
+              onFailure("lambda")
             }
           })
-          .done();
+          .done()
         } catch (err) {
-          console.log("createUserWithEmailAndPassword failed...", "Fetch error:", err);
-          onFailure();
+          console.log("createUserWithEmailAndPassword failed...", "Fetch error:", err)
+          onFailure()
         }
       }).catch((err) => {
-        console.log("firebase.auth().currentUser.getToken(true) failed...", "Firebase error:", err);
-        onFailure(err.code);
-      });
+        console.log("firebase.auth().currentUser.getToken(true) failed...", "Firebase error:", err)
+        onFailure(err.code)
+      })
     })
     .catch((err) => {
-      console.log("firebase.auth().createUserWithEmailAndPassword failed...", "Firebase error:", err);
-      onFailure(err.code);
-    });
+      console.log("firebase.auth().createUserWithEmailAndPassword failed...", "Firebase error:", err)
+      onFailure(err.code)
+    })
   }
 }

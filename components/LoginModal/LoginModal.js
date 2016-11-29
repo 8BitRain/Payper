@@ -43,12 +43,12 @@ export default class LoginModal extends React.Component {
       email,
       pass: password,
       type: "generic"
-    }, (user) => {
-      if (user) {
+    }, (res) => {
+      if (!res.errCode) {
         this.props.currentUser.initialize(user)
         this.onLoginSuccess()
       } else {
-        this.onLoginFailure()
+        this.onLoginFailure(res.errCode)
       }
     })
   }
@@ -60,6 +60,9 @@ export default class LoginModal extends React.Component {
 
   onLoginFailure(errCode) {
     var errorMessage = null
+
+    console.log("onLoginFailure received errCode", errCode)
+
     switch (errCode) {
       case "auth/wrong-password":
         errorMessage = "Incorrect password"
