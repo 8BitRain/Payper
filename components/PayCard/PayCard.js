@@ -72,7 +72,7 @@ class PayCard extends React.Component {
   }
 
   render() {
-    let { dummy, pic, name, purpose, amount, frequency, next, incoming, status, payments, paymentsMade } = this.state.details
+    let { dummy, pic, name, purpose, amount, incoming, next, frequency, status, payments, paymentsMade } = this.state.details
     let { progbarWidth } = this.state.animatedValues
     let initialsBuffer = name.split(" ").map((name) => name.charAt(0))
     let initials = initialsBuffer.join("")

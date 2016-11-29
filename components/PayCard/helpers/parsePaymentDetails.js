@@ -4,9 +4,9 @@ function parsePaymentDetails(props) {
   let { payment, currentUser } = props
 
   let user = {
-    name: (payment.flow == "incoming") ? payment.sender_name : payment.recip_name,
-    username: (payment.flow == "incoming") ? payment.sender_username : payment.recip_username,
-    pic: (payment.flow == "incoming") ? payment.sender_pic : payment.recip_pic
+    name: (payment.flow == "in") ? payment.sender_name : payment.recip_name,
+    username: (payment.flow == "in") ? payment.sender_username : payment.recip_username,
+    pic: (payment.flow == "in") ? payment.sender_pic : payment.recip_pic
   }
 
   let frequency = payment.frequency.charAt(0).toUpperCase() + payment.frequency.slice(1).toLowerCase()
@@ -22,13 +22,13 @@ function parsePaymentDetails(props) {
     frequency: frequency,
     nextTimestamp: payment.nextPayment,
     next: next,
-    incoming: payment.flow === "incoming",
     status: payment.status,
     payments: payment.payments,
     paymentsMade: payment.paymentsMade,
     pid: payment.pid,
     token: currentUser.token,
-    paymentType: payment.type
+    paymentType: payment.type,
+    incoming: payment.flow === "in"
   }
 
   return details

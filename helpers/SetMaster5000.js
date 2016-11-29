@@ -229,6 +229,23 @@ export function extractCompletedPayments(options) {
 
 
 /**
+  *   Given an array of payments, return an array of the PID's of all (if any)
+  *   pending series.
+**/
+export function extractPendingPayments(payments) {
+  let arr = [], curr
+
+  for (var p in payments) {
+    curr = payments[p]
+    if (curr.status.indexOf("pending") >= 0)
+      arr.push(curr.pid)
+  }
+
+  return arr
+}
+
+
+/**
   *   Given an array of payments and an array of payment ID's, move
   *   the specified payments to the front of the array
 **/
@@ -278,24 +295,33 @@ export function tackOnKeys(j, label) {
 
 
 /**
-  *
-  *   params: payments (JSON), flow (string)
+  *   Given a payment JSON...
+  *     1. tack on any necessary attributes
+  *     2. convert to array
+  *     3. push pending payments to front
+  *     4. return ordered payments to caller
 **/
-export function processPayments(params) {
-  if (!params.payments) return;
+export function processPayments(payments) {
+  if (!payments) return []
 
-  for (var k in params.payments) {
-    params.payments[k].pid = k;
-    params.payments[k].flow = params.flow;
+  // 1. tack on any necessary attributes
+  for (var k in payments) {
+    let curr = payments[k]
+    curr.pid = k
+    curr.incoming = curr.flow === "in"
   }
 
-  // Convert from JSON to array and extract PID's of complete payments
-  var paymentArray = JSONToArray({ JSON: params.payments }),
-      paymentsToPrioritize = extractCompletedPayments({ payments: paymentArray });
+  // 2. convert to array
+  let paymentArray = JSONToArray({ JSON: payments })
 
-  // Move complete payments to the front of array
-  var orderedPayments = (paymentsToPrioritize.length === 0) ? paymentArray : prioritizePayments({ payments: paymentArray, prioritize: paymentsToPrioritize });
+  // 3. push pending payments to front
+  let paymentsToPrioritize = extractPendingPayments(paymentArray)
 
+  let orderedPayments = (paymentsToPrioritize.length === 0)
+    ? paymentArray
+    : prioritizePayments({ payments: paymentArray, prioritize: paymentsToPrioritize })
+
+  // 4. return ordered payments to caller
   return orderedPayments;
 }
 

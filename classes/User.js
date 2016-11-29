@@ -360,13 +360,27 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) {
-            res = { in: [], out: [] }
+            updateViaRedux({ paymentFlow: { inc: [], out: [], all: [] } })
           } else {
-            if (res.out) res.out = SetMaster5000.processPayments({ payments: res.out, flow: "outgoing" })
-            if (res.in) res.in = SetMaster5000.processPayments({ payments: res.in, flow: "incoming" })
-          }
 
-          updateViaRedux({ paymentFlow: res })
+            // Tack on 'flow'
+            if (res.out) for (var k of Object.keys(res.out)) res.out[k].flow = "out"
+            if (res.in) for (var k of Object.keys(res.in)) res.in[k].flow = "in"
+
+            // Process payments
+            let inc = (res.in) ? SetMaster5000.processPayments(res.in) : []
+            let out = (res.out) ? SetMaster5000.processPayments(res.out) : []
+            let allPreProcess = Object.assign({}, res.in || {}, res.out || {})
+            let allPostProcess = SetMaster5000.processPayments(allPreProcess)
+
+            let paymentFlow = {
+              inc: inc,
+              out: out,
+              all: allPostProcess
+            }
+
+            updateViaRedux({paymentFlow})
+          }
         }
       },
       {
