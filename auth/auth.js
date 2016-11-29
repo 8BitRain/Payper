@@ -67,8 +67,9 @@ exports.signin = function(params, cb) {
     *   (4) return user details
     *   (app initialization will occur in signin's callback function)
   **/
-  signin((firebaseUser, isNewFacebookUser) => {
-    if (!firebaseUser) { cb(null); return }
+  signin((firebaseUser, isNewFacebookUser, err) => {
+    if (err) { cb({errCode: err.code}); return; }
+    if (!firebaseUser) { cb(null); return; }
     let { accessToken } = firebaseUser.stsTokenManager
 
     getCustomTokenAndKey(accessToken, null, (res) => {
@@ -169,7 +170,7 @@ exports.signin = function(params, cb) {
       cb(firebaseUser)
     }).catch((err) => {
       console.log(err)
-      cb(null)
+      cb(null, null, err)
     })
   }
 }
