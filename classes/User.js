@@ -124,10 +124,12 @@ export default class User {
     if (!params.phone) params.phone = this.decryptedPhone
     if (!params.token) params.token = this.token
 
-    for (var k in params) if (!params[k]) {
-      alert("Tried to create a Dwolla customer but " + k + " is undefined")
-      onFailure("undefined " + k)
-      return
+    for (var k in params) {
+      if (!params[k]) {
+        alert("Tried to create a Dwolla customer but " + k + " is undefined")
+        onFailure("undefined " + k)
+        return
+      }
     }
 
     try {

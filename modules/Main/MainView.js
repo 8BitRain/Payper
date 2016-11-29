@@ -68,9 +68,9 @@ class MainView extends React.Component {
     let noticeBar = []
     let { appFlags } = currentUser
     let awaitingCustomerVerification = appFlags.customer_status !== "verified"
-    let awaitingCutomerRetry = appFlags.customer_status === "retry"
+    let awatingCustomerRetry = appFlags.customer_status === "retry"
     let awaitingMicrodepositVerification = appFlags.onboarding_state === "awaitingMicrodepositVerification"
-    let awaitingBankAccount = appFlags.onboarding_state === "bank" || appFlags.customer_status === "documentSuccess"
+    let awaitingBankAccount =  appFlags.customer_status === "verified" && (appFlags.onboarding_state === "bank" || appFlags.customer_status === "documentSuccess")
     let awaitingDocumentUpload = appFlags.customer_status === "document" || appFlags.customer_status === "documentFailure"
     let shouldRenderNoticeBar = awaitingCustomerVerification || awaitingMicrodepositVerification || awaitingBankAccount
 
@@ -86,7 +86,7 @@ class MainView extends React.Component {
               if (awaitingDocumentUpload) this.toggleSideMenuSubpage("Document Uploader")
               else if (awaitingMicrodepositVerification) this.toggleSideMenuSubpage("Microdeposit Verification")
               else if (awaitingBankAccount) this.toggleSideMenuSubpage("Bank Accounts")
-              else if (awaitingCutomerRetry) this.toggleSideMenuSubpage("retry")
+              else if (awatingCustomerRetry) this.toggleSideMenuSubpage("retry")
             }} />
       })
     }
