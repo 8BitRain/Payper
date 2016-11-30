@@ -1,6 +1,8 @@
 import React from 'react'
-import { View, Text, Image, ListView, RecyclerViewBackedScrollView, Dimensions } from 'react-native'
-
+import { View, Text, Image, ListView, RecyclerViewBackedScrollView, Dimensions, TouchableHighlight, Alert } from 'react-native'
+import { Actions } from 'react-native-router-flux'
+import { FBLoginManager } from 'NativeModules'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
 let dims = Dimensions.get('window')
 let imageDims = { width: 56, height: 56 }
 import { colors } from '../../globalStyles'
@@ -19,6 +21,22 @@ class MyProfile extends React.Component {
     }
   }
 
+  deleteAccount() {
+    var { currentUser } = this.props
+
+    let message = "Are you sure you'd like to delete your account? This can't be undone."
+    Alert.alert("Wait!", message, [
+      {text: 'Cancel', onPress: () => null, style: 'cancel'},
+      {text: 'Yes', onPress: () => confirm()},
+    ])
+
+    function confirm() {
+      FBLoginManager.logOut()
+      Actions.LandingScreenViewContainer()
+      currentUser.delete()
+    }
+  }
+
   componentDidMount() {
     let rows = this.generateRowData(this.props.currentUser)
     this.setState({rows: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(rows)})
@@ -30,7 +48,8 @@ class MyProfile extends React.Component {
         {key: "Display Name", val: currentUser.first_name + " " + currentUser.last_name},
         {key: "Username", val: currentUser.username},
         {key: "Email", val: currentUser.decryptedEmail},
-        {key: "Phone Number", val: currentUser.decryptedPhone}
+        {key: "Phone Number", val: currentUser.decryptedPhone},
+        {key: "Delete my account", val: "asdf"}
       ]
     }
 
@@ -54,18 +73,34 @@ class MyProfile extends React.Component {
   renderRow(params) {
     let { key, val } = params
 
-    return(
-      <View style={{flexDirection: 'column', borderColor: colors.slateGrey, borderBottomWidth: 1.0}}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10}}>
-          <Text style={{color: colors.deepBlue}}>
-            { key }
-          </Text>
-          <Text style={{color: colors.deepBlue}}>
-            { val }
-          </Text>
+    if (key === "Delete my account") {
+      return(
+        <TouchableHighlight activeOpacity={0.8} underlayColor={'transparent'}
+          onPress={() => this.deleteAccount()}>
+          <View style={{flexDirection: 'column', borderColor: colors.slateGrey, borderBottomWidth: 1.0}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10}}>
+              <Text style={{color: colors.deepBlue}}>
+                { key }
+              </Text>
+              <EvilIcons name={"trash"} color={colors.carminePink} size={26} />
+            </View>
+          </View>
+        </TouchableHighlight>
+      )
+    } else {
+      return(
+        <View style={{flexDirection: 'column', borderColor: colors.slateGrey, borderBottomWidth: 1.0}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10}}>
+            <Text style={{color: colors.deepBlue}}>
+              { key }
+            </Text>
+            <Text style={{color: colors.deepBlue}}>
+              { val }
+            </Text>
+          </View>
         </View>
-      </View>
-    )
+      )
+    }
   }
 
   render() {
