@@ -49,7 +49,9 @@ class BankOnboardingView extends React.Component {
       city: null,
       state: null,
       dob: null,
-      ssn: null
+      ssn: null,
+      email: this.props.email || null,
+      phone: this.props.phone || null
     };
   }
 

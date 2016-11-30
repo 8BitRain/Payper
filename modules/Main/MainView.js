@@ -70,7 +70,7 @@ class MainView extends React.Component {
     let awaitingCustomerVerification = appFlags.customer_status !== "verified"
     let awatingCustomerRetry = appFlags.customer_status === "retry"
     let awaitingMicrodepositVerification = appFlags.onboarding_state === "awaitingMicrodepositVerification"
-    let awaitingBankAccount =  appFlags.customer_status === "verified" && (appFlags.onboarding_state === "bank" || appFlags.customer_status === "documentSuccess")
+    let awaitingBankAccount = appFlags.customer_status === "verified" && appFlags.onboarding_state === "bank" || appFlags.customer_status === "documentSuccess"
     let awaitingDocumentUpload = appFlags.customer_status === "document" || appFlags.customer_status === "documentFailure"
     let shouldRenderNoticeBar = awaitingCustomerVerification || awaitingMicrodepositVerification || awaitingBankAccount
 
@@ -133,7 +133,6 @@ class MainView extends React.Component {
       if (!firstElementIsNoticeBar) payFlow[k] = noticeBar.concat(payFlow[k])
     }
 
-    // Trigger re-render
     this.setState({
       all: this.EMPTY_DATA_SOURCE.cloneWithRows(payFlow.all),
       inc: this.EMPTY_DATA_SOURCE.cloneWithRows(payFlow.inc),
@@ -199,7 +198,6 @@ class MainView extends React.Component {
       sideMenuSubpageModalVisible: (sp) ? true : false
     })
   }
-
 
   getSideMenuSubpage(sp) {
     switch (sp) {

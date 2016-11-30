@@ -64,7 +64,7 @@ export default class User {
   }
 
   handleAppStateChange(state) {
-    if (state === 'active') this.refresh()
+    if (state === 'active' && firebase.auth().currentUser !== null) this.refresh()
   }
 
   /**
@@ -347,6 +347,8 @@ export default class User {
           if (!res) return
 
           // Update user attributes
+          console.log("\n\n--> users/" + this.uid + " response:\n", res)
+
           updateViaRedux(res)
 
           // If user has a funding source, fetch its bank account info
