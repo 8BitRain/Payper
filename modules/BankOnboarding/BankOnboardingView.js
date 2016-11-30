@@ -49,7 +49,9 @@ class BankOnboardingView extends React.Component {
       city: null,
       state: null,
       dob: null,
-      ssn: null
+      ssn: null,
+      email: this.props.email || null,
+      phone: this.props.phone || null
     };
   }
 
@@ -121,7 +123,7 @@ class BankOnboardingView extends React.Component {
     // If KYC failed due to retry status, cache this onboarding session
     if (customerStatus === "retry") {
       this.state.uid = this.props.currentUser.uid;
-      Async.set('BankOnboardingStateCache', JSON.stringify(this.state));
+      // Async.set('BankOnboardingStateCache', JSON.stringify(this.state));
     } else {
       Async.set('BankOnboardingStateCache', '');
     }

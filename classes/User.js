@@ -64,7 +64,7 @@ export default class User {
   }
 
   handleAppStateChange(state) {
-    if (state === 'active') this.refresh()
+    if (state === 'active' && firebase.auth().currentUser !== null) this.refresh()
   }
 
   /**
@@ -124,10 +124,12 @@ export default class User {
     if (!params.phone) params.phone = this.decryptedPhone
     if (!params.token) params.token = this.token
 
-    for (var k in params) if (!params[k]) {
-      alert("Tried to create a Dwolla customer but " + k + " is undefined")
-      onFailure("undefined " + k)
-      return
+    for (var k in params) {
+      if (!params[k]) {
+        alert("Tried to create a Dwolla customer but " + k + " is undefined")
+        onFailure("undefined " + k)
+        return
+      }
     }
 
     try {
@@ -345,6 +347,8 @@ export default class User {
           if (!res) return
 
           // Update user attributes
+          console.log("\n\n--> users/" + this.uid + " response:\n", res)
+
           updateViaRedux(res)
 
           // If user has a funding source, fetch its bank account info
@@ -360,13 +364,27 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) {
-            res = { in: [], out: [] }
+            updateViaRedux({ paymentFlow: { inc: [], out: [], all: [] } })
           } else {
-            if (res.out) res.out = SetMaster5000.processPayments({ payments: res.out, flow: "outgoing" })
-            if (res.in) res.in = SetMaster5000.processPayments({ payments: res.in, flow: "incoming" })
-          }
 
-          updateViaRedux({ paymentFlow: res })
+            // Tack on 'flow'
+            if (res.out) for (var k of Object.keys(res.out)) res.out[k].flow = "out"
+            if (res.in) for (var k of Object.keys(res.in)) res.in[k].flow = "in"
+
+            // Process payments
+            let inc = (res.in) ? SetMaster5000.processPayments(res.in) : []
+            let out = (res.out) ? SetMaster5000.processPayments(res.out) : []
+            let allPreProcess = Object.assign({}, res.in || {}, res.out || {})
+            let allPostProcess = SetMaster5000.processPayments(allPreProcess)
+
+            let paymentFlow = {
+              inc: inc,
+              out: out,
+              all: allPostProcess
+            }
+
+            updateViaRedux({paymentFlow})
+          }
         }
       },
       {
@@ -406,8 +424,7 @@ export default class User {
         callback: (res) => {
           if (!res) return
           let parsed = SetMaster5000.contactListToArray({ contacts: res })
-          if (!parsed) parsed = []
-          updateViaRedux({ payperContacts: parsed })
+          updateViaRedux({ payperContacts: parsed || [] })
         }
       }
     ]

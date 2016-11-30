@@ -188,7 +188,7 @@ export default class UserOnboardingView extends React.Component {
         { /* Bank onboarding modal */ }
         <Modal animationType={"slide"} visible={this.state.bankOnboardingModalVisible}>
           <View style={{ backgroundColor: colors.richBlack, flex: 1.0, width: dimensions.width }}>
-            <BankOnboardingView {...this.props} displayCloseButton={false} />
+            <BankOnboardingView {...this.props} {...this.state} displayCloseButton={false} />
           </View>
         </Modal>
       </View>

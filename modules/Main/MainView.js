@@ -5,7 +5,6 @@ import { View, TouchableHighlight, ListView, ScrollView, RecyclerViewBackedScrol
 import { VibrancyView } from "react-native-blur"
 import Drawer from 'react-native-drawer'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
-
 import { colors } from '../../globalStyles'
 import { SideMenu, PayCard, NoticeBar, PhotoUploader, MicrodepositOnboarding, TrendingPayments } from '../../components'
 import { MyProfile, BankAccounts, Notifications, Invite, Settings } from '../../components/SideMenuSubpages'
@@ -32,6 +31,12 @@ class MainView extends React.Component {
     }
 
     this.headerlessModalTitles = ["retry"]
+
+    this.alreadyGeneratedNoticeBar = {
+      inc: false,
+      out: false,
+      all: false
+    }
 
     this.state = {
       all: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
@@ -63,15 +68,16 @@ class MainView extends React.Component {
     let noticeBar = []
     let { appFlags } = currentUser
     let awaitingCustomerVerification = appFlags.customer_status !== "verified"
-    let awaitingCutomerRetry = appFlags.customer_status === "retry"
+    let awatingCustomerRetry = appFlags.customer_status === "retry"
     let awaitingMicrodepositVerification = appFlags.onboarding_state === "awaitingMicrodepositVerification"
-    let awaitingBankAccount = appFlags.onboarding_state === "bank" || appFlags.customer_status === "documentSuccess"
+    let awaitingBankAccount = appFlags.customer_status === "verified" && appFlags.onboarding_state === "bank" || appFlags.customer_status === "documentSuccess"
     let awaitingDocumentUpload = appFlags.customer_status === "document" || appFlags.customer_status === "documentFailure"
     let shouldRenderNoticeBar = awaitingCustomerVerification || awaitingMicrodepositVerification || awaitingBankAccount
 
     if (shouldRenderNoticeBar) {
       noticeBar.push({
         type: "priorityContent",
+        name: "NoticeBar",
         reactComponent:
           <NoticeBar
             dwollaCustomerStatus={appFlags.customer_status}
@@ -80,7 +86,7 @@ class MainView extends React.Component {
               if (awaitingDocumentUpload) this.toggleSideMenuSubpage("Document Uploader")
               else if (awaitingMicrodepositVerification) this.toggleSideMenuSubpage("Microdeposit Verification")
               else if (awaitingBankAccount) this.toggleSideMenuSubpage("Bank Accounts")
-              else if (awaitingCutomerRetry) this.toggleSideMenuSubpage("retry")
+              else if (awatingCustomerRetry) this.toggleSideMenuSubpage("retry")
             }} />
       })
     }
@@ -90,8 +96,10 @@ class MainView extends React.Component {
 
   generateEmptyState() {
     let emptyState = []
+
     emptyState.push({
       type: "priorityContent",
+      name: "EmptyState",
       reactComponent:
         <View style={{alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 50}}>
           <Text style={{backgroundColor: 'transparent', textAlign: 'center', fontSize: 18, fontWeight: '400', color: colors.richBlack, width: dims.width - 30}}>
@@ -119,34 +127,16 @@ class MainView extends React.Component {
     let noticeBar = this.generateNoticeBar(currentUser)
     let emptyState = this.generateEmptyState()
 
-    let inc = (payFlow.in) ? payFlow.in : []
-    let out = (payFlow.out) ? payFlow.out : []
-    let all = inc.concat(out)
-
-    let filteredPayFlows = {
-      inc: inc,
-      out: out,
-      all: all
+    for (var k of Object.keys(payFlow)) {
+      if (payFlow[k].length === 0) payFlow[k] = emptyState
+      let firstElementIsNoticeBar = payFlow[k][0].name === "NoticeBar"
+      if (!firstElementIsNoticeBar) payFlow[k] = noticeBar.concat(payFlow[k])
     }
 
-    // Render empty state if payFlow is empty
-    for (var k of Object.keys(filteredPayFlows)) {
-      let curr = filteredPayFlows[k]
-      if (curr.length === 0) filteredPayFlows[k] = emptyState.concat(curr)
-    }
-
-    // Render noticeBar
-    if (noticeBar.length > 0) {
-      filteredPayFlows.inc = noticeBar.concat(filteredPayFlows.inc)
-      filteredPayFlows.out = noticeBar.concat(filteredPayFlows.out)
-      filteredPayFlows.all = noticeBar.concat(filteredPayFlows.all)
-    }
-
-    // Trigger re-render
     this.setState({
-      all: this.EMPTY_DATA_SOURCE.cloneWithRows(filteredPayFlows.all),
-      inc: this.EMPTY_DATA_SOURCE.cloneWithRows(filteredPayFlows.inc),
-      out: this.EMPTY_DATA_SOURCE.cloneWithRows(filteredPayFlows.out)
+      all: this.EMPTY_DATA_SOURCE.cloneWithRows(payFlow.all),
+      inc: this.EMPTY_DATA_SOURCE.cloneWithRows(payFlow.inc),
+      out: this.EMPTY_DATA_SOURCE.cloneWithRows(payFlow.out)
     })
   }
 
@@ -208,7 +198,6 @@ class MainView extends React.Component {
       sideMenuSubpageModalVisible: (sp) ? true : false
     })
   }
-
 
   getSideMenuSubpage(sp) {
     switch (sp) {
