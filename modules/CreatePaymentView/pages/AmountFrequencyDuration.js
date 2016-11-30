@@ -109,13 +109,14 @@ export default class AmountFrequencyDuration extends React.Component {
   }
 
   validateAmount(input) {
-    let newState = {},
-        valid = input >= 1 && input <= 3000;
+    let newState = {}
+    let regex = /^[1-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/
+    let valid = regex.test(input) && input >= 1 && input <= 3000
 
-    newState.amount = input;
-    newState.submitText = (valid) ? "Next" : "Amount must be between $1 and $3000";
+    newState.amount = input
+    newState.submitText = (valid) ? "Next" : "Amount must be between $1 and $3000"
 
-    return newState;
+    return newState
   }
 
   validateFrequency(input) {
@@ -134,13 +135,13 @@ export default class AmountFrequencyDuration extends React.Component {
     let newState = {},
         amountIsValid = this.state.amount > 0 && this.state.amount < 1000,
         frequencyIsValid = this.state.frequency === "MONTHLY" || this.state.frequency === "WEEKLY",
-        durationIsValid = input > 0 && input < 1000;
+        durationIsValid = input > 0 && input < 1000 && input.indexOf('.') === -1;
 
     newState.duration = input;
 
     if (!amountIsValid) newState.submitText = "Amount must be between $1 and $3000";
     else if (!frequencyIsValid) newState.submitText = "Frequency must be per 'month' or 'week'";
-    else if (!durationIsValid) newState.submitText = "Duration must be between 1 and 999";
+    else if (!durationIsValid) newState.submitText = "Duration must be a whole number between 1 and 999";
     else newState.submitText = "Continue";
 
     return newState;
@@ -260,7 +261,7 @@ export default class AmountFrequencyDuration extends React.Component {
             onPress={() => this.handleSubmit()}>
               { /* Continue button */ }
               <Animated.View style={{ height: 60, backgroundColor: this.state.submitBackgroundColor, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
+                <Text style={{ fontFamily: 'Roboto', fontSize: 16, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center', paddingLeft: 15, paddingRight: 15 }}>
                   { this.state.submitText }
                 </Text>
               </Animated.View>

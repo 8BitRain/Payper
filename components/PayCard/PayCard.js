@@ -77,6 +77,10 @@ class PayCard extends React.Component {
     let initialsBuffer = name.split(" ").map((name) => name.charAt(0))
     let initials = initialsBuffer.join("")
 
+
+    amount = parseFloat(amount)
+    if (amount.toString().indexOf('.') >= 0) amount = amount.toFixed(2)
+
     return(
       <TouchableHighlight
         activeOpacity={0.8}

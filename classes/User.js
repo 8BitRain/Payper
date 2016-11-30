@@ -70,16 +70,12 @@ export default class User {
   /**
     *   Delete this user
   **/
-  delete(cb) {
+  delete() {
     const _this = this
-
-    // Delete user from Firebase auth
+    Async.set('user', '')
     let user = firebase.auth().currentUser
     user.delete().then(
     () => {
-      cb(true)
-
-      // Delete user data via Lambda endpoint
       try {
         fetch(baseURL + "user/delete", {method: "POST", body: JSON.stringify({ token: _this.token, uid: _this.uid })})
         .then((response) => response.json())
@@ -98,7 +94,6 @@ export default class User {
     },
     (err) => {
       console.log("Error deleting user from Firebase auth:", err)
-      cb(false)
     })
   }
 
@@ -424,8 +419,7 @@ export default class User {
         callback: (res) => {
           if (!res) return
           let parsed = SetMaster5000.contactListToArray({ contacts: res })
-          if (!parsed) parsed = []
-          updateViaRedux({ payperContacts: parsed })
+          updateViaRedux({ payperContacts: parsed || [] })
         }
       }
     ]

@@ -102,8 +102,6 @@ class CreatePaymentView extends React.Component {
         options.paymentInfo.phoneNumber = options.user.phone;
       }
 
-      console.log("inviteViaPayment with params:", options.paymentInfo)
-
       Lambda.inviteViaPayment(options.paymentInfo);
     }
   }
