@@ -109,13 +109,14 @@ export default class AmountFrequencyDuration extends React.Component {
   }
 
   validateAmount(input) {
-    let newState = {},
-        valid = input >= 1 && input <= 3000;
+    let newState = {}
+    let regex = /^[1-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/
+    let valid = regex.test(input) && input >= 1 && input <= 3000
 
-    newState.amount = input;
-    newState.submitText = (valid) ? "Next" : "Amount must be between $1 and $3000";
+    newState.amount = input
+    newState.submitText = (valid) ? "Next" : "Amount must be between $1 and $3000"
 
-    return newState;
+    return newState
   }
 
   validateFrequency(input) {

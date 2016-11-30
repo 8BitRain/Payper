@@ -424,8 +424,7 @@ export default class User {
         callback: (res) => {
           if (!res) return
           let parsed = SetMaster5000.contactListToArray({ contacts: res })
-          if (!parsed) parsed = []
-          updateViaRedux({ payperContacts: parsed })
+          updateViaRedux({ payperContacts: parsed || [] })
         }
       }
     ]
