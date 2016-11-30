@@ -84,7 +84,8 @@ class paydetails extends React.Component {
         token: token,
         payment_id: pid,
         type: paymentType,
-        status: status
+        status: status,
+        invite: status === "pendingInvite"
       })
 
       Actions.pop()
