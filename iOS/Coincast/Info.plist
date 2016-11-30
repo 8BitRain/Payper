@@ -30,9 +30,9 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>2</string>
+	<string>4</string>
 	<key>CodePushDeploymentKey</key>
-	<string>AarYhu5gwn2uwqhzXiLJ3Rglm9MBVkksGQK3-</string>
+	<string>$(CODEPUSH_KEY)</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
