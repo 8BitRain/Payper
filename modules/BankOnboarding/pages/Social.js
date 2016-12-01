@@ -12,8 +12,9 @@ export default class Social extends React.Component {
     super(props);
     this.state = {
       index: 0,
-      submitText: "Continue",
-      input: ""
+      submitText: "Submit",
+      input: "",
+      submittable: true
     };
   }
 
@@ -26,17 +27,18 @@ export default class Social extends React.Component {
   }
 
   handleSubmit() {
+    if (!this.state.submittable) return
+
     let isValid = (this.props.requireAllDigits) ? this.state.input.length === 9 : this.state.input.length === 4;
     if (!isValid) {
-      this.setState({
-        submitText: (this.props.requireAllDigits) ? "Enter all 9 digits" : "Enter all 4 digits"
-      });
+      this.setState({ submitText: (this.props.requireAllDigits) ? "Enter all 9 digits" : "Enter all 4 digits" });
       return;
     }
 
-    this.setState({ submitText: "Just a moment..." });
+    this.setState({ submitText: "Just a moment...", submittable: false });
+
     this.props.induceState({ ssn: this.state.input }, (success) => {
-      this.setState({ submitText: "Continue" });
+      this.setState({ submitText: "Submit", submittable: true });
     });
 
     // Pagination is handled in BankOnboardingView.createDwollaCustomer()'s
@@ -61,7 +63,7 @@ export default class Social extends React.Component {
         <View style={[styles.textInputWrap, {paddingTop: 8}]}>
           <TextInput
             ref={"ssnInput"}
-            placeholder="e.g. 1234"
+            placeholder={"e.g. 1234"}
             placeholderTextColor={colors.deepBlue}
             style={styles.textInput}
             maxLength={(this.props.requireAllDigits) ? 9 : 4}
