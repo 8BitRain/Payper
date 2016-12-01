@@ -87,7 +87,6 @@ export default class Coincast extends React.Component {
 
   componentWillMount() {
     this.client = new Client('f8be20d13dd76c17ff352c44d395270a');
-    Rain
     let clientId = DeviceInfo.getUniqueID();
     CodePush.sync();
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');
