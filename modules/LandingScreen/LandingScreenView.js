@@ -44,7 +44,7 @@ export default class LandingScreenView extends React.Component {
   }
 
   toggleLoginModal() {
-    CodePush.sync();
+    // CodePush.sync();
     this.setState({ loginModalVisible: !this.state.loginModalVisible });
   }
 
