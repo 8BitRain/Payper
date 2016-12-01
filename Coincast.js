@@ -12,6 +12,7 @@ import {
 } from 'react-native-google-analytics';
 import DeviceInfo from 'react-native-device-info';
 import CodePush from 'react-native-code-push';
+import { Client } from 'bugsnag-react-native';
 import * as Async from './helpers/Async';
 
 // Get build and version numbers
@@ -81,14 +82,14 @@ export default class Coincast extends React.Component {
   handleAppStateChange(state) {
     if (state === 'inactive') return;
     else if (state === 'background') Mixpanel.track('Session Duration');
-    else if (state === 'active') {
-      Mixpanel.timeEvent('Session Duration');
-      // CodePush.sync({ updateDialog: false, installMode: CodePush.InstallMode.IMMEDIATE });
-    }
+    else if (state === 'active') Mixpanel.timeEvent('Session Duration');
   }
 
   componentWillMount() {
+    this.client = new Client('f8be20d13dd76c17ff352c44d395270a');
+    Rain
     let clientId = DeviceInfo.getUniqueID();
+    CodePush.sync();
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');
     Mixpanel.timeEvent('Session Duration');
     AppState.addEventListener('change', this.handleAppStateChange);
