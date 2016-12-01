@@ -92,7 +92,7 @@ export default class Coincast extends React.Component {
 
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');
     Mixpanel.timeEvent('Session Duration');
-
+    
     AppState.addEventListener('change', this.handleAppStateChange);
      ga = new Analytics('UA-87368863-1', clientId, 1, DeviceInfo.getUserAgent());
      var screenView = new GAHits.ScreenView(
