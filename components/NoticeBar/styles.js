@@ -24,7 +24,8 @@ const styles = {
   text: {
     fontSize: 18,
     color: colors.snowWhite,
-    padding: 2
+    padding: 2,
+    lineHeight: 18 * 1.40
   }
 }
 

@@ -94,7 +94,7 @@ class MainView extends React.Component {
       type: "priorityContent",
       reactComponent:
         <View style={{alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 50}}>
-          <Text style={{backgroundColor: 'transparent', textAlign: 'center', fontSize: 18, fontWeight: '400', color: colors.richBlack, width: dims.width - 30}}>
+          <Text style={{backgroundColor: 'transparent', textAlign: 'center', lineHeight: 18 * 1.40, fontSize: 18, fontWeight: '400', color: colors.richBlack, width: dims.width - 30}}>
              {"When you set up a payment series, it will show up here."}
           </Text>
 
@@ -103,7 +103,7 @@ class MainView extends React.Component {
             underlayColor={'transparent'}
             onPress={() => {this.toggleSideMenuSubpage("Trending Payments")}}>
             <View style={{height: 60, backgroundColor: colors.accent, borderRadius: 4, marginTop: 15, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dims.width / 2}}>
-              <Text style={{ fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
+              <Text style={{ fontSize: 18, lineHeight: 18 * 1.40, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
                 {"Explore Trending Payments"}
               </Text>
             </View>
@@ -258,7 +258,7 @@ class MainView extends React.Component {
               underlayColor={'transparent'}
               onPress={() => this.toggleFilterMenu()}>
               <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
-                <Text style={{color: colors.lightGrey, fontSize: 17, backgroundColor: 'transparent'}}>
+                <Text style={{color: colors.lightGrey, fontSize: 18, backgroundColor: 'transparent'}}>
                   {this.state.activeFilter + " Payments"}
                 </Text>
 

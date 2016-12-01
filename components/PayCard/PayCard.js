@@ -92,8 +92,8 @@ class PayCard extends React.Component {
                 <View style={styles.imageWrap}>
                   {(pic)
                     ? <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: pic}} />
-                    : <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
+                    : <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent}}>
+                        <Text style={{color: colors.snowWhite, fontSize: 20, fontFamily: "Montserrat", fontWeight: '800'}}>
                           {initials}
                         </Text>
                       </View> }
@@ -102,12 +102,12 @@ class PayCard extends React.Component {
 
               { /* Name and payment purpose */ }
               <View style={{justifyContent: 'center', paddingLeft: 6}}>
-                <Text style={{color: colors.deepBlue, fontSize: 22, fontWeight: '400'}}>
+                <Text style={{color: colors.deepBlue, fontFamily: "Montserrat", fontSize: 22, fontWeight: '400'}}>
                   {name}
                 </Text>
                 <View style={{flexDirection: 'row'}}>
-                  <EvilIcons name={"pencil"} size={22} color={colors.slateGrey} />
-                  <Text style={{color: colors.slateGrey, fontSize: 14}}>
+                  <EvilIcons name={"pencil"} size={22} color={colors.deepBlue} />
+                  <Text style={{color: colors.deepBlue, fontFamily: "Montserrat", fontSize: 14}}>
                     {purpose}
                   </Text>
                 </View>
@@ -132,11 +132,11 @@ class PayCard extends React.Component {
               <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-end'}}>
                 <View style={{flexDirection: 'row'}}>
                   <View style={styles.freqAndNextPaymentWrap}>
-                    <EvilIcons name={"calendar"} size={22} color={colors.maastrichtBlue} />
+                    <EvilIcons name={"calendar"} size={22} color={colors.deepBlue} />
                     <Text style={[styles.freqAndNextPaymentText, {paddingLeft: 3}]}>
                       {frequency}
                     </Text>
-                    <Entypo name={"hour-glass"} size={13} color={colors.maastrichtBlue} style={{paddingLeft: 3, paddingTop: 1}} />
+                    <Entypo name={"hour-glass"} size={13} color={colors.deepBlue} style={{paddingLeft: 3, paddingTop: 1}} />
                     <Text style={[styles.freqAndNextPaymentText, {paddingLeft: 3}]}>
                       {next}
                     </Text>
@@ -195,7 +195,7 @@ const styles = {
     height: imageDims.height,
     borderRadius: imageDims.width / 2,
     shadowColor: colors.slateGrey,
-    shadowOpacity: 1.0,
+    shadowOpacity: 0.0,
     shadowRadius: 1,
     shadowOffset: {
       height: 0,
@@ -205,6 +205,7 @@ const styles = {
   amountText: {
     color: colors.alertGreen,
     fontSize: 20,
+    fontFamily: "Montserrat",
     fontWeight: '400'
   },
   freqAndNextPaymentWrap: {
@@ -213,7 +214,8 @@ const styles = {
     paddingBottom: 4
   },
   freqAndNextPaymentText: {
-    color: colors.maastrichtBlue,
+    color: colors.deepBlue,
+    fontFamily: "Montserrat",
     fontSize: 14
   },
   progbarBackground: {
