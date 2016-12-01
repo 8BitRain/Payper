@@ -88,10 +88,10 @@ export default class Coincast extends React.Component {
   componentWillMount() {
     this.client = new Client('f8be20d13dd76c17ff352c44d395270a');
     let clientId = DeviceInfo.getUniqueID();
+    RainFlameTame
     CodePush.sync();
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');
     Mixpanel.timeEvent('Session Duration');
-
     AppState.addEventListener('change', this.handleAppStateChange);
      ga = new Analytics('UA-87368863-1', clientId, 1, DeviceInfo.getUserAgent());
      var screenView = new GAHits.ScreenView(
@@ -100,7 +100,6 @@ export default class Coincast extends React.Component {
       DeviceInfo.getReadableVersion(),
       DeviceInfo.getBundleId()
     );
-
     ga.send(screenView);
   }
 
@@ -108,21 +107,24 @@ export default class Coincast extends React.Component {
     AppState.removeEventListener('change', this.handleAppStateChange);
   }
 
+
+
   render() {
     return (
       <Router key={Math.random()} createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 
-            <Scene initial
-              component={SplashViewContainer}
-              key="SplashViewContainer"
-              type="replace"
-              panHandlers={null} />
 
             <Scene
               component={MainView}
               key="MainView"
+              type="replace"
+              panHandlers={null} />
+
+            <Scene initial
+              component={SplashViewContainer}
+              key="SplashViewContainer"
               type="replace"
               panHandlers={null} />
 
