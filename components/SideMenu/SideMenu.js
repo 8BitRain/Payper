@@ -108,6 +108,19 @@ class SideMenu extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    // 
+    if (nextProps.currentUser.appFlags.numUnseenNotifications !== this.props.currentUser.appFlags.numUnseenNotifications) {
+      for (var o in this.state.options) {
+        let curr = this.state.options[o]
+        if (curr.title === "Notifications") {
+          let { numUnseenNotifications } = nextProps.currentUser.appFlags
+          curr.numericIndicator = numUnseenNotifications
+        }
+      }
+    }
+  }
+
   render() {
     let { toggleSideMenuSubpage } = this.props
     let { first_name, last_name, username, profile_pic } = this.props.currentUser
