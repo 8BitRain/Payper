@@ -33,6 +33,11 @@
 		07E535621D906D4900209808 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 07E535611D906D4900209808 /* libz.tbd */; };
 		07ECEB671DEF400F0037EF39 /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07ECEB651DEF400F0037EF39 /* Montserrat-Regular.ttf */; };
 		07ECEB681DEF400F0037EF39 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07ECEB661DEF400F0037EF39 /* Montserrat-Bold.ttf */; };
+		07ECEBAC1DF07CC90037EF39 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07ECEBAB1DF07CC90037EF39 /* OpenSans-Regular.ttf */; };
+		07ECEBC41DF07D050037EF39 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07ECEBC31DF07D050037EF39 /* OpenSans-Bold.ttf */; };
+		07ECEBC81DF07D340037EF39 /* RobotoSlab-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07ECEBC51DF07D340037EF39 /* RobotoSlab-Bold.ttf */; };
+		07ECEBC91DF07D340037EF39 /* RobotoSlab-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07ECEBC61DF07D340037EF39 /* RobotoSlab-Light.ttf */; };
+		07ECEBCA1DF07D340037EF39 /* RobotoSlab-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07ECEBC71DF07D340037EF39 /* RobotoSlab-Regular.ttf */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
@@ -261,6 +266,11 @@
 		07E535611D906D4900209808 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		07ECEB651DEF400F0037EF39 /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Regular.ttf"; path = "../../../Downloads/Montserrat (1)/Montserrat-Regular.ttf"; sourceTree = "<group>"; };
 		07ECEB661DEF400F0037EF39 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Bold.ttf"; path = "../../../Downloads/Montserrat (1)/Montserrat-Bold.ttf"; sourceTree = "<group>"; };
+		07ECEBAB1DF07CC90037EF39 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Regular.ttf"; path = "../../../Downloads/Open_Sans/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		07ECEBC31DF07D050037EF39 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Bold.ttf"; path = "../../../Downloads/Open_Sans/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		07ECEBC51DF07D340037EF39 /* RobotoSlab-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "RobotoSlab-Bold.ttf"; path = "../../../Downloads/Roboto_Slab/RobotoSlab-Bold.ttf"; sourceTree = "<group>"; };
+		07ECEBC61DF07D340037EF39 /* RobotoSlab-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "RobotoSlab-Light.ttf"; path = "../../../Downloads/Roboto_Slab/RobotoSlab-Light.ttf"; sourceTree = "<group>"; };
+		07ECEBC71DF07D340037EF39 /* RobotoSlab-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "RobotoSlab-Regular.ttf"; path = "../../../Downloads/Roboto_Slab/RobotoSlab-Regular.ttf"; sourceTree = "<group>"; };
 		07FF7BBB1D244F850012701C /* myicon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = myicon.ttf; path = ../myicon.ttf; sourceTree = "<group>"; };
 		09C9369473164F0088059C2E /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		126DC07690FA414E8D852666 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
@@ -620,6 +630,11 @@
 				232A65CD1D03D74E0084EA8E /* Roboto-Light.ttf */,
 				232A65CE1D03D74E0084EA8E /* Roboto-Medium.ttf */,
 				232A65CF1D03D74E0084EA8E /* Roboto-Thin.ttf */,
+				07ECEBAB1DF07CC90037EF39 /* OpenSans-Regular.ttf */,
+				07ECEBC31DF07D050037EF39 /* OpenSans-Bold.ttf */,
+				07ECEBC51DF07D340037EF39 /* RobotoSlab-Bold.ttf */,
+				07ECEBC61DF07D340037EF39 /* RobotoSlab-Light.ttf */,
+				07ECEBC71DF07D340037EF39 /* RobotoSlab-Regular.ttf */,
 				071349001D90529000B3B998 /* Fabric.framework */,
 				071349011D90529000B3B998 /* Crashlytics.framework */,
 				13B07FAE1A68108700A75B9A /* Coincast */,
@@ -1031,6 +1046,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07ECEBCA1DF07D340037EF39 /* RobotoSlab-Regular.ttf in Resources */,
 				232A65D21D03D74E0084EA8E /* Roboto-Medium.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				232A65D31D03D74E0084EA8E /* Roboto-Thin.ttf in Resources */,
@@ -1040,11 +1056,15 @@
 				232A65D01D03D74E0084EA8E /* Roboto-Bold.ttf in Resources */,
 				638E12F54994401DB32D7109 /* Entypo.ttf in Resources */,
 				44192408B916443E8CA59F4D /* EvilIcons.ttf in Resources */,
+				07ECEBC81DF07D340037EF39 /* RobotoSlab-Bold.ttf in Resources */,
 				DE5D275BD2D74B9DA0A67C7E /* FontAwesome.ttf in Resources */,
 				CE878DF8EF9242C0BD060B2A /* Foundation.ttf in Resources */,
 				9B887B6147934E829937CAE2 /* Ionicons.ttf in Resources */,
 				07ECEB681DEF400F0037EF39 /* Montserrat-Bold.ttf in Resources */,
 				B3761CC95BD645DE9BF9D6AD /* MaterialIcons.ttf in Resources */,
+				07ECEBC41DF07D050037EF39 /* OpenSans-Bold.ttf in Resources */,
+				07ECEBC91DF07D340037EF39 /* RobotoSlab-Light.ttf in Resources */,
+				07ECEBAC1DF07CC90037EF39 /* OpenSans-Regular.ttf in Resources */,
 				863BB52B66654FAAA09D1450 /* Octicons.ttf in Resources */,
 				208812DB690043A981DFF18A /* Zocial.ttf in Resources */,
 			);

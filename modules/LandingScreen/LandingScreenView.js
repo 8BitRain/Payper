@@ -114,10 +114,10 @@ export default class LandingScreenView extends React.Component {
             <Image source={require('../../assets/images/logo.png')} style={{height: dims.width * 0.22, width: (dims.width * 0.22) * this.logoAspectRatio}} />
 
             { /* Welcome message */ }
-            <Text style={{fontFamily: 'Montserrat', fontWeight: '500', fontSize: 26, color: colors.accent, width: dims.width - 80, marginTop: 20}}>
+            <Text style={{fontFamily: 'RobotoSlab-Regular', fontWeight: '500', fontSize: 26, lineHeight: 26 * 1.20, color: colors.accent, width: dims.width - 80, marginTop: 20}}>
               {"Welcome to Payper,"}
             </Text>
-            <Text style={{fontSize: 18, color: colors.accent, width: dims.width - 80}}>
+            <Text style={{fontFamily: "OpenSans", fontSize: 18, lineHeight: 18 * 1.20, color: colors.accent, width: dims.width - 80}}>
               {"the app that makes recurring payments easy."}
             </Text>
           </View>
@@ -146,7 +146,7 @@ export default class LandingScreenView extends React.Component {
             { /* "Sign up with email" button */ }
             <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={() => Actions.UserOnboardingViewContainer()}>
               <View style={{width: dims.width - 60, height: 45, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent, borderRadius: 4, marginTop: 6}}>
-                <Text style={{fontSize: 16, color: colors.snowWhite}}>
+                <Text style={{fontFamily: "OpenSans",fontSize: 16, color: colors.snowWhite}}>
                   {"Sign up with email"}
                 </Text>
               </View>
@@ -155,7 +155,7 @@ export default class LandingScreenView extends React.Component {
             { /* "Sign in with email" button */ }
             <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={this.toggleLoginModal.bind(this)}>
               <View style={{width: dims.width - 60, height: 45, justifyContent: 'flex-start', alignItems: 'center', borderRadius: 4, marginTop: 6, paddingTop: 6}}>
-                <Text style={{fontSize: 16, color: colors.deepBlue}}>
+                <Text style={{fontFamily: "OpenSans", fontSize: 16, color: colors.deepBlue}}>
                   {"Sign in with email"}
                 </Text>
               </View>
@@ -174,7 +174,7 @@ export default class LandingScreenView extends React.Component {
               else if (url === 'https://www.getpayper.io/privacy')
                 return 'Privacy Policy';
             }}>
-            <Text style={{ fontSize: 14, color: colors.deepBlue, fontWeight: '100' }}>
+            <Text style={{ fontFamily: "OpenSans", fontSize: 14, lineHeight: 14 * 1.20, color: colors.deepBlue, fontWeight: '100' }}>
               { "By creating an account or logging in, you agree to Payper's https://www.getpayper.io/terms and https://www.getpayper.io/privacy." }
             </Text>
           </Hyperlink>

@@ -23,6 +23,8 @@ const styles = {
   },
   text: {
     fontSize: 18,
+    fontFamily: "OpenSans",
+    lineHeight: 18 * 1.20,
     color: colors.snowWhite,
     padding: 2,
     lineHeight: 18 * 1.40

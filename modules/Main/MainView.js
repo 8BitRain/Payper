@@ -258,7 +258,7 @@ class MainView extends React.Component {
               underlayColor={'transparent'}
               onPress={() => this.toggleFilterMenu()}>
               <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
-                <Text style={{color: colors.lightGrey, fontSize: 18, backgroundColor: 'transparent'}}>
+                <Text style={{color: colors.lightGrey, fontFamily: "OpenSans", fontSize: 18, backgroundColor: 'transparent'}}>
                   {this.state.activeFilter + " Payments"}
                 </Text>
 

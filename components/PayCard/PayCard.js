@@ -93,7 +93,7 @@ class PayCard extends React.Component {
                   {(pic)
                     ? <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: pic}} />
                     : <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent}}>
-                        <Text style={{color: colors.snowWhite, fontSize: 20, fontFamily: "Montserrat", fontWeight: '800'}}>
+                        <Text style={{color: colors.snowWhite, fontSize: 20, fontFamily: "RobotoSlab-Regular", fontWeight: '800'}}>
                           {initials}
                         </Text>
                       </View> }
@@ -102,12 +102,12 @@ class PayCard extends React.Component {
 
               { /* Name and payment purpose */ }
               <View style={{justifyContent: 'center', paddingLeft: 6}}>
-                <Text style={{color: colors.deepBlue, fontFamily: "Montserrat", fontSize: 22, fontWeight: '400'}}>
+                <Text style={{color: colors.deepBlue, fontFamily: "RobotoSlab-Regular", fontSize: 22, fontWeight: '400'}}>
                   {name}
                 </Text>
                 <View style={{flexDirection: 'row'}}>
                   <EvilIcons name={"pencil"} size={22} color={colors.deepBlue} />
-                  <Text style={{color: colors.deepBlue, fontFamily: "Montserrat", fontSize: 14}}>
+                  <Text style={{color: colors.deepBlue, fontFamily: "OpenSans", fontSize: 14}}>
                     {purpose}
                   </Text>
                 </View>
@@ -205,7 +205,7 @@ const styles = {
   amountText: {
     color: colors.alertGreen,
     fontSize: 20,
-    fontFamily: "Montserrat",
+    fontFamily: "OpenSans",
     fontWeight: '400'
   },
   freqAndNextPaymentWrap: {
@@ -215,7 +215,7 @@ const styles = {
   },
   freqAndNextPaymentText: {
     color: colors.deepBlue,
-    fontFamily: "Montserrat",
+    fontFamily: "OpenSans",
     fontSize: 14
   },
   progbarBackground: {

@@ -59,7 +59,7 @@ export default class Name extends React.Component {
     return (
       <View style={styles.wrap}>
         <View>
-          <Text style={{ fontFamily: 'Montserrat', fontSize: 24, fontWeight: '400', color: colors.deepBlue, textAlign: 'center' }}>
+          <Text style={{ fontFamily: 'RobotoSlab-Regular', fontSize: 24,lineHeight: 24 * 1.20, fontWeight: '400', color: colors.deepBlue, textAlign: 'center' }}>
             { "What's your first and last name?" }
           </Text>
         </View>
@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     marginRight: 6,
     backgroundColor: 'rgba(0, 0, 0, 0.15)',
     textAlign: 'center',
+    fontFamily: "OpenSans",
     color: colors.deepBlue
   }
 });
