@@ -37,7 +37,7 @@ class StickyView extends React.Component {
 
   render() {
     return(
-      <Animated.View style={{ position: 'absolute', left: 0, right: 0, bottom: this.offsetBottom }}>
+      <Animated.View style={[this.props.style, { position: 'absolute', left: 0, right: 0, bottom: this.offsetBottom }]}>
         { this.props.children }
       </Animated.View>
     )

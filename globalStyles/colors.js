@@ -21,8 +21,10 @@ const colors = {
   deepBlue: "#000a14",
   gradientGreen: "#23CE6B",
 
+  // Opaque colors
   snowWhiteOpaque: "rgba(255, 251, 252, 0.5)",
   accentOpaque: "rgba(0, 207, 179, 0.5)",
+
   //old colors
   obisdian: "#08090A",
   white: "#fefeff",

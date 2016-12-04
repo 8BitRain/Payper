@@ -17,7 +17,7 @@ import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboarding
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView'
 import Phone from './modules/UserOnboarding/pages/Phone'
 import { PayDetails } from './components/PayCard'
-import { MainView } from './modules'
+import { MainView, OnboardingView } from './modules'
 
 /*
 // Get build and version numbers
@@ -106,12 +106,6 @@ export default class Coincast extends React.Component {
           <Scene key="root" hideNavBar hideTabBar>
 
             <Scene
-              component={MainView}
-              key="MainView"
-              type="replace"
-              panHandlers={null} />
-
-            <Scene initial
               component={SplashViewContainer}
               key="SplashViewContainer"
               type="replace"
@@ -126,6 +120,12 @@ export default class Coincast extends React.Component {
             <Scene
               component={LandingScreenViewContainer}
               key="LandingScreenViewContainer"
+              type="replace"
+              panHandlers={null} />
+
+            <Scene
+              component={MainView}
+              key="MainView"
               type="replace"
               panHandlers={null} />
 
@@ -155,6 +155,11 @@ export default class Coincast extends React.Component {
             <Scene
               component={PayDetails}
               key="PaymentDetails"
+              panHandlers={null} />
+
+            <Scene initial
+              component={OnboardingView}
+              key="OnboardingView"
               panHandlers={null} />
 
           </Scene>
