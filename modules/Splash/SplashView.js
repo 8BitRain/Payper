@@ -1,24 +1,25 @@
 // Dependencies
-import React from 'react';
-import { View, Text, Image, NetInfo, TouchableHighlight, Animated, Easing, Dimensions, StatusBar } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import React from 'react'
+import { View, Text, Image, NetInfo, TouchableHighlight, Animated, Easing, Dimensions, StatusBar } from 'react-native'
+import { Actions } from 'react-native-router-flux'
 import { signin } from '../../auth'
-import Mixpanel from 'react-native-mixpanel';
-import Entypo from 'react-native-vector-icons/Entypo';
-var FBLoginManager = require('NativeModules').FBLoginManager;
+import Mixpanel from 'react-native-mixpanel'
+import Entypo from 'react-native-vector-icons/Entypo'
+import CodePush from 'react-native-code-push'
+var FBLoginManager = require('NativeModules').FBLoginManager
 
 // Helpers
-import * as Async from '../../helpers/Async';
+import * as Async from '../../helpers/Async'
 
 // Custom styles
 import { colors } from '../../globalStyles'
-const dimensions = Dimensions.get('window');
+const dimensions = Dimensions.get('window')
 
 class SplashView extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.refreshIconInterpolator = new Animated.Value(0);
+    this.refreshIconInterpolator = new Animated.Value(0)
 
     this.state = {
       connected: true,
@@ -27,28 +28,28 @@ class SplashView extends React.Component {
         inputRange: [0, 100],
         outputRange: ['0deg', '360deg']
       })
-    };
+    }
   }
 
   componentWillMount() {
-    const _this = this;
-    FBLoginManager.logOut();
-    Mixpanel.timeEvent('Load Time: Splash View');
+    const _this = this
+    FBLoginManager.logOut()
+    Mixpanel.timeEvent('Load Time: Splash View')
 
     this.ConnectivityListener = NetInfo.isConnected.addEventListener('change', (isConnected) => {
       if (_this.state.reconnecting && !_this.state.connected)
-        clearInterval(_this.rotationInterval);
+        clearInterval(_this.rotationInterval)
 
       if (isConnected)
-        _this._onConnect();
+        _this._onConnect()
       else
-        _this._onDisconnect();
-    });
+        _this._onDisconnect()
+    })
   }
 
   componentWillUnmount() {
-    Mixpanel.track('Load Time: Splash View');
-    this.ConnectivityListener.remove();
+    Mixpanel.track('Load Time: Splash View')
+    this.ConnectivityListener.remove()
   }
 
   _rotateRefreshIcon() {
@@ -57,31 +58,33 @@ class SplashView extends React.Component {
       duration: 900,
       easing: Easing.elastic(1)
     }).start(() => {
-      this.refreshIconInterpolator.setValue(0);
-    });
+      this.refreshIconInterpolator.setValue(0)
+    })
   }
 
   _handleSignInSuccess() {
-    console.log("%cSigned in: true", "color:green;font-weight:900;");
-    Actions.MainViewContainer();
+    console.log("%cSigned in: true", "color:greenfont-weight:900")
+    Actions.MainViewContainer()
   }
 
   _handleSignInFailure() {
-    console.log("%cSigned in: false", "color:red;font-weight:900;");
-    Actions.LandingScreenViewContainer();
-    FBLoginManager.logOut();
+    console.log("%cSigned in: false", "color:redfont-weight:900")
+    Actions.LandingScreenViewContainer()
+    FBLoginManager.logOut()
   }
 
   _attemptReconnect() {
-    if (this.state.reconnecting) return;
-    this.setState({ reconnecting: true, reconnectMessage: "Attempting connection..." });
-    this._rotateRefreshIcon();
-    this.rotateInterval = setInterval(() => this._rotateRefreshIcon(), 900);
+    if (this.state.reconnecting) return
+    this.setState({ reconnecting: true, reconnectMessage: "Attempting connection..." })
+    this._rotateRefreshIcon()
+    this.rotateInterval = setInterval(() => this._rotateRefreshIcon(), 900)
   }
 
   _onConnect() {
-    const _this = this;
-    this.setState({ connected: true });
+    const _this = this
+    this.setState({ connected: true })
+
+    CodePush.sync()
 
     // Check beta status
     Async.get('betaStatus', (val) => {
@@ -107,14 +110,14 @@ class SplashView extends React.Component {
           }
         })
       } else {
-        Actions.BetaLandingScreenView();
+        Actions.BetaLandingScreenView()
       }
     })
   }
 
   _onDisconnect() {
-    Mixpanel.track('Connection Failed');
-    this.setState({ connected: false });
+    Mixpanel.track('Connection Failed')
+    this.setState({ connected: false })
   }
 
   render() {
@@ -150,8 +153,8 @@ class SplashView extends React.Component {
                 </TouchableHighlight>
               </View> }
       </View>
-    );
+    )
   }
-};
+}
 
-export default SplashView;
+export default SplashView

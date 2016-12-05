@@ -1,59 +1,42 @@
-// Dependencies
-import React from 'react';
+import React from 'react'
 import firebase from 'firebase'
-import { AppState } from 'react-native';
-import { Scene, Reducer, Router, Modal } from 'react-native-router-flux';
-import Mixpanel from 'react-native-mixpanel';
+import Mixpanel from 'react-native-mixpanel'
+import Error from './components/Error'
+import DeviceInfo from 'react-native-device-info'
+import * as Async from './helpers/Async'
+import SplashViewContainer from './modules/Splash/SplashViewContainer'
+import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreenView'
+import LandingScreenViewContainer from './modules/LandingScreen/LandingScreenViewContainer'
+import MainViewContainer from './modules/Main/MainViewContainer'
+import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer'
+import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView'
+import Phone from './modules/UserOnboarding/pages/Phone'
+import { AppState } from 'react-native'
+import { Scene, Reducer, Router, Modal } from 'react-native-router-flux'
 import { colors } from './globalStyles'
-import Error from './components/Error';
-import {
-  Analytics,
-  Hits as GAHits,
-} from 'react-native-google-analytics';
-import DeviceInfo from 'react-native-device-info';
-import CodePush from 'react-native-code-push';
-import { Client } from 'bugsnag-react-native';
-import * as Async from './helpers/Async';
-
-// Get build and version numbers
-// let build = DeviceInfo.getBuildNumber()
-// let version = DeviceInfo.getVersion()
-// let build_version = build + "_" + version
-// // build_version = '' // NOTE: uncomment this line to reset cache
-//
-// // Reset user cache if this is the first app session post-update
-// Async.get('build_version', (cached_build_version) => {
-//   if (cached_build_version !== build_version) {
-//     Async.set('user', '')
-//     Async.set('BankOnboardingStateCache', '')
-//     Async.set('betaStatus', '');
-//     Async.set('build_version', build_version)
-//   }
-// })
-
-// Async.set('betaStatus', 'fullAccess');
-
-// Modules
-import SplashViewContainer from './modules/Splash/SplashViewContainer';
-import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreenView';
-import LandingScreenViewContainer from './modules/LandingScreen/LandingScreenViewContainer';
-import MainViewContainer from './modules/Main/MainViewContainer';
-import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer';
-import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView';
-import Phone from './modules/UserOnboarding/pages/Phone';
+import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
+import { Client } from 'bugsnag-react-native'
 import { PayDetails } from './components/PayCard'
-
 import { MainView } from './modules'
 
+// Get build and version numbers
+let build = DeviceInfo.getBuildNumber()
+let version = DeviceInfo.getVersion()
+
+// Uncomment to reset user cache
+// Async.set('user', '')
+// Async.set('BankOnboardingStateCache', '')
+// Async.set('betaStatus', '')
 
 const reducerCreate = (params) => {
-  const defaultReducer = Reducer(params);
+  const defaultReducer = Reducer(params)
   return (state, action) => {
-    // console.log("ACTION:", action);
-    return defaultReducer(state, action);
+    // console.log("ACTION:", action)
+    return defaultReducer(state, action)
   }
-};
-var ga = this.ga = null;
+}
+
+var ga = this.ga = null
 
 const getSceneStyle = function(props, computedProps) {
   const style = {
@@ -63,49 +46,49 @@ const getSceneStyle = function(props, computedProps) {
     shadowOpacity: null,
     shadowRadius: null,
     backgroundColor: colors.snowWhite
-  };
-
-  if (computedProps.isActive) {
-    style.marginTop = computedProps.hideNavBar ? 0 : 64;
-    style.marginBottom = computedProps.hideTabBar ? 0 : 50;
   }
 
-  return style;
-};
+  if (computedProps.isActive) {
+    style.marginTop = computedProps.hideNavBar ? 0 : 64
+    style.marginBottom = computedProps.hideTabBar ? 0 : 50
+  }
+
+  return style
+}
 
 export default class Coincast extends React.Component {
   constructor(props) {
-    super(props);
-    this.handleAppStateChange = this.handleAppStateChange.bind(this);
+    super(props)
+    this.handleAppStateChange = this.handleAppStateChange.bind(this)
   }
 
   handleAppStateChange(state) {
-    if (state === 'inactive') return;
-    else if (state === 'background') Mixpanel.track('Session Duration');
-    else if (state === 'active') Mixpanel.timeEvent('Session Duration');
+    if (state === 'inactive') return
+    else if (state === 'background') Mixpanel.track('Session Duration')
+    else if (state === 'active') Mixpanel.timeEvent('Session Duration')
   }
 
   componentWillMount() {
-    this.client = new Client('f8be20d13dd76c17ff352c44d395270a');
-    let clientId = DeviceInfo.getUniqueID();
-    // CodePush.sync();
-    Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6');
-    Mixpanel.timeEvent('Session Duration');
+    this.client = new Client('f8be20d13dd76c17ff352c44d395270a')
+    let clientId = DeviceInfo.getUniqueID()
 
-    AppState.addEventListener('change', this.handleAppStateChange);
-     ga = new Analytics('UA-87368863-1', clientId, 1, DeviceInfo.getUserAgent());
+    Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6')
+    Mixpanel.timeEvent('Session Duration')
+
+    AppState.addEventListener('change', this.handleAppStateChange)
+     ga = new Analytics('UA-87368863-1', clientId, 1, DeviceInfo.getUserAgent())
      var screenView = new GAHits.ScreenView(
       'Example App',
       'Welcome Screen',
       DeviceInfo.getReadableVersion(),
       DeviceInfo.getBundleId()
-    );
+    )
 
-    ga.send(screenView);
+    ga.send(screenView)
   }
 
   componentWillUnmount() {
-    AppState.removeEventListener('change', this.handleAppStateChange);
+    AppState.removeEventListener('change', this.handleAppStateChange)
   }
 
   render() {
@@ -170,6 +153,6 @@ export default class Coincast extends React.Component {
           <Scene key="error" component={Error}/>
         </Scene>
       </Router>
-    );
+    )
   }
 }
