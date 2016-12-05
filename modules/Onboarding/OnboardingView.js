@@ -3,6 +3,7 @@ import { View, ScrollView, Animated, StatusBar, Image, TouchableHighlight, Text,
 import { colors } from '../../globalStyles'
 import { Tile, Input } from './subcomponents'
 import { StickyView } from '../../components'
+import * as animate from './animate'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const dims = Dimensions.get('window')
 
@@ -11,6 +12,26 @@ class OnboardingView extends React.Component {
     super(props)
 
     this.tiles = ["displayName", "profilePicture", "emailAddress", "billingAddress", "socialSecurityNumber"]
+
+    this.TILES = [
+      {
+        height: new Animated.Value(dims.width * 0.5),
+        width: new Animated.Value(dims.width * 0.5),
+        opacity: new Animated.Value(1.0),
+        iconName: "user",
+        title: "Display\nName",
+        placeholder: "Enter your display name",
+        onPress: () => this.focus("displayName")
+      },
+      {
+        height: new Animated.Value(dims.width * 0.5),
+        width: new Animated.Value(dims.width * 0.5),
+        opacity: new Animated.Value(1.0),
+        iconName: "image",
+        title: "Profile\nPicture",
+        onPress: () => this.focus("profilePicture")
+      }
+    ]
 
     this.inputProps = {
       displayName: {
@@ -27,90 +48,33 @@ class OnboardingView extends React.Component {
       }
     }
 
-    this.animatedValues = {
-      heights: {
-        displayName: new Animated.Value(dims.width * 0.5),
-        profilePicture: new Animated.Value(dims.width * 0.5),
-        emailAddress: new Animated.Value(dims.width * 0.5),
-        billingAddress: new Animated.Value(dims.width * 0.5),
-        socialSecurityNumber: new Animated.Value(dims.width * 0.5)
-      },
-      widths: {
-        displayName: new Animated.Value(dims.width * 0.5),
-        profilePicture: new Animated.Value(dims.width * 0.5),
-        emailAddress: new Animated.Value(dims.width * 0.5),
-        billingAddress: new Animated.Value(dims.width * 0.5),
-        socialSecurityNumber: new Animated.Value(dims.width * 0.5)
-      },
-      opacities: {
-        displayName: new Animated.Value(1),
-        profilePicture: new Animated.Value(1),
-        emailAddress: new Animated.Value(1),
-        billingAddress: new Animated.Value(1),
-        socialSecurityNumber: new Animated.Value(1)
-      }
-    }
-
     this.state = {
-      modalVisible: false
+      modalVisible: false,
+      focusedTile: null
     }
   }
 
+  reset() {
+    this.setState({focusedTile: null})
+    this.toggleModal()
+    animate.show(this.tiles, null, this.animatedValues)
+    animate.shrink(this.state.focusedTile, this.animatedValues)
+  }
+
   focus(tile) {
-    this.hide(this.tiles, tile, () => {
-      this.expand(tile, () => {
+    this.setState({focusedTile: tile})
+    animate.hide(this.tiles, tile, this.animatedValues, () => {
+      animate.expand(tile, this.animatedValues, () => {
         this.toggleModal(tile)
       })
     })
   }
 
-  expand(tile, cb) {
-    let { widths } = this.animatedValues
-    let width = widths[tile]
-    let min = dims.width * 0.5
-    let max = dims.width
-
-    Animated.timing(width, {
-      toValue: (width._value === min) ? max : min,
-      duration: 125
-    }).start(() => (typeof cb === 'function') ? cb() : null)
-  }
-
-  hide(tiles, tileToSkip, cb) {
-    let { heights, opacities } = this.animatedValues
-    let animationSequence = []
-
-    for (var i in tiles) {
-      let tile = tiles[i]
-      if (tile === tileToSkip) continue
-
-      let height = heights[tile]
-      let opacity = opacities[tile]
-
-      animationSequence.push(
-        Animated.parallel([
-          Animated.timing(height, {
-            toValue: (height._value > 0) ? 0 : (dims.width * 0.5),
-            duration: 200
-          }),
-          Animated.timing(opacity, {
-            toValue: (opacity._value > 0) ? 0 : 1,
-            duration: 100
-          })
-        ])
-      )
-    }
-
-    Animated.parallel(animationSequence).start(() => cb())
-  }
-
   toggleModal(inputting, cb) {
     let updatedState = {}
     updatedState.modalVisible = !this.state.modalVisible
-
     if (updatedState.modalVisible) updatedState.inputProps = this.inputProps[inputting]
     else updatedState.inputProps = {}
-
     this.setState(updatedState, () =>console.log(this.state))
   }
 
@@ -140,7 +104,10 @@ class OnboardingView extends React.Component {
 
         { /* Tiles */ }
         <ScrollView contentContainerStyle={{flex: 0.9, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap'}}>
-          <Tile complete
+
+        { /*
+
+          <Tile
             height={this.animatedValues.heights["displayName"]}
             width={this.animatedValues.widths["displayName"]}
             opacity={this.animatedValues.opacities["displayName"]}
@@ -158,7 +125,7 @@ class OnboardingView extends React.Component {
             iconName={"image"}
             title={"Profile\nPicture"}
             onPress={() => this.focus("profilePicture")} />
-          <Tile complete
+          <Tile
             height={this.animatedValues.heights["emailAddress"]}
             width={this.animatedValues.widths["emailAddress"]}
             opacity={this.animatedValues.opacities["emailAddress"]}
@@ -185,6 +152,8 @@ class OnboardingView extends React.Component {
             iconName={"lock"}
             title={"Social\nSecurity\nNumber"}
             onPress={() => this.focus("socialSecurityNumber")} />
+
+          */ }
         </ScrollView>
 
         <Modal visible={this.state.modalVisible} animationType={"slide"} transparent={true}>
@@ -194,7 +163,7 @@ class OnboardingView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.65}
               underlayColor={'transparent'}
-              onPress={() => alert("Would cancel")}
+              onPress={() => this.reset()}
               style={{justifyContent: 'center', alignItems: 'center'}}>
               <View style={{justifyContent: 'center', alignItems: 'center', padding: 8}}>
                 <EvilIcons name={"close-o"} size={30} color={colors.carminePink} />
