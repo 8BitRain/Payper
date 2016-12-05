@@ -91,21 +91,24 @@ export default class Coincast extends React.Component {
     AppState.removeEventListener('change', this.handleAppStateChange)
   }
 
+
+
   render() {
     return (
       <Router key={Math.random()} createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 
-            <Scene initial
-              component={SplashViewContainer}
-              key="SplashViewContainer"
-              type="replace"
-              panHandlers={null} />
 
             <Scene
               component={MainView}
               key="MainView"
+              type="replace"
+              panHandlers={null} />
+
+            <Scene initial
+              component={SplashViewContainer}
+              key="SplashViewContainer"
               type="replace"
               panHandlers={null} />
 
