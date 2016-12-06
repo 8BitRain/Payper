@@ -18,6 +18,7 @@ class PaymentOnboardingView extends React.Component {
           iconName: "user",
           complete: false,
           value: null,
+          invalidityAlert: "Please select one or more users.",
           textInputProps: {
             placeholder: "Search by name or username",
             keyboardType: "default",
@@ -30,6 +31,7 @@ class PaymentOnboardingView extends React.Component {
           iconName: "credit-card",
           complete: false,
           value: null,
+          invalidityAlert: "Please enter a valid USD amount between $1 and $3,000.",
           textInputProps: {
             placeholder: "$0.00",
             keyboardType: "numeric",
@@ -41,6 +43,7 @@ class PaymentOnboardingView extends React.Component {
           iconName: "clock",
           complete: false,
           value: null,
+          invalidityAlert: "Please enter a valid number greater than or equal to 1.",
           textInputProps: {
             placeholder: "Monthly or weekly?",
             keyboardType: "number-pad",
@@ -52,6 +55,7 @@ class PaymentOnboardingView extends React.Component {
           iconName: "calendar",
           complete: false,
           value: null,
+          invalidityAlert: "Please enter a valid frequency (monthly or weekly).",
           textInputProps: {
             placeholder: "0 months",
             keyboardType: "numeric",
@@ -63,10 +67,11 @@ class PaymentOnboardingView extends React.Component {
           iconName: "pencil",
           complete: false,
           value: null,
+          invalidityAlert: "Please enter a valid payment purpose.",
           textInputProps: {
             placeholder: "ex. Spotify Family Plan",
             keyboardType: "default",
-            autoCapitalize: "none",
+            autoCapitalize: "words",
             autoCorrect: false
           }
         }

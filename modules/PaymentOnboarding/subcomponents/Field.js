@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, TouchableHighlight, TouchableWithoutFeedback, Text, Dimensions, StyleSheet, Animated, Modal, TextInput, Keyboard} from 'react-native'
+import { View, TouchableHighlight, TouchableWithoutFeedback, Text, Dimensions, StyleSheet, Animated, Modal, TextInput, Keyboard, Alert } from 'react-native'
 import { colors } from '../../../globalStyles'
 import { StickyView } from '../../../components'
 import { VibrancyView } from 'react-native-blur'
@@ -12,7 +12,7 @@ class Field extends React.Component {
     super(props)
 
     this.AV = {
-      height: new Animated.Value(45),
+      height: new Animated.Value(55),
       opacity: new Animated.Value(1)
     }
 
@@ -20,7 +20,8 @@ class Field extends React.Component {
       ...this.props,
       focused: false,
       hidden: false,
-      touchable: true
+      touchable: true,
+      input: ""
     }
   }
 
@@ -38,7 +39,7 @@ class Field extends React.Component {
       }),
       Animated.timing(this.AV.opacity, {
         toValue: 0,
-        duration: 105
+        duration: 150
       })
     ]
 
@@ -50,12 +51,12 @@ class Field extends React.Component {
 
     let animations = [
       Animated.timing(this.AV.height, {
-        toValue: 45,
+        toValue: 55,
         duration: 180
       }),
       Animated.timing(this.AV.opacity, {
         toValue: 1,
-        duration: 105
+        duration: 150
       })
     ]
 
@@ -68,8 +69,32 @@ class Field extends React.Component {
     })
   }
 
+  submit(input) {
+    let valid = false
+    if (!valid) {
+      Alert.alert(
+        'Wait!',
+        this.props.invalidityAlert || 'Input is invalid.',
+        [{text: 'OK', onPress: () => this.input.focus()}]
+      )
+
+      return
+    }
+
+    let shouldSlideDown = this.state.input.length < 1 && input.length >= 1
+    let shouldSlideUp = this.state.input.length >= 1 && input.length < 1
+
+    this.setState({input}, () => {
+      if (shouldSlideDown) this.slideDown()
+      else if (shouldSlideUp) this.slideUp()
+    })
+  }
+
   render() {
-    let {iconName, title, complete, hidden, focused, value, placeholder, textInputProps} = this.state
+    let {
+      iconName, title, complete, hidden, focused, value, placeholder, input,
+      textInputProps
+    } = this.state
     let {height, opacity} = this.AV
 
     return(
@@ -98,16 +123,19 @@ class Field extends React.Component {
 
           { /* Input modal */ }
           <Modal visible={this.state.focused} animationType={"slide"} transparent={true}>
+            { /* Touching background dismisses field */ }
             <TouchableWithoutFeedback onPress={() => this.toggle()}>
               <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0}} />
             </TouchableWithoutFeedback>
 
-            <StickyView>
+            { /* Input sticks to top of keyboard */ }
+            <StickyView duration={0}>
               <View style={{alignItems: 'center', justifyContent: 'center', width: dims.width, backgroundColor: colors.lightGrey, padding: 10, paddingBottom: 0}}>
                 <EvilIcons name={iconName} size={34} color={colors.deepBlue} />
               </View>
 
               <View style={{flexDirection: 'row', width: dims.width, backgroundColor: colors.lightGrey}}>
+                { /* Cancel button */ }
                 <TouchableHighlight
                   activeOpacity={0.65}
                   underlayColor={'transparent'}
@@ -119,7 +147,9 @@ class Field extends React.Component {
                   </View>
                 </TouchableHighlight>
 
+                { /* Input field */ }
                 <TextInput
+                  ref={ref => this.input = ref}
                   defaultValue={value}
                   placeholderTextColor={colors.slateGrey}
                   blurOnSubmit={false}
@@ -129,10 +159,11 @@ class Field extends React.Component {
                   onChangeText={(input) => this.setState({value: input})}
                   onSubmitEditing={() => this.submit()} />
 
+                { /* Submit button */ }
                 <TouchableHighlight
                   activeOpacity={0.65}
                   underlayColor={'transparent'}
-                  onPress={() => this.toggle()}
+                  onPress={() => this.submit()}
                   style={{justifyContent: 'center', alignItems: 'center'}}>
                   <View style={{justifyContent: 'center', alignItems: 'center', padding: 8}}>
                     <EvilIcons name={"check"} size={30} color={colors.gradientGreen} />
@@ -147,17 +178,5 @@ class Field extends React.Component {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  shadow: {
-    shadowColor: colors.medGrey,
-    shadowOpacity: 1.0,
-    shadowRadius: 1,
-    shadowOffset: {
-      height: 0.25,
-      width: 0.25
-    }
-  }
-})
 
 module.exports = Field
