@@ -18,62 +18,79 @@ class PaymentOnboardingView extends React.Component {
           title: "Who?",
           iconName: "user",
           complete: false,
-          value: null,
+          value: "",
           invalidityAlert: "Please select one or more users.",
           textInputProps: {
             placeholder: "Search by name or username",
             keyboardType: "default",
             autoCapitalize: "words",
             autoCorrect: false
+          },
+          validateInput: (input) => {
+            return true
           }
         },
         {
           title: "How much?",
           iconName: "credit-card",
           complete: false,
-          value: null,
+          value: "",
           invalidityAlert: "Please enter a valid USD amount between $1 and $3,000.",
           textInputProps: {
             placeholder: "$0.00",
             keyboardType: "numeric",
             autoCorrect: false
+          },
+          validateInput: (input) => {
+            let isInRange = input >= 1 && input <= 3000
+            let isValid = isInRange
+            return isValid
           }
         },
         {
           title: "How often?",
           iconName: "clock",
           complete: false,
-          value: null,
-          invalidityAlert: "Please enter a valid number greater than or equal to 1.",
+          value: "",
+          invalidityAlert: "Please enter a valid frequency (monthly or weekly).",
           textInputProps: {
             placeholder: "Monthly or weekly?",
-            keyboardType: "number-pad",
+            keyboardType: "default",
             autoCorrect: false
+          },
+          validateInput: (input) => {
+
           }
         },
         {
           title: "How long?",
           iconName: "calendar",
           complete: false,
-          value: null,
-          invalidityAlert: "Please enter a valid frequency (monthly or weekly).",
+          value: "",
+          invalidityAlert: "Please enter a valid number greater than or equal to 1.",
           textInputProps: {
             placeholder: "0 months",
             keyboardType: "numeric",
             autoCorrect: false
+          },
+          validateInput: (input) => {
+
           }
         },
         {
           title: "What for?",
           iconName: "pencil",
           complete: false,
-          value: null,
+          value: "",
           invalidityAlert: "Please enter a valid payment purpose.",
           textInputProps: {
             placeholder: "ex. Spotify Family Plan",
             keyboardType: "default",
             autoCapitalize: "words",
             autoCorrect: false
+          },
+          validateInput: (input) => {
+
           }
         }
       ]

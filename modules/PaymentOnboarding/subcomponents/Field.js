@@ -12,8 +12,11 @@ class Field extends React.Component {
     super(props)
 
     this.AV = {
-      height: new Animated.Value(55),
-      opacity: new Animated.Value(1)
+      opacity: new Animated.Value(1),
+      height: new Animated.Value(70),
+      valueOpacity: new Animated.Value(0),
+      valueHeight: new Animated.Value(0),
+      valuePaddingBottom: new Animated.Value(0)
     }
 
     this.state = {
@@ -51,7 +54,7 @@ class Field extends React.Component {
 
     let animations = [
       Animated.timing(this.AV.height, {
-        toValue: 55,
+        toValue: 70,
         duration: 180
       }),
       Animated.timing(this.AV.opacity, {
@@ -69,25 +72,38 @@ class Field extends React.Component {
     })
   }
 
-  submit(input) {
-    let valid = false
-    if (!valid) {
-      Alert.alert(
-        'Wait!',
-        this.props.invalidityAlert || 'Input is invalid.',
-        [{text: 'OK', onPress: () => this.input.focus()}]
-      )
+  showValue() {
+    let animations = [
+      Animated.timing(this.AV.valueOpacity, {
+        toValue: 1,
+        duration: 110
+      }),
+      Animated.timing(this.AV.valueHeight, {
+        toValue: 20,
+        duration: 140
+      }),
+      Animated.timing(this.AV.valuePaddingBottom, {
+        toValue: 16,
+        duration: 140
+      })
+    ]
 
+    Animated.parallel(animations).start()
+  }
+
+  submit() {
+    let {input, value} = this.state
+    let inputIsValid = this.props.validateInput(input)
+
+    if (!inputIsValid) {
+      let title = "Wait!"
+      let msg = this.props.invalidityAlert || "Input is invalid."
+      Alert.alert(title, msg, [{text: 'OK', onPress: () => this.inputField.focus()}])
       return
     }
 
-    let shouldSlideDown = this.state.input.length < 1 && input.length >= 1
-    let shouldSlideUp = this.state.input.length >= 1 && input.length < 1
-
-    this.setState({input}, () => {
-      if (shouldSlideDown) this.slideDown()
-      else if (shouldSlideUp) this.slideUp()
-    })
+    let shouldShowValue = value.length < 1 && input.length >= 1
+    this.setState({value: input}, () => (shouldShowValue) ? this.showValue() : null)
   }
 
   render() {
@@ -95,7 +111,11 @@ class Field extends React.Component {
       iconName, title, complete, hidden, focused, value, placeholder, input,
       textInputProps
     } = this.state
-    let {height, opacity} = this.AV
+
+    let {
+      opacity, height,
+      valueOpacity, valueHeight, valuePaddingBottom
+    } = this.AV
 
     return(
       <TouchableHighlight
@@ -107,19 +127,30 @@ class Field extends React.Component {
             height: height,
             opacity: opacity,
             borderBottomWidth: (hidden) ? 0 : 1,
-            width: dims.width * 0.9, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', borderColor: colors.medGrey
+            width: dims.width * 0.9, borderColor: colors.medGrey
           }}>
 
-          { /* Icon and title */ }
-          <EvilIcons name={iconName} size={32} color={colors.accent} />
-          <Text style={{fontSize: 18, color: colors.deepBlue, paddingLeft: 10}}>
-            {title}
-          </Text>
+          { /* Icon, title, and plus/minus */ }
+          <View style={{flex: 1.0, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+            <EvilIcons name={iconName} size={32} color={colors.accent} />
 
-          { /* Value or placeholder value */ }
-          <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, justifyContent: 'center'}}>
-            <EvilIcons name={(focused) ? "minus" : "plus"} size={28} color={colors.medGrey} />
+            <Text style={{fontSize: 18, color: colors.deepBlue, paddingLeft: 10}}>
+              {title}
+            </Text>
+
+            <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, justifyContent: 'center'}}>
+              <EvilIcons name={(focused) ? "minus" : "plus"} size={28} color={colors.medGrey} />
+            </View>
           </View>
+
+          { /* Value */ }
+          <Animated.View style={{paddingBottom: valuePaddingBottom, height: valueHeight, opacity: valueOpacity, flexDirection: 'row', alignItems: 'center'}}>
+            <EvilIcons name={iconName} size={32} color={'transparent'} />
+
+            <Text style={{fontSize: 18, color: colors.gradientGreen, paddingLeft: 10}}>
+              {value}
+            </Text>
+          </Animated.View>
 
           { /* Input modal */ }
           <Modal visible={this.state.focused} animationType={"slide"} transparent={true}>
@@ -149,14 +180,14 @@ class Field extends React.Component {
 
                 { /* Input field */ }
                 <TextInput
-                  ref={ref => this.input = ref}
+                  ref={ref => this.inputField = ref}
                   defaultValue={value}
                   placeholderTextColor={colors.slateGrey}
                   blurOnSubmit={false}
                   autoFocus={true}
                   style={{flex: 0.65, height: 50, paddingLeft: 10, paddingRight: 10, textAlign: 'center'}}
                   {...textInputProps}
-                  onChangeText={(input) => this.setState({value: input})}
+                  onChangeText={(input) => this.setState({input: input})}
                   onSubmitEditing={() => this.submit()} />
 
                 { /* Submit button */ }
