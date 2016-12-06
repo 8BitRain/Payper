@@ -11,6 +11,10 @@ class OnboardingView extends React.Component {
   constructor(props) {
     super(props)
 
+    this.update = this.update.bind(this)
+    
+    let { displayName, phone, emailAddress, billingAddress, ssn } = this.props.currentUser
+
     this.state = {
       modalVisible: false,
       focusedTile: null,
@@ -19,50 +23,65 @@ class OnboardingView extends React.Component {
           iconName: "user",
           title: "Display Name",
           placeholder: "Enter your display name",
-          current: "Brady Sheridan",
           focused: false,
+          value: displayName || "",
           height: new Animated.Value(dims.width * 0.5),
           width: new Animated.Value(dims.width * 0.5),
-          opacity: new Animated.Value(1.0)
+          opacity: new Animated.Value(1.0),
+          update: this.update
         },
         {
           iconName: "image",
           title: "Profile Picture",
           placeholder: "Upload a profile picture",
           focused: false,
+          value: phone || "",
           height: new Animated.Value(dims.width * 0.5),
           width: new Animated.Value(dims.width * 0.5),
-          opacity: new Animated.Value(1.0)
+          opacity: new Animated.Value(1.0),
+          update: this.update
         },
         {
           iconName: "envelope",
           title: "Email Address",
           placeholder: "Enter your email address",
           focused: false,
+          value: emailAddress || "",
           height: new Animated.Value(dims.width * 0.5),
           width: new Animated.Value(dims.width * 0.5),
-          opacity: new Animated.Value(1.0)
+          opacity: new Animated.Value(1.0),
+          update: this.update
         },
         {
           iconName: "location",
           title: "Billing Address",
           placeholder: "Enter your billing address",
           focused: false,
+          value: billingAddress.toString() || "",
           height: new Animated.Value(dims.width * 0.5),
           width: new Animated.Value(dims.width * 0.5),
-          opacity: new Animated.Value(1.0)
+          opacity: new Animated.Value(1.0),
+          update: this.update
         },
         {
           iconName: "lock",
           title: "Social Security Number",
           placeholder: "Enter the last four digits of your SSN",
           focused: false,
+          value: ssn || "",
           height: new Animated.Value(dims.width * 0.5),
           width: new Animated.Value(dims.width * 0.5),
-          opacity: new Animated.Value(1.0)
+          opacity: new Animated.Value(1.0),
+          update: this.update
         }
       ]
     }
+  }
+
+  update(i, value) {
+    let updatedState = this.state
+    updatedState.tiles[i].value = value
+    this.setState(updatedState)
   }
 
   reset() {
@@ -127,7 +146,7 @@ class OnboardingView extends React.Component {
 
         { /* Tiles */ }
         <ScrollView contentContainerStyle={{flex: 0.9, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap'}}>
-          {this.state.tiles.map((tile, i) => <Tile {...tile} onPress={() => this.toggleTile(i)} leftAligned={i % 2 === 0} key={tile.title} />)}
+          {this.state.tiles.map((tile, i) => <Tile {...tile} tileIndex={i} onPress={() => this.toggleTile(i)} leftAligned={i % 2 === 0} key={tile.title} />)}
         </ScrollView>
       </View>
     )

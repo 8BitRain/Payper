@@ -158,6 +158,18 @@ export default class Coincast extends React.Component {
               panHandlers={null} />
 
             <Scene initial
+              currentUser={{
+                displayName: "Brady Sheridan",
+                emailAddress: "brady.sherid@gmail.com",
+                phoneNumber: "2623058038",
+                ssn: "8135",
+                billingAddress: {
+                  zip: "53715",
+                  city: "Madison",
+                  state: "WI",
+                  country: "United States"
+                }
+              }}
               component={OnboardingView}
               key="OnboardingView"
               panHandlers={null} />

@@ -1,9 +1,10 @@
 import React from 'react'
-import { View, TouchableHighlight, TouchableWithoutFeedback, Text, Dimensions, StyleSheet, Animated, Modal, TextInput } from 'react-native'
+import { View, TouchableHighlight, TouchableWithoutFeedback, Text, Dimensions, StyleSheet, Animated, Modal, TextInput, Keyboard} from 'react-native'
 import { colors } from '../../../globalStyles'
 import { StickyView } from '../../../components'
 import { VibrancyView } from 'react-native-blur'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import dismissKeyboard from 'react-native-dismiss-keyboard'
 const dims = Dimensions.get('window')
 
 class Tile extends React.Component {
@@ -11,8 +12,8 @@ class Tile extends React.Component {
     super(props)
 
     this.state = {
-      modalVisible: false,
-      ...this.props
+      ...this.props,
+      modalVisible: false
     }
   }
 
@@ -20,7 +21,7 @@ class Tile extends React.Component {
     if (this.props.focused === false && nextProps.focused === true)
       this.focus()
     else if (this.props.focused === true && nextProps.focused === false)
-      this.blur()
+      this.unfocus()
 
     this.setState(nextProps)
   }
@@ -29,12 +30,21 @@ class Tile extends React.Component {
     this.setState({focused: true, modalVisible: true})
   }
 
-  blur() {
+  unfocus() {
     this.setState({focused: false, modalVisible: false})
   }
 
+  submit() {
+    // TODO: Validate input
+    // TODO: Induce state
+    // TODO: Notify success
+    // TODO: Close modal
+    this.unfocus()
+    this.props.update(this.state.tileIndex, this.state.value)
+  }
+
   render() {
-    let {iconName, title, onPress, complete, backgroundColor, marginLeft, marginRight, height, width, opacity, leftAligned, focused, placeholder, current} = this.state
+    let {iconName, title, onPress, complete, backgroundColor, marginLeft, marginRight, height, width, opacity, leftAligned, focused, placeholder, value} = this.state
 
     return(
       <View>
@@ -46,7 +56,7 @@ class Tile extends React.Component {
             <Animated.View style={[styles.shadow, {opacity: opacity, marginLeft: (leftAligned) ? 12 : 6, marginRight: (leftAligned) ? 6 : 12, marginTop: 12, flex: 1.0, backgroundColor: colors.lightGrey, justifyContent: 'center', alignItems: 'center', borderRadius: 4}]}>
               { /* Icon and title */ }
               <EvilIcons name={iconName} size={44} color={colors.accent} />
-              <Text style={{fontSize: 18, color: (focused) ? colors.alertGreen : colors.deepBlue, textAlign: 'center'}}>
+              <Text style={{fontSize: 18, color: colors.deepBlue, textAlign: 'center'}}>
                 {title}
               </Text>
 
@@ -62,7 +72,7 @@ class Tile extends React.Component {
         <Modal visible={this.state.modalVisible} animationType={"slide"} transparent={true}>
           <View style={{flex: 1.0}}>
             { /* Background */ }
-            <TouchableWithoutFeedback onPress={() => this.blur()}>
+            <TouchableWithoutFeedback onPress={() => this.unfocus()}>
               <VibrancyView blurType={"dark"} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
             </TouchableWithoutFeedback>
 
@@ -77,7 +87,7 @@ class Tile extends React.Component {
                 <TouchableHighlight
                   activeOpacity={0.65}
                   underlayColor={'transparent'}
-                  onPress={() => this.blur()}
+                  onPress={() => this.unfocus()}
                   style={{justifyContent: 'center', alignItems: 'center'}}>
                   <View style={{justifyContent: 'center', alignItems: 'center', padding: 8}}>
                     <EvilIcons name={"close-o"} size={30} color={colors.carminePink} />
@@ -86,15 +96,19 @@ class Tile extends React.Component {
                 </TouchableHighlight>
 
                 <TextInput
+                  defaultValue={value}
                   placeholder={placeholder}
                   placeholderTextColor={colors.slateGrey}
+                  blurOnSubmit={false}
                   autoFocus
-                  style={{flex: 0.65, height: 50, paddingLeft: 15, paddingRight: 15}} />
+                  style={{flex: 0.65, height: 50, paddingLeft: 15, paddingRight: 15}}
+                  onChangeText={(input) => this.setState({value: input})}
+                  onSubmitEditing={() => this.submit()} />
 
                 <TouchableHighlight
                   activeOpacity={0.65}
                   underlayColor={'transparent'}
-                  onPress={() => alert("Would submit")}
+                  onPress={() => this.submit()}
                   style={{justifyContent: 'center', alignItems: 'center'}}>
                   <View style={{justifyContent: 'center', alignItems: 'center', padding: 8}}>
                     <EvilIcons name={"check"} size={30} color={colors.gradientGreen} />
