@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, ScrollView, Animated, StatusBar, Image, TouchableHighlight, Text, Dimensions, Modal, TextInput } from 'react-native'
+import { Actions } from 'react-native-router-flux'
 import { colors } from '../../globalStyles'
 import { StickyView } from '../../components'
 import { Field } from './subcomponents'
@@ -120,9 +121,9 @@ class PaymentOnboardingView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={'transparent'}
-              onPress={() => alert("Would close")}
-              style={{position: 'absolute', top: 0, bottom: 0, left: 6, paddingTop: 28, paddingLeft: 10, paddingRight: 10, backgroundColor: 'transparent'}}>
-              <EvilIcons name={"close"} size={24} color={colors.lightGrey} />
+              onPress={() => Actions.pop()}
+              style={{position: 'absolute', top: 18, bottom: 0, left: 0, padding: 14, justifyContent: 'center'}}>
+              <EvilIcons name={"chevron-left"} size={36} color={colors.lightGrey} />
             </TouchableHighlight>
           </View>
         </View>
