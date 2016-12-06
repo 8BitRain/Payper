@@ -170,7 +170,9 @@ class OnboardingView extends React.Component {
         </View>
 
         { /* Tiles */ }
-        <ScrollView contentContainerStyle={{flex: 0.9, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap'}}>
+        <ScrollView
+          keyboardShouldPersistTaps
+          contentContainerStyle={{flex: 0.9, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap'}}>
           {this.state.tiles.map((tile, i) => <Tile {...tile} tileIndex={i} onPress={() => this.toggleTile(i)} leftAligned={i % 2 === 0} key={tile.title} />)}
         </ScrollView>
       </View>
