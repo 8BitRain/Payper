@@ -11,46 +11,57 @@ class OnboardingView extends React.Component {
   constructor(props) {
     super(props)
 
-    this.tiles = ["displayName", "profilePicture", "emailAddress", "billingAddress", "socialSecurityNumber"]
-
-    this.TILES = [
-      {
-        height: new Animated.Value(dims.width * 0.5),
-        width: new Animated.Value(dims.width * 0.5),
-        opacity: new Animated.Value(1.0),
-        iconName: "user",
-        title: "Display\nName",
-        placeholder: "Enter your display name",
-        onPress: () => this.focus("displayName")
-      },
-      {
-        height: new Animated.Value(dims.width * 0.5),
-        width: new Animated.Value(dims.width * 0.5),
-        opacity: new Animated.Value(1.0),
-        iconName: "image",
-        title: "Profile\nPicture",
-        onPress: () => this.focus("profilePicture")
-      }
-    ]
-
-    this.inputProps = {
-      displayName: {
-        placeholder: "Enter your display name",
-        placeholderTextColor: colors.slateGrey
-      },
-      emailAddress: {
-        placeholder: "Enter your email address",
-        placeholderTextColor: colors.slateGrey
-      },
-      socialSecurityNumber: {
-        placeholder: "Enter the last four digits of your SSN",
-        placeholderTextColor: colors.slateGrey
-      }
-    }
-
     this.state = {
       modalVisible: false,
-      focusedTile: null
+      focusedTile: null,
+      tiles: [
+        {
+          iconName: "user",
+          title: "Display Name",
+          placeholder: "Enter your display name",
+          current: "Brady Sheridan",
+          focused: false,
+          height: new Animated.Value(dims.width * 0.5),
+          width: new Animated.Value(dims.width * 0.5),
+          opacity: new Animated.Value(1.0)
+        },
+        {
+          iconName: "image",
+          title: "Profile Picture",
+          placeholder: "Upload a profile picture",
+          focused: false,
+          height: new Animated.Value(dims.width * 0.5),
+          width: new Animated.Value(dims.width * 0.5),
+          opacity: new Animated.Value(1.0)
+        },
+        {
+          iconName: "envelope",
+          title: "Email Address",
+          placeholder: "Enter your email address",
+          focused: false,
+          height: new Animated.Value(dims.width * 0.5),
+          width: new Animated.Value(dims.width * 0.5),
+          opacity: new Animated.Value(1.0)
+        },
+        {
+          iconName: "location",
+          title: "Billing Address",
+          placeholder: "Enter your billing address",
+          focused: false,
+          height: new Animated.Value(dims.width * 0.5),
+          width: new Animated.Value(dims.width * 0.5),
+          opacity: new Animated.Value(1.0)
+        },
+        {
+          iconName: "lock",
+          title: "Social Security Number",
+          placeholder: "Enter the last four digits of your SSN",
+          focused: false,
+          height: new Animated.Value(dims.width * 0.5),
+          width: new Animated.Value(dims.width * 0.5),
+          opacity: new Animated.Value(1.0)
+        }
+      ]
     }
   }
 
@@ -70,12 +81,24 @@ class OnboardingView extends React.Component {
     })
   }
 
-  toggleModal(inputting, cb) {
-    let updatedState = {}
-    updatedState.modalVisible = !this.state.modalVisible
-    if (updatedState.modalVisible) updatedState.inputProps = this.inputProps[inputting]
-    else updatedState.inputProps = {}
-    this.setState(updatedState, () =>console.log(this.state))
+  toggleModal() {
+    this.setState({modalVisible: true})
+  }
+
+  toggleTile(i) {
+    let newState = this.state
+    let target = newState.tiles[i]
+
+    // Focus the pressed tile
+    target.focused = !target.focused
+
+    // Unfocus other tiles
+    for (var k in newState.tiles) {
+      let curr = newState.tiles[k]
+      if (curr !== target && curr.focused === true) curr.focused = false
+    }
+
+    this.setState(newState)
   }
 
   render() {
@@ -104,91 +127,8 @@ class OnboardingView extends React.Component {
 
         { /* Tiles */ }
         <ScrollView contentContainerStyle={{flex: 0.9, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap'}}>
-
-        { /*
-
-          <Tile
-            height={this.animatedValues.heights["displayName"]}
-            width={this.animatedValues.widths["displayName"]}
-            opacity={this.animatedValues.opacities["displayName"]}
-            marginLeft={10}
-            marginRight={5}
-            iconName={"user"}
-            title={"Display\nName"}
-            onPress={() => this.focus("displayName")} />
-          <Tile
-            height={this.animatedValues.heights["profilePicture"]}
-            width={this.animatedValues.widths["profilePicture"]}
-            opacity={this.animatedValues.opacities["profilePicture"]}
-            marginLeft={5}
-            marginRight={10}
-            iconName={"image"}
-            title={"Profile\nPicture"}
-            onPress={() => this.focus("profilePicture")} />
-          <Tile
-            height={this.animatedValues.heights["emailAddress"]}
-            width={this.animatedValues.widths["emailAddress"]}
-            opacity={this.animatedValues.opacities["emailAddress"]}
-            marginLeft={10}
-            marginRight={5}
-            iconName={"envelope"}
-            title={"Email\nAddress"}
-            onPress={() => this.focus("emailAddress")} />
-          <Tile
-            height={this.animatedValues.heights["billingAddress"]}
-            width={this.animatedValues.widths["billingAddress"]}
-            opacity={this.animatedValues.opacities["billingAddress"]}
-            marginLeft={5}
-            marginRight={10}
-            iconName={"location"}
-            title={"Billing\nAddress"}
-            onPress={() => this.focus("billingAddress")} />
-          <Tile
-            height={this.animatedValues.heights["socialSecurityNumber"]}
-            width={this.animatedValues.widths["socialSecurityNumber"]}
-            opacity={this.animatedValues.opacities["socialSecurityNumber"]}
-            marginLeft={10}
-            marginRight={5}
-            iconName={"lock"}
-            title={"Social\nSecurity\nNumber"}
-            onPress={() => this.focus("socialSecurityNumber")} />
-
-          */ }
+          {this.state.tiles.map((tile, i) => <Tile {...tile} onPress={() => this.toggleTile(i)} leftAligned={i % 2 === 0} key={tile.title} />)}
         </ScrollView>
-
-        <Modal visible={this.state.modalVisible} animationType={"slide"} transparent={true}>
-          <StickyView style={{flexDirection: 'row', flex: 1.0, width: dims.width, backgroundColor: colors.lightGrey}}>
-
-            { /* Cancel button */ }
-            <TouchableHighlight
-              activeOpacity={0.65}
-              underlayColor={'transparent'}
-              onPress={() => this.reset()}
-              style={{justifyContent: 'center', alignItems: 'center'}}>
-              <View style={{justifyContent: 'center', alignItems: 'center', padding: 8}}>
-                <EvilIcons name={"close-o"} size={30} color={colors.carminePink} />
-                <View style={{position: 'absolute', top: 4, bottom: 4, right: 0, width: 1, backgroundColor: colors.medGrey}} />
-              </View>
-            </TouchableHighlight>
-
-            <TextInput
-              {...this.state.inputProps}
-              autoFocus
-              style={{flex: 0.65, height: 50, paddingLeft: 15, paddingRight: 15}} />
-
-            { /* Submit button */ }
-            <TouchableHighlight
-              activeOpacity={0.65}
-              underlayColor={'transparent'}
-              onPress={() => alert("Would submit")}
-              style={{justifyContent: 'center', alignItems: 'center'}}>
-              <View style={{justifyContent: 'center', alignItems: 'center', padding: 8}}>
-                <EvilIcons name={"check"} size={30} color={colors.gradientGreen} />
-                <View style={{position: 'absolute', top: 4, bottom: 4, left: 0, width: 1, backgroundColor: colors.medGrey}} />
-              </View>
-            </TouchableHighlight>
-          </StickyView>
-        </Modal>
       </View>
     )
   }
