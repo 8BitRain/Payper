@@ -12,7 +12,7 @@ class OnboardingView extends React.Component {
     super(props)
 
     this.update = this.update.bind(this)
-    
+
     let { displayName, phone, emailAddress, billingAddress, ssn } = this.props.currentUser
 
     this.state = {
@@ -22,57 +22,82 @@ class OnboardingView extends React.Component {
         {
           iconName: "user",
           title: "Display Name",
-          placeholder: "Enter your display name",
           focused: false,
           value: displayName || "",
           height: new Animated.Value(dims.width * 0.5),
           width: new Animated.Value(dims.width * 0.5),
           opacity: new Animated.Value(1.0),
-          update: this.update
+          update: this.update,
+          textInputProps: {
+            placeholder: "Enter your display name",
+            keyboardType: "default",
+            autoCapitalize: "words",
+            autoCorrect: false
+          }
         },
         {
           iconName: "image",
           title: "Profile Picture",
-          placeholder: "Upload a profile picture",
           focused: false,
           value: phone || "",
           height: new Animated.Value(dims.width * 0.5),
           width: new Animated.Value(dims.width * 0.5),
           opacity: new Animated.Value(1.0),
-          update: this.update
+          update: this.update,
+          textInputProps: {
+            placeholder: "Upload a profile picture",
+            keyboardType: "default",
+            autoCapitalize: "none",
+            autoCorrect: false
+          }
         },
         {
           iconName: "envelope",
           title: "Email Address",
-          placeholder: "Enter your email address",
           focused: false,
           value: emailAddress || "",
           height: new Animated.Value(dims.width * 0.5),
           width: new Animated.Value(dims.width * 0.5),
           opacity: new Animated.Value(1.0),
-          update: this.update
+          update: this.update,
+          textInputProps: {
+            placeholder: "Enter your email address",
+            keyboardType: "email-address",
+            autoCapitalize: "none",
+            autoCorrect: false
+          }
         },
         {
           iconName: "location",
           title: "Billing Address",
-          placeholder: "Enter your billing address",
           focused: false,
           value: billingAddress.toString() || "",
           height: new Animated.Value(dims.width * 0.5),
           width: new Animated.Value(dims.width * 0.5),
           opacity: new Animated.Value(1.0),
-          update: this.update
+          update: this.update,
+          textInputProps: {
+            placeholder: "Enter your billing address",
+            keyboardType: "default",
+            autoCapitalize: "words",
+            autoCorrect: false
+          }
         },
         {
           iconName: "lock",
-          title: "Social Security Number",
-          placeholder: "Enter the last four digits of your SSN",
           focused: false,
           value: ssn || "",
           height: new Animated.Value(dims.width * 0.5),
           width: new Animated.Value(dims.width * 0.5),
           opacity: new Animated.Value(1.0),
-          update: this.update
+          update: this.update,
+          title: "Social Security Number",
+          textInputProps: {
+            placeholder: "Enter the last four digits of your SSN",
+            keyboardType: "number-pad",
+            autoCapitalize: "none",
+            autoCorrect: false
+          }
         }
       ]
     }

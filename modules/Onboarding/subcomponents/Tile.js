@@ -44,7 +44,9 @@ class Tile extends React.Component {
   }
 
   render() {
-    let {iconName, title, onPress, complete, backgroundColor, marginLeft, marginRight, height, width, opacity, leftAligned, focused, placeholder, value} = this.state
+    let {iconName, title, onPress, complete, backgroundColor,
+      marginLeft, marginRight, height, width, opacity, leftAligned,
+      focused, value, textInputProps} = this.state
 
     return(
       <View>
@@ -97,11 +99,11 @@ class Tile extends React.Component {
 
                 <TextInput
                   defaultValue={value}
-                  placeholder={placeholder}
                   placeholderTextColor={colors.slateGrey}
                   blurOnSubmit={false}
-                  autoFocus
+                  autoFocus={true}
                   style={{flex: 0.65, height: 50, paddingLeft: 15, paddingRight: 15}}
+                  {...textInputProps}
                   onChangeText={(input) => this.setState({value: input})}
                   onSubmitEditing={() => this.submit()} />
 
