@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Dimensions, StatusBar, Animated, Easing } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import Mixpanel from 'react-native-mixpanel';
+import { Timer } from '../../classes/Metrics'
 const { State: TextInputState } = TextInput;
 
 // Helpers
@@ -36,7 +36,8 @@ class CreatePaymentView extends React.Component {
   }
 
   componentWillMount() {
-    Mixpanel.timeEvent('Payment Onboarding');
+    this.timer = new Timer()
+    this.timer.start()
   }
 
   induceState(newState) {
@@ -68,13 +69,6 @@ class CreatePaymentView extends React.Component {
   }
 
   _sendPayment(options) {
-    Mixpanel.trackWithProperties('Payment Onboarding', {
-      completed: true,
-      cancelled: false,
-      cancelledOnPage: null,
-      uid: this.props.currentUser.uid
-    });
-
     // Strip user objects of unnecessary attributes
     let thisUser = this.props.currentUser.getPaymentAttributes(),
         otherUser = {
@@ -104,16 +98,17 @@ class CreatePaymentView extends React.Component {
 
       Lambda.inviteViaPayment(options.paymentInfo);
     }
+
+    this.timer.report("paymentOnboarding", this.props.currentUser.uid, {
+      cancelled: false
+    })
   }
 
   handleCancel() {
-    Mixpanel.trackWithProperties('Payment Onboarding', {
-      completed: false,
+    this.timer.report("paymentOnboarding", this.props.currentUser.uid, {
       cancelled: true,
-      cancelledOnPage: this.pages[this.state.pageIndex],
-      uid: this.props.currentUser.uid
-    });
-
+      cancelledOnPage: this.pages[this.state.pageIndex]
+    })
     this.props.toggleModal();
   }
 
