@@ -34,7 +34,7 @@ class MicrodepositOnboarding extends React.Component {
 
       Lambda.verifyMicrodeposits(params, (success) => {
         this.setState({ submitText: (success) ? "Verified!" : "We couldn't verify those amounts. Is there a typo?" })
-        if (success) setTimeout(() => this.handleCancel(), 750)
+        if (success) setTimeout(() => this.props.toggleModal(), 750)
       })
     } else {
       this.setState({ submitText: "Enter two valid amounts" })
