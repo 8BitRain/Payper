@@ -111,7 +111,7 @@ class MainView extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => {this.toggleSideMenuSubpage("Trending Payments")}}>
+            onPress={() => {{ this.toggleSideMenuSubpage("Trending Payments"); this.trackOnce.report("buttonPress/trendingPayments", this.props.currentUser.uid, { from: "emptyState" }) }}}>
             <View style={{height: 60, backgroundColor: colors.accent, borderRadius: 4, marginTop: 15, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dims.width / 2}}>
               <Text style={{ fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
                 {"Explore Trending Payments"}
@@ -347,7 +347,7 @@ class MainView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.85}
               underlayColor={'transparent'}
-              onPress={() => { this.setState({createPaymentModalVisible: true}); this.trackOnce.report("buttonPress/newPayment", this.props.currentUser.uid) }}
+              onPress={() => { this.setState({createPaymentModalVisible: true}); this.trackOnce.report("buttonPress/newPayment", this.props.currentUser.uid); }}
               style={{padding: 14, paddingRight: 20}}>
               <Animated.View style={{justifyContent: 'center', alignItems: 'center', transform: [{ rotate: this.animatedValues.plusAngle }]}}>
                 <EvilIcons name={"plus"} size={40} color={colors.accent} />
