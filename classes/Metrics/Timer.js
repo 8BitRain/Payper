@@ -22,7 +22,7 @@ class Timer {
     this.stop()
 
     let key = Date.now()
-    let path = "userMetrics/timing/" + uid
+    let path = "userMetrics/timing/" + label + "/" + uid
     let data = {
       startTime: this.startTime,
       stopTime: this.stopTime,
