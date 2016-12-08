@@ -95,22 +95,13 @@ export default class UserOnboardingView extends React.Component {
   }
 
   focusInput() {
-    let currPage = this.pages[this.state.pageIndex];
+    let currPage = this.pages[this.state.pageIndex]
     switch (currPage) {
-      case "name":
-        this.state.firstNameInput.focus();
-      break;
-      case "email":
-        this.state.emailInput.focus();
-      break;
-      case "password":
-        this.state.passwordInput.focus();
-      break;
-      case "phone":
-        this.state.phoneInput.focus();
-      break;
-      default:
-        dismissKeyboard();
+      case "name": this.state.firstNameInput.focus(); break;
+      case "email": this.state.emailInput.focus(); break;
+      case "password": this.state.passwordInput.focus(); break;
+      case "phone": this.state.phoneInput.focus(); break;
+      default: dismissKeyboard()
     }
   }
 
