@@ -462,7 +462,8 @@ export default class User {
               this.decryptedPhone = params.phone
               this.decryptedEmail = params.email
               console.log("createUserWithEmailAndPassword succeeded...", "Lambda response:", responseData)
-              onSuccess()
+              let uid = responseData.user.uid || "unknownUID"
+              onSuccess(uid)
             } else {
               onFailure("lambda")
             }

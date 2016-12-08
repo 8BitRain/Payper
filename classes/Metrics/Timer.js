@@ -1,5 +1,4 @@
 import * as firebase from 'firebase'
-import { report } from './index'
 
 class Timer {
   constructor(props) {
