@@ -10,6 +10,7 @@ import Mixpanel from 'react-native-mixpanel'
 import { Actions } from 'react-native-router-flux'
 import { FBLoginManager } from 'NativeModules'
 import { AppState } from 'react-native'
+import { Timer } from './Metrics'
 const baseURL = config.details[config.details.env].lambdaBaseURL
 
 export default class User {
@@ -60,12 +61,23 @@ export default class User {
     this.tokenRefreshInterval = setInterval(() => {
       this.refresh()
     }, ((60 * 1000) * 20))
+    this.timer = new Timer()
+    this.timer.start()
     AppState.addEventListener('change', this.handleAppStateChange)
   }
 
   handleAppStateChange(state) {
-    if (state === 'active' && firebase.auth().currentUser !== null) this.refresh()
+    if (state === 'inactive') {
+      return
+    } else if (state === 'background') {
+      this.timer.report("sessionDuration", this.uid)
+    } else if (state === 'active') {
+      this.timer = new Timer()
+      this.timer.start()
+      if (firebase.auth().currentUser !== null) this.refresh()
+    }
   }
+
 
   /**
     *   Delete this user

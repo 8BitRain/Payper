@@ -11,7 +11,6 @@ import MainViewContainer from './modules/Main/MainViewContainer'
 import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer'
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView'
 import Phone from './modules/UserOnboarding/pages/Phone'
-import { AppState } from 'react-native'
 import { Scene, Reducer, Router, Modal } from 'react-native-router-flux'
 import { colors } from './globalStyles'
 import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
@@ -59,13 +58,6 @@ const getSceneStyle = function(props, computedProps) {
 export default class Coincast extends React.Component {
   constructor(props) {
     super(props)
-    this.handleAppStateChange = this.handleAppStateChange.bind(this)
-  }
-
-  handleAppStateChange(state) {
-    if (state === 'inactive') return
-    else if (state === 'background') Mixpanel.track('Session Duration')
-    else if (state === 'active') Mixpanel.timeEvent('Session Duration')
   }
 
   componentWillMount() {
@@ -75,9 +67,8 @@ export default class Coincast extends React.Component {
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6')
     Mixpanel.timeEvent('Session Duration')
 
-    AppState.addEventListener('change', this.handleAppStateChange)
-     ga = new Analytics('UA-87368863-1', clientId, 1, DeviceInfo.getUserAgent())
-     var screenView = new GAHits.ScreenView(
+    ga = new Analytics('UA-87368863-1', clientId, 1, DeviceInfo.getUserAgent())
+    var screenView = new GAHits.ScreenView(
       'Example App',
       'Welcome Screen',
       DeviceInfo.getReadableVersion(),
@@ -85,10 +76,6 @@ export default class Coincast extends React.Component {
     )
 
     ga.send(screenView)
-  }
-
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this.handleAppStateChange)
   }
 
   render() {
