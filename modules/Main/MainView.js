@@ -9,6 +9,7 @@ import { colors } from '../../globalStyles'
 import { SideMenu, PayCard, NoticeBar, PhotoUploader, MicrodepositOnboarding, TrendingPayments } from '../../components'
 import { MyProfile, BankAccounts, Notifications, Invite, Settings } from '../../components/SideMenuSubpages'
 import { CreatePaymentView, BankOnboarding } from '../../modules'
+import { TrackOnce } from '../../classes/Metrics'
 const dims = Dimensions.get('window')
 
 class MainView extends React.Component {
@@ -56,6 +57,7 @@ class MainView extends React.Component {
     this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.decrypt((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.getNativeContacts((updates) => this.props.updateCurrentUser(updates))
+    this.trackOnce = new TrackOnce()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -345,7 +347,7 @@ class MainView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.85}
               underlayColor={'transparent'}
-              onPress={() => this.setState({createPaymentModalVisible: true})}
+              onPress={() => { this.setState({createPaymentModalVisible: true}); this.trackOnce.report("buttonPress/newPayment", this.props.currentUser.uid) }}
               style={{padding: 14, paddingRight: 20}}>
               <Animated.View style={{justifyContent: 'center', alignItems: 'center', transform: [{ rotate: this.animatedValues.plusAngle }]}}>
                 <EvilIcons name={"plus"} size={40} color={colors.accent} />

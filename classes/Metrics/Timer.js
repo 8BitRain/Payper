@@ -1,3 +1,4 @@
+import { getDeviceDetails } from './index'
 import * as firebase from 'firebase'
 
 class Timer {
@@ -26,7 +27,8 @@ class Timer {
       startTime: this.startTime,
       stopTime: this.stopTime,
       duration: this.duration,
-      uid: uid
+      uid: uid,
+      deviceDetails: getDeviceDetails()
     }
 
     if (props) Object.assign(data, props)
@@ -36,20 +38,3 @@ class Timer {
 }
 
 module.exports = Timer
-
-/**
-  Firebase Structure
-  ---------------------------------------------------------------------------
-  root
-    - userMetrics
-      - anonymous
-        - cancelledUserCreations
-        - failedUserCreations
-          - name, email, pass, etc...
-      - uid
-        - timing
-        - buttonPresses
-        - flows
-        - invalidInputs
-  ---------------------------------------------------------------------------
-**/

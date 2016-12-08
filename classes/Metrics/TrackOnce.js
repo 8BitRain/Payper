@@ -1,3 +1,4 @@
+import { getDeviceDetails } from './index'
 import * as firebase from 'firebase'
 
 class TrackOnce {
@@ -8,7 +9,9 @@ class TrackOnce {
   report(label, uid, props) {
     let key = Date.now()
     let path = "userMetrics/" + label + "/" + uid
-    let data = {}
+    let data = {
+      deviceDetails: getDeviceDetails()
+    }
     if (props) Object.assign(data, props)
     firebase.database().ref(path).child(key).set(data)
   }
