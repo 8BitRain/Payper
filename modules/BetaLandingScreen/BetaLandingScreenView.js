@@ -156,7 +156,7 @@ class BetaLandingScreenView extends React.Component {
         { /* Rest of modal */ }
         <View style={wrappers.modalContent}>
           <Text style={{fontSize: 22, color: colors.deepBlue, width: dims.width - 80, textAlign: 'center'}}>
-            { "What's your number?" }
+            { "What's your phone number?" }
           </Text>
 
           {(this.state.onboarding === "invite-request")
@@ -168,8 +168,8 @@ class BetaLandingScreenView extends React.Component {
           <TextInput
             style={wrappers.modalInputPhone}
             placeholderFontFamily={"Roboto"}
-            placeholderTextColor={colors.lightGrey}
-            placeholder={""}
+            placeholderTextColor={colors.slateGrey}
+            placeholder={"e.g. 2623058038"}
             defaultValue={this.state.phoneInput}
             autoCorrect={false} autoFocus
             keyboardType={"phone-pad"}
