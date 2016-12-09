@@ -1239,7 +1239,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchScreen;
-				CODEPUSH_KEY = "";
+				CODEPUSH_KEY = "PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3-";
 				CODE_SIGN_ENTITLEMENTS = Payper.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1371,7 +1371,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchScreen;
-				CODEPUSH_KEY = "";
+				CODEPUSH_KEY = "PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3-";
 				CODE_SIGN_ENTITLEMENTS = Payper.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
