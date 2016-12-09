@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import { View, TouchableHighlight, TouchableWithoutFeedback, Text, Dimensions, StyleSheet, Animated, Modal, TextInput, Keyboard, Alert } from 'react-native'
 import { colors } from '../../../globalStyles'
 import { StickyView } from '../../../components'
@@ -94,8 +95,9 @@ class DateField extends React.Component {
   }
 
   submit() {
-    let {value, validateInput, invalidityAlert, setValue} = this.props
-    let {input} = this.state
+    let {value, validateInput, invalidityAlert, setValues} = this.props
+    let {dayInput, monthInput, yearInput} = this.state
+    let input = dayInput + "-" + monthInput + "-" + yearInput
 
     // Validate input
     let inputIsValid = validateInput(input)
@@ -106,10 +108,19 @@ class DateField extends React.Component {
       return
     }
 
-    // Show value in this component/set value in parent component
-    let shouldShowValue = value.length < 1 && input.length >= 1
-    setValue(input, () => (shouldShowValue) ? this.showValue() : null)
+    setValues(input, () => this.showValue())
     this.toggle()
+  }
+
+  autoFillWithTodaysDate() {
+    let {setValues} = this.props
+    let now = new Date()
+    let day = now.getDate()
+    let month = now.getMonth() + 1
+    let year = now.getFullYear()
+    let combined = day + "-" + month + "-" + year
+    this.setState({dayInput: day, monthInput: month, yearInput: year})
+    setValues(combined, () => this.showValue())
   }
 
   render() {
@@ -158,7 +169,7 @@ class DateField extends React.Component {
             <EvilIcons name={iconName} size={32} color={'transparent'} />
 
             <Text style={{fontSize: 18, color: colors.gradientGreen, paddingLeft: 10}}>
-              {dayValue + "-" + monthValue + "-" + yearValue}
+              {moment(dayValue + "-" + monthValue + "-" + yearValue).calendar()}
             </Text>
           </Animated.View>
 
@@ -171,8 +182,25 @@ class DateField extends React.Component {
 
             { /* Input sticks to top of keyboard */ }
             <StickyView duration={0}>
-              <View style={{alignItems: 'center', justifyContent: 'center', width: dims.width, backgroundColor: colors.lightGrey, padding: 10, paddingBottom: 0}}>
-                <EvilIcons name={iconName} size={34} color={colors.deepBlue} />
+
+              <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: dims.width, backgroundColor: colors.lightGrey, padding: 10, paddingBottom: 0}}>
+                <View style={{flex: 0.3333}} />
+                <View style={{flex: 0.3333, justifyContent: 'center', alignItems: 'center'}}>
+                  <EvilIcons name={iconName} size={34} color={colors.deepBlue} />
+                </View>
+                <View style={{flex: 0.3333}}>
+                  <TouchableHighlight
+                    activeOpacity={0.65}
+                    underlayColor={'transparent'}
+                    onPress={() => this.autoFillWithTodaysDate()}>
+                    <View style={{flex: 1.0, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 4}}>
+                      <Text style={{fontSize: 16, color: colors.accent}}>
+                        {"Today"}
+                      </Text>
+                      <EvilIcons name={"chevron-right"} color={colors.accent} size={26} style={{paddingTop: 3}} />
+                    </View>
+                  </TouchableHighlight>
+                </View>
               </View>
 
               <View style={{flexDirection: 'row', width: dims.width, backgroundColor: colors.lightGrey}}>
@@ -188,7 +216,7 @@ class DateField extends React.Component {
                   </View>
                 </TouchableHighlight>
 
-                <View style={{flexDirection: 'row', flex: 0.65, height: 50}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', flex: 0.65, height: 50}}>
                   { /* Day input */ }
                   <TextInput
                     ref={ref => this.dayField = ref}
@@ -202,10 +230,12 @@ class DateField extends React.Component {
                     onChangeText={(input) => this.setState({dayInput: input})}
                     onSubmitEditing={() => this.submit()} />
 
+                  <View style={{height: 32, width: 1, backgroundColor: colors.medGrey}} />
+
                   { /* Month input */ }
                   <TextInput
                     ref={ref => this.monthField = ref}
-                    defaultValue={dayValue}
+                    defaultValue={monthValue}
                     placeholder={"MM"}
                     placeholderTextColor={colors.slateGrey}
                     keyboardType={"number-pad"}
@@ -214,10 +244,12 @@ class DateField extends React.Component {
                     onChangeText={(input) => this.setState({dayInput: input})}
                     onSubmitEditing={() => this.submit()} />
 
+                  <View style={{height: 32, width: 1, backgroundColor: colors.medGrey}} />
+
                   { /* Year input */ }
                   <TextInput
                     ref={ref => this.yearField = ref}
-                    defaultValue={dayValue}
+                    defaultValue={yearValue}
                     placeholder={"YYYY"}
                     placeholderTextColor={colors.slateGrey}
                     keyboardType={"number-pad"}

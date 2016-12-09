@@ -23,7 +23,7 @@ const colors = {
 
   // Opaque colors
   snowWhiteOpaque: "rgba(255, 251, 252, 0.5)",
-  accentOpaque: "rgba(0, 207, 179, 0.5)",
+  accentOpaque: "rgba(0, 207, 179, 0.7)",
 
   //old colors
   obisdian: "#08090A",
