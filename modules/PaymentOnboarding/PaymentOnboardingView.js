@@ -75,15 +75,6 @@ class PaymentOnboardingView extends React.Component {
           keyboardShouldPersistTaps
           contentContainerStyle={{alignItems: 'center'}}>
 
-          {/*this.state.fields.map((data, i) =>
-            <Field
-              {...data}
-              key={data.title}
-              frequency={this.state.frequency}
-              induceFieldRef={this.induceFieldRef}
-              toggleFieldFocus={this.toggleFieldFocus} />
-          )*/}
-
           { /* Who? */ }
           <Field
             title={"Who?"}
