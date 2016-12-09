@@ -3,7 +3,7 @@ import { View, ScrollView, Animated, StatusBar, Image, TouchableHighlight, Text,
 import { Actions } from 'react-native-router-flux'
 import { colors } from '../../globalStyles'
 import { StickyView } from '../../components'
-import { Field } from './subcomponents'
+import { TextField, DateField } from './subcomponents'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const dims = Dimensions.get('window')
 
@@ -18,7 +18,9 @@ class PaymentOnboardingView extends React.Component {
       howOften: "",
       howLong: "",
       whatFor: "",
-      start: ""
+      startDay: "",
+      startMonth: "",
+      startYear: ""
     }
 
     this.fieldRefs = {}
@@ -76,7 +78,7 @@ class PaymentOnboardingView extends React.Component {
           contentContainerStyle={{alignItems: 'center'}}>
 
           { /* Who? */ }
-          <Field
+          <TextField
             title={"Who?"}
             iconName={"user"}
             complete={false}
@@ -98,7 +100,7 @@ class PaymentOnboardingView extends React.Component {
             toggleFieldFocus={this.toggleFieldFocus} />
 
           { /* How much? */ }
-          <Field
+          <TextField
             title={"How much?"}
             iconName={"credit-card"}
             complete={false}
@@ -128,7 +130,7 @@ class PaymentOnboardingView extends React.Component {
             toggleFieldFocus={this.toggleFieldFocus} />
 
           { /* How often? */ }
-          <Field
+          <TextField
             title={"How often?"}
             iconName={"clock"}
             complete={false}
@@ -174,7 +176,7 @@ class PaymentOnboardingView extends React.Component {
             toggleFieldFocus={this.toggleFieldFocus} />
 
           { /* How long? */ }
-          <Field
+          <TextField
             title={"How long?"}
             iconName={"calendar"}
             complete={false}
@@ -206,7 +208,7 @@ class PaymentOnboardingView extends React.Component {
             toggleFieldFocus={this.toggleFieldFocus} />
 
           { /* What for? */ }
-          <Field
+          <TextField
             title={"What for?"}
             iconName={"pencil"}
             complete={false}
@@ -222,6 +224,23 @@ class PaymentOnboardingView extends React.Component {
             }}
             setValue={(value, cb) => {
               this.setState({whatFor: value}, () => cb())
+            }}
+            induceFieldRef={this.induceFieldRef}
+            toggleFieldFocus={this.toggleFieldFocus} />
+
+          { /* Starting when? */ }
+          <DateField
+            title={"Starting when?"}
+            iconName={"clock"}
+            complete={false}
+            dayValue={this.state.startDay}
+            monthValue={this.state.startMonth}
+            yearValue={this.state.startYear}
+            invalidityAlert={"Please enter a valid date."}
+            setValue={(value, type, cb) => {
+              if (type === "day") this.setState({startDay: value}, () => cb())
+              else if (type === "month") this.setState({startMonth: value}, () => cb())
+              else if (type === "year") this.setState({startYear: value}, () => cb())
             }}
             induceFieldRef={this.induceFieldRef}
             toggleFieldFocus={this.toggleFieldFocus} />

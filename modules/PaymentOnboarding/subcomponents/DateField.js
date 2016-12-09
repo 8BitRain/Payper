@@ -7,7 +7,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 const dims = Dimensions.get('window')
 
-class Field extends React.Component {
+class DateField extends React.Component {
   constructor(props) {
     super(props)
 
@@ -24,7 +24,9 @@ class Field extends React.Component {
       focused: false,
       hidden: false,
       touchable: true,
-      input: ""
+      dayInput: "",
+      monthInput: "",
+      yearInput: ""
     }
   }
 
@@ -112,7 +114,7 @@ class Field extends React.Component {
 
   render() {
     let {
-      iconName, title, complete, value, placeholder,
+      iconName, title, complete, dayValue, monthValue, yearValue, placeholder,
       textInputProps
     } = this.props
 
@@ -156,7 +158,7 @@ class Field extends React.Component {
             <EvilIcons name={iconName} size={32} color={'transparent'} />
 
             <Text style={{fontSize: 18, color: colors.gradientGreen, paddingLeft: 10}}>
-              {value}
+              {dayValue + "-" + monthValue + "-" + yearValue}
             </Text>
           </Animated.View>
 
@@ -186,17 +188,44 @@ class Field extends React.Component {
                   </View>
                 </TouchableHighlight>
 
-                { /* Input field */ }
-                <TextInput
-                  ref={ref => this.inputField = ref}
-                  defaultValue={value}
-                  placeholderTextColor={colors.slateGrey}
-                  blurOnSubmit={false}
-                  autoFocus={true}
-                  style={{flex: 0.65, height: 50, paddingLeft: 10, paddingRight: 10, textAlign: 'center'}}
-                  {...textInputProps}
-                  onChangeText={(input) => this.setState({input: input})}
-                  onSubmitEditing={() => this.submit()} />
+                <View style={{flexDirection: 'row', flex: 0.65, height: 50}}>
+                  { /* Day input */ }
+                  <TextInput
+                    ref={ref => this.dayField = ref}
+                    defaultValue={dayValue}
+                    placeholder={"DD"}
+                    placeholderTextColor={colors.slateGrey}
+                    keyboardType={"number-pad"}
+                    blurOnSubmit={false}
+                    autoFocus={true}
+                    style={{flex: 0.3333, height: 50, paddingLeft: 4, paddingRight: 4, textAlign: 'center', borderRightWidth: 1, borderColor: colors.slateGrey}}
+                    onChangeText={(input) => this.setState({dayInput: input})}
+                    onSubmitEditing={() => this.submit()} />
+
+                  { /* Month input */ }
+                  <TextInput
+                    ref={ref => this.monthField = ref}
+                    defaultValue={dayValue}
+                    placeholder={"MM"}
+                    placeholderTextColor={colors.slateGrey}
+                    keyboardType={"number-pad"}
+                    blurOnSubmit={false}
+                    style={{flex: 0.3333, height: 50, paddingLeft: 4, paddingRight: 4, textAlign: 'center'}}
+                    onChangeText={(input) => this.setState({dayInput: input})}
+                    onSubmitEditing={() => this.submit()} />
+
+                  { /* Year input */ }
+                  <TextInput
+                    ref={ref => this.yearField = ref}
+                    defaultValue={dayValue}
+                    placeholder={"YYYY"}
+                    placeholderTextColor={colors.slateGrey}
+                    keyboardType={"number-pad"}
+                    blurOnSubmit={false}
+                    style={{flex: 0.3333, height: 50, paddingLeft: 4, paddingRight: 4, textAlign: 'center'}}
+                    onChangeText={(input) => this.setState({dayInput: input})}
+                    onSubmitEditing={() => this.submit()} />
+                </View>
 
                 { /* Submit button */ }
                 <TouchableHighlight
@@ -218,4 +247,4 @@ class Field extends React.Component {
   }
 }
 
-module.exports = Field
+module.exports = DateField
