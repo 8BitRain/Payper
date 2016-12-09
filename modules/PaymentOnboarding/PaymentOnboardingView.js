@@ -121,7 +121,14 @@ class PaymentOnboardingView extends React.Component {
               return true
             }}
             setValue={(value, cb) => {
-              this.setState({howMuch: value}, () => cb())
+              let string = value.replace("$", "")
+              let float = parseFloat(string)
+              let formatted = ""
+
+              if (string.indexOf('.') >= 0) float = float.toFixed(2)
+              formatted = "$" + float
+
+              this.setState({howMuch: formatted}, () => cb())
             }}
             induceFieldRef={this.induceFieldRef}
             toggleFieldFocus={this.toggleFieldFocus} />
