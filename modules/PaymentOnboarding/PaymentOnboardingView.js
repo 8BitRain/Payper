@@ -112,21 +112,24 @@ class PaymentOnboardingView extends React.Component {
             iconName={"credit-card"}
             complete={false}
             value={this.state.howMuch}
-            invalidityAlert={"Please enter a valid amount."}
+            invalidityAlert={"Please enter an amount between $1 and $3,000."}
             textInputProps={{
               placeholder: "$0.00",
               keyboardType: "numeric"
             }}
             validateInput={(input) => {
-              return true
+              let string = input.replace(/[^\d\.]*/g, '')
+              let float = parseFloat(string)
+              let isValid = float >= 1 && float <= 3000
+              return isValid
             }}
             setValue={(value, cb) => {
-              let string = value.replace("$", "")
+              let string = value.replace(/[^\d\.]*/g, '')
               let float = parseFloat(string)
               let formatted = ""
 
               if (string.indexOf('.') >= 0) float = float.toFixed(2)
-              formatted = "$" + float
+              formatted = "$" + float.toLocaleString()
 
               this.setState({howMuch: formatted}, () => cb())
             }}
@@ -194,6 +197,7 @@ class PaymentOnboardingView extends React.Component {
               return true
             }}
             setValue={(value, cb) => {
+              value = value.split(" ")[0]
               let {howOften} = this.state
 
               // Determine freqency to be appended
