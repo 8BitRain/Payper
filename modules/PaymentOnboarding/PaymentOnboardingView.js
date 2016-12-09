@@ -13,87 +13,12 @@ class PaymentOnboardingView extends React.Component {
 
     this.state = {
       modalVisible: false,
-      fields: [
-        {
-          title: "Who?",
-          iconName: "user",
-          complete: false,
-          value: "",
-          invalidityAlert: "Please select one or more users.",
-          textInputProps: {
-            placeholder: "Search by name or username",
-            keyboardType: "default",
-            autoCapitalize: "words",
-            autoCorrect: false
-          },
-          validateInput: (input) => {
-            return true
-          }
-        },
-        {
-          title: "How much?",
-          iconName: "credit-card",
-          complete: false,
-          value: "",
-          invalidityAlert: "Please enter a valid USD amount between $1 and $3,000.",
-          textInputProps: {
-            placeholder: "$0.00",
-            keyboardType: "numeric",
-            autoCorrect: false
-          },
-          validateInput: (input) => {
-            let isInRange = input >= 1 && input <= 3000
-            let isValid = isInRange
-            return isValid
-          }
-        },
-        {
-          title: "How often?",
-          iconName: "clock",
-          complete: false,
-          value: "",
-          invalidityAlert: "Please enter a valid frequency (monthly or weekly).",
-          textInputProps: {
-            placeholder: "Monthly or weekly?",
-            keyboardType: "default",
-            autoCorrect: false
-          },
-          validateInput: (input) => {
-
-          }
-        },
-        {
-          title: "How long?",
-          iconName: "calendar",
-          complete: false,
-          value: "",
-          invalidityAlert: "Please enter a valid number greater than or equal to 1.",
-          textInputProps: {
-            placeholder: "0 months",
-            keyboardType: "numeric",
-            autoCorrect: false
-          },
-          validateInput: (input) => {
-
-          }
-        },
-        {
-          title: "What for?",
-          iconName: "pencil",
-          complete: false,
-          value: "",
-          invalidityAlert: "Please enter a valid payment purpose.",
-          textInputProps: {
-            placeholder: "ex. Spotify Family Plan",
-            keyboardType: "default",
-            autoCapitalize: "words",
-            autoCorrect: false
-          },
-          validateInput: (input) => {
-
-          }
-        }
-      ]
+      who: "",
+      howMuch: "",
+      howOften: "",
+      howLong: "",
+      whatFor: "",
+      start: ""
     }
 
     this.fieldRefs = {}
@@ -149,14 +74,156 @@ class PaymentOnboardingView extends React.Component {
         <ScrollView
           keyboardShouldPersistTaps
           contentContainerStyle={{alignItems: 'center'}}>
-          {this.state.fields.map((data, i) =>
+
+          {/*this.state.fields.map((data, i) =>
             <Field
               {...data}
               key={data.title}
+              frequency={this.state.frequency}
               induceFieldRef={this.induceFieldRef}
-              toggleFieldFocus={this.toggleFieldFocus}
-              toggle />
-          )}
+              toggleFieldFocus={this.toggleFieldFocus} />
+          )*/}
+
+          { /* Who? */ }
+          <Field
+            title={"Who?"}
+            iconName={"user"}
+            complete={false}
+            value={this.state.who}
+            invalidityAlert={"Please select one or more users."}
+            textInputProps={{
+              placeholder: "Search by name or number",
+              keyboardType: "default",
+              autoCapitalize: "words",
+              autoCorrect: false
+            }}
+            validateInput={(input) => {
+              return true
+            }}
+            setValue={(value, cb) => {
+              this.setState({who: value}, () => cb())
+            }}
+            induceFieldRef={this.induceFieldRef}
+            toggleFieldFocus={this.toggleFieldFocus} />
+
+          { /* How much? */ }
+          <Field
+            title={"How much?"}
+            iconName={"credit-card"}
+            complete={false}
+            value={this.state.howMuch}
+            invalidityAlert={"Please enter a valid amount."}
+            textInputProps={{
+              placeholder: "$0.00",
+              keyboardType: "numeric"
+            }}
+            validateInput={(input) => {
+              return true
+            }}
+            setValue={(value, cb) => {
+              this.setState({howMuch: value}, () => cb())
+            }}
+            induceFieldRef={this.induceFieldRef}
+            toggleFieldFocus={this.toggleFieldFocus} />
+
+          { /* How often? */ }
+          <Field
+            title={"How often?"}
+            iconName={"clock"}
+            complete={false}
+            value={this.state.howOften}
+            invalidityAlert={"Please enter a valid frequency (monthly or weekly)."}
+            textInputProps={{
+              placeholder: "Monthly or weekly?",
+              keyboardType: "default",
+              autoCapitalize: "words",
+              autoCorrect: false
+            }}
+            validateInput={(input) => {
+              input = input.toLowerCase()
+              let isValid = input.indexOf("month") >= 0 || input.indexOf("week") >= 0
+              return isValid
+            }}
+            setValue={(value, cb) => {
+              // Reformat value
+              value = value.toLowerCase()
+              if (value.indexOf("month") >= 0) value = "Monthly"
+              else if (value.indexOf("week") >= 0) value = "Weekly"
+
+              // Update duration
+              let {howLong} = this.state
+              if (howLong !== "") {
+                let buffer = howLong.split(" ")
+                let duration = buffer[0]
+
+                // Determine frequency to be appended
+                let frequency = ""
+                if (value === "Monthly")
+                  frequency = (duration === 1) ? " month" : " months"
+                else if (value === "Weekly")
+                  frequency = (duration === 1) ? " week" : " weeks"
+
+                duration += frequency
+                this.setState({howLong: duration})
+              }
+
+              this.setState({howOften: value}, () => cb())
+            }}
+            induceFieldRef={this.induceFieldRef}
+            toggleFieldFocus={this.toggleFieldFocus} />
+
+          { /* How long? */ }
+          <Field
+            title={"How long?"}
+            iconName={"calendar"}
+            complete={false}
+            value={this.state.howLong}
+            invalidityAlert={"Please enter a valid duration (1 or more " + ((this.state.howOften === "Monthly") ? "months" : "weeks") + ")"}
+            textInputProps={{
+              placeholder: "0 " + ((this.state.howOften === "Monthly") ? "months" : "weeks"),
+              keyboardType: "number-pad"
+            }}
+            validateInput={(input) => {
+              return true
+            }}
+            setValue={(value, cb) => {
+              let {howOften} = this.state
+
+              // Determine freqency to be appended
+              let frequency = ""
+              if (this.state.howOften === "Monthly")
+                frequency = (value === 1) ? " month" : " months"
+              else if (this.state.howOften === "Weekly")
+                frequency = (value === 1) ? " week" : " weeks"
+
+              value += frequency
+
+              this.setState({howLong: value}, () => cb())
+            }}
+            induceFieldRef={this.induceFieldRef}
+            toggleFieldFocus={this.toggleFieldFocus} />
+
+          { /* What for? */ }
+          <Field
+            title={"What for?"}
+            iconName={"pencil"}
+            complete={false}
+            value={this.state.whatFor}
+            invalidityAlert={"Please enter a payment purpose."}
+            textInputProps={{
+              placeholder: "ex. Spotify Family Plan",
+              keyboardType: "default",
+              autoCorrect: false
+            }}
+            validateInput={(input) => {
+              return input.length > 0
+            }}
+            setValue={(value, cb) => {
+              this.setState({whatFor: value}, () => cb())
+            }}
+            induceFieldRef={this.induceFieldRef}
+            toggleFieldFocus={this.toggleFieldFocus} />
+
         </ScrollView>
       </View>
     )

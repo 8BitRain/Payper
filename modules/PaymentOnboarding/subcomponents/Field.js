@@ -92,24 +92,32 @@ class Field extends React.Component {
   }
 
   submit() {
-    let {input, value} = this.state
-    let inputIsValid = this.props.validateInput(input)
+    let {value, validateInput, invalidityAlert, setValue} = this.props
+    let {input} = this.state
 
+    // Validate input
+    let inputIsValid = validateInput(input)
     if (!inputIsValid) {
       let title = "Wait!"
-      let msg = this.props.invalidityAlert || "Input is invalid."
+      let msg = invalidityAlert || "Input is invalid."
       Alert.alert(title, msg, [{text: 'OK', onPress: () => this.inputField.focus()}])
       return
     }
 
+    // Show value in this component/set value in parent component
     let shouldShowValue = value.length < 1 && input.length >= 1
-    this.setState({value: input}, () => (shouldShowValue) ? this.showValue() : null)
+    setValue(input, () => (shouldShowValue) ? this.showValue() : null)
+    this.toggle()
   }
 
   render() {
     let {
-      iconName, title, complete, hidden, focused, value, placeholder, input,
+      iconName, title, complete, value, placeholder,
       textInputProps
+    } = this.props
+
+    let {
+      focused, hidden, touchable, input
     } = this.state
 
     let {
