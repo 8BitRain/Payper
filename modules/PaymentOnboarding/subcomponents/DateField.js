@@ -169,7 +169,7 @@ class DateField extends React.Component {
             <EvilIcons name={iconName} size={32} color={'transparent'} />
 
             <Text style={{fontSize: 18, color: colors.gradientGreen, paddingLeft: 10}}>
-              {moment(dayValue + "-" + monthValue + "-" + yearValue).calendar()}
+              {dayValue + "-" + monthValue + "-" + yearValue + ""}
             </Text>
           </Animated.View>
 
@@ -193,11 +193,10 @@ class DateField extends React.Component {
                     activeOpacity={0.65}
                     underlayColor={'transparent'}
                     onPress={() => this.autoFillWithTodaysDate()}>
-                    <View style={{flex: 1.0, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingBottom: 4}}>
-                      <Text style={{fontSize: 16, color: colors.accent}}>
+                    <View style={{flex: 1.0, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                      <Text style={{fontSize: 16, color: colors.accent, paddingLeft: 8, paddingRight: 8, paddingTop: 6, paddingBottom: 6, borderRadius: 4, backgroundColor: colors.snowWhite, overflow: 'hidden'}}>
                         {"Today"}
                       </Text>
-                      <EvilIcons name={"chevron-right"} color={colors.accent} size={26} style={{paddingTop: 3}} />
                     </View>
                   </TouchableHighlight>
                 </View>

@@ -251,13 +251,22 @@ class PaymentOnboardingView extends React.Component {
             }}
             validateInput={(input) => {
               let buffer = input.split("-")
-              let day = buffer[0]
-              let month = buffer[1]
-              let year = buffer[2]
-              console.log("validating...")
-              console.log("day", day)
-              console.log("month", month)
-              console.log("year", year)
+              let dayString = buffer[0]
+              let monthString = buffer[1]
+              let yearString = buffer[2]
+              let dayFloat = parseFloat(dayString)
+              let monthFloat = parseFloat(monthString)
+              let yearFloat = parseFloat(yearString)
+
+              console.log("dayString", dayString)
+              console.log("monthString", monthString)
+              console.log("yearString", yearString)
+              console.log("dayFloat", dayFloat)
+              console.log("monthFloat", monthFloat)
+              console.log("yearFloat", yearFloat)
+
+              let date = new Date(input)
+              console.log("date", date)
 
               return true
             }}
