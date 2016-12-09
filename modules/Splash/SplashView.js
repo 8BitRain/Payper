@@ -87,8 +87,8 @@ class SplashView extends React.Component {
     this.setState({ connected: true })
 
     CodePush.sync({deploymentKey: codePushKey})
-    let start = codePushKey.substring(0, 5)
-    alert("codePushKey starts with " + start)
+    // let start = codePushKey.substring(0, 5)
+    // alert("codePushKey starts with " + start)
 
     // Check beta status
     Async.get('betaStatus', (val) => {

@@ -49,7 +49,8 @@ export var details = {
       "authDomain": "payper-test.firebaseapp.com",
       "databaseURL": "https://payper-test.firebaseio.com",
       "storageBucket": "payper-test.appspot.com"
-    }
+    },
+    "codePushKey": "PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3-"
   },
   "prod": {
     "lambdaBaseURL": "https://mey71fma7i.execute-api.us-east-1.amazonaws.com/prod/",
