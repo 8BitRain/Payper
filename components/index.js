@@ -7,3 +7,4 @@ exports.MicrodepositOnboarding = require('./MicrodepositOnboarding/MicrodepositO
 exports.TrendingPayments = require('./TrendingPayments/TrendingPayments')
 exports.PasswordReset = require('./PasswordReset/PasswordReset')
 exports.StickyView = require('./StickyView/StickyView')
+exports.DateInput = require('./DateInput/DateInput')
