@@ -11,6 +11,12 @@ class PaymentOnboardingView extends React.Component {
   constructor(props) {
     super(props)
 
+    this.AV = {
+      successHeight: new Animated.Value(60),
+      successOpacity: new Animated.Value(0),
+      buttonOpacity: new Animated.Value(1)
+    }
+
     this.state = {
       modalVisible: false,
       who: "",
@@ -48,7 +54,46 @@ class PaymentOnboardingView extends React.Component {
     }
   }
 
+  pay() {
+    let {
+      who, howMuch, howOften, howLong, whatFor,
+      startDay, startMonth, startYear
+    } = this.state
+
+    let {successHeight, successOpacity, buttonOpacity} = this.AV
+
+    let animations = [
+      Animated.timing(successHeight, {
+        toValue: dims.height * 0.2,
+        duration: 180
+      }),
+      Animated.timing(successOpacity, {
+        toValue: 1,
+        duration: 120
+      }),
+      Animated.timing(buttonOpacity, {
+        toValue: 0,
+        duration: 100
+      })
+    ]
+
+    Animated.parallel(animations).start(() => {
+      setTimeout(() => Actions.pop(), 800)
+    })
+  }
+
+  request() {
+    let {
+      who, howMuch, howOften, howLong, whatFor,
+      startDay, startMonth, startYear
+    } = this.state
+
+    console.log("--> request() was invoked...")
+  }
+
   render() {
+    let {successHeight, successOpacity, buttonOpacity} = this.AV
+
     return(
       <View style={{flex: 1.0, flexDirection: 'column'}}>
         <StatusBar barStyle={"light-content"} />
@@ -253,31 +298,49 @@ class PaymentOnboardingView extends React.Component {
         </ScrollView>
 
         { /* Pay and request buttons */ }
-        <View style={{position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row', alignItems: 'center', height: 60, backgroundColor: colors.lightGrey}}>
-          <TouchableHighlight
-            activeOpacity={0.75}
-            underlayColor={'transparent'}
-            onPress={() => console.log("Would request... this.state:", this.state)}>
-            <View style={{flex: 1.0, width: dims.width * 0.5, alignItems: 'center', justifyContent: 'center'}}>
-              <Text style={{fontSize: 20, color: colors.accent}}>
-                {"Request"}
-              </Text>
-            </View>
-          </TouchableHighlight>
+        <Animated.View
+          style={{
+            height: successHeight, position: 'absolute', bottom: 0, left: 0, right: 0,
+            shadowOpacity: 0.4, shadowRadius: 17, shadowOffset: { height: 0, width: 0 }
+          }}>
 
-          <View style={{height: 38, width: 1, backgroundColor: colors.medGrey}} />
+          { /* Success message */ }
+          <Animated.View
+            style={{
+              opacity: successOpacity, position: 'absolute', top: 0, right: 0,
+              bottom: 0, left: 0, alignItems: 'center', justifyContent: 'center',
+              backgroundColor: colors.gradientGreen
+            }}>
+            <EvilIcons name={"check"} color={colors.snowWhite} size={68} />
+          </Animated.View>
 
-          <TouchableHighlight
-            activeOpacity={0.75}
-            underlayColor={'transparent'}
-            onPress={() => console.log("Would pay... this.state:", this.state)}>
-            <View style={{flex: 1.0, width: dims.width * 0.5, alignItems: 'center', justifyContent: 'center'}}>
-              <Text style={{fontSize: 20, color: colors.gradientGreen}}>
-                {"Pay"}
-              </Text>
-            </View>
-          </TouchableHighlight>
-        </View>
+          { /* Pay and request buttons */ }
+          <Animated.View style={{opacity: buttonOpacity, flexDirection: 'row', alignItems: 'center', height: 60, backgroundColor: colors.lightGrey}}>
+            <TouchableHighlight
+              activeOpacity={0.75}
+              underlayColor={'transparent'}
+              onPress={() => this.request()}>
+              <View style={{flex: 1.0, width: dims.width * 0.5, alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={{fontSize: 20, color: colors.accent}}>
+                  {"Request"}
+                </Text>
+              </View>
+            </TouchableHighlight>
+
+            <View style={{height: 38, width: 1, backgroundColor: colors.medGrey}} />
+
+            <TouchableHighlight
+              activeOpacity={0.75}
+              underlayColor={'transparent'}
+              onPress={() => this.pay()}>
+              <View style={{flex: 1.0, width: dims.width * 0.5, alignItems: 'center', justifyContent: 'center'}}>
+                <Text style={{fontSize: 20, color: colors.gradientGreen}}>
+                  {"Pay"}
+                </Text>
+              </View>
+            </TouchableHighlight>
+          </Animated.View>
+        </Animated.View>
       </View>
     )
   }
