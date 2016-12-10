@@ -205,7 +205,10 @@ class DateField extends React.Component {
     let year = now.getFullYear()
     let combined = day + "-" + month + "-" + year
     this.setState({dayInput: day, monthInput: month, yearInput: year})
-    setValues(combined, () => this.showValue())
+    setValues(combined, () => {
+      this.showValue()
+      this.toggle()
+    })
   }
 
   onChangeText(input) {
