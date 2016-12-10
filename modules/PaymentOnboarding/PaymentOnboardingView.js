@@ -250,8 +250,34 @@ class PaymentOnboardingView extends React.Component {
             }}
             induceFieldRef={this.induceFieldRef}
             toggleFieldFocus={this.toggleFieldFocus} />
-
         </ScrollView>
+
+        { /* Pay and request buttons */ }
+        <View style={{position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row', alignItems: 'center', height: 60, backgroundColor: colors.lightGrey}}>
+          <TouchableHighlight
+            activeOpacity={0.75}
+            underlayColor={'transparent'}
+            onPress={() => console.log("Would request... this.state:", this.state)}>
+            <View style={{flex: 1.0, width: dims.width * 0.5, alignItems: 'center', justifyContent: 'center'}}>
+              <Text style={{fontSize: 20, color: colors.accent}}>
+                {"Request"}
+              </Text>
+            </View>
+          </TouchableHighlight>
+
+          <View style={{height: 38, width: 1, backgroundColor: colors.medGrey}} />
+
+          <TouchableHighlight
+            activeOpacity={0.75}
+            underlayColor={'transparent'}
+            onPress={() => console.log("Would pay... this.state:", this.state)}>
+            <View style={{flex: 1.0, width: dims.width * 0.5, alignItems: 'center', justifyContent: 'center'}}>
+              <Text style={{fontSize: 20, color: colors.gradientGreen}}>
+                {"Pay"}
+              </Text>
+            </View>
+          </TouchableHighlight>
+        </View>
       </View>
     )
   }
