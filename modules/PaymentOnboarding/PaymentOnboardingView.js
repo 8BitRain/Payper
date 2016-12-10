@@ -236,7 +236,6 @@ class PaymentOnboardingView extends React.Component {
             dayValue={this.state.startDay}
             monthValue={this.state.startMonth}
             yearValue={this.state.startYear}
-            invalidityAlert={"Please enter a valid date."}
             setValues={(values, cb) => {
               let buffer = values.split("-")
               let day = buffer[0]
@@ -248,27 +247,6 @@ class PaymentOnboardingView extends React.Component {
                 startMonth: month,
                 startYear: year
               }, () => cb())
-            }}
-            validateInput={(input) => {
-              let buffer = input.split("-")
-              let dayString = buffer[0]
-              let monthString = buffer[1]
-              let yearString = buffer[2]
-              let dayFloat = parseFloat(dayString)
-              let monthFloat = parseFloat(monthString)
-              let yearFloat = parseFloat(yearString)
-
-              console.log("dayString", dayString)
-              console.log("monthString", monthString)
-              console.log("yearString", yearString)
-              console.log("dayFloat", dayFloat)
-              console.log("monthFloat", monthFloat)
-              console.log("yearFloat", yearFloat)
-
-              let date = new Date(input)
-              console.log("date", date)
-
-              return true
             }}
             induceFieldRef={this.induceFieldRef}
             toggleFieldFocus={this.toggleFieldFocus} />

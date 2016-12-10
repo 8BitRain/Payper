@@ -1,6 +1,9 @@
 import React from 'react'
 import moment from 'moment'
-import { View, TouchableHighlight, TouchableWithoutFeedback, Text, Dimensions, StyleSheet, Animated, Modal, TextInput, Keyboard, Alert } from 'react-native'
+import {
+  View, TouchableHighlight, TouchableWithoutFeedback, Text, Dimensions,
+  StyleSheet, Animated, Modal, TextInput, Keyboard, Alert
+} from 'react-native'
 import { colors } from '../../../globalStyles'
 import { StickyView } from '../../../components'
 import { VibrancyView } from 'react-native-blur'
@@ -11,6 +14,13 @@ const dims = Dimensions.get('window')
 class DateField extends React.Component {
   constructor(props) {
     super(props)
+
+    this.months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ]
+
+    this.numDaysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
     this.AV = {
       opacity: new Animated.Value(1),
@@ -29,6 +39,8 @@ class DateField extends React.Component {
       monthInput: "",
       yearInput: ""
     }
+
+    this.validateInput = this.validateInput.bind(this)
   }
 
   componentWillMount() {
@@ -94,17 +106,90 @@ class DateField extends React.Component {
     Animated.parallel(animations).start()
   }
 
+  validateInput(input) {
+    let buffer = input.split("-")
+    let dayString = buffer[0]
+    let monthString = buffer[1]
+    let yearString = buffer[2]
+    let dayFloat = parseFloat(dayString)
+    let monthFloat = parseFloat(monthString)
+    let yearFloat = parseFloat(yearString)
+    let monthIndex = monthFloat - 1
+
+    // Validate day
+    let dayExceedsMaximum = dayFloat > this.numDaysInMonth[monthIndex]
+    let dayIsZero = dayFloat < 1
+    let dayIsValid = !dayExceedsMaximum && !dayIsZero
+
+    // Validate month
+    let monthIsValid = true
+
+    // Validate year
+    let yearIsInFuture
+    let yearIsValid = true
+
+    // Ensure date is today or in future
+    let date = yearString + "," + monthString + "," + dayString
+    let now = new Date()
+    let dateIsToday = now.getDate() === dayFloat && now.getMonth() + 1 === monthFloat && now.getFullYear() === yearFloat
+    let nowTimestamp = now.getTime()
+    let inputtedTimestamp = new Date(date).getTime()
+    let diff = inputtedTimestamp - nowTimestamp
+    let dateIsTodayOrInFuture = diff >= 0 || dateIsToday
+
+    // Compile validations
+    let isValid = dayIsValid && monthIsValid && yearIsValid && dateIsTodayOrInFuture
+
+    // If invalid, determine which error to display
+    let errorMessage, fieldToFocus
+    if (!isValid) {
+      // Year is invalid
+      if (!yearIsValid) {
+        errorMessage = "Year is invalid."
+        fieldToFocus = "yearField"
+      }
+
+      // Month is invalid
+      else if (!monthIsValid) {
+        errorMessage = "Month is invalid."
+        fieldToFocus = "monthField"
+      }
+
+      // Day is invalid
+      else if (!dayIsValid) {
+        if (dayExceedsMaximum) {
+          let max = this.numDaysInMonth[monthIndex]
+          errorMessage = "There are only " + max + " days in " + this.months[monthIndex] + "."
+          fieldToFocus = "dayField"
+        } else if (dayIsZero) {
+          errorMessage = "0 is not a validate day."
+          fieldToFocus = "dayField"
+        }
+      }
+
+      // Date isn't in the future
+      else if (!dateIsTodayOrInFuture) {
+        errorMessage = "Start date cannot be in the past."
+        fieldToFocus = "yearField"
+      }
+    }
+
+    return {inputIsValid: isValid, errorMessage: errorMessage, fieldToFocus: fieldToFocus}
+  }
+
   submit() {
-    let {value, validateInput, invalidityAlert, setValues} = this.props
+    let {value, invalidityAlert, setValues} = this.props
     let {dayInput, monthInput, yearInput} = this.state
+    let {validateInput} = this
+
     let input = dayInput + "-" + monthInput + "-" + yearInput
 
     // Validate input
-    let inputIsValid = validateInput(input)
+    let {inputIsValid, errorMessage, fieldToFocus} = validateInput(input)
     if (!inputIsValid) {
       let title = "Wait!"
-      let msg = invalidityAlert || "Input is invalid."
-      Alert.alert(title, msg, [{text: 'OK', onPress: () => this.inputField.focus()}])
+      let msg = errorMessage || "Input is invalid."
+      Alert.alert(title, msg, [{text: 'OK', onPress: () => (this[fieldToFocus]) ? this[fieldToFocus].focus() : null}])
       return
     }
 
@@ -121,6 +206,26 @@ class DateField extends React.Component {
     let combined = day + "-" + month + "-" + year
     this.setState({dayInput: day, monthInput: month, yearInput: year})
     setValues(combined, () => this.showValue())
+  }
+
+  onChangeText(input) {
+    let key = Object.keys(input)[0]
+    let val = input[key]
+
+    // Should input focus shift from day to month?
+    let dayIsTwoDigits = key === "dayInput" && val.length === 2
+    let dayCannotBeMoreThanOneDigit = key === "dayInput" && val.length === 1 && val >= 4
+    let shouldShiftFromDayToMonth = dayIsTwoDigits || dayCannotBeMoreThanOneDigit
+
+    // Should input focus shift from month to year?
+    let monthIsTwoDigits = key === "monthInput" && val.length === 2
+    let monthCannotBeMoreThanOneDigit = key === "monthInput" && val.length === 1 && val >= 3
+    let shouldShiftFromMonthToYear = monthIsTwoDigits || monthCannotBeMoreThanOneDigit
+
+    if (shouldShiftFromDayToMonth) this.monthField.focus()
+    else if (shouldShiftFromMonthToYear) this.yearField.focus()
+
+    this.setState(input)
   }
 
   render() {
@@ -223,10 +328,11 @@ class DateField extends React.Component {
                     placeholder={"DD"}
                     placeholderTextColor={colors.slateGrey}
                     keyboardType={"number-pad"}
+                    maxLimit={2}
                     blurOnSubmit={false}
                     autoFocus={true}
                     style={{flex: 0.3333, height: 50, paddingLeft: 4, paddingRight: 4, textAlign: 'center', borderRightWidth: 1, borderColor: colors.slateGrey}}
-                    onChangeText={(input) => this.setState({dayInput: input})}
+                    onChangeText={(input) => this.onChangeText({dayInput: input})}
                     onSubmitEditing={() => this.submit()} />
 
                   <View style={{height: 32, width: 1, backgroundColor: colors.medGrey}} />
@@ -238,9 +344,10 @@ class DateField extends React.Component {
                     placeholder={"MM"}
                     placeholderTextColor={colors.slateGrey}
                     keyboardType={"number-pad"}
+                    maxLimit={2}
                     blurOnSubmit={false}
                     style={{flex: 0.3333, height: 50, paddingLeft: 4, paddingRight: 4, textAlign: 'center'}}
-                    onChangeText={(input) => this.setState({dayInput: input})}
+                    onChangeText={(input) => this.onChangeText({monthInput: input})}
                     onSubmitEditing={() => this.submit()} />
 
                   <View style={{height: 32, width: 1, backgroundColor: colors.medGrey}} />
@@ -252,9 +359,10 @@ class DateField extends React.Component {
                     placeholder={"YYYY"}
                     placeholderTextColor={colors.slateGrey}
                     keyboardType={"number-pad"}
+                    maxLimit={4}
                     blurOnSubmit={false}
                     style={{flex: 0.3333, height: 50, paddingLeft: 4, paddingRight: 4, textAlign: 'center'}}
-                    onChangeText={(input) => this.setState({dayInput: input})}
+                    onChangeText={(input) => this.onChangeText({yearInput: input})}
                     onSubmitEditing={() => this.submit()} />
                 </View>
 
