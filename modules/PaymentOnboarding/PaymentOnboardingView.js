@@ -214,7 +214,7 @@ class PaymentOnboardingView extends React.Component {
             offsetTop={this.state.headerHeight}
             invalidityAlert={"Please select one or more users."}
             textInputProps={{
-              placeholder: "Search by name or number",
+              placeholder: "Search by name or username",
               keyboardType: "default",
               autoCapitalize: "words",
               autoCorrect: false
@@ -379,13 +379,17 @@ class PaymentOnboardingView extends React.Component {
             }}
             induceFieldRef={this.induceFieldRef}
             toggleFieldFocus={this.toggleFieldFocus} />
+
+          { /* Footer (fill) */ }
+          <View style={{width: dims.width, height: 90}} />
+
         </ScrollView>
 
         { /* Pay and request buttons */ }
         <Animated.View
           style={{
             height: successHeight, position: 'absolute', bottom: 0, left: 0, right: 0,
-            shadowOpacity: 0.2, shadowRadius: 17, shadowOffset: { height: 0, width: 0 }
+            shadowOpacity: 0.2, shadowRadius: 11, shadowOffset: { height: 0, width: 0 }
           }}>
 
           { /* Success message */ }

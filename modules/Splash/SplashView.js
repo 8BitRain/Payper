@@ -84,7 +84,7 @@ class SplashView extends React.Component {
     const _this = this
     this.setState({ connected: true })
 
-    CodePush.sync()
+    // CodePush.sync()
 
     // Check beta status
     Async.get('betaStatus', (val) => {

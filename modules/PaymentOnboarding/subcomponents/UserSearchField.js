@@ -104,7 +104,7 @@ class UserSearchField extends React.Component {
         duration: 140
       }),
       Animated.timing(this.AV.valuePaddingBottom, {
-        toValue: 8,
+        toValue: 13,
         duration: 140
       })
     ]
@@ -219,7 +219,7 @@ class UserSearchField extends React.Component {
             </Text>
 
             <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, justifyContent: 'center'}}>
-              <EvilIcons name={(focused) ? "minus" : "plus"} size={28} color={colors.medGrey} />
+              <EvilIcons name={(focused) ? "minus" : "plus"} size={28} color={colors.slateGrey} />
             </View>
           </View>
 
@@ -272,7 +272,7 @@ class UserSearchField extends React.Component {
                   ref={ref => this.inputField = ref}
                   placeholderTextColor={colors.slateGrey}
                   blurOnSubmit={false}
-                  autoFocus={true}
+                  autoFocus={false}
                   style={{flex: 0.65, height: 50, paddingLeft: 10, paddingRight: 10, textAlign: 'center'}}
                   {...textInputProps}
                   onChangeText={(input) => this.filterContacts(input)}

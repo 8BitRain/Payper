@@ -268,7 +268,7 @@ class DateField extends React.Component {
             </Text>
 
             <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, justifyContent: 'center'}}>
-              <EvilIcons name={(focused) ? "minus" : "plus"} size={28} color={colors.medGrey} />
+              <EvilIcons name={(focused) ? "minus" : "plus"} size={28} color={colors.slateGrey} />
             </View>
           </View>
 
