@@ -345,10 +345,7 @@ class MainView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.85}
               underlayColor={'transparent'}
-              onPress={
-                /* onPress={() => this.setState({createPaymentModalVisible: true})} */
-                () => Actions.PaymentOnboardingView({currentUser: this.props.currentUser})
-              }
+              onPress={() => Actions.PaymentOnboardingView({currentUser: this.props.currentUser})}
               style={{padding: 14, paddingRight: 20}}>
               <Animated.View style={{justifyContent: 'center', alignItems: 'center', transform: [{ rotate: this.animatedValues.plusAngle }]}}>
                 <EvilIcons name={"plus"} size={40} color={colors.accent} />

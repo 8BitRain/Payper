@@ -19,6 +19,7 @@ export default class User {
     this.appFlags = {}
     this.payperContacts = []
     this.nativeContacts = []
+    this.bankAccount = {}
     this.handleAppStateChange = this.handleAppStateChange.bind(this)
   }
 

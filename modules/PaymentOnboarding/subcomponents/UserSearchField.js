@@ -267,7 +267,7 @@ class UserSearchField extends React.Component {
                   ref={ref => this.inputField = ref}
                   placeholderTextColor={colors.slateGrey}
                   blurOnSubmit={false}
-                  autoFocus={false}
+                  autoFocus={true}
                   style={{flex: 0.65, height: 50, paddingLeft: 10, paddingRight: 10, textAlign: 'center'}}
                   {...textInputProps}
                   onChangeText={(input) => this.filterContacts(input)}

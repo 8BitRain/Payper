@@ -173,7 +173,7 @@ class PaymentOnboardingView extends React.Component {
     } = this.props.currentUser
 
     let {
-      confirmingPay, confirmingRequest
+      confirming
     } = this.state
 
     return(
@@ -423,11 +423,19 @@ class PaymentOnboardingView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.75}
               underlayColor={'transparent'}
-              onPress={() => (this.state.confirming === "request") ? this.request() : this.confirm("request")}>
+              onPress={() => (confirming === "request") ? this.request() : this.confirm("request")}>
               <Animated.View style={{width: requestButtonWidth, opacity: requestButtonOpacity, flex: 1.0, alignItems: 'center', justifyContent: 'center'}}>
-                <Text style={{fontSize: 20, color: colors.accent}}>
+                <Text style={{fontSize: 20, color: colors.accent, textAlign: 'center'}}>
                   {"Request"}
                 </Text>
+
+                { /* Bank account name */
+                  (confirming !== "" && bankAccount.name)
+                  ? <Text style={{fontSize: 16, color: colors.deepBlue, textAlign: 'center'}}>
+                      {"(" + bankAccount.name + ")"}
+                    </Text>
+                  : null
+                }
               </Animated.View>
             </TouchableHighlight>
 
@@ -443,6 +451,14 @@ class PaymentOnboardingView extends React.Component {
                 <Text style={{fontSize: 20, color: colors.gradientGreen}}>
                   {"Pay"}
                 </Text>
+
+                { /* Bank account name */
+                  (confirming !== "" && bankAccount.name)
+                  ? <Text style={{fontSize: 16, color: colors.deepBlue, textAlign: 'center'}}>
+                      {"(" + bankAccount.name + ")"}
+                    </Text>
+                  : null
+                }
               </Animated.View>
             </TouchableHighlight>
           </Animated.View>
