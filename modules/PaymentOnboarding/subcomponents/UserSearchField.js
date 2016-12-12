@@ -154,7 +154,7 @@ class UserSearchField extends React.Component {
   render() {
     let {
       iconName, title, complete, dayValue, monthValue, yearValue, placeholder,
-      textInputProps
+      textInputProps, offsetTop
     } = this.props
 
     let {
@@ -205,12 +205,11 @@ class UserSearchField extends React.Component {
           <Modal visible={this.state.focused} animationType={"slide"} transparent={true}>
             { /* Touching background dismisses field */ }
             <TouchableWithoutFeedback onPress={() => this.toggle()}>
-              <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0}} />
+              <Animated.View style={{height: offsetTop + height._value, width: dims.width, borderWidth: 1, borderColor: 'blue'}} />
             </TouchableWithoutFeedback>
 
             { /* Contact ListView */ }
             <ListView
-              style={{borderWidth: 1, borderColor: colors.carminePink}}
               dataSource={this.state.dataSource}
               renderRow={this.renderRow.bind(this)}
               renderSectionHeader={this.renderSectionHeader.bind(this)}
@@ -218,7 +217,7 @@ class UserSearchField extends React.Component {
               renderFooter={() => <View style={{height: 75}} />}
               keyboardDismissMode={"on-drag"}
               enableEmptySections />
-              
+
             { /* Input sticks to top of keyboard */ }
             <StickyView duration={0}>
               <View style={{flexDirection: 'row', width: dims.width, backgroundColor: colors.lightGrey}}>

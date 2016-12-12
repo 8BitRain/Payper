@@ -25,6 +25,7 @@ class PaymentOnboardingView extends React.Component {
 
     this.state = {
       modalVisible: false,
+      headerHeight: 0,
       confirming: "",
       who: "",
       howMuch: "",
@@ -180,7 +181,7 @@ class PaymentOnboardingView extends React.Component {
         <StatusBar barStyle={"light-content"} />
 
         { /* Header */ }
-        <View style={{overflow: 'hidden'}}>
+        <View style={{overflow: 'hidden'}} onLayout={(e) => this.setState({headerHeight: e.nativeEvent.layout.height})}>
           <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
 
           <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
@@ -210,6 +211,7 @@ class PaymentOnboardingView extends React.Component {
             iconName={"user"}
             complete={false}
             value={this.state.who}
+            offsetTop={this.state.headerHeight}
             invalidityAlert={"Please select one or more users."}
             textInputProps={{
               placeholder: "Search by name or number",
