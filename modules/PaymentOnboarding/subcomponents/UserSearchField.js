@@ -6,10 +6,11 @@ import {
   ListView, RecyclerViewBackedScrollView
 } from 'react-native'
 import { colors } from '../../../globalStyles'
-import { StickyView, UserPic } from '../../../components'
+import { StickyView } from '../../../components'
+import { UserRow } from './index'
 import { VibrancyView } from 'react-native-blur'
+import { UserPic } from '../../../components'
 import * as SetMaster5000 from '../../../helpers/SetMaster5000'
-import * as StringMaster5000 from '../../../helpers/StringMaster5000'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 const dims = Dimensions.get('window')
@@ -139,23 +140,24 @@ class UserSearchField extends React.Component {
     this.setState(input)
   }
 
-  select(user) {
+  toggleSelect(user) {
+
+
+    console.log("--> toggleSelect() was invoked")
+    console.log("user", user)
+    console.log("selectedUsers", this.state.selectedUsers)
     let {selectedUsers, selectionMap} = this.state
     let alreadySelected = selectedUsers.includes(user)
 
-    // 1. Add or remove user preview
+    // Add or remove user preview
     if (alreadySelected) {
       let index = selectedUsers.indexOf(user)
-      selectedUsers.splice(index)
+      selectedUsers.splice(index, 1)
     } else {
       selectedUsers.push(user)
     }
 
-    // 2. Update this.state.selectionMap
-    let identifier = user.uid || user.phone
-    selectionMap[identifier] = !selectionMap[identifier]
-
-    // 3. Update state and show or hide user preview list
+    // Update state and show or hide user preview list
     this.setState(this.state, () => (this.state.selectedUsers.length === 0) ? this.hideValue() : this.showValue())
   }
 
@@ -177,35 +179,7 @@ class UserSearchField extends React.Component {
   }
 
   renderRow(user) {
-    let identifier = user.uid || user.phone
-    let isSelected = this.state.selectionMap[identifier]
-
-    return(
-      <TouchableHighlight
-        activeOpacity={0.75}
-        underlayColor={'transparent'}
-        onPress={() => this.select(user)}>
-        <View style={{width: dims.width * 0.9, borderBottomWidth: 1, borderBottomColor: colors.lightGrey, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', paddingTop: 8, paddingBottom: 8}}>
-          { /* Profile pic */ }
-          <UserPic width={40} height={40} user={user} />
-
-          { /* Name and username */ }
-          <View style={{flexDirection: 'column', paddingLeft: 10}}>
-            <Text style={{color: colors.deepBlue, fontSize: 16}}>
-              {user.first_name + " " + user.last_name}
-            </Text>
-            <Text style={{color: (user.username) ? colors.accent : colors.gradientGreen, fontSize: 14}}>
-              {user.username || StringMaster5000.stylizePhoneNumber(user.phone)}
-            </Text>
-          </View>
-
-          { /* (+) or (√) */ }
-          <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-            <EvilIcons name={(isSelected) ? "check" : "plus"} color={(isSelected) ? colors.gradientGreen : colors.medGrey} size={30} />
-          </View>
-        </View>
-      </TouchableHighlight>
-    )
+    return <UserRow user={user} toggleSelect={() => this.toggleSelect(user)} />
   }
 
   render() {
