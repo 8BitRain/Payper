@@ -141,11 +141,6 @@ class UserSearchField extends React.Component {
   }
 
   toggleSelect(user) {
-
-
-    console.log("--> toggleSelect() was invoked")
-    console.log("user", user)
-    console.log("selectedUsers", this.state.selectedUsers)
     let {selectedUsers, selectionMap} = this.state
     let alreadySelected = selectedUsers.includes(user)
 

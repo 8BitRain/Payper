@@ -231,7 +231,7 @@ class PaymentOnboardingView extends React.Component {
           { /* How much? */ }
           <TextField
             title={"How much?"}
-            iconName={"credit-card"}
+            iconName={"tag"}
             complete={false}
             value={this.state.howMuch}
             invalidityAlert={"Please enter an amount between $1 and $3,000."}
@@ -409,8 +409,13 @@ class PaymentOnboardingView extends React.Component {
               activeOpacity={0.75}
               underlayColor={'transparent'}
               onPress={() => this.confirm(this.state.confirming)}>
-              <Animated.View style={{width: cancelButtonWidth, opacity: cancelButtonOpacity, flex: 1.0, alignItems: 'center', justifyContent: 'center'}}>
+              <Animated.View style={{flexDirection: 'row', width: cancelButtonWidth, opacity: cancelButtonOpacity, flex: 1.0, alignItems: 'center', justifyContent: 'center'}}>
                 <EvilIcons name={"close-o"} color={colors.carminePink} size={26} />
+
+                { /* Partial border */ }
+                <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, justifyContent: 'center'}}>
+                  <View style={{height: 38, width: 1, backgroundColor: colors.medGrey}} />
+                </View>
               </Animated.View>
             </TouchableHighlight>
 
@@ -427,7 +432,7 @@ class PaymentOnboardingView extends React.Component {
             </TouchableHighlight>
 
             { /* Partial border */ }
-            <View style={{height: 38, width: 1, backgroundColor: colors.medGrey}} />
+            <View style={{height: 38, width: (this.state.confirming === "") ? 1 : 0, backgroundColor: colors.medGrey}} />
 
             { /* 'Pay' button */ }
             <TouchableHighlight
