@@ -31,7 +31,7 @@ $  react-native run-ios
 * If a non-existent node module error is thrown, run `npm install --save node-module-name`.
 
 ## **The Team**
-| Front end (💣)       | Back end  | Multi-purpose Gurus|
+| Front end            | Back end  | Multi-purpose Gurus|
 |:--------------------:|:---------:|:------------------:|
 | Eric & Brady         | Vash      | Mo & Luke          |
 
