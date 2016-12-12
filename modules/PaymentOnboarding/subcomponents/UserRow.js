@@ -46,7 +46,7 @@ class UserRow extends React.Component {
 
           { /* (+) or (√) */ }
           <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
-            <EvilIcons name={(selected) ? "check" : "plus"} color={(selected) ? colors.gradientGreen : colors.medGrey} size={30} />
+            <EvilIcons name={(selected) ? "check" : "plus"} color={(selected) ? colors.gradientGreen : colors.slateGrey} size={30} />
           </View>
         </View>
       </TouchableHighlight>
