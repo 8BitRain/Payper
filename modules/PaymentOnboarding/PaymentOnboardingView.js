@@ -12,13 +12,20 @@ class PaymentOnboardingView extends React.Component {
     super(props)
 
     this.AV = {
-      successHeight: new Animated.Value(60),
+      successHeight: new Animated.Value(75),
       successOpacity: new Animated.Value(0),
-      buttonOpacity: new Animated.Value(1)
+      buttonOpacity: new Animated.Value(1),
+      payButtonWidth: new Animated.Value(dims.width * 0.5),
+      requestButtonWidth: new Animated.Value(dims.width * 0.5),
+      payButtonOpacity: new Animated.Value(dims.width * 1.0),
+      requestButtonOpacity: new Animated.Value(dims.width * 1.0),
+      cancelButtonWidth: new Animated.Value(0),
+      cancelButtonOpacity: new Animated.Value(0)
     }
 
     this.state = {
       modalVisible: false,
+      confirming: "",
       who: "",
       howMuch: "",
       howOften: "",
@@ -60,9 +67,11 @@ class PaymentOnboardingView extends React.Component {
       startDay, startMonth, startYear
     } = this.state
 
-    let {successHeight, successOpacity, buttonOpacity} = this.AV
+    let {
+      successHeight, successOpacity, buttonOpacity
+    } = this.AV
 
-    let animations = [
+    let successAnimations = [
       Animated.timing(successHeight, {
         toValue: dims.height * 0.2,
         duration: 180
@@ -77,7 +86,7 @@ class PaymentOnboardingView extends React.Component {
       })
     ]
 
-    Animated.parallel(animations).start(() => {
+    Animated.parallel(successAnimations).start(() => {
       setTimeout(() => Actions.pop(), 800)
     })
   }
@@ -88,11 +97,83 @@ class PaymentOnboardingView extends React.Component {
       startDay, startMonth, startYear
     } = this.state
 
-    console.log("--> request() was invoked...")
+    let {
+      successHeight, successOpacity, buttonOpacity
+    } = this.AV
+
+    let successAnimations = [
+      Animated.timing(successHeight, {
+        toValue: dims.height * 0.2,
+        duration: 180
+      }),
+      Animated.timing(successOpacity, {
+        toValue: 1,
+        duration: 120
+      }),
+      Animated.timing(buttonOpacity, {
+        toValue: 0,
+        duration: 100
+      })
+    ]
+
+    Animated.parallel(successAnimations).start(() => {
+      setTimeout(() => Actions.pop(), 800)
+    })
+  }
+
+  confirm(payOrRequest) {
+    let {
+      successHeight, successOpacity, buttonOpacity,
+      payButtonWidth, requestButtonWidth, payButtonOpacity, requestButtonOpacity,
+      cancelButtonWidth, cancelButtonOpacity
+    } = this.AV
+
+    let expanding = this.state.confirming === ""
+    let pressedButtonWidth = (payOrRequest === "pay") ? payButtonWidth : requestButtonWidth
+    let otherButtonWidth = (payOrRequest === "pay") ? requestButtonWidth : payButtonWidth
+    let otherButtonOpacity = (payOrRequest === "pay") ? requestButtonOpacity : payButtonOpacity
+
+    let confirmAnimations = [
+      Animated.timing(pressedButtonWidth, {
+        toValue: (expanding) ? dims.width * 0.8 : dims.width * 0.5,
+        duration: 140
+      }),
+      Animated.timing(otherButtonWidth, {
+        toValue: (expanding) ? 0 : dims.width * 0.5,
+        duration: 140
+      }),
+      Animated.timing(cancelButtonWidth, {
+        toValue: (expanding) ? dims.width * 0.2 : 0,
+        duration: 140
+      }),
+      Animated.timing(otherButtonOpacity, {
+        toValue: (expanding) ? 0 : 1,
+        duration: 40
+      }),
+      Animated.timing(cancelButtonOpacity, {
+        toValue: (expanding) ? 1 : 0,
+        duration: 40
+      })
+    ]
+
+    Animated.parallel(confirmAnimations).start()
+    this.setState({confirming: (expanding) ? payOrRequest : ""})
   }
 
   render() {
-    let {successHeight, successOpacity, buttonOpacity} = this.AV
+    let {
+      successHeight, successOpacity, buttonOpacity,
+      payButtonWidth, requestButtonWidth, payButtonOpacity, requestButtonOpacity,
+      cancelButtonWidth, cancelButtonOpacity
+    } = this.AV
+
+    let {
+      bankAccount
+    } = this.props.currentUser
+
+    let {
+      confirmingPay, confirmingRequest
+    } = this.state
 
     return(
       <View style={{flex: 1.0, flexDirection: 'column'}}>
@@ -301,7 +382,7 @@ class PaymentOnboardingView extends React.Component {
         <Animated.View
           style={{
             height: successHeight, position: 'absolute', bottom: 0, left: 0, right: 0,
-            shadowOpacity: 0.4, shadowRadius: 17, shadowOffset: { height: 0, width: 0 }
+            shadowOpacity: 0.2, shadowRadius: 17, shadowOffset: { height: 0, width: 0 }
           }}>
 
           { /* Success message */ }
@@ -315,29 +396,42 @@ class PaymentOnboardingView extends React.Component {
           </Animated.View>
 
           { /* Pay and request buttons */ }
-          <Animated.View style={{opacity: buttonOpacity, flexDirection: 'row', alignItems: 'center', height: 60, backgroundColor: colors.lightGrey}}>
+          <Animated.View style={{opacity: buttonOpacity, flexDirection: 'row', alignItems: 'center', height: 75, backgroundColor: colors.lightGrey}}>
+            { /* Cancel button */ }
             <TouchableHighlight
               activeOpacity={0.75}
               underlayColor={'transparent'}
-              onPress={() => this.request()}>
-              <View style={{flex: 1.0, width: dims.width * 0.5, alignItems: 'center', justifyContent: 'center'}}>
+              onPress={() => this.confirm(this.state.confirming)}>
+              <Animated.View style={{width: cancelButtonWidth, opacity: cancelButtonOpacity, flex: 1.0, alignItems: 'center', justifyContent: 'center'}}>
+                <EvilIcons name={"close-o"} color={colors.carminePink} size={26} />
+              </Animated.View>
+            </TouchableHighlight>
+
+            { /* 'Request' button */ }
+            <TouchableHighlight
+              activeOpacity={0.75}
+              underlayColor={'transparent'}
+              onPress={() => (this.state.confirming === "request") ? this.request() : this.confirm("request")}>
+              <Animated.View style={{width: requestButtonWidth, opacity: requestButtonOpacity, flex: 1.0, alignItems: 'center', justifyContent: 'center'}}>
                 <Text style={{fontSize: 20, color: colors.accent}}>
                   {"Request"}
                 </Text>
-              </View>
+              </Animated.View>
             </TouchableHighlight>
 
+            { /* Partial border */ }
             <View style={{height: 38, width: 1, backgroundColor: colors.medGrey}} />
 
+            { /* 'Pay' button */ }
             <TouchableHighlight
               activeOpacity={0.75}
               underlayColor={'transparent'}
-              onPress={() => this.pay()}>
-              <View style={{flex: 1.0, width: dims.width * 0.5, alignItems: 'center', justifyContent: 'center'}}>
+              onPress={() => (this.state.confirming === "pay") ? this.pay() : this.confirm("pay")}>
+              <Animated.View style={{width: payButtonWidth, opacity: payButtonOpacity, flex: 1.0, alignItems: 'center', justifyContent: 'center'}}>
                 <Text style={{fontSize: 20, color: colors.gradientGreen}}>
                   {"Pay"}
                 </Text>
-              </View>
+              </Animated.View>
             </TouchableHighlight>
           </Animated.View>
         </Animated.View>
