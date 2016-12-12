@@ -3,7 +3,7 @@ import { View, ScrollView, Animated, StatusBar, Image, TouchableHighlight, Text,
 import { Actions } from 'react-native-router-flux'
 import { colors } from '../../globalStyles'
 import { StickyView } from '../../components'
-import { TextField, DateField } from './subcomponents'
+import { TextField, DateField, UserSearchField } from './subcomponents'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const dims = Dimensions.get('window')
 
@@ -204,7 +204,8 @@ class PaymentOnboardingView extends React.Component {
           contentContainerStyle={{alignItems: 'center'}}>
 
           { /* Who? */ }
-          <TextField
+          <UserSearchField
+            currentUser={this.props.currentUser}
             title={"Who?"}
             iconName={"user"}
             complete={false}
