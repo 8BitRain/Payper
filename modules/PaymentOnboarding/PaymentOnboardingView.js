@@ -28,6 +28,7 @@ class PaymentOnboardingView extends React.Component {
       headerHeight: 0,
       confirming: "",
       who: "",
+      selectionMap: {},
       howMuch: "",
       howOften: "",
       howLong: "",
@@ -87,9 +88,19 @@ class PaymentOnboardingView extends React.Component {
       })
     ]
 
-    Animated.parallel(successAnimations).start(() => {
-      setTimeout(() => Actions.pop(), 800)
-    })
+    console.log("--> pay() was invoked")
+    console.log("--> who", who)
+    console.log("--> howMuch", howMuch)
+    console.log("--> howOften", howOften)
+    console.log("--> howLong", howLong)
+    console.log("--> whatFor", whatFor)
+    console.log("--> startDay", startDay)
+    console.log("--> startMonth", startMonth)
+    console.log("--> startYear", startYear)
+
+    // Animated.parallel(successAnimations).start(() => {
+    //   setTimeout(() => Actions.pop(), 800)
+    // })
   }
 
   request() {
@@ -211,6 +222,7 @@ class PaymentOnboardingView extends React.Component {
             iconName={"user"}
             complete={false}
             value={this.state.who}
+            selectionMap={this.state.selectionMap}
             offsetTop={this.state.headerHeight}
             invalidityAlert={"Please select one or more users."}
             textInputProps={{
@@ -222,8 +234,8 @@ class PaymentOnboardingView extends React.Component {
             validateInput={(input) => {
               return true
             }}
-            setValue={(value, cb) => {
-              this.setState({who: value}, () => cb())
+            setValue={(values, cb) => {
+              this.setState({who: values.selectedUsers, selectionMap: values.selectionMap})
             }}
             induceFieldRef={this.induceFieldRef}
             toggleFieldFocus={this.toggleFieldFocus} />

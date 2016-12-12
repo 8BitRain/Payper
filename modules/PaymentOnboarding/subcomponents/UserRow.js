@@ -12,7 +12,7 @@ class UserRow extends React.Component {
 
     this.state = {
       ...this.props,
-      selected: false
+      selected: this.props.selected
     }
   }
 

@@ -44,7 +44,7 @@ class UserSearchField extends React.Component {
       hidden: false,
       touchable: true,
       selectedUsers: [],
-      selectionMap: {},
+      selectionMap: this.props.selectionMap,
       dataSource: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(this.allContactsMap)
     }
   }
@@ -89,6 +89,7 @@ class UserSearchField extends React.Component {
 
   toggle() {
     this.setState({focused: !this.state.focused}, () => {
+      if (!this.state.focused) this.filterContacts("")
       this.props.toggleFieldFocus(this.state.title)
     })
   }
@@ -133,6 +134,8 @@ class UserSearchField extends React.Component {
 
   submit() {
     let {setValue} = this.props
+    let {selectedUsers, selectionMap} = this.state
+    setValue({selectedUsers, selectionMap})
     this.toggle()
   }
 
@@ -151,6 +154,10 @@ class UserSearchField extends React.Component {
     } else {
       selectedUsers.push(user)
     }
+
+    // Update selectionMap
+    let identifier = user.uid || user.phone
+    selectionMap[identifier] = !selectionMap[identifier]
 
     // Update state and show or hide user preview list
     this.setState(this.state, () => (this.state.selectedUsers.length === 0) ? this.hideValue() : this.showValue())
@@ -174,7 +181,9 @@ class UserSearchField extends React.Component {
   }
 
   renderRow(user) {
-    return <UserRow user={user} toggleSelect={() => this.toggleSelect(user)} />
+    let {selectionMap} = this.state
+    let identifier = user.uid || user.phone
+    return <UserRow selected={selectionMap[identifier]} user={user} toggleSelect={() => this.toggleSelect(user)} />
   }
 
   render() {
