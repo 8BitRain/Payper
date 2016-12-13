@@ -112,7 +112,7 @@ class PaymentOnboardingView extends React.Component {
         invite: (otherUser.uid) ? false : true,
         phoneNumber: otherUser.phone,
         invitee: "recip",
-        amount: howMuch.slice(1, howMuch.length - 1),
+        amount: (howMuch.indexOf("$") >= 0) ? howMuch.slice(1) : howMuch,
         frequency: howOften.toUpperCase(),
         payments: howLong.split(" ")[0],
         purpose: whatFor,
@@ -132,14 +132,19 @@ class PaymentOnboardingView extends React.Component {
 
   request() {
     let {
+      currentUser
+    } = this.props
+
+    let {
       who, howMuch, howOften, howLong, whatFor,
-      startDay, startMonth, startYear
+      startDay, startMonth, startYear, confirming
     } = this.state
 
     let {
       successHeight, successOpacity, buttonOpacity
     } = this.AV
 
+    // Format success animations
     let successAnimations = [
       Animated.timing(successHeight, {
         toValue: dims.height * 0.2,
@@ -155,6 +160,37 @@ class PaymentOnboardingView extends React.Component {
       })
     ]
 
+    // Format and send payments
+    for (var k in who) {
+      let user = who[k]
+      let thisUser = currentUser.getPaymentAttributes()
+      let otherUser = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        profile_pic: user.profile_pic,
+        username: user.username,
+        uid: user.uid,
+        phone: user.phone
+      }
+      let paymentInfo = {
+        sender: otherUser,
+        recip: thisUser,
+        invite: (otherUser.uid) ? false : true,
+        phoneNumber: otherUser.phone,
+        invitee: "sender",
+        amount: (howMuch.indexOf("$") >= 0) ? howMuch.slice(1) : howMuch,
+        frequency: howOften.toUpperCase(),
+        payments: howLong.split(" ")[0],
+        purpose: whatFor,
+        type: "request",
+        token: currentUser.token
+      }
+
+      if (paymentInfo.invite) Lambda.inviteViaPayment(paymentInfo)
+      else Lambda.createPayment(paymentInfo)
+    }
+
+    // Show success animation, page back to main view
     Animated.parallel(successAnimations).start(() => {
       setTimeout(() => Actions.pop(), 800)
     })
