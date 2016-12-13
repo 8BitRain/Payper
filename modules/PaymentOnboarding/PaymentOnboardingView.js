@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ScrollView, Animated, StatusBar, Image, TouchableHighlight, Text, Dimensions, Modal, TextInput } from 'react-native'
+import { View, ScrollView, Animated, StatusBar, Image, TouchableHighlight, Text, Dimensions, Modal, TextInput, Alert } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import { colors } from '../../globalStyles'
 import { StickyView } from '../../components'
@@ -197,6 +197,21 @@ class PaymentOnboardingView extends React.Component {
   }
 
   confirm(payOrRequest) {
+    // Make sure no fields are blank
+    let {
+      who, howMuch, howOften, howLong, whatFor, startDay, startMonth, startYear
+    } = this.state
+
+    let fields = [who, howMuch, howOften, howLong, whatFor, startDay, startMonth, startYear]
+
+    for (var i in fields) {
+      let curr = fields[i]
+      if (curr === "") {
+        Alert.alert("Wait!", "Please fill out all fields.")
+        return
+      }
+    }
+
     let {
       successHeight, successOpacity, buttonOpacity,
       payButtonWidth, requestButtonWidth, payButtonOpacity, requestButtonOpacity,
