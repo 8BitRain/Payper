@@ -4,6 +4,7 @@ import { Actions } from 'react-native-router-flux'
 import { colors } from '../../globalStyles'
 import { StickyView } from '../../components'
 import { TextField, DateField, UserSearchField } from './subcomponents'
+import * as Lambda from '../../services/Lambda'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const dims = Dimensions.get('window')
 
@@ -65,14 +66,19 @@ class PaymentOnboardingView extends React.Component {
 
   pay() {
     let {
+      currentUser
+    } = this.props
+
+    let {
       who, howMuch, howOften, howLong, whatFor,
-      startDay, startMonth, startYear
+      startDay, startMonth, startYear, confirming
     } = this.state
 
     let {
       successHeight, successOpacity, buttonOpacity
     } = this.AV
 
+    // Format success animations
     let successAnimations = [
       Animated.timing(successHeight, {
         toValue: dims.height * 0.2,
@@ -88,19 +94,40 @@ class PaymentOnboardingView extends React.Component {
       })
     ]
 
-    console.log("--> pay() was invoked")
-    console.log("--> who", who)
-    console.log("--> howMuch", howMuch)
-    console.log("--> howOften", howOften)
-    console.log("--> howLong", howLong)
-    console.log("--> whatFor", whatFor)
-    console.log("--> startDay", startDay)
-    console.log("--> startMonth", startMonth)
-    console.log("--> startYear", startYear)
+    // Format and send payments
+    for (var k in who) {
+      let user = who[k]
+      let thisUser = currentUser.getPaymentAttributes()
+      let otherUser = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        profile_pic: user.profile_pic,
+        username: user.username,
+        uid: user.uid,
+        phone: user.phone
+      }
+      let paymentInfo = {
+        sender: thisUser,
+        recip: otherUser,
+        invite: (otherUser.uid) ? false : true,
+        phoneNumber: otherUser.phone,
+        invitee: "recip",
+        amount: howMuch.slice(1, howMuch.length - 1),
+        frequency: howOften.toUpperCase(),
+        payments: howLong.split(" ")[0],
+        purpose: whatFor,
+        type: "payment",
+        token: currentUser.token
+      }
 
-    // Animated.parallel(successAnimations).start(() => {
-    //   setTimeout(() => Actions.pop(), 800)
-    // })
+      if (paymentInfo.invite) Lambda.inviteViaPayment(paymentInfo)
+      else Lambda.createPayment(paymentInfo)
+    }
+
+    // Show success animation, page back to main view
+    Animated.parallel(successAnimations).start(() => {
+      setTimeout(() => Actions.pop(), 800)
+    })
   }
 
   request() {
