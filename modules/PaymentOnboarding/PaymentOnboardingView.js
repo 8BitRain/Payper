@@ -32,6 +32,7 @@ class PaymentOnboardingView extends React.Component {
       modalVisible: false,
       headerHeight: 0,
       selectionMap: {},
+      scrollTop: 0,
       confirming: "",
       who: "",
       howMuch: "",
@@ -58,16 +59,28 @@ class PaymentOnboardingView extends React.Component {
   }
 
   toggleFieldFocus(title) {
+    let {scrollTop, scrollTopCache} = this.state
     let fieldIsFocused = this.fieldRefs[title].state.focused
 
+    // Scroll to cached scrollTop
+    if (fieldIsFocused) {
+      // We're focusing; record scrollTop position to return to on unfocus
+      this.setState({scrollTopCache: scrollTop})
+    } else {
+      // We're unfocusing; scroll to previous scrollTop position
+      this.ScrollView.scrollTo({y: scrollTopCache, animated: false})
+    }
+
+    // Show or hide 'Explore Trending Payments' button
+    this.toggleExploreButton()
+
+    // Show or hide input fields
     for (var k of Object.keys(this.fieldRefs)) {
       if (k === title) continue
       let curr = this.fieldRefs[k]
       if (fieldIsFocused) curr.hide()
       else curr.show()
     }
-
-    this.toggleExploreButton()
   }
 
   toggleExploreButton() {
@@ -332,6 +345,9 @@ class PaymentOnboardingView extends React.Component {
 
         { /* Fields */ }
         <ScrollView
+          ref={ref => this.ScrollView = ref}
+          onScroll={(e) => this.setState({scrollTop: e.nativeEvent.contentOffset.y})}
+          scrollEventThrottle={16}
           keyboardShouldPersistTaps
           contentContainerStyle={{alignItems: 'center'}}>
 
