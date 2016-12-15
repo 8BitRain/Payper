@@ -3,7 +3,7 @@ import { View, ScrollView, Animated, StatusBar, Image, TouchableHighlight, Text,
 import { Actions } from 'react-native-router-flux'
 import { colors } from '../../globalStyles'
 import { StickyView, TrendingPayments } from '../../components'
-import { TextField, DateField, UserSearchField } from './subcomponents'
+import { TextField, FrequencyField, DateField, UserSearchField } from './subcomponents'
 import * as Lambda from '../../services/Lambda'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const dims = Dimensions.get('window')
@@ -410,7 +410,7 @@ class PaymentOnboardingView extends React.Component {
             toggleFieldFocus={this.toggleFieldFocus} />
 
           { /* How often? */ }
-          <TextField
+          <FrequencyField
             title={"How often?"}
             iconName={"clock"}
             complete={false}
@@ -497,7 +497,8 @@ class PaymentOnboardingView extends React.Component {
             textInputProps={{
               placeholder: "ex. Spotify Family Plan",
               keyboardType: "default",
-              autoCorrect: false
+              autoCorrect: false,
+              maxLength: 30
             }}
             validateInput={(input) => {
               return input.length > 0
