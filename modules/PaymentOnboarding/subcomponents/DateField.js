@@ -116,42 +116,30 @@ class DateField extends React.Component {
     let yearFloat = parseFloat(yearString)
     let monthIndex = monthFloat - 1
 
+    // Make sure date is in the future
+    let now = new Date()
+    let then = new Date(yearString + "," + monthString + "," + dayString)
+    let dateIsInFuture = moment(then).isSameOrAfter(now, 'day')
+
+    // Make sure date starts up to one year from now
+    let dateStartsWithinAYear = moment(then).isSameOrBefore(moment(now).add(1, 'year'), 'day')
+
     // Validate day
     let dayExceedsMaximum = dayFloat > this.numDaysInMonth[monthIndex]
     let dayIsZero = dayFloat < 1
     let dayIsValid = !dayExceedsMaximum && !dayIsZero
 
     // Validate month
-    let monthIsValid = true
+    let monthExceedsMaximum = monthFloat > 12
+    let monthIsZero = monthFloat < 1
+    let monthIsValid = !monthExceedsMaximum && !monthIsZero
 
     // Validate year
-    let yearIsInFuture
-    let yearIsValid = true
-
-    // Ensure date is today or in future
-    let date = yearString + "," + monthString + "," + dayString
-    let now = new Date()
-    let nowTimestamp = now.getTime()
-    let inputtedTimestamp = new Date(date).getTime()
-    let dateIsToday = now.getDate() === dayFloat && now.getMonth() + 1 === monthFloat && now.getFullYear() === yearFloat
-    let diff = inputtedTimestamp - nowTimestamp
-    let dateIsTodayOrInFuture = diff >= 0 || dateIsToday
+    let yearIsInPast = yearFloat < now.getFullYear()
+    let yearIsValid = !yearIsInPast
 
     // Compile validations
-    let isValid = dayIsValid && monthIsValid && yearIsValid && dateIsTodayOrInFuture
-
-    // Debug logs
-    console.log("------------------------------------------")
-    console.log("--> Date validation debug logs")
-    console.log("------------------------------------------")
-    console.log("--> validating date")
-    console.log("--> date (YYYY,MM,DD)", date)
-    console.log("--> nowTimestamp", nowTimestamp)
-    console.log("--> inputtedTimestamp", inputtedTimestamp)
-    console.log("--> dateIsToday", dateIsToday)
-    console.log("--> diff", diff)
-    console.log("--> dateIsTodayOrInFuture", dateIsTodayOrInFuture)
-    console.log("------------------------------------------")
+    let isValid = dayIsValid && monthIsValid && yearIsValid && dateIsInFuture && dateStartsWithinAYear
 
     // If invalid, determine which error to display
     let errorMessage, fieldToFocus
@@ -159,6 +147,7 @@ class DateField extends React.Component {
       // Year is invalid
       if (!yearIsValid) {
         errorMessage = "Year is invalid."
+        if (yearIsInPast) errorMessage = "Year cannot be in the past."
         fieldToFocus = "yearField"
       }
 
@@ -180,9 +169,15 @@ class DateField extends React.Component {
         }
       }
 
-      // Date isn't in the future
-      else if (!dateIsTodayOrInFuture) {
-        errorMessage = "Start date cannot be in the past."
+      // Date is not in the future
+      else if (!dateIsInFuture) {
+        errorMessage = "Start date must not be in the past."
+        fieldToFocus = "yearField"
+      }
+
+      // Date doesn't start within a year from today
+      else if (!dateStartsWithinAYear) {
+        errorMessage = "Start date must not be over a year from today."
         fieldToFocus = "yearField"
       }
     }
@@ -217,11 +212,7 @@ class DateField extends React.Component {
     let month = now.getMonth() + 1
     let year = now.getFullYear()
     let combined = day + "-" + month + "-" + year
-    this.setState({dayInput: day, monthInput: month, yearInput: year})
-    setValues(combined, () => {
-      this.showValue()
-      this.toggle()
-    })
+    this.setState({dayInput: day, monthInput: month, yearInput: year}, () => this.submit())
   }
 
   onChangeText(input) {
@@ -290,7 +281,11 @@ class DateField extends React.Component {
             <EvilIcons name={iconName} size={32} color={'transparent'} />
 
             <Text style={{fontSize: 18, color: colors.gradientGreen, paddingLeft: 10}}>
-              {dayValue + "-" + monthValue + "-" + yearValue + ""}
+              {
+                moment(yearValue.toString() + monthValue.toString() + dayValue.toString()).format('MMM Do[,] YYYY')
+                ||
+                (dayValue + "-" + monthValue + "-" + yearValue + "")
+              }
             </Text>
           </Animated.View>
 
