@@ -117,11 +117,25 @@ class MyProfile extends React.Component {
           <View style={styles.imageWrap}>
             {(profile_pic)
               ? <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: profile_pic}} />
-              : <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center'}}>
-                  <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
-                    {initials}
+              : <View>
+                  {/*Profile pic with initials*/}
+                  <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
+                      {initials}
+                    </Text>
+                  </View>
+                  {/*Button overlay to add a photo*/}
+                  {/*Play around with using a photo icon*/}
+                  <TouchableHighlight activeOpacity={0.8} underlayColor={'transparent'}
+                    style={{position: "absolute", top: 0}}
+                    onPress={() => console.log("Working as expected")}>
+                  <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.medGrey, opacity: .92}}>
+                  <Text style={{color: colors.accent, fontSize: 14, fontWeight: '400', textAlign: "center", backgroundColor: "transparent"}}>
+                    {"add photo"}
                   </Text>
-                </View> }
+                  </View>
+                  </TouchableHighlight>
+                </View>}
           </View>
           <Text style={{color: colors.deepBlue, fontSize: 22, fontWeight: '200', paddingTop: 8, textAlign: 'center', backgroundColor: 'transparent'}}>
             {name}
