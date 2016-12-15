@@ -21,7 +21,11 @@ class PaymentOnboardingView extends React.Component {
       payButtonOpacity: new Animated.Value(dims.width * 1.0),
       requestButtonOpacity: new Animated.Value(dims.width * 1.0),
       cancelButtonWidth: new Animated.Value(0),
-      cancelButtonOpacity: new Animated.Value(0)
+      cancelButtonOpacity: new Animated.Value(0),
+      exploreButtonHeight: new Animated.Value(60),
+      exploreButtonOpacity: new Animated.Value(1),
+      exploreButtonMarginTop: new Animated.Value(10),
+      exploreButtonPadding: new Animated.Value(8)
     }
 
     this.state = {
@@ -62,6 +66,36 @@ class PaymentOnboardingView extends React.Component {
       if (fieldIsFocused) curr.hide()
       else curr.show()
     }
+
+    this.toggleExploreButton()
+  }
+
+  toggleExploreButton() {
+    let {
+      exploreButtonHeight, exploreButtonOpacity, exploreButtonMarginTop,
+      exploreButtonPadding
+    } = this.AV
+
+    let animations = [
+      Animated.timing(exploreButtonHeight, {
+        toValue: (exploreButtonHeight._value === 0) ? 60 : 0,
+        duration: 200
+      }),
+      Animated.timing(exploreButtonOpacity, {
+        toValue: (exploreButtonOpacity._value === 0) ? 1 : 0,
+        duration: 160
+      }),
+      Animated.timing(exploreButtonMarginTop, {
+        toValue: (exploreButtonMarginTop._value === 0) ? 10 : 0,
+        duration: 200
+      }),
+      Animated.timing(exploreButtonPadding, {
+        toValue: (exploreButtonPadding._value === 0) ? 8 : 0,
+        duration: 200
+      })
+    ]
+
+    Animated.parallel(animations).start()
   }
 
   pay() {
@@ -260,7 +294,9 @@ class PaymentOnboardingView extends React.Component {
     let {
       successHeight, successOpacity, buttonOpacity,
       payButtonWidth, requestButtonWidth, payButtonOpacity, requestButtonOpacity,
-      cancelButtonWidth, cancelButtonOpacity
+      cancelButtonWidth, cancelButtonOpacity,
+      exploreButtonHeight, exploreButtonOpacity, exploreButtonMarginTop,
+      exploreButtonPadding
     } = this.AV
 
     let {
@@ -304,14 +340,18 @@ class PaymentOnboardingView extends React.Component {
             activeOpacity={0.8}
             underlayColor={'transparent'}
             onPress={() => this.toggleModal()}>
-            <View style={{padding: 8, marginTop: 10, backgroundColor: colors.lightGrey, borderRadius: 4}}>
+            <Animated.View
+              style={{
+                height: exploreButtonHeight, opacity: exploreButtonOpacity, padding: exploreButtonPadding, marginTop: exploreButtonMarginTop,
+                backgroundColor: colors.lightGrey, borderRadius: 4
+              }}>
               <Text style={{color: colors.slateGrey, fontSize: 14, backgroundColor: 'transparent', textAlign: 'center'}}>
                 {"Curious what others are using Payper for?"}
                 <Text style={{color: colors.accent}}>
                   {" Explore Trending Payments"}
                 </Text>
               </Text>
-            </View>
+            </Animated.View>
           </TouchableHighlight>
 
           { /* Who? */ }
