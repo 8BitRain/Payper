@@ -131,14 +131,27 @@ class DateField extends React.Component {
     // Ensure date is today or in future
     let date = yearString + "," + monthString + "," + dayString
     let now = new Date()
-    let dateIsToday = now.getDate() === dayFloat && now.getMonth() + 1 === monthFloat && now.getFullYear() === yearFloat
     let nowTimestamp = now.getTime()
     let inputtedTimestamp = new Date(date).getTime()
+    let dateIsToday = now.getDate() === dayFloat && now.getMonth() + 1 === monthFloat && now.getFullYear() === yearFloat
     let diff = inputtedTimestamp - nowTimestamp
     let dateIsTodayOrInFuture = diff >= 0 || dateIsToday
 
     // Compile validations
     let isValid = dayIsValid && monthIsValid && yearIsValid && dateIsTodayOrInFuture
+
+    // Debug logs
+    console.log("------------------------------------------")
+    console.log("--> Date validation debug logs")
+    console.log("------------------------------------------")
+    console.log("--> validating date")
+    console.log("--> date (YYYY,MM,DD)", date)
+    console.log("--> nowTimestamp", nowTimestamp)
+    console.log("--> inputtedTimestamp", inputtedTimestamp)
+    console.log("--> dateIsToday", dateIsToday)
+    console.log("--> diff", diff)
+    console.log("--> dateIsTodayOrInFuture", dateIsTodayOrInFuture)
+    console.log("------------------------------------------")
 
     // If invalid, determine which error to display
     let errorMessage, fieldToFocus

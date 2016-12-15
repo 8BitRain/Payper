@@ -2,7 +2,7 @@ import React from 'react'
 import { View, ScrollView, Animated, StatusBar, Image, TouchableHighlight, Text, Dimensions, Modal, TextInput, Alert } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import { colors } from '../../globalStyles'
-import { StickyView } from '../../components'
+import { StickyView, TrendingPayments } from '../../components'
 import { TextField, DateField, UserSearchField } from './subcomponents'
 import * as Lambda from '../../services/Lambda'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -27,9 +27,9 @@ class PaymentOnboardingView extends React.Component {
     this.state = {
       modalVisible: false,
       headerHeight: 0,
+      selectionMap: {},
       confirming: "",
       who: "",
-      selectionMap: {},
       howMuch: "",
       howOften: "",
       howLong: "",
@@ -250,6 +250,12 @@ class PaymentOnboardingView extends React.Component {
     this.setState({confirming: (expanding) ? payOrRequest : ""})
   }
 
+  toggleModal() {
+    this.setState({
+      modalVisible: !this.state.modalVisible
+    })
+  }
+
   render() {
     let {
       successHeight, successOpacity, buttonOpacity,
@@ -292,6 +298,21 @@ class PaymentOnboardingView extends React.Component {
         <ScrollView
           keyboardShouldPersistTaps
           contentContainerStyle={{alignItems: 'center'}}>
+
+          { /* 'Explore' link */ }
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => this.toggleModal()}>
+            <View style={{padding: 8, marginTop: 10, backgroundColor: colors.lightGrey, borderRadius: 4}}>
+              <Text style={{color: colors.slateGrey, fontSize: 14, backgroundColor: 'transparent', textAlign: 'center'}}>
+                {"Curious what others are using Payper for?"}
+                <Text style={{color: colors.accent}}>
+                  {" Explore Trending Payments"}
+                </Text>
+              </Text>
+            </View>
+          </TouchableHighlight>
 
           { /* Who? */ }
           <UserSearchField
@@ -553,6 +574,32 @@ class PaymentOnboardingView extends React.Component {
             </TouchableHighlight>
           </Animated.View>
         </Animated.View>
+
+        { /* Trending Payments Modal */ }
+        <Modal animationType={"slide"} visible={this.state.modalVisible}>
+          <View style={{flex: 1.0}}>
+            { /* Header */ }
+            <View style={{overflow: 'hidden'}}>
+              <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
+              <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
+                <Text style={{color: colors.lightGrey, fontSize: 17, backgroundColor: 'transparent'}}>
+                  {"Trending Payments"}
+                </Text>
+
+                <TouchableHighlight
+                  activeOpacity={0.75}
+                  underlayColor={'transparent'}
+                  style={{position: 'absolute', top: 0, left: 0, bottom: 0, padding: 14, paddingTop: 30, justifyContent: 'center'}}
+                  onPress={() => this.toggleModal()}>
+                  <EvilIcons name={"close"} color={colors.snowWhite} size={24} />
+                </TouchableHighlight>
+              </View>
+            </View>
+
+            { /* Content */ }
+            <TrendingPayments currentUser={this.props.currentUser} />
+          </View>
+        </Modal>
       </View>
     )
   }
