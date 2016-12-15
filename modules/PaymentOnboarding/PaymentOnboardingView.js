@@ -24,7 +24,7 @@ class PaymentOnboardingView extends React.Component {
       cancelButtonOpacity: new Animated.Value(0),
       exploreButtonHeight: new Animated.Value(60),
       exploreButtonOpacity: new Animated.Value(1),
-      exploreButtonMarginTop: new Animated.Value(10),
+      exploreButtonMarginTop: new Animated.Value(15),
       exploreButtonPadding: new Animated.Value(8)
     }
 
@@ -86,7 +86,7 @@ class PaymentOnboardingView extends React.Component {
         duration: 160
       }),
       Animated.timing(exploreButtonMarginTop, {
-        toValue: (exploreButtonMarginTop._value === 0) ? 10 : 0,
+        toValue: (exploreButtonMarginTop._value === 0) ? 15 : 0,
         duration: 200
       }),
       Animated.timing(exploreButtonPadding, {
@@ -343,7 +343,7 @@ class PaymentOnboardingView extends React.Component {
             <Animated.View
               style={{
                 height: exploreButtonHeight, opacity: exploreButtonOpacity, padding: exploreButtonPadding, marginTop: exploreButtonMarginTop,
-                backgroundColor: colors.lightGrey, borderRadius: 4
+                backgroundColor: colors.lightGrey, borderRadius: 4, justifyContent: 'center', alignItems: 'center'
               }}>
               <Text style={{color: colors.slateGrey, fontSize: 14, backgroundColor: 'transparent', textAlign: 'center'}}>
                 {"Curious what others are using Payper for?"}
