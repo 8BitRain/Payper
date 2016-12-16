@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment'
 import { View, ScrollView, Animated, StatusBar, Image, TouchableHighlight, Text, Dimensions, Modal, TextInput, Alert } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import { colors } from '../../globalStyles'
@@ -41,7 +42,8 @@ class PaymentOnboardingView extends React.Component {
       whatFor: "",
       startDay: "",
       startMonth: "",
-      startYear: ""
+      startYear: "",
+      startUTCString: ""
     }
 
     this.fieldRefs = {}
@@ -118,7 +120,8 @@ class PaymentOnboardingView extends React.Component {
 
     let {
       who, howMuch, howOften, howLong, whatFor,
-      startDay, startMonth, startYear, confirming
+      startDay, startMonth, startYear, startUTCString,
+      confirming
     } = this.state
 
     let {
@@ -164,7 +167,8 @@ class PaymentOnboardingView extends React.Component {
         payments: howLong.split(" ")[0],
         purpose: whatFor,
         type: "payment",
-        token: currentUser.token
+        token: currentUser.token,
+        start: startUTCString
       }
 
       if (paymentInfo.invite) Lambda.inviteViaPayment(paymentInfo)
@@ -184,7 +188,8 @@ class PaymentOnboardingView extends React.Component {
 
     let {
       who, howMuch, howOften, howLong, whatFor,
-      startDay, startMonth, startYear, confirming
+      startDay, startMonth, startYear, startUTCString,
+      confirming
     } = this.state
 
     let {
@@ -230,7 +235,8 @@ class PaymentOnboardingView extends React.Component {
         payments: howLong.split(" ")[0],
         purpose: whatFor,
         type: "request",
-        token: currentUser.token
+        token: currentUser.token,
+        start: startUTCString
       }
 
       if (paymentInfo.invite) Lambda.inviteViaPayment(paymentInfo)
@@ -539,10 +545,18 @@ class PaymentOnboardingView extends React.Component {
               let month = buffer[1]
               let year = buffer[2]
 
+              // Get UTC string for start date
+              let dateTime = values + " 08:30:00 AM"
+              let dateTimeFormat = 'DD-MM-YYYY hh:mm:ss a'
+              let formatted = moment(dateTime, dateTimeFormat)
+              let utc = formatted.utc()
+              let utcString = utc.valueOf()
+
               this.setState({
                 startDay: day,
                 startMonth: month,
-                startYear: year
+                startYear: year,
+                startUTCString: utcString
               }, () => cb())
             }}
             induceFieldRef={this.induceFieldRef}
