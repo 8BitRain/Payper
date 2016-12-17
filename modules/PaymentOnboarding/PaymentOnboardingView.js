@@ -485,7 +485,7 @@ class PaymentOnboardingView extends React.Component {
             value={this.state.howLong}
             invalidityAlert={"Please enter a valid duration (1 or more " + ((this.state.howOften === "Monthly") ? "months" : "weeks") + ")"}
             textInputProps={{
-              placeholder: "0 " + ((this.state.howOften === "Monthly") ? "months" : "weeks"),
+              placeholder: "0 " + ((this.state.howOften === "Monthly") ? "(months)" : "(weeks)"),
               keyboardType: "number-pad"
             }}
             validateInput={(input) => {
