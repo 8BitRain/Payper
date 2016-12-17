@@ -169,6 +169,11 @@ class FrequencyField extends React.Component {
 
             <Animated.View style={{backgroundColor: colors.snowWhite, marginTop: height._value + 60, width: dims.width, height: dims.height, paddingTop: 20, justifyContent: 'flex-start', alignItems: 'center'}}>
 
+              { /* Touching background dismisses field */ }
+              <TouchableWithoutFeedback onPress={() => this.toggle()}>
+                <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0}} />
+              </TouchableWithoutFeedback>
+
               { /* 'Monthly' button */ }
               <TouchableHighlight
                 activeOpacity={0.8}
