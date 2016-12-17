@@ -123,17 +123,6 @@ class DateField extends React.Component {
     let dateIsInFuture = inputMoment.isSameOrAfter(nowMoment, 'day')
     let dateStartsWithinAYear = inputMoment.isSameOrBefore(nowMoment.add(1, 'year'), 'day')
 
-    console.log("--> validating startDate")
-    console.log("--> nowMoment", nowMoment)
-    console.log("--> inputMoment", inputMoment)
-    console.log("--> dateIsInFuture", dateIsInFuture)
-    console.log("--> dateStartsWithinAYear", dateStartsWithinAYear)
-
-    // let debugAlert = "typeof dateIsInFuture is " + typeof dateIsInFuture + " \ntypeof dateStartsWithinAYear is " + typeof dateStartsWithinAYear
-    // setTimeout(() => {
-    //   alert(debugAlert)
-    // }, 1700)
-
     // Validate day
     let dayExceedsMaximum = dayFloat > this.numDaysInMonth[monthIndex]
     let dayIsZero = dayFloat < 1
