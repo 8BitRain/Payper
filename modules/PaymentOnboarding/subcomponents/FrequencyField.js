@@ -167,7 +167,7 @@ class FrequencyField extends React.Component {
               <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0}} />
             </TouchableWithoutFeedback>
 
-            <Animated.View style={{backgroundColor: colors.snowWhite, marginTop: height._value + 60, width: dims.width, height: dims.height, paddingTop: 20, justifyContent: 'flex-start', alignItems: 'center'}}>
+            <Animated.View style={{backgroundColor: colors.snowWhite, marginTop: height._value + 60, paddingBottom: height._value + 132, width: dims.width, height: dims.height, paddingTop: 20, justifyContent: 'center', alignItems: 'center'}}>
 
               { /* Touching background dismisses field */ }
               <TouchableWithoutFeedback onPress={() => this.toggle()}>
