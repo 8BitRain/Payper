@@ -116,13 +116,23 @@ class DateField extends React.Component {
     let yearFloat = parseFloat(yearString)
     let monthIndex = monthFloat - 1
 
-    // Make sure date is in the future
-    let now = new Date()
-    let then = new Date(yearString + "," + monthString + "," + dayString)
-    let dateIsInFuture = moment(then).isSameOrAfter(now, 'day')
+    // Valid start relative to today's date
+    let dateFormat = 'DD-MM-YYYY'
+    let nowMoment = moment()
+    let inputMoment = moment(input, dateFormat)
+    let dateIsInFuture = inputMoment.isSameOrAfter(nowMoment, 'day')
+    let dateStartsWithinAYear = inputMoment.isSameOrBefore(nowMoment.add(1, 'year'), 'day')
 
-    // Make sure date starts up to one year from now
-    let dateStartsWithinAYear = moment(then).isSameOrBefore(moment(now).add(1, 'year'), 'day')
+    console.log("--> validating startDate")
+    console.log("--> nowMoment", nowMoment)
+    console.log("--> inputMoment", inputMoment)
+    console.log("--> dateIsInFuture", dateIsInFuture)
+    console.log("--> dateStartsWithinAYear", dateStartsWithinAYear)
+
+    // let debugAlert = "typeof dateIsInFuture is " + typeof dateIsInFuture + " \ntypeof dateStartsWithinAYear is " + typeof dateStartsWithinAYear
+    // setTimeout(() => {
+    //   alert(debugAlert)
+    // }, 1700)
 
     // Validate day
     let dayExceedsMaximum = dayFloat > this.numDaysInMonth[monthIndex]
@@ -135,7 +145,7 @@ class DateField extends React.Component {
     let monthIsValid = !monthExceedsMaximum && !monthIsZero
 
     // Validate year
-    let yearIsInPast = yearFloat < now.getFullYear()
+    let yearIsInPast = yearFloat < new Date().getFullYear()
     let yearIsValid = !yearIsInPast
 
     // Compile validations
@@ -177,7 +187,7 @@ class DateField extends React.Component {
 
       // Date doesn't start within a year from today
       else if (!dateStartsWithinAYear) {
-        errorMessage = "Start date must not be over a year from today."
+        errorMessage = "Start date must be within a year of today."
         fieldToFocus = "yearField"
       }
     }
