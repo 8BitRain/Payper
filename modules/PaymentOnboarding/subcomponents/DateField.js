@@ -219,18 +219,18 @@ class DateField extends React.Component {
     let key = Object.keys(input)[0]
     let val = input[key]
 
-    // Should input focus shift from day to month?
-    let dayIsTwoDigits = key === "dayInput" && val.length === 2
-    let dayCannotBeMoreThanOneDigit = key === "dayInput" && val.length === 1 && val >= 4
-    let shouldShiftFromDayToMonth = dayIsTwoDigits || dayCannotBeMoreThanOneDigit
-
-    // Should input focus shift from month to year?
+    // Should input focus shift from month to day?
     let monthIsTwoDigits = key === "monthInput" && val.length === 2
     let monthCannotBeMoreThanOneDigit = key === "monthInput" && val.length === 1 && val >= 3
-    let shouldShiftFromMonthToYear = monthIsTwoDigits || monthCannotBeMoreThanOneDigit
+    let shouldShiftFromMonthToDay = monthIsTwoDigits || monthCannotBeMoreThanOneDigit
 
-    if (shouldShiftFromDayToMonth) this.monthField.focus()
-    else if (shouldShiftFromMonthToYear) this.yearField.focus()
+    // Should input focus shift from day to year?
+    let dayIsTwoDigits = key === "dayInput" && val.length === 2
+    let dayCannotBeMoreThanOneDigit = key === "dayInput" && val.length === 1 && val >= 4
+    let shouldShiftFromDayToYear = dayIsTwoDigits || dayCannotBeMoreThanOneDigit
+
+    if (shouldShiftFromMonthToDay) this.dayField.focus()
+    else if (shouldShiftFromDayToYear) this.yearField.focus()
 
     this.setState(input)
   }
@@ -332,22 +332,6 @@ class DateField extends React.Component {
                 </TouchableHighlight>
 
                 <View style={{flexDirection: 'row', alignItems: 'center', flex: 0.65, height: 50}}>
-                  { /* Day input */ }
-                  <TextInput
-                    ref={ref => this.dayField = ref}
-                    defaultValue={dayValue}
-                    placeholder={"DD"}
-                    placeholderTextColor={colors.slateGrey}
-                    keyboardType={"number-pad"}
-                    maxLimit={2}
-                    blurOnSubmit={false}
-                    autoFocus={true}
-                    style={{flex: 0.3333, height: 50, paddingLeft: 4, paddingRight: 4, textAlign: 'center', borderRightWidth: 1, borderColor: colors.slateGrey}}
-                    onChangeText={(input) => this.onChangeText({dayInput: input})}
-                    onSubmitEditing={() => this.submit()} />
-
-                  <View style={{height: 32, width: 1, backgroundColor: colors.medGrey}} />
-
                   { /* Month input */ }
                   <TextInput
                     ref={ref => this.monthField = ref}
@@ -357,8 +341,24 @@ class DateField extends React.Component {
                     keyboardType={"number-pad"}
                     maxLimit={2}
                     blurOnSubmit={false}
+                    autoFocus={true}
                     style={{flex: 0.3333, height: 50, paddingLeft: 4, paddingRight: 4, textAlign: 'center'}}
                     onChangeText={(input) => this.onChangeText({monthInput: input})}
+                    onSubmitEditing={() => this.submit()} />
+
+                  <View style={{height: 32, width: 1, backgroundColor: colors.medGrey}} />
+
+                  { /* Day input */ }
+                  <TextInput
+                    ref={ref => this.dayField = ref}
+                    defaultValue={dayValue}
+                    placeholder={"DD"}
+                    placeholderTextColor={colors.slateGrey}
+                    keyboardType={"number-pad"}
+                    maxLimit={2}
+                    blurOnSubmit={false}
+                    style={{flex: 0.3333, height: 50, paddingLeft: 4, paddingRight: 4, textAlign: 'center', borderRightWidth: 1, borderColor: colors.slateGrey}}
+                    onChangeText={(input) => this.onChangeText({dayInput: input})}
                     onSubmitEditing={() => this.submit()} />
 
                   <View style={{height: 32, width: 1, backgroundColor: colors.medGrey}} />
