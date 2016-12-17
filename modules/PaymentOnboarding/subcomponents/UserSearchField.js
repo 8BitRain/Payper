@@ -101,11 +101,11 @@ class UserSearchField extends React.Component {
         duration: 110
       }),
       Animated.timing(this.AV.valueHeight, {
-        toValue: 32,
+        toValue: 38,
         duration: 140
       }),
       Animated.timing(this.AV.valuePaddingBottom, {
-        toValue: 13,
+        toValue: 16,
         duration: 140
       })
     ]
@@ -233,7 +233,7 @@ class UserSearchField extends React.Component {
             <EvilIcons name={iconName} size={32} color={'transparent'} />
 
             { /* Previews for selected users */ }
-            {selectedUsers.map((user, i) => <UserPic width={30} height={30} marginLeft={4} user={user} key={user.uid || user.phone} />)}
+            {selectedUsers.map((user, i) => <UserPic width={40} height={40} marginLeft={4} user={user} key={user.uid || user.phone} />)}
           </Animated.View>
 
           { /* Input modal */ }
