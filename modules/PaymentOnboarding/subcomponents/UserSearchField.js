@@ -266,8 +266,8 @@ class UserSearchField extends React.Component {
                   onPress={() => this.toggle()}
                   style={{justifyContent: 'center', alignItems: 'center'}}>
                   <View style={{justifyContent: 'center', alignItems: 'center', padding: 8}}>
-                    <EvilIcons name={"close-o"} size={30} color={colors.carminePink} />
-                    <View style={{position: 'absolute', top: 4, bottom: 4, right: 0, width: 1, backgroundColor: colors.medGrey}} />
+                    <EvilIcons name={"close-o"} size={38} color={colors.carminePink} />
+                    <View style={{position: 'absolute', top: 10, bottom: 10, right: 0, width: 1, backgroundColor: colors.medGrey}} />
                   </View>
                 </TouchableHighlight>
 
@@ -289,8 +289,8 @@ class UserSearchField extends React.Component {
                   onPress={() => this.submit()}
                   style={{justifyContent: 'center', alignItems: 'center'}}>
                   <View style={{justifyContent: 'center', alignItems: 'center', padding: 8}}>
-                    <EvilIcons name={"check"} size={30} color={colors.gradientGreen} />
-                    <View style={{position: 'absolute', top: 4, bottom: 4, left: 0, width: 1, backgroundColor: colors.medGrey}} />
+                    <EvilIcons name={"check"} size={38} color={colors.gradientGreen} />
+                    <View style={{position: 'absolute', top: 10, bottom: 10, left: 0, width: 1, backgroundColor: colors.medGrey}} />
                   </View>
                 </TouchableHighlight>
               </View>
