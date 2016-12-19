@@ -1,13 +1,8 @@
 import React from 'react'
 import firebase from 'firebase'
-import { AppState } from 'react-native'
-import { Scene, Reducer, Router, Modal } from 'react-native-router-flux'
 import Mixpanel from 'react-native-mixpanel'
-import { colors } from './globalStyles'
 import Error from './components/Error'
-import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
 import DeviceInfo from 'react-native-device-info'
-import { Client } from 'bugsnag-react-native'
 import * as Async from './helpers/Async'
 import SplashViewContainer from './modules/Splash/SplashViewContainer'
 import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreenView'
@@ -16,28 +11,22 @@ import MainViewContainer from './modules/Main/MainViewContainer'
 import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer'
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView'
 import Phone from './modules/UserOnboarding/pages/Phone'
+import { AppState } from 'react-native'
+import { Scene, Reducer, Router, Modal } from 'react-native-router-flux'
+import { colors } from './globalStyles'
+import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
+import { Client } from 'bugsnag-react-native'
 import { PayDetails } from './components/PayCard'
 import { MainView, OnboardingView, PaymentOnboardingView } from './modules'
 
-/*
 // Get build and version numbers
 let build = DeviceInfo.getBuildNumber()
 let version = DeviceInfo.getVersion()
-let build_version = build + "_" + version
-// build_version = '' // NOTE: uncomment this line to reset cache
 
-// Reset user cache if this is the first app session post-update
-Async.get('build_version', (cached_build_version) => {
-  if (cached_build_version !== build_version) {
-    Async.set('user', '')
-    Async.set('BankOnboardingStateCache', '')
-    Async.set('betaStatus', '')
-    Async.set('build_version', build_version)
-  }
-})
-
-Async.set('betaStatus', 'fullAccess')
-*/
+// Uncomment to reset user cache
+// Async.set('user', '')
+// Async.set('BankOnboardingStateCache', '')
+// Async.set('betaStatus', '')
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params)
@@ -82,8 +71,10 @@ export default class Coincast extends React.Component {
   componentWillMount() {
     this.client = new Client('f8be20d13dd76c17ff352c44d395270a')
     let clientId = DeviceInfo.getUniqueID()
+
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6')
     Mixpanel.timeEvent('Session Duration')
+
     AppState.addEventListener('change', this.handleAppStateChange)
      ga = new Analytics('UA-87368863-1', clientId, 1, DeviceInfo.getUserAgent())
      var screenView = new GAHits.ScreenView(
@@ -92,6 +83,7 @@ export default class Coincast extends React.Component {
       DeviceInfo.getReadableVersion(),
       DeviceInfo.getBundleId()
     )
+
     ga.send(screenView)
   }
 
