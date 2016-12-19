@@ -74,7 +74,7 @@ class PaymentOnboardingView extends React.Component {
     // Continue flow
     if (inFlow && shouldContinueFlow) {
       let nextFieldIndex = this.fieldNames.indexOf(title) + 1
-      
+
       if (nextFieldIndex < this.fieldNames.length) {
         let nextFieldTitle = this.fieldNames[nextFieldIndex]
         let nextField = this.fieldRefs[nextFieldTitle]
@@ -86,9 +86,10 @@ class PaymentOnboardingView extends React.Component {
       }
     }
 
-    // Break flow
-    if (!fieldIsFocused && shouldContinueFlow === false)
-      this.setState({inFlow: false})
+    // Break flow if input was cancelled, or if we've reached the end
+    let inputWasCancelled = !fieldIsFocused && shouldContinueFlow === false
+    let endOfFlowWasReached = !fieldIsFocused && title === "Starting when?"
+    if (inputWasCancelled || endOfFlowWasReached) this.setState({inFlow: false})
 
     // Show or hide 'Explore Trending Payments' button
     this.toggleExploreButton()
