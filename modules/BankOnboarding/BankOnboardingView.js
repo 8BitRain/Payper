@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableHighlight, StyleSheet, Animated, Easing, Dimensions, StatusBar, Image } from "react-native";
 import { Actions } from 'react-native-router-flux';
-import Mixpanel from 'react-native-mixpanel';
+import { Timer, TrackOnce } from '../../classes/Metrics'
 import Entypo from 'react-native-vector-icons/Entypo';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import dismissKeyboard from 'react-native-dismiss-keyboard';
@@ -75,7 +75,9 @@ class BankOnboardingView extends React.Component {
       this.setState(cachedState);
     });
 
-    Mixpanel.timeEvent('Dwolla Customer Onboarding');
+    this.timer = new Timer()
+    this.trackOnce = new TrackOnce()
+    this.timer.start()
   }
 
   induceState(substate, cb) {
@@ -128,14 +130,13 @@ class BankOnboardingView extends React.Component {
       Async.set('BankOnboardingStateCache', '');
     }
 
-    // Track this onboarding session in Mixpanel
-    Mixpanel.trackWithProperties('Dwolla Customer Onboarding', {
+    this.timer.report("customerOnboarding", this.props.currentUser.uid, {
       completed: true,
       cancelled: false,
       errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
       uid: this.props.currentUser.uid,
       customerStatus: customerStatus
-    });
+    })
 
     // Exit onboarding flow
     setTimeout(() => {
@@ -153,7 +154,12 @@ class BankOnboardingView extends React.Component {
   **/
   handleFailure(errCode, cb) {
     this.errCodes.push({ errCode: errCode, timestamp: new Date().getTime() });
-    Mixpanel.trackWithProperties('Failed Dwolla Customer Creation', { errCode: errCode });
+
+    this.trackOnce.report("failedCustomerCreation", this.props.currentUser.uid, {
+      errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
+      uid: this.props.currentUser.uid
+    })
+
     let msg = (errCode === 'Duplicate')
       ? "A customer with that email address already exists. Please use a different one."
       : "Something went wrong on our end 🙄. Please try again.";
@@ -241,12 +247,12 @@ class BankOnboardingView extends React.Component {
   }
 
   handleCancel() {
-    Mixpanel.trackWithProperties('Dwolla Customer Onboarding', {
+    this.timer.report("customerOnboarding", this.props.currentUser.uid, {
       completed: false,
       cancelled: true,
       errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
       uid: this.props.currentUser.uid
-    });
+    })
 
     this.props.closeModal();
   }

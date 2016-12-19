@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux'
 import { colors } from '../../globalStyles'
 import { StickyView, TrendingPayments } from '../../components'
 import { TextField, FrequencyField, DateField, UserSearchField } from './subcomponents'
+import { Timer } from '../../classes/Metrics'
 import * as Lambda from '../../services/Lambda'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const dims = Dimensions.get('window')
@@ -53,6 +54,11 @@ class PaymentOnboardingView extends React.Component {
     this.fieldRefs = {}
     this.induceFieldRef = this.induceFieldRef.bind(this)
     this.toggleFieldFocus = this.toggleFieldFocus.bind(this)
+  }
+
+  componentWillMount() {
+    this.timer = new Timer()
+    this.timer.start()
   }
 
   induceFieldRef(ref) {
@@ -217,6 +223,10 @@ class PaymentOnboardingView extends React.Component {
     Animated.parallel(successAnimations).start(() => {
       setTimeout(() => Actions.pop(), 800)
     })
+
+    this.timer.report("paymentOnboarding", this.props.currentUser.uid, {
+      cancelled: false
+    })
   }
 
   request() {
@@ -285,6 +295,10 @@ class PaymentOnboardingView extends React.Component {
     Animated.parallel(successAnimations).start(() => {
       setTimeout(() => Actions.pop(), 800)
     })
+
+    this.timer.report("paymentOnboarding", this.props.currentUser.uid, {
+      cancelled: false
+    })
   }
 
   confirm(payOrRequest) {
@@ -347,6 +361,14 @@ class PaymentOnboardingView extends React.Component {
     })
   }
 
+  cancel() {
+    this.timer.report("paymentOnboarding", this.props.currentUser.uid, {
+      cancelled: true,
+      stateSnapshot: this.state
+    })
+
+    Actions.pop()
+  }
   render() {
     let {
       successHeight, successOpacity, buttonOpacity,
@@ -380,7 +402,7 @@ class PaymentOnboardingView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={'transparent'}
-              onPress={() => Actions.pop()}
+              onPress={() => this.cancel()}
               style={{position: 'absolute', top: 18, bottom: 0, left: 0, padding: 14, justifyContent: 'center'}}>
               <EvilIcons name={"chevron-left"} size={36} color={colors.lightGrey} />
             </TouchableHighlight>

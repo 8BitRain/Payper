@@ -5,6 +5,7 @@ import Mixpanel from 'react-native-mixpanel';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import * as config from '../../config';
 import { colors } from '../../globalStyles'
+import { Timer, TrackOnce } from '../../classes/Metrics'
 const dimensions = Dimensions.get('window');
 
 class IAVWebView extends React.Component {
@@ -23,20 +24,19 @@ class IAVWebView extends React.Component {
 
   componentWillMount() {
     this.refresh();
-    Mixpanel.timeEvent('IAV Onboarding');
+    this.timer = new Timer()
+    this.trackOnce = new TrackOnce()
+    this.timer.start()
   }
 
   componentWillUnmount() {
-    Mixpanel.trackWithProperties('IAV Onboarding', {
-      cancelled: this.state.cancelled,
-      uid: this.props.currentUser.uid,
-      IAVToken: this.state.IAVToken,
-      firebaseToken: this.props.currentUser.token
-    });
+    this.timer.report("bankOnboarding", this.props.currentUser.uid, {
+      uid: this.props.currentUser.uid
+    })
   }
 
   handleError(err) {
-    console.log("Error loading WebView:\n", err);
+    this.trackOnce.report("failedIAVLoad", this.props.currentUser.uid)
   }
 
   refresh() {
