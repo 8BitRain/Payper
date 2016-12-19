@@ -36,7 +36,8 @@ class PaymentOnboardingView extends React.Component {
       headerHeight: 0,
       selectionMap: {},
       scrollTop: 0,
-      inFlow: true,
+      inFlow: false,
+      haventFocusedAFieldYet: true,
       confirming: "",
       who: "",
       howMuch: "",
@@ -68,8 +69,16 @@ class PaymentOnboardingView extends React.Component {
   }
 
   toggleFieldFocus(title, shouldContinueFlow) {
-    let {scrollTop, scrollTopCache, inFlow} = this.state
+    let {scrollTop, scrollTopCache, inFlow, haventFocusedAFieldYet} = this.state
     let fieldIsFocused = this.fieldRefs[title].state.focused
+
+    // If the first field opened is 'Who?', start flow
+    if (fieldIsFocused && title === "Who?" && haventFocusedAFieldYet)
+      this.setState({inFlow: true})
+
+    // We've focused a field. Flow cannot be initiated again
+    if (fieldIsFocused && haventFocusedAFieldYet)
+      this.setState({haventFocusedAFieldYet: false})
 
     // Continue flow
     if (inFlow && shouldContinueFlow) {
@@ -533,8 +542,6 @@ class PaymentOnboardingView extends React.Component {
                 frequency = (value === 1) ? " week" : " weeks"
 
               value += frequency
-
-              console.log("--> How long?", value)
 
               this.setState({howLong: value}, () => cb())
             }}
