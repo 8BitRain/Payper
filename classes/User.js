@@ -354,9 +354,6 @@ export default class User {
         callback: (res) => {
           if (!res) return
 
-          // Update user attributes
-          console.log("\n\n--> users/" + this.uid + " response:\n", res)
-
           updateViaRedux(res)
 
           // If user has a funding source, fetch its bank account info

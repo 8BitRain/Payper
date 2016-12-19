@@ -61,10 +61,15 @@ class MainView extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("--> MainView will receive props:", nextProps)
     let payFlowChanged = nextProps.currentUser.paymentFlow !== this.props.currentUser.paymentFlow
     let appFlagsChanged = nextProps.currentUser.appFlags !== this.props.currentUser.appFlags
     if (payFlowChanged || appFlagsChanged) this.generatePayCards(nextProps.currentUser)
+
+    console.log("\n\n")
+    console.log("--> Pay flow changed:", payFlowChanged)
+    console.log("--> App flags changed:", appFlagsChanged)
+    console.log("--> Will regenerate:", payFlowChanged || appFlagsChanged)
+    console.log("\n\n")
   }
 
   generateNoticeBar(currentUser) {
