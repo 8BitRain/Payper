@@ -110,7 +110,7 @@ class BankAccounts extends React.Component {
         <TouchableHighlight
           activeOpacity={0.75}
           underlayColor={'transparent'}
-          onPress={() => (bankAccount.name) ? this.onlyAllowOneBankAccount() : this.toggleIAVModal()}>
+          onPress={() => (bankAccount && bankAccount.name) ? this.onlyAllowOneBankAccount() : this.toggleIAVModal()}>
           <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
             <EvilIcons name={"plus"} color={colors.accent} size={38} />
             <Text style={{fontSize: 20, color: colors.accent, paddingLeft: 4}}>

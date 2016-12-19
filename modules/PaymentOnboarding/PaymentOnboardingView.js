@@ -675,7 +675,7 @@ class PaymentOnboardingView extends React.Component {
                 { /* Bank account name */
                   (confirming !== "" && bankAccount.name)
                   ? <Text style={{fontSize: 16, color: colors.deepBlue, textAlign: 'center'}}>
-                      {"(" + bankAccount.name + ")"}
+                      {"(Active bank: " + ((bankAccount.name.length > 14) ? bankAccount.name.substring(0, 13).trim().concat("...") : bankAccount.name) + ")"}
                     </Text>
                   : null
                 }
@@ -698,7 +698,7 @@ class PaymentOnboardingView extends React.Component {
                 { /* Bank account name */
                   (confirming !== "" && bankAccount.name)
                   ? <Text style={{fontSize: 16, color: colors.deepBlue, textAlign: 'center'}}>
-                      {"(" + bankAccount.name + ")"}
+                      {"(Active bank: " + ((bankAccount.name.length > 14) ? bankAccount.name.substring(0, 13).trim().concat("...") : bankAccount.name) + ")"}
                     </Text>
                   : null
                 }
