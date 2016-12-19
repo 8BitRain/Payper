@@ -81,9 +81,9 @@ class DateField extends React.Component {
     Animated.parallel(animations).start(() => this.setState({touchable: true}))
   }
 
-  toggle() {
+  toggle(shouldContinueFlow) {
     this.setState({focused: !this.state.focused}, () => {
-      this.props.toggleFieldFocus(this.state.title)
+      this.props.toggleFieldFocus(this.state.title, shouldContinueFlow)
     })
   }
 
@@ -201,7 +201,7 @@ class DateField extends React.Component {
     }
 
     setValues(input, () => this.showValue())
-    this.toggle()
+    this.toggle(/*(shouldContinueFlow)*/true)
   }
 
   autoFillWithTodaysDate() {
@@ -253,7 +253,7 @@ class DateField extends React.Component {
       <TouchableHighlight
         activeOpacity={0.8}
         underlayColor={'transparent'}
-        onPress={() => this.toggle()}>
+        onPress={() => this.toggle(/*(shouldContinueFlow)*/false)}>
         <Animated.View
           style={{
             height: height,
@@ -291,7 +291,7 @@ class DateField extends React.Component {
           { /* Input modal */ }
           <Modal visible={this.state.focused} animationType={"slide"} transparent={true}>
             { /* Touching background dismisses field */ }
-            <TouchableWithoutFeedback onPress={() => this.toggle()}>
+            <TouchableWithoutFeedback onPress={() => this.toggle(/*(shouldContinueFlow)*/false)}>
               <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0}} />
             </TouchableWithoutFeedback>
 
@@ -322,7 +322,7 @@ class DateField extends React.Component {
                 <TouchableHighlight
                   activeOpacity={0.65}
                   underlayColor={'transparent'}
-                  onPress={() => this.toggle()}
+                  onPress={() => this.toggle(/*(shouldContinueFlow)*/false)}
                   style={{justifyContent: 'center', alignItems: 'center'}}>
                   <View style={{justifyContent: 'center', alignItems: 'center', padding: 8}}>
                     <EvilIcons name={"close-o"} size={38} color={colors.carminePink} />

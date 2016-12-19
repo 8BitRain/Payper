@@ -29,11 +29,14 @@ class PaymentOnboardingView extends React.Component {
       exploreButtonPadding: new Animated.Value(8)
     }
 
+    this.fieldNames = ['Who?', 'How much?', 'How often?', 'How long?', 'What for?', 'Starting when?']
+
     this.state = {
       modalVisible: false,
       headerHeight: 0,
       selectionMap: {},
       scrollTop: 0,
+      inFlow: true,
       confirming: "",
       who: "",
       howMuch: "",
@@ -60,9 +63,35 @@ class PaymentOnboardingView extends React.Component {
     this.setState({modalVisible: true})
   }
 
-  toggleFieldFocus(title) {
-    let {scrollTop, scrollTopCache} = this.state
+  toggleFlow() {
+    this.setState({inFlow: !this.state.inFlow})
+  }
+
+  toggleFieldFocus(title, shouldContinueFlow) {
+    let {scrollTop, scrollTopCache, inFlow} = this.state
     let fieldIsFocused = this.fieldRefs[title].state.focused
+
+    // Continue flow
+    if (inFlow && shouldContinueFlow) {
+      let nextFieldIndex = this.fieldNames.indexOf(title) + 1
+      
+      if (nextFieldIndex < this.fieldNames.length) {
+        let nextFieldTitle = this.fieldNames[nextFieldIndex]
+        let nextField = this.fieldRefs[nextFieldTitle]
+
+        setTimeout(() => {
+          nextField.toggle()
+          this.toggleExploreButton("hide")
+        }, 250)
+      }
+    }
+
+    // Break flow
+    if (!fieldIsFocused && shouldContinueFlow === false)
+      this.setState({inFlow: false})
+
+    // Show or hide 'Explore Trending Payments' button
+    this.toggleExploreButton()
 
     // Scroll to cached scrollTop
     if (fieldIsFocused) {
@@ -73,19 +102,22 @@ class PaymentOnboardingView extends React.Component {
       this.ScrollView.scrollTo({y: scrollTopCache, animated: false})
     }
 
-    // Show or hide 'Explore Trending Payments' button
-    this.toggleExploreButton()
-
     // Show or hide input fields
     for (var k of Object.keys(this.fieldRefs)) {
       if (k === title) continue
       let curr = this.fieldRefs[k]
+
+      // Toggle field visiblity
       if (fieldIsFocused) curr.hide()
       else curr.show()
+
+      console.log("-----------------------------")
+      console.log("--> field's title is", k)
+      console.log("--> field is focused?", fieldIsFocused)
     }
   }
 
-  toggleExploreButton() {
+  toggleExploreButton(override) {
     let {
       exploreButtonHeight, exploreButtonOpacity, exploreButtonMarginTop,
       exploreButtonPadding
@@ -93,19 +125,19 @@ class PaymentOnboardingView extends React.Component {
 
     let animations = [
       Animated.timing(exploreButtonHeight, {
-        toValue: (exploreButtonHeight._value === 0) ? 60 : 0,
+        toValue: (exploreButtonHeight._value === 0 && override !== "hide") ? 60 : 0,
         duration: 200
       }),
       Animated.timing(exploreButtonOpacity, {
-        toValue: (exploreButtonOpacity._value === 0) ? 1 : 0,
+        toValue: (exploreButtonOpacity._value === 0 && override !== "hide") ? 1 : 0,
         duration: 160
       }),
       Animated.timing(exploreButtonMarginTop, {
-        toValue: (exploreButtonMarginTop._value === 0) ? 15 : 0,
+        toValue: (exploreButtonMarginTop._value === 0 && override !== "hide") ? 15 : 0,
         duration: 200
       }),
       Animated.timing(exploreButtonPadding, {
-        toValue: (exploreButtonPadding._value === 0) ? 8 : 0,
+        toValue: (exploreButtonPadding._value === 0 && override !== "hide") ? 8 : 0,
         duration: 200
       })
     ]

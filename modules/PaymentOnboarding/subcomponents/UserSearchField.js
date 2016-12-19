@@ -87,12 +87,13 @@ class UserSearchField extends React.Component {
     Animated.parallel(animations).start(() => this.setState({touchable: true}))
   }
 
-  toggle() {
+  toggle(shouldContinueFlow) {
     this.setState({focused: !this.state.focused}, () => {
       if (!this.state.focused) this.filterContacts("")
-      this.props.toggleFieldFocus(this.state.title)
+      this.props.toggleFieldFocus(this.state.title, shouldContinueFlow)
     })
   }
+
 
   showValue() {
     let animations = [
@@ -136,7 +137,7 @@ class UserSearchField extends React.Component {
     let {setValue} = this.props
     let {selectedUsers, selectionMap} = this.state
     setValue({selectedUsers, selectionMap})
-    this.toggle()
+    this.toggle(/*(shouldContinueFlow)*/true)
   }
 
   onChangeText(input) {
@@ -205,7 +206,7 @@ class UserSearchField extends React.Component {
       <TouchableHighlight
         activeOpacity={0.8}
         underlayColor={'transparent'}
-        onPress={() => this.toggle()}>
+        onPress={() => this.toggle(/*(shouldContinueFlow)*/false)}>
         <Animated.View
           style={{
             height: height,
@@ -239,7 +240,7 @@ class UserSearchField extends React.Component {
           { /* Input modal */ }
           <Modal visible={this.state.focused} animationType={"slide"} transparent={true}>
             { /* Touching background dismisses field */ }
-            <TouchableWithoutFeedback onPress={() => this.toggle()}>
+            <TouchableWithoutFeedback onPress={() => this.toggle(/*(shouldContinueFlow)*/false)}>
               <Animated.View style={{height: offsetTop + height._value, width: dims.width}} />
             </TouchableWithoutFeedback>
 
@@ -263,7 +264,7 @@ class UserSearchField extends React.Component {
                 <TouchableHighlight
                   activeOpacity={0.65}
                   underlayColor={'transparent'}
-                  onPress={() => this.toggle()}
+                  onPress={() => this.toggle(/*(shouldContinueFlow)*/false)}
                   style={{justifyContent: 'center', alignItems: 'center'}}>
                   <View style={{justifyContent: 'center', alignItems: 'center', padding: 8}}>
                     <EvilIcons name={"close-o"} size={38} color={colors.carminePink} />

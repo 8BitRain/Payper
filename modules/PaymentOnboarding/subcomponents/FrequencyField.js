@@ -66,9 +66,9 @@ class FrequencyField extends React.Component {
     Animated.parallel(animations).start(() => this.setState({touchable: true}))
   }
 
-  toggle() {
+  toggle(shouldContinueFlow) {
     this.setState({focused: !this.state.focused}, () => {
-      this.props.toggleFieldFocus(this.state.title)
+      this.props.toggleFieldFocus(this.state.title, shouldContinueFlow)
     })
   }
 
@@ -107,7 +107,7 @@ class FrequencyField extends React.Component {
     // Show value in this component/set value in parent component
     let shouldShowValue = value.length < 1 && input.length >= 1
     setValue(input, () => (shouldShowValue) ? this.showValue() : null)
-    this.toggle()
+    this.toggle(/*(shouldContinueFlow)*/true)
   }
 
   render() {
@@ -129,7 +129,7 @@ class FrequencyField extends React.Component {
       <TouchableHighlight
         activeOpacity={0.8}
         underlayColor={'transparent'}
-        onPress={() => this.toggle()}>
+        onPress={() => this.toggle(/*(shouldContinueFlow)*/false)}>
         <Animated.View
           style={{
             height: height,
@@ -163,14 +163,14 @@ class FrequencyField extends React.Component {
           { /* Input modal */ }
           <Modal visible={this.state.focused} animationType={"slide"} transparent={true}>
             { /* Touching background dismisses field */ }
-            <TouchableWithoutFeedback onPress={() => this.toggle()}>
+            <TouchableWithoutFeedback onPress={() => this.toggle(/*(shouldContinueFlow)*/false)}>
               <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0}} />
             </TouchableWithoutFeedback>
 
             <Animated.View style={{backgroundColor: colors.snowWhite, marginTop: height._value + 60, paddingBottom: height._value + 132, width: dims.width, height: dims.height, paddingTop: 20, justifyContent: 'center', alignItems: 'center'}}>
 
               { /* Touching background dismisses field */ }
-              <TouchableWithoutFeedback onPress={() => this.toggle()}>
+              <TouchableWithoutFeedback onPress={() => this.toggle(/*(shouldContinueFlow)*/false)}>
                 <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0}} />
               </TouchableWithoutFeedback>
 
