@@ -189,7 +189,7 @@ class TextField extends React.Component {
                 { /* Input field */ }
                 <TextInput
                   ref={ref => this.inputField = ref}
-                  defaultValue={value}
+                  defaultValue={textInputProps.defaultValue || value}
                   placeholderTextColor={colors.slateGrey}
                   blurOnSubmit={false}
                   autoFocus={true}

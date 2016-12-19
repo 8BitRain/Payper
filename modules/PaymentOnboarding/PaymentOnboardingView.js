@@ -111,10 +111,6 @@ class PaymentOnboardingView extends React.Component {
       // Toggle field visiblity
       if (fieldIsFocused) curr.hide()
       else curr.show()
-
-      console.log("-----------------------------")
-      console.log("--> field's title is", k)
-      console.log("--> field is focused?", fieldIsFocused)
     }
   }
 
@@ -519,7 +515,8 @@ class PaymentOnboardingView extends React.Component {
             invalidityAlert={"Please enter a valid duration (1 or more " + ((this.state.howOften === "Monthly") ? "months" : "weeks") + ")"}
             textInputProps={{
               placeholder: "0 " + ((this.state.howOften === "Monthly") ? "(months)" : "(weeks)"),
-              keyboardType: "number-pad"
+              keyboardType: "number-pad",
+              defaultValue: this.state.howLong.split(" ")[0]
             }}
             validateInput={(input) => {
               return true
@@ -536,6 +533,8 @@ class PaymentOnboardingView extends React.Component {
                 frequency = (value === 1) ? " week" : " weeks"
 
               value += frequency
+
+              console.log("--> How long?", value)
 
               this.setState({howLong: value}, () => cb())
             }}
