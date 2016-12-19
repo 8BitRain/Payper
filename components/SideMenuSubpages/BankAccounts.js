@@ -32,7 +32,7 @@ class BankAccounts extends React.Component {
   }
 
   generateRows(currentUser) {
-    let rows = { "My Bank Accounts": (currentUser.bankAccount.name) ? [currentUser.bankAccount] : [{name: "None. Add one now!", notTouchable: true}] }
+    let rows = { "My Bank Accounts": (currentUser.bankAccount && currentUser.bankAccount.name) ? [currentUser.bankAccount] : [{name: "None. Add one now!", notTouchable: true}] }
     this.setState({rows: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(rows)})
   }
 
