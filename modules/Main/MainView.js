@@ -1,5 +1,6 @@
 import React from 'react'
 import moment from 'moment'
+import * as _ from 'lodash'
 import { Actions } from 'react-native-router-flux'
 import { View, TouchableHighlight, ListView, ScrollView, RecyclerViewBackedScrollView, Dimensions, Animated, Easing, StatusBar, Text, Image, Modal } from 'react-native'
 import { VibrancyView } from "react-native-blur"
@@ -64,12 +65,6 @@ class MainView extends React.Component {
     let payFlowChanged = nextProps.currentUser.paymentFlow !== this.props.currentUser.paymentFlow
     let appFlagsChanged = nextProps.currentUser.appFlags !== this.props.currentUser.appFlags
     if (payFlowChanged || appFlagsChanged) this.generatePayCards(nextProps.currentUser)
-
-    console.log("\n\n")
-    console.log("--> Pay flow changed:", payFlowChanged)
-    console.log("--> App flags changed:", appFlagsChanged)
-    console.log("--> Will regenerate:", payFlowChanged || appFlagsChanged)
-    console.log("\n\n")
   }
 
   generateNoticeBar(currentUser) {
@@ -98,6 +93,8 @@ class MainView extends React.Component {
             }} />
       })
     }
+
+    console.log("--> shouldRenderNoticeBar", shouldRenderNoticeBar)
 
     return noticeBar
   }
@@ -131,15 +128,20 @@ class MainView extends React.Component {
   }
 
   generatePayCards(currentUser) {
-    let payFlow = currentUser.paymentFlow
+    let payFlow = _.cloneDeep(currentUser.paymentFlow)
     let noticeBar = this.generateNoticeBar(currentUser)
     let emptyState = this.generateEmptyState()
 
     for (var k of Object.keys(payFlow)) {
       if (payFlow[k].length === 0) payFlow[k] = emptyState
-      let firstElementIsNoticeBar = payFlow[k][0].name === "NoticeBar"
-      if (!firstElementIsNoticeBar) payFlow[k] = noticeBar.concat(payFlow[k])
+      payFlow[k] = noticeBar.concat(payFlow[k])
     }
+
+    console.log("------------------------------------------------------------------")
+    console.log("generatePayCards was invoked")
+    console.log("currentUser.paymentFlow", currentUser.paymentFlow)
+    console.log("payFlow", payFlow)
+    console.log("------------------------------------------------------------------")
 
     this.setState({
       all: this.EMPTY_DATA_SOURCE.cloneWithRows(payFlow.all),
@@ -149,6 +151,9 @@ class MainView extends React.Component {
   }
 
   renderRow(rowData) {
+    if (typeof rowData === 'undefined')
+      return <View />
+
     switch (rowData.type) {
       case "priorityContent": return rowData.reactComponent
       default: return <PayCard payment={rowData} currentUser={this.props.currentUser} />
