@@ -62,7 +62,7 @@ class SideMenu extends React.Component {
         {
           title: 'Notifications',
           icon: 'bell',
-          numericIndicator: currentUser.appFlags.numUnseenNotifications,
+          numericIndicator: (currentUser.appFlags) ? currentUser.appFlags.numUnseenNotifications : 0,
           destination: () => toggleSideMenuSubpage("Notifications")
         },
         {
