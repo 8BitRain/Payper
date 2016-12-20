@@ -606,18 +606,30 @@ class PaymentOnboardingView extends React.Component {
               let month = buffer[1]
               let year = buffer[2]
 
-              // Get UTC string for start date
+              // Determine whether start date is today
+              let now = moment()
+              let then = moment(values, "DD-MM-YYYY")
+              let inputIsToday = now.isSame(then, 'day')
+
+              // Set up date time
+              let dateTimeFormat = 'DD-MM-YYYY hh:mm:ss a'
               let dateTime = values + " 08:30:00 AM"
 
-              // If start date is today, first payment should go through in
-              // 5 minutes. Otherwise, first payment should go through at 8:30AM
-              let now = moment()
-              console.log("--> now", now)
+              let utcString
 
-              let dateTimeFormat = 'DD-MM-YYYY hh:mm:ss a'
-              let formatted = moment(dateTime, dateTimeFormat)
-              let utc = formatted.utc()
-              let utcString = utc.valueOf()
+              // If start date is today, first payment should happen in 5
+              // minutes
+              if (inputIsToday) {
+                let fiveMinutesFromNow = now.add(5, 'minutes')
+                utcString = fiveMinutesFromNow.utc().valueOf()
+              }
+
+              // Otherwise, first payment should happen at 8:30AM on the start
+              // date
+              else {
+                let formattedDateTime = moment(dateTime, dateTimeFormat)
+                utcString = formattedDateTime.utc().valueOf()
+              }
 
               this.setState({
                 startDay: day,
