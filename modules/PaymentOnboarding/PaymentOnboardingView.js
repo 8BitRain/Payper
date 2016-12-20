@@ -608,6 +608,12 @@ class PaymentOnboardingView extends React.Component {
 
               // Get UTC string for start date
               let dateTime = values + " 08:30:00 AM"
+
+              // If start date is today, first payment should go through in
+              // 5 minutes. Otherwise, first payment should go through at 8:30AM
+              let now = moment()
+              console.log("--> now", now)
+
               let dateTimeFormat = 'DD-MM-YYYY hh:mm:ss a'
               let formatted = moment(dateTime, dateTimeFormat)
               let utc = formatted.utc()
@@ -673,7 +679,7 @@ class PaymentOnboardingView extends React.Component {
                 </Text>
 
                 { /* Bank account name */
-                  (confirming !== "" && bankAccount.name)
+                  (confirming !== "" && bankAccount && bankAccount.name)
                   ? <Text style={{fontSize: 16, color: colors.deepBlue, textAlign: 'center'}}>
                       {"(Active bank: " + ((bankAccount.name.length > 14) ? bankAccount.name.substring(0, 13).trim().concat("...") : bankAccount.name) + ")"}
                     </Text>
