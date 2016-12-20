@@ -32,7 +32,7 @@ class BankAccounts extends React.Component {
   }
 
   generateRows(currentUser) {
-    let rows = { "My Bank Accounts": [currentUser.bankAccount || {name: "None. Add one now!", notTouchable: true}] }
+    let rows = { "My Bank Accounts": (currentUser.bankAccount && currentUser.bankAccount.name) ? [currentUser.bankAccount] : [{name: "None. Add one now!", notTouchable: true}] }
     this.setState({rows: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(rows)})
   }
 
@@ -110,7 +110,7 @@ class BankAccounts extends React.Component {
         <TouchableHighlight
           activeOpacity={0.75}
           underlayColor={'transparent'}
-          onPress={() => (bankAccount) ? this.onlyAllowOneBankAccount() : this.toggleIAVModal()}>
+          onPress={() => (bankAccount && bankAccount.name) ? this.onlyAllowOneBankAccount() : this.toggleIAVModal()}>
           <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
             <EvilIcons name={"plus"} color={colors.accent} size={38} />
             <Text style={{fontSize: 20, color: colors.accent, paddingLeft: 4}}>

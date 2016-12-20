@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, TouchableHighlight, StyleSheet, Animated, Easing, Dimensions, StatusBar, Image, Modal } from "react-native";
 import { Actions } from 'react-native-router-flux';
+import { Timer, TrackOnce } from '../../classes/Metrics'
 import Mixpanel from 'react-native-mixpanel';
 import Entypo from 'react-native-vector-icons/Entypo';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -41,7 +42,9 @@ export default class UserOnboardingView extends React.Component {
   }
 
   componentWillMount() {
-    Mixpanel.timeEvent('User Onboarding');
+    this.timer = new Timer()
+    this.trackOnce = new TrackOnce()
+    this.timer.start()
   }
 
   toggleBankOnboardingModal() {
@@ -49,30 +52,35 @@ export default class UserOnboardingView extends React.Component {
   }
 
   createUser(cb) {
-    //var nameBuffer = this.state.name.split(" ");
     this.props.currentUser.createUserWithEmailAndPassword({
-      //firstName: nameBuffer.splice(0, 1).join(""),
-      //lastName: nameBuffer.join(" "),
       firstName: this.state.firstName,
       lastName: this.state.lastName,
       email: this.state.email,
       password: this.state.password,
       phone: this.state.phone
     },
-    () => {
-      Mixpanel.trackWithProperties('User Onboarding', {
+    (uid) => {
+      // Success!
+      this.timer.report("userOnboarding", uid, {
         completed: true,
         cancelled: false,
         errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
-        uid: this.props.currentUser.uid
-      });
+        uid: uid
+      })
+
       this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates));
       this.toggleBankOnboardingModal();
       cb();
     },
     (errCode) => {
+      // Failure :(
       this.errCodes.push({ errCode: errCode, timestamp: new Date().getTime() });
-      Mixpanel.trackWithProperties('Failed User Creation', { errCode: errCode });
+
+      this.trackOnce.report("failedUserCreation", "unknownUID", {
+        errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
+        uid: "unknownUID"
+      })
+
       if (errCode === "auth/email-already-in-use") {
         alert("This email is already in use.");
       } else {
@@ -87,22 +95,13 @@ export default class UserOnboardingView extends React.Component {
   }
 
   focusInput() {
-    let currPage = this.pages[this.state.pageIndex];
+    let currPage = this.pages[this.state.pageIndex]
     switch (currPage) {
-      case "name":
-        this.state.firstNameInput.focus();
-      break;
-      case "email":
-        this.state.emailInput.focus();
-      break;
-      case "password":
-        this.state.passwordInput.focus();
-      break;
-      case "phone":
-        this.state.phoneInput.focus();
-      break;
-      default:
-        dismissKeyboard();
+      case "name": this.state.firstNameInput.focus(); break;
+      case "email": this.state.emailInput.focus(); break;
+      case "password": this.state.passwordInput.focus(); break;
+      case "phone": this.state.phoneInput.focus(); break;
+      default: dismissKeyboard()
     }
   }
 
@@ -133,11 +132,12 @@ export default class UserOnboardingView extends React.Component {
   }
 
   handleCancel() {
-    Mixpanel.trackWithProperties('User Onboarding', {
+    this.timer.report("userOnboarding", "unknownUID", {
       completed: false,
       cancelled: true,
-      errCodes: (this.errCodes.length > 0) ? this.errCodes : "none"
-    });
+      errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
+      uid: "unknownUID"
+    })
 
     if (typeof this.props.handleCancel === 'function') this.props.handleCancel();
     else Actions.LandingScreenViewContainer();

@@ -37,7 +37,7 @@ class UserSelection extends React.Component {
     //   let curr = globalUserList[i]
     //   console.log("curr", curr)
     // }
-    
+
 
     this.allContacts = payperContacts.concat(nativeContacts, globalUserList)
     this.allContactsMap = SetMaster5000.arrayToMap(this.allContacts)

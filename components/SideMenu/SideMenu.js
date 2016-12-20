@@ -3,6 +3,7 @@ import { View, Text, TouchableHighlight, Image, Dimensions, StyleSheet, Linking,
 import { colors } from '../../globalStyles'
 import { VibrancyView } from 'react-native-blur'
 import { signout } from '../../auth'
+import { TrackOnce } from '../../classes/Metrics'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 let dims = Dimensions.get('window')
@@ -49,6 +50,7 @@ class SideMenu extends React.Component {
     super(props)
 
     let { toggleSideMenuSubpage, currentUser } = this.props
+    let trackOnce = new TrackOnce()
 
     this.state = {
       options: [
@@ -67,6 +69,14 @@ class SideMenu extends React.Component {
           title: 'Invite a Friend',
           icon: 'envelope',
           destination: () => toggleSideMenuSubpage("Invite a Friend")
+        },
+        {
+          title: 'Trending Payments',
+          icon: 'chart',
+          destination: () => {
+            toggleSideMenuSubpage("Trending Payments")
+            trackOnce.report("buttonPress/trendingPayments", currentUser.uid, { from: "side menu"})
+          }
         },
         // {
         //   title: 'Settings',
@@ -109,7 +119,7 @@ class SideMenu extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // 
+    //
     if (nextProps.currentUser.appFlags.numUnseenNotifications !== this.props.currentUser.appFlags.numUnseenNotifications) {
       for (var o in this.state.options) {
         let curr = this.state.options[o]

@@ -22,7 +22,7 @@ class StickyView extends React.Component {
 
     Animated.timing(this.offsetBottom, {
       toValue: e.endCoordinates.height,
-      duration: 350,
+      duration: this.props.duration || 350,
       easing: Easing.elastic(0.5)
     }).start()
   }
@@ -30,14 +30,14 @@ class StickyView extends React.Component {
   _keyboardWillHide() {
     Animated.timing(this.offsetBottom, {
       toValue: 0,
-      duration: 350,
+      duration: this.props.duration || 350,
       easing: Easing.elastic(0.5)
     }).start()
   }
 
   render() {
     return(
-      <Animated.View style={{ position: 'absolute', left: 0, right: 0, bottom: this.offsetBottom }}>
+      <Animated.View style={[this.props.style, { position: 'absolute', left: 0, right: 0, bottom: this.offsetBottom }]}>
         { this.props.children }
       </Animated.View>
     )

@@ -9,6 +9,7 @@ import { colors } from '../../globalStyles'
 import { SideMenu, PayCard, NoticeBar, PhotoUploader, MicrodepositOnboarding, TrendingPayments } from '../../components'
 import { MyProfile, BankAccounts, Notifications, Invite, Settings } from '../../components/SideMenuSubpages'
 import { CreatePaymentView, BankOnboarding } from '../../modules'
+import { TrackOnce } from '../../classes/Metrics'
 const dims = Dimensions.get('window')
 
 class MainView extends React.Component {
@@ -56,12 +57,19 @@ class MainView extends React.Component {
     this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.decrypt((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.getNativeContacts((updates) => this.props.updateCurrentUser(updates))
+    this.trackOnce = new TrackOnce()
   }
 
   componentWillReceiveProps(nextProps) {
     let payFlowChanged = nextProps.currentUser.paymentFlow !== this.props.currentUser.paymentFlow
     let appFlagsChanged = nextProps.currentUser.appFlags !== this.props.currentUser.appFlags
     if (payFlowChanged || appFlagsChanged) this.generatePayCards(nextProps.currentUser)
+
+    console.log("\n\n")
+    console.log("--> Pay flow changed:", payFlowChanged)
+    console.log("--> App flags changed:", appFlagsChanged)
+    console.log("--> Will regenerate:", payFlowChanged || appFlagsChanged)
+    console.log("\n\n")
   }
 
   generateNoticeBar(currentUser) {
@@ -109,7 +117,7 @@ class MainView extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => {this.toggleSideMenuSubpage("Trending Payments")}}>
+            onPress={() => {{ this.toggleSideMenuSubpage("Trending Payments"); this.trackOnce.report("buttonPress/trendingPayments", this.props.currentUser.uid, { from: "emptyState" }) }}}>
             <View style={{height: 60, backgroundColor: colors.accent, borderRadius: 4, marginTop: 15, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dims.width / 2}}>
               <Text style={{ fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
                 {"Explore Trending Payments"}
@@ -345,7 +353,7 @@ class MainView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.85}
               underlayColor={'transparent'}
-              onPress={() => this.setState({createPaymentModalVisible: true})}
+              onPress={() => {Actions.PaymentOnboardingView({currentUser: this.props.currentUser}); this.trackOnce.report("buttonPress/newPayment", this.props.currentUser.uid); }}
               style={{padding: 14, paddingRight: 20}}>
               <Animated.View style={{justifyContent: 'center', alignItems: 'center', transform: [{ rotate: this.animatedValues.plusAngle }]}}>
                 <EvilIcons name={"plus"} size={40} color={colors.accent} />

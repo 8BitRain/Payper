@@ -16,14 +16,14 @@ class UserPic extends React.Component {
         ? initials = (name[0].substring(0, 1) + name[name.length - 1].substring(0, 1)).toUpperCase()
         : initials = name[0].substring(0, 1).toUpperCase()
       return(
-        <View style={[userStyles.pic, userStyles.initials, {width: this.props.width, height: this.props.height, borderColor: (this.props.user.provider || this.props.user.username || this.props.accent) ? colors.accent : colors.gradientGreen, borderRadius: this.props.width / 2}]}>
+        <View style={[userStyles.pic, userStyles.initials, {width: this.props.width, height: this.props.height, marginLeft: this.props.marginLeft || 0, borderColor: (this.props.user.provider || this.props.user.username || this.props.accent) ? colors.accent : colors.gradientGreen, borderRadius: this.props.width / 2}]}>
           <Text style={{fontFamily: 'Roboto', fontSize: (this.props.width >= 50) ? 18 : 14, color: (this.props.user.provider || this.props.user.username) ? colors.accent : colors.gradientGreen}}>{ initials }</Text>
         </View>
       )
     } else {
-      return <Image style={{borderWidth: 1, borderColor: (this.props.user.provider || this.props.user.username || this.props.accent) ? colors.accent : colors.gradientGreen, width: this.props.width, height: this.props.height, borderRadius: this.props.height / 2}} source={{uri: this.props.user.profile_pic}} />
+      return <Image style={{borderWidth: 1, borderColor: (this.props.user.provider || this.props.user.username || this.props.accent) ? colors.accent : colors.gradientGreen, width: this.props.width, height: this.props.height, marginLeft: this.props.marginLeft || 0, borderRadius: this.props.height / 2}} source={{uri: this.props.user.profile_pic}} />
     }
   }
 }
 
-export default UserPic
+module.exports = UserPic

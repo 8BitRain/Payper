@@ -11,13 +11,12 @@ import MainViewContainer from './modules/Main/MainViewContainer'
 import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer'
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView'
 import Phone from './modules/UserOnboarding/pages/Phone'
-import { AppState } from 'react-native'
 import { Scene, Reducer, Router, Modal } from 'react-native-router-flux'
 import { colors } from './globalStyles'
 import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
 import { Client } from 'bugsnag-react-native'
 import { PayDetails } from './components/PayCard'
-import { MainView } from './modules'
+import { MainView, OnboardingView, PaymentOnboardingView } from './modules'
 
 // Get build and version numbers
 let build = DeviceInfo.getBuildNumber()
@@ -59,13 +58,6 @@ const getSceneStyle = function(props, computedProps) {
 export default class Coincast extends React.Component {
   constructor(props) {
     super(props)
-    this.handleAppStateChange = this.handleAppStateChange.bind(this)
-  }
-
-  handleAppStateChange(state) {
-    if (state === 'inactive') return
-    else if (state === 'background') Mixpanel.track('Session Duration')
-    else if (state === 'active') Mixpanel.timeEvent('Session Duration')
   }
 
   componentWillMount() {
@@ -75,9 +67,8 @@ export default class Coincast extends React.Component {
     Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6')
     Mixpanel.timeEvent('Session Duration')
 
-    AppState.addEventListener('change', this.handleAppStateChange)
-     ga = new Analytics('UA-87368863-1', clientId, 1, DeviceInfo.getUserAgent())
-     var screenView = new GAHits.ScreenView(
+    ga = new Analytics('UA-87368863-1', clientId, 1, DeviceInfo.getUserAgent())
+    var screenView = new GAHits.ScreenView(
       'Example App',
       'Welcome Screen',
       DeviceInfo.getReadableVersion(),
@@ -87,21 +78,11 @@ export default class Coincast extends React.Component {
     ga.send(screenView)
   }
 
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this.handleAppStateChange)
-  }
-
   render() {
     return (
       <Router key={Math.random()} createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
-
-            <Scene
-              component={MainView}
-              key="MainView"
-              type="replace"
-              panHandlers={null} />
 
             <Scene initial
               component={SplashViewContainer}
@@ -118,6 +99,12 @@ export default class Coincast extends React.Component {
             <Scene
               component={LandingScreenViewContainer}
               key="LandingScreenViewContainer"
+              type="replace"
+              panHandlers={null} />
+
+            <Scene
+              component={MainView}
+              key="MainView"
               type="replace"
               panHandlers={null} />
 
@@ -147,6 +134,28 @@ export default class Coincast extends React.Component {
             <Scene
               component={PayDetails}
               key="PaymentDetails"
+              panHandlers={null} />
+
+            <Scene
+              currentUser={{
+                displayName: "Brady Sheridan",
+                emailAddress: "brady.sherid@gmail.com",
+                phoneNumber: "2623058038",
+                ssn: "8135",
+                billingAddress: {
+                  zip: "53715",
+                  city: "Madison",
+                  state: "WI",
+                  country: "United States"
+                }
+              }}
+              component={OnboardingView}
+              key="OnboardingView"
+              panHandlers={null} />
+
+            <Scene
+              component={PaymentOnboardingView}
+              key="PaymentOnboardingView"
               panHandlers={null} />
 
           </Scene>
