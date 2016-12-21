@@ -207,7 +207,7 @@ class MainView extends React.Component {
       case "Invite a Friend": return <Invite {...this.props} />
       case "Settings": return <Settings {...this.props} />
       case "Trending Payments": return <TrendingPayments toggleModal={() => this.toggleSideMenuSubpage(null)} title={"Trending Payments"} index={0} currentUser={this.props.currentUser}/>
-      case "Document Uploader": return <PhotoUploader toggleModal={() => this.toggleSideMenuSubpage(null)} title={"Secure Document Upload"} index={0} {...this.props} />
+      case "Document Uploader": return <PhotoUploader toggleModal={() => this.toggleSideMenuSubpage(null)} title={"Secure Document Upload"} type={"document"} index={0} {...this.props} />
       case "Microdeposit Verification": return <MicrodepositOnboarding toggleModal={() => this.toggleSideMenuSubpage(null)} {...this.props} />
       case "retry": return <BankOnboarding retry displayCloseButton currentUser={this.props.currentUser} closeModal={() => this.toggleSideMenuSubpage(null)} />
       default: return <View style={{flex: 1.0, justifyContent: 'center', alignItems: 'center'}}><Text style={{width: dims.width - 80, fontSize: 18, color: colors.accent}}>{"Oops, there's a bug in our code. Let us know at support@getpayper.io"}</Text></View>

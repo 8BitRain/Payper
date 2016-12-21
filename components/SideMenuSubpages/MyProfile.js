@@ -1,8 +1,9 @@
 import React from 'react'
-import { View, Text, Image, ListView, RecyclerViewBackedScrollView, Dimensions, TouchableHighlight, Alert } from 'react-native'
+import { View, Text, Image, ListView, RecyclerViewBackedScrollView, Dimensions, TouchableHighlight, Alert, Modal } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import { FBLoginManager } from 'NativeModules'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import {PhotoUploader} from '../'
 let dims = Dimensions.get('window')
 let imageDims = { width: 56, height: 56 }
 import { colors } from '../../globalStyles'
@@ -17,7 +18,9 @@ class MyProfile extends React.Component {
     })
 
     this.state = {
-      rows: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections({})
+      rows: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections({}),
+      modalVisible: false,
+      optimisticallyRenderedImage: null
     }
   }
 
@@ -103,6 +106,60 @@ class MyProfile extends React.Component {
     }
   }
 
+  togglePhotoUploader(visible){
+    this.setState({
+      modalVisible: visible
+    })
+  }
+
+  setOptimisticallyRenderedImage(url){
+    this.setState({
+      optimisticallyRenderedImage: url
+    });
+    console.log("setOptimisticallyRenderedImage FIRED");
+  }
+
+  _renderPicWithInitials(initials){
+    return(
+      <View style={styles.imageWrap}>
+          { /*Profile pic with initials*/ }
+          <TouchableHighlight activeOpacity={0.8} underlayColor={'transparent'}
+            style={{position: "absolute", top: 0}}
+            onPress={() => this.togglePhotoUploader(true)}>
+            <View style={{flex: 1, marginBottom: 10}}>
+              <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
+                  {initials}
+                </Text>
+              </View>
+              <Text style={{color: colors.accent, fontSize: 14, fontWeight: '200', textAlign: "center", backgroundColor: "transparent", width: 100, alignSelf: 'center', marginTop: 5}}>
+                {"add photo"}
+              </Text>
+            </View>
+          </TouchableHighlight>
+      </View>
+    )
+  }
+
+  _renderProfilePic(profile_pic){
+    return(
+      <View style={styles.imageWrap}>
+          { /*Profile pic with initials*/ }
+          <TouchableHighlight activeOpacity={0.8} underlayColor={'transparent'}
+            style={{position: "absolute", top: 0}}
+            onPress={() => this.togglePhotoUploader(true)}>
+            <View style={{flex: 1, marginBottom: 10}}>
+            {this.state.optimisticallyRenderedImage ? <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: this.state.optimisticallyRenderedImage}} /> :
+               <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: profile_pic}} />}
+              <Text style={{color: colors.accent, fontSize: 14, fontWeight: '200', textAlign: "center", backgroundColor: "transparent", width: 100, alignSelf: 'center', marginTop: 5}}>
+                {"change photo"}
+              </Text>
+            </View>
+          </TouchableHighlight>
+      </View>
+    )
+  }
+
   render() {
     let { first_name, last_name, username, profile_pic } = this.props.currentUser
     let name = first_name + " " + last_name
@@ -114,28 +171,11 @@ class MyProfile extends React.Component {
 
         { /* Header */ }
         <View style={{flexDirection: 'column', alignItems: 'center', paddingBottom: 15}}>
-          <View style={styles.imageWrap}>
+          <View style={{marginBottom: 15}}>
+            { console.log("Profile_Pic Url:", profile_pic)}
             {(profile_pic)
-              ? <Image style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2}} source={{uri: profile_pic}} />
-              : <View>
-                  {/*Profile pic with initials*/}
-                  <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center'}}>
-                    <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
-                      {initials}
-                    </Text>
-                  </View>
-                  {/*Button overlay to add a photo*/}
-                  {/*Play around with using a photo icon*/}
-                  <TouchableHighlight activeOpacity={0.8} underlayColor={'transparent'}
-                    style={{position: "absolute", top: 0}}
-                    onPress={() => console.log("Working as expected")}>
-                  <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.medGrey, opacity: .92}}>
-                  <Text style={{color: colors.accent, fontSize: 14, fontWeight: '400', textAlign: "center", backgroundColor: "transparent"}}>
-                    {"add photo"}
-                  </Text>
-                  </View>
-                  </TouchableHighlight>
-                </View>}
+              ? this._renderProfilePic(profile_pic)
+              : this._renderPicWithInitials(initials) }
           </View>
           <Text style={{color: colors.deepBlue, fontSize: 22, fontWeight: '200', paddingTop: 8, textAlign: 'center', backgroundColor: 'transparent'}}>
             {name}
@@ -154,7 +194,38 @@ class MyProfile extends React.Component {
           renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
           renderFooter={() => <View style={{height: 90}} />}
           enableEmptySections />
+
+          { /*Photo Uploader Modal*/ }
+          <Modal
+           animationType={"slide"}
+           transparent={false}
+           visible={this.state.modalVisible}>
+           <View style={{overflow: 'hidden'}}>
+               <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
+               <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
+                 <Text style={{color: colors.lightGrey, fontSize: 17, backgroundColor: 'transparent'}}>
+                   {"Photo Upload"}
+                 </Text>
+
+                 <TouchableHighlight
+                   activeOpacity={0.75}
+                   underlayColor={'transparent'}
+                   style={{position: 'absolute', top: 0, left: 0, bottom: 0, padding: 14, paddingTop: 30, justifyContent: 'center'}}
+                   onPress={() => this.togglePhotoUploader(false)}>
+                   <EvilIcons name={"close"} color={colors.snowWhite} size={24} />
+                 </TouchableHighlight>
+               </View>
+             </View>
+           <PhotoUploader
+           toggleModal={(value) => this.togglePhotoUploader(value)}
+           setOptimisticallyRenderedImage={(url) => this.setOptimisticallyRenderedImage(url)}
+           title={"PhotoUploader"}
+           type={"photo"} index={1} {...this.props}/>
+          </Modal>
+
       </View>
+
+
     )
   }
 }
