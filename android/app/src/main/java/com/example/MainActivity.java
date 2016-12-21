@@ -2,6 +2,7 @@
 package com.example;
 
 import com.facebook.react.ReactActivity;
+import com.bugsnag.BugsnagReactNative;
 
 
 
