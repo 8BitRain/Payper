@@ -56,7 +56,7 @@ class PhotoUploader extends React.Component {
         total: null
       }
     };
-
+    console.log("TYPE" + this.state.type);
   }
 
   componentDidMount() {
@@ -137,6 +137,7 @@ class PhotoUploader extends React.Component {
            assetType='Photos'
            imagesPerRow={3}
            imageMargin={5}
+           emptyText={"Loading Photos..."}
            backgroundColor={colors.medGrey}
            callback={this.getSelectedImages.bind(this)}
           />
@@ -146,45 +147,40 @@ class PhotoUploader extends React.Component {
 
   _renderPhotoView(){
     console.log("Current Mode" + this.state.mode);
-    switch (this.state.index){
-      //Renders the camera
-      case 1:
-        return(
-          <View style={styles.cameraContainer}>
-          <Camera
-            ref={(cam) => {
-              this.camera = cam;
-            }}
-            style={styles.preview}
-            aspect={Camera.constants.Aspect.fill}>
-          </Camera>
-          {/*<View style={styles.capture}>
-            <Ionicons onPress={this.takePicture.bind(this)} style={{}} size={48} name="ios-camera" color={"black"} />
-          </View>*/}
-          <View style={[styles.capture]}>
-            <TouchableHighlight
-              activeOpacity={0.8}
-              underlayColor={'transparent'}
-              onPress={this.takePicture.bind(this)}
-              style={{width: dimensions.width}}>
-              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <Ionicons style={{}} size={48} name="ios-camera" color={colors.accent} />
-              </View>
-            </TouchableHighlight>
+    return(
+      <View style={styles.cameraContainer}>
+      <Camera
+        ref={(cam) => {
+          this.camera = cam;
+        }}
+        style={styles.preview}
+        aspect={Camera.constants.Aspect.fill}>
+      </Camera>
+      {/*<View style={styles.capture}>
+        <Ionicons onPress={this.takePicture.bind(this)} style={{}} size={48} name="ios-camera" color={"black"} />
+      </View>*/}
+      <View style={[styles.capture]}>
+        <TouchableHighlight
+          activeOpacity={0.8}
+          underlayColor={'transparent'}
+          onPress={this.takePicture.bind(this)}
+          style={{width: dimensions.width}}>
+          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <Ionicons style={{}} size={48} name="ios-camera" color={colors.accent} />
           </View>
-          </View>
+        </TouchableHighlight>
+      </View>
+      </View>
+    );
 
-        );
-        break;
-      //Renders the image user took and prompts confirmation.
-      case 2:
-        return(
-          <View style={styles.container}>
-            <Image source={{uri: this.state.selectedImage}} style={{height: dimensions.height, width: dimensions.width}} />
-          </View>
-        );
-        break;
-    }
+  }
+
+  _renderPhotoTaken(){
+    return(
+      <View style={styles.container}>
+        <Image source={{uri: this.state.selectedImage}} style={{height: dimensions.height * .80, width: dimensions.width}} />
+      </View>
+    );
   }
 
   _renderDocumentUploadExplanation(){
@@ -375,6 +371,7 @@ class PhotoUploader extends React.Component {
         {(this.state.index == 0) && (this.state.type == "document") ? this._renderDocumentUploadExplanation() : null}
         {/*(this.state.index == 0) && (this.state.type == "document") ? null : (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView()*/}
         {(this.state.index == 1 && this.state.type == "photo" || this.state.type == "document") ? (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView() : null}
+        {(this.state.index == 2) ? this._renderPhotoTaken() : null}
       </View>
       {this._renderFooter()}
       </View>

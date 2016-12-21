@@ -427,6 +427,7 @@ class Payments extends React.Component {
           <PhotoUploader
             toggleModal={() => this.toggleDocumentUploadModal()}
             title={"Secure Document Upload"}
+            type={"document"}
             index={0}
             currentUser={this.props.currentUser}/>
 
