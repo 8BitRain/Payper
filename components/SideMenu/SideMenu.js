@@ -183,7 +183,9 @@ const styles = StyleSheet.create({
     height: imageDims.height,
     borderRadius: imageDims.width / 2,
     borderWidth: 1,
-    borderColor: colors.slateGrey
+    borderColor: colors.slateGrey,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
 
