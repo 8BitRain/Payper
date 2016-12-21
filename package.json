@@ -43,6 +43,7 @@
     "react-native-google-analytics": "^1.3.2",
     "react-native-google-places-autocomplete": "*",
     "react-native-hyperlink": "*",
+    "react-native-image-resizer": "0.0.12",
     "react-native-mixpanel": "*",
     "react-native-modalbox": "*",
     "react-native-router-flux": "./libs/react-native-router-flux-master",
