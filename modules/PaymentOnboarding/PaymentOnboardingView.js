@@ -606,12 +606,30 @@ class PaymentOnboardingView extends React.Component {
               let month = buffer[1]
               let year = buffer[2]
 
-              // Get UTC string for start date
-              let dateTime = values + " 08:30:00 AM"
+              // Determine whether start date is today
+              let now = moment()
+              let then = moment(values, "DD-MM-YYYY")
+              let inputIsToday = now.isSame(then, 'day')
+
+              // Set up date time
               let dateTimeFormat = 'DD-MM-YYYY hh:mm:ss a'
-              let formatted = moment(dateTime, dateTimeFormat)
-              let utc = formatted.utc()
-              let utcString = utc.valueOf()
+              let dateTime = values + " 08:30:00 AM"
+
+              let utcString
+
+              // If start date is today, first payment should happen in 5
+              // minutes
+              if (inputIsToday) {
+                let fiveMinutesFromNow = now.add(5, 'minutes')
+                utcString = fiveMinutesFromNow.utc().valueOf()
+              }
+
+              // Otherwise, first payment should happen at 8:30AM on the start
+              // date
+              else {
+                let formattedDateTime = moment(dateTime, dateTimeFormat)
+                utcString = formattedDateTime.utc().valueOf()
+              }
 
               this.setState({
                 startDay: day,
@@ -673,7 +691,7 @@ class PaymentOnboardingView extends React.Component {
                 </Text>
 
                 { /* Bank account name */
-                  (confirming !== "" && bankAccount.name)
+                  (confirming !== "" && bankAccount && bankAccount.name)
                   ? <Text style={{fontSize: 16, color: colors.deepBlue, textAlign: 'center'}}>
                       {"(Active bank: " + ((bankAccount.name.length > 14) ? bankAccount.name.substring(0, 13).trim().concat("...") : bankAccount.name) + ")"}
                     </Text>
@@ -696,7 +714,7 @@ class PaymentOnboardingView extends React.Component {
                 </Text>
 
                 { /* Bank account name */
-                  (confirming !== "" && bankAccount.name)
+                  (confirming !== "" && bankAccount && bankAccount.name)
                   ? <Text style={{fontSize: 16, color: colors.deepBlue, textAlign: 'center'}}>
                       {"(Active bank: " + ((bankAccount.name.length > 14) ? bankAccount.name.substring(0, 13).trim().concat("...") : bankAccount.name) + ")"}
                     </Text>

@@ -62,7 +62,7 @@ class SideMenu extends React.Component {
         {
           title: 'Notifications',
           icon: 'bell',
-          numericIndicator: currentUser.appFlags.numUnseenNotifications,
+          numericIndicator: (currentUser.appFlags) ? currentUser.appFlags.numUnseenNotifications : 0,
           destination: () => toggleSideMenuSubpage("Notifications")
         },
         {
@@ -119,8 +119,7 @@ class SideMenu extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    //
-    if (nextProps.currentUser.appFlags.numUnseenNotifications !== this.props.currentUser.appFlags.numUnseenNotifications) {
+    if (nextProps.currentUser.appFlags && nextProps.currentUser.appFlags.numUnseenNotifications !== this.props.currentUser.appFlags.numUnseenNotifications) {
       for (var o in this.state.options) {
         let curr = this.state.options[o]
         if (curr.title === "Notifications") {
@@ -184,7 +183,9 @@ const styles = StyleSheet.create({
     height: imageDims.height,
     borderRadius: imageDims.width / 2,
     borderWidth: 1,
-    borderColor: colors.slateGrey
+    borderColor: colors.slateGrey,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
 

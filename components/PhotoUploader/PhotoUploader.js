@@ -12,6 +12,7 @@ import CameraRollPicker from 'react-native-camera-roll-picker';
 import Camera from 'react-native-camera';
 var ReadImageData = require('NativeModules').ReadImageData;
 import { RNS3 } from 'react-native-aws3';
+import ImageResizer from 'react-native-image-resizer';
 
 
 // Components
@@ -27,93 +28,35 @@ import * as config from '../../config';
 
 // classes
 import User from '../../classes/User';
+import * as Lambda from '../../services/Lambda';
+
 //Custom
 const dimensions = Dimensions.get('window');
 let PHOTOS_COUNT_BY_FETCH = 24;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  cameraContainer:{
-    flex: dimensions.height * .66,
-    height: dimensions.height * .66
-  },
-  preview: {
-    flex: dimensions.height * .66,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    height: dimensions.height * .66,
-    width: Dimensions.get('window').width
-  },
-  capture: {
-    flex: dimensions.height,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colors.medGrey,
-    borderRadius: 0,
-    color: '#000',
-    padding: 10
-  },
-  imageGrid: {
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  justifyContent: 'center',
-  },
-  image: {
-    width: 100,
-    height: 100,
-    margin: 10,
-  },
-  generalText: {
-    fontSize: 24,
-    color: colors.deepBlue,
-    margin: 15,
-    marginLeft: dimensions.width * .05
-  },
-  generalTextBold: {
-    fontSize: 24,
-    color: colors.deepBlue,
-    fontWeight: "bold",
-    margin: 15,
-    marginBottom: 0,
-    marginLeft: dimensions.width * .15
-  },
-  headerWrap: {
-    flexDirection: 'row',
-    flex: 0.15,
-    width: dimensions.width,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 20
-  },
-  wrap: {
-    flex: 1.0,
-    width: dimensions.width,
-    backgroundColor: colors.snowWhite,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    paddingTop: 20
-  }
-
-});
 
 class PhotoUploader extends React.Component {
   constructor(props) {
     super(props);
-
+    { /*PhotoUploader type can either be "photo" or "document"*/ }
     this.state = {
       opacity: new Animated.Value(0),
       title: this.props.title,
-      index: 0,
+      type: this.props.type,
+      index: this.props.index,
       image: this.props.image,
+      optimisticallyRenderedImage: null,
       photoUploaded: false,
       selectedImage: null,
       mode: "photo",
       num: 0,
-      selected: []
+      selected: [],
+      progress: {
+        loaded: null,
+        total: null
+      }
     };
-
+    console.log("TYPE" + this.state.type);
   }
 
   componentDidMount() {
@@ -194,6 +137,7 @@ class PhotoUploader extends React.Component {
            assetType='Photos'
            imagesPerRow={3}
            imageMargin={5}
+           emptyText={"Loading Photos..."}
            backgroundColor={colors.medGrey}
            callback={this.getSelectedImages.bind(this)}
           />
@@ -203,45 +147,40 @@ class PhotoUploader extends React.Component {
 
   _renderPhotoView(){
     console.log("Current Mode" + this.state.mode);
-    switch (this.state.index){
-      //Renders the camera
-      case 1:
-        return(
-          <View style={styles.cameraContainer}>
-          <Camera
-            ref={(cam) => {
-              this.camera = cam;
-            }}
-            style={styles.preview}
-            aspect={Camera.constants.Aspect.fill}>
-          </Camera>
-          {/*<View style={styles.capture}>
-            <Ionicons onPress={this.takePicture.bind(this)} style={{}} size={48} name="ios-camera" color={"black"} />
-          </View>*/}
-          <View style={[styles.capture]}>
-            <TouchableHighlight
-              activeOpacity={0.8}
-              underlayColor={'transparent'}
-              onPress={this.takePicture.bind(this)}
-              style={{width: dimensions.width}}>
-              <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                <Ionicons style={{}} size={48} name="ios-camera" color={colors.accent} />
-              </View>
-            </TouchableHighlight>
+    return(
+      <View style={styles.cameraContainer}>
+      <Camera
+        ref={(cam) => {
+          this.camera = cam;
+        }}
+        style={styles.preview}
+        aspect={Camera.constants.Aspect.fill}>
+      </Camera>
+      {/*<View style={styles.capture}>
+        <Ionicons onPress={this.takePicture.bind(this)} style={{}} size={48} name="ios-camera" color={"black"} />
+      </View>*/}
+      <View style={[styles.capture]}>
+        <TouchableHighlight
+          activeOpacity={0.8}
+          underlayColor={'transparent'}
+          onPress={this.takePicture.bind(this)}
+          style={{width: dimensions.width}}>
+          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <Ionicons style={{}} size={48} name="ios-camera" color={colors.accent} />
           </View>
-          </View>
+        </TouchableHighlight>
+      </View>
+      </View>
+    );
 
-        );
-        break;
-      //Renders the image user took and prompts confirmation.
-      case 2:
-        return(
-          <View style={styles.container}>
-            <Image source={{uri: this.state.selectedImage}} style={{height: dimensions.height, width: dimensions.width}} />
-          </View>
-        );
-        break;
-    }
+  }
+
+  _renderPhotoTaken(){
+    return(
+      <View style={styles.container}>
+        <Image source={{uri: this.state.selectedImage}} style={{height: dimensions.height * .80, width: dimensions.width}} />
+      </View>
+    );
   }
 
   _renderDocumentUploadExplanation(){
@@ -300,7 +239,7 @@ class PhotoUploader extends React.Component {
         return(
           <StickyView>
             <ContinueButton text={(this.state.photoUploaded) ? "Uploading..." : "Upload Photo"} onPress={() => {
-              this.uploadPhotoS3(this.state.selectedImage);
+              this.uploadPhotoS3(this.state.selectedImage, this.state.type);
               this.setState({photoUploaded: true});
             }}/>
           </StickyView>
@@ -335,25 +274,49 @@ class PhotoUploader extends React.Component {
     );
   }
 
-  _renderAlert(){
-    Alert.photoUpload({
-      title: "Document Upload Status",
-      message: "Your document successfully uploaded!",
-      confirmMessage: "Ok",
-      confirm: () => {
-        this.setState({photoUploaded: false});
-        this.props.toggleModal();
-      }
-    });
+  _renderAlert(type){
+    if(type == "document"){
+      Alert.photoUpload({
+        title: "Document Upload Status",
+        message: "Your document successfully uploaded!",
+        confirmMessage: "Ok",
+        confirm: () => {
+          this.setState({photoUploaded: false});
+          this.props.toggleModal(false);
+        }
+      });
+    }
+
+    if(type == "photo"){
+      Alert.photoUpload({
+        title: "Photo Upload Progress",
+        message: "Your photo was successfully uploaded",
+        confirmMessage: "Ok",
+        confirm: () => {
+          this.setState({photoUploaded: false});
+          this.props.toggleModal(false);
+        }
+      });
+    }
+
   }
 
-  uploadPhotoS3(uri){
-    // Decrypt user email
-    /*User.decrypt((response) => {
-      console.log("Decrypted User: " + response);
-    });*/
-
-
+  uploadPhotoS3(uri, type){
+    //compress the photo
+    console.log("TYPE: " +  type);
+    console.log("STATE TYPE: " + this.state.type);
+    if(type == "photo"){
+      //params imageUri, newWidth, newHeight, compressFormat, quality, rotation, outputPath
+      ImageResizer.createResizedImage(uri, 64, 64, "JPEG", 10, 0).then((resizedImageUri) => {
+        // resizeImageUri is the URI of the new image that can now be displayed, uploaded...
+        console.log("FIRED COMPRESSOR");
+        console.log("RESIZED IMAGE URI:", resizedImageUri);
+      }).catch((err) => {
+        // Oops, something went wrong. Check that the filename is correct and
+        // inspect err to get more details.
+        console.log("COMPRESSION ERROR:", err);
+      });
+    }
     var decryptedEmail = this.props.currentUser.decryptedEmail.replace(".", ">");
     console.log(decryptedEmail);
 
@@ -365,29 +328,38 @@ class PhotoUploader extends React.Component {
     }
 
     let options = {
-      bucket: "payper-verifydocs-" + config.details.env,
+      bucket: (this.state.type == "document") ? "payper-verifydocs-" + config.details.env : "payper-profilepics-" + config.details.env,
       region: "us-east-1",
       accessKey: "AKIAJAPGM72WRCJVO33A",
       secretKey: "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",
       successActionStatus: 201
     }
+    this.props.setOptimisticallyRenderedImage(this.state.selectedImage);
+    console.log("Setting optimisticallyRenderedImage");
     RNS3.put(file, options).then(response => {
       if (response.status !== 201){
           console.log(response);
           throw new Error("Failed to upload image to S3");
       }
-      this._renderAlert();
-      /**
-       * {
-       *   postResponse: {
-       *     bucket: "your-bucket",
-       *     etag : "9f620878e06d28774406017480a59fd4",
-       *     key: "uploads/image.png",
-       *     location: "https://your-bucket.s3.amazonaws.com/uploads%2Fimage.png"
-       *   }
-       * }
-       */
-    }).progress((e) => console.log(e.loaded / e.total));;
+      if(response.status == 201){
+        console.log(response.headers.Location);
+        var userPhoto = response.headers.Location;
+        //this.props.setOptimisticallyRenderedImage(userPhoto);
+        console.log(this.props);
+        //How can I update currentUser.profile_pic?
+        this._renderAlert(this.state.type);
+        if(this.state.type == "photo"){
+          //Update the user's profile picture
+          Lambda.updateProfilePic({url: response.headers.Location , token: this.props.currentUser.token }, (response) => {
+            console.log(response);
+            this.currentUser
+          });
+        }
+      }
+
+    }).progress((e) => {
+      console.log(e.loaded / e.total)
+    });
   }
 
   render() {
@@ -396,8 +368,10 @@ class PhotoUploader extends React.Component {
 
 
       <View style={{flex: .8}}>
-        {(this.state.index == 0) && (this.state.title == "Secure Document Upload") ? this._renderDocumentUploadExplanation() : null}
-        {(this.state.index == 0) && (this.state.title == "Secure Document Upload") ? null : (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView()}
+        {(this.state.index == 0) && (this.state.type == "document") ? this._renderDocumentUploadExplanation() : null}
+        {/*(this.state.index == 0) && (this.state.type == "document") ? null : (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView()*/}
+        {(this.state.index == 1 && this.state.type == "photo" || this.state.type == "document") ? (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView() : null}
+        {(this.state.index == 2) ? this._renderPhotoTaken() : null}
       </View>
       {this._renderFooter()}
       </View>
@@ -405,5 +379,73 @@ class PhotoUploader extends React.Component {
     );
   }
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  cameraContainer:{
+    flex: dimensions.height * .66,
+    height: dimensions.height * .66
+  },
+  preview: {
+    flex: dimensions.height * .66,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    height: dimensions.height * .66,
+    width: Dimensions.get('window').width
+  },
+  capture: {
+    flex: dimensions.height,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.medGrey,
+    borderRadius: 0,
+    color: '#000',
+    padding: 10
+  },
+  imageGrid: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  },
+  image: {
+    width: 100,
+    height: 100,
+    margin: 10,
+  },
+  generalText: {
+    fontSize: 24,
+    color: colors.deepBlue,
+    margin: 15,
+    marginLeft: dimensions.width * .05
+  },
+  generalTextBold: {
+    fontSize: 24,
+    color: colors.deepBlue,
+    fontWeight: "bold",
+    margin: 15,
+    marginBottom: 0,
+    marginLeft: dimensions.width * .15
+  },
+  headerWrap: {
+    flexDirection: 'row',
+    flex: 0.15,
+    width: dimensions.width,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 20
+  },
+  wrap: {
+    flex: 1.0,
+    width: dimensions.width,
+    backgroundColor: colors.snowWhite,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    paddingTop: 20
+  }
+
+});
+
 
 module.exports = PhotoUploader;
