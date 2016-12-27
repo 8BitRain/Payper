@@ -94,8 +94,6 @@ class MainView extends React.Component {
       })
     }
 
-    console.log("--> shouldRenderNoticeBar", shouldRenderNoticeBar)
-
     return noticeBar
   }
 
