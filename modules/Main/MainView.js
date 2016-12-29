@@ -7,7 +7,7 @@ import { VibrancyView } from "react-native-blur"
 import Drawer from 'react-native-drawer'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import { colors } from '../../globalStyles'
-import { SideMenu, PayCard, NoticeBar, PhotoUploader, MicrodepositOnboarding, TrendingPayments } from '../../components'
+import { SideMenu, PayCard, StatusCard, PhotoUploader, MicrodepositOnboarding, TrendingPayments } from '../../components'
 import { MyProfile, BankAccounts, Notifications, Invite, Settings } from '../../components/SideMenuSubpages'
 import { CreatePaymentView, BankOnboarding } from '../../modules'
 import { TrackOnce } from '../../classes/Metrics'
@@ -67,30 +67,23 @@ class MainView extends React.Component {
     if (payFlowChanged || appFlagsChanged) this.generatePayCards(nextProps.currentUser)
   }
 
-  generateNoticeBar(currentUser) {
+  generateStatusCard(currentUser) {
     let noticeBar = []
     let { appFlags } = currentUser
-    let awaitingCustomerVerification = appFlags.customer_status !== "verified"
-    let awatingCustomerRetry = appFlags.customer_status === "retry"
-    let awaitingMicrodepositVerification = appFlags.onboarding_state === "awaitingMicrodepositVerification"
-    let awaitingBankAccount = appFlags.customer_status === "verified" && appFlags.onboarding_state === "bank" || appFlags.customer_status === "documentSuccess"
-    let awaitingDocumentUpload = appFlags.customer_status === "document" || appFlags.customer_status === "documentFailure"
-    let shouldRenderNoticeBar = awaitingCustomerVerification || awaitingMicrodepositVerification || awaitingBankAccount
+
+    // TODO: Determine when notice bar should be rendered
+    let shouldRenderNoticeBar = true
+
+    // TODO: Determine which callback function to invoke on press
+    let noticeBarCallback = () => {
+      console.log("--> noticeBarCallback() was invoked...")
+    }
 
     if (shouldRenderNoticeBar) {
       noticeBar.push({
         type: "priorityContent",
         name: "NoticeBar",
-        reactComponent:
-          <NoticeBar
-            dwollaCustomerStatus={appFlags.customer_status}
-            onboardingState={appFlags.onboarding_state}
-            onPress={() => {
-              if (awaitingDocumentUpload) this.toggleSideMenuSubpage("Document Uploader")
-              else if (awaitingMicrodepositVerification) this.toggleSideMenuSubpage("Microdeposit Verification")
-              else if (awaitingBankAccount) this.toggleSideMenuSubpage("Bank Accounts")
-              else if (awatingCustomerRetry) this.toggleSideMenuSubpage("retry")
-            }} />
+        reactComponent: <StatusCard />
       })
     }
 
@@ -98,49 +91,43 @@ class MainView extends React.Component {
   }
 
   generateEmptyState() {
-    let emptyState = []
+    let emptyState = [
+      {
+        type: "priorityContent",
+        name: "EmptyState",
+        reactComponent:
+          <View style={{alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 50}}>
+            <Text style={{backgroundColor: 'transparent', textAlign: 'center', fontSize: 18, fontWeight: '400', color: colors.richBlack, width: dims.width - 30}}>
+               {"When you set up a payment series, it will show up here."}
+            </Text>
 
-    emptyState.push({
-      type: "priorityContent",
-      name: "EmptyState",
-      reactComponent:
-        <View style={{alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 50}}>
-          <Text style={{backgroundColor: 'transparent', textAlign: 'center', fontSize: 18, fontWeight: '400', color: colors.richBlack, width: dims.width - 30}}>
-             {"When you set up a payment series, it will show up here."}
-          </Text>
-
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            onPress={() => {{ this.toggleSideMenuSubpage("Trending Payments"); this.trackOnce.report("buttonPress/trendingPayments", this.props.currentUser.uid, { from: "emptyState" }) }}}>
-            <View style={{height: 60, backgroundColor: colors.accent, borderRadius: 4, marginTop: 15, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dims.width / 2}}>
-              <Text style={{ fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
-                {"Explore Trending Payments"}
-              </Text>
-            </View>
-          </TouchableHighlight>
-        </View>
-    })
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              onPress={() => {{ this.toggleSideMenuSubpage("Trending Payments"); this.trackOnce.report("buttonPress/trendingPayments", this.props.currentUser.uid, { from: "emptyState" }) }}}>
+              <View style={{height: 60, backgroundColor: colors.accent, borderRadius: 4, marginTop: 15, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dims.width / 2}}>
+                <Text style={{ fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
+                  {"Explore Trending Payments"}
+                </Text>
+              </View>
+            </TouchableHighlight>
+          </View>
+      }
+    ]
 
     return emptyState
   }
 
   generatePayCards(currentUser) {
     let payFlow = _.cloneDeep(currentUser.paymentFlow)
-    let noticeBar = this.generateNoticeBar(currentUser)
     let emptyState = this.generateEmptyState()
 
-    for (var k of Object.keys(payFlow)) {
-      if (payFlow[k].length === 0) payFlow[k] = emptyState
-      payFlow[k] = noticeBar.concat(payFlow[k])
-    }
+    // Prepend empty state if necessary
+    for (var k of Object.keys(payFlow))
+      if (payFlow[k].length === 0)
+        payFlow[k] = emptyState
 
-    console.log("------------------------------------------------------------------")
-    console.log("generatePayCards was invoked")
-    console.log("currentUser.paymentFlow", currentUser.paymentFlow)
-    console.log("payFlow", payFlow)
-    console.log("------------------------------------------------------------------")
-
+    // Trigger re-render
     this.setState({
       all: this.EMPTY_DATA_SOURCE.cloneWithRows(payFlow.all),
       inc: this.EMPTY_DATA_SOURCE.cloneWithRows(payFlow.inc),
@@ -326,6 +313,9 @@ class MainView extends React.Component {
               </TouchableHighlight> */ }
             </ScrollView>
           </Animated.View>
+
+          { /* Bank account status */ }
+          <StatusCard {...this.props} />
 
           { /* Banner info and payment list */ }
           <ListView

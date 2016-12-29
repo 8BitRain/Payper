@@ -69,7 +69,7 @@ export default class UserOnboardingView extends React.Component {
       })
 
       this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates));
-      this.toggleBankOnboardingModal();
+      Actions.MainViewContainer()
       cb();
     },
     (errCode) => {
