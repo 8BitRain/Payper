@@ -87,7 +87,7 @@ exports.signin = function(params, cb) {
             .then((response) => response.json())
             .then((responseData) => {
               console.log("user/facebookCreate responseData", responseData)
-              cb(responseData.user)
+              cb(responseData.user, true)
             })
             .done()
           } catch (err) {

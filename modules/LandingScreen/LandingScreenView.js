@@ -60,12 +60,7 @@ export default class LandingScreenView extends React.Component {
   }
 
   onGenericLoginSuccess() {
-    let appFlags = this.props.currentUser.appFlags
-    if (appFlags.onboarding_state === "customer" && !appFlags.customer_status) {
-      Actions.BankOnboardingView({ currentUser: this.props.currentUser })
-    } else {
-      Actions.MainViewContainer()
-    }
+    Actions.MainViewContainer({type: 'replace'})
   }
 
   signinWithFacebook(userData) {
@@ -75,30 +70,19 @@ export default class LandingScreenView extends React.Component {
       type: "facebook",
       facebookToken: token,
       facebookUserData: userData
-    }, (user) => {
-      if (user) {
-        let { appFlags } = user
-        this.props.currentUser.initialize(user)
-
-        let appFlagsAreUndefined = typeof appFlags === 'undefined'
-        let onboardingStateIsCustomer = appFlags && appFlags.onboarding_state === "customer" && !appFlags.customer_status
-
-        if (appFlagsAreUndefined || onboardingStateIsCustomer) {
-          Actions.BankOnboardingView({
-            currentUser: this.props.currentUser,
-            emailFromFacebook: email,
-            phoneFromFacebook: phone,
-            onboardEmail: true,
-            onboardPhone: true
-          })
-        } else {
-          Actions.MainViewContainer()
-        }
-      } else {
+    }, (user, isNewUser) => {
+      // Something went wrong; User JSON is non-existent
+      if (!user) {
         alert("Something went wrong. Please try again later.")
         FBLoginManager.logOut()
         this.toggleLoadingScreen()
+        return
       }
+
+      // Success! Initialize user object and progress to next view
+      this.props.currentUser.initialize(user)
+      if (true === isNewUser) Actions.FirstPaymentView()
+      else Actions.MainViewContainer()
     })
   }
 

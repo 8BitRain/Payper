@@ -16,7 +16,7 @@ import { colors } from './globalStyles'
 import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
 import { Client } from 'bugsnag-react-native'
 import { PayDetails } from './components/PayCard'
-import { MainView, OnboardingView, PaymentOnboardingView } from './modules'
+import { MainView, OnboardingView, PaymentOnboardingView, FirstPaymentView } from './modules'
 
 // Get build and version numbers
 let build = DeviceInfo.getBuildNumber()
@@ -103,12 +103,6 @@ export default class Coincast extends React.Component {
               panHandlers={null} />
 
             <Scene
-              component={MainView}
-              key="MainView"
-              type="replace"
-              panHandlers={null} />
-
-            <Scene
               component={BankOnboardingView}
               key="BankOnboardingView"
               type="replace"
@@ -117,7 +111,7 @@ export default class Coincast extends React.Component {
             <Scene
               component={MainViewContainer}
               key="MainViewContainer"
-              type="replace"
+              direction="vertical"
               panHandlers={null} />
 
             <Scene
@@ -137,25 +131,13 @@ export default class Coincast extends React.Component {
               panHandlers={null} />
 
             <Scene
-              currentUser={{
-                displayName: "Brady Sheridan",
-                emailAddress: "brady.sherid@gmail.com",
-                phoneNumber: "2623058038",
-                ssn: "8135",
-                billingAddress: {
-                  zip: "53715",
-                  city: "Madison",
-                  state: "WI",
-                  country: "United States"
-                }
-              }}
-              component={OnboardingView}
-              key="OnboardingView"
+              component={PaymentOnboardingView}
+              key="PaymentOnboardingView"
               panHandlers={null} />
 
             <Scene
-              component={PaymentOnboardingView}
-              key="PaymentOnboardingView"
+              component={FirstPaymentView}
+              key="FirstPaymentView"
               panHandlers={null} />
 
           </Scene>
