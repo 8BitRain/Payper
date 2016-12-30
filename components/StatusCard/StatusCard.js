@@ -1,9 +1,10 @@
 import React from 'react'
-import { View, Text, TouchableHighlight, Animated, Easing, Dimensions } from 'react-native'
+import { View, Text, TouchableHighlight, Animated, Easing, Dimensions, Modal } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import { colors } from '../../globalStyles'
+import { IAVWebView } from '../index'
 const dims = Dimensions.get('window')
 
 class StatusCard extends React.Component {
@@ -30,23 +31,49 @@ class StatusCard extends React.Component {
     }
 
     this.state = {
-      pressable: props.pressable || true
+      pressable: props.pressable || true,
+      modalContent: this.getModalContent(props.currentUser.appFlags['onboarding-progress']),
+      modalVisible: false
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let currOnboardingProgress = this.props.currentUser.appFlags['onboarding-progress']
+    let newOnboardingProgress = nextProps.currentUser.appFlags['onboarding-progress']
+    
+    if (currOnboardingProgress !== newOnboardingProgress) {
+      let modalContent = this.getModalContent(newOnboardingProgress)
+      this.setState({modalContent: modalContent})
+    }
+  }
+
+  toggleModal() {
+    this.setState({modalVisible: !this.state.modalVisible})
+  }
+
+  getModalContent(onboardingProgress) {
+    // TODO: Flesh out this switch statement
+    switch (onboardingProgress) {
+      case "need-bank": return <View style={{flex: 1.0, backgroundColor: colors.accent}}><IAVWebView refreshable currentUser={this.props.currentUser} toggleModal={() => this.toggleModal()} /></View>
+      case "need-kyc": return <View />
+      case "need-documentNeeded": return <View />
+      case "need-documentFailed": return <View />
+      case "microdeposits-deposited": return <View />
+      case "microdeposits-failed": return <View />
+      default: return <TouchableHighlight onPress={() => this.setState({modalVisible: false})} style={{flex: 1.0}}><View style={{flex: 1.0, backgroundColor: colors.carminePink}} /></TouchableHighlight>
     }
   }
 
   handlePress() {
     if (!this.state.pressable) return
-    console.log("--> StatusCard was pressed...")
+    this.toggleModal()
   }
 
   getMessage() {
-    let onboardingProgress = this.props.currentUser.appFlags.onboarding_progress || ""
+    let onboardingProgress = this.props.currentUser.appFlags["onboarding-progress"] || ""
     let buffer = onboardingProgress.split("-")
     let cat = buffer[0]
     let key = buffer[1]
-
-    console.log("--> cat", cat)
-    console.log("--> key", key)
 
     let message = (undefined === this.messages[cat] || undefined === this.messages[cat][key])
       ? "App flag is undefined..."
@@ -56,31 +83,39 @@ class StatusCard extends React.Component {
   }
 
   render() {
+    let {modalVisible, modalContent} = this.state
     let message = this.getMessage()
 
     return(
-      <TouchableHighlight
-        activeOpacity={(this.state.pressable) ? 0.75 : 1.0}
-        underlayColor={'transparent'}
-        onPress={() => this.handlePress()}>
-        <View style={{width: dims.width, padding: 15, backgroundColor: colors.maastrichtBlue, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+      <View>
+        <TouchableHighlight
+          activeOpacity={(this.state.pressable) ? 0.75 : 1.0}
+          underlayColor={'transparent'}
+          onPress={() => this.handlePress()}>
+          <View style={{width: dims.width, padding: 15, backgroundColor: colors.maastrichtBlue, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
-          { /* Text */ }
-          <View style={{flex: 0.8, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: 'red'}}>
-            <Text style={{fontSize: 16, color: colors.snowWhite}}>
-              {message}
-            </Text>
+            { /* Text */ }
+            <View style={{flex: 0.8, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{fontSize: 16, color: colors.snowWhite}}>
+                {message}
+              </Text>
+            </View>
+
+            { /* Icon */ }
+            <View style={{flex: 0.2, justifyContent: 'center', alignItems: 'center'}}>
+            {(this.state.pressable)
+              ? <EvilIcons name={"chevron-right"} color={colors.snowWhite} size={26} />
+              : null }
+            </View>
+
           </View>
+        </TouchableHighlight>
 
-          { /* Icon */ }
-          <View style={{flex: 0.2, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: 'yellow'}}>
-          {(this.state.pressable)
-            ? <EvilIcons name={"chevron-right"} color={colors.snowWhite} size={26} />
-            : null }
-          </View>
-
-        </View>
-      </TouchableHighlight>
+        { /* Actionable status cards toggle this modal */ }
+        <Modal visible={modalVisible} animationType={'slide'}>
+          {modalContent}
+        </Modal>
+      </View>
     )
   }
 }
