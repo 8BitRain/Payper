@@ -47,7 +47,7 @@ export default class User {
   update(updates) {
     // console.log("Updating user with updates:", updates)
     for (var k in updates) this[k] = updates[k]
-    let userCache = (this.appFlags && this.appFlags.onboarding_state === "customer" && !this.appFlags.customer_status) ? "" : JSON.stringify(this)
+    let userCache = JSON.stringify(this)
     Async.set('user', userCache)
   }
 
