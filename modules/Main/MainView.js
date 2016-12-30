@@ -49,7 +49,8 @@ class MainView extends React.Component {
       createPaymentModalVisible: false,
       sideMenuSubpageModalVisible: false,
       activeSideMenuSubpage: null,
-      activeFilter: "All"
+      activeFilter: "All",
+      mounted: false
     }
   }
 
@@ -59,6 +60,14 @@ class MainView extends React.Component {
     this.props.currentUser.decrypt((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.getNativeContacts((updates) => this.props.updateCurrentUser(updates))
     this.trackOnce = new TrackOnce()
+  }
+
+  componentDidMount() {
+    // Hide contents of side menu until component has fully mounted to prevent
+    // its visibility during slide animation
+    setTimeout(() => {
+      this.setState({mounted: true})
+    }, 850)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -213,7 +222,7 @@ class MainView extends React.Component {
   }
 
   render() {
-    let { activeFilter } = this.state
+    let { activeFilter, mounted } = this.state
     let dataSource = []
 
     switch (activeFilter) {
@@ -231,7 +240,7 @@ class MainView extends React.Component {
         tweenDuration={100}
         onOpenStart={() => this.rotateToX()}
         onCloseStart={() => this.rotateToPlus()}
-        content={<SideMenu {...this.props} toggleSideMenuSubpage={(p) => this.toggleSideMenuSubpage(p)} />}>
+        content={<View style={{opacity: (mounted) ? 1.0 : 0.0}}><SideMenu {...this.props} toggleSideMenuSubpage={(p) => this.toggleSideMenuSubpage(p)} /></View>}>
 
         <View style={{flex: 1.0, backgroundColor: colors.lightGrey}}>
           <StatusBar barStyle={"light-content"} />
@@ -360,7 +369,6 @@ class MainView extends React.Component {
               {...this.props}
               toggleModal={() => this.setState({createPaymentModalVisible: false})} />
           </Modal>
-
 
           { /* Side menu page modal */ }
           <Modal animationType={"slide"} transparent={true} visible={this.state.sideMenuSubpageModalVisible}>

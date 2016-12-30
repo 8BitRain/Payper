@@ -111,7 +111,6 @@ export default class Coincast extends React.Component {
             <Scene
               component={MainViewContainer}
               key="MainViewContainer"
-              direction="vertical"
               panHandlers={null} />
 
             <Scene
