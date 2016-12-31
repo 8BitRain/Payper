@@ -11,28 +11,49 @@ class StatusCard extends React.Component {
   constructor(props) {
     super(props)
 
-    this.messages = {
-      "need": {
-        "bank": "Press to add your bank account.",
-        "kyc": "Press to verify your bank accont."
+    this.config = {
+      'need-bank': {
+        message: "need-bank",
+        pressable: true,
+        modalContent:
+          <View style={{flex: 1.0, backgroundColor: colors.accent}}>
+            <IAVWebView refreshable currentUser={this.props.currentUser} toggleModal={() => this.toggleModal()} />
+          </View>
       },
-      "kyc": {
-        "retry": "We need you to double check your security questions.",
-        "documentNeeded": "Additional documents are needed to verify your bank account.",
-        "documentProcessing": "We're verifying your bank account. Hang tight! (ETA: 3 days)",
-        "documentReceived": "We're verifying your bank account. Hang tight! (ETA: 1 day)",
-        "suspended": "It's taking us a little longer than expected to verify your bank account. Hang tight!"
+      'need-kyc': {
+        message: "need-kyc"
       },
-      "microdeposits": {
-        "initialized": "Your microdeposits will arrive in 1-3 business days.",
-        "deposited": "Your microdeposits have landed! Press to verify your bank account.",
-        "failed": "Your microdeposits failed to land. Please re-link your bank account. (Be sure to enter the correct routing and account number!)"
+      'kyc-retry': {
+        message: "kyc-retry"
+      },
+      'kyc-documentNeeded': {
+        message: "kyc-documentNeeded"
+      },
+      'kyc-documentProcessing': {
+        message: "kyc-documentProcessing"
+      },
+      'kyc-documentReceived': {
+        message: "kyc-documentReceived"
+      },
+      'kyc-suspended': {
+        message: "kyc-suspended"
+      },
+      'microdeposits-initialized': {
+        message: "microdeposits-initialized"
+      },
+      'microdeposits-deposited': {
+        message: "microdeposits-deposited"
+      },
+      'microdeposits-failed':{
+        message: "microdeposits-failed)"
       }
     }
 
+    let onboardingProgress = props.currentUser.appFlags['onboarding-progress']
+
     this.state = {
-      pressable: props.pressable || true,
-      modalContent: this.getModalContent(props.currentUser.appFlags['onboarding-progress']),
+      pressable: (this.config[onboardingProgress]) ? this.config[onboardingProgress].pressable : false,
+      modalContent: (this.config[onboardingProgress]) ? this.config[onboardingProgress].modalContent : <View />,
       modalVisible: false
     }
   }
@@ -40,10 +61,12 @@ class StatusCard extends React.Component {
   componentWillReceiveProps(nextProps) {
     let currOnboardingProgress = this.props.currentUser.appFlags['onboarding-progress']
     let newOnboardingProgress = nextProps.currentUser.appFlags['onboarding-progress']
-    
+
     if (currOnboardingProgress !== newOnboardingProgress) {
-      let modalContent = this.getModalContent(newOnboardingProgress)
-      this.setState({modalContent: modalContent})
+      this.setState({
+        pressable: (this.config[newOnboardingProgress]) ? this.config[newOnboardingProgress].pressable : false,
+        modalContent: (this.config[newOnboardingProgress]) ? this.config[newOnboardingProgress].modalContent : <View />
+      })
     }
   }
 
@@ -51,40 +74,15 @@ class StatusCard extends React.Component {
     this.setState({modalVisible: !this.state.modalVisible})
   }
 
-  getModalContent(onboardingProgress) {
-    // TODO: Flesh out this switch statement
-    switch (onboardingProgress) {
-      case "need-bank": return <View style={{flex: 1.0, backgroundColor: colors.accent}}><IAVWebView refreshable currentUser={this.props.currentUser} toggleModal={() => this.toggleModal()} /></View>
-      case "need-kyc": return <View />
-      case "need-documentNeeded": return <View />
-      case "need-documentFailed": return <View />
-      case "microdeposits-deposited": return <View />
-      case "microdeposits-failed": return <View />
-      default: return <TouchableHighlight onPress={() => this.setState({modalVisible: false})} style={{flex: 1.0}}><View style={{flex: 1.0, backgroundColor: colors.carminePink}} /></TouchableHighlight>
-    }
-  }
-
   handlePress() {
     if (!this.state.pressable) return
     this.toggleModal()
   }
 
-  getMessage() {
-    let onboardingProgress = this.props.currentUser.appFlags["onboarding-progress"] || ""
-    let buffer = onboardingProgress.split("-")
-    let cat = buffer[0]
-    let key = buffer[1]
-
-    let message = (undefined === this.messages[cat] || undefined === this.messages[cat][key])
-      ? "App flag is undefined..."
-      : this.messages[cat][key]
-
-    return message
-  }
-
   render() {
     let {modalVisible, modalContent} = this.state
-    let message = this.getMessage()
+    let onboardingProgress = this.props.currentUser.appFlags['onboarding-progress']
+    let message = (this.config[onboardingProgress]) ? this.config[onboardingProgress].message : "'" + onboardingProgress + "' is not a valid value for the onboarding-progress appFlag"
 
     return(
       <View>

@@ -240,7 +240,7 @@ class MainView extends React.Component {
         tweenDuration={100}
         onOpenStart={() => this.rotateToX()}
         onCloseStart={() => this.rotateToPlus()}
-        content={<View style={{opacity: (mounted) ? 1.0 : 0.0}}><SideMenu {...this.props} toggleSideMenuSubpage={(p) => this.toggleSideMenuSubpage(p)} /></View>}>
+        content={<View style={{flex: 1.0, opacity: (mounted) ? 1.0 : 0.0}}><SideMenu {...this.props} toggleSideMenuSubpage={(p) => this.toggleSideMenuSubpage(p)} /></View>}>
 
         <View style={{flex: 1.0, backgroundColor: colors.lightGrey}}>
           <StatusBar barStyle={"light-content"} />
