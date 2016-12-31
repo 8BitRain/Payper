@@ -16,7 +16,7 @@ import { colors } from './globalStyles'
 import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
 import { Client } from 'bugsnag-react-native'
 import { PayDetails } from './components/PayCard'
-import { MainView, OnboardingView, PaymentOnboardingView, FirstPaymentView } from './modules'
+import { MainView, OnboardingView, PaymentOnboardingView, FirstPaymentView, KYCOnboardingView } from './modules'
 
 // Get build and version numbers
 let build = DeviceInfo.getBuildNumber()
@@ -84,7 +84,7 @@ export default class Coincast extends React.Component {
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 
-            <Scene initial
+            <Scene
               component={SplashViewContainer}
               key="SplashViewContainer"
               type="replace"
@@ -137,6 +137,12 @@ export default class Coincast extends React.Component {
             <Scene
               component={FirstPaymentView}
               key="FirstPaymentView"
+              panHandlers={null} />
+
+            <Scene initial
+              component={KYCOnboardingView}
+              key="KYCOnboardingView"
+              direction="vertical"
               panHandlers={null} />
 
           </Scene>
