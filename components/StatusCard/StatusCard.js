@@ -82,7 +82,7 @@ class StatusCard extends React.Component {
   render() {
     let {modalVisible, modalContent} = this.state
     let onboardingProgress = this.props.currentUser.appFlags['onboarding-progress']
-    let message = (this.config[onboardingProgress]) ? this.config[onboardingProgress].message : "'" + onboardingProgress + "' is not a valid value for the onboarding-progress appFlag"
+    let message = (this.config[onboardingProgress]) ? this.config[onboardingProgress].message : "'" + onboardingProgress + "' is not a valid value for the 'onboarding-progress' appFlag"
 
     return(
       <View>
