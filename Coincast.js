@@ -84,7 +84,7 @@ export default class Coincast extends React.Component {
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 
-            <Scene
+            <Scene initial
               component={SplashViewContainer}
               key="SplashViewContainer"
               type="replace"
@@ -139,7 +139,7 @@ export default class Coincast extends React.Component {
               key="FirstPaymentView"
               panHandlers={null} />
 
-            <Scene initial
+            <Scene
               component={KYCOnboardingView}
               key="KYCOnboardingView"
               direction="vertical"
