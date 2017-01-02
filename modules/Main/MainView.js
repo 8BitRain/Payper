@@ -76,29 +76,6 @@ class MainView extends React.Component {
     if (payFlowChanged || appFlagsChanged) this.generatePayCards(nextProps.currentUser)
   }
 
-  generateStatusCard(currentUser) {
-    let noticeBar = []
-    let { appFlags } = currentUser
-
-    // TODO: Determine when notice bar should be rendered
-    let shouldRenderNoticeBar = true
-
-    // TODO: Determine which callback function to invoke on press
-    let noticeBarCallback = () => {
-      console.log("--> noticeBarCallback() was invoked...")
-    }
-
-    if (shouldRenderNoticeBar) {
-      noticeBar.push({
-        type: "priorityContent",
-        name: "NoticeBar",
-        reactComponent: <StatusCard />
-      })
-    }
-
-    return noticeBar
-  }
-
   generateEmptyState() {
     let emptyState = [
       {
@@ -323,7 +300,7 @@ class MainView extends React.Component {
             </ScrollView>
           </Animated.View>
 
-          { /* Bank account status */ }
+          { /* onboarding-progress status card */ }
           <StatusCard {...this.props} />
 
           { /* Banner info and payment list */ }

@@ -1,29 +1,33 @@
 // Dependencies
-import React from 'react';
-import { View, Text, TouchableHighlight, WebView, Dimensions, StatusBar } from 'react-native';
-import Mixpanel from 'react-native-mixpanel';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import * as config from '../../config';
+import React from 'react'
+import { View, Text, TouchableHighlight, WebView, Dimensions, StatusBar } from 'react-native'
+import Mixpanel from 'react-native-mixpanel'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import * as config from '../../config'
 import { colors } from '../../globalStyles'
 import { Timer, TrackOnce } from '../../classes/Metrics'
-const dimensions = Dimensions.get('window');
+const dimensions = Dimensions.get('window')
 
 class IAVWebView extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.WEB_VIEW_REF = "IAVWebView";
-    this.payperEnv = config.details.env;
-    this.dwollaEnv = (config.details.env === "dev") ? "sandbox" : "prod";
+    this.WEB_VIEW_REF = "IAVWebView"
+    this.payperEnv = config.details.env
+    this.dwollaEnv = (config.details.env === "dev") ? "sandbox" : "prod"
 
     this.state = {
       cancelled: false,
       injectedJS: ""
-    };
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("--> IAVWebView will receive props\n", nextProps)
   }
 
   componentWillMount() {
-    this.refresh();
+    this.refresh()
     this.timer = new Timer()
     this.trackOnce = new TrackOnce()
     this.timer.start()
@@ -47,22 +51,22 @@ class IAVWebView extends React.Component {
         dwollaEnv: this.dwollaEnv,
         payperEnv: this.payperEnv
       }, () => {
-        this.refs[this.WEB_VIEW_REF].reload();
-      });
-    });
+        this.refs[this.WEB_VIEW_REF].reload()
+      })
+    })
   }
 
   getIAVToken(cb) {
     this.props.currentUser.getIAVToken({ token: this.props.currentUser.token }, (res) => {
-      cb(res.IAVToken);
-    });
+      cb(res.IAVToken)
+    })
   }
 
   generateInjectedJS(params, cb) {
-    let injectedJS = "$(function() { generateIAVSession(\"" + params.IAVToken + "\", \"" + params.firebaseToken + "\", \"" + params.dwollaEnv + "\", \"" + params.payperEnv + "\"); })";
+    let injectedJS = "$(function() { generateIAVSession(\"" + params.IAVToken + "\", \"" + params.firebaseToken + "\", \"" + params.dwollaEnv + "\", \"" + params.payperEnv + "\") })"
     this.setState({ injectedJS: injectedJS }, () => {
-      if (typeof cb === 'function') cb();
-    });
+      if (typeof cb === 'function') cb()
+    })
   }
 
   render() {
@@ -110,7 +114,7 @@ class IAVWebView extends React.Component {
             onError={err => this.handleError(err)}  />
         </View>
       </View>
-    );
+    )
 
     else return (
       <WebView
@@ -119,7 +123,7 @@ class IAVWebView extends React.Component {
         injectedJavaScript={this.state.injectedJS}
         startInLoadingState={false}
         onError={err => this.handleError(err)}  />
-    );
+    )
   }
 }
 

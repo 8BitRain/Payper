@@ -4,7 +4,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import { colors } from '../../globalStyles'
-import { IAVWebView } from '../index'
+import { IAVWebView, KYCOnboardingView } from '../index'
 const dims = Dimensions.get('window')
 
 class StatusCard extends React.Component {
@@ -21,7 +21,12 @@ class StatusCard extends React.Component {
           </View>
       },
       'need-kyc': {
-        message: "need-kyc"
+        message: "need-kyc",
+        pressable: true,
+        modalContent:
+          <View style={{flex: 1.0, backgroundColor: colors.accent}}>
+            <KYCOnboardingView currentUser={this.props.currentUser} />
+          </View>
       },
       'kyc-retry': {
         message: "kyc-retry"
