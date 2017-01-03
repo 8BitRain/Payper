@@ -16,7 +16,7 @@ import { colors } from './globalStyles'
 import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
 import { Client } from 'bugsnag-react-native'
 import { PayDetails } from './components/PayCard'
-import { MainView, OnboardingView, PaymentOnboardingView, FirstPaymentView, KYCOnboardingView } from './modules'
+import { MainView, OnboardingView, PaymentOnboardingView, FirstPaymentView, KYCOnboardingView, PartialUserOnboardingView } from './modules'
 
 // Get build and version numbers
 let build = DeviceInfo.getBuildNumber()
@@ -142,6 +142,12 @@ export default class Coincast extends React.Component {
             <Scene
               component={KYCOnboardingView}
               key="KYCOnboardingView"
+              direction="vertical"
+              panHandlers={null} />
+
+            <Scene
+              component={PartialUserOnboardingView}
+              key="PartialUserOnboardingView"
               direction="vertical"
               panHandlers={null} />
 

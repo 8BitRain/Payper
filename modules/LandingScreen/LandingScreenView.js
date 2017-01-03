@@ -79,10 +79,19 @@ export default class LandingScreenView extends React.Component {
         return
       }
 
-      // Success! Initialize user object and progress to next view
       this.props.currentUser.initialize(user)
-      if (true === isNewUser) Actions.FirstPaymentView()
-      else Actions.MainViewContainer()
+
+      if (!user.phone || !user.email)
+        Actions.PartialUserOnboardingView({
+          phone: userData.phone,
+          email: userData.email,
+          currentUser: this.props.currentUser,
+          isNewUser: isNewUser
+        })
+      else if (true === isNewUser)
+        Actions.FirstPaymentView()
+      else
+        Actions.MainViewContainer()
     })
   }
 

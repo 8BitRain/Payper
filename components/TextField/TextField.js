@@ -1,60 +1,32 @@
 import React from 'react'
-import moment from 'moment'
-import {
-  View, TouchableHighlight, TouchableWithoutFeedback, Text, Dimensions,
-  StyleSheet, Animated, Modal, TextInput, Keyboard, Alert,
-  ListView, RecyclerViewBackedScrollView
-} from 'react-native'
-import { colors } from '../../../globalStyles'
-import { StickyView } from '../../../components'
-import { UserRow } from './index'
+import { View, TouchableHighlight, TouchableWithoutFeedback, Text, Dimensions, StyleSheet, Animated, Modal, TextInput, Keyboard, Alert } from 'react-native'
+import { colors } from '../../globalStyles'
+import { StickyView } from '../../components'
 import { VibrancyView } from 'react-native-blur'
-import { UserPic } from '../../../components'
-import * as SetMaster5000 from '../../../helpers/SetMaster5000'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 const dims = Dimensions.get('window')
 
-class UserSearchField extends React.Component {
+class TextField extends React.Component {
   constructor(props) {
     super(props)
 
-    this.EMPTY_DATA_SOURCE = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
-      sectionHeaderHasChanged: (s1, s2) => s1 !== s2
-    })
+    let value = this.props.value
 
     this.AV = {
       opacity: new Animated.Value(1),
-      height: new Animated.Value(90),
-      valueOpacity: new Animated.Value(0),
-      valueHeight: new Animated.Value(0),
-      valuePaddingBottom: new Animated.Value(0)
+      height: new Animated.Value(70),
+      valueOpacity: new Animated.Value((value) ? 1 : 0),
+      valueHeight: new Animated.Value((value) ? 20 : 0),
+      valuePaddingBottom: new Animated.Value((value) ? 16 : 0)
     }
-
-    // TODO: Filter contacts so they only appear in one list.
-    let { payperContacts, nativeContacts, globalUserList } = this.props.currentUser
-
-    // TODO: get rid of this debug log
-    console.log("--> payperContacts =", payperContacts)
-
-    if (null === payperContacts) {
-      this.allContacts = nativeContacts.concat(globalUserList)
-    } else {
-      this.allContacts = payperContacts.concat(nativeContacts).concat(globalUserList)
-    }
-
-    this.allContactsMap = SetMaster5000.arrayToMap(this.allContacts)
-    this.filteredContactsMap = {}
 
     this.state = {
       ...this.props,
       focused: false,
       hidden: false,
       touchable: true,
-      selectedUsers: [],
-      selectionMap: this.props.selectionMap,
-      dataSource: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(this.allContactsMap)
+      input: ""
     }
   }
 
@@ -84,7 +56,7 @@ class UserSearchField extends React.Component {
 
     let animations = [
       Animated.timing(this.AV.height, {
-        toValue: 90,
+        toValue: 70,
         duration: 180
       }),
       Animated.timing(this.AV.opacity, {
@@ -98,11 +70,9 @@ class UserSearchField extends React.Component {
 
   toggle(shouldContinueFlow) {
     this.setState({focused: !this.state.focused}, () => {
-      if (!this.state.focused) this.filterContacts("")
       this.props.toggleFieldFocus(this.state.title, shouldContinueFlow)
     })
   }
-
 
   showValue() {
     let animations = [
@@ -111,7 +81,7 @@ class UserSearchField extends React.Component {
         duration: 110
       }),
       Animated.timing(this.AV.valueHeight, {
-        toValue: 38,
+        toValue: 20,
         duration: 140
       }),
       Animated.timing(this.AV.valuePaddingBottom, {
@@ -123,87 +93,33 @@ class UserSearchField extends React.Component {
     Animated.parallel(animations).start()
   }
 
-  hideValue() {
-    let animations = [
-      Animated.timing(this.AV.valueOpacity, {
-        toValue: 0,
-        duration: 110
-      }),
-      Animated.timing(this.AV.valueHeight, {
-        toValue: 0,
-        duration: 140
-      }),
-      Animated.timing(this.AV.valuePaddingBottom, {
-        toValue: 0,
-        duration: 140
-      })
-    ]
-
-    Animated.parallel(animations).start()
-  }
-
   submit() {
-    let {setValue} = this.props
-    let {selectedUsers, selectionMap} = this.state
-    setValue({selectedUsers, selectionMap})
-    this.toggle(/*(shouldContinueFlow)*/true)
-  }
+    let {value, validateInput, invalidityAlert, setValue} = this.props
+    let {input} = this.state
 
-  onChangeText(input) {
-    this.setState(input)
-  }
-
-  toggleSelect(user) {
-    let {selectedUsers, selectionMap} = this.state
-    let alreadySelected = selectedUsers.includes(user)
-
-    // Add or remove user preview
-    if (alreadySelected) {
-      let index = selectedUsers.indexOf(user)
-      selectedUsers.splice(index, 1)
-    } else {
-      selectedUsers.push(user)
+    // Validate input
+    let inputIsValid = validateInput(input)
+    if (!inputIsValid) {
+      let title = "Wait!"
+      let msg = invalidityAlert || "Input is invalid."
+      Alert.alert(title, msg, [{text: 'OK', onPress: () => this.inputField.focus()}])
+      return
     }
 
-    // Update selectionMap
-    let identifier = user.uid || user.phone
-    selectionMap[identifier] = !selectionMap[identifier]
-
-    // Update state and show or hide user preview list
-    this.setState(this.state, () => (this.state.selectedUsers.length === 0) ? this.hideValue() : this.showValue())
-  }
-
-  filterContacts(query) {
-    this.setState({ query: query })
-    let filtered = SetMaster5000.filterContacts(this.allContacts, query)
-    this.filteredContactsMap = SetMaster5000.arrayToMap(filtered)
-    if (filtered.length > 0) this.setState({ dataSource: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections(this.filteredContactsMap) })
-  }
-
-  renderSectionHeader(sectionData, sectionTitle) {
-    return(
-      <View style={{width: dims.width * 0.9, padding: 5, backgroundColor: colors.snowWhite, borderBottomWidth: 1, borderColor: colors.lightGrey}}>
-        <Text style={{color: colors.deepBlue, fontSize: 16}}>
-          {sectionTitle}
-        </Text>
-      </View>
-    )
-  }
-
-  renderRow(user) {
-    let {selectionMap} = this.state
-    let identifier = user.uid || user.phone
-    return <UserRow selected={selectionMap[identifier]} user={user} toggleSelect={() => this.toggleSelect(user)} />
+    // Show value in this component/set value in parent component
+    let shouldShowValue = value.length < 1 && input.length >= 1
+    setValue(input, () => (shouldShowValue) ? this.showValue() : null)
+    this.toggle(/*(shouldContinueFlow)*/true)
   }
 
   render() {
     let {
-      iconName, title, complete, dayValue, monthValue, yearValue, placeholder,
-      textInputProps, offsetTop
+      iconName, title, complete, value, placeholder,
+      textInputProps
     } = this.props
 
     let {
-      focused, hidden, touchable, input, selectedUsers
+      focused, hidden, touchable, input
     } = this.state
 
     let {
@@ -238,36 +154,27 @@ class UserSearchField extends React.Component {
           </View>
 
           { /* Value */ }
-          <Animated.View style={{paddingBottom: valuePaddingBottom, height: valueHeight, opacity: valueOpacity, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-            { /* (filler) */ }
+          <Animated.View style={{paddingBottom: valuePaddingBottom, height: valueHeight, opacity: valueOpacity, flexDirection: 'row', alignItems: 'center'}}>
             <EvilIcons name={iconName} size={32} color={'transparent'} />
 
-            { /* Previews for selected users */ }
-            {selectedUsers.map((user, i) => <UserPic width={40} height={40} marginLeft={4} user={user} key={user.uid || user.phone} />)}
+            <Text style={{fontSize: 18, color: colors.gradientGreen, paddingLeft: 10}}>
+              {value}
+            </Text>
           </Animated.View>
 
           { /* Input modal */ }
           <Modal visible={this.state.focused} animationType={"slide"} transparent={true}>
             { /* Touching background dismisses field */ }
             <TouchableWithoutFeedback onPress={() => this.toggle(/*(shouldContinueFlow)*/false)}>
-              <Animated.View style={{height: offsetTop + height._value, width: dims.width}} />
+              <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0}} />
             </TouchableWithoutFeedback>
-
-            { /* Contact ListView */ }
-            <ListView
-              keyboardShouldPersistTaps
-              style={{backgroundColor: colors.snowWhite}}
-              contentContainerStyle={{width: dims.width, alignItems: 'center'}}
-              dataSource={this.state.dataSource}
-              renderRow={this.renderRow.bind(this)}
-              renderSectionHeader={this.renderSectionHeader.bind(this)}
-              renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-              renderFooter={() => <View style={{height: 75}} />}
-              keyboardDismissMode={"on-drag"}
-              enableEmptySections />
 
             { /* Input sticks to top of keyboard */ }
             <StickyView duration={0}>
+              <View style={{alignItems: 'center', justifyContent: 'center', width: dims.width, backgroundColor: colors.lightGrey, padding: 10, paddingBottom: 0}}>
+                <EvilIcons name={iconName} size={34} color={colors.deepBlue} />
+              </View>
+
               <View style={{flexDirection: 'row', width: dims.width, backgroundColor: colors.lightGrey}}>
                 { /* Cancel button */ }
                 <TouchableHighlight
@@ -284,12 +191,13 @@ class UserSearchField extends React.Component {
                 { /* Input field */ }
                 <TextInput
                   ref={ref => this.inputField = ref}
+                  defaultValue={textInputProps.defaultValue || value}
                   placeholderTextColor={colors.slateGrey}
                   blurOnSubmit={false}
                   autoFocus={true}
                   style={{flex: 0.65, height: 50, paddingLeft: 10, paddingRight: 10, textAlign: 'center'}}
                   {...textInputProps}
-                  onChangeText={(input) => this.filterContacts(input)}
+                  onChangeText={(input) => this.setState({input: input})}
                   onSubmitEditing={() => this.submit()} />
 
                 { /* Submit button */ }
@@ -312,4 +220,4 @@ class UserSearchField extends React.Component {
   }
 }
 
-module.exports = UserSearchField
+module.exports = TextField
