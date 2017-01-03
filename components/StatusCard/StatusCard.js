@@ -50,7 +50,7 @@ class StatusCard extends React.Component {
         message: "microdeposits-deposited"
       },
       'microdeposits-failed':{
-        message: "microdeposits-failed)"
+        message: "microdeposits-failed"
       }
     }
 
@@ -106,9 +106,9 @@ class StatusCard extends React.Component {
 
             { /* Icon */ }
             <View style={{flex: 0.2, justifyContent: 'center', alignItems: 'center'}}>
-            {(this.state.pressable)
-              ? <EvilIcons name={"chevron-right"} color={colors.snowWhite} size={26} />
-              : null }
+              {(this.state.pressable)
+                ? <EvilIcons name={"chevron-right"} color={colors.snowWhite} size={26} />
+                : null }
             </View>
 
           </View>

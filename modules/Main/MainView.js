@@ -9,7 +9,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import { colors } from '../../globalStyles'
 import { SideMenu, PayCard, StatusCard, PhotoUploader, MicrodepositOnboarding, TrendingPayments } from '../../components'
 import { MyProfile, BankAccounts, Notifications, Invite, Settings } from '../../components/SideMenuSubpages'
-import { CreatePaymentView, BankOnboarding } from '../../modules'
+import { BankOnboarding } from '../../modules'
 import { TrackOnce } from '../../classes/Metrics'
 const dims = Dimensions.get('window')
 
@@ -301,7 +301,7 @@ class MainView extends React.Component {
           </Animated.View>
 
           { /* onboarding-progress status card */ }
-          <StatusCard {...this.props} />
+
 
           { /* Banner info and payment list */ }
           <ListView
@@ -339,13 +339,6 @@ class MainView extends React.Component {
               </Animated.View>
             </TouchableHighlight>
           </View>
-
-          { /* Create payment modal */ }
-          <Modal animationType={"slide"} visible={this.state.createPaymentModalVisible}>
-            <CreatePaymentView
-              {...this.props}
-              toggleModal={() => this.setState({createPaymentModalVisible: false})} />
-          </Modal>
 
           { /* Side menu page modal */ }
           <Modal animationType={"slide"} transparent={true} visible={this.state.sideMenuSubpageModalVisible}>
