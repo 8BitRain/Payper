@@ -431,6 +431,7 @@ export default class User {
           if (!res) return
           let parsed = SetMaster5000.contactListToArray({ contacts: res })
           if (parsed === null) parsed = []
+          console.log("--> updating payperContacts to:", parsed)
           updateViaRedux({ payperContacts: parsed })
         }
       }

@@ -35,9 +35,12 @@ class UserSearchField extends React.Component {
     // TODO: Filter contacts so they only appear in one list.
     let { payperContacts, nativeContacts, globalUserList } = this.props.currentUser
 
-    // TODO: Debug this
-    // Original: this.allContacts = payperContacts.concat(nativeContacts, globalUserList)
-    this.allContacts = payperContacts.concat(nativeContacts).concat(globalUserList)
+    console.log("--> payperContacts =", payperContacts)
+    if (null === payperContacts) {
+      this.allContacts = nativeContacts.concat(globalUserList)
+    } else {
+      this.allContacts = payperContacts.concat(nativeContacts).concat(globalUserList)
+    }
 
     this.allContactsMap = SetMaster5000.arrayToMap(this.allContacts)
     this.filteredContactsMap = {}
