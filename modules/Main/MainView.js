@@ -301,7 +301,7 @@ class MainView extends React.Component {
           </Animated.View>
 
           { /* onboarding-progress status card */ }
-
+          <StatusCard {...this.props} />
 
           { /* Banner info and payment list */ }
           <ListView
