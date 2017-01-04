@@ -54,7 +54,7 @@ class StatusCard extends React.Component {
       }
     }
 
-    let onboardingProgress = props.currentUser.appFlags['onboarding-progress']
+    let onboardingProgress = props.currentUser.appFlags['onboardingProgress']
 
     this.state = {
       pressable: (this.config[onboardingProgress]) ? this.config[onboardingProgress].pressable : false,
@@ -64,8 +64,8 @@ class StatusCard extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let currOnboardingProgress = this.props.currentUser.appFlags['onboarding-progress']
-    let newOnboardingProgress = nextProps.currentUser.appFlags['onboarding-progress']
+    let currOnboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
+    let newOnboardingProgress = nextProps.currentUser.appFlags['onboardingProgress']
 
     if (currOnboardingProgress !== newOnboardingProgress) {
       this.setState({
@@ -86,8 +86,8 @@ class StatusCard extends React.Component {
 
   render() {
     let {modalVisible, modalContent} = this.state
-    let onboardingProgress = this.props.currentUser.appFlags['onboarding-progress']
-    let message = (this.config[onboardingProgress]) ? this.config[onboardingProgress].message : "'" + onboardingProgress + "' is not a valid value for the 'onboarding-progress' appFlag"
+    let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
+    let message = (this.config[onboardingProgress]) ? this.config[onboardingProgress].message : "'" + onboardingProgress + "' is not a valid value for the 'onboardingProgress' appFlag"
 
     return(
       <View>

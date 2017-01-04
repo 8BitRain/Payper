@@ -469,6 +469,7 @@ export default class User {
           .then((response) => response.json())
           .then((responseData) => {
             if (!responseData.errorMessage) {
+              console.log("--> responseData", responseData)
               responseData.user.token = token
               this.initialize(responseData.user)
               this.decryptedPhone = params.phone
