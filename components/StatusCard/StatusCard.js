@@ -1,10 +1,11 @@
 import React from 'react'
+import { Actions } from 'react-native-router-flux'
 import { View, Text, TouchableHighlight, Animated, Easing, Dimensions, Modal } from 'react-native'
+import { colors } from '../../globalStyles'
+import { IAVWebView, KYCOnboardingView } from '../index'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
-import { colors } from '../../globalStyles'
-import { IAVWebView, KYCOnboardingView } from '../index'
 const dims = Dimensions.get('window')
 
 class StatusCard extends React.Component {
@@ -15,18 +16,18 @@ class StatusCard extends React.Component {
       'need-bank': {
         message: "need-bank",
         pressable: true,
-        modalContent:
-          <View style={{flex: 1.0, backgroundColor: colors.accent}}>
-            <IAVWebView refreshable currentUser={this.props.currentUser} toggleModal={() => this.toggleModal()} />
-          </View>
+        destination: () => Actions.GlobalModal({
+          subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} toggleModal={() => this.toggleModal()} />,
+          backgroundColor: colors.accent
+        })
       },
       'need-kyc': {
         message: "need-kyc",
         pressable: true,
-        modalContent:
-          <View style={{flex: 1.0, backgroundColor: colors.accent}}>
-            <KYCOnboardingView currentUser={this.props.currentUser} toggleModal={() => this.toggleModal()} />
-          </View>
+        destination: () => Actions.GlobalModal({
+          subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} toggleModal={() => this.toggleModal()} />,
+          backgroundColor: colors.accent
+        })
       },
       'kyc-retry': {
         message: "kyc-retry"
@@ -79,22 +80,23 @@ class StatusCard extends React.Component {
     this.setState({modalVisible: !this.state.modalVisible})
   }
 
-  handlePress() {
+  handlePress(destination) {
     if (!this.state.pressable) return
-    this.toggleModal()
+    (typeof destination === 'function') ? destination() : null
   }
 
   render() {
     let {modalVisible, modalContent} = this.state
     let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
     let message = (this.config[onboardingProgress]) ? this.config[onboardingProgress].message : "'" + onboardingProgress + "' is not a valid value for the 'onboardingProgress' appFlag"
+    let destination = (this.config[onboardingProgress]) ? this.config[onboardingProgress].destination : null
 
     return(
       <View>
         <TouchableHighlight
           activeOpacity={(this.state.pressable) ? 0.75 : 1.0}
           underlayColor={'transparent'}
-          onPress={() => this.handlePress()}>
+          onPress={() => this.handlePress(destination)}>
           <View style={{width: dims.width, padding: 15, backgroundColor: colors.maastrichtBlue, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
 
             { /* Text */ }
@@ -113,11 +115,6 @@ class StatusCard extends React.Component {
 
           </View>
         </TouchableHighlight>
-
-        { /* Actionable status cards toggle this modal */ }
-        <Modal visible={modalVisible} animationType={'slide'}>
-          {modalContent}
-        </Modal>
       </View>
     )
   }

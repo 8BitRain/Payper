@@ -47,8 +47,6 @@ class MainView extends React.Component {
       drawerOpen: false,
       filterMenuOpen: false,
       createPaymentModalVisible: false,
-      sideMenuSubpageModalVisible: false,
-      activeSideMenuSubpage: null,
       activeFilter: "All",
       mounted: false
     }
@@ -90,7 +88,14 @@ class MainView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={'transparent'}
-              onPress={() => {{ this.toggleSideMenuSubpage("Trending Payments"); this.trackOnce.report("buttonPress/trendingPayments", this.props.currentUser.uid, { from: "emptyState" }) }}}>
+              onPress={() => {
+                Actions.GlobalModal({
+                  subcomponent: <TrendingPayments {...this.props} />,
+                  showHeader: true,
+                  title: "Trending Payments"
+                })
+                this.trackOnce.report("buttonPress/trendingPayments", this.props.currentUser.uid, { from: "emptyState" })
+              }}>
               <View style={{height: 60, backgroundColor: colors.accent, borderRadius: 4, marginTop: 15, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dims.width / 2}}>
                 <Text style={{ fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
                   {"Explore Trending Payments"}
@@ -176,28 +181,6 @@ class MainView extends React.Component {
     })
   }
 
-  toggleSideMenuSubpage(sp) {
-    this.setState({
-      activeSideMenuSubpage: sp,
-      sideMenuSubpageModalVisible: (sp) ? true : false
-    })
-  }
-
-  getSideMenuSubpage(sp) {
-    switch (sp) {
-      case "My Profile": return <MyProfile currentUser={this.props.currentUser} />
-      case "Bank Accounts": return <BankAccounts {...this.props} />
-      case "Notifications": return <Notifications {...this.props} />
-      case "Invite a Friend": return <Invite {...this.props} />
-      case "Settings": return <Settings {...this.props} />
-      case "Trending Payments": return <TrendingPayments toggleModal={() => this.toggleSideMenuSubpage(null)} title={"Trending Payments"} index={0} currentUser={this.props.currentUser}/>
-      case "Document Uploader": return <PhotoUploader toggleModal={() => this.toggleSideMenuSubpage(null)} title={"Secure Document Upload"} type={"document"} index={0} currentUser={this.props.currentUser} />
-      case "Microdeposit Verification": return <MicrodepositOnboarding toggleModal={() => this.toggleSideMenuSubpage(null)} {...this.props} />
-      case "retry": return <BankOnboarding retry displayCloseButton currentUser={this.props.currentUser} closeModal={() => this.toggleSideMenuSubpage(null)} />
-      default: return <View style={{flex: 1.0, justifyContent: 'center', alignItems: 'center'}}><Text style={{width: dims.width - 80, fontSize: 18, color: colors.accent}}>{"Oops, there's a bug in our code. Let us know at support@getpayper.io"}</Text></View>
-    }
-  }
-
   render() {
     let { activeFilter, mounted } = this.state
     let dataSource = []
@@ -217,7 +200,7 @@ class MainView extends React.Component {
         tweenDuration={100}
         onOpenStart={() => this.rotateToX()}
         onCloseStart={() => this.rotateToPlus()}
-        content={<View style={{flex: 1.0, opacity: (mounted) ? 1.0 : 0.0}}><SideMenu {...this.props} toggleSideMenuSubpage={(p) => this.toggleSideMenuSubpage(p)} /></View>}>
+        content={<View style={{flex: 1.0, opacity: (mounted) ? 1.0 : 0.0}}><SideMenu {...this.props} /></View>}>
 
         <View style={{flex: 1.0, backgroundColor: colors.lightGrey}}>
           <StatusBar barStyle={"light-content"} />
@@ -342,38 +325,6 @@ class MainView extends React.Component {
               </Animated.View>
             </TouchableHighlight>
           </View>
-
-          { /* Side menu page modal */ }
-          <Modal animationType={"slide"} transparent={true} visible={this.state.sideMenuSubpageModalVisible}>
-            <View style={{flex: 1.0}}>
-
-              { /* Header */
-                (this.headerlessModalTitles.includes(this.state.activeSideMenuSubpage))
-                ? null
-                : <View style={{overflow: 'hidden'}}>
-                    <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
-                    <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
-                      <Text style={{color: colors.lightGrey, fontSize: 17, backgroundColor: 'transparent'}}>
-                        {this.state.activeSideMenuSubpage}
-                      </Text>
-
-                      <TouchableHighlight
-                        activeOpacity={0.75}
-                        underlayColor={'transparent'}
-                        style={{position: 'absolute', top: 0, left: 0, bottom: 0, padding: 14, paddingTop: 30, justifyContent: 'center'}}
-                        onPress={() => this.toggleSideMenuSubpage(null)}>
-                        <EvilIcons name={"close"} color={colors.snowWhite} size={24} />
-                      </TouchableHighlight>
-                    </View>
-                  </View>
-              }
-
-              { /* Inner content */ }
-              <View style={{flex: 1.0}}>
-                {this.getSideMenuSubpage(this.state.activeSideMenuSubpage)}
-              </View>
-            </View>
-          </Modal>
         </View>
       </Drawer>
     )

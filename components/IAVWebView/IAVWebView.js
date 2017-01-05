@@ -1,5 +1,6 @@
 // Dependencies
 import React from 'react'
+import { Actions } from 'react-native-router-flux'
 import { View, Text, TouchableHighlight, WebView, Dimensions, StatusBar } from 'react-native'
 import Mixpanel from 'react-native-mixpanel'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -84,7 +85,7 @@ class IAVWebView extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => this.setState({ cancelled: true }, () => this.props.toggleModal())}>
+            onPress={() => this.setState({ cancelled: true }, () => Actions.pop())}>
 
             <EvilIcons name={"close"} size={24} color={colors.snowWhite} />
 

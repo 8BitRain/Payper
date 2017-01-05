@@ -16,7 +16,7 @@ import { colors } from './globalStyles'
 import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
 import { Client } from 'bugsnag-react-native'
 import { PayDetails } from './components/PayCard'
-import { MainView, OnboardingView, PaymentOnboardingView, FirstPaymentView, KYCOnboardingView, PartialUserOnboardingView } from './modules'
+import { MainView, OnboardingView, PaymentOnboardingView, FirstPaymentView, PartialUserOnboardingView } from './modules'
 import { GlobalModal } from './components'
 
 // Get build and version numbers
@@ -104,35 +104,8 @@ export default class Coincast extends React.Component {
               panHandlers={null} />
 
             <Scene
-              component={BankOnboardingView}
-              key="BankOnboardingView"
-              type="replace"
-              panHandlers={null} />
-
-            <Scene
-              component={MainViewContainer}
-              key="MainViewContainer"
-              panHandlers={null} />
-
-            <Scene
               component={UserOnboardingViewContainer}
               key="UserOnboardingViewContainer"
-              panHandlers={null} />
-
-            <Scene
-              component={Phone}
-              key="Phone"
-              type="replace"
-              panHandlers={null} />
-
-            <Scene
-              component={PayDetails}
-              key="PaymentDetails"
-              panHandlers={null} />
-
-            <Scene
-              component={PaymentOnboardingView}
-              key="PaymentOnboardingView"
               panHandlers={null} />
 
             <Scene
@@ -141,23 +114,29 @@ export default class Coincast extends React.Component {
               panHandlers={null} />
 
             <Scene
-              component={KYCOnboardingView}
-              key="KYCOnboardingView"
-              direction="vertical"
-              panHandlers={null} />
-
-            <Scene
               component={PartialUserOnboardingView}
               key="PartialUserOnboardingView"
               direction="vertical"
               panHandlers={null} />
 
+            <Scene
+              component={MainViewContainer}
+              key="MainViewContainer"
+              panHandlers={null} />
+
+            <Scene
+              component={PayDetails}
+              key="PaymentDetails"
+              panHandlers={null} />
           </Scene>
 
-          <Scene key="error" component={Error} />
-          
-          <Scene key="GlobalModal" component={GlobalModal} />
+          <Scene
+            key="GlobalModal"
+            component={GlobalModal} />
 
+          <Scene
+            key="error"
+            component={Error} />
         </Scene>
       </Router>
     )
