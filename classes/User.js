@@ -335,7 +335,6 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   verify(params) {
-    console.log("--> User.verify was invoked with params", params)
     params.token = this.token
 
     try {

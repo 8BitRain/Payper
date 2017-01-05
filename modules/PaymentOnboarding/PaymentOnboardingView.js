@@ -33,6 +33,7 @@ class PaymentOnboardingView extends React.Component {
     this.fieldNames = ['Who?', 'How much?', 'How often?', 'How long?', 'What for?', 'Starting when?']
 
     this.state = {
+      cancellable: true,
       modalVisible: false,
       headerHeight: 0,
       selectionMap: {},
@@ -362,6 +363,10 @@ class PaymentOnboardingView extends React.Component {
   }
 
   cancel() {
+    if (!this.state.cancellable) return
+
+    this.setState({cancellable: false})
+
     this.timer.report("paymentOnboarding", this.props.currentUser.uid, {
       cancelled: true,
       stateSnapshot: this.state
