@@ -373,9 +373,8 @@ class PaymentOnboardingView extends React.Component {
     })
 
     Actions.pop()
-
-    setTimeout(() => this.setState({cancellable: true}), 780)
   }
+  
   render() {
     let {
       successHeight, successOpacity, buttonOpacity,
