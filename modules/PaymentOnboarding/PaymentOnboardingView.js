@@ -374,7 +374,7 @@ class PaymentOnboardingView extends React.Component {
 
     Actions.pop()
   }
-  
+
   render() {
     let {
       successHeight, successOpacity, buttonOpacity,
@@ -410,7 +410,7 @@ class PaymentOnboardingView extends React.Component {
               underlayColor={'transparent'}
               onPress={() => this.cancel()}
               style={{position: 'absolute', top: 18, bottom: 0, left: 0, padding: 14, justifyContent: 'center'}}>
-              <EvilIcons name={"chevron-left"} size={36} color={colors.lightGrey} />
+              <EvilIcons name={"close"} size={24} color={colors.snowWhite} />
             </TouchableHighlight>
           </View>
         </View>
