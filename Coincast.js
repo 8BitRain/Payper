@@ -17,6 +17,7 @@ import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
 import { Client } from 'bugsnag-react-native'
 import { PayDetails } from './components/PayCard'
 import { MainView, OnboardingView, PaymentOnboardingView, FirstPaymentView, KYCOnboardingView, PartialUserOnboardingView } from './modules'
+import { GlobalModal } from './components'
 
 // Get build and version numbers
 let build = DeviceInfo.getBuildNumber()
@@ -152,7 +153,11 @@ export default class Coincast extends React.Component {
               panHandlers={null} />
 
           </Scene>
-          <Scene key="error" component={Error}/>
+
+          <Scene key="error" component={Error} />
+          
+          <Scene key="GlobalModal" component={GlobalModal} />
+
         </Scene>
       </Router>
     )
