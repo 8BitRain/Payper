@@ -13,6 +13,21 @@ class KYCOnboardingView extends React.Component {
     console.log("--> KYCOnboardingView will mount with props...\n", this.props)
   }
 
+  verify() {
+    let testParams = {
+      firstName: "Test",
+      lastName: "Guy",
+      address: "1001 University Ave",
+      city: "Madison",
+      state: "WI",
+      zip: "53715",
+      dob: "1997-06-02",
+      ssn: "8135"
+    }
+
+    this.props.currentUser.verify(testParams)
+  }
+
   render() {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.snowWhite}}>
@@ -28,9 +43,17 @@ class KYCOnboardingView extends React.Component {
 
         <TouchableHighlight
           underlayColor={'transparent'}
-          onPress={() => Actions.MainViewContainer()}>
+          onPress={() => this.verify()}>
+          <Text style={{textAlign: 'center', width: dims.width * 0.85, margin: 5, fontSize: 16, color: colors.snowWhite, backgroundColor: colors.gradientGreen, padding: 14, borderRadius: 4, overflow: 'hidden'}}>
+            {"Test Verification"}
+          </Text>
+        </TouchableHighlight>
+
+        <TouchableHighlight
+          underlayColor={'transparent'}
+          onPress={() => this.props.toggleModal()}>
           <Text style={{textAlign: 'center', width: dims.width * 0.85, margin: 5, fontSize: 16, color: colors.snowWhite, backgroundColor: colors.accent, padding: 14, borderRadius: 4, overflow: 'hidden'}}>
-            {"Continue"}
+            {"Back"}
           </Text>
         </TouchableHighlight>
       </View>

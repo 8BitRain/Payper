@@ -25,7 +25,7 @@ class StatusCard extends React.Component {
         pressable: true,
         modalContent:
           <View style={{flex: 1.0, backgroundColor: colors.accent}}>
-            <KYCOnboardingView currentUser={this.props.currentUser} />
+            <KYCOnboardingView currentUser={this.props.currentUser} toggleModal={() => this.toggleModal()} />
           </View>
       },
       'kyc-retry': {

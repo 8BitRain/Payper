@@ -329,6 +329,32 @@ export default class User {
   }
 
   /**
+    *   Verify this user's Dwolla customer
+    *   params: firstName, lastName, address, city, state, zip, dob, ssn
+    *   (token is tacked on to params)
+    *   -----------------------------------------------------------------------
+  **/
+  verify(params) {
+    console.log("--> User.verify was invoked with params", params)
+    params.token = this.token
+
+    try {
+      fetch(baseURL + "customer/verify", {method: "POST", body: JSON.stringify(params)})
+      .then((response) => response.json())
+      .then((responseData) => {
+        if (!responseData.errorMessage) {
+          console.log("Customer verification succeeded! responseData:", responseData)
+        } else {
+          console.log("Error verifying customer:", responseData.errorMessage)
+        }
+      })
+      .done()
+    } catch (err) {
+      console.log("Error verifying customer", err)
+    }
+  }
+
+  /**
     *   Enable listeners on this user's Firebase data
     *   -----------------------------------------------------------------------
   **/
