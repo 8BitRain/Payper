@@ -87,12 +87,13 @@ exports.signin = function(params, cb) {
             .then((response) => response.json())
             .then((responseData) => {
               console.log("user/facebookCreate responseData", responseData)
-              cb(responseData.user, true)
+              if (responseData.errorMessage) cb(responseData, true)
+              else cb(responseData.user, true)
             })
             .done()
           } catch (err) {
             console.log("user/facebookCreate failed...", "err:", err)
-            cb(null)
+            cb(err)
           }
         } else {
           getUserDetails(uid, (userDetails) => {

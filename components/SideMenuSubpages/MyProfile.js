@@ -35,6 +35,7 @@ class MyProfile extends React.Component {
 
     function confirm() {
       FBLoginManager.logOut()
+      Actions.pop()
       Actions.LandingScreenViewContainer()
       currentUser.delete()
     }

@@ -1,9 +1,10 @@
 import React from 'react'
-import { View, Text, TouchableHighlight, Dimensions, StatusBar, Image, ScrollView, Alert } from "react-native"
-import { colors } from '../../globalStyles'
-import { TextField } from '../../components'
-import { validatePhone, validateEmail } from '../../helpers'
-import { Actions } from 'react-native-router-flux'
+import {View, Text, TouchableHighlight, Dimensions, StatusBar, Image, ScrollView, Alert, Animated} from "react-native"
+import {colors} from '../../globalStyles'
+import {TextField} from '../../components'
+import {validatePhone, validateEmail} from '../../helpers'
+import {Actions} from 'react-native-router-flux'
+import {signin} from '../../auth'
 import * as Lambda from '../../services/Lambda'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const dims = Dimensions.get('window')
@@ -13,8 +14,12 @@ export default class PartialUserOnboardingView extends React.Component {
     super(props)
 
     this.state = {
-      phone: this.props.phone || "",
-      email: this.props.email || ""
+      firstName: props.firstName || "undefined",
+      facebookUserData: props.facebookUserData || {},
+      facebookToken: props.facebookToken || "",
+      phone: props.phone || "",
+      email: props.email || "",
+      loading: false
     }
 
     this.fieldRefs = {}
@@ -42,7 +47,7 @@ export default class PartialUserOnboardingView extends React.Component {
   }
 
   submit() {
-    let {phone, email} = this.state
+    let {phone, email, facebookToken, facebookUserData} = this.state
     let {currentUser, isNewUser} = this.props
 
     // Validate inputs
@@ -51,24 +56,44 @@ export default class PartialUserOnboardingView extends React.Component {
       return
     }
 
-    // Update in front end
-    currentUser.update({decryptedEmail: email, decryptedPhone: phone})
+    // Tack on newly inputted email and phone
+    if (email !== facebookUserData.email) facebookUserData.email = email
+    if (phone !== facebookUserData.phone) facebookUserData.phone = phone
 
-    // Update in back end
-    let params = {updatedPhone: phone, updatedEmail: email}
-    Lambda.updateUser({token: currentUser.token, user: params})
+    // Display loading icon
+    this.setState({loading: true})
 
-    // Go to next view
-    if (isNewUser) Actions.FirstPaymentView()
-    else Actions.MainViewContainer()
+    // Sign in
+    signin({
+      type: "facebook",
+      facebookToken: facebookToken,
+      facebookUserData: facebookUserData
+    }, (responseData, isNewUser) => {
+      let {errorMessage} = responseData
+
+      if (errorMessage) {
+        this.setState({loading: false})
+        let alert = (errorMessage === "dupe-email")
+          ? 'A user with that email address already exists.'
+          : 'A user with that phone number already exists.'
+        Alert.alert('Wait!', alert)
+      } else {
+        this.setState({loading: false})
+        responseData.decryptedEmail = email
+        responseData.decryptedPhone = phone
+        console.log("\n\n\n--> responseData", responseData)
+        this.props.currentUser.initialize(responseData)
+        Actions.MainViewContainer()
+      }
+    })
   }
 
   render() {
-    let {phone, email} = this.state
+    let {
+      firstName, phone, email, loading, error
+    } = this.state
 
     let info = "Please verify that your contact information is up to date."
-
-    // Overwrite with more detailed info if possible
     if (!phone && !email) info = "We weren't able to retrieve your phone number or email address from Facebook."
     else if (!phone) info = "We weren't able to retrieve your phone number from Facebook."
     else if (!email) info = "We weren't able to retrieve your email address from Facebook."
@@ -83,7 +108,7 @@ export default class PartialUserOnboardingView extends React.Component {
 
           <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
             <Text style={{color: colors.lightGrey, fontSize: 17, backgroundColor: 'transparent'}}>
-              {"Contact Information"}
+              {"Sign Up Confirmation"}
             </Text>
           </View>
         </View>
@@ -95,6 +120,20 @@ export default class PartialUserOnboardingView extends React.Component {
           scrollEventThrottle={16}
           keyboardShouldPersistTaps
           contentContainerStyle={{alignItems: 'center'}}>
+
+          { /* Welcome message and info/error messages */ }
+          <Animated.View>
+            <View style={{width: dims.width * 0.9, padding: 12, marginTop: 12, backgroundColor: colors.lightGrey, borderRadius: 4, justifyContent: 'center'}}>
+              <Text style={{color: colors.deepBlue, fontSize: 20, padding: 4, backgroundColor: 'transparent', textAlign: 'left'}}>
+                {"Hey " + firstName + ","}
+              </Text>
+
+              { /* Info */
+                <Text style={{color: colors.deepBlue, fontSize: 14, padding: 4, backgroundColor: 'transparent', textAlign: 'left'}}>
+                  {info}
+                </Text> }
+            </View>
+          </Animated.View>
 
           { /* Email */ }
           <TextField
@@ -141,12 +180,6 @@ export default class PartialUserOnboardingView extends React.Component {
             induceFieldRef={this.induceFieldRef}
             toggleFieldFocus={this.toggleFieldFocus} />
 
-          { /* Info */ }
-          <View style={{width: dims.width * 0.9, padding: 8, marginTop: 15, backgroundColor: colors.lightGrey, borderRadius: 4, justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={{color: colors.deepBlue, fontSize: 14, backgroundColor: 'transparent', textAlign: 'center'}}>
-              {info}
-            </Text>
-          </View>
         </ScrollView>
 
         { /* 'Continue' button */ }
@@ -161,7 +194,9 @@ export default class PartialUserOnboardingView extends React.Component {
               shadowColor: colors.medGrey, shadowOpacity: 0.75, shadowRadius: 2, shadowOffset: { height: 0, width: 0 }
             }}>
             <Text style={{color: colors.snowWhite, fontSize: 18, textAlign: 'center'}}>
-              {"Continue"}
+              {(loading)
+                ? "Just a second..."
+                : "Continue"}
             </Text>
           </View>
         </TouchableHighlight>

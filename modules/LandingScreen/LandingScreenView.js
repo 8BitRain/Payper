@@ -1,14 +1,15 @@
 // Dependencies
 import React from 'react'
-import { View, ScrollView, Text, TouchableHighlight, Modal, Animated, Easing, Dimensions, Linking, StatusBar, Image } from 'react-native'
-import { Actions } from 'react-native-router-flux'
+import firebase from 'firebase'
+import {View, ScrollView, Text, TouchableHighlight, Modal, Animated, Easing, Dimensions, Linking, StatusBar, Image} from 'react-native'
+import {Actions} from 'react-native-router-flux'
 import Mixpanel from 'react-native-mixpanel'
 import Hyperlink from 'react-native-hyperlink'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const FBSDK = require('react-native-fbsdk')
-const { LoginButton, AccessToken } = FBSDK
-import { FBLoginManager } from 'NativeModules'
-import { signin, requestFacebookUserData } from '../../auth'
+const {LoginButton, AccessToken} = FBSDK
+import {FBLoginManager} from 'NativeModules'
+import {signin, requestFacebookUserData} from '../../auth'
 import CodePush from 'react-native-code-push';
 
 // Helpers
@@ -39,7 +40,7 @@ export default class LandingScreenView extends React.Component {
     }
   }
 
-  handleURLClick = (url) =>{
+  handleURLClick = (url) => {
     Linking.openURL(url).catch(err => console.error('An error occurred', err));
   }
 
@@ -64,35 +65,87 @@ export default class LandingScreenView extends React.Component {
   }
 
   signinWithFacebook(userData) {
-    let { token, email, phone } = userData
+    let {
+      token, email, phone, facebook_id, first_name
+    } = userData
 
-    signin({
-      type: "facebook",
-      facebookToken: token,
-      facebookUserData: userData
-    }, (user, isNewUser) => {
-      // Something went wrong; User JSON is non-existent
-      if (!user) {
-        alert("Something went wrong. Please try again later.")
-        FBLoginManager.logOut()
-        this.toggleLoadingScreen()
-        return
+    // Check if this is a new Facebook user
+    firebase.database().ref('/facebook').child(facebook_id).once('value', (snapshot) => {
+      let val = snapshot.val()
+      let isNewFacebookUser = val === null
+
+      // Facebook user doesn't exist yet
+      // Advance to PartialUserOnboardingView, account creation takes place there
+      if (isNewFacebookUser) {
+        Actions.PartialUserOnboardingView({
+          email, phone,
+          firstName: first_name,
+          facebookToken: token,
+          facebookUserData: userData,
+          currentUser: this.props.currentUser
+        })
       }
 
-      this.props.currentUser.initialize(user)
+      // Facebook user already exists
+      // Sign in, advance to next view
+      else {
+        signin({
+          type: "facebook",
+          facebookToken: token,
+          facebookUserData: userData
+        }, (responseData, isNewUser) => {
+          if (null === responseData) {
+            Alert.alert('Sorry', 'Something went wrong. Please try again later.')
+            FBLoginManager.logOut()
+            this.toggleLoadingScreen()
+            return
+          }
 
-      if (!user.phone || !user.email)
-        Actions.PartialUserOnboardingView({
-          phone: userData.phone,
-          email: userData.email,
-          currentUser: this.props.currentUser,
-          isNewUser: isNewUser
+          this.props.currentUser.initialize(responseData)
+          Actions.MainViewContainer()
         })
-      else if (true === isNewUser)
-        Actions.FirstPaymentView()
-      else
-        Actions.MainViewContainer()
+      }
     })
+    .catch((err) => {
+      Alert.alert('Sorry', 'Something went wrong. Please try again later.')
+    })
+
+    // signin({
+    //   type: "facebook",
+    //   facebookToken: token,
+    //   facebookUserData: userData
+    // }, (responseData, isNewUser) => {
+    //   console.log("--> signinWithFacebook was invoked with responseData:", responseData)
+    //
+    //   if (null === responseData) {
+    //     Alert.alert("Sorry", "Something went wrong. Please try again later.")
+    //     FBLoginManager.logOut()
+    //     this.toggleLoadingScreen()
+    //     return
+    //   }
+    //
+    //   let {errorMessage} = responseData
+    //   let errorCode, emailIsDupe, phoneIsDupe
+    //   if (errorMessage) {
+    //     errorMessage = JSON.parse(errorMessage)
+    //     errorCode = errorMessage[0].code
+    //     emailisDupe = errorMessage[0].path === "/email"
+    //   }
+    //
+    //   if (true === isNewUser) {
+    //     Actions.PartialUserOnboardingView({
+    //       email: userData.email,
+    //       phone: userData.phone,
+    //       emailIsDupe: emailisDupe,
+    //       phoneIsDupe: phoneIsDupe,
+    //       currentUser: this.props.currentUser,
+    //       isNewUser: isNewUser
+    //     })
+    //   } else {
+    //     this.props.currentUser.initialize(responseData)
+    //     Actions.MainViewContainer()
+    //   }
+    // })
   }
 
   render() {
