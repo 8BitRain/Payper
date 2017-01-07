@@ -1,11 +1,10 @@
 import React from 'react'
-import { View, Text, Modal, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions, Alert, ActionSheetIOS } from 'react-native'
-import EvilIcons from 'react-native-vector-icons/EvilIcons'
-
+import {View, Text, Modal, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions, Alert, ActionSheetIOS} from 'react-native'
+import {colors} from '../../globalStyles'
+import {IAVWebView} from '../../components'
 const dims = Dimensions.get('window')
 import * as Lambda from '../../services/Lambda'
-import { colors } from '../../globalStyles'
-import { IAVWebView } from '../../components'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 class BankAccounts extends React.Component {
   constructor(props) {

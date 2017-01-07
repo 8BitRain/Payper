@@ -35,6 +35,7 @@ class IAVWebView extends React.Component {
   }
 
   componentWillUnmount() {
+    console.log("--> IAVWebView will unmount")
     this.timer.report("bankOnboarding", this.props.currentUser.uid, {
       uid: this.props.currentUser.uid
     })
@@ -70,6 +71,14 @@ class IAVWebView extends React.Component {
     })
   }
 
+  handleCancel() {
+    this.setState({cancelled: true}, () => {
+      (typeof this.props.toggleModal === 'function')
+        ? this.props.toggleModal()
+        : Actions.pop()
+    })
+  }
+
   render() {
     if (this.props.refreshable) return(
       <View style={{flex: 1.0, marginTop: 20, backgroundColor: colors.accent}}>
@@ -85,7 +94,7 @@ class IAVWebView extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => this.setState({ cancelled: true }, () => Actions.pop())}>
+            onPress={() => this.handleCancel()}>
 
             <EvilIcons name={"close"} size={24} color={colors.snowWhite} />
 

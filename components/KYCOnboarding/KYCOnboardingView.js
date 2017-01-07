@@ -1,7 +1,7 @@
 import React from 'react'
-import { View, Text, TouchableHighlight, StatusBar, Dimensions } from 'react-native'
-import { Actions } from 'react-native-router-flux'
-import { colors } from "../../globalStyles"
+import {Actions} from 'react-native-router-flux'
+import {View, Text, TouchableHighlight, StatusBar, Dimensions} from 'react-native'
+import {colors} from "../../globalStyles"
 const dims = Dimensions.get('window')
 
 class KYCOnboardingView extends React.Component {
@@ -51,7 +51,7 @@ class KYCOnboardingView extends React.Component {
 
         <TouchableHighlight
           underlayColor={'transparent'}
-          onPress={() => this.props.toggleModal()}>
+          onPress={() => Actions.pop()}>
           <Text style={{textAlign: 'center', width: dims.width * 0.85, margin: 5, fontSize: 16, color: colors.snowWhite, backgroundColor: colors.accent, padding: 14, borderRadius: 4, overflow: 'hidden'}}>
             {"Back"}
           </Text>
