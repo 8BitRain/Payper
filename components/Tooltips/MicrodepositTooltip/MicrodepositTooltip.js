@@ -10,11 +10,11 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Swiper from 'react-native-swiper';
 
 // Stylesheets
-import {colors} from '../../globalStyles';
+import {colors} from '../../../globalStyles';
 
 // Partial components
-import Header from '../../components/Header/Header';
-import * as Headers from '../../helpers/Headers';
+import Header from '../../../components/Header/Header';
+import * as Headers from '../../../helpers/Headers';
 
 //Custom
 const dimensions = Dimensions.get('window');
@@ -72,17 +72,17 @@ class MicrodepositTooltip extends React.Component {
             activeDot={this._renderActiveDot()}>
             <View style={styles.slide1}>
               <Text style={styles.header}>{"Verifying Your Bank Account"}</Text>
-              <Image source={require('../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
               <Text style={styles.text}> {"Payper will notify you when 2 amounts (Less than 20 cents each) are deposited in your account."}}</Text>
             </View>
             <View style={styles.slide2}>
               <Text style={styles.header}>{"Verifying Your Bank Account"}</Text>
-              <Image source={require('../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
               <Text style={styles.text}>{"Check your bank account for 2 amounts deposited by Payper."}</Text>
             </View>
             <View style={styles.slide3}>
               <Text style={styles.header}>{"Verifying Your Bank Account"}</Text>
-              <Image source={require('../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
               <Text style={styles.text}>{"On the home page of this app click on your status card to enter the 2 amounts Payper deposited."}</Text>
               <View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
               <TouchableHighlight
