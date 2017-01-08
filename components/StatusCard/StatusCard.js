@@ -17,7 +17,7 @@ class StatusCard extends React.Component {
         message: "need-bank",
         pressable: true,
         destination: () => Actions.GlobalModal({
-          subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} toggleModal={() => this.toggleModal()} />,
+          subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
           backgroundColor: colors.accent
         })
       },
@@ -25,7 +25,7 @@ class StatusCard extends React.Component {
         message: "need-kyc",
         pressable: true,
         destination: () => Actions.GlobalModal({
-          subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} toggleModal={() => this.toggleModal()} />,
+          subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
           backgroundColor: colors.accent
         })
       },
@@ -59,8 +59,7 @@ class StatusCard extends React.Component {
 
     this.state = {
       pressable: (this.config[onboardingProgress]) ? this.config[onboardingProgress].pressable : false,
-      modalContent: (this.config[onboardingProgress]) ? this.config[onboardingProgress].modalContent : <View />,
-      modalVisible: false
+      modalContent: (this.config[onboardingProgress]) ? this.config[onboardingProgress].modalContent : <View />
     }
   }
 
@@ -76,17 +75,13 @@ class StatusCard extends React.Component {
     }
   }
 
-  toggleModal() {
-    this.setState({modalVisible: !this.state.modalVisible})
-  }
-
   handlePress(destination) {
     if (!this.state.pressable) return
     (typeof destination === 'function') ? destination() : null
   }
 
   render() {
-    let {modalVisible, modalContent} = this.state
+    let {modalContent} = this.state
     let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
     let message = (this.config[onboardingProgress]) ? this.config[onboardingProgress].message : "'" + onboardingProgress + "' is not a valid value for the 'onboardingProgress' appFlag"
     let destination = (this.config[onboardingProgress]) ? this.config[onboardingProgress].destination : null
