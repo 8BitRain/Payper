@@ -75,7 +75,7 @@ class SuspendedTooltip extends React.Component {
             activeOpacity={0.8}
             underlayColor={'transparent'}
             onPress={() => console.log("Close Modal")}
-            style={{height: 50, width: dimensions.width * .84, backgroundColor: "#06C0A7", justifyContent: "center"}}>
+            style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
 
                 <Text style={styles.buttonText}>{"Contact Payper"}</Text>
           </TouchableHighlight>
