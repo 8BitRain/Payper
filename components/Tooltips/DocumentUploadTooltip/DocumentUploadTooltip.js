@@ -28,7 +28,7 @@ class DocumentUploadTooltip extends React.Component {
     this.state = {
       index: 0,
       closeModal: false,
-      openTooltip: true
+      openTooltip: false
     }
 
 
