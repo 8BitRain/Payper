@@ -603,17 +603,17 @@ class PaymentOnboardingView extends React.Component {
             yearValue={this.state.startYear}
             setValues={(values, cb) => {
               let buffer = values.split("-")
-              let day = buffer[0]
-              let month = buffer[1]
+              let day = buffer[1]
+              let month = buffer[0]
               let year = buffer[2]
 
               // Determine whether start date is today
               let now = moment()
-              let then = moment(values, "DD-MM-YYYY")
+              let then = moment(values, "MM-DD-YYYY")
               let inputIsToday = now.isSame(then, 'day')
 
               // Set up date time
-              let dateTimeFormat = 'DD-MM-YYYY hh:mm:ss a'
+              let dateTimeFormat = 'MM-DD-YYYY hh:mm:ss a'
               let dateTime = values + " 08:30:00 AM"
 
               let utcString

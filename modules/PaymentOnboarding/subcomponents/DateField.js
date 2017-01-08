@@ -108,8 +108,8 @@ class DateField extends React.Component {
 
   validateInput(input) {
     let buffer = input.split("-")
-    let dayString = buffer[0]
-    let monthString = buffer[1]
+    let dayString = buffer[1]
+    let monthString = buffer[0]
     let yearString = buffer[2]
     let dayFloat = parseFloat(dayString)
     let monthFloat = parseFloat(monthString)
@@ -117,7 +117,7 @@ class DateField extends React.Component {
     let monthIndex = monthFloat - 1
 
     // Valid start relative to today's date
-    let dateFormat = 'DD-MM-YYYY'
+    let dateFormat = 'MM-DD-YYYY'
     let nowMoment = moment()
     let inputMoment = moment(input, dateFormat)
     let dateIsInFuture = inputMoment.isSameOrAfter(nowMoment, 'day')
@@ -189,7 +189,7 @@ class DateField extends React.Component {
     let {dayInput, monthInput, yearInput} = this.state
     let {validateInput} = this
 
-    let input = dayInput + "-" + monthInput + "-" + yearInput
+    let input = monthInput + "-" + dayInput + "-" + yearInput
 
     // Validate input
     let {inputIsValid, errorMessage, fieldToFocus} = validateInput(input)
@@ -249,6 +249,9 @@ class DateField extends React.Component {
       valueOpacity, valueHeight, valuePaddingBottom
     } = this.AV
 
+    let values = monthValue.toString() + "-" + dayValue.toString() + "-" + yearValue.toString()
+    let calendarizedValue = moment(values, "MM-DD-YYYY").format('MMM Do[,] YYYY')
+
     return(
       <TouchableHighlight
         activeOpacity={0.8}
@@ -280,11 +283,7 @@ class DateField extends React.Component {
             <EvilIcons name={iconName} size={32} color={'transparent'} />
 
             <Text style={{fontSize: 18, color: colors.gradientGreen, paddingLeft: 10}}>
-              {
-                moment(yearValue.toString() + monthValue.toString() + dayValue.toString()).format('MMM Do[,] YYYY')
-                ||
-                (dayValue + "-" + monthValue + "-" + yearValue + "")
-              }
+              {calendarizedValue}
             </Text>
           </Animated.View>
 
