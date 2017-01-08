@@ -50,6 +50,7 @@
     "react-native-side-menu": "*",
     "react-native-simple-picker": "*",
     "react-native-swipeout": "*",
+    "react-native-swiper": "^1.5.4",
     "react-native-uploader": "0.0.9",
     "react-native-vector-icons": "*",
     "react-native-webview": "*",
