@@ -10,7 +10,9 @@ function parsePaymentDetails(props) {
   }
 
   let frequency = payment.frequency.charAt(0).toUpperCase() + payment.frequency.slice(1).toLowerCase()
-  let formattedTimestamp = moment(payment.nextPayment).format("MMM D")
+
+  let timestamp = parseInt(payment.nextPayment)
+  let formattedTimestamp = moment(timestamp).format("MMM D")
   let next = (formattedTimestamp !== "Invalid date") ? formattedTimestamp : "TBD"
 
   let details = {

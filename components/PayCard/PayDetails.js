@@ -137,6 +137,7 @@ class paydetails extends React.Component {
 
   generateDetailRows() {
     let { payments, paymentsMade, status, nextTimestamp, purpose, amount, frequency, name, incoming } = this.props
+    nextTimestamp = parseInt(nextTimestamp)
     let firstName = name.split(" ")[0]
     let endsInS = firstName.charAt(firstName.length - 1) === 's'
 
