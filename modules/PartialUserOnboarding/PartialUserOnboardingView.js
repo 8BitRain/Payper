@@ -7,6 +7,7 @@ import {Actions} from 'react-native-router-flux'
 import {signin} from '../../auth'
 import * as Lambda from '../../services/Lambda'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 const dims = Dimensions.get('window')
 
 export default class PartialUserOnboardingView extends React.Component {
@@ -161,7 +162,9 @@ export default class PartialUserOnboardingView extends React.Component {
           { /* Phone */ }
           <TextField
             title={"Phone Number"}
-            iconName={"envelope"}
+            iconName={"ios-call-outline"}
+            iconSize={32}
+            iconType={"ionicon"}
             complete={false}
             value={this.state.phone}
             invalidityAlert={"Please enter a valid phone number."}

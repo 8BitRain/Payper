@@ -1,9 +1,10 @@
 import React from 'react'
-import { View, TouchableHighlight, TouchableWithoutFeedback, Text, Dimensions, StyleSheet, Animated, Modal, TextInput, Keyboard, Alert } from 'react-native'
-import { colors } from '../../globalStyles'
-import { StickyView } from '../../components'
-import { VibrancyView } from 'react-native-blur'
+import {View, TouchableHighlight, TouchableWithoutFeedback, Text, Dimensions, StyleSheet, Animated, Modal, TextInput, Keyboard, Alert} from 'react-native'
+import {colors} from '../../globalStyles'
+import {StickyView} from '../../components'
+import {VibrancyView} from 'react-native-blur'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 const dims = Dimensions.get('window')
 
@@ -114,7 +115,7 @@ class TextField extends React.Component {
 
   render() {
     let {
-      iconName, title, complete, value, placeholder,
+      iconName, iconType, iconSize, title, complete, value, placeholder,
       textInputProps
     } = this.props
 
@@ -142,7 +143,12 @@ class TextField extends React.Component {
 
           { /* Icon, title, and plus/minus */ }
           <View style={{flex: 1.0, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
-            <EvilIcons name={iconName} size={32} color={colors.accent} />
+
+            <View style={{width: 32, justifyContent: 'center', alignItems: 'center'}}>
+              {(iconType === "ionicon")
+                ? <Ionicons name={iconName} size={iconSize || 32} color={colors.accent} />
+                : <EvilIcons name={iconName} size={iconSize || 32} color={colors.accent} /> }
+            </View>
 
             <Text style={{fontSize: 18, color: colors.deepBlue, paddingLeft: 10}}>
               {title}
@@ -155,7 +161,7 @@ class TextField extends React.Component {
 
           { /* Value */ }
           <Animated.View style={{paddingBottom: valuePaddingBottom, height: valueHeight, opacity: valueOpacity, flexDirection: 'row', alignItems: 'center'}}>
-            <EvilIcons name={iconName} size={32} color={'transparent'} />
+            <View style={{width: 32}} />
 
             <Text style={{fontSize: 18, color: colors.gradientGreen, paddingLeft: 10}}>
               {value}
@@ -172,7 +178,9 @@ class TextField extends React.Component {
             { /* Input sticks to top of keyboard */ }
             <StickyView duration={0}>
               <View style={{alignItems: 'center', justifyContent: 'center', width: dims.width, backgroundColor: colors.lightGrey, padding: 10, paddingBottom: 0}}>
-                <EvilIcons name={iconName} size={34} color={colors.deepBlue} />
+                {(iconType === "ionicon")
+                  ? <Ionicons name={iconName} size={iconSize || 34} color={colors.deepBlue} />
+                  : <EvilIcons name={iconName} size={iconSize || 34} color={colors.deepBlue} /> }
               </View>
 
               <View style={{flexDirection: 'row', width: dims.width, backgroundColor: colors.lightGrey}}>
