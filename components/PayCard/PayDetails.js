@@ -155,7 +155,7 @@ class paydetails extends React.Component {
         {key: "Current Payment", val: paymentsMade + " of " + payments},
         {key: "Next Payment", val: moment(nextTimestamp).format("MMM D [around] h:mma")},
         {key: "Purpose", val: purpose},
-        {key: "Amount", val: "$" + amount},
+        {key: "Amount", val: "$" + amount + ((frequency === "Monthly") ? " per month" : " per week")},
         {key: "Frequency", val: frequency}
       ]
     }
