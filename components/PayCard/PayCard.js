@@ -138,7 +138,7 @@ class PayCard extends React.Component {
                   <View style={styles.freqAndNextPaymentWrap}>
                     <EvilIcons name={"calendar"} size={22} color={colors.maastrichtBlue} />
                     <Text style={[styles.freqAndNextPaymentText, {paddingLeft: 3}]}>
-                      {frequency}
+                      {(frequency === "Weekly") ? "Per week" : "Per month"}
                     </Text>
                     <Entypo name={"hour-glass"} size={13} color={colors.maastrichtBlue} style={{paddingLeft: 3, paddingTop: 1}} />
                     <Text style={[styles.freqAndNextPaymentText, {paddingLeft: 3}]}>
