@@ -1,12 +1,13 @@
 import React from 'react'
-import WebViewBridge from 'react-native-webview-bridge'
 import {Actions} from 'react-native-router-flux'
 import {View, Text, TouchableHighlight, WebView, Dimensions, StatusBar} from 'react-native'
+import {colors} from '../../globalStyles'
+import {Timer, TrackOnce} from '../../classes/Metrics'
+import KYCOnboardingView from '../KYCOnboarding/KYCOnboardingView'
+import WebViewBridge from 'react-native-webview-bridge'
 import Mixpanel from 'react-native-mixpanel'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import * as config from '../../config'
-import {colors} from '../../globalStyles'
-import {Timer, TrackOnce} from '../../classes/Metrics'
 const dimensions = Dimensions.get('window')
 
 class IAVWebView extends React.Component {
@@ -23,8 +24,7 @@ class IAVWebView extends React.Component {
   }
 
   componentWillMount() {
-    setTimeout(() => this.refresh(), 400)
-    // this.refresh()
+    this.refresh()
     this.timer = new Timer()
     this.trackOnce = new TrackOnce()
     this.timer.start()
@@ -92,18 +92,39 @@ class IAVWebView extends React.Component {
 
   onBridgeMessage(msg) {
     if (msg === "hello from webview") return
-    
-    let { webviewbridge } = this.refs
-    let {onCompletion} = this.props
+
+    let {webviewbridge} = this.refs
+    let {onCompletion, currentUser} = this.props
 
     let buffer = msg.split("-")
     let success = (buffer[0]) ? buffer[0] === "success" : undefined
     let verificationType = (buffer[1]) ? buffer[1].split(":")[1] : undefined
 
-    if (typeof onCompletion === 'function')
-      onCompletion(success, verificationType)
-    else
-      console.log("--> IAVWebView has been completed, but wasn't passed an 'onCompletion' prop.\nSuccess? " + success + "\n Verification type? " + verificationType)
+    if (true === success) {
+      if (verificationType === "microdeposits") {
+        Actions.refresh({
+          subcomponent:
+            <View style={{flex: 1.0, justifyContent: 'center', alignItems: 'center'}}>
+              <Text>MicrodepositInfo</Text>
+            </View>,
+          backgroundColor: colors.snowWhite,
+          showHeader: true,
+          title: "Microdeposit Verification"
+        })
+      } else if ("verified" === currentUser.appFlags.customer_status) {
+        if (typeof this.props.toggleModal === 'function')
+          this.props.toggleModal()
+        else
+          Actions.pop()
+      } else {
+        Actions.refresh({
+          subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
+          backgroundColor: colors.accent,
+          showHeader: true,
+          title: "Bank Account Verification"
+        })
+      }
+    }
   }
 
   render() {
