@@ -1,19 +1,18 @@
-// Dependencies
 import React from 'react'
-import { Actions } from 'react-native-router-flux'
-import { View, Text, TouchableHighlight, WebView, Dimensions, StatusBar } from 'react-native'
+import WebViewBridge from 'react-native-webview-bridge'
+import {Actions} from 'react-native-router-flux'
+import {View, Text, TouchableHighlight, WebView, Dimensions, StatusBar} from 'react-native'
 import Mixpanel from 'react-native-mixpanel'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import * as config from '../../config'
-import { colors } from '../../globalStyles'
-import { Timer, TrackOnce } from '../../classes/Metrics'
+import {colors} from '../../globalStyles'
+import {Timer, TrackOnce} from '../../classes/Metrics'
 const dimensions = Dimensions.get('window')
 
 class IAVWebView extends React.Component {
   constructor(props) {
     super(props)
 
-    this.WEB_VIEW_REF = "IAVWebView"
     this.payperEnv = config.details.env
     this.dwollaEnv = (config.details.env === "dev") ? "sandbox" : "prod"
 
@@ -23,19 +22,15 @@ class IAVWebView extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log("--> IAVWebView will receive props\n", nextProps)
-  }
-
   componentWillMount() {
-    this.refresh()
+    setTimeout(() => this.refresh(), 400)
+    // this.refresh()
     this.timer = new Timer()
     this.trackOnce = new TrackOnce()
     this.timer.start()
   }
 
   componentWillUnmount() {
-    console.log("--> IAVWebView will unmount")
     this.timer.report("bankOnboarding", this.props.currentUser.uid, {
       uid: this.props.currentUser.uid
     })
@@ -53,7 +48,7 @@ class IAVWebView extends React.Component {
         dwollaEnv: this.dwollaEnv,
         payperEnv: this.payperEnv
       }, () => {
-        this.refs[this.WEB_VIEW_REF].reload()
+        this.refs.webviewbridge.reload()
       })
     })
   }
@@ -65,7 +60,23 @@ class IAVWebView extends React.Component {
   }
 
   generateInjectedJS(params, cb) {
-    let injectedJS = "$(function() { generateIAVSession(\"" + params.IAVToken + "\", \"" + params.firebaseToken + "\", \"" + params.dwollaEnv + "\", \"" + params.payperEnv + "\") })"
+    let {IAVToken, firebaseToken, dwollaEnv, payperEnv} = params
+
+    let injectedJS = `
+      $(function() {
+        if (WebViewBridge) {
+          WebViewBridge.onMessage = function (message) {
+            if (message === "hello from react-native") {
+              WebViewBridge.send("got the message inside webview");
+            }
+          };
+          WebViewBridge.send("hello from webview");
+        }
+
+        generateIAVSession("` + IAVToken + `", "` + firebaseToken + `", "` + dwollaEnv + `", "` + payperEnv + `");
+      })
+    `
+
     this.setState({ injectedJS: injectedJS }, () => {
       if (typeof cb === 'function') cb()
     })
@@ -79,8 +90,24 @@ class IAVWebView extends React.Component {
     })
   }
 
+  onBridgeMessage(msg) {
+    if (msg === "hello from webview") return
+    
+    let { webviewbridge } = this.refs
+    let {onCompletion} = this.props
+
+    let buffer = msg.split("-")
+    let success = (buffer[0]) ? buffer[0] === "success" : undefined
+    let verificationType = (buffer[1]) ? buffer[1].split(":")[1] : undefined
+
+    if (typeof onCompletion === 'function')
+      onCompletion(success, verificationType)
+    else
+      console.log("--> IAVWebView has been completed, but wasn't passed an 'onCompletion' prop.\nSuccess? " + success + "\n Verification type? " + verificationType)
+  }
+
   render() {
-    if (this.props.refreshable) return(
+    return(
       <View style={{flex: 1.0, marginTop: 20, backgroundColor: colors.accent}}>
         <View style={{flex: 0.1, backgroundColor: colors.accent, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingLeft: 12.5, paddingRight: 12.5}}>
           { /* Header title */ }
@@ -116,23 +143,15 @@ class IAVWebView extends React.Component {
           { /* Background */ }
           <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.accent }} />
 
-          <WebView
-            ref={this.WEB_VIEW_REF}
-            source={{ uri: 'http://www.getpayper.io/iav' }}
+          <WebViewBridge
+            ref="webviewbridge"
+            onBridgeMessage={(msg) => this.onBridgeMessage(msg)}
+            javaScriptEnabled={true}
             injectedJavaScript={this.state.injectedJS}
-            startInLoadingState={false}
-            onError={err => this.handleError(err)}  />
+            source={{uri: 'http://localhost:8080/iav'}} />
+
         </View>
       </View>
-    )
-
-    else return (
-      <WebView
-        ref={this.WEB_VIEW_REF}
-        source={{ uri: 'http://www.getpayper.io/iav' }}
-        injectedJavaScript={this.state.injectedJS}
-        startInLoadingState={false}
-        onError={err => this.handleError(err)}  />
     )
   }
 }
