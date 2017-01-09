@@ -15,6 +15,7 @@ import AddBankAccountTooltip from './components/Tooltips/AddBankAccountTooltip/A
 import MicrodepositTooltip from './components/Tooltips/MicrodepositTooltip/MicrodepositTooltip'
 import SuspendedTooltip from './components/Tooltips/SuspendedTooltip/SuspendedTooltip'
 import DocumentUploadTooltip from './components/Tooltips/DocumentUploadTooltip/DocumentUploadTooltip'
+import StatusCard from './components/StatusCard/StatusCard'
 import { Scene, Reducer, Router, Modal } from 'react-native-router-flux'
 import { colors } from './globalStyles'
 import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
@@ -154,11 +155,17 @@ export default class Coincast extends React.Component {
                   panHandlers={null} />
 
                   <Scene
-                    initial
                     component={DocumentUploadTooltip}
                     key="DocumentUploadTooltip"
                     type="replace"
                     panHandlers={null} />
+
+                    <Scene
+                      initial
+                      component={StatusCard}
+                      key="StatusCard"
+                      type="replace"
+                      panHandlers={null} />
 
 
             <Scene
