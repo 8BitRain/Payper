@@ -246,10 +246,6 @@ class PaymentOnboardingView extends React.Component {
 
     // Format success animations
     let successAnimations = [
-      Animated.timing(successHeight, {
-        toValue: dims.height * 0.2,
-        duration: 180
-      }),
       Animated.timing(successOpacity, {
         toValue: 1,
         duration: 120
@@ -348,6 +344,10 @@ class PaymentOnboardingView extends React.Component {
       Animated.timing(cancelButtonOpacity, {
         toValue: (expanding) ? 1 : 0,
         duration: 40
+      }),
+      Animated.timing(successHeight, {
+        toValue: (expanding) ? dims.height * 0.2 : 75,
+        duration: 180
       })
     ]
 
@@ -369,6 +369,7 @@ class PaymentOnboardingView extends React.Component {
 
     Actions.pop()
   }
+
   render() {
     let {
       successHeight, successOpacity, buttonOpacity,
@@ -383,7 +384,7 @@ class PaymentOnboardingView extends React.Component {
     } = this.props.currentUser
 
     let {
-      confirming
+      confirming, howMuch, howLong, howOften
     } = this.state
 
     return(
@@ -664,7 +665,7 @@ class PaymentOnboardingView extends React.Component {
           </Animated.View>
 
           { /* Pay and request buttons */ }
-          <Animated.View style={{opacity: buttonOpacity, flexDirection: 'row', alignItems: 'center', height: 75, backgroundColor: colors.lightGrey}}>
+          <Animated.View style={{opacity: buttonOpacity, flexDirection: 'row', flex: 1.0, alignItems: 'center', backgroundColor: colors.lightGrey}}>
             { /* Cancel button */ }
             <TouchableHighlight
               activeOpacity={0.75}
@@ -690,12 +691,20 @@ class PaymentOnboardingView extends React.Component {
                   {"Request"}
                 </Text>
 
+                { /* Payment summary */
+                  (confirming !== "")
+                    ? <Text style={{fontSize: 14, color: colors.deepBlue, textAlign: 'center', paddingTop: 3}}>
+                        {howMuch + " per " + ((howOften === "Weekly") ? "week" : "month") + " for " + howLong}
+                      </Text>
+                    : null
+                }
+
                 { /* Bank account name */
                   (confirming !== "" && bankAccount && bankAccount.name)
-                  ? <Text style={{fontSize: 16, color: colors.deepBlue, textAlign: 'center'}}>
-                      {"(Active bank: " + ((bankAccount.name.length > 14) ? bankAccount.name.substring(0, 13).trim().concat("...") : bankAccount.name) + ")"}
-                    </Text>
-                  : null
+                    ? <Text style={{fontSize: 14, color: colors.deepBlue, textAlign: 'center'}}>
+                        {"(Bank: " + ((bankAccount.name.length > 14) ? bankAccount.name.substring(0, 13).trim().concat("...") : bankAccount.name) + ")"}
+                      </Text>
+                    : null
                 }
               </Animated.View>
             </TouchableHighlight>
@@ -713,12 +722,20 @@ class PaymentOnboardingView extends React.Component {
                   {"Pay"}
                 </Text>
 
+                { /* Payment summary */
+                  (confirming !== "")
+                    ? <Text style={{fontSize: 14, color: colors.deepBlue, textAlign: 'center', paddingTop: 3}}>
+                        {howMuch + " per " + ((howOften === "Weekly") ? "week" : "month") + " for " + howLong}
+                      </Text>
+                    : null
+                }
+
                 { /* Bank account name */
                   (confirming !== "" && bankAccount && bankAccount.name)
-                  ? <Text style={{fontSize: 16, color: colors.deepBlue, textAlign: 'center'}}>
-                      {"(Active bank: " + ((bankAccount.name.length > 14) ? bankAccount.name.substring(0, 13).trim().concat("...") : bankAccount.name) + ")"}
-                    </Text>
-                  : null
+                    ? <Text style={{fontSize: 14, color: colors.deepBlue, textAlign: 'center'}}>
+                        {"(Bank: " + ((bankAccount.name.length > 14) ? bankAccount.name.substring(0, 13).trim().concat("...") : bankAccount.name) + ")"}
+                      </Text>
+                    : null
                 }
               </Animated.View>
             </TouchableHighlight>
