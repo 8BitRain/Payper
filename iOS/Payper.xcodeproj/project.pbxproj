@@ -17,6 +17,7 @@
 		071349031D90529000B3B998 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 071349011D90529000B3B998 /* Crashlytics.framework */; };
 		0730F3921DCBB26600C8076D /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0730F3911DCBB23500C8076D /* libRCTCamera.a */; };
 		074420571DF0A3420087FF09 /* libBugsnagReactNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 074420561DF0A30D0087FF09 /* libBugsnagReactNative.a */; };
+		075C106D1E242567006C8FB6 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 075C10541E24255A006C8FB6 /* libART.a */; };
 		076CE2EE1DCA5C2F008C8D96 /* AssetLibraryToBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 076CE2ED1DCA5C2F008C8D96 /* AssetLibraryToBase64.m */; };
 		0788F5851D4306C800C3286E /* libRCTFBLogin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0788F5731D42FEC000C3286E /* libRCTFBLogin.a */; };
 		079D26581D430BD2000F7943 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 079D26551D430BD2000F7943 /* FBSDKCoreKit.framework */; };
@@ -119,6 +120,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 8AD256131D6DE5F600C7D842;
 			remoteInfo = BugsnagReactNative;
+		};
+		075C10531E24255A006C8FB6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 075C104F1E242559006C8FB6 /* ART.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 0CF68AC11AF0540F00FF9E5C;
+			remoteInfo = ART;
 		};
 		0788F5721D42FEC000C3286E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -255,6 +263,7 @@
 		071349011D90529000B3B998 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		0730F38C1DCBB23500C8076D /* RCTCamera.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RCTCamera.xcodeproj"; sourceTree = "<group>"; };
 		0744204F1DF0A30D0087FF09 /* BugsnagReactNative.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BugsnagReactNative.xcodeproj; path = "../node_modules/bugsnag-react-native/cocoa/BugsnagReactNative.xcodeproj"; sourceTree = "<group>"; };
+		075C104F1E242559006C8FB6 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
 		076CE2ED1DCA5C2F008C8D96 /* AssetLibraryToBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AssetLibraryToBase64.m; path = "../node_modules/react-native-asset-library-to-base64/ios/AssetLibraryToBase64.m"; sourceTree = "<group>"; };
 		07759FC31D42CEFC00D30AA2 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../../../FacebookSDKs-iOS-4.14.0/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		079D26551D430BD2000F7943 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../../../FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
@@ -327,6 +336,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				075C106D1E242567006C8FB6 /* libART.a in Frameworks */,
 				07DE499D1E09AE650018BE24 /* libRCTImageResizer.a in Frameworks */,
 				074420571DF0A3420087FF09 /* libBugsnagReactNative.a in Frameworks */,
 				596CF3861DDA4B8D004AB22D /* libRNDeviceInfo.a in Frameworks */,
@@ -434,6 +444,14 @@
 			isa = PBXGroup;
 			children = (
 				074420561DF0A30D0087FF09 /* libBugsnagReactNative.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		075C10501E242559006C8FB6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				075C10541E24255A006C8FB6 /* libART.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -605,6 +623,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				075C104F1E242559006C8FB6 /* ART.xcodeproj */,
 				07DE49801E09AE540018BE24 /* RCTImageResizer.xcodeproj */,
 				0744204F1DF0A30D0087FF09 /* BugsnagReactNative.xcodeproj */,
 				596CF3801DDA4B53004AB22D /* RNDeviceInfo.xcodeproj */,
@@ -798,6 +817,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 075C10501E242559006C8FB6 /* Products */;
+					ProjectRef = 075C104F1E242559006C8FB6 /* ART.xcodeproj */;
+				},
+				{
 					ProductGroup = 074420501DF0A30D0087FF09 /* Products */;
 					ProjectRef = 0744204F1DF0A30D0087FF09 /* BugsnagReactNative.xcodeproj */;
 				},
@@ -950,6 +973,13 @@
 			fileType = archive.ar;
 			path = libBugsnagReactNative.a;
 			remoteRef = 074420551DF0A30D0087FF09 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		075C10541E24255A006C8FB6 /* libART.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libART.a;
+			remoteRef = 075C10531E24255A006C8FB6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		0788F5731D42FEC000C3286E /* libRCTFBLogin.a */ = {

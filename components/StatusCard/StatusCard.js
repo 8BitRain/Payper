@@ -7,6 +7,9 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+
+//External Libraries
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 //Custom
 const dimensions = Dimensions.get('window');
 let imageDims = { width: 56, height: 56 }
@@ -17,7 +20,8 @@ class StatusCard extends React.Component {
 
     this.config = {
       'need-bank': {
-        message: "need-bank",
+        message: "You still need to add a bank account!",
+        title: "Bank Account Needed",
         action: "Add Bank",
         pressable: true,
         destination: () => Actions.GlobalModal({
@@ -113,7 +117,7 @@ class StatusCard extends React.Component {
       <View style={styles.wrapper}>
         {/* //TODO Close Modal Floating Points Move this to outside of wrapper*/}
         {/* Header */}
-        <View style={{flex: 1, justifyContent: "flex-start", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", marginTop: 5}}>
+        <View style={{flex: 1, justifyContent: "flex-start", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", marginTop: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, backgroundColor: colors.darkAccent}}>
           {/* Profile Picture & Onboarding Progress Text*/}
           <View style={{flex: 1, alignItems: "center"}}>
             {this._renderPicWithInitials("ES")}
@@ -125,15 +129,39 @@ class StatusCard extends React.Component {
               <Ionicons size={24} name="md-lock" color={colors.snowWhite} />
               <Text style={styles.text}>{"Send Money"}</Text>
             </View>
+            {/* Progress Percentage */}
+            <View style={{flex: 1, alignItems: "center"}}>
+              {/* <Text style={styles.header}>{"80%"}</Text> */}
+              <AnimatedCircularProgress
+                size={64}
+                width={4}
+                fill={80}
+                tintColor={colors.snowWhite}
+                backgroundColor={colors.medGrey}>
+                {
+                  (fill) => (
+                    <Text style={styles.percantageText}>
+                      {"80%"}
+                    </Text>
+                  )
+                }
+              </AnimatedCircularProgress>
+            </View>
             <View style={{flex: 1, alignItems: "center"}}>
               <Ionicons size={24} name="md-lock" color={colors.snowWhite} />
               <Text style={styles.text}>{"Recieve Money"}</Text>
             </View>
           </View>
+
+
         </View>
         {/* Body */}
+        <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+          <Text style={styles.header}>{this.config['need-bank'].title}</Text>
+          <Text style={styles.text}>{this.config['need-bank'].message}</Text>
+        </View>
         {/*Footer*/}
-        <View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
+        <View style={{flex: .5, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
@@ -147,7 +175,7 @@ class StatusCard extends React.Component {
     )
   }
 }
-
+//Ideal margins are *.25 for Top & Bottom
 var styles = StyleSheet.create({
   wrapper: {
     flex: 1,
@@ -155,8 +183,8 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.accent,
     margin: dimensions.width * .08,
-    marginTop: dimensions.height * .25,
-    marginBottom: dimensions.height * .25,
+    marginTop: dimensions.height * .15,
+    marginBottom: dimensions.height * .15,
     borderRadius: dimensions.width / 32.0,
   },
   imageWrap: {
@@ -165,12 +193,21 @@ var styles = StyleSheet.create({
     borderRadius: imageDims.width / 2,
     backgroundColor: colors.snowWhite,
     shadowColor: colors.slateGrey,
+    marginTop: 5,
     shadowOpacity: 0.0,
     shadowRadius: 1,
     shadowOffset: {
       height: 0,
       width: 0
     }
+  },
+  percantageText: {
+    position: "absolute",
+    bottom: 24,
+    left: 20,
+    fontSize: 14,
+    color: colors.snowWhite,
+    fontWeight: "bold"
   },
   buttonText:{
     color: '#fff',
@@ -202,6 +239,14 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 15,
     lineHeight: 18 * 1.20
+  },
+  header2:{
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 5,
+    lineHeight: 14 * 1.20
   },
   footer: {
     color: '#fff',
