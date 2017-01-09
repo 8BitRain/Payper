@@ -149,7 +149,7 @@ class StatusCard extends React.Component {
             </View>
             <View style={{flex: 1, alignItems: "center"}}>
               <Ionicons size={24} name="md-lock" color={colors.snowWhite} />
-              <Text style={styles.text}>{"Recieve Money"}</Text>
+              <Text style={styles.text}>{"Receive Money"}</Text>
             </View>
           </View>
 
