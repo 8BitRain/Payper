@@ -8,6 +8,7 @@ import Drawer from 'react-native-drawer'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import { colors } from '../../globalStyles'
 import { SideMenu, PayCard, StatusCard, PhotoUploader, MicrodepositOnboarding, TrendingPayments } from '../../components'
+import KYCOnboardingView from '../../components/KYCOnboarding/KYCOnboardingView'
 import { MyProfile, BankAccounts, Notifications, Invite, Settings } from '../../components/SideMenuSubpages'
 import { BankOnboarding, PaymentOnboardingView } from '../../modules'
 import { TrackOnce } from '../../classes/Metrics'
@@ -316,8 +317,13 @@ class MainView extends React.Component {
               activeOpacity={0.85}
               underlayColor={'transparent'}
               onPress={() => {
-                Actions.GlobalModal({ subcomponent: <PaymentOnboardingView {...this.props} /> })
-                this.trackOnce.report("buttonPress/newPayment", this.props.currentUser.uid)
+                // Actions.GlobalModal({ subcomponent: <PaymentOnboardingView {...this.props} /> })
+                // this.trackOnce.report("buttonPress/newPayment", this.props.currentUser.uid)
+                Actions.GlobalModal({
+                  subcomponent: <KYCOnboardingView {...this.props} />,
+                  showHeader: true,
+                  title: "Account Verification"
+                })
               }}
               style={{padding: 14, paddingRight: 20}}>
               <Animated.View style={{justifyContent: 'center', alignItems: 'center', transform: [{ rotate: this.animatedValues.plusAngle }]}}>
