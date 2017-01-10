@@ -6,8 +6,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
-//External Libraries
-import Swiper from 'react-native-swiper';
+
+import Confetti from 'react-native-confetti';
 
 // Stylesheets
 import {colors} from '../../../globalStyles';
@@ -30,20 +30,49 @@ class BankAccountAdded extends React.Component {
       closeModal: false
     }
 
+    this.loadKey_value_0 = new Animated.Value(1);
+
 
   }
 
   componentDidMount() {
+    {/* Animations */}
+    this.loadKey_0();
+    if(this._confettiView) {
+      this._confettiView.startConfetti();
+    }
 
   }
 
+  loadKey_0() {
+  this.loadKey_value_0.setValue(0);
+  Animated.timing(
+    this.loadKey_value_0,
+    {
+      toValue: 1,
+      duration: 1000,
+      easing: Easing.ease
+    }
+  ).start()
+  }
+
+
 
   render() {
+    const loadKey_0 = this.loadKey_value_0.interpolate({
+     inputRange: [0, 1],
+     outputRange: [0, 2]
+    })
+
     return(
-      <View style={styles.wrapper}>
-        <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-          <Text style={{fontSize: 64}}>🔑</Text>
+      <View style={{flex: 1}}>
+        <View style={styles.wrapper}>
+          <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+            { <Animated.Text style={{fontSize: loadKey_0}}>🔑</Animated.Text> }
+            { /*<Animated.Image style={{width: 64, height: 64, transform: [{scaleX: loadKey_0}, {scaleY: loadKey_0}]}} source={require('../../../assets/images/key.png')}/> */}
+          </View>
         </View>
+        <Confetti duration={1000} ref={(node) => this._confettiView = node}/>
       </View>
     );
   }
