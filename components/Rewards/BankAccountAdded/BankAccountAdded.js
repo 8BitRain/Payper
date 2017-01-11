@@ -29,6 +29,7 @@ class BankAccountAdded extends React.Component {
       index: 0,
       closeModal: false,
       moneyTransitionState: 0,
+      buttonFadeState: 0,
       buttonState: 0,
       moneyBagContainerTop: 0
     }
@@ -37,11 +38,13 @@ class BankAccountAdded extends React.Component {
 
     this.loadKey_value_0 = new Animated.Value(0);
     this.celebration_text_value = new Animated.Value(0);
-    this.fadein_confirmation_button_value = new Animated.Value(0);
+    this.fade_confirmation_button_value = new Animated.Value(0);
+    //Yo what does this even mean ??? change name
     this.transistion_view_value = new Animated.Value(0);
     this.moneybag_transition_value = new Animated.Value(0);
     this.extendedhand_transition_value = new Animated.Value(0);
     this.transition_money_hand_value = new Animated.Value(0);
+    this.fadein_verifyid_text_value = new Animated.Value(0);
 
 
   }
@@ -75,12 +78,13 @@ class BankAccountAdded extends React.Component {
         duration: 500,
         easing: Easing.elastic(2)
       }
-    ).start(() => this.fadein_confirmation_button())
+    ).start(() => this.fade_confirmation_button())
   }
 
-  fadein_confirmation_button(){
+  fade_confirmation_button(){
+    this.fade_confirmation_button_value.setValue(0);
     Animated.timing(
-      this.fadein_confirmation_button_value,
+      this.fade_confirmation_button_value,
       {
         toValue: 1,
         duration: 500,
@@ -88,6 +92,10 @@ class BankAccountAdded extends React.Component {
       }
     ).start()
   }
+
+  //Move celebration + key left
+  //Fade out celebration text + key
+  //Fade out confirmation button
 
   transistion_view(){
     Animated.timing(
@@ -135,16 +143,95 @@ class BankAccountAdded extends React.Component {
         duration: 500,
         easing: Easing.ease
       }
-    ).start()
+    ).start(() => {this.fadein_verifyid_text()})
+  }
+
+  fadein_verifyid_text(){
+    Animated.timing(
+      this.fadein_verifyid_text_value,
+      {
+        toValue: 1,
+        duration: 500,
+        easing: Easing.elastic(2.0)
+      }
+    ).start(() => {
+      this.setState({buttonFadeState: 0,  buttonState: 1});
+      this.fade_confirmation_button();
+      console.log(this.state.buttonState);
+    })
   }
 
 
+  _renderConfirmationButton(){
+    var fade_confirmation_button;
+    switch (this.state.buttonFadeState) {
+      //FADE IN
+      case 0:
+        fade_confirmation_button = this.fade_confirmation_button_value.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0.0, 1.0]
+        })
+        break;
+      //FADE OUT
+      case 1:
+         fade_confirmation_button = this.transistion_view_value.interpolate({
+          inputRange: [0, 1],
+          outputRange: [1.0, 0.0]
+        })
+        break;
+      default:
+    }
+
+    if(this.state.buttonState == 0){
+      return(
+        <Animated.View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", opacity: fade_confirmation_button}}>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => {
+              this.setState({buttonFadeState: 1});
+              this.transistion_view();
+            }}
+            style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
+
+                <Text style={styles.buttonText}>{"Great!"}</Text>
+          </TouchableHighlight>
+        </Animated.View>
+      );
+    }
+
+    if(this.state.buttonState == 1){
+      return(
+        <Animated.View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, opacity: fade_confirmation_button}}>
+          <View style={{flexDirection: "row"}}>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => {
+              /*this.setState({buttonFadeState: 1});*/
+              //this.transistion_view();
+            }}
+            style={{height: 50, width: dimensions.width * .44, backgroundColor: colors.lightAccent, justifyContent: "center", borderRightColor: colors.accent, borderRightWidth: 3.0}}>
+                <Text style={styles.buttonText}>{"Verifiy I.D"}</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => {
+              /*this.setState({buttonFadeState: 1});*/
+              //this.transistion_view();
+            }}
+            style={{height: 50, width: dimensions.width * .44, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
+                <Text style={styles.buttonText}>{"Skip"}</Text>
+          </TouchableHighlight>
+          </View>
+        </Animated.View>
+      );
+    }
+
+  }
 
   render() {
-    const loadKey_0 = this.loadKey_value_0.interpolate({
-     inputRange: [0, 1],
-     outputRange: [0, 64]
-    })
 
     const loadKey_scaleChange = this.loadKey_value_0.interpolate({
      inputRange: [0, 1],
@@ -156,10 +243,29 @@ class BankAccountAdded extends React.Component {
       outputRange: [0.0, 1.0]
     })
 
-    const fadein_confirmation_button = this.fadein_confirmation_button_value.interpolate({
+    /*const fade_confirmation_button = this.fade_confirmation_button_value.interpolate({
       inputRange: [0, 1],
       outputRange: [0.0, 1.0]
-    })
+    })*/
+
+    var fade_confirmation_button;
+    switch (this.state.buttonFadeState) {
+      //FADE IN
+      case 0:
+        fade_confirmation_button = this.fade_confirmation_button_value.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0.0, 1.0]
+        })
+        break;
+      //FADE OUT
+      case 1:
+         fade_confirmation_button = this.transistion_view_value.interpolate({
+          inputRange: [0, 1],
+          outputRange: [1.0, 0.0]
+        })
+        break;
+      default:
+    }
 
     const transistion_view = this.transistion_view_value.interpolate({
       inputRange: [0, 1],
@@ -208,6 +314,10 @@ class BankAccountAdded extends React.Component {
       outputRange: [0.0, -80.0]
     })
 
+    const fadein_verifyid_text = this.fadein_verifyid_text_value.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0.0, 1.0]
+    })
 
 
     return(
@@ -231,18 +341,16 @@ class BankAccountAdded extends React.Component {
             <Text style={styles.header}>{"Congrats!"}</Text>
             <Text style={styles.text}>{"You've unlocked the ability to send money with Payper!"}</Text>
           </Animated.View>
-          { /**/ }
-
-          <Animated.View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", opacity: this.fadein_confirmation_button_value}}>
-            <TouchableHighlight
-              activeOpacity={0.8}
-              underlayColor={'transparent'}
-              onPress={() => this.transistion_view()}
-              style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
-
-                  <Text style={styles.buttonText}>{"Great!"}</Text>
-            </TouchableHighlight>
+          {/* Verify I.D */}
+          <Animated.View style={{flex: 1, paddingLeft: 25, paddingRight: 25, position: "absolute", justifyContent: "center", alignItems: "center", top: dimensions.height * .35, opacity: fadein_verifyid_text,
+            transform: [{scaleX: fadein_verifyid_text }, {scaleY: fadein_verifyid_text}]}}>
+            <Text style={styles.header}>{"Want to recieve money?"}</Text>
+            <Text style={styles.text}>{"Verify your identity to unlock recieving money with Payper!"}</Text>
           </Animated.View>
+
+          {/* Confirmation Button */}
+          {this._renderConfirmationButton()}
+
         </View>
         <Confetti duration={1000} ref={(node) => this._confettiView = node}/>
       </View>
@@ -260,6 +368,7 @@ var styles = StyleSheet.create({
     marginTop: dimensions.height * .10,
     marginBottom: dimensions.height * .10,
     borderRadius: dimensions.width / 32.0,
+    overflow: "hidden"
   },
 
   buttonText:{
