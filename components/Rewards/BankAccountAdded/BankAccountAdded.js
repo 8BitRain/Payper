@@ -28,8 +28,12 @@ class BankAccountAdded extends React.Component {
     this.state = {
       index: 0,
       closeModal: false,
-      moneyTransitionState: 0
+      moneyTransitionState: 0,
+      buttonState: 0,
+      moneyBagContainerTop: 0
     }
+
+    this.top_pos;
 
     this.loadKey_value_0 = new Animated.Value(0);
     this.celebration_text_value = new Animated.Value(0);
@@ -104,7 +108,12 @@ class BankAccountAdded extends React.Component {
         duration: 600,
         easing: Easing.elastic(1.5)
       }
-    ).start(() => {this.setState({moneyTransitionState: 1}), this.transition_money_hand()})
+    ).start(() => {
+      this.setState({moneyTransitionState: 1});
+      //Adjust moneybag Containers top positioning. TranslateY caused an offset
+      this.setState({moneyBagContainerTop: 125})
+      this.transition_money_hand();
+    })
   }
 
   extendedhand_transition(){
@@ -152,7 +161,7 @@ class BankAccountAdded extends React.Component {
       outputRange: [0.0, 1.0]
     })
 
-    const transistion_view = this.transition_money_hand_value.interpolate({
+    const transistion_view = this.transistion_view_value.interpolate({
       inputRange: [0, 1],
       outputRange: [0.0, -40.0]
     })
@@ -183,7 +192,7 @@ class BankAccountAdded extends React.Component {
       case 1:
          moneybag_transition = this.transition_money_hand_value.interpolate({
           inputRange: [0, 1],
-          outputRange: [0.0, -20.0]
+          outputRange: [0.0, -80.0]
         })
         break;
       default:
@@ -209,19 +218,21 @@ class BankAccountAdded extends React.Component {
             <Animated.Image style={{width: 64, height: 64, transform: [{scaleX: loadKey_scaleChange}, {scaleY: loadKey_scaleChange}], opacity: 1}} source={require('../../../assets/images/key.png')}/>
           </Animated.View>
           {/* Money Bag */}
-          {<Animated.View style={{flex: 1, position: "absolute", justifyContent: "center", alignItems: "center", left: 110, top: 0, transform: [{translateY: moneybag_transition}], opacity: moneybag_transition_opacity}}>
+          {<Animated.View style={{flex: 1, position: "absolute", justifyContent: "center", alignItems: "center", left: 110, top: this.state.moneyBagContainerTop, transform: [{translateY: moneybag_transition}], opacity: moneybag_transition_opacity}}>
             <Animated.Image style={{width: 60, height: 81}} source={require('../../../assets/images/moneybag.png')}/>
           </Animated.View>}
           {/* Extended Hand*/}
-          <Animated.View style={{flex: 1, position: "absolute", justifyContent: "center", alignItems: "center", left: 100, top: 200, transform: [{translateY: transition_money_hand}], opacity: extendedhand_transition, width: 64, height: 64}}>
+          <Animated.View  style={{flex: 1, position: "absolute", justifyContent: "center", alignItems: "center", left: 100, top: 200, transform: [{translateY: transition_money_hand}], opacity: extendedhand_transition, width: 64, height: 64}}>
             <Animated.Image style={{width: 122, height: 56}} source={require('../../../assets/images/extendedhand.png')}/>
           </Animated.View>
-
+          {/* Send Money With Payper */}
           <Animated.View style={{flex: 1, paddingLeft: 50, paddingRight: 50, position: "absolute", justifyContent: "center", alignItems: "center", top: dimensions.height * .45, opacity: transistion_view_opacity,
             transform: [{scaleX: load_celebration_text }, {scaleY: load_celebration_text}, {translateX: transistion_view}]}}>
             <Text style={styles.header}>{"Congrats!"}</Text>
             <Text style={styles.text}>{"You've unlocked the ability to send money with Payper!"}</Text>
           </Animated.View>
+          { /**/ }
+
           <Animated.View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", opacity: this.fadein_confirmation_button_value}}>
             <TouchableHighlight
               activeOpacity={0.8}
