@@ -1,1 +1,1 @@
-{ "presets": ["es2015", "react-native"], "compact" : true }
+{ "presets": ["react-native"] }

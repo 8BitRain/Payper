@@ -7,7 +7,6 @@
     "sync-rnrf": "rm -rf ./node_modules/react-native-router-flux; sane '/usr/bin/rsync -v -a --exclude .git --exclude Example --exclude node_modules ../ ./node_modules/react-native-router-flux/' .. --glob='{**/*.json,**/*.js}'"
   },
   "dependencies": {
-    "babel-preset-es2015": "^6.18.0",
     "buffer": "^5.0.0",
     "bugsnag-react-native": "^1.1.3",
     "events": "^1.1.1",
