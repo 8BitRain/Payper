@@ -115,8 +115,8 @@ class KYCOnboardingView extends React.Component {
               validateInput={(input) => {
                 return true
               }}
-              setValue={(value, cb) => {
-                this.setState({street: value}, () => cb())
+              setValues={(values, cb) => {
+                this.setState(values, () => cb())
               }}
               induceFieldRef={this.induceFieldRef}
               toggleFieldFocus={this.toggleFieldFocus} />
