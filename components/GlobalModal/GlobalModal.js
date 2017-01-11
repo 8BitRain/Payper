@@ -2,6 +2,7 @@ import React from 'react'
 import {Actions} from 'react-native-router-flux'
 import {View, TouchableHighlight, Text, Dimensions, Modal, Image} from 'react-native'
 import {colors} from '../../globalStyles'
+import {IAVWebView} from '../../components'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const dims = Dimensions.get('window')
 

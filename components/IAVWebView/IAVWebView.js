@@ -3,7 +3,6 @@ import {Actions} from 'react-native-router-flux'
 import {View, Text, TouchableHighlight, WebView, Dimensions, StatusBar} from 'react-native'
 import {colors} from '../../globalStyles'
 import {Timer, TrackOnce} from '../../classes/Metrics'
-import KYCOnboardingView from '../KYCOnboarding/KYCOnboardingView'
 import WebViewBridge from 'react-native-webview-bridge'
 import Mixpanel from 'react-native-mixpanel'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -117,12 +116,17 @@ class IAVWebView extends React.Component {
         else
           Actions.pop()
       } else {
+
+        // Why this import syntax? https://goo.gl/gcNg7z
+        var KYCOnboardingView = require('../KYCOnboarding/KYCOnboardingView')
+
         Actions.refresh({
           subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
           backgroundColor: colors.accent,
           showHeader: true,
           title: "Bank Account Verification"
         })
+
       }
     }
   }

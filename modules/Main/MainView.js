@@ -317,13 +317,8 @@ class MainView extends React.Component {
               activeOpacity={0.85}
               underlayColor={'transparent'}
               onPress={() => {
-                // Actions.GlobalModal({ subcomponent: <PaymentOnboardingView {...this.props} /> })
-                // this.trackOnce.report("buttonPress/newPayment", this.props.currentUser.uid)
-                Actions.GlobalModal({
-                  subcomponent: <KYCOnboardingView {...this.props} />,
-                  showHeader: true,
-                  title: "Account Verification"
-                })
+                Actions.GlobalModal({ subcomponent: <PaymentOnboardingView {...this.props} /> })
+                this.trackOnce.report("buttonPress/newPayment", this.props.currentUser.uid)
               }}
               style={{padding: 14, paddingRight: 20}}>
               <Animated.View style={{justifyContent: 'center', alignItems: 'center', transform: [{ rotate: this.animatedValues.plusAngle }]}}>

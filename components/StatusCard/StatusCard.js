@@ -26,7 +26,7 @@ class StatusCard extends React.Component {
         pressable: true,
         destination: () => Actions.GlobalModal({
           subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
-          backgroundColor: colors.accent,
+          backgroundColor: colors.snowWhite,
           showHeader: true,
           title: "Bank Account Verification"
         })
