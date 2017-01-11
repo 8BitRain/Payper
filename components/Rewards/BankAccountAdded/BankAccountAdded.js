@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TouchableHighlight, Animated, Easing, Image, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, TouchableHighlight, Animated, Easing, Image, Dimensions, StyleSheet, Modal } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -31,7 +31,8 @@ class BankAccountAdded extends React.Component {
       moneyTransitionState: 0,
       buttonFadeState: 0,
       buttonState: 0,
-      moneyBagContainerTop: 0
+      moneyBagContainerTop: 0,
+      openTooltip: false
     }
 
     this.top_pos;
@@ -56,6 +57,10 @@ class BankAccountAdded extends React.Component {
       this._confettiView.startConfetti();
     }*/
 
+  }
+
+  toggleTooltip(toggle){
+    this.setState({openTooltip: toggle });
   }
 
   loadKey_0() {
@@ -184,7 +189,7 @@ class BankAccountAdded extends React.Component {
 
     if(this.state.buttonState == 0){
       return(
-        <Animated.View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", opacity: fade_confirmation_button}}>
+        <Animated.View style={{flex: 1, alignItems: "center", borderRadius: dimensions.width / 32.0, borderTopLeftRadius: 0, borderTopRightRadius: 0, overflow: "hidden", opacity: fade_confirmation_button, position: "absolute", top: dimensions.height * .71}}>
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
@@ -202,33 +207,52 @@ class BankAccountAdded extends React.Component {
 
     if(this.state.buttonState == 1){
       return(
-        <Animated.View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, opacity: fade_confirmation_button}}>
+        <Animated.View style={{flex: 1, alignItems: "center", borderRadius: dimensions.width / 32.0, borderTopLeftRadius: 0, borderTopRightRadius: 0, overflow: "hidden", opacity: fade_confirmation_button, position: "absolute", top: dimensions.height * .71}}>
           <View style={{flexDirection: "row"}}>
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            onPress={() => {
-              /*this.setState({buttonFadeState: 1});*/
-              //this.transistion_view();
-            }}
-            style={{height: 50, width: dimensions.width * .44, backgroundColor: colors.lightAccent, justifyContent: "center", borderRightColor: colors.accent, borderRightWidth: 3.0}}>
-                <Text style={styles.buttonText}>{"Verifiy I.D"}</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            onPress={() => {
-              /*this.setState({buttonFadeState: 1});*/
-              //this.transistion_view();
-            }}
-            style={{height: 50, width: dimensions.width * .44, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
-                <Text style={styles.buttonText}>{"Skip"}</Text>
-          </TouchableHighlight>
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              onPress={() => {
+                /*this.setState({buttonFadeState: 1});*/
+                //this.transistion_view();
+              }}
+              style={{height: 50, width: dimensions.width * .44, backgroundColor: colors.lightAccent, justifyContent: "center", borderRightColor: colors.accent, borderRightWidth: 3.0}}>
+                  <Text style={styles.buttonText}>{"Verifiy I.D"}</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              onPress={() => {
+                /*this.setState({buttonFadeState: 1});*/
+                //this.transistion_view();
+              }}
+              style={{height: 50, width: dimensions.width * .44, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
+                  <Text style={styles.buttonText}>{"Skip"}</Text>
+            </TouchableHighlight>
           </View>
         </Animated.View>
       );
     }
+  }
 
+  _renderTooltip(){
+    return(
+      <View style={styles.wrapper2}>
+          <Text style={styles.headerL}>{"Why do I need to verify my identity?"}</Text>
+          <Text style={styles.textL}>{"Payper needs to verify your identity in order to comply with Federal Law. This is to prevent fraud. We care about your security and DO NOT store your information."}</Text>
+          <View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => {this.toggleTooltip(false)}}
+            style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightCarminePink, justifyContent: "center"}}>
+                <View style={{flexDirection: "row", justifyContent: "center", width: dimensions.width * .84}}>
+                  <Text style={styles.buttonText}>{"Okay"}</Text>
+                </View>
+          </TouchableHighlight>
+          </View>
+      </View>
+    );
   }
 
   render() {
@@ -323,6 +347,16 @@ class BankAccountAdded extends React.Component {
     return(
       <View style={{flex: 1}}>
         <View style={styles.wrapper}>
+          {/* Tooltip */}
+          <Animated.View style={{flex: 1, position: "absolute", top: 15, left: 233, opacity: fadein_verifyid_text}}>
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              style={{}}
+              onPress={() => {this.toggleTooltip(true)}}>
+                  <Ionicons style={{}} size={32} name="ios-help-circle" color={colors.snowWhite} />
+            </TouchableHighlight>
+          </Animated.View>
           {/* Key */}
           <Animated.View style={{flex: 1, position: "absolute", justifyContent: "center", alignItems: "center", left: 100, top: 150, opacity: transistion_view_opacity, transform: [{translateX: transistion_view}]}}>
             <Animated.Image style={{width: 64, height: 64, transform: [{scaleX: loadKey_scaleChange}, {scaleY: loadKey_scaleChange}], opacity: 1}} source={require('../../../assets/images/key.png')}/>
@@ -352,9 +386,17 @@ class BankAccountAdded extends React.Component {
           {this._renderConfirmationButton()}
 
         </View>
+
+        <Modal
+          animationType={"slide"}
+          transparent={true}
+          visible={this.state.openTooltip}>
+            { this._renderTooltip()}
+          </Modal>
         <Confetti duration={1000} ref={(node) => this._confettiView = node}/>
       </View>
     );
+
   }
 }
 
@@ -370,7 +412,16 @@ var styles = StyleSheet.create({
     borderRadius: dimensions.width / 32.0,
     overflow: "hidden"
   },
-
+  wrapper2: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: colors.carminePink,
+    margin: dimensions.width * .12,
+    marginTop: dimensions.height * .25,
+    marginBottom: dimensions.height * .25,
+    borderRadius: dimensions.width / 32.0,
+  },
   buttonText:{
     color: '#fff',
     fontSize: 18,
@@ -385,6 +436,14 @@ var styles = StyleSheet.create({
     lineHeight: 16 * 1.20,
     textAlign: "center",
     fontWeight: "500"
+  },
+  textL: {
+    color: '#fff',
+    fontSize: 16,
+    lineHeight: 16 * 1.20,
+    textAlign: "left",
+    fontWeight: "500",
+    padding: 15
   },
   text2: {
     color: '#fff',
@@ -401,6 +460,17 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 15,
     lineHeight: 18 * 1.20
+  },
+  headerL: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'left',
+    marginRight: 40,
+    marginLeft: 10,
+    marginTop: 15,
+    padding: 0,
+    lineHeight: 18 * 1.,
   },
   footer: {
     color: '#fff',
