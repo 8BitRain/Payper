@@ -2,7 +2,7 @@ import React from 'react'
 import {Actions} from 'react-native-router-flux'
 import {View, Text, TouchableHighlight, StatusBar, Dimensions, ScrollView} from 'react-native'
 import {colors} from '../../globalStyles'
-import {NameField, TextField, DateField} from '../../components'
+import {NameField, TextField, DateField, AddressField} from '../../components'
 const dims = Dimensions.get('window')
 
 class KYCOnboardingView extends React.Component {
@@ -72,7 +72,6 @@ class KYCOnboardingView extends React.Component {
         <View style={{flex: 1.0, flexDirection: 'column'}}>
           <StatusBar barStyle={"light-content"} />
 
-
           { /* Fields */ }
           <ScrollView
             ref={ref => this.ScrollView = ref}
@@ -103,7 +102,7 @@ class KYCOnboardingView extends React.Component {
               toggleFieldFocus={this.toggleFieldFocus} />
 
             { /* Billing Address */ }
-            <TextField
+            <AddressField
               title={"Billing Address"}
               iconName={"location"}
               complete={false}
