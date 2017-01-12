@@ -63,42 +63,37 @@ class StatusCard extends React.Component {
         message: "microdeposits-failed"
       }
     }
-
-    let onboardingProgress = props.currentUser.appFlags['onboardingProgress']
-
-    this.state = {
-      pressable: (this.config[onboardingProgress]) ? this.config[onboardingProgress].pressable : false,
-      modalContent: (this.config[onboardingProgress]) ? this.config[onboardingProgress].modalContent : <View />
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    let currOnboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
-    let newOnboardingProgress = nextProps.currentUser.appFlags['onboardingProgress']
-
-    if (currOnboardingProgress !== newOnboardingProgress) {
-      this.setState({
-        pressable: (this.config[newOnboardingProgress]) ? this.config[newOnboardingProgress].pressable : false,
-        modalContent: (this.config[newOnboardingProgress]) ? this.config[newOnboardingProgress].modalContent : <View />
-      })
-    }
   }
 
   handlePress(destination) {
-    if (!this.state.pressable) return
-    (typeof destination === 'function') ? destination() : null
+    let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
+
+    let pressable = (this.config[onboardingProgress])
+      ? this.config[onboardingProgress].pressable
+      : false
+
+    if (!pressable) return
+
+    if (typeof destination === 'function')
+      destination()
   }
 
   render() {
-    let {modalContent} = this.state
     let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
-    let message = (this.config[onboardingProgress]) ? this.config[onboardingProgress].message : "'" + onboardingProgress + "' is not a valid value for the 'onboardingProgress' appFlag"
-    let destination = (this.config[onboardingProgress]) ? this.config[onboardingProgress].destination : null
+    let message = (this.config[onboardingProgress])
+      ? this.config[onboardingProgress].message
+      : "'" + onboardingProgress + "' is not a valid value for the 'onboardingProgress' appFlag"
+    let destination = (this.config[onboardingProgress])
+      ? this.config[onboardingProgress].destination
+      : null
+    let pressable = (this.config[onboardingProgress])
+      ? this.config[onboardingProgress].pressable
+      : null
 
     return(
       <View>
         <TouchableHighlight
-          activeOpacity={(this.state.pressable) ? 0.75 : 1.0}
+          activeOpacity={(pressable) ? 0.75 : 1.0}
           underlayColor={'transparent'}
           onPress={() => this.handlePress(destination)}>
           <View style={{width: dims.width, padding: 15, backgroundColor: colors.maastrichtBlue, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
@@ -112,7 +107,7 @@ class StatusCard extends React.Component {
 
             { /* Icon */ }
             <View style={{flex: 0.2, justifyContent: 'center', alignItems: 'center'}}>
-              {(this.state.pressable)
+              {(pressable)
                 ? <EvilIcons name={"chevron-right"} color={colors.snowWhite} size={26} />
                 : null }
             </View>

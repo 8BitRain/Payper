@@ -334,7 +334,7 @@ export default class User {
     *   (token is tacked on to params)
     *   -----------------------------------------------------------------------
   **/
-  verify(params) {
+  verify(params, cb) {
     params.token = this.token
 
     try {
@@ -343,13 +343,16 @@ export default class User {
       .then((responseData) => {
         if (!responseData.errorMessage) {
           console.log("Customer verification succeeded! responseData:", responseData)
+          cb(true)
         } else {
           console.log("Error verifying customer:", responseData.errorMessage)
+          cb(false)
         }
       })
       .done()
     } catch (err) {
       console.log("Error verifying customer", err)
+      cb(false)
     }
   }
 

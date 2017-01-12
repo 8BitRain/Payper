@@ -3,6 +3,7 @@ import {Actions} from 'react-native-router-flux'
 import {View, Text, TouchableHighlight, StatusBar, Dimensions, ScrollView, Alert, Animated} from 'react-native'
 import {colors} from '../../globalStyles'
 import {NameField, TextField, DateField, AddressField} from '../../components'
+import {ListOfStates} from '../../helpers'
 const dims = Dimensions.get('window')
 
 class KYCOnboardingView extends React.Component {
@@ -14,6 +15,7 @@ class KYCOnboardingView extends React.Component {
     }
 
     this.state = {
+      loading: false,
       firstName: props.currentUser.first_name,
       lastName: props.currentUser.last_name,
       street: "",
@@ -30,10 +32,6 @@ class KYCOnboardingView extends React.Component {
     this.fieldRefs = {}
     this.induceFieldRef = this.induceFieldRef.bind(this)
     this.toggleFieldFocus = this.toggleFieldFocus.bind(this)
-  }
-
-  componentDidMount() {
-    console.log("--> KYCOnboardingView mounted. State:", this.state)
   }
 
   induceFieldRef(ref) {
@@ -74,11 +72,13 @@ class KYCOnboardingView extends React.Component {
       ssn: "1234"
     }
 
-    this.props.currentUser.verify(testParams)
+    this.props.currentUser.verify(testParams, () => null)
   }
 
   verify() {
-    let values = {street, city, state, zip, dob, ssn, firstName, lastName} = this.state
+    console.log("--> verify() was invoked...")
+    let {street, city, state, zip, dob, ssn, firstName, lastName} = this.state
+    let values = {street, city, state, zip, dob, ssn, firstName, lastName}
 
     // Check that all input fields have been filled out
     for (var k in values) {
@@ -88,14 +88,34 @@ class KYCOnboardingView extends React.Component {
       }
     }
 
-    alert("Would verify")
+    // Display loading indicator
+    this.setState({loading: true})
+
+    // Format params
+    let params = {
+      firstName, lastName, city, state, zip, dob, ssn,
+      state: ListOfStates[state],
+      address: street
+    }
+
+    // Verify
+    this.props.currentUser.verify(params, (success) => {
+      console.log("--> verify() callback was invoked. success?", success)
+
+      if (success) {
+        this.setState({loading: false})
+        alert("Success!")
+      } else {
+        Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
+      }
+    })
   }
 
   render() {
     let {
       verifyButtonOpacity
     } = this.AV
-    
+
     if (true) {
       return(
         <View style={{flex: 1.0, flexDirection: 'column'}}>
@@ -148,10 +168,7 @@ class KYCOnboardingView extends React.Component {
                 return true
               }}
               setValues={(values, cb) => {
-                this.setState(values, () => {
-                  console.log("--> this.state", this.state)
-                  cb()
-                })
+                this.setState(values, () => cb())
               }}
               induceFieldRef={this.induceFieldRef}
               toggleFieldFocus={this.toggleFieldFocus} />
@@ -206,9 +223,11 @@ class KYCOnboardingView extends React.Component {
             <Animated.View style={{opacity: verifyButtonOpacity}}>
               <TouchableHighlight
                 underlayColor={'transparent'}
-                onPress={() => this.verify()}>
+                onPress={() => (this.state.loading) ? null : this.testVerify()}>
                 <Text style={{textAlign: 'center', width: dims.width * 0.85, marginTop: 15, fontSize: 16, color: colors.snowWhite, backgroundColor: colors.gradientGreen, padding: 14, borderRadius: 4, overflow: 'hidden'}}>
-                  {"Verify"}
+                  {(this.state.loading)
+                    ? "Verifying your account..."
+                    : "Verify"}
                 </Text>
               </TouchableHighlight>
             </Animated.View>
