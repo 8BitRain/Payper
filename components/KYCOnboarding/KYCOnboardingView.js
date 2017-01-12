@@ -76,7 +76,6 @@ class KYCOnboardingView extends React.Component {
   }
 
   verify() {
-    console.log("--> verify() was invoked...")
     let {street, city, state, zip, dob, ssn, firstName, lastName} = this.state
     let values = {street, city, state, zip, dob, ssn, firstName, lastName}
 
@@ -98,10 +97,10 @@ class KYCOnboardingView extends React.Component {
       address: street
     }
 
+    console.log("--> verifying account with params:", params)
+
     // Verify
     this.props.currentUser.verify(params, (success) => {
-      console.log("--> verify() callback was invoked. success?", success)
-
       if (success) {
         this.setState({loading: false})
         alert("Success!")

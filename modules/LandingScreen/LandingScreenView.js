@@ -65,6 +65,8 @@ export default class LandingScreenView extends React.Component {
   }
 
   signinWithFacebook(userData) {
+    console.log("--> userData", userData)
+    
     let {
       token, email, phone, facebook_id, first_name
     } = userData
@@ -95,7 +97,7 @@ export default class LandingScreenView extends React.Component {
           facebookUserData: userData
         }, (responseData, isNewUser) => {
           if (null === responseData) {
-            Alert.alert('Sorry', 'Something went wrong. Please try again later.')
+            Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
             FBLoginManager.logOut()
             this.toggleLoadingScreen()
             return

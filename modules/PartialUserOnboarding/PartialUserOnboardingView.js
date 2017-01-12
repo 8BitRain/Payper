@@ -74,15 +74,21 @@ export default class PartialUserOnboardingView extends React.Component {
 
       if (errorMessage) {
         this.setState({loading: false})
-        let alert = (errorMessage === "dupe-email")
-          ? 'A user with that email address already exists.'
-          : 'A user with that phone number already exists.'
-        Alert.alert('Wait!', alert)
+
+        // Determine error alert
+        let title, msg
+        switch (errorMessage) {
+          case "dupe-email": title = 'Wait!'; msg = 'A user with that email address already exists.'; break;
+          case "dupe-phone": title = 'Wait!'; msg = 'A user with that phone number already exists.'; break;
+          default: title = 'Sorry...'; msg = 'Something went wrong. Please try again later.';
+        }
+
+        Alert.alert(title, msg)
       } else {
         this.setState({loading: false})
         responseData.decryptedEmail = email
         responseData.decryptedPhone = phone
-        console.log("\n\n\n--> responseData", responseData)
+        console.log("\n\n\n--> Facebook user creation responseData", responseData)
         this.props.currentUser.initialize(responseData)
         Actions.MainViewContainer()
       }

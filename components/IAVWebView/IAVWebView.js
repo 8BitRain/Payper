@@ -116,17 +116,15 @@ class IAVWebView extends React.Component {
         else
           Actions.pop()
       } else {
-
         // Why this import syntax? https://goo.gl/gcNg7z
         var KYCOnboardingView = require('../KYCOnboarding/KYCOnboardingView')
 
         Actions.refresh({
           subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
-          backgroundColor: colors.accent,
+          backgroundColor: colors.snowWhite,
           showHeader: true,
           title: "Bank Account Verification"
         })
-
       }
     }
   }
