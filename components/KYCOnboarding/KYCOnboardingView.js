@@ -1,6 +1,6 @@
 import React from 'react'
 import {Actions} from 'react-native-router-flux'
-import {View, Text, TouchableHighlight, StatusBar, Dimensions, ScrollView} from 'react-native'
+import {View, Text, TouchableHighlight, StatusBar, Dimensions, ScrollView, Alert, Animated} from 'react-native'
 import {colors} from '../../globalStyles'
 import {NameField, TextField, DateField, AddressField} from '../../components'
 const dims = Dimensions.get('window')
@@ -8,6 +8,10 @@ const dims = Dimensions.get('window')
 class KYCOnboardingView extends React.Component {
   constructor(props) {
     super(props)
+
+    this.AV = {
+      verifyButtonOpacity: new Animated.Value(1)
+    }
 
     this.state = {
       firstName: props.currentUser.first_name,
@@ -38,7 +42,14 @@ class KYCOnboardingView extends React.Component {
   }
 
   toggleFieldFocus(title, shouldContinueFlow) {
+    let {verifyButtonOpacity} = this.AV
     let fieldIsFocused = this.fieldRefs[title].state.focused
+
+    // Show or hide verify button
+    Animated.timing(verifyButtonOpacity, {
+      toValue: (fieldIsFocused) ? 0 : 1,
+      duration: 200
+    }).start()
 
     // Show or hide input fields
     for (var k of Object.keys(this.fieldRefs)) {
@@ -66,7 +77,25 @@ class KYCOnboardingView extends React.Component {
     this.props.currentUser.verify(testParams)
   }
 
+  verify() {
+    let values = {street, city, state, zip, dob, ssn, firstName, lastName} = this.state
+
+    // Check that all input fields have been filled out
+    for (var k in values) {
+      if (!values[k]) {
+        Alert.alert('Wait!', 'Please fill out all fields.')
+        return
+      }
+    }
+
+    alert("Would verify")
+  }
+
   render() {
+    let {
+      verifyButtonOpacity
+    } = this.AV
+    
     if (true) {
       return(
         <View style={{flex: 1.0, flexDirection: 'column'}}>
@@ -172,6 +201,17 @@ class KYCOnboardingView extends React.Component {
               }}
               induceFieldRef={this.induceFieldRef}
               toggleFieldFocus={this.toggleFieldFocus} />
+
+            { /* Submit button */ }
+            <Animated.View style={{opacity: verifyButtonOpacity}}>
+              <TouchableHighlight
+                underlayColor={'transparent'}
+                onPress={() => this.verify()}>
+                <Text style={{textAlign: 'center', width: dims.width * 0.85, marginTop: 15, fontSize: 16, color: colors.snowWhite, backgroundColor: colors.gradientGreen, padding: 14, borderRadius: 4, overflow: 'hidden'}}>
+                  {"Verify"}
+                </Text>
+              </TouchableHighlight>
+            </Animated.View>
 
           </ScrollView>
         </View>
