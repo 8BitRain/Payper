@@ -16,6 +16,7 @@ import MicrodepositTooltip from './components/Tooltips/MicrodepositTooltip/Micro
 import SuspendedTooltip from './components/Tooltips/SuspendedTooltip/SuspendedTooltip'
 import DocumentUploadTooltip from './components/Tooltips/DocumentUploadTooltip/DocumentUploadTooltip'
 import BankAccountAdded from './components/Rewards/BankAccountAdded/BankAccountAdded'
+import VerifiedIdentity from './components/Rewards/VerifiedIdentity/VerifiedIdentity'
 import StatusCard from './components/StatusCard/StatusCard'
 import { Scene, Reducer, Router, Modal } from 'react-native-router-flux'
 import { colors } from './globalStyles'
@@ -173,6 +174,12 @@ export default class Coincast extends React.Component {
                         key="BankAccountAdded"
                         type="replace"
                         panHandlers={null} />
+
+                        <Scene
+                          component={VerifiedIdentity}
+                          key="VerifiedIdentity"
+                          type="replace"
+                          panHandlers={null} />
 
 
             <Scene
