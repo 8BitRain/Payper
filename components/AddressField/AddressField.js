@@ -31,10 +31,10 @@ class AddressField extends React.Component {
       focused: false,
       hidden: false,
       touchable: true,
-      street: props.street || "",
-      city: props.city || "",
-      state: props.state || "",
-      zip: props.zip || ""
+      street: props.streetValue || "",
+      city: props.cityValue || "",
+      state: props.stateValue || "",
+      zip: props.zipValue || ""
     }
 
     this.inputRefs = {}
@@ -250,9 +250,10 @@ class AddressField extends React.Component {
               <View style={{width: 32}} />
 
               <Text style={{fontSize: 18, color: colors.gradientGreen, paddingLeft: 10}}>
-                {(street.length >= 13)
+                { /* (street.length >= 13)
                   ? street.substring(0, 13) + "..."
-                  : street + "..." }
+                  : street + "..." */ }
+                {street}
               </Text>
             </Animated.View>
           </Animated.View>
@@ -273,6 +274,7 @@ class AddressField extends React.Component {
                       autoCorrect: false,
                       autoFocus: true,
                       returnKeyType: "next",
+                      defaultValue: street,
                       onSubmitEditing: () => this.inputRefs.City.focus(),
                       onChangeText: (text) => this.setState({street: text})
                     }}
@@ -285,34 +287,22 @@ class AddressField extends React.Component {
                       autoCapitalize: "words",
                       autoCorrect: false,
                       returnKeyType: "next",
-                      onSubmitEditing: () => this.inputRefs.ZIP.focus(),
+                      defaultValue: city,
+                      onSubmitEditing: () => this.inputRefs.State.focus(),
                       onChangeText: (text) => this.setState({city: text})
                     }}
                     induceInputRef={(name, ref) => this.induceInputRef(name, ref)} />
 
                   <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                    { /* ZIP Code */ }
-                    <AddressTextInput
-                      label={"ZIP"}
-                      textInputProps={{
-                        autoCorrect: false,
-                        maxLength: 5,
-                        keyboardType: "number-pad",
-                        returnKeyType: "next",
-                        onSubmitEditing: () => this.inputRefs.State.focus(),
-                        onChangeText: (text) => this.setState({zip: text})
-                      }}
-                      containerStyles={{
-                        width: dims.width * 0.43
-                      }}
-                      induceInputRef={(name, ref) => this.induceInputRef(name, ref)} />
-
                     { /* State */ }
                     <AddressTextInput
                       label={"State"}
                       textInputProps={{
                         autoCorrect: false,
                         blurOnSubmit: true,
+                        defaultValue: state,
+                        returnKeyType: "next",
+                        onSubmitEditing: () => this.inputRefs.ZIP.focus(),
                         onChangeText: (text) => this.setState({state: text})
                       }}
                       containerStyles={{
@@ -320,6 +310,25 @@ class AddressField extends React.Component {
                       }}
                       induceInputRef={(name, ref) => this.induceInputRef(name, ref)} />
 
+                    { /* ZIP Code */ }
+                    <AddressTextInput
+                      label={"ZIP"}
+                      textInputProps={{
+                        autoCorrect: false,
+                        maxLength: 5,
+                        keyboardType: "number-pad",
+                        returnKeyType: "done",
+                        defaultValue: zip,
+                        onSubmitEditing: () => this.submit(),
+                        onChangeText: (text) => {
+                          this.setState({zip: text})
+                          if (text.length === 5) this.inputRefs.ZIP.blur()
+                        }
+                      }}
+                      containerStyles={{
+                        width: dims.width * 0.43
+                      }}
+                      induceInputRef={(name, ref) => this.induceInputRef(name, ref)} />
                   </View>
 
                   <TouchableHighlight underlayColor={'transparent'} onPress={() => this.submit()}>

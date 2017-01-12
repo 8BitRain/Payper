@@ -25,14 +25,21 @@ class StatusCard extends React.Component {
         message: "need-kyc",
         pressable: true,
         destination: () => Actions.GlobalModal({
-          subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
+          subcomponent: <KYCOnboardingView retry={false} currentUser={this.props.currentUser} />,
           backgroundColor: colors.snowWhite,
           showHeader: true,
-          title: "Bank Account Verification"
+          title: "Account Verification"
         })
       },
       'kyc-retry': {
-        message: "kyc-retry"
+        message: "kyc-retry",
+        pressable: true,
+        destination: () => Actions.GlobalModal({
+          subcomponent: <KYCOnboardingView retry={true} currentUser={this.props.currentUser} />,
+          backgroundColor: colors.snowWhite,
+          showHeader: true,
+          title: "Retry Account Verification"
+        })
       },
       'kyc-documentNeeded': {
         message: "kyc-documentNeeded"

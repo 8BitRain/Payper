@@ -106,7 +106,10 @@ class KYCOnboardingView extends React.Component {
               title={"Billing Address"}
               iconName={"location"}
               complete={false}
-              value={this.state.street}
+              streetValue={this.state.street}
+              cityValue={this.state.city}
+              stateValue={this.state.state}
+              zipValue={this.state.zip}
               invalidityAlert={"Please enter a valid address."}
               textInputProps={{
                 autoCapitalize: "words",
@@ -116,7 +119,10 @@ class KYCOnboardingView extends React.Component {
                 return true
               }}
               setValues={(values, cb) => {
-                this.setState(values, () => cb())
+                this.setState(values, () => {
+                  console.log("--> this.state", this.state)
+                  cb()
+                })
               }}
               induceFieldRef={this.induceFieldRef}
               toggleFieldFocus={this.toggleFieldFocus} />
