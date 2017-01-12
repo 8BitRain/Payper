@@ -32,7 +32,7 @@ class BankAccountAdded extends React.Component {
       buttonFadeState: 0,
       buttonState: 0,
       moneyBagContainerTop: 0,
-      openTooltip: false
+      openTooltip: false,
     }
 
     this.top_pos;
@@ -46,6 +46,7 @@ class BankAccountAdded extends React.Component {
     this.extendedhand_transition_value = new Animated.Value(0);
     this.transition_money_hand_value = new Animated.Value(0);
     this.fadein_verifyid_text_value = new Animated.Value(0);
+    this.fade_confetti_value = new Animated.Value(1);
 
 
   }
@@ -111,6 +112,17 @@ class BankAccountAdded extends React.Component {
         easing: Easing.spring
       }
     ).start(() => this.extendedhand_transition())
+  }
+
+  fade_confetti(){
+    Animated.timing(
+      this.transistion_view_value,
+      {
+        toValue: 0,
+        duration: 500,
+        easing: Easing.spring
+      }
+    ).start()
   }
 
   moneybag_transition(){
@@ -195,6 +207,7 @@ class BankAccountAdded extends React.Component {
             underlayColor={'transparent'}
             onPress={() => {
               this.setState({buttonFadeState: 1});
+              this.fade_confetti();
               this.transistion_view();
             }}
             style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
@@ -344,6 +357,7 @@ class BankAccountAdded extends React.Component {
     })
 
 
+
     return(
       <View style={{flex: 1}}>
         <View style={styles.wrapper}>
@@ -393,7 +407,9 @@ class BankAccountAdded extends React.Component {
           visible={this.state.openTooltip}>
             { this._renderTooltip()}
           </Modal>
+
         <Confetti duration={1000} ref={(node) => this._confettiView = node}/>
+
       </View>
     );
 
@@ -435,7 +451,8 @@ var styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 16 * 1.20,
     textAlign: "center",
-    fontWeight: "500"
+    fontWeight: "500",
+    marginTop: 2.5
   },
   textL: {
     color: '#fff',
@@ -455,7 +472,7 @@ var styles = StyleSheet.create({
   },
   header: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 15,
