@@ -89,8 +89,16 @@ class StatusCard extends React.Component {
   }
 
   handlePress(destination) {
-    if (!this.state.pressable) return
-    (typeof destination === 'function') ? destination() : null
+    let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
+
+    let pressable = (this.config[onboardingProgress])
+      ? this.config[onboardingProgress].pressable
+      : false
+
+    if (!pressable) return
+
+    if (typeof destination === 'function')
+      destination()
   }
 
   _renderPicWithInitials(initials){
@@ -107,11 +115,17 @@ class StatusCard extends React.Component {
   }
 
   render() {
-    let {modalContent} = this.state
-    //let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
-    let onboardingProgress = 'need-bank'
-    let message = (this.config[onboardingProgress]) ? this.config[onboardingProgress].message : "'" + onboardingProgress + "' is not a valid value for the 'onboardingProgress' appFlag"
-    let destination = (this.config[onboardingProgress]) ? this.config[onboardingProgress].destination : null
+     let onboardingProgress = "need-bank";
+     //let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
+     let message = (this.config[onboardingProgress])
+       ? this.config[onboardingProgress].message
+       : "'" + onboardingProgress + "' is not a valid value for the 'onboardingProgress' appFlag"
+     let destination = (this.config[onboardingProgress])
+       ? this.config[onboardingProgress].destination
+       : null
+     let pressable = (this.config[onboardingProgress])
+       ? this.config[onboardingProgress].pressable
+       : null
 
     return(
       <View style={styles.wrapper}>
