@@ -18,6 +18,84 @@ class StatusCard extends React.Component {
   constructor(props) {
     super(props)
 
+    this.customer_status = this.props.currentUser.customer_status;
+    this.onboardingPercentage = 0;
+    switch (this.props.onboardingProgress) {
+      case "kyc-success":
+        this.onboardingPercentage = 100;
+        break;
+      case "need-bank":
+        if(this.customer_status== "verified"){
+          this.onboardingPercentage = 75;
+        }
+        if(this.customer_status == "kyc-retry" || this.customer_status == "kyc-document" || this.customer_status == "kyc-suspended"){
+          this.onboardingPercentage = 60;
+        }
+        if(this.customer_status == "kyc-documentRecieved"){
+          this.onboardingPercentage = 65;
+        }
+        if(this.customer_status == "kyc-documentProcessing"){
+          this.onboardingPercentage = 75;
+        }
+        if(this.customer_status == "unverified"){
+          this.onboardingPercentage = 50;
+        }
+        break;
+      case "microdeposits-initialized":
+        if(this.customer_status == "verified"){
+          this.onboardingPercentage = 80;
+        }
+        if(this.customer_status == "kyc-retry" || this.customer_status == "kyc-document" || this.customer_status == "kyc-documentFailed" || this.customer_status == "kyc-suspended"){
+          this.onboardingPercentage = 65;
+        }
+        if(this.customer_status == "kyc-documentRecieved"){
+          this.onboardingPercentage = 70;
+        }
+        if(this.customer_status == "kyc-documentProcessing"){
+          this.onboardingPercentage = 75;
+        }
+        if(this.customer_status == "unverified"){
+          this.onboardingPercentage = 55;
+        }
+        break;
+      case "microdeposits-failed":
+        if(this.customer_status == "verified"){
+          this.onboardingPercentage = 75;
+        }
+        if(this.customer_status == "kyc-retry" || this.customer_status == "kyc-document" || this.customer_status == "kyc-documentFailed" || this.customer_status == "kyc-suspended"){
+          this.onboardingPercentage = 65;
+        }
+        if(this.customer_status == "kyc-documentRecieved"){
+          this.onboardingPercentage = 70;
+        }
+        if(this.customer_status == "kyc-documentProcessing"){
+          this.onboardingPercentage = 75;
+        }
+        if(this.customer_status == "unverified"){
+          this.onboardingPercentage = 50;
+        }
+        break;
+      case "need-kyc":
+        if(this.customer_status == "kyc-documentRecieved"){
+          this.onboardingPercentage = 80;
+        }
+        break;
+      case "kyc-retry" || "kyc-suspended" || "kyc-documentNeeded" :
+        this.onboardingPercentage = 75;
+        break;
+      case "kyc-documentRecieved":
+        this.onboardingPercentage = 80;
+        break;
+      case "kyc-documentProcessing":
+        this.onboardingPercentage = 85;
+        break;
+      case "kyc-documentFailed":
+        this.onboardingPercentage = 75;
+        break;
+      default:
+
+    }
+
     this.config = {
       'need-bank': {
         message: "You still need to add a bank account!",
@@ -86,7 +164,7 @@ class StatusCard extends React.Component {
 
   _renderPicWithInitials(firstname, lastname){
     let initials = firstname.charAt(0) + lastname.charAt(0);
-    
+
     return(
       <View style={styles.imageWrap}>
           { /*Profile pic with initials*/ }
@@ -97,6 +175,10 @@ class StatusCard extends React.Component {
           </View>
       </View>
     )
+  }
+
+  _renderUnlocks(onboardingProgress){
+
   }
 
   render() {
@@ -118,8 +200,8 @@ class StatusCard extends React.Component {
           {/* Unlocked Features*/}
           <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
             <View style={{flex: 1, alignItems: "center"}}>
-              <Ionicons size={24} name="md-lock" color={colors.snowWhite} />
-              <Text style={styles.text}>{"Send Money"}</Text>
+              <Ionicons size={24} name="md-lock" color={colors.medGrey} />
+              <Text style={styles.lockText}>{"Send Money"}</Text>
             </View>
             {/* Progress Percentage */}
             <View style={{flex: 1, alignItems: "center"}}>
@@ -133,15 +215,15 @@ class StatusCard extends React.Component {
                 {
                   (fill) => (
                     <Text style={styles.percantageText}>
-                      {"80%"}
+                      {this.onboardingPercentage + "%"}
                     </Text>
                   )
                 }
               </AnimatedCircularProgress>
             </View>
             <View style={{flex: 1, alignItems: "center"}}>
-              <Ionicons size={24} name="md-lock" color={colors.snowWhite} />
-              <Text style={styles.text}>{"Receive Money"}</Text>
+              <Ionicons size={24} name="md-lock" color={colors.medGrey} />
+              <Text style={styles.lockText}>{"Receive Money"}</Text>
             </View>
           </View>
 
@@ -209,6 +291,20 @@ var styles = StyleSheet.create({
     alignSelf: "center"
   },
   text: {
+    color: '#fff',
+    fontSize: 16,
+    lineHeight: 16 * 1.20,
+    textAlign: "center",
+    fontWeight: "500"
+  },
+  lockText: {
+    color: colors.medGrey,
+    fontSize: 16,
+    lineHeight: 16 * 1.20,
+    textAlign: "center",
+    fontWeight: "500"
+  },
+  unlockedText:{
     color: '#fff',
     fontSize: 16,
     lineHeight: 16 * 1.20,
