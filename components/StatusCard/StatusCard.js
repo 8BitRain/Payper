@@ -311,8 +311,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.accent,
     margin: dimensions.width * .08,
-    marginTop: dimensions.height * .15,
-    marginBottom: dimensions.height * .15,
     borderRadius: dimensions.width / 32.0,
     height: 300
   },
