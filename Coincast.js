@@ -11,6 +11,10 @@ import MainViewContainer from './modules/Main/MainViewContainer'
 import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer'
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView'
 import Phone from './modules/UserOnboarding/pages/Phone'
+import AddBankAccountTooltip from './components/Tooltips/AddBankAccountTooltip/AddBankAccountTooltip'
+import MicrodepositTooltip from './components/Tooltips/MicrodepositTooltip/MicrodepositTooltip'
+import SuspendedTooltip from './components/Tooltips/SuspendedTooltip/SuspendedTooltip'
+import DocumentUploadTooltip from './components/Tooltips/DocumentUploadTooltip/DocumentUploadTooltip'
 import { Scene, Reducer, Router, Modal } from 'react-native-router-flux'
 import { colors } from './globalStyles'
 import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
@@ -85,7 +89,7 @@ export default class Coincast extends React.Component {
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 
-            <Scene initial
+            <Scene
               component={SplashViewContainer}
               key="SplashViewContainer"
               type="replace"
