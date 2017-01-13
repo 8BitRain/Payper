@@ -77,9 +77,7 @@ class StatusCard extends React.Component {
         }
         break;
       case "need-kyc":
-        if(this.customer_status == "kyc-documentRecieved"){
-          this.onboardingPercentage = 80;
-        }
+        this.onboardingPercentage = 70;
         break;
       case "kyc-retry" || "kyc-suspended" || "kyc-documentNeeded" :
         this.onboardingPercentage = 75;
@@ -257,8 +255,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.accent,
     margin: dimensions.width * .08,
-    marginTop: dimensions.height * .15,
-    marginBottom: dimensions.height * .15,
     borderRadius: dimensions.width / 32.0,
     height: 300
   },
