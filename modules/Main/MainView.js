@@ -35,12 +35,6 @@ class MainView extends React.Component {
 
     this.headerlessModalTitles = ["retry"]
 
-    this.alreadyGeneratedNoticeBar = {
-      inc: false,
-      out: false,
-      all: false
-    }
-
     this.state = {
       all: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
       inc: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
@@ -71,8 +65,7 @@ class MainView extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     let payFlowChanged = nextProps.currentUser.paymentFlow !== this.props.currentUser.paymentFlow
-    let appFlagsChanged = nextProps.currentUser.appFlags !== this.props.currentUser.appFlags
-    if (payFlowChanged || appFlagsChanged) this.generatePayCards(nextProps.currentUser)
+    if (payFlowChanged) this.generatePayCards(nextProps.currentUser)
   }
 
   generateEmptyState() {
@@ -120,11 +113,6 @@ class MainView extends React.Component {
         payFlow[k] = emptyState
     }
 
-    // Prepend status card
-    payFlow.all.unshift({type: "statusCard"})
-    payFlow.inc.unshift({type: "statusCard"})
-    payFlow.out.unshift({type: "statusCard"})
-
     // Trigger re-render
     this.setState({
       all: this.EMPTY_DATA_SOURCE.cloneWithRows(payFlow.all),
@@ -139,7 +127,6 @@ class MainView extends React.Component {
 
     switch (rowData.type) {
       case "priorityContent": return rowData.reactComponent
-      case "statusCard": return <StatusCard {...this.props} />
       default: return <PayCard payment={rowData} currentUser={this.props.currentUser} />
     }
   }
@@ -296,6 +283,7 @@ class MainView extends React.Component {
           <ListView
             dataSource={dataSource}
             renderRow={this.renderRow.bind(this)}
+            renderHeader={() => <StatusCard {...this.props} />}
             renderFooter={() => <View style={{height: 90}} />}
             renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
             enableEmptySections />
