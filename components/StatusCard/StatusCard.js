@@ -231,7 +231,7 @@ class StatusCard extends React.Component {
 
         </View>
         {/* Body */}
-        <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+        <View style={{flex: .5, justifyContent: "center", alignItems: "center"}}>
           <Text style={styles.header}>{this.config[onboardingProgress].title}</Text>
           <Text style={styles.text}>{this.config[onboardingProgress].message}</Text>
         </View>
@@ -260,6 +260,7 @@ var styles = StyleSheet.create({
     marginTop: dimensions.height * .15,
     marginBottom: dimensions.height * .15,
     borderRadius: dimensions.width / 32.0,
+    height: 300
   },
   imageWrap: {
     width: imageDims.width,
