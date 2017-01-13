@@ -138,49 +138,6 @@ export default class Coincast extends React.Component {
               type="replace"
               panHandlers={null} />
 
-            <Scene
-              component={AddBankAccountTooltip}
-              key="AddBankAccountTooltip"
-              type="replace"
-              panHandlers={null} />
-
-              <Scene
-                component={MicrodepositTooltip}
-                key="MicrodepositTooltip"
-                type="replace"
-                panHandlers={null} />
-
-              <Scene
-                  component={SuspendedTooltip}
-                  key="SuspendedTooltip"
-                  type="replace"
-                  panHandlers={null} />
-
-                  <Scene
-                    component={DocumentUploadTooltip}
-                    key="DocumentUploadTooltip"
-                    type="replace"
-                    panHandlers={null} />
-
-                    <Scene
-                      component={StatusCard}
-                      key="StatusCard"
-                      type="replace"
-                      panHandlers={null} />
-
-                      <Scene
-                        initial
-                        component={BankAccountAdded}
-                        key="BankAccountAdded"
-                        type="replace"
-                        panHandlers={null} />
-
-                        <Scene
-                          component={VerifiedIdentity}
-                          key="VerifiedIdentity"
-                          type="replace"
-                          panHandlers={null} />
-
 
             <Scene
               component={PayDetails}
