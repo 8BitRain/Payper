@@ -95,29 +95,51 @@ class paydetails extends React.Component {
   acceptRequest(payment) {
     let { token, pid, paymentType, status } = this.props
 
-    // TODO: Optimistically mark payment card as confirmed
-    Lambda.confirmPayment({
-      token: token,
-      payment_id: pid,
-      type: paymentType,
-      status: status
-    })
+    Alert.alert(
+      "Wait!",
+      "Are you sure you'd like to accept this payment request?",
+      [
+        {text: 'Nevermind', onPress: () => console.log('Nevermind'), style: 'cancel'},
+        {text: 'Yes', onPress: () => confirm()},
+      ]
+    )
 
-    Actions.pop()
+    function confirm() {
+      // TODO: Optimistically delete payment card
+      Lambda.confirmPayment({
+        token: token,
+        payment_id: pid,
+        type: paymentType,
+        status: status
+      })
+
+      Actions.pop()
+    }
   }
 
   rejectRequest(payment) {
     let { token, pid, paymentType, status } = this.props
 
-    // TODO: Optimistically delete payment card
-    Lambda.rejectPayment({
-      token: token,
-      payment_id: pid,
-      type: paymentType,
-      status: status
-    })
+    Alert.alert(
+      "Wait!",
+      "Are you sure you'd like to reject this payment request?",
+      [
+        {text: 'Nevermind', onPress: () => console.log('Nevermind'), style: 'cancel'},
+        {text: 'Yes', onPress: () => confirm()},
+      ]
+    )
 
-    Actions.pop()
+    function confirm() {
+      // TODO: Optimistically delete payment card
+      Lambda.rejectPayment({
+        token: token,
+        payment_id: pid,
+        type: paymentType,
+        status: status
+      })
+
+      Actions.pop()
+    }
   }
 
   blockUser() {
