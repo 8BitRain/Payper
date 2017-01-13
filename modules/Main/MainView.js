@@ -291,14 +291,7 @@ class MainView extends React.Component {
             </ScrollView>
           </Animated.View>
 
-<<<<<<< HEAD
-          { /* onboarding-progress status card */ }
 
-          <StatusCard {...this.props} />
-          
-
-=======
->>>>>>> db39c1c7d5fd0681927d5d890696dbad45bbba17
           { /* Banner info and payment list */ }
           <ListView
             dataSource={dataSource}
