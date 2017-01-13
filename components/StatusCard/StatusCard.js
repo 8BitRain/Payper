@@ -2,7 +2,7 @@ import React from 'react'
 import { Actions } from 'react-native-router-flux'
 import { View, Text, TouchableHighlight, Animated, Easing, Dimensions, Modal, Image, StyleSheet } from 'react-native'
 import { colors } from '../../globalStyles'
-import { IAVWebView, KYCOnboardingView } from '../index'
+import { IAVWebView, KYCOnboardingView, PhotoUploader } from '../index'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -59,9 +59,9 @@ class StatusCard extends React.Component {
         action: "Take Snapshot",
         pressable: true,
         destination: () => Actions.GlobalModal({
-          subcomponent: <View />,
+          subcomponent: <PhotoUploader title={"Document Upload"} index={1} brand={"document"}  {...this.props}/>,
           backgroundColor: colors.carminePink,
-          showHeader: true,
+          showHeader: false,
           title: "Document Upload"
         })
       },
@@ -246,12 +246,12 @@ class StatusCard extends React.Component {
           {/* Header */}
           <View style={{flex: 1, justifyContent: "flex-start", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", marginTop: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, backgroundColor: colors.darkAccent}}>
             {/* Profile Picture & Onboarding Progress Text*/}
-            <View style={{flex: 1, alignItems: "center"}}>
+            <View style={{flex: 1, alignItems: "center", backgroundColor: colors.darkAccent}}>
               {this._renderPicWithInitials(this.props.currentUser.first_name, this.props.currentUser.last_name)}
               <Text style={styles.text}>{"My Profile Strength"}</Text>
             </View>
             {/* Unlocked Features*/}
-            <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
+            <View style={{flex: 1, flexDirection: "row", alignItems: "center", backgroundColor: colors.darkAccent}}>
               <View style={{flex: 1, alignItems: "center"}}>
                 <Ionicons size={24} name="md-lock" color={colors.medGrey} />
                 <Text style={styles.lockText}>{"Send Money"}</Text>
@@ -312,7 +312,7 @@ var styles = StyleSheet.create({
     backgroundColor: colors.accent,
     margin: dimensions.width * .08,
     borderRadius: dimensions.width / 32.0,
-    height: 300
+    height: 320
   },
   imageWrap: {
     width: imageDims.width,

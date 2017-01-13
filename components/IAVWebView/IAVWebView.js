@@ -1,11 +1,13 @@
 import React from 'react'
 import {Actions} from 'react-native-router-flux'
-import {View, Text, TouchableHighlight, WebView, Dimensions, StatusBar} from 'react-native'
+import {View, Text, TouchableHighlight, WebView, Dimensions, StatusBar, Modal, StyleSheet} from 'react-native'
 import {colors} from '../../globalStyles'
 import {Timer, TrackOnce} from '../../classes/Metrics'
 import WebViewBridge from 'react-native-webview-bridge'
 import Mixpanel from 'react-native-mixpanel'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import AddBankAccountTooltip from '../Tooltips/AddBankAccountTooltip/AddBankAccountTooltip'
 import * as config from '../../config'
 const dimensions = Dimensions.get('window')
 
@@ -18,7 +20,8 @@ class IAVWebView extends React.Component {
 
     this.state = {
       cancelled: false,
-      injectedJS: ""
+      injectedJS: "",
+      openTooltip: false
     }
   }
 
@@ -33,6 +36,10 @@ class IAVWebView extends React.Component {
     this.timer.report("bankOnboarding", this.props.currentUser.uid, {
       uid: this.props.currentUser.uid
     })
+  }
+
+  toggleTooltip(toggle){
+    this.setState({openTooltip: toggle });
   }
 
   handleError(err) {
@@ -188,6 +195,7 @@ class IAVWebView extends React.Component {
     }
   }
 
+
   render() {
     return(
       <View style={{flex: 1.0, marginTop: 20, backgroundColor: colors.accent}}>
@@ -210,7 +218,7 @@ class IAVWebView extends React.Component {
           </TouchableHighlight>
 
           { /* Refresh button */ }
-          <TouchableHighlight
+          {/*<TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
             onPress={() => this.refresh()}>
@@ -219,6 +227,14 @@ class IAVWebView extends React.Component {
               {"Refresh"}
             </Text>
 
+          </TouchableHighlight>*/}
+          { /*Add Bank Account Tooltip*/ }
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            style={{}}
+            onPress={() => {this.toggleTooltip(true)}}>
+                <Ionicons style={{}} size={32} name="ios-help-circle" color={colors.snowWhite} />
           </TouchableHighlight>
         </View>
         <View style={{ flex: 0.9 }}>
@@ -233,9 +249,29 @@ class IAVWebView extends React.Component {
             source={{uri: 'https://www.getpayper.io/iav'}} />
 
         </View>
+        <Modal
+          animationType={"slide"}
+          transparent={true}
+          visible={this.state.openTooltip}
+          >
+            <AddBankAccountTooltip/>
+          </Modal>
       </View>
     )
   }
 }
+
+var styles = StyleSheet.create({
+  wrapper2: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: colors.carminePink,
+    margin: dimensions.width * .12,
+    marginTop: dimensions.height * .25,
+    marginBottom: dimensions.height * .25,
+    borderRadius: dimensions.width / 32.0,
+  }
+})
 
 module.exports = IAVWebView

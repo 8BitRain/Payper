@@ -53,18 +53,10 @@ class AddBankAccountTooltip extends React.Component {
   render() {
     return(
       <View style={{flex: 1}}>
+
+      <View style={{flex: 1}}>
         {/* To get the close button working change height to 50. Remember to view the borders*/}
-        <View style={{flex: 1, width: 100, height: 5}}>
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            style={{position: "absolute", margin: dimensions.width * .08, marginTop: 20, marginBottom: 0, top: 0, left: 0, right: 0, bottom: 0 }}
-            onPress={() => console.log("Skip Modal")}>
 
-                <EvilIcons  size={32} name="close" color={colors.accent} />
-
-          </TouchableHighlight>
-        </View>
         <View style={{padding: 0}}>
           <Swiper style={styles.wrapper, {}}
             showsButtons={false}
@@ -117,6 +109,18 @@ class AddBankAccountTooltip extends React.Component {
             </View>
           </Swiper>
       </View>
+    </View>
+    <View style={{flex: 1, position: "absolute", left: 0, top: 0}}>
+      <TouchableHighlight
+        activeOpacity={0.8}
+        underlayColor={'transparent'}
+        style={{margin: dimensions.width * .08, marginTop: 20}}
+        onPress={() => console.log("Skip Modal")}>
+
+            <EvilIcons  size={32} name="close" color={colors.snowWhite} />
+
+      </TouchableHighlight>
+    </View>
     </View>
     );
   }

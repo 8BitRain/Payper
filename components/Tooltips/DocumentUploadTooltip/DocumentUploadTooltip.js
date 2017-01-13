@@ -77,18 +77,6 @@ class DocumentUploadTooltip extends React.Component {
   render() {
     return(
       <View style={{flex: 1}}>
-        {/* To get the close button working change height to 50. Remember to view the borders*/}
-        <View style={{ width: 100, height: 5}}>
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            style={{position: "absolute", margin: dimensions.width * .08, marginTop: 20, marginBottom: 0, top: 0, left: 0, right: 0, bottom: 0 }}
-            onPress={() => console.log("Skip Modal")}>
-
-                <EvilIcons  size={32} name="close" color={colors.accent} />
-
-          </TouchableHighlight>
-        </View>
         <View style={styles.wrapper}>
           <TouchableHighlight
             activeOpacity={0.8}
@@ -118,7 +106,7 @@ class DocumentUploadTooltip extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => console.log("Close Modal")}
+            onPress={() => {this.props.toggleModal(false)}}
             style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
                 <View style={{flexDirection: "row", justifyContent: "center", width: dimensions.width * .84}}>
                   <Text style={styles.buttonText}>{"Take A Photo"}</Text>
