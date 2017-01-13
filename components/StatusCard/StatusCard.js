@@ -18,88 +18,11 @@ class StatusCard extends React.Component {
   constructor(props) {
     super(props)
 
-
-    this.customer_status = this.props.currentUser.customer_status;
-    this.onboardingPercentage = 0;
-    switch (this.props.onboardingProgress) {
-      case "kyc-success":
-        this.onboardingPercentage = 100;
-        break;
-      case "need-bank":
-        if(this.customer_status== "verified"){
-          this.onboardingPercentage = 75;
-        }
-        if(this.customer_status == "kyc-retry" || this.customer_status == "kyc-document" || this.customer_status == "kyc-suspended"){
-          this.onboardingPercentage = 60;
-        }
-        if(this.customer_status == "kyc-documentRecieved"){
-          this.onboardingPercentage = 65;
-        }
-        if(this.customer_status == "kyc-documentProcessing"){
-          this.onboardingPercentage = 75;
-        }
-        if(this.customer_status == "unverified"){
-          this.onboardingPercentage = 50;
-        }
-        break;
-      case "microdeposits-initialized":
-        if(this.customer_status == "verified"){
-          this.onboardingPercentage = 80;
-        }
-        if(this.customer_status == "kyc-retry" || this.customer_status == "kyc-document" || this.customer_status == "kyc-documentFailed" || this.customer_status == "kyc-suspended"){
-          this.onboardingPercentage = 65;
-        }
-        if(this.customer_status == "kyc-documentRecieved"){
-          this.onboardingPercentage = 70;
-        }
-        if(this.customer_status == "kyc-documentProcessing"){
-          this.onboardingPercentage = 75;
-        }
-        if(this.customer_status == "unverified"){
-          this.onboardingPercentage = 55;
-        }
-        break;
-      case "microdeposits-failed":
-        if(this.customer_status == "verified"){
-          this.onboardingPercentage = 75;
-        }
-        if(this.customer_status == "kyc-retry" || this.customer_status == "kyc-document" || this.customer_status == "kyc-documentFailed" || this.customer_status == "kyc-suspended"){
-          this.onboardingPercentage = 65;
-        }
-        if(this.customer_status == "kyc-documentRecieved"){
-          this.onboardingPercentage = 70;
-        }
-        if(this.customer_status == "kyc-documentProcessing"){
-          this.onboardingPercentage = 75;
-        }
-        if(this.customer_status == "unverified"){
-          this.onboardingPercentage = 50;
-        }
-        break;
-      case "need-kyc":
-        this.onboardingPercentage = 70;
-        break;
-      case "kyc-retry" || "kyc-suspended" || "kyc-documentNeeded" :
-        this.onboardingPercentage = 75;
-        break;
-      case "kyc-documentRecieved":
-        this.onboardingPercentage = 80;
-        break;
-      case "kyc-documentProcessing":
-        this.onboardingPercentage = 85;
-        break;
-      case "kyc-documentFailed":
-        this.onboardingPercentage = 75;
-        break;
-      default:
-
-    }
-
     this.config = {
       'need-bank': {
-        message: "You still need to add a bank account!",
         title: "Bank Account Needed",
-        action: "Add Bank",
+        message: "You won't be able to send money until you add a bank account.",
+        action: "Add Bank Account",
         pressable: true,
         destination: () => Actions.GlobalModal({
           subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
@@ -107,45 +30,171 @@ class StatusCard extends React.Component {
         })
       },
       'need-kyc': {
-        message: "need-kyc",
+        title: "Account Verification Needed",
+        message: "You won't be able to receive money until you verify your account.",
+        action: "Verify Account",
         pressable: true,
         destination: () => Actions.GlobalModal({
           subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
-          backgroundColor: colors.accent,
+          backgroundColor: colors.snowWhite,
           showHeader: true,
-          title: "Bank Account Verification"
+          title: "Account Verification"
         })
       },
       'kyc-retry': {
-        message: "kyc-retry"
+        title: "Account Verification Failed",
+        message: "Try verifying your account again with slightly more detailed information.",
+        action: "Verify Account",
+        pressable: true,
+        destination: () => Actions.GlobalModal({
+          subcomponent: <KYCOnboardingView retry currentUser={this.props.currentUser} />,
+          backgroundColor: colors.snowWhite,
+          showHeader: true,
+          title: "Account Verification"
+        })
       },
       'kyc-documentNeeded': {
-        message: "kyc-documentNeeded"
+        title: "Additional Documents Required",
+        message: "We need a bit more info to verify your account. Please take a snapshot of a valid photo ID.",
+        action: "Take Snapshot",
+        pressable: true,
+        destination: () => Actions.GlobalModal({
+          subcomponent: <View />,
+          backgroundColor: colors.carminePink,
+          showHeader: true,
+          title: "Document Upload"
+        })
       },
       'kyc-documentProcessing': {
-        message: "kyc-documentProcessing"
+        title: "Verifying Your Account",
+        message: "We're processing your information and will notify you when verification is complete."
       },
       'kyc-documentReceived': {
-        message: "kyc-documentReceived"
+        title: "Verifying Your Account",
+        message: "We're processing your information and will notify you when verification is complete."
       },
       'kyc-suspended': {
-        message: "kyc-suspended"
+        title: "Verifying Your Account",
+        message: "We're processing your information and will notify you when verification is complete."
       },
       'microdeposits-initialized': {
-        message: "microdeposits-initialized"
+        title: "Microdeposits Initialized",
+        message: "We're transferring two small (< 20¢) sums to your bank account. We will notify you when they've arrived."
       },
       'microdeposits-deposited': {
-        message: "microdeposits-deposited"
+        title: "Microdeposits Arrived",
+        message: "We've deposited two small (< 20¢) sums to your bank account and are awaiting your verification.",
+        action: "Verify Microdeposits",
+        pressable: true,
+        destination: () => Actions.GlobalModal({
+          subcomponent: <View />,
+          backgroundColor: colors.carminePink,
+          showHeader: true,
+          title: "Document Upload"
+        })
       },
-      'microdeposits-failed':{
-        message: "microdeposits-failed"
+      'microdeposits-failed': {
+        title: "Microdeposits Failed to Transfer",
+        message: "Please try adding your bank account again. Be sure to double check your routing and account number.",
+        action: "Add Bank Account",
+        pressable: true,
+        destination: () => Actions.GlobalModal({
+          subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
+          backgroundColor: colors.accent
+        })
       }
     }
-    //let onboardingProgress = props.currentUser.appFlags['onboardingProgress']
-    //let onboardingProgress = 'need-bank'
 
+    this.state = {
+      onboardingPercentage: 0
+    }
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      onboardingPercentage: this.getOnboardingPercentage(nextProps.currentUser.appFlags)
+    })
+  }
+
+  getOnboardingPercentage(appFlags) {
+    let customer_status = appFlags.customer_status;
+    let onboardingPercentage = 0;
+
+    switch (appFlags.onboardingProgress) {
+      case "kyc-success":
+        onboardingPercentage = 100;
+        break;
+      case "need-bank":
+        if(customer_status== "verified"){
+          onboardingPercentage = 75;
+        }
+        if(customer_status == "kyc-retry" || customer_status == "kyc-document" || customer_status == "kyc-suspended"){
+          onboardingPercentage = 60;
+        }
+        if(customer_status == "kyc-documentRecieved"){
+          onboardingPercentage = 65;
+        }
+        if(customer_status == "kyc-documentProcessing"){
+          onboardingPercentage = 75;
+        }
+        if(customer_status == "unverified"){
+          onboardingPercentage = 50;
+        }
+        break;
+      case "microdeposits-initialized":
+        if(customer_status == "verified"){
+          onboardingPercentage = 80;
+        }
+        if(customer_status == "kyc-retry" || customer_status == "kyc-document" || customer_status == "kyc-documentFailed" || customer_status == "kyc-suspended"){
+          onboardingPercentage = 65;
+        }
+        if(customer_status == "kyc-documentRecieved"){
+          onboardingPercentage = 70;
+        }
+        if(customer_status == "kyc-documentProcessing"){
+          onboardingPercentage = 75;
+        }
+        if(customer_status == "unverified"){
+          onboardingPercentage = 55;
+        }
+        break;
+      case "microdeposits-failed":
+        if(customer_status == "verified"){
+          onboardingPercentage = 75;
+        }
+        if(customer_status == "kyc-retry" || customer_status == "kyc-document" || customer_status == "kyc-documentFailed" || customer_status == "kyc-suspended"){
+          onboardingPercentage = 65;
+        }
+        if(customer_status == "kyc-documentRecieved"){
+          onboardingPercentage = 70;
+        }
+        if(customer_status == "kyc-documentProcessing"){
+          onboardingPercentage = 75;
+        }
+        if(customer_status == "unverified"){
+          onboardingPercentage = 50;
+        }
+        break;
+      case "need-kyc":
+        onboardingPercentage = 70;
+        break;
+      case "kyc-retry" || "kyc-suspended" || "kyc-documentNeeded" :
+        onboardingPercentage = 75;
+        break;
+      case "kyc-documentRecieved":
+        onboardingPercentage = 80;
+        break;
+      case "kyc-documentProcessing":
+        onboardingPercentage = 85;
+        break;
+      case "kyc-documentFailed":
+        onboardingPercentage = 75;
+        break;
+      default:
+    }
+
+    return onboardingPercentage
+  }
 
   handlePress(destination) {
       let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
@@ -182,71 +231,78 @@ class StatusCard extends React.Component {
 
   render() {
     let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
-    //let onboardingProgress = 'need-bank'
     let message = (this.config[onboardingProgress]) ? this.config[onboardingProgress].message : "'" + onboardingProgress + "' is not a valid value for the 'onboardingProgress' appFlag"
     let destination = (this.config[onboardingProgress]) ? this.config[onboardingProgress].destination : null
 
-    return(
-      <View style={styles.wrapper}>
-        {/* //TODO Close Modal Floating Points Move this to outside of wrapper*/}
-        {/* Header */}
-        <View style={{flex: 1, justifyContent: "flex-start", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", marginTop: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, backgroundColor: colors.darkAccent}}>
-          {/* Profile Picture & Onboarding Progress Text*/}
-          <View style={{flex: 1, alignItems: "center"}}>
-            {this._renderPicWithInitials(this.props.currentUser.first_name, this.props.currentUser.last_name)}
-            <Text style={styles.text}>{"My Profile Strength"}</Text>
-          </View>
-          {/* Unlocked Features*/}
-          <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
+    // Return an empty view for cases where no StatusCard should be rendered
+    if (!this.config[onboardingProgress]) {
+      return(
+        <View />
+      )
+    } else {
+      return(
+        <View style={styles.wrapper}>
+          {/* //TODO Close Modal Floating Points Move this to outside of wrapper*/}
+          {/* Header */}
+          <View style={{flex: 1, justifyContent: "flex-start", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", marginTop: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, backgroundColor: colors.darkAccent}}>
+            {/* Profile Picture & Onboarding Progress Text*/}
             <View style={{flex: 1, alignItems: "center"}}>
-              <Ionicons size={24} name="md-lock" color={colors.medGrey} />
-              <Text style={styles.lockText}>{"Send Money"}</Text>
+              {this._renderPicWithInitials(this.props.currentUser.first_name, this.props.currentUser.last_name)}
+              <Text style={styles.text}>{"My Profile Strength"}</Text>
             </View>
-            {/* Progress Percentage */}
-            <View style={{flex: 1, alignItems: "center"}}>
-              {/* <Text style={styles.header}>{"80%"}</Text> */}
-              <AnimatedCircularProgress
-                size={64}
-                width={4}
-                fill={this.onboardingPercentage}
-                tintColor={colors.snowWhite}
-                backgroundColor={colors.medGrey}>
-                {
-                  (fill) => (
-                    <Text style={styles.percantageText}>
-                      {this.onboardingPercentage + "%"}
-                    </Text>
-                  )
-                }
-              </AnimatedCircularProgress>
+            {/* Unlocked Features*/}
+            <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
+              <View style={{flex: 1, alignItems: "center"}}>
+                <Ionicons size={24} name="md-lock" color={colors.medGrey} />
+                <Text style={styles.lockText}>{"Send Money"}</Text>
+              </View>
+              {/* Progress Percentage */}
+              <View style={{flex: 1, alignItems: "center"}}>
+                {/* <Text style={styles.header}>{"80%"}</Text> */}
+                <AnimatedCircularProgress
+                  size={64}
+                  width={4}
+                  fill={this.state.onboardingPercentage}
+                  tintColor={colors.snowWhite}
+                  backgroundColor={colors.medGrey}>
+                  {
+                    (fill) => (
+                      <Text style={styles.percantageText}>
+                        {this.state.onboardingPercentage + "%"}
+                      </Text>
+                    )
+                  }
+                </AnimatedCircularProgress>
+              </View>
+              <View style={{flex: 1, alignItems: "center"}}>
+                <Ionicons size={24} name="md-lock" color={colors.medGrey} />
+                <Text style={styles.lockText}>{"Receive Money"}</Text>
+              </View>
             </View>
-            <View style={{flex: 1, alignItems: "center"}}>
-              <Ionicons size={24} name="md-lock" color={colors.medGrey} />
-              <Text style={styles.lockText}>{"Receive Money"}</Text>
-            </View>
-          </View>
 
 
-        </View>
-        {/* Body */}
-        <View style={{flex: .5, justifyContent: "center", alignItems: "center"}}>
-          <Text style={styles.header}>{this.config[onboardingProgress].title}</Text>
-          <Text style={styles.text}>{this.config[onboardingProgress].message}</Text>
-        </View>
-        {/*Footer*/}
-        <View style={{flex: .5, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            onPress={() => {this.handlePress(destination)}}
-            style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
-                <Text style={styles.buttonText}>{this.config[onboardingProgress].action}</Text>
-          </TouchableHighlight>
-        </View>
-    </View>
-    )
+          </View>
+          {/* Body */}
+          <View style={{flex: .5, justifyContent: "center", alignItems: "center"}}>
+            <Text style={styles.header}>{this.config[onboardingProgress].title}</Text>
+            <Text style={styles.text}>{this.config[onboardingProgress].message}</Text>
+          </View>
+          {/*Footer*/}
+          <View style={{flex: .5, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
+            <TouchableHighlight
+              activeOpacity={0.8}
+              underlayColor={'transparent'}
+              onPress={() => {this.handlePress(destination)}}
+              style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
+                  <Text style={styles.buttonText}>{this.config[onboardingProgress].action}</Text>
+            </TouchableHighlight>
+          </View>
+      </View>
+      )
+    }
   }
 }
+
 //Ideal margins are *.25 for Top & Bottom
 var styles = StyleSheet.create({
   wrapper: {
