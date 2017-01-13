@@ -77,6 +77,8 @@ class DocumentUploadTooltip extends React.Component {
   render() {
     return(
       <View style={{flex: 1}}>
+        <View style={styles.dimBackground}>
+        </View>
         <View style={styles.wrapper}>
           <TouchableHighlight
             activeOpacity={0.8}
@@ -128,6 +130,14 @@ class DocumentUploadTooltip extends React.Component {
 }
 
 var styles = StyleSheet.create({
+  dimBackground: {
+    flex: 1,
+    position: "absolute",
+    backgroundColor: colors.richBlack,
+    opacity: .9,
+    height: dimensions.height,
+    width: dimensions.width
+  },
   wrapper: {
     flex: 1,
     justifyContent: 'flex-start',

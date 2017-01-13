@@ -21,7 +21,7 @@ class IAVWebView extends React.Component {
     this.state = {
       cancelled: false,
       injectedJS: "",
-      openTooltip: false
+      openTooltip: false,
     }
   }
 
@@ -41,6 +41,7 @@ class IAVWebView extends React.Component {
   toggleTooltip(toggle){
     this.setState({openTooltip: toggle });
   }
+
 
   handleError(err) {
     this.trackOnce.report("failedIAVLoad", this.props.currentUser.uid)
@@ -196,7 +197,7 @@ class IAVWebView extends React.Component {
           transparent={true}
           visible={this.state.openTooltip}
           >
-            <AddBankAccountTooltip/>
+            <AddBankAccountTooltip toggleTooltip={(value) => this.toggleTooltip(value)}/>
           </Modal>
       </View>
     )

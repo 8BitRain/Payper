@@ -53,12 +53,14 @@ class AddBankAccountTooltip extends React.Component {
   render() {
     return(
       <View style={{flex: 1}}>
-
+      {/* Dim Background*/ }
+      <View style={styles.dimBackground}>
+      </View>
       <View style={{flex: 1}}>
         {/* To get the close button working change height to 50. Remember to view the borders*/}
 
         <View style={{padding: 0}}>
-          <Swiper style={styles.wrapper, {}}
+          <Swiper style={styles.wrapper}
             showsButtons={false}
             dot={this._renderDot()}
             activeDot={this._renderActiveDot()}>
@@ -115,7 +117,7 @@ class AddBankAccountTooltip extends React.Component {
         activeOpacity={0.8}
         underlayColor={'transparent'}
         style={{margin: dimensions.width * .08, marginTop: 20}}
-        onPress={() => console.log("Skip Modal")}>
+        onPress={() => {this.props.toggleTooltip(false)}}>
 
             <EvilIcons  size={32} name="close" color={colors.snowWhite} />
 
@@ -127,8 +129,17 @@ class AddBankAccountTooltip extends React.Component {
 }
 
 var styles = StyleSheet.create({
+  dimBackground: {
+    flex: 1,
+    position: "absolute",
+    backgroundColor: colors.richBlack,
+    opacity: .9,
+    height: dimensions.height,
+    width: dimensions.width
+  },
   wrapper: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
+    opacity: 1
   },
   slide1: {
     flex: 1,
@@ -138,7 +149,8 @@ var styles = StyleSheet.create({
     margin: dimensions.width * .08,
     marginTop: dimensions.height * .10,
     marginBottom: dimensions.height * .10,
-    borderRadius: dimensions.width / 32.0
+    borderRadius: dimensions.width / 32.0,
+    opacity: 1
 
   },
   slide2: {
