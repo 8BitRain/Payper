@@ -89,8 +89,19 @@ exports.signin = function(params, cb) {
             .then((response) => response.json())
             .then((responseData) => {
               console.log("user/facebookCreate responseData", responseData)
-              if (responseData.errorMessage) cb(responseData, true)
-              else cb(responseData.user, true)
+              if (responseData.errorMessage) {
+                cb(responseData, true)
+              } else {
+                var userData = responseData.user
+
+                // Get appFlags before notifying caller of success
+                firebase.database().ref('/appFlags').child(userData.uid).once('value', (snapshot) => {
+                  let appFlags = snapshot.val() || {}
+                  userData.appFlags = appFlags
+                  console.log("--> userData", userData)
+                  cb(userData, true)
+                })
+              }
             })
             .done()
           } catch (err) {

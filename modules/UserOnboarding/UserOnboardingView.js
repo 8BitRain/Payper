@@ -68,8 +68,10 @@ export default class UserOnboardingView extends React.Component {
         uid: uid
       })
 
-      this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates))
-      Actions.FirstPaymentView()
+      console.log("--> User creation was a success. Response", uid)
+      // this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates))
+      // // Actions.FirstPaymentView()
+      Actions.MainViewContainer()
       cb()
     },
     (errCode) => {

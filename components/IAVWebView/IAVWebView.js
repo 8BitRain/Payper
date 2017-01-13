@@ -61,6 +61,12 @@ class IAVWebView extends React.Component {
   generateInjectedJS(params, cb) {
     let {IAVToken, firebaseToken, dwollaEnv, payperEnv} = params
 
+    console.log("--> Generating injected JS")
+    console.log("--> IAVToken", IAVToken)
+    console.log("--> firebaseToken", firebaseToken)
+    console.log("--> dwollaEnv", dwollaEnv)
+    console.log("--> payperEnv", payperEnv)
+
     let injectedJS = `
       $(function() {
         if (WebViewBridge) {

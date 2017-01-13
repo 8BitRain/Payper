@@ -362,7 +362,7 @@ export default class User {
   startListening(updateViaRedux) {
     this.endpoints = [
       {
-        endpoint: 'users',
+        endpoint: 'usernames',
         eventType: 'value',
         listener: null,
         callback: (res) => {
@@ -511,11 +511,19 @@ export default class User {
               .then((responseData) => {
                 if (!responseData.errorMessage) {
                   responseData.user.token = token
-                  this.initialize(responseData.user)
                   this.decryptedPhone = params.phone
                   this.decryptedEmail = params.email
-                  let uid = responseData.user.uid || "unknownUID"
-                  onSuccess(uid)
+
+                  var uid = responseData.user.uid || "unknownUID"
+                  var userData = responseData.user
+
+                  // Get appFlags before notifying caller of success
+                  firebase.database().ref('/appFlags').child(uid).once('value', (snapshot) => {
+                    let appFlags = snapshot.val() || {}
+                    userData.appFlags = appFlags
+                    this.initialize(userData)
+                    onSuccess(uid)
+                  })
                 } else {
                   onFailure("lambda")
                 }
