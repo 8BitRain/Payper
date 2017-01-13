@@ -21,6 +21,7 @@ const colors = {
   lightGrey: "#F6F5F5",
   accent: "#00CEB3",
   lightAccent: "#02DDC1",
+  darkAccent: "#03C9AF",
   darkAccent: "#06C0A7",
   deepBlue: "#000a14",
   gradientGreen: "#23CE6B",
