@@ -179,7 +179,7 @@ class StatusCard extends React.Component {
   }
 
   _renderUnlocks(onboardingProgress){
-
+    //TODO add rendering logic for locks & associated text based on onboaridngProgress
   }
 
   render() {
@@ -210,7 +210,7 @@ class StatusCard extends React.Component {
               <AnimatedCircularProgress
                 size={64}
                 width={4}
-                fill={80}
+                fill={this.onboardingPercentage}
                 tintColor={colors.snowWhite}
                 backgroundColor={colors.medGrey}>
                 {
