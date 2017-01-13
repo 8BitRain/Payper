@@ -147,8 +147,7 @@ class VerifiedIdentity extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => {
-            }}
+            onPress={() => this.props.destination()}
             style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
 
                 <Text style={styles.buttonText}>{"Great!"}</Text>

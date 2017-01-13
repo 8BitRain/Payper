@@ -1,12 +1,11 @@
 // Dependencies
 import React from 'react';
+import {Actions} from 'react-native-router-flux'
 import { View, Text, TouchableHighlight, Animated, Easing, Image, Dimensions, StyleSheet, Modal } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
-
-
 import Confetti from 'react-native-confetti';
 
 // Stylesheets
@@ -206,9 +205,17 @@ class BankAccountAdded extends React.Component {
             activeOpacity={0.8}
             underlayColor={'transparent'}
             onPress={() => {
-              this.setState({buttonFadeState: 1});
-              this.fade_confetti();
-              this.transistion_view();
+              // If user is unverified, show money bag animation
+              if (this.props.shouldShowAccountVerification) {
+                this.setState({buttonFadeState: 1});
+                this.fade_confetti();
+                this.transistion_view();
+              }
+
+              // Otherwise, go back to app
+              else {
+                this.props.skipDestination()
+              }
             }}
             style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
 
@@ -225,20 +232,14 @@ class BankAccountAdded extends React.Component {
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={'transparent'}
-              onPress={() => {
-                /*this.setState({buttonFadeState: 1});*/
-                //this.transistion_view();
-              }}
+              onPress={() => this.props.verifyAccountDestination()}
               style={{height: 50, width: dimensions.width * .44, backgroundColor: colors.lightAccent, justifyContent: "center", borderRightColor: colors.accent, borderRightWidth: 3.0}}>
-                  <Text style={styles.buttonText}>{"Verifiy I.D"}</Text>
+                  <Text style={styles.buttonText}>{"Verify Account"}</Text>
             </TouchableHighlight>
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={'transparent'}
-              onPress={() => {
-                /*this.setState({buttonFadeState: 1});*/
-                //this.transistion_view();
-              }}
+              onPress={() => this.props.skipDestination()}
               style={{height: 50, width: dimensions.width * .44, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
                   <Text style={styles.buttonText}>{"Skip"}</Text>
             </TouchableHighlight>

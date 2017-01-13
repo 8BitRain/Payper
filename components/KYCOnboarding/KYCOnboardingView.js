@@ -97,16 +97,26 @@ class KYCOnboardingView extends React.Component {
       address: street
     }
 
-    console.log("--> verifying account with params:", params)
-
     // Verify
     this.props.currentUser.verify(params, (success) => {
       this.setState({loading: false})
-      if (success) {
-        alert("Success!")
-      } else {
+
+      if (success)
+        this.onSuccess()
+      else
         Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
-      }
+    })
+  }
+
+  onSuccess() {
+    const VerifiedIdentity = require('../Rewards/VerifiedIdentity/VerifiedIdentity')
+
+    Actions.refresh({
+      subcomponent:
+        <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.snowWhite}}>
+          <VerifiedIdentity destination={() => Actions.pop()} />
+        </View>,
+      backgroundColor: colors.snowWhite
     })
   }
 

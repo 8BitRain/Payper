@@ -168,12 +168,6 @@ class AddressField extends React.Component {
     let {setValues} = this.props
     let {street, city, state, zip} = this.state
 
-    console.log("--> submit() was invoked...")
-    console.log("--> street", street)
-    console.log("--> city", city)
-    console.log("--> state", state)
-    console.log("--> zip", zip)
-
     // Validate input
     let validityReport = this.validateInput()
     let {addressIsValid, fieldToFocus, invalidityAlert} = validityReport
@@ -302,6 +296,7 @@ class AddressField extends React.Component {
                         blurOnSubmit: true,
                         defaultValue: state,
                         returnKeyType: "next",
+                        autoCapitalize: "words",
                         onSubmitEditing: () => this.inputRefs.ZIP.focus(),
                         onChangeText: (text) => this.setState({state: text})
                       }}

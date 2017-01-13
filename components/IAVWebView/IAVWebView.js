@@ -110,23 +110,75 @@ class IAVWebView extends React.Component {
           showHeader: true,
           title: "Microdeposit Verification"
         })
-      } else if ("verified" === currentUser.appFlags.customer_status) {
-        if (typeof this.props.toggleModal === 'function')
-          this.props.toggleModal()
-        else
-          Actions.pop()
       } else {
         // Why this import syntax? https://goo.gl/gcNg7z
-        const KYCOnboardingView = require('../KYCOnboarding/KYCOnboardingView')
         const BankAccountAdded = require('../Rewards/BankAccountAdded/BankAccountAdded')
 
+        let userIsVerified = this.props.currentUser.appFlags.customer_status === "verified"
+
         Actions.refresh({
-          subcomponent: <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.snowWhite}}><BankAccountAdded /></View>,
+          subcomponent:
+            <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.snowWhite}}>
+              <BankAccountAdded
+                currentUser={this.props.currentUser}
+                shouldShowAccountVerification={!userIsVerified}
+                verifyAccountDestination={() => {
+                  // Why this import syntax? https://goo.gl/gcNg7z
+                  const KYCOnboardingView = require('../KYCOnboarding/KYCOnboardingView')
+
+                  Actions.refresh({
+                    subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
+                    backgroundColor: colors.snowWhite,
+                    showHeader: true,
+                    title: "Account Verification"
+                  })
+                }}
+                skipDestination={() => Actions.pop()} />
+            </View>,
           backgroundColor: colors.snowWhite,
           showHeader: true,
           title: "Bank Account Verification"
         })
       }
+
+      // else if ("verified" === currentUser.appFlags.customer_status) {
+      //
+      //   // Why this import syntax? https://goo.gl/gcNg7z
+      //   const BankAccountAdded = require('../Rewards/BankAccountAdded/BankAccountAdded')
+      //
+      //   Actions.refresh({
+      //     subcomponent:
+      //       <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.snowWhite}}>
+      //         <BankAccountAdded
+      //           currentUser={this.props.currentUser}
+      //           toggleModal={this.props.toggleModal} />
+      //       </View>,
+      //     backgroundColor: colors.snowWhite,
+      //     showHeader: true,
+      //     title: "Bank Account Verification"
+      //   })
+      //
+      //
+      //   if (typeof this.props.toggleModal === 'function')
+      //     this.props.toggleModal()
+      //   else
+      //     Actions.pop()
+      // } else {
+      //   // Why this import syntax? https://goo.gl/gcNg7z
+      //   const BankAccountAdded = require('../Rewards/BankAccountAdded/BankAccountAdded')
+      //
+      //   Actions.refresh({
+      //     subcomponent:
+      //       <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.snowWhite}}>
+      //         <BankAccountAdded
+      //           currentUser={this.props.currentUser}
+      //           toggleModal={this.props.toggleModal} />
+      //       </View>,
+      //     backgroundColor: colors.snowWhite,
+      //     showHeader: true,
+      //     title: "Bank Account Verification"
+      //   })
+      // }
     }
   }
 
