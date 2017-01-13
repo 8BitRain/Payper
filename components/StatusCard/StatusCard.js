@@ -65,34 +65,28 @@ class StatusCard extends React.Component {
       }
     }
     //let onboardingProgress = props.currentUser.appFlags['onboardingProgress']
-    let onboardingProgress = 'need-bank'
+    //let onboardingProgress = 'need-bank'
 
-    this.state = {
-      pressable: (this.config[onboardingProgress]) ? this.config[onboardingProgress].pressable : false,
-      modalContent: (this.config[onboardingProgress]) ? this.config[onboardingProgress].modalContent : <View />
-    }
   }
 
-  componentWillReceiveProps(nextProps) {
-    //let currOnboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
-    //let newOnboardingProgress = nextProps.currentUser.appFlags['onboardingProgress']
-    let currOnboardingProgress = 'need-bank'
-    let newOnboardingProgress = 'need-bank'
-
-    if (currOnboardingProgress !== newOnboardingProgress) {
-      this.setState({
-        pressable: (this.config[newOnboardingProgress]) ? this.config[newOnboardingProgress].pressable : false,
-        modalContent: (this.config[newOnboardingProgress]) ? this.config[newOnboardingProgress].modalContent : <View />
-      })
-    }
-  }
 
   handlePress(destination) {
-    if (!this.state.pressable) return
-    (typeof destination === 'function') ? destination() : null
-  }
+      let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
 
-  _renderPicWithInitials(initials){
+      let pressable = (this.config[onboardingProgress])
+        ? this.config[onboardingProgress].pressable
+        : false
+
+      if (!pressable) return
+
+      if (typeof destination === 'function')
+        destination()
+    }
+
+
+  _renderPicWithInitials(firstname, lastname){
+    let initials = firstname.charAt(0) + lastname.charAt(0);
+    
     return(
       <View style={styles.imageWrap}>
           { /*Profile pic with initials*/ }
@@ -106,9 +100,8 @@ class StatusCard extends React.Component {
   }
 
   render() {
-    let {modalContent} = this.state
-    //let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
-    let onboardingProgress = 'need-bank'
+    let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
+    //let onboardingProgress = 'need-bank'
     let message = (this.config[onboardingProgress]) ? this.config[onboardingProgress].message : "'" + onboardingProgress + "' is not a valid value for the 'onboardingProgress' appFlag"
     let destination = (this.config[onboardingProgress]) ? this.config[onboardingProgress].destination : null
 
@@ -119,8 +112,8 @@ class StatusCard extends React.Component {
         <View style={{flex: 1, justifyContent: "flex-start", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", marginTop: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, backgroundColor: colors.darkAccent}}>
           {/* Profile Picture & Onboarding Progress Text*/}
           <View style={{flex: 1, alignItems: "center"}}>
-            {this._renderPicWithInitials("ES")}
-            <Text style={styles.text}>{"Eric's Onboarding Progress"}</Text>
+            {this._renderPicWithInitials(this.props.currentUser.first_name, this.props.currentUser.last_name)}
+            <Text style={styles.text}>{"My Profile Strength"}</Text>
           </View>
           {/* Unlocked Features*/}
           <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
@@ -156,18 +149,17 @@ class StatusCard extends React.Component {
         </View>
         {/* Body */}
         <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-          <Text style={styles.header}>{this.config['need-bank'].title}</Text>
-          <Text style={styles.text}>{this.config['need-bank'].message}</Text>
+          <Text style={styles.header}>{this.config[onboardingProgress].title}</Text>
+          <Text style={styles.text}>{this.config[onboardingProgress].message}</Text>
         </View>
         {/*Footer*/}
         <View style={{flex: .5, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => console.log("Close Modal")}
+            onPress={() => {this.handlePress(destination)}}
             style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
-
-                <Text style={styles.buttonText}>{this.config['need-bank'].action}</Text>
+                <Text style={styles.buttonText}>{this.config[onboardingProgress].action}</Text>
           </TouchableHighlight>
         </View>
     </View>
