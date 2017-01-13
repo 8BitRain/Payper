@@ -119,9 +119,25 @@ class StatusCard extends React.Component {
         {/* Header */}
         <View style={{flex: 1, justifyContent: "flex-start", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", marginTop: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, backgroundColor: colors.darkAccent}}>
           {/* Profile Picture & Onboarding Progress Text*/}
-          <View style={{flex: 1, alignItems: "center"}}>
+          <View style={{flex: 1, alignItems: "flex-start", flexDirection: "row"}}>
             {this._renderPicWithInitials("ES")}
-            <Text style={styles.text}>{"Eric's Onboarding Progress"}</Text>
+            <View style={{flex: 1, position: "absolute", left: 0, opacity: .9}}>
+              <AnimatedCircularProgress
+                size={64}
+                width={4}
+                fill={80}
+                tintColor={colors.carminePink}
+                backgroundColor={colors.medGrey}>
+                {
+                  (fill) => (
+                    <Text style={styles.percantageText}>
+                      {"80%"}
+                    </Text>
+                  )
+                }
+              </AnimatedCircularProgress>
+            </View>
+            <Text style={styles.text}>{"My Profile Strength"}</Text>
           </View>
           {/* Unlocked Features*/}
           <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
@@ -237,7 +253,6 @@ var styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginTop: 15,
     lineHeight: 18 * 1.20
   },
   header2:{
