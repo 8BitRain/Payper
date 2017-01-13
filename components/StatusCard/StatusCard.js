@@ -18,6 +18,15 @@ class StatusCard extends React.Component {
   constructor(props) {
     super(props)
 
+    this.onboardingPercentage = 0;
+    switch (this.props.onboardingProgress) {
+      case "kyc-success":
+
+        break;
+      default:
+
+    }
+
     this.config = {
       'need-bank': {
         message: "You still need to add a bank account!",
@@ -86,7 +95,7 @@ class StatusCard extends React.Component {
 
   _renderPicWithInitials(firstname, lastname){
     let initials = firstname.charAt(0) + lastname.charAt(0);
-    
+
     return(
       <View style={styles.imageWrap}>
           { /*Profile pic with initials*/ }
@@ -97,6 +106,10 @@ class StatusCard extends React.Component {
           </View>
       </View>
     )
+  }
+
+  _renderUnlocks(onboardingProgress){
+
   }
 
   render() {
@@ -118,8 +131,8 @@ class StatusCard extends React.Component {
           {/* Unlocked Features*/}
           <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
             <View style={{flex: 1, alignItems: "center"}}>
-              <Ionicons size={24} name="md-lock" color={colors.snowWhite} />
-              <Text style={styles.text}>{"Send Money"}</Text>
+              <Ionicons size={24} name="md-lock" color={colors.medGrey} />
+              <Text style={styles.lockText}>{"Send Money"}</Text>
             </View>
             {/* Progress Percentage */}
             <View style={{flex: 1, alignItems: "center"}}>
@@ -140,8 +153,8 @@ class StatusCard extends React.Component {
               </AnimatedCircularProgress>
             </View>
             <View style={{flex: 1, alignItems: "center"}}>
-              <Ionicons size={24} name="md-lock" color={colors.snowWhite} />
-              <Text style={styles.text}>{"Receive Money"}</Text>
+              <Ionicons size={24} name="md-lock" color={colors.medGrey} />
+              <Text style={styles.lockText}>{"Receive Money"}</Text>
             </View>
           </View>
 
@@ -209,6 +222,20 @@ var styles = StyleSheet.create({
     alignSelf: "center"
   },
   text: {
+    color: '#fff',
+    fontSize: 16,
+    lineHeight: 16 * 1.20,
+    textAlign: "center",
+    fontWeight: "500"
+  },
+  lockText: {
+    color: colors.medGrey,
+    fontSize: 16,
+    lineHeight: 16 * 1.20,
+    textAlign: "center",
+    fontWeight: "500"
+  },
+  unlockedText:{
     color: '#fff',
     fontSize: 16,
     lineHeight: 16 * 1.20,
