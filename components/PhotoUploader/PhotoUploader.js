@@ -1,9 +1,11 @@
 // Dependencies
 import React from 'react';
-import {   AppRegistry, Dimensions, Platform,  StyleSheet, Text,TouchableHighlight, View, Animated, Image, NativeModules, ListView, DeviceEventEmitter } from 'react-native';
+import { AppRegistry, Dimensions, Platform,  StyleSheet, Text,TouchableHighlight, View, Animated, Image, NativeModules, ListView, DeviceEventEmitter, Modal } from 'react-native';
+import {Actions} from 'react-native-router-flux'
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {colors} from '../../globalStyles';
 import * as Headers from '../../helpers/Headers';
 
@@ -19,6 +21,9 @@ import ImageResizer from 'react-native-image-resizer';
 import UserPic from '../Previews/UserPic/UserPic';
 import StickyView from '../../classes/StickyView';
 import ContinueButton from './subcomponents/ContinueButton';
+import DocumentUploadTooltip from '../Tooltips/DocumentUploadTooltip/DocumentUploadTooltip'
+
+
 // Partial components
 import Header from '../../components/Header/Header';
 import * as Alert from '../../helpers/Alert';
@@ -39,11 +44,13 @@ class PhotoUploader extends React.Component {
   constructor(props) {
     super(props);
     { /*PhotoUploader type can either be "photo" or "document"*/ }
+
+    console.log("Title: " + this.props.title + " Type: " + this.props.brand + " Index: " + this.props.index);
     this.state = {
       opacity: new Animated.Value(0),
       title: this.props.title,
-      type: this.props.type,
-      index: this.props.index,
+      brand: this.props.brand,
+      index: 1,
       image: this.props.image,
       optimisticallyRenderedImage: null,
       photoUploaded: false,
@@ -54,9 +61,10 @@ class PhotoUploader extends React.Component {
       progress: {
         loaded: null,
         total: null
-      }
+      },
+      openTooltip: true
     };
-    console.log("TYPE" + this.state.type);
+    console.log("BRAND" + this.state.brand);
   }
 
   componentDidMount() {
@@ -80,6 +88,10 @@ class PhotoUploader extends React.Component {
       toValue: 0.0,
       velocity: 4.0
     }).start();
+  }
+
+  toggleModal(toggle){
+    this.setState({openTooltip: toggle });
   }
 
   getSelectedImages(images, current) {
@@ -239,7 +251,7 @@ class PhotoUploader extends React.Component {
         return(
           <StickyView>
             <ContinueButton text={(this.state.photoUploaded) ? "Uploading..." : "Upload Photo"} onPress={() => {
-              this.uploadPhotoS3(this.state.selectedImage, this.state.type);
+              this.uploadPhotoS3(this.state.selectedImage, this.state.brand);
               this.setState({photoUploaded: true});
             }}/>
           </StickyView>
@@ -274,8 +286,8 @@ class PhotoUploader extends React.Component {
     );
   }
 
-  _renderAlert(type){
-    if(type == "document"){
+  _renderAlert(brand){
+    if(brand == "document"){
       Alert.photoUpload({
         title: "Document Upload Status",
         message: "Your document successfully uploaded!",
@@ -287,7 +299,7 @@ class PhotoUploader extends React.Component {
       });
     }
 
-    if(type == "photo"){
+    if(brand == "photo"){
       Alert.photoUpload({
         title: "Photo Upload Progress",
         message: "Your photo was successfully uploaded",
@@ -301,11 +313,11 @@ class PhotoUploader extends React.Component {
 
   }
 
-  uploadPhotoS3(uri, type){
+  uploadPhotoS3(uri, brand){
     //compress the photo
-    console.log("TYPE: " +  type);
-    console.log("STATE TYPE: " + this.state.type);
-    if(type == "photo"){
+    console.log("BRAND: " +  brand);
+    console.log("STATE BRAND: " + this.state.brand);
+    if(brand == "photo"){
       //params imageUri, newWidth, newHeight, compressFormat, quality, rotation, outputPath
       ImageResizer.createResizedImage(uri, 64, 64, "JPEG", 10, 0).then((resizedImageUri) => {
         // resizeImageUri is the URI of the new image that can now be displayed, uploaded...
@@ -328,7 +340,7 @@ class PhotoUploader extends React.Component {
     }
 
     let options = {
-      bucket: (this.state.type == "document") ? "payper-verifydocs-" + config.details.env : "payper-profilepics-" + config.details.env,
+      bucket: (this.state.brand == "document") ? "payper-verifydocs-" + config.details.env : "payper-profilepics-" + config.details.env,
       region: "us-east-1",
       accessKey: "AKIAJAPGM72WRCJVO33A",
       secretKey: "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",
@@ -347,8 +359,8 @@ class PhotoUploader extends React.Component {
         //this.props.setOptimisticallyRenderedImage(userPhoto);
         console.log(this.props);
         //How can I update currentUser.profile_pic?
-        this._renderAlert(this.state.type);
-        if(this.state.type == "photo"){
+        this._renderAlert(this.state.brand);
+        if(this.state.brand == "photo"){
           //Update the user's profile picture
           Lambda.updateProfilePic({url: response.headers.Location , token: this.props.currentUser.token }, (response) => {
             console.log(response);
@@ -366,14 +378,45 @@ class PhotoUploader extends React.Component {
     return(
       <View style={{flex: 1, backgroundColor: colors.snowWhite}}>
 
+      {/* Header*/}
+      <View style={{flex: .1, backgroundColor: colors.accent, flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+          { /*Close*/ }
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            style={{marginTop: 10}}
+            onPress={() => {Actions.pop()}}>
+                <EvilIcons  size={32} name="close" color={colors.snowWhite} />
+          </TouchableHighlight>
 
+          <Text style={{marginTop: 10, fontSize: 17, color: colors.lightGrey, marginRight: 50, marginLeft: 50}}>{this.props.title}</Text>
+          { /*Document Upload Tooltip*/ }
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            style={{marginTop: 10}}
+            onPress={() => {this.toggleModal(true)}}>
+                <Ionicons style={{}} size={32} name="ios-help-circle" color={colors.snowWhite} />
+          </TouchableHighlight>
+      </View>
+
+      { /*Main Content*/ }
       <View style={{flex: .8}}>
-        {(this.state.index == 0) && (this.state.type == "document") ? this._renderDocumentUploadExplanation() : null}
+        {(this.state.index == 0) && (this.state.brand == "document") ? this._renderDocumentUploadExplanation() : null}
         {/*(this.state.index == 0) && (this.state.type == "document") ? null : (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView()*/}
-        {(this.state.index == 1 && this.state.type == "photo" || this.state.type == "document") ? (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView() : null}
+        {(this.state.index == 1 && this.state.brand == "photo" || this.state.brand == "document") ? (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView() : null}
         {(this.state.index == 2) ? this._renderPhotoTaken() : null}
       </View>
       {this._renderFooter()}
+
+      <Modal
+        animationType={"slide"}
+        transparent={true}
+        visible={this.state.openTooltip}
+        >
+          <DocumentUploadTooltip toggleModal={(value) => this.toggleModal(value)}/>
+        </Modal>
+
       </View>
 
     );

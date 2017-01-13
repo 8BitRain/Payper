@@ -2,7 +2,7 @@ import React from 'react'
 import { Actions } from 'react-native-router-flux'
 import { View, Text, TouchableHighlight, Animated, Easing, Dimensions, Modal, Image, StyleSheet } from 'react-native'
 import { colors } from '../../globalStyles'
-import { IAVWebView, KYCOnboardingView } from '../index'
+import { IAVWebView, KYCOnboardingView, PhotoUploader } from '../index'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -59,9 +59,9 @@ class StatusCard extends React.Component {
         action: "Take Snapshot",
         pressable: true,
         destination: () => Actions.GlobalModal({
-          subcomponent: <View />,
+          subcomponent: <PhotoUploader title={"Document Upload"} index={1} brand={"document"}  {...this.props}/>,
           backgroundColor: colors.carminePink,
-          showHeader: true,
+          showHeader: false,
           title: "Document Upload"
         })
       },
