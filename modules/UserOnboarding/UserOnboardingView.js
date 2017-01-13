@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react'
-import { View, Text, TouchableHighlight, StyleSheet, Animated, Easing, Dimensions, StatusBar, Image, Modal } from "react-native"
+import { View, Text, TouchableHighlight, StyleSheet, Animated, Easing, Dimensions, StatusBar, Image, Modal, Alert } from "react-native"
 import { Actions } from 'react-native-router-flux'
 import { Timer, TrackOnce } from '../../classes/Metrics'
 import Mixpanel from 'react-native-mixpanel'
@@ -81,10 +81,12 @@ export default class UserOnboardingView extends React.Component {
         uid: "unknownUID"
       })
 
-      if (errCode === "auth/email-already-in-use") {
-        alert("This email is already in use.")
+      if (errCode === "auth/email-already-in-use" || errCode === "dupe-email") {
+        Alert.alert('Wait!', 'This email is already in use.')
+      } else if (errCode === "dupe-phone") {
+        Alert.alert('Wait!', 'This phone number is already in use.')
       } else {
-        alert("Something went wrong on our end 🙄\n\nPlease try again")
+        Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
         cb()
       }
     })

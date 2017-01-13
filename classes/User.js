@@ -80,7 +80,6 @@ export default class User {
     }
   }
 
-
   /**
     *   Delete this user
   **/
@@ -487,41 +486,67 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   createUserWithEmailAndPassword(params, onSuccess, onFailure) {
-    firebase.auth().createUserWithEmailAndPassword(params.email, params.password).then(() => {
-      firebase.auth().currentUser.getToken(true).then((token) => {
-        params.token = token
-        params.password = null
-        var stringifiedParams = JSON.stringify(params)
-        try {
-          fetch(baseURL + "user/create", {method: "POST", body: stringifiedParams})
-          .then((response) => response.json())
-          .then((responseData) => {
-            if (!responseData.errorMessage) {
-              console.log("--> responseData", responseData)
-              responseData.user.token = token
-              this.initialize(responseData.user)
-              this.decryptedPhone = params.phone
-              this.decryptedEmail = params.email
-              console.log("createUserWithEmailAndPassword succeeded...", "Lambda response:", responseData)
-              let uid = responseData.user.uid || "unknownUID"
-              onSuccess(uid)
-            } else {
-              onFailure("lambda")
+    verifyPhone({
+      phone: params.phone,
+      token: this.token
+    }, (res) => {
+      let {errorMessage} = res
+
+      // If phone number is not unique, alert user
+      if (errorMessage) {
+        onFailure(errorMessage)
+        return
+      }
+
+      // Otherwise, continue with user creation
+      else {
+        firebase.auth().createUserWithEmailAndPassword(params.email, params.password).then(() => {
+          firebase.auth().currentUser.getToken(true).then((token) => {
+            params.token = token
+            params.password = null
+            var stringifiedParams = JSON.stringify(params)
+            try {
+              fetch(baseURL + "user/create", {method: "POST", body: stringifiedParams})
+              .then((response) => response.json())
+              .then((responseData) => {
+                if (!responseData.errorMessage) {
+                  responseData.user.token = token
+                  this.initialize(responseData.user)
+                  this.decryptedPhone = params.phone
+                  this.decryptedEmail = params.email
+                  let uid = responseData.user.uid || "unknownUID"
+                  onSuccess(uid)
+                } else {
+                  onFailure("lambda")
+                }
+              })
+              .done()
+            } catch (err) {
+              console.log("createUserWithEmailAndPassword failed...", "Fetch error:", err)
+              onFailure()
             }
+          }).catch((err) => {
+            console.log("firebase.auth().currentUser.getToken(true) failed...", "Firebase error:", err)
+            onFailure(err.code)
           })
-          .done()
-        } catch (err) {
-          console.log("createUserWithEmailAndPassword failed...", "Fetch error:", err)
-          onFailure()
-        }
-      }).catch((err) => {
-        console.log("firebase.auth().currentUser.getToken(true) failed...", "Firebase error:", err)
-        onFailure(err.code)
-      })
+        })
+        .catch((err) => {
+          console.log("firebase.auth().createUserWithEmailAndPassword failed...", "Firebase error:", err)
+          onFailure(err.code)
+        })
+      }
     })
-    .catch((err) => {
-      console.log("firebase.auth().createUserWithEmailAndPassword failed...", "Firebase error:", err)
-      onFailure(err.code)
-    })
+
+    function verifyPhone(params, cb) {
+      try {
+        fetch(baseURL + "user/verifyPhone", {method: "POST", body: JSON.stringify(params)})
+        .then((response) => response.json())
+        .then((responseData) => cb(responseData))
+        .done()
+      } catch (err) {
+        console.log("Error verifying phone number uniquity", err)
+        cb({errorMessage: err})
+      }
+    }
   }
 }

@@ -101,8 +101,8 @@ class KYCOnboardingView extends React.Component {
 
     // Verify
     this.props.currentUser.verify(params, (success) => {
+      this.setState({loading: false})
       if (success) {
-        this.setState({loading: false})
         alert("Success!")
       } else {
         Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
@@ -185,12 +185,13 @@ class KYCOnboardingView extends React.Component {
                 let day = buffer[1]
                 let month = buffer[0]
                 let year = buffer[2]
+                let formattedDOB = year.concat("-").concat(month).concat("-").concat(day)
 
                 this.setState({
                   dobDay: day,
                   dobMonth: month,
                   dobYear: year,
-                  dob: values
+                  dob: formattedDOB
                 }, () => cb())
               }}
               induceFieldRef={this.induceFieldRef}
@@ -222,7 +223,7 @@ class KYCOnboardingView extends React.Component {
             <Animated.View style={{opacity: verifyButtonOpacity}}>
               <TouchableHighlight
                 underlayColor={'transparent'}
-                onPress={() => (this.state.loading) ? null : this.testVerify()}>
+                onPress={() => (this.state.loading) ? null : this.verify()}>
                 <Text style={{textAlign: 'center', width: dims.width * 0.85, marginTop: 15, fontSize: 16, color: colors.snowWhite, backgroundColor: colors.gradientGreen, padding: 14, borderRadius: 4, overflow: 'hidden'}}>
                   {(this.state.loading)
                     ? "Verifying your account..."
