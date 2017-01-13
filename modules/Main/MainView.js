@@ -115,9 +115,15 @@ class MainView extends React.Component {
     let emptyState = this.generateEmptyState()
 
     // Prepend empty state if necessary
-    for (var k of Object.keys(payFlow))
+    for (var k of Object.keys(payFlow)) {
       if (payFlow[k].length === 0)
         payFlow[k] = emptyState
+    }
+
+    // Prepend status card
+    payFlow.all.unshift({type: "statusCard"})
+    payFlow.inc.unshift({type: "statusCard"})
+    payFlow.out.unshift({type: "statusCard"})
 
     // Trigger re-render
     this.setState({
@@ -133,6 +139,7 @@ class MainView extends React.Component {
 
     switch (rowData.type) {
       case "priorityContent": return rowData.reactComponent
+      case "statusCard": return <StatusCard {...this.props} />
       default: return <PayCard payment={rowData} currentUser={this.props.currentUser} />
     }
   }
@@ -284,11 +291,14 @@ class MainView extends React.Component {
             </ScrollView>
           </Animated.View>
 
+<<<<<<< HEAD
           { /* onboarding-progress status card */ }
 
           <StatusCard {...this.props} />
           
 
+=======
+>>>>>>> db39c1c7d5fd0681927d5d890696dbad45bbba17
           { /* Banner info and payment list */ }
           <ListView
             dataSource={dataSource}

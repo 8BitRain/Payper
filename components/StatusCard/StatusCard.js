@@ -18,6 +18,7 @@ class StatusCard extends React.Component {
   constructor(props) {
     super(props)
 
+
     this.customer_status = this.props.currentUser.customer_status;
     this.onboardingPercentage = 0;
     switch (this.props.onboardingProgress) {
