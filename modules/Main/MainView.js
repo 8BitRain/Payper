@@ -2,12 +2,12 @@ import React from 'react'
 import moment from 'moment'
 import * as _ from 'lodash'
 import { Actions } from 'react-native-router-flux'
-import { View, TouchableHighlight, ListView, ScrollView, RecyclerViewBackedScrollView, Dimensions, Animated, Easing, StatusBar, Text, Image, Modal } from 'react-native'
+import { View, TouchableHighlight, ListView, ScrollView, Dimensions, Animated, Easing, StatusBar, Text, Image, Modal } from 'react-native'
 import { VibrancyView } from "react-native-blur"
 import Drawer from 'react-native-drawer'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import { colors } from '../../globalStyles'
-import { SideMenu, PayCard, StatusCard, PhotoUploader, MicrodepositOnboarding, TrendingPayments } from '../../components'
+import { SideMenu, PayCard, StatusCard, PhotoUploader, MicrodepositOnboarding, TrendingPayments, DynamicList } from '../../components'
 import KYCOnboardingView from '../../components/KYCOnboarding/KYCOnboardingView'
 import { MyProfile, BankAccounts, Notifications, Invite, Settings } from '../../components/SideMenuSubpages'
 import { BankOnboarding, PaymentOnboardingView } from '../../modules'
@@ -18,31 +18,17 @@ class MainView extends React.Component {
   constructor(props) {
     super(props)
 
-    this.EMPTY_DATA_SOURCE = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2
-    })
-
     let plusAngleInterpolator = new Animated.Value(0)
     let chevronAngleInterpolator = new Animated.Value(0)
 
     this.animatedValues = {
-      filterMenuHeight: new Animated.Value(1),
       chevronAngleInterpolator: chevronAngleInterpolator,
       chevronAngle: chevronAngleInterpolator.interpolate({inputRange: [0, 150], outputRange: ['0deg', '180deg']}),
       plusAngleInterpolator: plusAngleInterpolator,
       plusAngle: plusAngleInterpolator.interpolate({inputRange: [0, 150], outputRange: ['0deg', '135deg']})
     }
 
-    this.headerlessModalTitles = ["retry"]
-
     this.state = {
-      all: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
-      inc: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
-      out: this.EMPTY_DATA_SOURCE.cloneWithRows([]),
-      drawerOpen: false,
-      filterMenuOpen: false,
-      createPaymentModalVisible: false,
-      activeFilter: "All",
       mounted: false
     }
   }
@@ -61,74 +47,6 @@ class MainView extends React.Component {
     setTimeout(() => {
       this.setState({mounted: true})
     }, 850)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    let payFlowChanged = nextProps.currentUser.paymentFlow !== this.props.currentUser.paymentFlow
-    if (payFlowChanged) this.generatePayCards(nextProps.currentUser)
-  }
-
-  generateEmptyState() {
-    let emptyState = [
-      {
-        type: "priorityContent",
-        name: "EmptyState",
-        reactComponent:
-          <View style={{alignItems: 'center', justifyContent: 'center', margin: 10, marginTop: 50}}>
-            <Text style={{backgroundColor: 'transparent', textAlign: 'center', fontSize: 18, fontWeight: '400', color: colors.richBlack, width: dims.width - 30}}>
-               {"When you set up a payment series, it will show up here."}
-            </Text>
-
-            <TouchableHighlight
-              activeOpacity={0.8}
-              underlayColor={'transparent'}
-              onPress={() => {
-                Actions.GlobalModal({
-                  subcomponent: <TrendingPayments {...this.props} />,
-                  showHeader: true,
-                  title: "Trending Payments"
-                })
-                this.trackOnce.report("buttonPress/trendingPayments", this.props.currentUser.uid, { from: "emptyState" })
-              }}>
-              <View style={{height: 60, backgroundColor: colors.accent, borderRadius: 4, marginTop: 15, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: dims.width / 2}}>
-                <Text style={{ fontSize: 18, fontWeight: '400', color: colors.snowWhite, alignSelf: 'center', textAlign: 'center' }}>
-                  {"Explore Trending Payments"}
-                </Text>
-              </View>
-            </TouchableHighlight>
-          </View>
-      }
-    ]
-
-    return emptyState
-  }
-
-  generatePayCards(currentUser) {
-    let payFlow = _.cloneDeep(currentUser.paymentFlow)
-    let emptyState = this.generateEmptyState()
-
-    // Prepend empty state if necessary
-    for (var k of Object.keys(payFlow)) {
-      if (payFlow[k].length === 0)
-        payFlow[k] = emptyState
-    }
-
-    // Trigger re-render
-    this.setState({
-      all: this.EMPTY_DATA_SOURCE.cloneWithRows(payFlow.all),
-      inc: this.EMPTY_DATA_SOURCE.cloneWithRows(payFlow.inc),
-      out: this.EMPTY_DATA_SOURCE.cloneWithRows(payFlow.out)
-    })
-  }
-
-  renderRow(rowData) {
-    if (typeof rowData === 'undefined')
-      return <View />
-
-    switch (rowData.type) {
-      case "priorityContent": return rowData.reactComponent
-      default: return <PayCard payment={rowData} currentUser={this.props.currentUser} />
-    }
   }
 
   rotateToX() {
@@ -151,40 +69,8 @@ class MainView extends React.Component {
     }).start()
   }
 
-  toggleFilterMenu() {
-    let { chevronAngleInterpolator, filterMenuHeight } = this.animatedValues
-
-    this.setState({filterMenuOpen: !this.state.filterMenuOpen}, () => {
-      Animated.parallel([
-        Animated.timing(chevronAngleInterpolator, {
-          toValue: (this.state.filterMenuOpen) ? 150 : 0,
-          duration: 150,
-          easing: Easing.elastic(0.4)
-        }),
-        Animated.timing(filterMenuHeight, {
-          toValue: (this.state.filterMenuOpen) ? 75 : 1,
-          duration: 150,
-          easing: Easing.elastic(0.4)
-        })
-      ]).start()
-    })
-  }
-
-  toggleFilter(f) {
-    this.setState({ activeFilter: f }, () => {
-      this.toggleFilterMenu()
-    })
-  }
-
   render() {
-    let { activeFilter, mounted } = this.state
-    let dataSource = []
-
-    switch (activeFilter) {
-      case "Outgoing": dataSource = this.state.out; break;
-      case "Incoming": dataSource = this.state.inc; break;
-      case "All": dataSource = this.state.all; break;
-    }
+    let {mounted} = this.state
 
     return(
       <Drawer
@@ -204,89 +90,29 @@ class MainView extends React.Component {
           <View style={{overflow: 'hidden'}}>
             <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
 
-            <TouchableHighlight
-              activeOpacity={0.8}
-              underlayColor={'transparent'}
-              onPress={() => this.toggleFilterMenu()}>
-              <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
-                <Text style={{color: colors.lightGrey, fontSize: 17, backgroundColor: 'transparent'}}>
-                  {this.state.activeFilter + " Payments"}
-                </Text>
-
-                <Animated.View style={{position: 'absolute', top: 0, right: 6, paddingTop: 24, backgroundColor: 'transparent'}}>
-                  <Animated.View style={{ transform: [{ rotate: this.animatedValues.chevronAngle }] }}>
-                    <EvilIcons name={"chevron-down"} size={34} color={colors.lightGrey} />
-                  </Animated.View>
-                </Animated.View>
-              </View>
-            </TouchableHighlight>
+            <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
+              <Text style={{color: colors.lightGrey, fontSize: 17, backgroundColor: 'transparent'}}>
+                {"My Payments"}
+              </Text>
+            </View>
           </View>
 
-          <Animated.View style={{height: this.animatedValues.filterMenuHeight, backgroundColor: colors.snowWhite, overflow: 'hidden'}}>
-            <ScrollView horizontal contentContainerStyle={{flex: 1.0, paddingLeft: 12, paddingRight: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-              { /* All */ }
-              <TouchableHighlight
-                activeOpacity={0.8}
-                underlayColor={'transparent'}
-                onPress={() => this.toggleFilter('All')}>
-                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                  <EvilIcons name={"eye"} size={38} color={colors.accent} />
-                  <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
-                    {"All"}
-                  </Text>
-                </View>
-              </TouchableHighlight>
+          { /* Banner info and payment list
+            <ListView
+              dataSource={dataSource}
+              renderRow={this.renderRow.bind(this)}
+              renderHeader={() => <StatusCard {...this.props} />}
+              renderFooter={() => <View style={{height: 90}} />}
+              renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+              enableEmptySections />
+          */ }
 
-              { /* Outgoing */ }
-              <TouchableHighlight
-                activeOpacity={0.8}
-                underlayColor={'transparent'}
-                onPress={() => this.toggleFilter('Outgoing')}>
-                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                  <EvilIcons name={"arrow-up"} size={38} color={colors.accent} />
-                  <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
-                    {"Outgoing"}
-                  </Text>
-                </View>
-              </TouchableHighlight>
-
-              { /* Incoming */ }
-              <TouchableHighlight
-                activeOpacity={0.8}
-                underlayColor={'transparent'}
-                onPress={() => this.toggleFilter('Incoming')}>
-                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                  <EvilIcons name={"arrow-down"} size={38} color={colors.accent} />
-                  <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
-                    {"Incoming"}
-                  </Text>
-                </View>
-              </TouchableHighlight>
-
-              { /* Soonest
-              <TouchableHighlight
-                activeOpacity={0.8}
-                underlayColor={colors.maastrichtBlue}
-                onPress={() => this.toggleFilter('Soonest')}>
-                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                  <EvilIcons name={"calendar"} size={38} color={colors.accent} />
-                  <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
-                    {"Soonest"}
-                  </Text>
-                </View>
-              </TouchableHighlight> */ }
-            </ScrollView>
-          </Animated.View>
-
-
-          { /* Banner info and payment list */ }
-          <ListView
-            dataSource={dataSource}
-            renderRow={this.renderRow.bind(this)}
+          { /* StatusCard (header), PayCards (dataSource), TrendingPayments (footer) */ }
+          <DynamicList
+            data={this.props.currentUser.paymentFlow}
+            renderRow={(rowData) => <PayCard {...this.props} payment={rowData} />}
             renderHeader={() => <StatusCard {...this.props} />}
-            renderFooter={() => <View style={{height: 90}} />}
-            renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-            enableEmptySections />
+            renderFooter={() => <View style={{height: 90, marginTop: 25, borderTopWidth: 1, borderColor: colors.medGrey}} />} />
 
           { /* Footer */ }
           <View style={{position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row', borderTopWidth: 1.0, borderColor: colors.lightGrey, backgroundColor: 'rgba(255, 255, 255, 0.64)', justifyContent: 'space-between'}}>
