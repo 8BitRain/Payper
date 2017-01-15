@@ -110,9 +110,33 @@ class MainView extends React.Component {
           { /* StatusCard (header), PayCards (dataSource), TrendingPayments (footer) */ }
           <DynamicList
             data={this.props.currentUser.paymentFlow}
-            renderRow={(rowData) => <PayCard {...this.props} payment={rowData} />}
+            renderRow={(rowData, sectionID, rowID) => {
+              return <PayCard {...this.props} payment={rowData} />
+            }}
+            renderSectionHeader={(rowData, sectionID) => {
+              let numRows = Object.keys(rowData).length
+              let title
+              switch (sectionID) {
+                case "in": title = `Incoming Payments (${numRows})`; break;
+                case "out": title = `Outgoing Payments (${numRows})`; break;
+                default: title = ""
+              }
+
+              return(
+                <View style={{
+                  padding: 7,
+                  paddingLeft: dims.width * 0.05,
+                  marginTop: 8,
+                  backgroundColor: 'rgba(246, 245, 245, 0.94)'
+                }}>
+                  <Text style={{color: colors.deepBlue, fontSize: 17}}>
+                    {title}
+                  </Text>
+                </View>
+              )
+            }}
             renderHeader={() => <StatusCard {...this.props} />}
-            renderFooter={() => <View style={{height: 90, marginTop: 25, borderTopWidth: 1, borderColor: colors.medGrey}} />} />
+            renderFooter={() => <View style={{height: 90, marginTop: 25, borderTopWidth: 1, borderColor: colors.lightGrey}} />} />
 
           { /* Footer */ }
           <View style={{position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row', borderTopWidth: 1.0, borderColor: colors.lightGrey, backgroundColor: 'rgba(255, 255, 255, 0.64)', justifyContent: 'space-between'}}>

@@ -86,8 +86,12 @@ class DynamicList extends React.Component {
   }
 
   render() {
-    let {dataSource} = this.state
-    let {renderHeader, renderFooter} = this.props
+    let {
+      dataSource
+    } = this.state
+    let {
+      renderHeader, renderFooter, renderSectionHeader
+    } = this.props
 
     return(
       <View style={{flex: 1.0}}>
@@ -95,6 +99,7 @@ class DynamicList extends React.Component {
           enableEmptySections
           dataSource={dataSource}
           renderRow={this.renderRow}
+          renderSectionHeader={renderSectionHeader}
           renderHeader={renderHeader}
           renderFooter={renderFooter}
           renderScrollComponent={(props) => <RecyclerViewBackedScrollView {...props} />} />
