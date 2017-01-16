@@ -281,7 +281,7 @@ class StatusCard extends React.Component {
         <View style={styles.wrapper}>
           {/* //TODO Close Modal Floating Points Move this to outside of wrapper*/}
           {/* Header */}
-          <View style={{flex: 1, justifyContent: "flex-start", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", marginTop: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, backgroundColor: colors.darkAccent}}>
+          <View style={{flex: 1, flexShrink: 0, justifyContent: "flex-start", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", marginTop: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, backgroundColor: colors.darkAccent}}>
             {/* Profile Picture & Onboarding Progress Text*/}
             <View style={{flex: 1, alignItems: "center", backgroundColor: colors.darkAccent}}>
               {this._renderPicWithInitials(this.props.currentUser.first_name, this.props.currentUser.last_name)}
@@ -318,16 +318,19 @@ class StatusCard extends React.Component {
             <Text style={styles.header}>{this.config[onboardingProgress].title}</Text>
             <Text style={styles.text}>{this.config[onboardingProgress].message}</Text>
           </View>
-          {/*Footer*/}
-          <View style={{flex: .5, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
-            <TouchableHighlight
-              activeOpacity={0.8}
-              underlayColor={'transparent'}
-              onPress={() => {this.handlePress(destination)}}
-              style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
-                  <Text style={styles.buttonText}>{this.config[onboardingProgress].action}</Text>
-            </TouchableHighlight>
-          </View>
+
+          { /* Footer */
+            (!this.config[onboardingProgress].action)
+              ? null
+              : <View style={{flex: .5, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
+                  <TouchableHighlight
+                    activeOpacity={0.8}
+                    underlayColor={'transparent'}
+                    onPress={() => {this.handlePress(destination)}}
+                    style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
+                    <Text style={styles.buttonText}>{this.config[onboardingProgress].action}</Text>
+                  </TouchableHighlight>
+                </View> }
       </View>
       )
     }
