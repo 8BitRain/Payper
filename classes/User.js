@@ -20,6 +20,7 @@ export default class User {
     this.appFlags = {}
     this.payperContacts = []
     this.nativeContacts = []
+    this.globalUserList = []
     this.bankAccount = {}
     this.handleAppStateChange = this.handleAppStateChange.bind(this)
   }
@@ -45,10 +46,33 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   update(updates) {
-    // console.log("Updating user with updates:", updates)
+    console.log("Updating user with updates:", updates)
     for (var k in updates) this[k] = updates[k]
-    let userCache = (this.appFlags && this.appFlags.onboarding_state === "customer" && !this.appFlags.customer_status) ? "" : JSON.stringify(this)
+    let userCache = JSON.stringify(this)
     Async.set('user', userCache)
+  }
+
+  /**
+    *   Cycle this user's access and refresh tokens
+    *   -----------------------------------------------------------------------
+  **/
+  startTokenRefresher(updateViaRedux) {
+    let refreshInterval = 60 * 1000 * 20
+    this.tokenRefreshInterval = setInterval(() => {
+      this.refresh(updateViaRedux)
+    }, refreshInterval)
+  }
+
+  refresh(updateViaRedux) {
+    firebase.auth().currentUser.getToken(true)
+    .then(function(tkn) {
+      if (typeof updateViaRedux === 'function')
+        updateViaRedux({ token: tkn })
+      else
+        this.update({ token: tkn })
+    }).catch(function(err) {
+      console.log("Error getting new token:", err)
+    })
   }
 
   /**
@@ -59,9 +83,6 @@ export default class User {
   initialize(user) {
     this.update(user)
     this.decrypt((res) => (res) ? this.update(res) : null)
-    this.tokenRefreshInterval = setInterval(() => {
-      this.refresh()
-    }, ((60 * 1000) * 20))
     this.timer = new Timer()
     this.timer.start()
     AppState.addEventListener('change', this.handleAppStateChange)
@@ -78,7 +99,6 @@ export default class User {
       if (firebase.auth().currentUser !== null) this.refresh()
     }
   }
-
 
   /**
     *   Delete this user
@@ -314,17 +334,31 @@ export default class User {
   }
 
   /**
-    *   Cycle this user's access and refresh tokens
+    *   Verify this user's Dwolla customer
+    *   params: firstName, lastName, address, city, state, zip, dob, ssn
+    *   (token is tacked on to params)
     *   -----------------------------------------------------------------------
   **/
-  refresh() {
-    const _this = this
-    firebase.auth().currentUser.getToken(true)
-    .then(function(tkn) {
-      _this.update({ token: tkn })
-    }).catch(function(err) {
-      console.log("Error getting new token:", err)
-    })
+  verify(params, cb) {
+    params.token = this.token
+
+    try {
+      fetch(baseURL + "customer/verify", {method: "POST", body: JSON.stringify(params)})
+      .then((response) => response.json())
+      .then((responseData) => {
+        if (!responseData.errorMessage) {
+          console.log("Customer verification succeeded! responseData:", responseData)
+          cb(true)
+        } else {
+          console.log("Error verifying customer:", responseData.errorMessage)
+          cb(false)
+        }
+      })
+      .done()
+    } catch (err) {
+      console.log("Error verifying customer", err)
+      cb(false)
+    }
   }
 
   /**
@@ -334,7 +368,7 @@ export default class User {
   startListening(updateViaRedux) {
     this.endpoints = [
       {
-        endpoint: 'users',
+        endpoint: 'usernames',
         eventType: 'value',
         listener: null,
         callback: (res) => {
@@ -458,40 +492,75 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   createUserWithEmailAndPassword(params, onSuccess, onFailure) {
-    firebase.auth().createUserWithEmailAndPassword(params.email, params.password).then(() => {
-      firebase.auth().currentUser.getToken(true).then((token) => {
-        params.token = token
-        params.password = null
-        var stringifiedParams = JSON.stringify(params)
-        try {
-          fetch(baseURL + "user/create", {method: "POST", body: stringifiedParams})
-          .then((response) => response.json())
-          .then((responseData) => {
-            if (!responseData.errorMessage) {
-              responseData.user.token = token
-              this.initialize(responseData.user)
-              this.decryptedPhone = params.phone
-              this.decryptedEmail = params.email
-              console.log("createUserWithEmailAndPassword succeeded...", "Lambda response:", responseData)
-              let uid = responseData.user.uid || "unknownUID"
-              onSuccess(uid)
-            } else {
-              onFailure("lambda")
+    verifyPhone({
+      phone: params.phone,
+      token: this.token
+    }, (res) => {
+      let {errorMessage} = res
+
+      // If phone number is not unique, alert user
+      if (errorMessage) {
+        onFailure(errorMessage)
+        return
+      }
+
+      // Otherwise, continue with user creation
+      else {
+        firebase.auth().createUserWithEmailAndPassword(params.email, params.password).then(() => {
+          firebase.auth().currentUser.getToken(true).then((token) => {
+            params.token = token
+            params.password = null
+            var stringifiedParams = JSON.stringify(params)
+            try {
+              fetch(baseURL + "user/create", {method: "POST", body: stringifiedParams})
+              .then((response) => response.json())
+              .then((responseData) => {
+                if (!responseData.errorMessage) {
+                  responseData.user.token = token
+                  this.decryptedPhone = params.phone
+                  this.decryptedEmail = params.email
+
+                  var uid = responseData.user.uid || "unknownUID"
+                  var userData = responseData.user
+
+                  // Get appFlags before notifying caller of success
+                  firebase.database().ref('/appFlags').child(uid).once('value', (snapshot) => {
+                    let appFlags = snapshot.val() || {}
+                    userData.appFlags = appFlags
+                    this.initialize(userData)
+                    onSuccess(uid)
+                  })
+                } else {
+                  onFailure("lambda")
+                }
+              })
+              .done()
+            } catch (err) {
+              console.log("createUserWithEmailAndPassword failed...", "Fetch error:", err)
+              onFailure()
             }
+          }).catch((err) => {
+            console.log("firebase.auth().currentUser.getToken(true) failed...", "Firebase error:", err)
+            onFailure(err.code)
           })
-          .done()
-        } catch (err) {
-          console.log("createUserWithEmailAndPassword failed...", "Fetch error:", err)
-          onFailure()
-        }
-      }).catch((err) => {
-        console.log("firebase.auth().currentUser.getToken(true) failed...", "Firebase error:", err)
-        onFailure(err.code)
-      })
+        })
+        .catch((err) => {
+          console.log("firebase.auth().createUserWithEmailAndPassword failed...", "Firebase error:", err)
+          onFailure(err.code)
+        })
+      }
     })
-    .catch((err) => {
-      console.log("firebase.auth().createUserWithEmailAndPassword failed...", "Firebase error:", err)
-      onFailure(err.code)
-    })
+
+    function verifyPhone(params, cb) {
+      try {
+        fetch(baseURL + "user/verifyPhone", {method: "POST", body: JSON.stringify(params)})
+        .then((response) => response.json())
+        .then((responseData) => cb(responseData))
+        .done()
+      } catch (err) {
+        console.log("Error verifying phone number uniquity", err)
+        cb({errorMessage: err})
+      }
+    }
   }
 }

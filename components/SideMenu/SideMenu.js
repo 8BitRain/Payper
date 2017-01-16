@@ -1,9 +1,12 @@
 import React from 'react'
+import { Actions } from 'react-native-router-flux'
 import { View, Text, TouchableHighlight, Image, Dimensions, StyleSheet, Linking, Alert, ActionSheetIOS, Platform } from 'react-native'
 import { colors } from '../../globalStyles'
 import { VibrancyView } from 'react-native-blur'
 import { signout } from '../../auth'
 import { TrackOnce } from '../../classes/Metrics'
+import { BankAccounts, Notifications, MyProfile } from '../SideMenuSubpages'
+import { TrendingPayments } from '../index'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 let dims = Dimensions.get('window')
@@ -49,7 +52,7 @@ class SideMenu extends React.Component {
   constructor(props) {
     super(props)
 
-    let { toggleSideMenuSubpage, currentUser } = this.props
+    let { currentUser } = this.props
     let trackOnce = new TrackOnce()
 
     this.state = {
@@ -57,32 +60,34 @@ class SideMenu extends React.Component {
         {
           title: 'Bank Accounts',
           icon: 'archive',
-          destination: () => toggleSideMenuSubpage("Bank Accounts")
+          destination: () => Actions.GlobalModal({
+            subcomponent: <BankAccounts {...this.props} />,
+            showHeader: true,
+            title: "Bank Accounts"
+          })
         },
         {
           title: 'Notifications',
           icon: 'bell',
           numericIndicator: (currentUser.appFlags) ? currentUser.appFlags.numUnseenNotifications : 0,
-          destination: () => toggleSideMenuSubpage("Notifications")
-        },
-        {
-          title: 'Invite a Friend',
-          icon: 'envelope',
-          destination: () => toggleSideMenuSubpage("Invite a Friend")
+          destination: () => Actions.GlobalModal({
+            subcomponent: <Notifications {...this.props} />,
+            showHeader: true,
+            title: "Notifications"
+          })
         },
         {
           title: 'Trending Payments',
           icon: 'chart',
           destination: () => {
-            toggleSideMenuSubpage("Trending Payments")
+            Actions.GlobalModal({
+              subcomponent: <TrendingPayments {...this.props} />,
+              showHeader: true,
+              title: "Trending Payments"
+            })
             trackOnce.report("buttonPress/trendingPayments", currentUser.uid, { from: "side menu"})
           }
         },
-        // {
-        //   title: 'Settings',
-        //   icon: 'gear',
-        //   destination: () => toggleSideMenuSubpage("Settings")
-        // },
         {
           title: 'FAQ',
           icon: 'question',
@@ -131,7 +136,6 @@ class SideMenu extends React.Component {
   }
 
   render() {
-    let { toggleSideMenuSubpage } = this.props
     let { first_name, last_name, username, profile_pic } = this.props.currentUser
     let name = first_name + " " + last_name
     let initialsBuffer = name.split(" ").map((name) => name.charAt(0))
@@ -145,7 +149,11 @@ class SideMenu extends React.Component {
         <TouchableHighlight
           activeOpacity={0.75}
           underlayColor={'transparent'}
-          onPress={() => toggleSideMenuSubpage("My Profile")}>
+          onPress={() => Actions.GlobalModal({
+            subcomponent: <MyProfile {...this.props} />,
+            showHeader: true,
+            title: "My Profile"
+          })}>
           <View style={{flexDirection: 'row', padding: 20, alignItems: 'center'}}>
             <View style={styles.imageWrap}>
               {(profile_pic)

@@ -35,6 +35,7 @@ class MyProfile extends React.Component {
 
     function confirm() {
       FBLoginManager.logOut()
+      Actions.pop()
       Actions.LandingScreenViewContainer()
       currentUser.delete()
     }
@@ -220,7 +221,7 @@ class MyProfile extends React.Component {
            toggleModal={(value) => this.togglePhotoUploader(value)}
            setOptimisticallyRenderedImage={(url) => this.setOptimisticallyRenderedImage(url)}
            title={"PhotoUploader"}
-           type={"photo"} index={1} {...this.props}/>
+           brand={"photo"} index={1} {...this.props}/>
           </Modal>
 
       </View>

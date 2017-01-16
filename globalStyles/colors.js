@@ -9,6 +9,8 @@ const colors = {
 
   // Alert colors
   carminePink: "#FF6B6B",
+  darkCarminePink: "#DF5F5F",
+  lightCarminePink: "#FF7878",
   alertRed: "#FB3640",
   alertYellow: "#f7ca2a",
   alertGreen: "#10bf5a",
@@ -18,6 +20,9 @@ const colors = {
   medGrey: "#E8E5E6",
   lightGrey: "#F6F5F5",
   accent: "#00CEB3",
+  lightAccent: "#02DDC1",
+  darkAccent: "#03C9AF",
+  darkAccent: "#06C0A7",
   deepBlue: "#000a14",
   gradientGreen: "#23CE6B",
 

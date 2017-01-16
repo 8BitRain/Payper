@@ -1,31 +1,31 @@
 // Dependencies
-import React from 'react';
-import { View, Text, TouchableHighlight, StyleSheet, Animated, Easing, Dimensions, StatusBar, Image, Modal } from "react-native";
-import { Actions } from 'react-native-router-flux';
+import React from 'react'
+import { View, Text, TouchableHighlight, StyleSheet, Animated, Easing, Dimensions, StatusBar, Image, Modal, Alert } from "react-native"
+import { Actions } from 'react-native-router-flux'
 import { Timer, TrackOnce } from '../../classes/Metrics'
-import Mixpanel from 'react-native-mixpanel';
-import Entypo from 'react-native-vector-icons/Entypo';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import dismissKeyboard from 'react-native-dismiss-keyboard';
+import Mixpanel from 'react-native-mixpanel'
+import Entypo from 'react-native-vector-icons/Entypo'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import dismissKeyboard from 'react-native-dismiss-keyboard'
 
 // Pages
-import Name from './pages/Name';
-import Email from './pages/Email';
-import Password from './pages/Password';
-import Phone from './pages/Phone';
-import Summary from './pages/Summary';
-import BankOnboardingView from '../BankOnboarding/BankOnboardingView';
+import Name from './pages/Name'
+import Email from './pages/Email'
+import Password from './pages/Password'
+import Phone from './pages/Phone'
+import Summary from './pages/Summary'
+import BankOnboardingView from '../BankOnboarding/BankOnboardingView'
 
 // Stylesheets
-import {colors} from '../../globalStyles';
-const dimensions = Dimensions.get('window');
+import {colors} from '../../globalStyles'
+const dimensions = Dimensions.get('window')
 
 export default class UserOnboardingView extends React.Component {
   constructor(props) {
-    super(props);
-    this.offsetX = new Animated.Value(0);
-    this.logoAspectRatio = 377 / 568;
-    this.errCodes = [];
+    super(props)
+    this.offsetX = new Animated.Value(0)
+    this.logoAspectRatio = 377 / 568
+    this.errCodes = []
     this.pages = ['name', 'email', 'password', 'phone', 'summary']
     this.state = {
       animating: false,
@@ -38,7 +38,7 @@ export default class UserOnboardingView extends React.Component {
       email: null,
       password: null,
       phone: null
-    };
+    }
   }
 
   componentWillMount() {
@@ -48,7 +48,7 @@ export default class UserOnboardingView extends React.Component {
   }
 
   toggleBankOnboardingModal() {
-    this.setState({ bankOnboardingModalVisible: !this.state.bankOnboardingModalVisible });
+    this.setState({ bankOnboardingModalVisible: !this.state.bankOnboardingModalVisible })
   }
 
   createUser(cb) {
@@ -68,30 +68,34 @@ export default class UserOnboardingView extends React.Component {
         uid: uid
       })
 
-      this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates));
-      this.toggleBankOnboardingModal();
-      cb();
+      console.log("--> User creation was a success. Response", uid)
+      // this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates))
+      // // Actions.FirstPaymentView()
+      Actions.MainViewContainer()
+      cb()
     },
     (errCode) => {
       // Failure :(
-      this.errCodes.push({ errCode: errCode, timestamp: new Date().getTime() });
+      this.errCodes.push({ errCode: errCode, timestamp: new Date().getTime() })
 
       this.trackOnce.report("failedUserCreation", "unknownUID", {
         errCodes: (this.errCodes.length > 0) ? this.errCodes : "none",
         uid: "unknownUID"
       })
 
-      if (errCode === "auth/email-already-in-use") {
-        alert("This email is already in use.");
+      if (errCode === "auth/email-already-in-use" || errCode === "dupe-email") {
+        Alert.alert('Wait!', 'This email is already in use.')
+      } else if (errCode === "dupe-phone") {
+        Alert.alert('Wait!', 'This phone number is already in use.')
       } else {
-        alert("Something went wrong on our end 🙄\n\nPlease try again");
-        cb();
+        Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
+        cb()
       }
-    });
+    })
   }
 
   induceState(substate) {
-    this.setState(substate, () => this.state.firstNameInput.focus());
+    this.setState(substate, () => this.state.firstNameInput.focus())
   }
 
   focusInput() {
@@ -101,34 +105,34 @@ export default class UserOnboardingView extends React.Component {
       case "email": this.state.emailInput.focus(); break;
       case "password": this.state.passwordInput.focus(); break;
       case "phone": this.state.phoneInput.focus(); break;
-      default: dismissKeyboard()
+      default: dismissKeyboard();
     }
   }
 
   nextPage(params) {
-    if (this.state.animating) return;
-    this.setState({ animating: true });
+    if (this.state.animating) return
+    this.setState({ animating: true })
 
-    this.setState({ pageIndex: this.state.pageIndex + 1 }, () => this.focusInput());
+    this.setState({ pageIndex: this.state.pageIndex + 1 }, () => this.focusInput())
 
     Animated.timing(this.offsetX, {
       toValue: this.offsetX._value - dimensions.width,
       duration: 200,
       easing: Easing.elastic(0),
-    }).start(() => this.setState({ animating: false }));
+    }).start(() => this.setState({ animating: false }))
   }
 
   prevPage() {
-    if (this.state.animating || this.state.pageIndex === 0) return;
-    this.setState({ animating: true });
+    if (this.state.animating || this.state.pageIndex === 0) return
+    this.setState({ animating: true })
 
-    this.setState({ pageIndex: this.state.pageIndex - 1 }, () => this.focusInput());
+    this.setState({ pageIndex: this.state.pageIndex - 1 }, () => this.focusInput())
 
     Animated.timing(this.offsetX, {
       toValue: this.offsetX._value + dimensions.width,
       duration: 200,
       easing: Easing.elastic(0),
-    }).start(() => this.setState({ animating: false }));
+    }).start(() => this.setState({ animating: false }))
   }
 
   handleCancel() {
@@ -139,8 +143,8 @@ export default class UserOnboardingView extends React.Component {
       uid: "unknownUID"
     })
 
-    if (typeof this.props.handleCancel === 'function') this.props.handleCancel();
-    else Actions.LandingScreenViewContainer();
+    if (typeof this.props.handleCancel === 'function') this.props.handleCancel()
+    else Actions.pop()
   }
 
   render() {
@@ -192,8 +196,8 @@ export default class UserOnboardingView extends React.Component {
           </View>
         </Modal>
       </View>
-    );
-  };
+    )
+  }
 }
 
 const styles = StyleSheet.create({
@@ -218,4 +222,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   }
-});
+})

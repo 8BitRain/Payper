@@ -11,12 +11,20 @@ import MainViewContainer from './modules/Main/MainViewContainer'
 import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer'
 import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView'
 import Phone from './modules/UserOnboarding/pages/Phone'
+import AddBankAccountTooltip from './components/Tooltips/AddBankAccountTooltip/AddBankAccountTooltip'
+import MicrodepositTooltip from './components/Tooltips/MicrodepositTooltip/MicrodepositTooltip'
+import SuspendedTooltip from './components/Tooltips/SuspendedTooltip/SuspendedTooltip'
+import DocumentUploadTooltip from './components/Tooltips/DocumentUploadTooltip/DocumentUploadTooltip'
+import BankAccountAdded from './components/Rewards/BankAccountAdded/BankAccountAdded'
+import VerifiedIdentity from './components/Rewards/VerifiedIdentity/VerifiedIdentity'
+import StatusCard from './components/StatusCard/StatusCard'
 import { Scene, Reducer, Router, Modal } from 'react-native-router-flux'
 import { colors } from './globalStyles'
 import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
 import { Client } from 'bugsnag-react-native'
 import { PayDetails } from './components/PayCard'
-import { MainView, OnboardingView, PaymentOnboardingView } from './modules'
+import { MainView, OnboardingView, PaymentOnboardingView, FirstPaymentView, PartialUserOnboardingView } from './modules'
+import { GlobalModal } from './components'
 
 // Get build and version numbers
 let build = DeviceInfo.getBuildNumber()
@@ -84,7 +92,7 @@ export default class Coincast extends React.Component {
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
 
-            <Scene initial
+            <Scene
               component={SplashViewContainer}
               key="SplashViewContainer"
               type="replace"
@@ -103,63 +111,39 @@ export default class Coincast extends React.Component {
               panHandlers={null} />
 
             <Scene
-              component={MainView}
-              key="MainView"
-              type="replace"
-              panHandlers={null} />
-
-            <Scene
-              component={BankOnboardingView}
-              key="BankOnboardingView"
-              type="replace"
-              panHandlers={null} />
-
-            <Scene
-              component={MainViewContainer}
-              key="MainViewContainer"
-              type="replace"
-              panHandlers={null} />
-
-            <Scene
               component={UserOnboardingViewContainer}
               key="UserOnboardingViewContainer"
               panHandlers={null} />
 
             <Scene
-              component={Phone}
-              key="Phone"
-              type="replace"
+              component={FirstPaymentView}
+              key="FirstPaymentView"
+              panHandlers={null} />
+
+            <Scene
+              component={PartialUserOnboardingView}
+              key="PartialUserOnboardingView"
+              direction="vertical"
+              panHandlers={null} />
+
+            <Scene
+              component={MainViewContainer}
+              key="MainViewContainer"
               panHandlers={null} />
 
             <Scene
               component={PayDetails}
               key="PaymentDetails"
               panHandlers={null} />
-
-            <Scene
-              currentUser={{
-                displayName: "Brady Sheridan",
-                emailAddress: "brady.sherid@gmail.com",
-                phoneNumber: "2623058038",
-                ssn: "8135",
-                billingAddress: {
-                  zip: "53715",
-                  city: "Madison",
-                  state: "WI",
-                  country: "United States"
-                }
-              }}
-              component={OnboardingView}
-              key="OnboardingView"
-              panHandlers={null} />
-
-            <Scene
-              component={PaymentOnboardingView}
-              key="PaymentOnboardingView"
-              panHandlers={null} />
-
           </Scene>
-          <Scene key="error" component={Error}/>
+
+          <Scene
+            key="GlobalModal"
+            component={GlobalModal} />
+
+          <Scene
+            key="error"
+            component={Error} />
         </Scene>
       </Router>
     )

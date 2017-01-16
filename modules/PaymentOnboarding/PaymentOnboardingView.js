@@ -33,6 +33,7 @@ class PaymentOnboardingView extends React.Component {
     this.fieldNames = ['Who?', 'How much?', 'How often?', 'How long?', 'What for?', 'Starting when?']
 
     this.state = {
+      cancellable: true,
       modalVisible: false,
       headerHeight: 0,
       selectionMap: {},
@@ -362,6 +363,10 @@ class PaymentOnboardingView extends React.Component {
   }
 
   cancel() {
+    if (!this.state.cancellable) return
+
+    this.setState({cancellable: false})
+
     this.timer.report("paymentOnboarding", this.props.currentUser.uid, {
       cancelled: true,
       stateSnapshot: this.state
@@ -405,7 +410,7 @@ class PaymentOnboardingView extends React.Component {
               underlayColor={'transparent'}
               onPress={() => this.cancel()}
               style={{position: 'absolute', top: 18, bottom: 0, left: 0, padding: 14, justifyContent: 'center'}}>
-              <EvilIcons name={"chevron-left"} size={36} color={colors.lightGrey} />
+              <EvilIcons name={"close"} size={24} color={colors.snowWhite} />
             </TouchableHighlight>
           </View>
         </View>

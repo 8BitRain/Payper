@@ -50,8 +50,10 @@ exports.signout = function(currentUser) {
 exports.signin = function(params, cb) {
   let { type, facebookToken, facebookUserData, accessToken, email, pass, key } = params
 
-  // Determine which signin function to use
+  // Declare signin function var
   let signin
+
+  // Initialize signin function var depending on signin mode
   switch (type) {
     case "facebook": signin = (cb) => signinFacebook(cb); break;
     case "generic": signin = (cb) => signinGeneric(cb); break;
@@ -87,12 +89,24 @@ exports.signin = function(params, cb) {
             .then((response) => response.json())
             .then((responseData) => {
               console.log("user/facebookCreate responseData", responseData)
-              cb(responseData.user)
+              if (responseData.errorMessage) {
+                cb(responseData, true)
+              } else {
+                var userData = responseData.user
+
+                // Get appFlags before notifying caller of success
+                firebase.database().ref('/appFlags').child(userData.uid).once('value', (snapshot) => {
+                  let appFlags = snapshot.val() || {}
+                  userData.appFlags = appFlags
+                  console.log("--> userData", userData)
+                  cb(userData, true)
+                })
+              }
             })
             .done()
           } catch (err) {
             console.log("user/facebookCreate failed...", "err:", err)
-            cb(null)
+            cb(err)
           }
         } else {
           getUserDetails(uid, (userDetails) => {
