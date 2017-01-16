@@ -141,6 +141,7 @@ class StatusCard extends React.Component {
           onboardingPercentage = 50;
         }
         break;
+      case "microdeposits-deposited":
       case "microdeposits-initialized":
         if(customer_status == "verified"){
           onboardingPercentage = 80;
