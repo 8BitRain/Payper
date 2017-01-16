@@ -209,7 +209,48 @@ class StatusCard extends React.Component {
         destination()
     }
 
+  _renderSendMoneyLock(currentUser){
+    //Render Send Money and Lock as unlocked
+    if(currentUser.fundingSource &&
+      currentUser.customer_status != "microdeposits-initialized" &&
+      currentUser.customer_status != "microdeposits-deposited" &&
+      currentUser.customer_status != "microdeposits-failed"){
+        return(
+          <View style={{flex: 1, alignItems: "center"}}>
+            <Ionicons size={24} name="md-unlock" color={colors.snowWhite} />
+            <Text style={styles.unlockedText}>{"Send Money"}</Text>
+          </View>
+        )
+      } else {
+    //Render Send Money and Lock as locked
+        return(
+          <View style={{flex: 1, alignItems: "center"}}>
+            <Ionicons size={24} name="md-lock" color={colors.medGrey} />
+            <Text style={styles.lockText}>{"Send Money"}</Text>
+          </View>
+        )
+      }
+  }
 
+  _renderRecieveMoneyLock(currentUser){
+    //Recieve money unlocked
+    if(currentUser.customer_status == "kyc-success"){
+      return(
+        <View style={{flex: 1, alignItems: "center"}}>
+          <Ionicons size={24} name="md-unlock" color={colors.snowWhite} />
+          <Text style={styles.unlockedText}>{"Receive Money"}</Text>
+        </View>
+      );
+    //Recieve money locked
+    } else {
+      return(
+        <View style={{flex: 1, alignItems: "center"}}>
+          <Ionicons size={24} name="md-lock" color={colors.medGrey} />
+          <Text style={styles.lockText}>{"Receive Money"}</Text>
+        </View>
+      );
+    }
+  }
   _renderPicWithInitials(firstname, lastname){
     let initials = firstname.charAt(0) + lastname.charAt(0);
 
@@ -223,10 +264,6 @@ class StatusCard extends React.Component {
           </View>
       </View>
     )
-  }
-
-  _renderUnlocks(onboardingProgress){
-    //TODO add rendering logic for locks & associated text based on onboaridngProgress
   }
 
   render() {
@@ -252,10 +289,7 @@ class StatusCard extends React.Component {
             </View>
             {/* Unlocked Features*/}
             <View style={{flex: 1, flexDirection: "row", alignItems: "center", backgroundColor: colors.darkAccent}}>
-              <View style={{flex: 1, alignItems: "center"}}>
-                <Ionicons size={24} name="md-lock" color={colors.medGrey} />
-                <Text style={styles.lockText}>{"Send Money"}</Text>
-              </View>
+              {this._renderSendMoneyLock(this.props.currentUser)}
               {/* Progress Percentage */}
               <View style={{flex: 1, alignItems: "center"}}>
                 {/* <Text style={styles.header}>{"80%"}</Text> */}
@@ -274,10 +308,7 @@ class StatusCard extends React.Component {
                   }
                 </AnimatedCircularProgress>
               </View>
-              <View style={{flex: 1, alignItems: "center"}}>
-                <Ionicons size={24} name="md-lock" color={colors.medGrey} />
-                <Text style={styles.lockText}>{"Receive Money"}</Text>
-              </View>
+              {this._renderRecieveMoneyLock(this.props.currentUser)}
             </View>
 
 
@@ -359,7 +390,7 @@ var styles = StyleSheet.create({
     fontWeight: "500"
   },
   unlockedText:{
-    color: '#fff',
+    color: colors.snowWhite,
     fontSize: 16,
     lineHeight: 16 * 1.20,
     textAlign: "center",
