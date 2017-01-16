@@ -46,10 +46,30 @@ export default class User {
     *   -----------------------------------------------------------------------
   **/
   update(updates) {
-    // console.log("Updating user with updates:", updates)
+    console.log("Updating user with updates:", updates)
     for (var k in updates) this[k] = updates[k]
     let userCache = JSON.stringify(this)
     Async.set('user', userCache)
+  }
+
+  /**
+    *   Cycle this user's access and refresh tokens
+    *   -----------------------------------------------------------------------
+  **/
+  startTokenRefresher(updateViaRedux) {
+    let refreshInterval = 60 * 1000 * 20
+    this.tokenRefreshInterval = setInterval(() => {
+      refresh(updateViaRedux)
+    }, refreshInterval)
+
+    function refresh(updateViaRedux) {
+      firebase.auth().currentUser.getToken(true)
+      .then(function(tkn) {
+        updateViaRedux({ token: tkn })
+      }).catch(function(err) {
+        console.log("Error getting new token:", err)
+      })
+    }
   }
 
   /**
@@ -60,9 +80,6 @@ export default class User {
   initialize(user) {
     this.update(user)
     this.decrypt((res) => (res) ? this.update(res) : null)
-    this.tokenRefreshInterval = setInterval(() => {
-      this.refresh()
-    }, ((60 * 1000) * 20))
     this.timer = new Timer()
     this.timer.start()
     AppState.addEventListener('change', this.handleAppStateChange)
@@ -311,20 +328,6 @@ export default class User {
     } catch (err) {
       console.log("Error getting IAV token:", responseData.errorMessage)
     }
-  }
-
-  /**
-    *   Cycle this user's access and refresh tokens
-    *   -----------------------------------------------------------------------
-  **/
-  refresh() {
-    const _this = this
-    firebase.auth().currentUser.getToken(true)
-    .then(function(tkn) {
-      _this.update({ token: tkn })
-    }).catch(function(err) {
-      console.log("Error getting new token:", err)
-    })
   }
 
   /**

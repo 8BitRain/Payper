@@ -52,6 +52,7 @@ class MainView extends React.Component {
     this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.decrypt((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.getNativeContacts((updates) => this.props.updateCurrentUser(updates))
+    this.props.currentUser.startTokenRefresher((updates) => this.props.updateCurrentUser(updates))
     this.trackOnce = new TrackOnce()
   }
 
