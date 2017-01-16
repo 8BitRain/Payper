@@ -61,15 +61,18 @@ export default class User {
     this.tokenRefreshInterval = setInterval(() => {
       refresh(updateViaRedux)
     }, refreshInterval)
+  }
 
-    function refresh(updateViaRedux) {
-      firebase.auth().currentUser.getToken(true)
-      .then(function(tkn) {
+  refresh(updateViaRedux) {
+    firebase.auth().currentUser.getToken(true)
+    .then(function(tkn) {
+      if (typeof updateViaRedux === 'function')
         updateViaRedux({ token: tkn })
-      }).catch(function(err) {
-        console.log("Error getting new token:", err)
-      })
-    }
+      else
+        this.update({ token: tkn })
+    }).catch(function(err) {
+      console.log("Error getting new token:", err)
+    })
   }
 
   /**
