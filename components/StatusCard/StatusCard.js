@@ -2,7 +2,7 @@ import React from 'react'
 import { Actions } from 'react-native-router-flux'
 import { View, Text, TouchableHighlight, Animated, Easing, Dimensions, Modal, Image, StyleSheet } from 'react-native'
 import { colors } from '../../globalStyles'
-import { IAVWebView, KYCOnboardingView, PhotoUploader } from '../index'
+import { IAVWebView, KYCOnboardingView, PhotoUploader, MicrodepositOnboarding } from '../index'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -60,7 +60,7 @@ class StatusCard extends React.Component {
         pressable: true,
         destination: () => Actions.GlobalModal({
           subcomponent: <PhotoUploader title={"Document Upload"} index={1} brand={"document"}  {...this.props}/>,
-          backgroundColor: colors.carminePink,
+          backgroundColor: colors.snowWhite,
           showHeader: false,
           title: "Document Upload"
         })
@@ -87,10 +87,10 @@ class StatusCard extends React.Component {
         action: "Verify Microdeposits",
         pressable: true,
         destination: () => Actions.GlobalModal({
-          subcomponent: <View />,
-          backgroundColor: colors.carminePink,
+          subcomponent: <MicrodepositOnboarding {...this.props} toggleModal={() => Actions.pop()} />,
+          backgroundColor: colors.snowWhite,
           showHeader: true,
-          title: "Document Upload"
+          title: "Microdeposit Verification"
         })
       },
       'microdeposits-failed': {
