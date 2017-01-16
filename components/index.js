@@ -18,3 +18,5 @@ exports.BankAccountAdded = require('./Rewards/BankAccountAdded/BankAccountAdded'
 exports.VerifiedIdentity = require('./Rewards/VerifiedIdentity/VerifiedIdentity')
 exports.DocumentUploadTooltip  = require('./Tooltips/DocumentUploadTooltip/DocumentUploadTooltip')
 exports.DynamicList = require('./DynamicList/DynamicList')
+exports.ExploreTrendingPaymentsButton = require('./ExploreTrendingPaymentsButton/ExploreTrendingPaymentsButton')
+exports.EmptyState = require('./EmptyState/EmptyState')

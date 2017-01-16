@@ -1,17 +1,23 @@
 import React from 'react'
 import moment from 'moment'
 import * as _ from 'lodash'
-import { Actions } from 'react-native-router-flux'
-import { View, TouchableHighlight, ListView, ScrollView, Dimensions, Animated, Easing, StatusBar, Text, Image, Modal } from 'react-native'
-import { VibrancyView } from "react-native-blur"
+import {Actions} from 'react-native-router-flux'
+import {
+  View, TouchableHighlight, ListView, ScrollView, Dimensions,
+  Animated, Easing, StatusBar, Text, Image, Modal
+} from 'react-native'
+import {VibrancyView} from "react-native-blur"
 import Drawer from 'react-native-drawer'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
-import { colors } from '../../globalStyles'
-import { SideMenu, PayCard, StatusCard, PhotoUploader, MicrodepositOnboarding, TrendingPayments, DynamicList } from '../../components'
+import {colors} from '../../globalStyles'
+import {
+  SideMenu, PayCard, StatusCard, PhotoUploader, MicrodepositOnboarding,
+  TrendingPayments, DynamicList, ExploreTrendingPaymentsButton, EmptyState
+} from '../../components'
 import KYCOnboardingView from '../../components/KYCOnboarding/KYCOnboardingView'
-import { MyProfile, BankAccounts, Notifications, Invite, Settings } from '../../components/SideMenuSubpages'
-import { BankOnboarding, PaymentOnboardingView } from '../../modules'
-import { TrackOnce } from '../../classes/Metrics'
+import {MyProfile, BankAccounts, Notifications, Invite, Settings} from '../../components/SideMenuSubpages'
+import {BankOnboarding, PaymentOnboardingView} from '../../modules'
+import {TrackOnce} from '../../classes/Metrics'
 const dims = Dimensions.get('window')
 
 class MainView extends React.Component {
@@ -110,9 +116,7 @@ class MainView extends React.Component {
           { /* StatusCard (header), PayCards (dataSource), TrendingPayments (footer) */ }
           <DynamicList
             data={this.props.currentUser.paymentFlow}
-            renderRow={(rowData, sectionID, rowID) => {
-              return <PayCard {...this.props} payment={rowData} />
-            }}
+            renderRow={(rowData, sectionID, rowID) => <PayCard {...this.props} payment={rowData} />}
             renderSectionHeader={(rowData, sectionID) => {
               let numRows = Object.keys(rowData).length
               let title
@@ -136,7 +140,21 @@ class MainView extends React.Component {
               )
             }}
             renderHeader={() => <StatusCard {...this.props} />}
-            renderFooter={() => <View style={{height: 90, marginTop: 25, borderTopWidth: 1, borderColor: colors.lightGrey}} />} />
+            renderFooter={() => {
+              let data = this.props.currentUser.paymentFlow
+
+              return(
+                <View style={{paddingBottom: 100}}>
+                  { /* Empty state */
+                    (data.in || data.out)
+                      ? null
+                      : <EmptyState /> }
+
+                  { /* Trending payments button */ }
+                  <ExploreTrendingPaymentsButton />
+                </View>
+              )
+            }} />
 
           { /* Footer */ }
           <View style={{position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row', borderTopWidth: 1.0, borderColor: colors.lightGrey, backgroundColor: 'rgba(255, 255, 255, 0.64)', justifyContent: 'space-between'}}>
