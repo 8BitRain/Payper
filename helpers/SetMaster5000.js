@@ -130,7 +130,6 @@ export function globalUserListToArray(options) {
     }
   }
 
-  console.log("--> arr", arr)
   return arr;
 };
 

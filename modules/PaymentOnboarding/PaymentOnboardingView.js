@@ -216,8 +216,6 @@ class PaymentOnboardingView extends React.Component {
         start: startUTCString
       }
 
-      console.log("--> creating payment with payment info:", paymentInfo)
-      
       if (paymentInfo.invite) Lambda.inviteViaPayment(paymentInfo)
       else Lambda.createPayment(paymentInfo)
     }
