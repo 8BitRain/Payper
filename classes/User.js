@@ -59,7 +59,7 @@ export default class User {
   startTokenRefresher(updateViaRedux) {
     let refreshInterval = 60 * 1000 * 20
     this.tokenRefreshInterval = setInterval(() => {
-      refresh(updateViaRedux)
+      this.refresh(updateViaRedux)
     }, refreshInterval)
   }
 
