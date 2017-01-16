@@ -212,9 +212,9 @@ class StatusCard extends React.Component {
   _renderSendMoneyLock(currentUser){
     //Render Send Money and Lock as unlocked
     if(currentUser.fundingSource &&
-      currentUser.customer_status != "microdeposits-initialized" &&
-      currentUser.customer_status != "microdeposits-deposited" &&
-      currentUser.customer_status != "microdeposits-failed"){
+      currentUser.appFlags.onboardingProgress != "microdeposits-initialized" &&
+      currentUser.appFlags.onboardingProgress != "microdeposits-deposited" &&
+      currentUser.appFlags.onboardingProgress != "microdeposits-failed"){
         return(
           <View style={{flex: 1, alignItems: "center"}}>
             <Ionicons size={24} name="md-unlock" color={colors.snowWhite} />
@@ -234,7 +234,7 @@ class StatusCard extends React.Component {
 
   _renderRecieveMoneyLock(currentUser){
     //Recieve money unlocked
-    if(currentUser.customer_status == "kyc-success"){
+    if(currentUser.appFlags.onboardingProgress == "kyc-success"){
       return(
         <View style={{flex: 1, alignItems: "center"}}>
           <Ionicons size={24} name="md-unlock" color={colors.snowWhite} />
