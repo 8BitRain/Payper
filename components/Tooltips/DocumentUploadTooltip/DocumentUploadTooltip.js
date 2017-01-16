@@ -31,11 +31,25 @@ class DocumentUploadTooltip extends React.Component {
       openTooltip: false
     }
 
+    this.fade_dimmed_background_value = new Animated.Value(0);
+
 
   }
 
   componentDidMount() {
+    this.fade_dimmed_background();
+  }
 
+  fade_dimmed_background() {
+    //this.fade_dimmed_background_value.setValue(0);
+    Animated.timing(
+      this.fade_dimmed_background_value,
+      {
+        toValue: 1,
+        duration: 500,
+        easing: Easing.ease
+      }
+    ).start()
   }
 
   toggleTooltip(toggle){
@@ -75,10 +89,19 @@ class DocumentUploadTooltip extends React.Component {
   }
 
   render() {
+    const dimOpacity = this.fade_dimmed_background_value.interpolate({
+      inputRange: [0.0, 1.0],
+      outputRange: [0.0, 0.9]
+    })
     return(
       <View style={{flex: 1}}>
-        <View style={styles.dimBackground}>
-        </View>
+        <Animated.View style={{flex: 1,
+            position: "absolute",
+            backgroundColor: colors.richBlack,
+            opacity: dimOpacity,
+            height: dimensions.height,
+            width: dimensions.width}}>
+        </Animated.View>
         <View style={styles.wrapper}>
           <TouchableHighlight
             activeOpacity={0.8}

@@ -30,11 +30,24 @@ class AddBankAccountTooltip extends React.Component {
       closeModal: false
     }
 
+    this.fade_dimmed_background_value = new Animated.Value(0);
 
   }
 
   componentDidMount() {
+    this.fade_dimmed_background();
+  }
 
+  fade_dimmed_background() {
+    //this.fade_dimmed_background_value.setValue(0);
+    Animated.timing(
+      this.fade_dimmed_background_value,
+      {
+        toValue: 1,
+        duration: 500,
+        easing: Easing.ease
+      }
+    ).start()
   }
 
   _renderDot(){
@@ -51,11 +64,20 @@ class AddBankAccountTooltip extends React.Component {
   }
 
   render() {
+    const dimOpacity = this.fade_dimmed_background_value.interpolate({
+      inputRange: [0.0, 1.0],
+      outputRange: [0.0, 0.9]
+    })
     return(
       <View style={{flex: 1}}>
       {/* Dim Background*/ }
-      <View style={styles.dimBackground}>
-      </View>
+      <Animated.View style={{flex: 1,
+          position: "absolute",
+          backgroundColor: colors.richBlack,
+          opacity: dimOpacity,
+          height: dimensions.height,
+          width: dimensions.width}}>
+      </Animated.View>
       <View style={{flex: 1}}>
         {/* To get the close button working change height to 50. Remember to view the borders*/}
 
@@ -66,7 +88,7 @@ class AddBankAccountTooltip extends React.Component {
             activeDot={this._renderActiveDot()}>
             <View style={styles.slide1}>
               <Text style={styles.header}>Adding A Bank Account Is Secure & Simple</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/add_bank_explan_1.png')} style={{width: dimensions.width * .84, height: dimensions.height * .40, marginTop: 30, marginBottom: 5}} />
               <Text style={styles.text}> You have two ways to add a bank account,
               through Instant Account Verification and Deposit Verification</Text>
               <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
@@ -75,9 +97,9 @@ class AddBankAccountTooltip extends React.Component {
             </View>
             <View style={styles.slide2}>
               <Text style={styles.header}>Instant Account Verification</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/add_bank_explan_2.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
               <Text style={styles.text}>Find your bank!</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 5, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/add_bank_explan_3.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 5, marginBottom: 5}} />
               <Text style={styles.text}>Use your login information to verify your bank account. Thats it!</Text>
               <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
                 <Text style={styles.footer}>*Payper does not store this information</Text>
