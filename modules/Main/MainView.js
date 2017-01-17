@@ -7,7 +7,7 @@ import { VibrancyView } from "react-native-blur"
 import Drawer from 'react-native-drawer'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import { colors } from '../../globalStyles'
-import { SideMenu, PayCard, StatusCard, PhotoUploader, MicrodepositOnboarding, TrendingPayments } from '../../components'
+import { SideMenu, PayCard, StatusCard, PhotoUploader, MicrodepositOnboarding, TrendingPayments, AlternateStatusCard } from '../../components'
 import KYCOnboardingView from '../../components/KYCOnboarding/KYCOnboardingView'
 import { MyProfile, BankAccounts, Notifications, Invite, Settings } from '../../components/SideMenuSubpages'
 import { BankOnboarding, PaymentOnboardingView } from '../../modules'
@@ -284,7 +284,7 @@ class MainView extends React.Component {
           <ListView
             dataSource={dataSource}
             renderRow={this.renderRow.bind(this)}
-            renderHeader={() => <StatusCard {...this.props} />}
+            renderHeader={() => <AlternateStatusCard {...this.props} />}
             renderFooter={() => <View style={{height: 90}} />}
             renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
             enableEmptySections />
