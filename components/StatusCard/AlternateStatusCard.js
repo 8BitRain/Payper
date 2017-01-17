@@ -11,7 +11,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 const dims = Dimensions.get('window')
 const imageDims = { width: 56, height: 56 }
-const imageWrapDims = { width: 60, height: 60 }
+const imageWrapDims = { width: 62, height: 62 }
 
 class AlternateStatusCard extends React.Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class AlternateStatusCard extends React.Component {
     this.config = {
       'need-bank': {
         title: "Bank Account Needed",
-        message: "You won't be able to send money until you add a bank account.",
+        message: "Link your bank account to unlock the ability to send money!",
         action: "Add Bank Account",
         pressable: true,
         destination: () => Actions.GlobalModal({
@@ -30,7 +30,7 @@ class AlternateStatusCard extends React.Component {
       },
       'need-kyc': {
         title: "Account Verification Needed",
-        message: "You won't be able to receive money until you verify your account.",
+        message: "Verify your account to unlock the ability to receive money!",
         action: "Verify Account",
         pressable: true,
         destination: () => Actions.GlobalModal({
@@ -42,7 +42,7 @@ class AlternateStatusCard extends React.Component {
       },
       'kyc-retry': {
         title: "Account Verification Failed",
-        message: "Try verifying your account again with slightly more detailed information.",
+        message: "We failed to verify your account. Try verifying again with slightly more detailed information.",
         action: "Verify Account",
         pressable: true,
         destination: () => Actions.GlobalModal({
@@ -54,8 +54,8 @@ class AlternateStatusCard extends React.Component {
       },
       'kyc-documentNeeded': {
         title: "Additional Documents Required",
-        message: "We need a bit more info to verify your account. Please take a snapshot of a valid photo ID.",
-        action: "Take Snapshot",
+        message: "We need a bit more info to verify your account. Please take a snapshot of a valid photo ID (passport, driver's license, etc.).",
+        action: "Take Snapshot of ID",
         pressable: true,
         destination: () => Actions.GlobalModal({
           subcomponent: <PhotoUploader title={"Document Upload"} index={1} brand={"document"}  {...this.props}/>,
@@ -78,11 +78,11 @@ class AlternateStatusCard extends React.Component {
       },
       'microdeposits-initialized': {
         title: "Microdeposits Initialized",
-        message: "We're transferring two small (< 20¢) sums to your bank account. We will notify you when they've arrived."
+        message: "We're transferring two small (< 20¢) sums to your bank account and will notify you when they've arrived."
       },
       'microdeposits-deposited': {
         title: "Microdeposits Arrived",
-        message: "We've deposited two small (< 20¢) sums to your bank account and are awaiting your verification.",
+        message: "We've deposited two small (< 20¢) sums to your bank account.",
         action: "Verify Microdeposits",
         pressable: true,
         destination: () => Actions.GlobalModal({
@@ -94,7 +94,7 @@ class AlternateStatusCard extends React.Component {
       },
       'microdeposits-failed': {
         title: "Microdeposits Failed to Transfer",
-        message: "Please try adding your bank account again. Be sure to double check your routing and account number.",
+        message: "Your microdeposits failed to transfer. Please try adding your bank account again. Be sure to double check your routing and account number!",
         action: "Add Bank Account",
         pressable: true,
         destination: () => Actions.GlobalModal({
@@ -138,10 +138,8 @@ class AlternateStatusCard extends React.Component {
         <View />
       )
     } else {
-      let message = configInfo.message
-      let destination = configInfo.destination
-      let action = configInfo.action
       let {onboardingPercentage} = this.state
+      let {message, destination, action} = configInfo
       let profilePic = this.props.currentUser.profile_pic
       let canSendMoney = currentUser.fundingSource
         && onboardingProgress !== "microdeposits-initialized"
@@ -165,16 +163,18 @@ class AlternateStatusCard extends React.Component {
           { /* Top third (profile strength) */ }
           <View style={{justifyContent: 'center', paddingBottom: 12}}>
             { /* "My Profile Strength" */ }
-            <Text style={{fontSize: 18, padding: 10, color: colors.deepBlue, textAlign: 'center'}}>
-              {"My Account Strength"}
-            </Text>
+            <View style={{flex: 1.0, backgroundColor: 'rgba(165, 245, 224, 0.78)'}}>
+              <Text style={{fontSize: 18, padding: 10, color: colors.deepBlue, textAlign: 'center'}}>
+                {"My Account Strength"}
+              </Text>
+            </View>
 
             { /* Profile pic and onboarding percentage */ }
-            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+            <View style={{marginTop: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
               <View style={styles.imageWrap}>
                 <AnimatedCircularProgress
                   size={imageWrapDims.width}
-                  width={4}
+                  width={6}
                   fill={onboardingPercentage}
                   tintColor={colors.accent}
                   backgroundColor={colors.medGrey}>
@@ -219,7 +219,7 @@ class AlternateStatusCard extends React.Component {
           { /* Middle third (info) */
             (!message)
               ? null
-              : <View style={{flex: 1.0, padding: 12, paddingBottom: 18, justifyContent: 'center', alignItems: 'center'}}>
+              : <View style={{flex: 1.0, padding: 12, paddingBottom: 22, justifyContent: 'center', alignItems: 'center'}}>
                   <Text style={{fontSize: 15, color: colors.deepBlue}}>
                     {message}
                   </Text>
@@ -229,11 +229,11 @@ class AlternateStatusCard extends React.Component {
             (!action || !destination)
               ? null
               : <TouchableHighlight
-                  style={{flex: 1.0, padding: 16, backgroundColor: colors.gradientGreen, justifyContent: 'center'}}
+                  style={{flex: 1.0, padding: 16, backgroundColor: colors.accent, justifyContent: 'center'}}
                   activeOpacity={0.95}
                   underlayColor={colors.accent}
                   onPress={() => destination()}>
-                  <Text style={{fontSize: 16, color: colors.snowWhite, textAlign: 'center'}}>
+                  <Text style={{fontSize: 16, color: colors.lightGrey, textAlign: 'center'}}>
                     {"Next Step: "}
                     {action}
                   </Text>
