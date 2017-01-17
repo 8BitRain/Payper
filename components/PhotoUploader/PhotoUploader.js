@@ -62,7 +62,7 @@ class PhotoUploader extends React.Component {
         loaded: null,
         total: null
       },
-      openTooltip: true
+      openTooltip: this.props.brand == "document" ? true : false
     };
     console.log("BRAND" + this.state.brand);
   }
@@ -206,6 +206,30 @@ class PhotoUploader extends React.Component {
         {(this.props.currentUser.appFlags.customer_status == "document") ? <Text style={styles.generalTextBold}>{"Driver's License"}</Text> : <Text style={styles.generalTextBold}>{"Low Image Quality"}</Text>}
         {(this.props.currentUser.appFlags.customer_status == "document") ? <Text style={styles.generalTextBold}>{"Passport Photo ID"}</Text> : <Text style={styles.generalTextBold}>{"Invalid Driver's License"}</Text>}
         {(this.props.currentUser.appFlags.customer_status == "documentFailure") ? <Text style={styles.generalTextBold}>{"Invalid Passport Photo ID"}</Text> : null}
+      </View>
+    );
+  }
+  _renderHeader(){
+    return(
+      <View style={{flex: .1, backgroundColor: colors.accent, flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+          { /*Close*/ }
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            style={{marginTop: 10}}
+            onPress={() => {Actions.pop()}}>
+                <EvilIcons  size={32} name="close" color={colors.snowWhite} />
+          </TouchableHighlight>
+
+          <Text style={{marginTop: 10, fontSize: 17, color: colors.lightGrey, marginRight: 50, marginLeft: 50}}>{this.props.title}</Text>
+          { /*Document Upload Tooltip*/ }
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            style={{marginTop: 10}}
+            onPress={() => {this.toggleModal(true)}}>
+                <Ionicons style={{}} size={32} name="ios-help-circle" color={colors.snowWhite} />
+          </TouchableHighlight>
       </View>
     );
   }
@@ -379,26 +403,7 @@ class PhotoUploader extends React.Component {
       <View style={{flex: 1, backgroundColor: colors.snowWhite}}>
 
       {/* Header*/}
-      <View style={{flex: .1, backgroundColor: colors.accent, flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
-          { /*Close*/ }
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            style={{marginTop: 10}}
-            onPress={() => {Actions.pop()}}>
-                <EvilIcons  size={32} name="close" color={colors.snowWhite} />
-          </TouchableHighlight>
-
-          <Text style={{marginTop: 10, fontSize: 17, color: colors.lightGrey, marginRight: 50, marginLeft: 50}}>{this.props.title}</Text>
-          { /*Document Upload Tooltip*/ }
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            style={{marginTop: 10}}
-            onPress={() => {this.toggleModal(true)}}>
-                <Ionicons style={{}} size={32} name="ios-help-circle" color={colors.snowWhite} />
-          </TouchableHighlight>
-      </View>
+      { this.state.brand == "document" ? this._renderHeader() : null}
 
       { /*Main Content*/ }
       <View style={{flex: .8}}>
