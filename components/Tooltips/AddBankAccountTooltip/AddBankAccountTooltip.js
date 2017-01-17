@@ -107,7 +107,7 @@ class AddBankAccountTooltip extends React.Component {
             </View>
             <View style={styles.slide3}>
               <Text style={styles.header}>{"Can't Find Your Bank? No Problem!"}</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/add_bank_explan_4.png')} style={{width: dimensions.width * .84, height: dimensions.height * .40, marginTop: 30, marginBottom: 5}} />
               <Text style={styles.text}>If your bank is not found you will automatically use deposit verification.</Text>
               <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
                 <Text style={styles.footer}>*Payper does not store this information</Text>
@@ -115,9 +115,9 @@ class AddBankAccountTooltip extends React.Component {
             </View>
             <View style={styles.slide4}>
               <Text style={styles.header}>Deposit Verification</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/add_bank_explan_5.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
               <Text style={styles.text}>{"Enter your routing number and account number."}</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 5, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/add_bank_explan_6.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 5, marginBottom: 5}} />
               <Text style={styles.text}>{"Those numbers can easily be found on a check."}</Text>
               <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
                 <Text style={styles.footer}>*Payper does not store this information</Text>
@@ -125,7 +125,6 @@ class AddBankAccountTooltip extends React.Component {
             </View>
             <View style={styles.slide5}>
               <Text style={styles.header}>{"That's it!"}</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
               <Text style={styles.text}>{"Once finished you will be returned to the home screen."}</Text>
               <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
                 <Text style={styles.footer}>*Payper does not store this information</Text>
@@ -209,6 +208,7 @@ var styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: "column",
     backgroundColor: colors.accent,
     margin: dimensions.width * .08,
     marginTop: dimensions.height * .10,
@@ -222,13 +222,28 @@ var styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "500"
   },
+  finalText: {
+    color: '#fff',
+    fontSize: 20,
+    lineHeight: 20 * 1.20,
+    textAlign: "center",
+    fontWeight: "400"
+  },
   header: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 19,
     fontWeight: 'bold',
     textAlign: 'left',
     marginTop: 15,
     lineHeight: 18 * 1.20
+  },
+  finalHeader: {
+    color: "#fff",
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'left',
+    marginTop: 15,
+    lineHeight: 24 * 1.20
   },
   footer: {
     color: '#fff',

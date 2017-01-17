@@ -284,7 +284,7 @@ class MainView extends React.Component {
           <ListView
             dataSource={dataSource}
             renderRow={this.renderRow.bind(this)}
-            renderHeader={() => <AlternateStatusCard {...this.props} />}
+            renderHeader={() => <StatusCard {...this.props} />}
             renderFooter={() => <View style={{height: 90}} />}
             renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
             enableEmptySections />
