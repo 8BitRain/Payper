@@ -11,6 +11,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 const dims = Dimensions.get('window')
 const imageDims = { width: 56, height: 56 }
+const imageWrapDims = { width: 60, height: 60 }
 
 class AlternateStatusCard extends React.Component {
   constructor(props) {
@@ -127,7 +128,8 @@ class AlternateStatusCard extends React.Component {
   }
 
   render() {
-    let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
+    let {currentUser} = this.props
+    let onboardingProgress = currentUser.appFlags['onboardingProgress']
     let configInfo = this.config[onboardingProgress]
 
     // Return an empty view for cases where no StatusCard should be rendered
@@ -139,33 +141,136 @@ class AlternateStatusCard extends React.Component {
       let message = configInfo.message
       let destination = configInfo.destination
       let action = configInfo.action
+      let {onboardingPercentage} = this.state
+      let profilePic = this.props.currentUser.profile_pic
+      let canSendMoney = currentUser.fundingSource
+        && onboardingProgress !== "microdeposits-initialized"
+        && onboardingProgress !== "microdeposits-deposited"
+        && onboardingProgress !== "microdeposits-failed"
+      let canReceiveMoney = onboardingProgress === "kyc-success"
 
       return(
-        <View style={{width: dims.width * 0.94, marginLeft: dims.width * 0.03, borderRadius: 5, marginTop: 8, overflow: 'hidden', height: 300, backgroundColor: colors.snowWhite}}>
+        <View
+          style={{
+            width: dims.width * 0.94, marginLeft: dims.width * 0.03, marginTop: 8, backgroundColor: colors.snowWhite,
+            shadowColor: colors.medGrey,
+            shadowOpacity: 1.0,
+            shadowRadius: 2,
+            shadowOffset: {
+              height: 0,
+              width: 0
+            }
+          }}>
+
           { /* Top third (profile strength) */ }
-          <View style={{flex: 0.333, backgroundColor: 'red'}} />
+          <View style={{justifyContent: 'center', paddingBottom: 12}}>
+            { /* "My Profile Strength" */ }
+            <Text style={{fontSize: 18, padding: 10, color: colors.deepBlue, textAlign: 'center'}}>
+              {"My Account Strength"}
+            </Text>
+
+            { /* Profile pic and onboarding percentage */ }
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+              <View style={styles.imageWrap}>
+                <AnimatedCircularProgress
+                  size={imageWrapDims.width}
+                  width={4}
+                  fill={onboardingPercentage}
+                  tintColor={colors.accent}
+                  backgroundColor={colors.medGrey}>
+                  {(fill) => <View style={styles.imageBorder} />}
+                </AnimatedCircularProgress>
+                <Image style={styles.image} source={{uri: profilePic}} />
+              </View>
+
+              <View style={{width: 20}} />
+
+              <View style={{flexDirection: 'row'}}>
+                <Text style={{fontSize: 56, color: colors.accent, fontWeight: '200'}}>
+                  {onboardingPercentage}
+                </Text>
+                <Text style={{fontSize: 28, color: colors.accent, fontWeight: '200', marginTop: 6}}>
+                  {"%"}
+                </Text>
+              </View>
+            </View>
+
+            { /* Locked and unlocked features */ }
+            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10}}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <EvilIcons name={(canSendMoney) ? "unlock" : "lock"} size={24} color={(canSendMoney) ? colors.deepBlue : colors.slateGrey} />
+                <Text style={{fontSize: 17, color: (canSendMoney) ? colors.deepBlue : colors.slateGrey, fontWeight: '200'}}>
+                  {"Send Money"}
+                </Text>
+              </View>
+
+              { /* Spacer */ }
+              <View style={{width: 6}} />
+
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <EvilIcons name={(canReceiveMoney) ? "unlock" : "lock"} size={24} color={(canReceiveMoney) ? colors.deepBlue : colors.slateGrey} />
+                <Text style={{fontSize: 17, color: (canReceiveMoney) ? colors.deepBlue : colors.slateGrey, fontWeight: '200'}}>
+                  {"Receive Money"}
+                </Text>
+              </View>
+            </View>
+          </View>
 
           { /* Middle third (info) */
             (!message)
               ? null
-              : <View style={{flex: 0.333, backgroundColor: colors.accent}} /> }
+              : <View style={{flex: 1.0, padding: 12, paddingBottom: 18, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={{fontSize: 15, color: colors.deepBlue}}>
+                    {message}
+                  </Text>
+                </View> }
 
           { /* Bottom third (action button) */
             (!action || !destination)
               ? null
-              : <View>
-                  <TouchableHighlight
-                    activeOpacity={0.7}
-                    underlayColor={'transparent'}
-                    onPress={() => alert("Pressed action")}>
-                    <Text style={{flex: 1.0, fontSize: 16, color: colors.accent, padding: 14, textAlign: 'center'}}>
-                      {action}
-                    </Text>
-                  </TouchableHighlight>
-                </View> }
+              : <TouchableHighlight
+                  style={{flex: 1.0, padding: 16, backgroundColor: colors.gradientGreen, justifyContent: 'center'}}
+                  activeOpacity={0.95}
+                  underlayColor={colors.accent}
+                  onPress={() => destination()}>
+                  <Text style={{fontSize: 16, color: colors.snowWhite, textAlign: 'center'}}>
+                    {"Next Step: "}
+                    {action}
+                  </Text>
+                </TouchableHighlight> }
         </View>
       )
     }
+  }
+}
+
+const styles = {
+  wrap: {
+    backgroundColor: colors.snowWhite,
+    paddingTop: 20,
+    flex: 1.0,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+  image: {
+    position: 'absolute',
+    width: imageDims.width,
+    height: imageDims.height,
+    borderRadius: imageDims.width / 2,
+    top: (imageWrapDims.height - imageDims.height) / 2,
+    left: (imageWrapDims.width - imageDims.width) / 2,
+  },
+  imageBorder: {
+    position: 'absolute',
+    top: 0,
+    left: 0
+  },
+  imageWrap: {
+    width: imageWrapDims.width,
+    height: imageWrapDims.height,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 }
 
