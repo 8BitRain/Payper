@@ -100,20 +100,32 @@ class DynamicList extends React.Component {
     let {data} = this.props
 
     console.log("--> optimisticallyUpdate was invoked...")
-    console.log("--> params", params)
-    console.log("--> data", data)
-    console.log("--> dataSource", dataSource)
 
-    function add() {
+    add(additions, this)
+    if (removals) remove(removals)
+    if (mutations) mutate(mutations)
 
+    function add(additions, scope) {
+      additions = {out: additions}
+      
+      if (additions.out)
+        data.out = Object.assign({}, data.out, additions.out)
+      if (additions.in)
+        data.in = Object.assign({}, data.in, additions.in)
+
+      console.log("--> data", data)
+
+      // scope.setState({dataSource: newDataSource})
     }
 
-    function remove() {
-
+    function remove(removals) {
+      console.log("--> optimisticallyUpdate.remove() was invoked...")
+      console.log("--> removals", removals)
     }
 
-    function mutate() {
-
+    function mutate(mutations) {
+      console.log("--> optimisticallyUpdate.mutate() was invoked...")
+      console.log("--> mutations", mutations)
     }
   }
 
