@@ -6,6 +6,8 @@ import { signin } from '../../auth'
 import Mixpanel from 'react-native-mixpanel'
 import Entypo from 'react-native-vector-icons/Entypo'
 import CodePush from 'react-native-code-push'
+import * as config from '../../config'
+const codePushKey = config.details[config.details.env].codePushKey
 var FBLoginManager = require('NativeModules').FBLoginManager
 
 // Helpers
@@ -84,7 +86,9 @@ class SplashView extends React.Component {
     const _this = this
     this.setState({ connected: true })
 
-    // CodePush.sync()
+    CodePush.sync({deploymentKey: codePushKey})
+    // let start = codePushKey.substring(0, 5)
+    // alert("codePushKey starts with " + start)
 
     // Check beta status
     Async.get('betaStatus', (val) => {

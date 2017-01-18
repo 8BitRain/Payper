@@ -30,11 +30,24 @@ class AddBankAccountTooltip extends React.Component {
       closeModal: false
     }
 
+    this.fade_dimmed_background_value = new Animated.Value(0);
 
   }
 
   componentDidMount() {
+    this.fade_dimmed_background();
+  }
 
+  fade_dimmed_background() {
+    //this.fade_dimmed_background_value.setValue(0);
+    Animated.timing(
+      this.fade_dimmed_background_value,
+      {
+        toValue: 1,
+        duration: 500,
+        easing: Easing.ease
+      }
+    ).start()
   }
 
   _renderDot(){
@@ -51,11 +64,20 @@ class AddBankAccountTooltip extends React.Component {
   }
 
   render() {
+    const dimOpacity = this.fade_dimmed_background_value.interpolate({
+      inputRange: [0.0, 1.0],
+      outputRange: [0.0, 0.9]
+    })
     return(
       <View style={{flex: 1}}>
       {/* Dim Background*/ }
-      <View style={styles.dimBackground}>
-      </View>
+      <Animated.View style={{flex: 1,
+          position: "absolute",
+          backgroundColor: colors.richBlack,
+          opacity: dimOpacity,
+          height: dimensions.height,
+          width: dimensions.width}}>
+      </Animated.View>
       <View style={{flex: 1}}>
         {/* To get the close button working change height to 50. Remember to view the borders*/}
 
@@ -66,7 +88,7 @@ class AddBankAccountTooltip extends React.Component {
             activeDot={this._renderActiveDot()}>
             <View style={styles.slide1}>
               <Text style={styles.header}>Adding A Bank Account Is Secure & Simple</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/add_bank_explan_1.png')} style={{width: dimensions.width * .84, height: dimensions.height * .40, marginTop: 30, marginBottom: 5}} />
               <Text style={styles.text}> You have two ways to add a bank account,
               through Instant Account Verification and Deposit Verification</Text>
               <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
@@ -75,9 +97,9 @@ class AddBankAccountTooltip extends React.Component {
             </View>
             <View style={styles.slide2}>
               <Text style={styles.header}>Instant Account Verification</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/add_bank_explan_2.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
               <Text style={styles.text}>Find your bank!</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 5, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/add_bank_explan_3.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 5, marginBottom: 5}} />
               <Text style={styles.text}>Use your login information to verify your bank account. Thats it!</Text>
               <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
                 <Text style={styles.footer}>*Payper does not store this information</Text>
@@ -85,7 +107,7 @@ class AddBankAccountTooltip extends React.Component {
             </View>
             <View style={styles.slide3}>
               <Text style={styles.header}>{"Can't Find Your Bank? No Problem!"}</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/add_bank_explan_4.png')} style={{width: dimensions.width * .84, height: dimensions.height * .40, marginTop: 30, marginBottom: 5}} />
               <Text style={styles.text}>If your bank is not found you will automatically use deposit verification.</Text>
               <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
                 <Text style={styles.footer}>*Payper does not store this information</Text>
@@ -93,9 +115,9 @@ class AddBankAccountTooltip extends React.Component {
             </View>
             <View style={styles.slide4}>
               <Text style={styles.header}>Deposit Verification</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/add_bank_explan_5.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
               <Text style={styles.text}>{"Enter your routing number and account number."}</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 5, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/add_bank_explan_6.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 5, marginBottom: 5}} />
               <Text style={styles.text}>{"Those numbers can easily be found on a check."}</Text>
               <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
                 <Text style={styles.footer}>*Payper does not store this information</Text>
@@ -103,7 +125,6 @@ class AddBankAccountTooltip extends React.Component {
             </View>
             <View style={styles.slide5}>
               <Text style={styles.header}>{"That's it!"}</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
               <Text style={styles.text}>{"Once finished you will be returned to the home screen."}</Text>
               <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
                 <Text style={styles.footer}>*Payper does not store this information</Text>
@@ -187,6 +208,7 @@ var styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: "column",
     backgroundColor: colors.accent,
     margin: dimensions.width * .08,
     marginTop: dimensions.height * .10,
@@ -200,13 +222,28 @@ var styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "500"
   },
+  finalText: {
+    color: '#fff',
+    fontSize: 20,
+    lineHeight: 20 * 1.20,
+    textAlign: "center",
+    fontWeight: "400"
+  },
   header: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 19,
     fontWeight: 'bold',
     textAlign: 'left',
     marginTop: 15,
     lineHeight: 18 * 1.20
+  },
+  finalHeader: {
+    color: "#fff",
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'left',
+    marginTop: 15,
+    lineHeight: 24 * 1.20
   },
   footer: {
     color: '#fff',

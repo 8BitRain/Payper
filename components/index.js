@@ -20,3 +20,4 @@ exports.DocumentUploadTooltip  = require('./Tooltips/DocumentUploadTooltip/Docum
 exports.DynamicList = require('./DynamicList/DynamicList')
 exports.ExploreTrendingPaymentsButton = require('./ExploreTrendingPaymentsButton/ExploreTrendingPaymentsButton')
 exports.EmptyState = require('./EmptyState/EmptyState')
+exports.AlternateStatusCard = require('./StatusCard/AlternateStatusCard')

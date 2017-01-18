@@ -2,7 +2,7 @@ import React from 'react'
 import { Actions } from 'react-native-router-flux'
 import { View, Text, TouchableHighlight, Animated, Easing, Dimensions, Modal, Image, StyleSheet } from 'react-native'
 import { colors } from '../../globalStyles'
-import { IAVWebView, KYCOnboardingView, PhotoUploader } from '../index'
+import { IAVWebView, KYCOnboardingView, PhotoUploader, MicrodepositOnboarding } from '../index'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -60,7 +60,7 @@ class StatusCard extends React.Component {
         pressable: true,
         destination: () => Actions.GlobalModal({
           subcomponent: <PhotoUploader title={"Document Upload"} index={1} brand={"document"}  {...this.props}/>,
-          backgroundColor: colors.carminePink,
+          backgroundColor: colors.snowWhite,
           showHeader: false,
           title: "Document Upload"
         })
@@ -87,10 +87,10 @@ class StatusCard extends React.Component {
         action: "Verify Microdeposits",
         pressable: true,
         destination: () => Actions.GlobalModal({
-          subcomponent: <View />,
-          backgroundColor: colors.carminePink,
+          subcomponent: <MicrodepositOnboarding {...this.props} toggleModal={() => Actions.pop()} />,
+          backgroundColor: colors.snowWhite,
           showHeader: true,
-          title: "Document Upload"
+          title: "Microdeposit Verification"
         })
       },
       'microdeposits-failed': {
@@ -141,6 +141,7 @@ class StatusCard extends React.Component {
           onboardingPercentage = 50;
         }
         break;
+      case "microdeposits-deposited":
       case "microdeposits-initialized":
         if(customer_status == "verified"){
           onboardingPercentage = 80;
@@ -209,7 +210,48 @@ class StatusCard extends React.Component {
         destination()
     }
 
+  _renderSendMoneyLock(currentUser){
+    //Render Send Money and Lock as unlocked
+    if(currentUser.fundingSource &&
+      currentUser.appFlags.onboardingProgress != "microdeposits-initialized" &&
+      currentUser.appFlags.onboardingProgress != "microdeposits-deposited" &&
+      currentUser.appFlags.onboardingProgress != "microdeposits-failed"){
+        return(
+          <View style={{flex: 1, alignItems: "center"}}>
+            <Ionicons size={24} name="md-unlock" color={colors.snowWhite} />
+            <Text style={styles.unlockedText}>{"Send Money"}</Text>
+          </View>
+        )
+      } else {
+    //Render Send Money and Lock as locked
+        return(
+          <View style={{flex: 1, alignItems: "center"}}>
+            <Ionicons size={24} name="md-lock" color={colors.medGrey} />
+            <Text style={styles.lockText}>{"Send Money"}</Text>
+          </View>
+        )
+      }
+  }
 
+  _renderRecieveMoneyLock(currentUser){
+    //Recieve money unlocked
+    if(currentUser.appFlags.onboardingProgress == "kyc-success"){
+      return(
+        <View style={{flex: 1, alignItems: "center"}}>
+          <Ionicons size={24} name="md-unlock" color={colors.snowWhite} />
+          <Text style={styles.unlockedText}>{"Receive Money"}</Text>
+        </View>
+      );
+    //Recieve money locked
+    } else {
+      return(
+        <View style={{flex: 1, alignItems: "center"}}>
+          <Ionicons size={24} name="md-lock" color={colors.medGrey} />
+          <Text style={styles.lockText}>{"Receive Money"}</Text>
+        </View>
+      );
+    }
+  }
   _renderPicWithInitials(firstname, lastname){
     let initials = firstname.charAt(0) + lastname.charAt(0);
 
@@ -223,10 +265,6 @@ class StatusCard extends React.Component {
           </View>
       </View>
     )
-  }
-
-  _renderUnlocks(onboardingProgress){
-    //TODO add rendering logic for locks & associated text based on onboaridngProgress
   }
 
   render() {
@@ -244,7 +282,7 @@ class StatusCard extends React.Component {
         <View style={styles.wrapper}>
           {/* //TODO Close Modal Floating Points Move this to outside of wrapper*/}
           {/* Header */}
-          <View style={{flex: 1, justifyContent: "flex-start", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", marginTop: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, backgroundColor: colors.darkAccent}}>
+          <View style={{flex: 1, flexShrink: 0, justifyContent: "flex-start", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden", marginTop: 0, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, backgroundColor: colors.darkAccent}}>
             {/* Profile Picture & Onboarding Progress Text*/}
             <View style={{flex: 1, alignItems: "center", backgroundColor: colors.darkAccent}}>
               {this._renderPicWithInitials(this.props.currentUser.first_name, this.props.currentUser.last_name)}
@@ -252,10 +290,7 @@ class StatusCard extends React.Component {
             </View>
             {/* Unlocked Features*/}
             <View style={{flex: 1, flexDirection: "row", alignItems: "center", backgroundColor: colors.darkAccent}}>
-              <View style={{flex: 1, alignItems: "center"}}>
-                <Ionicons size={24} name="md-lock" color={colors.medGrey} />
-                <Text style={styles.lockText}>{"Send Money"}</Text>
-              </View>
+              {this._renderSendMoneyLock(this.props.currentUser)}
               {/* Progress Percentage */}
               <View style={{flex: 1, alignItems: "center"}}>
                 {/* <Text style={styles.header}>{"80%"}</Text> */}
@@ -274,10 +309,7 @@ class StatusCard extends React.Component {
                   }
                 </AnimatedCircularProgress>
               </View>
-              <View style={{flex: 1, alignItems: "center"}}>
-                <Ionicons size={24} name="md-lock" color={colors.medGrey} />
-                <Text style={styles.lockText}>{"Receive Money"}</Text>
-              </View>
+              {this._renderRecieveMoneyLock(this.props.currentUser)}
             </View>
 
 
@@ -287,16 +319,19 @@ class StatusCard extends React.Component {
             <Text style={styles.header}>{this.config[onboardingProgress].title}</Text>
             <Text style={styles.text}>{this.config[onboardingProgress].message}</Text>
           </View>
-          {/*Footer*/}
-          <View style={{flex: .5, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
-            <TouchableHighlight
-              activeOpacity={0.8}
-              underlayColor={'transparent'}
-              onPress={() => {this.handlePress(destination)}}
-              style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
-                  <Text style={styles.buttonText}>{this.config[onboardingProgress].action}</Text>
-            </TouchableHighlight>
-          </View>
+
+          { /* Footer */
+            (!this.config[onboardingProgress].action)
+              ? null
+              : <View style={{flex: .5, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
+                  <TouchableHighlight
+                    activeOpacity={0.8}
+                    underlayColor={'transparent'}
+                    onPress={() => {this.handlePress(destination)}}
+                    style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
+                    <Text style={styles.buttonText}>{this.config[onboardingProgress].action}</Text>
+                  </TouchableHighlight>
+                </View> }
       </View>
       )
     }
@@ -359,7 +394,7 @@ var styles = StyleSheet.create({
     fontWeight: "500"
   },
   unlockedText:{
-    color: '#fff',
+    color: colors.snowWhite,
     fontSize: 16,
     lineHeight: 16 * 1.20,
     textAlign: "center",

@@ -39,7 +39,8 @@ export var details = {
       "authDomain": "coincast.firebaseapp.com",
       "databaseURL": "https://coincast.firebaseio.com",
       "storageBucket": "firebase-coincast.appspot.com"
-    }
+    },
+    "codePushKey": "AarYhu5gwn2uwqhzXiLJ3Rglm9MBVkksGQK3-"
   },
   "test": {
     "lambdaBaseURL": "https://mey71fma7i.execute-api.us-east-1.amazonaws.com/test/",
@@ -48,7 +49,8 @@ export var details = {
       "authDomain": "payper-test.firebaseapp.com",
       "databaseURL": "https://payper-test.firebaseio.com",
       "storageBucket": "payper-test.appspot.com"
-    }
+    },
+    "codePushKey": "PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3-"
   },
   "prod": {
     "lambdaBaseURL": "https://mey71fma7i.execute-api.us-east-1.amazonaws.com/prod/",
@@ -57,6 +59,7 @@ export var details = {
       "authDomain": "payper-prod.firebaseapp.com",
       "databaseURL": "https://payper-prod.firebaseio.com",
       "storageBucket": "payper-prod.appspot.com"
-    }
+    },
+    "codePushKey": "PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3-"
   }
 };

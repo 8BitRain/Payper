@@ -12,7 +12,8 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import {colors} from '../../globalStyles'
 import {
   SideMenu, PayCard, StatusCard, PhotoUploader, MicrodepositOnboarding,
-  TrendingPayments, DynamicList, ExploreTrendingPaymentsButton, EmptyState
+  TrendingPayments, DynamicList, ExploreTrendingPaymentsButton, EmptyState,
+  AlternateStatusCard
 } from '../../components'
 import KYCOnboardingView from '../../components/KYCOnboarding/KYCOnboardingView'
 import {MyProfile, BankAccounts, Notifications, Invite, Settings} from '../../components/SideMenuSubpages'
@@ -44,6 +45,7 @@ class MainView extends React.Component {
     this.props.currentUser.startListening((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.decrypt((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.getNativeContacts((updates) => this.props.updateCurrentUser(updates))
+    this.props.currentUser.startTokenRefresher((updates) => this.props.updateCurrentUser(updates))
     this.trackOnce = new TrackOnce()
   }
 
@@ -147,7 +149,7 @@ class MainView extends React.Component {
                 </View>
               )
             }}
-            renderHeader={() => <StatusCard {...this.props} />}
+            renderHeader={() => <AlternateStatusCard {...this.props} />}
             renderFooter={() => {
               let data = this.props.currentUser.paymentFlow
 

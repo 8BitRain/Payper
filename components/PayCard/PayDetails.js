@@ -159,6 +159,7 @@ class paydetails extends React.Component {
 
   generateDetailRows() {
     let { payments, paymentsMade, status, nextTimestamp, purpose, amount, frequency, name, incoming } = this.props
+    nextTimestamp = parseInt(nextTimestamp)
     let firstName = name.split(" ")[0]
     let endsInS = firstName.charAt(firstName.length - 1) === 's'
 
@@ -177,7 +178,7 @@ class paydetails extends React.Component {
         {key: "Current Payment", val: paymentsMade + " of " + payments},
         {key: "Next Payment", val: moment(nextTimestamp).format("MMM D [around] h:mma")},
         {key: "Purpose", val: purpose},
-        {key: "Amount", val: "$" + amount},
+        {key: "Amount", val: "$" + amount + ((frequency === "Monthly") ? " per month" : " per week")},
         {key: "Frequency", val: frequency}
       ]
     }

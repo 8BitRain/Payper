@@ -120,10 +120,10 @@ export function contactsArrayToNumbersArray(contacts) {
 export function globalUserListToArray(options) {
   var arr = [], curr;
 
-  for (var uid in options.users) {
-    if (uid != options.uid) {
-      curr = options.users[uid];
-      curr.uid = uid;
+  for (var username in options.users) {
+    if (username != options.username) {
+      curr = options.users[username];
+      curr.username = username;
       curr.sectionTitle = options.sectionTitle;
       curr.selected = false;
       arr.push(curr);

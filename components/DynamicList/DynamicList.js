@@ -68,8 +68,6 @@ class DynamicList extends React.Component {
 
   componentWillMount() {
     let {induceRef} = this.props
-
-    console.log("--> induceRef", induceRef)
     if (typeof induceRef === 'function')
       induceRef(this)
   }

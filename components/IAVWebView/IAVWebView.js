@@ -115,19 +115,16 @@ class IAVWebView extends React.Component {
 
     if (true === success) {
       if (verificationType === "microdeposits") {
+        // Why this import syntax? https://goo.gl/gcNg7z
+        const MicrodepositTooltip = require('../Tooltips/MicrodepositTooltip/MicrodepositTooltip')
+
         Actions.refresh({
-          subcomponent:
-            <View style={{flex: 1.0, justifyContent: 'center', alignItems: 'center'}}>
-              <Text>MicrodepositInfo</Text>
-            </View>,
-          backgroundColor: colors.snowWhite,
-          showHeader: true,
-          title: "Microdeposit Verification"
+          subcomponent: <MicrodepositTooltip closeModal={() => Actions.pop()} />,
+          backgroundColor: colors.snowWhite
         })
       } else {
         // Why this import syntax? https://goo.gl/gcNg7z
         const BankAccountAdded = require('../Rewards/BankAccountAdded/BankAccountAdded')
-
         let userIsVerified = this.props.currentUser.appFlags.customer_status === "verified"
 
         Actions.refresh({
@@ -154,45 +151,6 @@ class IAVWebView extends React.Component {
           title: "Bank Account Verification"
         })
       }
-
-      // else if ("verified" === currentUser.appFlags.customer_status) {
-      //
-      //   // Why this import syntax? https://goo.gl/gcNg7z
-      //   const BankAccountAdded = require('../Rewards/BankAccountAdded/BankAccountAdded')
-      //
-      //   Actions.refresh({
-      //     subcomponent:
-      //       <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.snowWhite}}>
-      //         <BankAccountAdded
-      //           currentUser={this.props.currentUser}
-      //           toggleModal={this.props.toggleModal} />
-      //       </View>,
-      //     backgroundColor: colors.snowWhite,
-      //     showHeader: true,
-      //     title: "Bank Account Verification"
-      //   })
-      //
-      //
-      //   if (typeof this.props.toggleModal === 'function')
-      //     this.props.toggleModal()
-      //   else
-      //     Actions.pop()
-      // } else {
-      //   // Why this import syntax? https://goo.gl/gcNg7z
-      //   const BankAccountAdded = require('../Rewards/BankAccountAdded/BankAccountAdded')
-      //
-      //   Actions.refresh({
-      //     subcomponent:
-      //       <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.snowWhite}}>
-      //         <BankAccountAdded
-      //           currentUser={this.props.currentUser}
-      //           toggleModal={this.props.toggleModal} />
-      //       </View>,
-      //     backgroundColor: colors.snowWhite,
-      //     showHeader: true,
-      //     title: "Bank Account Verification"
-      //   })
-      // }
     }
   }
 
