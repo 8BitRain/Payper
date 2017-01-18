@@ -111,18 +111,17 @@ class DocumentUploadTooltip extends React.Component {
           <Text style={styles.headerL}>{"We require additional I.D to verify your identity"}</Text>
 
           <View style={styles.content}>
-            <Text style={styles.header2}>{"Valid I.D Includes ..."}</Text>
-            <View style={{flexDirection: "row", justifyContent: "center", margin: 0}}>
+            <View style={{flexDirection: "column", justifyContent: "center", margin: 0}}>
                 <View style={{flexDirection: "column", alignSelf: "flex-start", alignItems: "center"}}>
-                  <Image source={require('../../../assets/images/document_upload_id.png')} style={{width: 75, height: 50, marginTop: 55, marginBottom: 5, padding: 0}} />
-                  <Text style={styles.text} >{"Driver's License"}</Text>
+                  <Image source={require('../../../assets/images/document_upload_passport.png')} style={styles.passport} />
+                  <Text style={styles.text} >{"Passport Photo"}</Text>
                 </View>
-                <View style={{flexDirection: "column", alignSelf: "center", margin: 15, marginTop: 25, marginLeft: 8.5, marginRight: 6.5}}>
+                <View style={{flexDirection: "column", alignSelf: "center", margin: 15, marginTop: 15, marginLeft: 8.5, marginRight: 6.5}}>
                   <Text style={styles.text3}>{"or"}</Text>
                 </View>
                 <View style={{flexDirection: "column", alignSelf: "flex-end", alignItems: "center"}}>
-                    <Image source={require('../../../assets/images/document_upload_passport.png')} style={{width: 50, height: 75, marginTop: 25, marginBottom: 5, padding: 0}} />
-                    <Text style={styles.text} >{"Passport Photo"}</Text>
+                    <Image source={require('../../../assets/images/document_upload_id.png')} style={styles.license} />
+                    <Text style={styles.text} >{"Driver's License"}</Text>
                 </View>
             </View>
           </View>
@@ -197,9 +196,23 @@ var styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginTop: device == "SE" ? dimensions.height * .15 : device == "6" ? 10  : 10 ,
+    marginTop: device == "SE" ? dimensions.height * .15 : device == "6" ? dimensions.height * .15  : dimensions.height * .15 ,
     alignItems: "center",
     justifyContent: "center"
+  },
+  passport:{
+    width: device == "SE" ? 60 : device == "6" ? 75 : 90,
+    height: device == "SE" ? 90 : device == "6" ? 115 : 140,
+    marginTop: 0,
+    marginBottom: 5,
+    padding: 0
+  },
+  license:{
+    width: device == "SE" ? 100 : device == "6" ? 115 : 130,
+    height: device == "SE" ? 60 : device == "6" ? 75 : 90,
+    marginTop: 0,
+    marginBottom: 5,
+    padding: 0
   },
   buttonText:{
     color: '#fff',
@@ -217,8 +230,10 @@ var styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
-    fontSize: device == "SE" ? 14 : device == "6" ? 18 : 20,
-    lineHeight: device == "SE" ? 14 * 1.20 : device == "6" ? 18 * 1.20 : 20 * 1.20,
+    fontSize: device == "SE" ? 18 : device == "6" ? 18 : 22,
+    paddingLeft: 10,
+    paddingRight: 10,
+    lineHeight: device == "SE" ? 18 * 1.20 : device == "6" ? 18 * 1.20 : 22 * 1.20,
     textAlign: "center",
     fontWeight: "500"
   },
@@ -232,39 +247,31 @@ var styles = StyleSheet.create({
   },
   text3: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: device == "SE" ? 16 : device == "6" ? 18 : 20,
     lineHeight: 16 * 1.20,
     textAlign: "center",
     fontWeight: "500",
     padding: 0
   },
-  header: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 15,
-    lineHeight: 18 * 1.20
-  },
   header2: {
     color: "#fff",
-    fontSize: device == "SE" ? 17 : device == "6" ? 21 : 23,
+    fontSize: device == "SE" ? 18 : device == "6" ? 21 : 23,
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: device == "SE" ? 0: device == "6" ? 0 : 0,
-    lineHeight: device == "SE" ? 16 * 1.20 : device == "6" ? 20 * 1.20 : 22 * 1.20,
+    lineHeight: device == "SE" ? 18 * 1.20 : device == "6" ? 21 * 1.20 : 23 * 1.20,
   },
 
   headerL: {
     color: "#fff",
-    fontSize: device == "SE" ? 18 : device == "6" ? 22 : 24,
+    fontSize: device == "SE" ? 20 : device == "6" ? 22 : 24,
     fontWeight: 'bold',
     textAlign: 'left',
-    marginRight: device == "SE" ? 40 : device == "6" ? 40 : 40,
-    marginLeft: 10,
+    paddingLeft: device == "SE" ? 15 : device == "6" ? 15 : 15,
+    paddingRight: device == "SE" ? 40 : device == "6" ? 40 : 40,
     marginTop: 15,
     padding: 0,
-    lineHeight: device == "SE" ? 18 * 1.20 : device == "6" ? 22 * 1.40 : 24 * 1.20,
+    lineHeight: device == "SE" ? 20 * 1.20 : device == "6" ? 22 * 1.20 : 24 * 1.20,
   },
 
   footer: {

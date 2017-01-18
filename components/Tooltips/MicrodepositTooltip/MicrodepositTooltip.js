@@ -102,7 +102,7 @@ class MicrodepositTooltip extends React.Component {
           underlayColor={'transparent'}
           style={{ margin: dimensions.width * .08, marginTop: 20 }}
           onPress={() => this.closeModal()}>
-          <Ionicons size={34} name="md-close-circle" color={colors.accent} />
+          <Ionicons size={34} name="md-close" color={colors.accent} />
         </TouchableHighlight>
       </View>
     </View>

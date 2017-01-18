@@ -18,6 +18,7 @@ import * as Headers from '../../../helpers/Headers';
 
 //Custom
 const dimensions = Dimensions.get('window');
+import { device } from '../../../helpers'
 
 class SuspendedTooltip extends React.Component {
   constructor(props) {
