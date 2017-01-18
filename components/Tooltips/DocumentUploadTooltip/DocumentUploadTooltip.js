@@ -273,6 +273,17 @@ var styles = StyleSheet.create({
     padding: 0,
     lineHeight: device == "SE" ? 20 * 1.20 : device == "6" ? 22 * 1.20 : 24 * 1.20,
   },
+  header2: {
+    color: "#fff",
+    fontSize: device == "SE" ? 20 : device == "6" ? 22 : 24,
+    fontWeight: 'bold',
+    textAlign: 'left',
+    paddingLeft: device == "SE" ? 10 : device == "6" ? 10 : 10,
+    paddingRight: device == "SE" ? 40 : device == "6" ? 40 : 40,
+    marginTop: 15,
+    padding: 0,
+    lineHeight: device == "SE" ? 20 * 1.20 : device == "6" ? 22 * 1.20 : 24 * 1.20,
+  },
 
   footer: {
     fontSize: 14,

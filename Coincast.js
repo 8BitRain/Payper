@@ -100,8 +100,8 @@ export default class Coincast extends React.Component {
 
               <Scene
                 initial
-                component={DocumentUploadTooltip}
-                key="DocumentUploadTooltip"
+                component={SuspendedTooltip}
+                key="SuspendedTooltip"
                 type="replace"
                 panHandlers={null} />
 
