@@ -28,7 +28,7 @@ class AlternateStatusCard extends React.Component {
       },
       'need-kyc': {
         title: "Account Verification Needed",
-        action: "Next Step: Add Bank Account",
+        action: "Next Step: Verify Account",
         destination: () => Actions.GlobalModal({
           subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
           backgroundColor: colors.snowWhite,
@@ -226,7 +226,7 @@ class AlternateStatusCard extends React.Component {
             { /* Middle third (info) */
               (!message)
                 ? null
-                : <View style={{flex: 1.0, padding: 12, paddingBottom: 22, justifyContent: 'center', alignItems: 'center'}}>
+                : <View style={{padding: 12, paddingBottom: 22, justifyContent: 'center', alignItems: 'center'}}>
                     <Text style={{fontSize: 15, color: colors.deepBlue}}>
                       {message}
                     </Text>
@@ -236,7 +236,7 @@ class AlternateStatusCard extends React.Component {
               (!action || !destination)
                 ? null
                 : <TouchableHighlight
-                    style={{flex: 1.0, padding: 16, backgroundColor: colors.accent, justifyContent: 'center'}}
+                    style={{padding: 16, backgroundColor: colors.accent, justifyContent: 'center'}}
                     activeOpacity={0.95}
                     underlayColor={colors.accent}
                     onPress={() => destination()}>
