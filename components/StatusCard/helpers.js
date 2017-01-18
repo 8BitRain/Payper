@@ -61,10 +61,12 @@ exports.getOnboardingPercentage = (appFlags) => {
     case "need-kyc":
       onboardingPercentage = 70;
       break;
-    case "kyc-retry" || "kyc-suspended" || "kyc-documentNeeded" :
+    case "kyc-retry":
+    case "kyc-suspended":
+    case "kyc-documentNeeded":
       onboardingPercentage = 75;
       break;
-    case "kyc-documentRecieved":
+    case "kyc-documentReceived":
       onboardingPercentage = 80;
       break;
     case "kyc-documentProcessing":

@@ -18,3 +18,5 @@ exports.BankAccountAdded = require('./Rewards/BankAccountAdded/BankAccountAdded'
 exports.VerifiedIdentity = require('./Rewards/VerifiedIdentity/VerifiedIdentity')
 exports.DocumentUploadTooltip  = require('./Tooltips/DocumentUploadTooltip/DocumentUploadTooltip')
 exports.AlternateStatusCard = require('./StatusCard/AlternateStatusCard')
+exports.MicrodepositTooltip = require('./Tooltips/MicrodepositTooltip/MicrodepositTooltip')
+exports.SuspendedTooltip = require('./Tooltips/SuspendedTooltip/SuspendedTooltip')

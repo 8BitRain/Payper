@@ -57,6 +57,10 @@ class SuspendedTooltip extends React.Component {
   }
 
 
+  closeModal() {
+    let {closeModal} = this.props
+    if (typeof closeModal === 'function') closeModal()
+  }
 
   render() {
     return(
@@ -79,9 +83,7 @@ class SuspendedTooltip extends React.Component {
               underlayColor={'transparent'}
               style={{ margin: dimensions.width * .08, marginTop: 20 }}
               onPress={() => this.closeModal()}>
-
                   <Ionicons  size={32} name="md-close" color={colors.accent} />
-
             </TouchableHighlight>
           </View>
         </View>

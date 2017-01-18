@@ -210,13 +210,14 @@ class KYCOnboardingView extends React.Component {
             { /* SSN */ }
             <TextField
               title={"Social Security Number"}
+              subtitle={"(Last 4 Digits)"}
               iconName={"lock"}
               complete={false}
               value={this.state.ssn}
               invalidityAlert={"Please enter a valid social security number."}
               textInputProps={{
-                placeholder: "e.g. 1234",
-                maxLength: 4,
+                placeholder: (this.props.retry) ? "e.g. 123456789" : "e.g. 1234",
+                maxLength: (this.props.retry) ? 8 : 4,
                 keyboardType: "number-pad"
               }}
               validateInput={(input) => {

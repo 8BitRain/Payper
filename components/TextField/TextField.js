@@ -13,10 +13,11 @@ class TextField extends React.Component {
     super(props)
 
     let value = this.props.value
+    let subtitle = this.props.subtitle
 
     this.AV = {
       opacity: new Animated.Value(1),
-      height: new Animated.Value(70),
+      height: new Animated.Value((subtitle) ? 90 : 70),
       valueOpacity: new Animated.Value((value) ? 1 : 0),
       valueHeight: new Animated.Value((value) ? 20 : 0),
       valuePaddingBottom: new Animated.Value((value) ? 16 : 0)
@@ -57,7 +58,7 @@ class TextField extends React.Component {
 
     let animations = [
       Animated.timing(this.AV.height, {
-        toValue: 70,
+        toValue: (this.props.subtitle) ? 90 : 70,
         duration: 180
       }),
       Animated.timing(this.AV.opacity, {
@@ -115,8 +116,8 @@ class TextField extends React.Component {
 
   render() {
     let {
-      iconName, iconType, iconSize, title, complete, value, placeholder,
-      textInputProps
+      iconName, iconType, iconSize, title, subtitle,
+      complete, value, placeholder, textInputProps
     } = this.props
 
     let {
@@ -150,9 +151,18 @@ class TextField extends React.Component {
                 : <EvilIcons name={iconName} size={iconSize || 32} color={colors.accent} /> }
             </View>
 
-            <Text style={{fontSize: 18, color: colors.deepBlue, paddingLeft: 10}}>
-              {title}
-            </Text>
+            {(subtitle)
+              ? <View>
+                  <Text style={{fontSize: 18, color: colors.deepBlue, paddingLeft: 10}}>
+                    {title}
+                  </Text>
+                  <Text style={{fontSize: 16, color: colors.maastrichtBlue, paddingLeft: 10}}>
+                    {subtitle}
+                  </Text>
+                </View>
+              : <Text style={{fontSize: 18, color: colors.deepBlue, paddingLeft: 10}}>
+                  {title}
+                </Text> }
 
             <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, justifyContent: 'center'}}>
               <EvilIcons name={(focused) ? "minus" : "plus"} size={28} color={colors.slateGrey} />
