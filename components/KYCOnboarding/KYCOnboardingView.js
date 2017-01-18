@@ -98,11 +98,13 @@ class KYCOnboardingView extends React.Component {
     }
 
     // Verify
-    this.props.currentUser.verify(params, (success) => {
+    this.props.currentUser.verify(params, (customerStatus) => {
       this.setState({loading: false})
 
-      if (success)
+      if (customerStatus === "verified")
         this.onSuccess()
+      else if (customerStatus === "document" || customerStatus === "retry" || customerStatus === "suspended")
+        this.onFailure()
       else
         Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
     })
@@ -118,6 +120,10 @@ class KYCOnboardingView extends React.Component {
         </View>,
       backgroundColor: colors.snowWhite
     })
+  }
+
+  onFailure() {
+    Actions.pop()
   }
 
   render() {
@@ -210,14 +216,14 @@ class KYCOnboardingView extends React.Component {
             { /* SSN */ }
             <TextField
               title={"Social Security Number"}
-              subtitle={"(Last 4 Digits)"}
+              subtitle={(this.props.retry) ? null : "(Last 4 Digits)"}
               iconName={"lock"}
               complete={false}
               value={this.state.ssn}
               invalidityAlert={"Please enter a valid social security number."}
               textInputProps={{
                 placeholder: (this.props.retry) ? "e.g. 123456789" : "e.g. 1234",
-                maxLength: (this.props.retry) ? 8 : 4,
+                maxLength: (this.props.retry) ? 9 : 4,
                 keyboardType: "number-pad"
               }}
               validateInput={(input) => {
