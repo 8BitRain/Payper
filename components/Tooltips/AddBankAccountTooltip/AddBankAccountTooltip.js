@@ -92,9 +92,9 @@ class AddBankAccountTooltip extends React.Component {
               <Image source={require('../../../assets/images/add_bank_explan_1.png')} style={{width: dimensions.width * .84, height: dimensions.height * .40, marginTop: 30, marginBottom: 5}} />
               <Text style={styles.text}>You have two ways to add a bank account,
               through Instant Account Verification and Deposit Verification</Text>
-              <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
+              {/*<View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
                 <Text style={styles.footer}>*Payper does not store this information</Text>
-              </View>
+              </View>*/}
             </View>
             <View style={styles.slide2}>
               <Text style={styles.header}>Instant Account Verification</Text>
@@ -102,31 +102,31 @@ class AddBankAccountTooltip extends React.Component {
               <Text style={styles.text}>Find your bank!</Text>
               <Image source={require('../../../assets/images/add_bank_explan_3.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 5, marginBottom: 5}} />
               <Text style={styles.text}>Use your login information to verify your bank account. Thats it!</Text>
-              <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
+              {/*<View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
                 <Text style={styles.footer}>*Payper does not store this information</Text>
-              </View>
+              </View>*/}
             </View>
             <View style={styles.slide3}>
               <Text style={styles.header}>{"Can't Find Your Bank? No Problem!"}</Text>
               <Image source={require('../../../assets/images/add_bank_explan_4.png')} style={{width: dimensions.width * .84, height: dimensions.height * .40, marginTop: 30, marginBottom: 5}} />
               <Text style={styles.text}>If your bank is not found you will automatically use deposit verification.</Text>
-              <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
+              {/*<View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
                 <Text style={styles.footer}>*Payper does not store this information</Text>
-              </View>
+              </View>*/}
             </View>
             <View style={styles.slide4}>
               <Text style={styles.header}>Deposit Verification</Text>
-              <Image source={require('../../../assets/images/add_bank_explan_5.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/add_bank_explan_5.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 30, marginBottom: 5}} />
               <Text style={styles.text}>{"Enter your routing number and account number."}</Text>
               <Image source={require('../../../assets/images/add_bank_explan_6.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 5, marginBottom: 5}} />
               <Text style={styles.text}>{"Those numbers can easily be found on a check."}</Text>
-              <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
+              {/*<View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
                 <Text style={styles.footer}>*Payper does not store this information</Text>
-              </View>
+              </View>*/}
             </View>
             <View style={styles.slide5}>
               <Text style={styles.header}>{"That's it!"}</Text>
-              <Text style={styles.text}>{"Once finished you will be returned to the home screen."}</Text>
+              <Text style={styles.finalText}>{"Once finished you will be returned to the home screen."}</Text>
               <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
                 <Text style={styles.footer}>*Payper does not store this information</Text>
               </View>
@@ -141,7 +141,7 @@ class AddBankAccountTooltip extends React.Component {
         style={{margin: dimensions.width * .08, marginTop: 20}}
         onPress={() => {this.props.toggleTooltip(false)}}>
 
-            <EvilIcons  size={32} name="close" color={colors.snowWhite} />
+            <Ionicons  size={32} name="md-close" color={colors.snowWhite} />
 
       </TouchableHighlight>
     </View>
@@ -197,7 +197,7 @@ var styles = StyleSheet.create({
   },
   slide4: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: colors.accent,
     margin: dimensions.width * .08,
@@ -218,29 +218,34 @@ var styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
-    fontSize: 16,
-    lineHeight: 16 * 1.20,
-    paddingLeft: 10,
-    paddingRight: 10,
+    fontSize: device == "SE" ? 16 : device == "6" ? 18 : 20,
+    lineHeight: device == "SE" ? 16 * 1.20 : device == "6" ? 18 * 1.20 : 20 * 1.20,
+    paddingLeft: device == "SE" ? 10 : device == "6" ? 10 : 10,
+    paddingRight: device == "SE" ? 10 : device == "6" ? 10 : 10,
+    paddingTop: device == "SE" ? 10 : device == "6" ? 10 : 10,
+    paddingBottom: device == "SE" ? 10 : device == "6" ? 10 : 10,
     textAlign: "left",
     fontWeight: "500"
   },
   finalText: {
     color: '#fff',
-    fontSize: 20,
-    lineHeight: 20 * 1.20,
-    textAlign: "center",
-    fontWeight: "400"
+    fontSize: device == "SE" ? 16 : device == "6" ? 18 : 20,
+    lineHeight: device == "SE" ? 16 : device == "6" ? 18 : 20,
+    marginTop: device == "SE" ? dimensions.height * .30 : device == "6" ? dimensions.height * .30 : dimensions.height * .30,
+    paddingLeft: device == "SE" ? 10 : device == "6" ? 10 : 10,
+    paddingRight: device == "SE" ? 10 : device == "6" ? 10 : 10,
+    textAlign: "left",
+    fontWeight: "500"
   },
   header: {
     color: "#fff",
-    fontSize: 20,
+    fontSize: device == "SE" ? 18 : device == "6" ? 20 : 22,
     fontWeight: 'bold',
     textAlign: 'left',
     marginTop: 15,
     paddingLeft: 10,
     paddingRight: 10,
-    lineHeight: 18 * 1.20
+    lineHeight: device == "SE" ? 18 * 1.20 : device == "6" ? 20 * 1.20 : 22 * 1.20
   },
   finalHeader: {
     color: "#fff",

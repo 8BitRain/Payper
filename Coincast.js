@@ -100,18 +100,10 @@ export default class Coincast extends React.Component {
 
               <Scene
                 initial
-                component={SuspendedTooltip}
-                key="SuspendedTooltip"
+                component={AddBankAccountTooltip}
+                key="AddBankAccountTooltip"
                 type="replace"
                 panHandlers={null} />
-
-                <Scene
-
-                  component={AddBankAccountTooltip}
-                  key="AddBankAccountTooltip"
-                  type="replace"
-                  panHandlers={null} />
-
 
 
             <Scene
