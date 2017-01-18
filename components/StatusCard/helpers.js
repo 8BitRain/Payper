@@ -2,8 +2,6 @@ exports.getOnboardingPercentage = (appFlags) => {
   let customer_status = appFlags.customer_status;
   let onboardingPercentage = 0;
 
-  console.log("--> appFlags.onboardingProgress", appFlags.onboardingProgress)
-
   switch (appFlags.onboardingProgress) {
     case "kyc-success":
       onboardingPercentage = 100;
@@ -79,8 +77,6 @@ exports.getOnboardingPercentage = (appFlags) => {
       break;
     default:
   }
-
-  console.log("--> onboardingPercentage", onboardingPercentage)
 
   return onboardingPercentage
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import {Actions} from 'react-native-router-flux'
 import {View, Text, TouchableHighlight, Animated, Easing, Dimensions, Modal, Image, StyleSheet} from 'react-native'
 import {colors} from '../../globalStyles'
-import {IAVWebView, KYCOnboardingView, PhotoUploader, MicrodepositOnboarding} from '../index'
+import {IAVWebView, KYCOnboardingView, PhotoUploader, MicrodepositOnboarding, MicrodepositTooltip, SuspendedTooltip} from '../index'
 import {AnimatedCircularProgress} from 'react-native-circular-progress'
 import {getOnboardingPercentage} from './helpers'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -20,9 +20,7 @@ class AlternateStatusCard extends React.Component {
     this.config = {
       'need-bank': {
         title: "Bank Account Needed",
-        message: "Link your bank account to unlock the ability to send money!",
-        action: "Add Bank Account",
-        pressable: true,
+        action: "Next Step: Add Bank Account",
         destination: () => Actions.GlobalModal({
           subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
           backgroundColor: colors.accent
@@ -30,9 +28,7 @@ class AlternateStatusCard extends React.Component {
       },
       'need-kyc': {
         title: "Account Verification Needed",
-        // message: "Verify your account to unlock the ability to receive money!",
-        action: "Verify Account",
-        pressable: true,
+        action: "Next Step: Add Bank Account",
         destination: () => Actions.GlobalModal({
           subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
           backgroundColor: colors.snowWhite,
@@ -42,9 +38,8 @@ class AlternateStatusCard extends React.Component {
       },
       'kyc-retry': {
         title: "Account Verification Failed",
-        message: "We failed to verify your account. Try verifying again with slightly more detailed information.",
-        action: "Verify Account",
-        pressable: true,
+        message: "We need a bit more information to verify your account.",
+        action: "Next Step: Verify Account",
         destination: () => Actions.GlobalModal({
           subcomponent: <KYCOnboardingView retry currentUser={this.props.currentUser} />,
           backgroundColor: colors.snowWhite,
@@ -55,8 +50,7 @@ class AlternateStatusCard extends React.Component {
       'kyc-documentNeeded': {
         title: "Additional Documents Required",
         message: "We need a bit more info to verify your account.",
-        action: "Upload Photo ID",
-        pressable: true,
+        action: "Next Step: Upload Photo ID",
         destination: () => Actions.GlobalModal({
           subcomponent: <PhotoUploader title={"Document Upload"} index={1} brand={"document"}  {...this.props}/>,
           backgroundColor: colors.snowWhite,
@@ -70,21 +64,30 @@ class AlternateStatusCard extends React.Component {
       },
       'kyc-documentReceived': {
         title: "Verifying Your Account",
-        message: "We're processing your information and will notify you when verification is complete."
+        message: "We're reviewing your information and will notify you when verification is complete."
       },
       'kyc-suspended': {
         title: "Verifying Your Account",
-        message: "We're processing your information and will notify you when verification is complete."
+        message: "We're taking a bit longer than usual to verify your account.",
+        action: "More Info",
+        destination: () => Actions.GlobalModal({
+          subcomponent: <SuspendedTooltip closeModal={() => Actions.pop()} />,
+          backgroundColor: colors.snowWhite
+        })
       },
       'microdeposits-initialized': {
         title: "Microdeposits Initialized",
-        message: "We're transferring two small (< 20¢) sums to your bank account and will notify you when they've arrived."
+        message: "We're transferring two small (< 20¢) sums to your bank account and will notify you when they've arrived.",
+        action: "More Info",
+        destination: () => Actions.GlobalModal({
+          subcomponent: <MicrodepositTooltip closeModal={() => Actions.pop()} />,
+          backgroundColor: colors.snowWhite
+        })
       },
       'microdeposits-deposited': {
         title: "Microdeposits Arrived",
         message: "We've deposited two small (< 20¢) sums to your bank account.",
-        action: "Verify Microdeposits",
-        pressable: true,
+        action: "Next Step: Verify Microdeposits",
         destination: () => Actions.GlobalModal({
           subcomponent: <MicrodepositOnboarding {...this.props} toggleModal={() => Actions.pop()} />,
           backgroundColor: colors.snowWhite,
@@ -94,9 +97,8 @@ class AlternateStatusCard extends React.Component {
       },
       'microdeposits-failed': {
         title: "Microdeposits Failed to Transfer",
-        message: "Your microdeposits failed to transfer. Please try adding your bank account again. Be sure to double check your routing and account number!",
-        action: "Add Bank Account",
-        pressable: true,
+        message: "We couldn't send microdeposits with the information provided. Please try again.",
+        action: "Next Step: Add Bank Account",
         destination: () => Actions.GlobalModal({
           subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
           backgroundColor: colors.accent
@@ -117,9 +119,8 @@ class AlternateStatusCard extends React.Component {
 
   handlePress(destination) {
     let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
-    let pressable = (this.config[onboardingProgress])
-      ? this.config[onboardingProgress].pressable
-      : false
+    let configInfo = this.config[onboardingProgress]
+    let pressable = configInfo && configInfo.action && configInfo.destination
 
     if (!pressable) return
 
@@ -240,7 +241,6 @@ class AlternateStatusCard extends React.Component {
                     underlayColor={colors.accent}
                     onPress={() => destination()}>
                     <Text style={{fontSize: 16, color: colors.lightGrey, textAlign: 'center'}}>
-                      {"Next Step: "}
                       {action}
                     </Text>
                   </TouchableHighlight> }

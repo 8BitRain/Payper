@@ -96,7 +96,7 @@ class MicrodepositTooltip extends React.Component {
       <TouchableHighlight
         activeOpacity={0.8}
         underlayColor={'transparent'}
-        style={{position: "absolute", margin: dimensions.width * .08, marginTop: 20, marginBottom: 0, top: 0, left: 0, right: 0, bottom: 0 }}
+        style={{position: "absolute", margin: dimensions.width * .08, marginTop: 20, marginBottom: 0, top: 0, left: 0}}
         onPress={() => this.closeModal()}>
 
         <EvilIcons size={32} name="close" color={colors.accent} />
