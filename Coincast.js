@@ -98,13 +98,6 @@ export default class Coincast extends React.Component {
               type="replace"
               panHandlers={null} />
 
-              <Scene
-                initial
-                component={SuspendedTooltip}
-                key="SuspendedTooltip"
-                type="replace"
-                panHandlers={null} />
-
 
             <Scene
               component={BetaLandingScreenView}
