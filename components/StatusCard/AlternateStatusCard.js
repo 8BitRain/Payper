@@ -187,7 +187,11 @@ class AlternateStatusCard extends React.Component {
                     backgroundColor={colors.medGrey}>
                     {(fill) => <View style={styles.imageBorder} />}
                   </AnimatedCircularProgress>
-                  <Image style={styles.image} source={{uri: profilePic}} />
+                  {(profilePic)
+                    ? <Image style={styles.image} source={{uri: profilePic}} />
+                    : <View style={styles.image}><Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
+                        {currentUser.first_name.charAt(0) + currentUser.last_name.charAt(0)}
+                      </Text></View> }
                 </View>
 
                 <View style={{width: 20}} />
@@ -267,6 +271,9 @@ const styles = {
     borderRadius: imageDims.width / 2,
     top: (imageWrapDims.height - imageDims.height) / 2,
     left: (imageWrapDims.width - imageDims.width) / 2,
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   imageBorder: {
     position: 'absolute',
