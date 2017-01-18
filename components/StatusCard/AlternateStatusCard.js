@@ -30,7 +30,7 @@ class AlternateStatusCard extends React.Component {
       },
       'need-kyc': {
         title: "Account Verification Needed",
-        message: "Verify your account to unlock the ability to receive money!",
+        // message: "Verify your account to unlock the ability to receive money!",
         action: "Verify Account",
         pressable: true,
         destination: () => Actions.GlobalModal({
@@ -54,8 +54,8 @@ class AlternateStatusCard extends React.Component {
       },
       'kyc-documentNeeded': {
         title: "Additional Documents Required",
-        message: "We need a bit more info to verify your account. Please take a snapshot of a valid photo ID (passport, driver's license, etc.).",
-        action: "Take Snapshot of ID",
+        message: "We need a bit more info to verify your account.",
+        action: "Upload Photo ID",
         pressable: true,
         destination: () => Actions.GlobalModal({
           subcomponent: <PhotoUploader title={"Document Upload"} index={1} brand={"document"}  {...this.props}/>,
@@ -148,96 +148,103 @@ class AlternateStatusCard extends React.Component {
       let canReceiveMoney = onboardingProgress === "kyc-success"
 
       return(
-        <View
-          style={{
-            width: dims.width * 0.94, marginLeft: dims.width * 0.03, marginTop: 8, backgroundColor: colors.snowWhite,
-            shadowColor: colors.medGrey,
-            shadowOpacity: 1.0,
-            shadowRadius: 2,
-            shadowOffset: {
-              height: 0,
-              width: 0
-            }
-          }}>
+        <View>
 
-          { /* Top third (profile strength) */ }
-          <View style={{justifyContent: 'center', paddingBottom: 12}}>
-            { /* "My Profile Strength" */ }
-            <View style={{flex: 1.0, backgroundColor: 'rgba(165, 245, 224, 0.78)'}}>
-              <Text style={{fontSize: 18, padding: 10, color: colors.deepBlue, textAlign: 'center'}}>
-                {"My Account Strength"}
-              </Text>
+          { /* Shadow must be absolutely position due to 'overflow: hidden'
+               style on actual container */ }
+          <View
+            style={{position: 'absolute', top: 22, left: dims.width * 0.06, right: dims.width * 0.06, bottom: 12, borderRadius: 5,
+              shadowColor: colors.medGrey,
+              shadowOpacity: 1.0,
+              shadowRadius: 2,
+              shadowOffset: { height: 0, width: 0}
+            }} />
+
+          <View
+            style={{
+              width: dims.width * 0.88, marginLeft: dims.width * 0.06, marginTop: 22, marginBottom: 12, backgroundColor: colors.snowWhite,
+              borderRadius: 5, overflow: 'hidden'
+            }}>
+
+            { /* Top third (profile strength) */ }
+            <View style={{justifyContent: 'center', paddingBottom: 12}}>
+              { /* "My Profile Strength" */ }
+              <View style={{flex: 1.0, backgroundColor: '#efebf2'}}>
+                <Text style={{fontSize: 18, padding: 10, color: colors.deepBlue, textAlign: 'center'}}>
+                  {"My Account Strength"}
+                </Text>
+              </View>
+
+              { /* Profile pic and onboarding percentage */ }
+              <View style={{marginTop: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                <View style={styles.imageWrap}>
+                  <AnimatedCircularProgress
+                    size={imageWrapDims.width}
+                    width={6}
+                    fill={onboardingPercentage}
+                    tintColor={colors.accent}
+                    backgroundColor={colors.medGrey}>
+                    {(fill) => <View style={styles.imageBorder} />}
+                  </AnimatedCircularProgress>
+                  <Image style={styles.image} source={{uri: profilePic}} />
+                </View>
+
+                <View style={{width: 20}} />
+
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={{fontSize: 56, color: colors.accent, fontWeight: '200'}}>
+                    {onboardingPercentage}
+                  </Text>
+                  <Text style={{fontSize: 28, color: colors.accent, fontWeight: '200', marginTop: 6}}>
+                    {"%"}
+                  </Text>
+                </View>
+              </View>
+
+              { /* Locked and unlocked features */ }
+              <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10}}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <EvilIcons name={(canSendMoney) ? "unlock" : "lock"} size={24} color={(canSendMoney) ? colors.deepBlue : colors.slateGrey} />
+                  <Text style={{fontSize: 17, color: (canSendMoney) ? colors.deepBlue : colors.slateGrey, fontWeight: '200'}}>
+                    {"Send Money"}
+                  </Text>
+                </View>
+
+                { /* Spacer */ }
+                <View style={{width: 0}} />
+
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <EvilIcons name={(canReceiveMoney) ? "unlock" : "lock"} size={24} color={(canReceiveMoney) ? colors.deepBlue : colors.slateGrey} />
+                  <Text style={{fontSize: 17, color: (canReceiveMoney) ? colors.deepBlue : colors.slateGrey, fontWeight: '200'}}>
+                    {"Receive Money"}
+                  </Text>
+                </View>
+              </View>
             </View>
 
-            { /* Profile pic and onboarding percentage */ }
-            <View style={{marginTop: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-              <View style={styles.imageWrap}>
-                <AnimatedCircularProgress
-                  size={imageWrapDims.width}
-                  width={6}
-                  fill={onboardingPercentage}
-                  tintColor={colors.accent}
-                  backgroundColor={colors.medGrey}>
-                  {(fill) => <View style={styles.imageBorder} />}
-                </AnimatedCircularProgress>
-                <Image style={styles.image} source={{uri: profilePic}} />
-              </View>
+            { /* Middle third (info) */
+              (!message)
+                ? null
+                : <View style={{flex: 1.0, padding: 12, paddingBottom: 22, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{fontSize: 15, color: colors.deepBlue}}>
+                      {message}
+                    </Text>
+                  </View> }
 
-              <View style={{width: 20}} />
-
-              <View style={{flexDirection: 'row'}}>
-                <Text style={{fontSize: 56, color: colors.accent, fontWeight: '200'}}>
-                  {onboardingPercentage}
-                </Text>
-                <Text style={{fontSize: 28, color: colors.accent, fontWeight: '200', marginTop: 6}}>
-                  {"%"}
-                </Text>
-              </View>
-            </View>
-
-            { /* Locked and unlocked features */ }
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10}}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <EvilIcons name={(canSendMoney) ? "unlock" : "lock"} size={24} color={(canSendMoney) ? colors.deepBlue : colors.slateGrey} />
-                <Text style={{fontSize: 17, color: (canSendMoney) ? colors.deepBlue : colors.slateGrey, fontWeight: '200'}}>
-                  {"Send Money"}
-                </Text>
-              </View>
-
-              { /* Spacer */ }
-              <View style={{width: 6}} />
-
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <EvilIcons name={(canReceiveMoney) ? "unlock" : "lock"} size={24} color={(canReceiveMoney) ? colors.deepBlue : colors.slateGrey} />
-                <Text style={{fontSize: 17, color: (canReceiveMoney) ? colors.deepBlue : colors.slateGrey, fontWeight: '200'}}>
-                  {"Receive Money"}
-                </Text>
-              </View>
-            </View>
+            { /* Bottom third (action button) */
+              (!action || !destination)
+                ? null
+                : <TouchableHighlight
+                    style={{flex: 1.0, padding: 16, backgroundColor: colors.accent, justifyContent: 'center'}}
+                    activeOpacity={0.95}
+                    underlayColor={colors.accent}
+                    onPress={() => destination()}>
+                    <Text style={{fontSize: 16, color: colors.lightGrey, textAlign: 'center'}}>
+                      {"Next Step: "}
+                      {action}
+                    </Text>
+                  </TouchableHighlight> }
           </View>
-
-          { /* Middle third (info) */
-            (!message)
-              ? null
-              : <View style={{flex: 1.0, padding: 12, paddingBottom: 22, justifyContent: 'center', alignItems: 'center'}}>
-                  <Text style={{fontSize: 15, color: colors.deepBlue}}>
-                    {message}
-                  </Text>
-                </View> }
-
-          { /* Bottom third (action button) */
-            (!action || !destination)
-              ? null
-              : <TouchableHighlight
-                  style={{flex: 1.0, padding: 16, backgroundColor: colors.accent, justifyContent: 'center'}}
-                  activeOpacity={0.95}
-                  underlayColor={colors.accent}
-                  onPress={() => destination()}>
-                  <Text style={{fontSize: 16, color: colors.lightGrey, textAlign: 'center'}}>
-                    {"Next Step: "}
-                    {action}
-                  </Text>
-                </TouchableHighlight> }
         </View>
       )
     }

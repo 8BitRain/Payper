@@ -2,6 +2,8 @@ exports.getOnboardingPercentage = (appFlags) => {
   let customer_status = appFlags.customer_status;
   let onboardingPercentage = 0;
 
+  console.log("--> appFlags.onboardingProgress", appFlags.onboardingProgress)
+
   switch (appFlags.onboardingProgress) {
     case "kyc-success":
       onboardingPercentage = 100;
@@ -61,7 +63,9 @@ exports.getOnboardingPercentage = (appFlags) => {
     case "need-kyc":
       onboardingPercentage = 70;
       break;
-    case "kyc-retry" || "kyc-suspended" || "kyc-documentNeeded" :
+    case "kyc-retry":
+    case "kyc-suspended":
+    case "kyc-documentNeeded":
       onboardingPercentage = 75;
       break;
     case "kyc-documentRecieved":
@@ -75,6 +79,8 @@ exports.getOnboardingPercentage = (appFlags) => {
       break;
     default:
   }
+
+  console.log("--> onboardingPercentage", onboardingPercentage)
 
   return onboardingPercentage
 }
