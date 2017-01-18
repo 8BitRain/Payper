@@ -55,6 +55,13 @@ class MainView extends React.Component {
     }, 850)
   }
 
+  componentWillReceiveProps(nextProps) {
+    let {paymentListRef} = this.state
+    let {paymentListUpdates} = nextProps
+    if (paymentListUpdates && paymentListRef)
+      paymentListRef.optimisticallyUpdate(paymentListUpdates)
+  }
+
   rotateToX() {
     let { plusAngleInterpolator } = this.animatedValues
 
@@ -116,6 +123,7 @@ class MainView extends React.Component {
           { /* StatusCard (header), PayCards (dataSource), TrendingPayments (footer) */ }
           <DynamicList
             data={this.props.currentUser.paymentFlow}
+            induceRef={(ref) => this.setState({paymentListRef: ref})}
             renderRow={(rowData, sectionID, rowID) => <PayCard {...this.props} payment={rowData} />}
             renderSectionHeader={(rowData, sectionID) => {
               let numRows = Object.keys(rowData).length

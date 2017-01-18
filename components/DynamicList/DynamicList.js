@@ -1,9 +1,12 @@
 /**
     Based on https://goo.gl/hC4u7t
     TODO
-    - [ ] Add header functionality
-    - [ ] Add footer functionality
-    - [ ] Add section header functionality
+    - [X] Add header functionality
+    - [X] Add footer functionality
+    - [X] Add section header functionality
+    - [ ] Implement optimisticallyAdd function
+    - [ ] Implement optimisticallyRemove function
+    - [ ] Implement exit animations for DynamicListRows
 **/
 import React from 'react'
 import {
@@ -63,6 +66,14 @@ class DynamicList extends React.Component {
     this.renderRow = this.renderRow.bind(this)
   }
 
+  componentWillMount() {
+    let {induceRef} = this.props
+
+    console.log("--> induceRef", induceRef)
+    if (typeof induceRef === 'function')
+      induceRef(this)
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.data) {
       this.setState({
@@ -83,6 +94,29 @@ class DynamicList extends React.Component {
         {row}
       </DynamicListRow>
     )
+  }
+
+  optimisticallyUpdate(params, cb) {
+    let {additions, removals, mutations} = params
+    let {dataSource} = this.state
+    let {data} = this.props
+
+    console.log("--> optimisticallyUpdate was invoked...")
+    console.log("--> params", params)
+    console.log("--> data", data)
+    console.log("--> dataSource", dataSource)
+
+    function add() {
+
+    }
+
+    function remove() {
+
+    }
+
+    function mutate() {
+
+    }
   }
 
   render() {

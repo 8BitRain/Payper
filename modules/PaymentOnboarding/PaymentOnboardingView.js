@@ -189,6 +189,12 @@ class PaymentOnboardingView extends React.Component {
       })
     ]
 
+    // Push payments here to be passed back to MainView.js for optimistic
+    // rendering
+    let paymentListUpdates = {
+      additions: []
+    }
+
     // Format and send payments
     for (var k in who) {
       let user = who[k]
@@ -216,13 +222,19 @@ class PaymentOnboardingView extends React.Component {
         start: startUTCString
       }
 
-      if (paymentInfo.invite) Lambda.inviteViaPayment(paymentInfo)
-      else Lambda.createPayment(paymentInfo)
+      // To be passed back to MainView.js for optimistic rendering
+      paymentListUpdates.additions.push(paymentInfo)
+
+      // if (paymentInfo.invite) Lambda.inviteViaPayment(paymentInfo)
+      // else Lambda.createPayment(paymentInfo)
     }
 
     // Show success animation, page back to main view
     Animated.parallel(successAnimations).start(() => {
-      setTimeout(() => Actions.pop(), 800)
+      setTimeout(() => {
+        Actions.pop()
+        Actions.refresh({paymentListUpdates})
+      }, 800)
     })
 
     this.timer.report("paymentOnboarding", this.props.currentUser.uid, {
