@@ -15,15 +15,18 @@ import {colors} from '../../../globalStyles';
 // Partial components
 import Header from '../../../components/Header/Header';
 import * as Headers from '../../../helpers/Headers';
+import {device} from '../../../helpers';
 
 //Custom
 const dimensions = Dimensions.get('window');
+
 
 class DocumentUploadTooltip extends React.Component {
   constructor(props) {
     super(props);
     //this.height = new Animated.Value(0);
 
+    //this.deviceType = getDeviceType(dimensions.width);
 
     this.state = {
       index: 0,
@@ -33,11 +36,12 @@ class DocumentUploadTooltip extends React.Component {
 
     this.fade_dimmed_background_value = new Animated.Value(0);
 
-
   }
 
   componentDidMount() {
     this.fade_dimmed_background();
+
+    console.log("DocumentUploadTooltip DeviceType: " +  device);
   }
 
   fade_dimmed_background() {
@@ -103,28 +107,24 @@ class DocumentUploadTooltip extends React.Component {
             width: dimensions.width}}>
         </Animated.View>
         <View style={styles.wrapper}>
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            style={{position: "absolute", margin: 0, top: 15, left: 233, right: 0}}
-            onPress={() => {this.toggleTooltip(true)}}>
-                <Ionicons style={{}} size={32} name="ios-help-circle" color={colors.snowWhite} />
-          </TouchableHighlight>
+
           <Text style={styles.headerL}>{"We require additional I.D to verify your identity"}</Text>
 
-          <Text style={styles.header2}>{"Valid I.D Includes ..."}</Text>
-          <View style={{flexDirection: "row", justifyContent: "center", margin: 0}}>
-              <View style={{flexDirection: "column", alignSelf: "flex-start", alignItems: "center"}}>
-                <Image source={require('../../../assets/images/blank_image.png')} style={{width: 100, height: 100, marginTop: 25, marginBottom: 5, padding: 0}} />
-                <Text style={styles.text} >{"Driver's License"}</Text>
-              </View>
-              <View style={{flexDirection: "column", alignSelf: "center", margin: 15, marginTop: 25, marginLeft: 8.5, marginRight: 6.5}}>
-                <Text style={styles.text3}>{"or"}</Text>
-              </View>
-              <View style={{flexDirection: "column", alignSelf: "flex-end", alignItems: "center"}}>
-                  <Image source={require('../../../assets/images/blank_image.png')} style={{width: 100, height: 100, marginTop: 25, marginBottom: 5, padding: 0}} />
-                  <Text style={styles.text} >{"Passport Photo"}</Text>
-              </View>
+          <View style={styles.content}>
+            <Text style={styles.header2}>{"Valid I.D Includes ..."}</Text>
+            <View style={{flexDirection: "row", justifyContent: "center", margin: 0}}>
+                <View style={{flexDirection: "column", alignSelf: "flex-start", alignItems: "center"}}>
+                  <Image source={require('../../../assets/images/document_upload_id.png')} style={{width: 75, height: 50, marginTop: 55, marginBottom: 5, padding: 0}} />
+                  <Text style={styles.text} >{"Driver's License"}</Text>
+                </View>
+                <View style={{flexDirection: "column", alignSelf: "center", margin: 15, marginTop: 25, marginLeft: 8.5, marginRight: 6.5}}>
+                  <Text style={styles.text3}>{"or"}</Text>
+                </View>
+                <View style={{flexDirection: "column", alignSelf: "flex-end", alignItems: "center"}}>
+                    <Image source={require('../../../assets/images/document_upload_passport.png')} style={{width: 50, height: 75, marginTop: 25, marginBottom: 5, padding: 0}} />
+                    <Text style={styles.text} >{"Passport Photo"}</Text>
+                </View>
+            </View>
           </View>
 
           <View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
@@ -147,6 +147,13 @@ class DocumentUploadTooltip extends React.Component {
           >
             { this._renderTooltip()}
           </Modal>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            style={styles.helpTooltip}
+            onPress={() => {this.toggleTooltip(true)}}>
+                <Ionicons style={{}} size={32} name="ios-help-circle" color={colors.snowWhite} />
+          </TouchableHighlight>
     </View>
     );
   }
@@ -171,7 +178,6 @@ var styles = StyleSheet.create({
     marginBottom: dimensions.height * .10,
     borderRadius: dimensions.width / 32.0,
   },
-
   wrapper2: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -181,6 +187,19 @@ var styles = StyleSheet.create({
     marginTop: dimensions.height * .25,
     marginBottom: dimensions.height * .25,
     borderRadius: dimensions.width / 32.0,
+  },
+  helpTooltip: {
+    position: "absolute",
+    margin: 0,
+    top: dimensions.height * .12,
+    left: dimensions.width * .82,
+    right: 0
+  },
+  content: {
+    flex: 1,
+    marginTop: device == "SE" ? dimensions.height * .15 : device == "6" ? 10  : 10 ,
+    alignItems: "center",
+    justifyContent: "center"
   },
   buttonText:{
     color: '#fff',
@@ -198,8 +217,8 @@ var styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
-    fontSize: 16,
-    lineHeight: 16 * 1.20,
+    fontSize: device == "SE" ? 14 : device == "6" ? 18 : 20,
+    lineHeight: device == "SE" ? 14 * 1.20 : device == "6" ? 18 * 1.20 : 20 * 1.20,
     textAlign: "center",
     fontWeight: "500"
   },
@@ -210,14 +229,6 @@ var styles = StyleSheet.create({
     textAlign: "left",
     fontWeight: "500",
     padding: 15
-  },
-  text2: {
-    color: '#fff',
-    fontSize: 16,
-    lineHeight: 16 * 1.20,
-    textAlign: "center",
-    fontWeight: "500",
-    marginTop: 15
   },
   text3: {
     color: '#fff',
@@ -237,27 +248,26 @@ var styles = StyleSheet.create({
   },
   header2: {
     color: "#fff",
-    fontSize: 17,
+    fontSize: device == "SE" ? 17 : device == "6" ? 21 : 23,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginTop: 55,
-    lineHeight: 17 * 1.20
+    marginTop: device == "SE" ? 0: device == "6" ? 0 : 0,
+    lineHeight: device == "SE" ? 16 * 1.20 : device == "6" ? 20 * 1.20 : 22 * 1.20,
   },
 
   headerL: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: device == "SE" ? 18 : device == "6" ? 22 : 24,
     fontWeight: 'bold',
     textAlign: 'left',
-    marginRight: 40,
+    marginRight: device == "SE" ? 40 : device == "6" ? 40 : 40,
     marginLeft: 10,
     marginTop: 15,
     padding: 0,
-    lineHeight: 18 * 1.,
+    lineHeight: device == "SE" ? 18 * 1.20 : device == "6" ? 22 * 1.40 : 24 * 1.20,
   },
 
   footer: {
-    color: '#fff',
     fontSize: 14,
     lineHeight: 14 * 1.20,
     textAlign: "center",

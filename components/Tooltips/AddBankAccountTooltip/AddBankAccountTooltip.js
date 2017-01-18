@@ -18,6 +18,7 @@ import * as Headers from '../../../helpers/Headers';
 
 //Custom
 const dimensions = Dimensions.get('window');
+import {device} from '../../../helpers';
 
 class AddBankAccountTooltip extends React.Component {
   constructor(props) {
@@ -89,7 +90,7 @@ class AddBankAccountTooltip extends React.Component {
             <View style={styles.slide1}>
               <Text style={styles.header}>Adding A Bank Account Is Secure & Simple</Text>
               <Image source={require('../../../assets/images/add_bank_explan_1.png')} style={{width: dimensions.width * .84, height: dimensions.height * .40, marginTop: 30, marginBottom: 5}} />
-              <Text style={styles.text}> You have two ways to add a bank account,
+              <Text style={styles.text}>You have two ways to add a bank account,
               through Instant Account Verification and Deposit Verification</Text>
               <View style={{flex: 1, justifyContent: "flex-end", marginBottom: 15}}>
                 <Text style={styles.footer}>*Payper does not store this information</Text>
@@ -97,7 +98,7 @@ class AddBankAccountTooltip extends React.Component {
             </View>
             <View style={styles.slide2}>
               <Text style={styles.header}>Instant Account Verification</Text>
-              <Image source={require('../../../assets/images/add_bank_explan_2.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
+              <Image source={require('../../../assets/images/add_bank_explan_2.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 30, marginBottom: 5}} />
               <Text style={styles.text}>Find your bank!</Text>
               <Image source={require('../../../assets/images/add_bank_explan_3.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 5, marginBottom: 5}} />
               <Text style={styles.text}>Use your login information to verify your bank account. Thats it!</Text>
@@ -219,7 +220,9 @@ var styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     lineHeight: 16 * 1.20,
-    textAlign: "center",
+    paddingLeft: 10,
+    paddingRight: 10,
+    textAlign: "left",
     fontWeight: "500"
   },
   finalText: {
@@ -231,10 +234,12 @@ var styles = StyleSheet.create({
   },
   header: {
     color: "#fff",
-    fontSize: 19,
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'left',
     marginTop: 15,
+    paddingLeft: 10,
+    paddingRight: 10,
     lineHeight: 18 * 1.20
   },
   finalHeader: {
