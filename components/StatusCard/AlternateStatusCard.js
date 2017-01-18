@@ -30,7 +30,7 @@ class AlternateStatusCard extends React.Component {
       },
       'need-kyc': {
         title: "Account Verification Needed",
-        message: "Verify your account to unlock the ability to receive money!",
+        // message: "Verify your account to unlock the ability to receive money!",
         action: "Verify Account",
         pressable: true,
         destination: () => Actions.GlobalModal({
@@ -150,7 +150,8 @@ class AlternateStatusCard extends React.Component {
       return(
         <View
           style={{
-            width: dims.width * 0.94, marginLeft: dims.width * 0.03, marginTop: 8, backgroundColor: colors.snowWhite,
+            width: dims.width * 0.88, marginLeft: dims.width * 0.06, marginTop: 22, marginBottom: 12, backgroundColor: colors.snowWhite,
+
             shadowColor: colors.medGrey,
             shadowOpacity: 1.0,
             shadowRadius: 2,
@@ -163,7 +164,7 @@ class AlternateStatusCard extends React.Component {
           { /* Top third (profile strength) */ }
           <View style={{justifyContent: 'center', paddingBottom: 12}}>
             { /* "My Profile Strength" */ }
-            <View style={{flex: 1.0, backgroundColor: 'rgba(165, 245, 224, 0.78)'}}>
+            <View style={{flex: 1.0, backgroundColor: '#efebf2'}}>
               <Text style={{fontSize: 18, padding: 10, color: colors.deepBlue, textAlign: 'center'}}>
                 {"My Account Strength"}
               </Text>
@@ -205,7 +206,7 @@ class AlternateStatusCard extends React.Component {
               </View>
 
               { /* Spacer */ }
-              <View style={{width: 6}} />
+              <View style={{width: 0}} />
 
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <EvilIcons name={(canReceiveMoney) ? "unlock" : "lock"} size={24} color={(canReceiveMoney) ? colors.deepBlue : colors.slateGrey} />
