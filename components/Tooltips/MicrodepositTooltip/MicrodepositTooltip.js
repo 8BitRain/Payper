@@ -70,18 +70,18 @@ class MicrodepositTooltip extends React.Component {
               activeDot={this._renderActiveDot()}>
               <View style={styles.slide1}>
                 <Text style={styles.header}>{"Verifying Your Bank Account"}</Text>
-                <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
-                <Text style={styles.text}>{"Payper will notify you when 2 amounts (Less than 20 cents each) are deposited in your account."}}</Text>
+                <Image source={require('../../../assets/images/microdeposit_tooltip_1.png')} style={{width: dimensions.width * .84, height: dimensions.height * .40, marginTop: 20, marginBottom: 5}} />
+                <Text style={styles.text}>{"Payper will notify you when 2 amounts (Less than 20 cents each) are deposited in your account."}</Text>
               </View>
               <View style={styles.slide2}>
                 <Text style={styles.header}>{"Verifying Your Bank Account"}</Text>
-                <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
+                <Image source={require('../../../assets/images/microdeposit_tooltip_2.png')} style={{width: dimensions.width * .84, height: dimensions.height * .45, marginTop: 20, marginBottom: 5}} />
                 <Text style={styles.text}>{"Check your bank account for 2 amounts deposited by Payper."}</Text>
               </View>
               <View style={styles.slide3}>
                 <Text style={styles.header}>{"Verifying Your Bank Account"}</Text>
-                <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
-                <Text style={styles.text}>{"On the home page of this app click on your status card to enter the 2 amounts Payper deposited."}</Text>
+                <Image source={require('../../../assets/images/microdeposit_tooltip_3.png')} style={{width: dimensions.width * .84, height: dimensions.height * .50, marginTop: 0, marginBottom: 2.5}} />
+                <Text style={styles.text}>{"Click on your status card to enter the 2 deposited amounts."}</Text>
                 <View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
                   <TouchableHighlight
                     activeOpacity={0.8}

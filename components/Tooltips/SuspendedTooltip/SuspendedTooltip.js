@@ -64,10 +64,11 @@ class SuspendedTooltip extends React.Component {
         {/* To get the close button working change height to 50. Remember to view the borders*/}
         <View style={{flex: 1}}>
           <View style={styles.wrapper}>
-            <Text style={styles.header}>{"Oh no, there seems to be an issue with your account."}</Text>
-            <Image source={require('../../../assets/images/suspended_photo.png')} style={{width: dimensions.width * .84, height: dimensions.height * .30, marginTop: 20, marginBottom: 5}} />
+            <Text style={styles.header}>{"Oh no!"}</Text>
+            <Image source={require('../../../assets/images/suspended_photo_crash.png')} style={{width: dimensions.width * .56, height: dimensions.height * .245, marginTop: 35, marginBottom: 5}} />
             {/*<Text style={styles.header2}>{"We know this can be frustrating but don't worry!"}</Text>*/}
-            <Text style={styles.text2} >{"We are getting down to the bottom of why this happened. We'll keep you updated."}</Text>
+            <Text style={styles.text2} >{"There is an issue with your verification."}</Text>
+            <Text style={styles.text2} >{"We are working on fixing this."}</Text>
             <View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
               <Text style={styles.text3} >{"Contact us at info@getpayper.io"}</Text>
             </View>
@@ -120,11 +121,11 @@ var styles = StyleSheet.create({
     color: '#fff',
     fontSize: device == "SE" ? 16 : device == "6" ? 18 : 20,
     lineHeight: device == "SE" ? 16 * 1.20 : device == "6" ? 16 * 1.20 : 16 * 1.20,
-    paddingLeft: 15,
+    paddingLeft: 10,
     paddingRight: 10,
-    textAlign: "left",
+    textAlign: "center",
     fontWeight: "500",
-    marginTop: 10
+    marginTop: 25
   },
   text3: {
     color: '#fff',
@@ -139,10 +140,10 @@ var styles = StyleSheet.create({
   },
   header: {
     color: "#fff",
-    fontSize: device == "SE" ? 18 : device == "6" ? 20 : 22,
+    fontSize: device == "SE" ? 50 : device == "6" ? 75 : 100,
     fontWeight: 'bold',
     textAlign: 'left',
-    marginTop: 15,
+    paddingTop: device == "SE" ? 45 : device == "6" ? 70 : 95,
     lineHeight: device == "SE" ? 18 * 1.20 : device == "6" ? 20 * 1.20 : 22 * 1.20
   },
   header2: {
