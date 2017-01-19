@@ -1,7 +1,8 @@
 // Dependencies
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TextInput, Alert } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import dismissKeyboard from 'react-native-dismiss-keyboard'
 
 // Helpers
 import * as Validate from '../../../helpers/Validate';
@@ -19,6 +20,10 @@ export default class Summary extends React.Component {
     this.state = {
       submitText: "Sign me up!",
       passwordIsHidden: true,
+      name: null,
+      email: null,
+      password: null,
+      phone: null,
       nameIsValid: this.props.user.firstName && Validate.name(this.props.user.firstName) && this.props.user.lastName && Validate.name(this.props.user.lastName),
       emailIsValid: Validate.email(this.props.user.email),
       passwordValidations: Validate.password(this.props.user.password),
@@ -27,22 +32,69 @@ export default class Summary extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    var nextState = {
-      nameIsValid: this.props.user.firstName && Validate.name(this.props.user.firstName) && this.props.user.lastName && Validate.name(this.props.user.lastName),
-      emailIsValid: Validate.email(nextProps.user.email),
-      passwordValidations: Validate.password(nextProps.user.password),
-      phoneValidations: Validate.phone(nextProps.user.phone)
-    };
-    nextState.submitText = (!nextState.nameIsValid) ? "Enter a valid name" : (!nextState.emailIsValid) ? "Enter a valid email address" : (!nextState.passwordValidations.isValid) ? "Enter a valid password" : (!nextState.phoneValidations.isValid) ? "Enter a valid phone number" : "Sign me up!";
-    this.setState(nextState);
+    // var nextState = {
+    //   nameIsValid: this.props.user.firstName && Validate.name(this.props.user.firstName) && this.props.user.lastName && Validate.name(this.props.user.lastName),
+    //   emailIsValid: Validate.email(nextProps.user.email),
+    //   passwordValidations: Validate.password(nextProps.user.password),
+    //   phoneValidations: Validate.phone(nextProps.user.phone)
+    // };
+    // nextState.submitText = (!nextState.nameIsValid) ? "Enter a valid name" : (!nextState.emailIsValid) ? "Enter a valid email address" : (!nextState.passwordValidations.isValid) ? "Enter a valid password" : (!nextState.phoneValidations.isValid) ? "Enter a valid phone number" : "Sign me up!";
+    // this.setState(nextState);
   }
 
   handleSubmit() {
-    if (this.state.submitText !== "Sign me up!") return;
-    this.setState({ submitText: "Creating user..." });
-    this.props.createUser(() => {
-      this.setState({ submitText: "Sign me up!" });
-    });
+    if (this.state.submitText !== "Sign me up!") return
+
+    let {name, email, password, phone} = this.state
+
+    this.setState({ submitText: "Creating user..." })
+
+    let updatedState = {}
+    if (name && name !== this.props.name && name.split(" ").length > 1)
+      updatedState["name"] = name
+    if (email && email !== this.props.email)
+      updatedState["email"] = email
+    if (password && password !== this.props.password)
+      updatedState["password"] = password
+    if (phone && phone !== this.props.phone)
+      updatedState["phone"] = phone
+
+    this.props.induceState(updatedState, () => {
+      let validations = {
+        nameIsValid: this.props.user.firstName && Validate.name(this.props.user.firstName) && this.props.user.lastName && Validate.name(this.props.user.lastName),
+        emailIsValid: Validate.email(this.props.user.email),
+        passwordValidations: Validate.password(this.props.user.password),
+        phoneValidations: Validate.phone(this.props.user.phone)
+      }
+
+      if (!validations.nameIsValid) {
+        Alert.alert('Wait!', 'Please enter a valid name.')
+        this.setState({ submitText: "Sign me up!" })
+        return
+      }
+
+      if (!validations.emailIsValid) {
+        Alert.alert('Wait!', 'Please enter a valid email address.')
+        this.setState({ submitText: "Sign me up!" })
+        return
+      }
+
+      if (!validations.passwordValidations.isValid) {
+        Alert.alert('Wait!', 'Please enter a valid password.')
+        this.setState({ submitText: "Sign me up!" })
+        return
+      }
+
+      if (!validations.phoneValidations.isValid) {
+        Alert.alert('Wait!', 'Please enter a valid phone number.')
+        this.setState({ submitText: "Sign me up!" })
+        return
+      }
+
+      this.props.createUser(() => {
+        this.setState({ submitText: "Sign me up!" })
+      })
+    })
   }
 
   render() {
@@ -63,7 +115,7 @@ export default class Summary extends React.Component {
                 placeholder={"e.g. John Doe"}
                 placeholderTextColor={colors.deepBlue}
                 autoCapitalize={"words"} autoCorrect={false}
-                onChangeText={input => this.props.induceState({ name: input.trim() })}
+                onChangeText={input => this.setState({ name: input.trim() })}
                 defaultValue={this.props.user.firstName + " " + this.props.user.lastName}
                 style={styles.input} />
             </View>
@@ -75,7 +127,7 @@ export default class Summary extends React.Component {
                 placeholderTextColor={colors.lightGrey}
                 autoCapitalize={"none"} autoCorrect={false}
                 keyboardType={"email-address"}
-                onChangeText={input => this.props.induceState({ email: input.trim() })}
+                onChangeText={input => this.setState({ email: input.trim() })}
                 defaultValue={this.props.user.email}
                 style={styles.input} />
             </View>
@@ -87,7 +139,7 @@ export default class Summary extends React.Component {
                 placeholderTextColor={colors.lightGrey}
                 autoCapitalize={"none"} autoCorrect={false}
                 secureTextEntry
-                onChangeText={input => this.props.induceState({ password: input.trim() })}
+                onChangeText={input => this.setState({ password: input.trim() })}
                 defaultValue={this.props.user.password}
                 secureTextEntry={this.state.passwordIsHidden}
                 style={styles.input} />
@@ -100,7 +152,10 @@ export default class Summary extends React.Component {
                 placeholderTextColor={colors.lightGrey}
                 autoCapitalize={"none"} autoCorrect={false}
                 keyboardType={"number-pad"}
-                onChangeText={input => this.props.induceState({ phone: input.trim() })}
+                onChangeText={input => {
+                  this.setState({ phone: input.trim() })
+                  if (input.length === 10) dismissKeyboard()
+                }}
                 maxLength={10}
                 defaultValue={this.props.user.phone}
                 style={styles.input} />

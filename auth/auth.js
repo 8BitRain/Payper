@@ -67,7 +67,7 @@ exports.signin = function(params, cb) {
     *   User is not cached
     *   (1) use firebaseUser's accessToken to get a customToken and key
     *   (2) fetch user details from firebase database
-    *   (3) attach customToken and key to user details
+    *   (3) attach  and key to user details
     *   (4) return user details
     *   (app initialization will occur in signin's callback function)
   **/
@@ -77,6 +77,12 @@ exports.signin = function(params, cb) {
     let { accessToken } = firebaseUser.stsTokenManager
 
     getCustomTokenAndKey(accessToken, null, (res) => {
+      if (res === null) {
+        cb(null)
+        alert("couldn't sign in via cached access token")
+        return
+      }
+
       let { customToken, key } = res
 
       firebase.auth().signInWithCustomToken(customToken).then((responseData) => {
@@ -137,7 +143,7 @@ exports.signin = function(params, cb) {
   function signinCached(cb) {
     firebase.database().ref('users').child(uid).once('value', (snapshot) => {
       let userData = snapshot.val()
-      
+
       // User does not exist (was likely deleted from another device)
       if (!userData) {
         cb(null)

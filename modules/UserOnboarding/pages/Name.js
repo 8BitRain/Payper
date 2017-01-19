@@ -66,6 +66,7 @@ export default class Name extends React.Component {
 
         <View style={styles.inputWrap}>
           <TextInput
+            autoFocus
             ref={"firstNameInput"}
             style={styles.input}
             defaultValue={this.state.name}
@@ -73,8 +74,10 @@ export default class Name extends React.Component {
             placeholderTextColor={colors.deepBlue}
             autoCapitalize={"words"} autoCorrect={false}
             onChangeText={(input) => this.handleFirstNameChangeText(input)}
-            onKeyPress={e => { if (e.nativeEvent.key === "Enter") this.handleSubmit() }} />
+            onBlur={() => this.refs.lastNameInput.focus()}
+            returnKeyType={"next"} />
           <TextInput
+            ref={"lastNameInput"}
             style={styles.input}
             defaultValue={this.state.name}
             placeholder={"e.g. Doe"}

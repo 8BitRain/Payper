@@ -85,8 +85,10 @@ export default class UserOnboardingView extends React.Component {
 
       if (errCode === "auth/email-already-in-use" || errCode === "dupe-email") {
         Alert.alert('Wait!', 'This email is already in use.')
+        cb()
       } else if (errCode === "dupe-phone") {
         Alert.alert('Wait!', 'This phone number is already in use.')
+        cb()
       } else {
         Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
         cb()
@@ -94,8 +96,10 @@ export default class UserOnboardingView extends React.Component {
     })
   }
 
-  induceState(substate) {
-    this.setState(substate, () => this.state.firstNameInput.focus())
+  induceState(substate, cb) {
+    console.log("--> induceState was invoked with cb", cb)
+    console.log("--> typeof cb === 'function'", typeof cb === 'function')
+    this.setState(substate, () => (typeof cb === 'function') ? cb() : null)
   }
 
   focusInput() {
@@ -183,7 +187,7 @@ export default class UserOnboardingView extends React.Component {
           <View style={{ flex: 1.0, width: dimensions.width }}>
             <Summary
               nextPage={() => this.nextPage()}
-              induceState={substate => this.induceState(substate)}
+              induceState={(substate, cb) => this.induceState(substate, cb)}
               createUser={(cb) => this.createUser(cb)}
               user={{firstName: this.state.firstName, lastName: this.state.lastName, email: this.state.email, password: this.state.password, phone: this.state.phone }} />
           </View>
