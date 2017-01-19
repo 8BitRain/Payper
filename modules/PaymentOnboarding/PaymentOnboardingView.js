@@ -33,6 +33,7 @@ class PaymentOnboardingView extends React.Component {
     this.fieldNames = ['Who?', 'How much?', 'How often?', 'How long?', 'What for?', 'Starting when?']
 
     this.state = {
+      submittable: true,
       cancellable: true,
       modalVisible: false,
       headerHeight: 0,
@@ -159,6 +160,9 @@ class PaymentOnboardingView extends React.Component {
   }
 
   pay() {
+    if (!this.state.submittable) return
+    this.setState({submittable: false})
+
     let {
       currentUser
     } = this.props
@@ -231,6 +235,9 @@ class PaymentOnboardingView extends React.Component {
   }
 
   request() {
+    if (!this.state.submittable) return
+    this.setState({submittable: false})
+
     let {
       currentUser
     } = this.props
