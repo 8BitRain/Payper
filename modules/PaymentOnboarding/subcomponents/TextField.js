@@ -163,7 +163,7 @@ class TextField extends React.Component {
           { /* Input modal */ }
           <Modal visible={this.state.focused} animationType={"slide"} transparent={true}>
             { /* Touching background dismisses field */ }
-            <TouchableWithoutFeedback onPress={() => this.toggle(/*(shouldContinueFlow)*/false)}>
+            <TouchableWithoutFeedback onPress={() => this.submit()}>
               <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0}} />
             </TouchableWithoutFeedback>
 

@@ -189,6 +189,13 @@ class DateField extends React.Component {
     let {dayInput, monthInput, yearInput} = this.state
     let {validateInput} = this
 
+    if (!monthInput || !dayInput || !yearInput) {
+      let title = "Wait!"
+      let msg = "Please fill out all date fields."
+      Alert.alert(title, msg, [{text: 'OK', onPress: () => this.monthField.focus()}])
+      return
+    }
+
     let input = monthInput + "-" + dayInput + "-" + yearInput
 
     // Validate input
@@ -290,7 +297,7 @@ class DateField extends React.Component {
           { /* Input modal */ }
           <Modal visible={this.state.focused} animationType={"slide"} transparent={true}>
             { /* Touching background dismisses field */ }
-            <TouchableWithoutFeedback onPress={() => this.toggle(/*(shouldContinueFlow)*/false)}>
+            <TouchableWithoutFeedback onPress={() => this.submit()}>
               <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0}} />
             </TouchableWithoutFeedback>
 

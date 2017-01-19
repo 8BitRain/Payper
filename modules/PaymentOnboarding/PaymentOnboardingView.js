@@ -313,12 +313,19 @@ class PaymentOnboardingView extends React.Component {
 
     let fields = [who, howMuch, howOften, howLong, whatFor, startDay, startMonth, startYear]
 
+    // Validate existence of all inputs
     for (var i in fields) {
       let curr = fields[i]
       if (curr === "") {
         Alert.alert("Wait!", "Please fill out all fields.")
         return
       }
+    }
+
+    // Valid 'who' (existence of the array doesn't mean it has anything inside)
+    if (Array.isArray(who) && who.length < 1) {
+      Alert.alert("Wait!", "Please fill out all fields.")
+      return
     }
 
     let {
@@ -464,9 +471,6 @@ class PaymentOnboardingView extends React.Component {
               keyboardType: "default",
               autoCapitalize: "words",
               autoCorrect: false
-            }}
-            validateInput={(input) => {
-              return true
             }}
             setValue={(values, cb) => {
               this.setState({who: values.selectedUsers, selectionMap: values.selectionMap})
