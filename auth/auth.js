@@ -137,8 +137,7 @@ exports.signin = function(params, cb) {
   function signinCached(cb) {
     firebase.database().ref('users').child(uid).once('value', (snapshot) => {
       let userData = snapshot.val()
-      console.log("--> signing in via cache.... userData:", userData)
-
+      
       // User does not exist (was likely deleted from another device)
       if (!userData) {
         cb(null)
