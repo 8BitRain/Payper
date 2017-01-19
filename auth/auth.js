@@ -48,7 +48,9 @@ exports.signout = function(currentUser) {
 }
 
 exports.signin = function(params, cb) {
-  let { type, facebookToken, facebookUserData, accessToken, email, pass, key } = params
+  let {
+    type, facebookToken, facebookUserData, accessToken, email, pass, key, uid
+  } = params
 
   // Declare signin function var
   let signin
@@ -125,26 +127,39 @@ exports.signin = function(params, cb) {
 
   /**
     *   User is cached
-    *   (1) use cached user key to get new custom token
-    *   (2) use new custom token sign in and get new accessToken
-    *   (3) attach new customToken and accessToken to user object
-    *   (4) return firebaseUser to caller
+    *   (1) check to make sure user exists in Firebase (prevents loading of
+    *       an undefined user in the case of account deletion)
+    *   (2) use cached user key to get new custom token
+    *   (3) use new custom token sign in and get new accessToken
+    *   (4) attach new customToken and accessToken to user object
+    *   (5) return firebaseUser to caller
   **/
   function signinCached(cb) {
-    getCustomTokenAndKey(accessToken, key, (res) => {
-      if (!res) {
+    firebase.database().ref('users').child(uid).once('value', (snapshot) => {
+      let userData = snapshot.val()
+      
+      // User does not exist (was likely deleted from another device)
+      if (!userData) {
         cb(null)
         return
       }
 
-      let { customToken, key } = res
+      // User exists. Continue signin execution
+      getCustomTokenAndKey(accessToken, key, (res) => {
+        if (!res) {
+          cb(null)
+          return
+        }
 
-      firebase.auth().signInWithCustomToken(customToken).then((user) => {
-        let firebaseUser = user.toJSON()
-        cb(firebaseUser)
-      }).catch((err) => {
-        console.log(err)
-        cb(null)
+        let { customToken, key } = res
+
+        firebase.auth().signInWithCustomToken(customToken).then((user) => {
+          let firebaseUser = user.toJSON()
+          cb(firebaseUser)
+        }).catch((err) => {
+          console.log(err)
+          cb(null)
+        })
       })
     })
   }

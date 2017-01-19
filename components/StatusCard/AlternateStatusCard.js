@@ -1,6 +1,7 @@
 import React from 'react'
+import firebase from 'firebase'
 import {Actions} from 'react-native-router-flux'
-import {View, Text, TouchableHighlight, Animated, Easing, Dimensions, Modal, Image, StyleSheet} from 'react-native'
+import {View, Text, TouchableHighlight, Animated, Dimensions, Modal, Image, StyleSheet} from 'react-native'
 import {colors} from '../../globalStyles'
 import {IAVWebView, KYCOnboardingView, PhotoUploader, MicrodepositOnboarding, MicrodepositTooltip, SuspendedTooltip} from '../index'
 import {AnimatedCircularProgress} from 'react-native-circular-progress'
@@ -16,6 +17,11 @@ const imageWrapDims = { width: 62, height: 62 }
 class AlternateStatusCard extends React.Component {
   constructor(props) {
     super(props)
+
+    this.AV = {
+      opacity: new Animated.Value(1),
+      height: undefined // defined on mount in layout()
+    }
 
     this.config = {
       'need-bank': {
@@ -103,6 +109,10 @@ class AlternateStatusCard extends React.Component {
           subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
           backgroundColor: colors.accent
         })
+      },
+      'kyc-success': {
+        action: "Dismiss",
+        destination: () => this.dismiss()
       }
     }
 
@@ -128,17 +138,44 @@ class AlternateStatusCard extends React.Component {
       destination()
   }
 
+  layout(e) {
+    let height = e.nativeEvent.layout.height
+    this.AV.height = new Animated.Value(height)
+  }
+
+  dismiss() {
+    let {height, opacity} = this.AV
+
+    let animations = [
+      Animated.timing(height, {
+        toValue: 0,
+        duration: 200
+      }),
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 180
+      })
+    ]
+
+    Animated.parallel(animations).start(() => {
+      let {uid} = this.props.currentUser
+      let path = `/appFlags/${uid}/onboardingProgress`
+      firebase.database().ref(path).set('kyc-successDismissed')
+    })
+  }
+
   render() {
     let {currentUser} = this.props
     let onboardingProgress = currentUser.appFlags['onboardingProgress']
     let configInfo = this.config[onboardingProgress]
 
-    // Return an empty view for cases where no StatusCard should be rendered
+    // Return an empty view for cases when no StatusCard should be rendered
     if (!configInfo) {
       return(
         <View />
       )
     } else {
+      let {height, opacity} = this.AV
       let {onboardingPercentage} = this.state
       let {message, destination, action} = configInfo
       let profilePic = this.props.currentUser.profile_pic
@@ -149,7 +186,9 @@ class AlternateStatusCard extends React.Component {
       let canReceiveMoney = onboardingProgress === "kyc-success"
 
       return(
-        <View>
+        <Animated.View
+          onLayout={(e) => this.layout(e)}
+          style={{height, opacity}}>
 
           { /* Shadow must be absolutely position due to 'overflow: hidden'
                style on actual container */ }
@@ -187,7 +226,11 @@ class AlternateStatusCard extends React.Component {
                     backgroundColor={colors.medGrey}>
                     {(fill) => <View style={styles.imageBorder} />}
                   </AnimatedCircularProgress>
-                  <Image style={styles.image} source={{uri: profilePic}} />
+                  {(profilePic)
+                    ? <Image style={styles.image} source={{uri: profilePic}} />
+                    : <View style={styles.image}><Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
+                        {currentUser.first_name.charAt(0) + currentUser.last_name.charAt(0)}
+                      </Text></View> }
                 </View>
 
                 <View style={{width: 20}} />
@@ -245,7 +288,7 @@ class AlternateStatusCard extends React.Component {
                     </Text>
                   </TouchableHighlight> }
           </View>
-        </View>
+        </Animated.View>
       )
     }
   }
@@ -267,6 +310,9 @@ const styles = {
     borderRadius: imageDims.width / 2,
     top: (imageWrapDims.height - imageDims.height) / 2,
     left: (imageWrapDims.width - imageDims.width) / 2,
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   imageBorder: {
     position: 'absolute',

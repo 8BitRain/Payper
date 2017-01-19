@@ -188,6 +188,8 @@ class MainView extends React.Component {
       case "All": dataSource = this.state.all; break;
     }
 
+
+
     return(
       <Drawer
         type={"overlay"}
@@ -197,7 +199,11 @@ class MainView extends React.Component {
         tweenDuration={100}
         onOpenStart={() => this.rotateToX()}
         onCloseStart={() => this.rotateToPlus()}
-        content={<View style={{flex: 1.0, opacity: (mounted) ? 1.0 : 0.0}}><SideMenu {...this.props} /></View>}>
+        content={
+          <View style={{flex: 1.0, opacity: (mounted) ? 1.0 : 0.0}}>
+            <SideMenu {...this.props} />
+          </View>
+        }>
 
         <View style={{flex: 1.0, backgroundColor: colors.lightGrey}}>
           <StatusBar barStyle={"light-content"} />
@@ -264,19 +270,6 @@ class MainView extends React.Component {
                   </Text>
                 </View>
               </TouchableHighlight>
-
-              { /* Soonest
-              <TouchableHighlight
-                activeOpacity={0.8}
-                underlayColor={colors.maastrichtBlue}
-                onPress={() => this.toggleFilter('Soonest')}>
-                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                  <EvilIcons name={"calendar"} size={38} color={colors.accent} />
-                  <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
-                    {"Soonest"}
-                  </Text>
-                </View>
-              </TouchableHighlight> */ }
             </ScrollView>
           </Animated.View>
 
@@ -285,7 +278,7 @@ class MainView extends React.Component {
           <ListView
             dataSource={dataSource}
             renderRow={this.renderRow.bind(this)}
-            renderHeader={() => <StatusCard {...this.props} />}
+            renderHeader={() => <AlternateStatusCard {...this.props} />}
             renderFooter={() => <View style={{height: 90}} />}
             renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
             enableEmptySections />
