@@ -97,10 +97,10 @@ class SplashView extends React.Component {
           if (!user) {
             this._handleSignInFailure()
           } else {
-            let { key, token } = JSON.parse(user)
+            let { key, token, uid } = JSON.parse(user)
 
             signin({
-              key,
+              key, uid,
               accessToken: token,
               type: "cached"
             }, (userDetails) => {
