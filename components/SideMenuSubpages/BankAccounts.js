@@ -1,4 +1,5 @@
 import React from 'react'
+import {Actions} from 'react-native-router-flux'
 import {View, Text, Modal, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions, Alert, ActionSheetIOS} from 'react-native'
 import {colors} from '../../globalStyles'
 import {IAVWebView} from '../../components'
@@ -22,6 +23,7 @@ class BankAccounts extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log("--> BankAccounts.js will receive props:", nextProps)
     if (nextProps.currentUser.bankAccount !== this.props.currentUser.bankAccount)
       this.generateRows(nextProps.currentUser)
   }
@@ -36,9 +38,11 @@ class BankAccounts extends React.Component {
   }
 
   deleteBankAccount(bankAccount) {
-    let { token } = this.props.currentUser
+    let {currentUser} = this.props
     this.props.updateCurrentUser({bankAccount: null})
-    Lambda.removeFundingSource({token: token})
+    currentUser.bankAccount = null
+    this.generateRows(currentUser)
+    Lambda.removeFundingSource({token: currentUser.token})
   }
 
   onlyAllowOneBankAccount() {
