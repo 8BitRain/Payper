@@ -270,19 +270,6 @@ class MainView extends React.Component {
                   </Text>
                 </View>
               </TouchableHighlight>
-
-              { /* Soonest
-              <TouchableHighlight
-                activeOpacity={0.8}
-                underlayColor={colors.maastrichtBlue}
-                onPress={() => this.toggleFilter('Soonest')}>
-                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10}}>
-                  <EvilIcons name={"calendar"} size={38} color={colors.accent} />
-                  <Text style={{color: colors.maastrichtBlue, fontSize: 16}}>
-                    {"Soonest"}
-                  </Text>
-                </View>
-              </TouchableHighlight> */ }
             </ScrollView>
           </Animated.View>
 

@@ -186,7 +186,9 @@ class AlternateStatusCard extends React.Component {
       let canReceiveMoney = onboardingProgress === "kyc-success"
 
       return(
-        <Animated.View style={{height, opacity}}>
+        <Animated.View
+          onLayout={(e) => this.layout(e)}
+          style={{height, opacity}}>
 
           { /* Shadow must be absolutely position due to 'overflow: hidden'
                style on actual container */ }
@@ -199,7 +201,6 @@ class AlternateStatusCard extends React.Component {
             }} />
 
           <View
-            onLayout={(e) => this.layout(e)}
             style={{
               width: dims.width * 0.88, marginLeft: dims.width * 0.06, marginTop: 22, marginBottom: 12, backgroundColor: colors.snowWhite,
               borderRadius: 5, overflow: 'hidden'
