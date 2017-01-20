@@ -186,20 +186,7 @@ class PhotoUploader extends React.Component {
     );
   }
 
-  _renderDocumentUploadExplanation(){
-    return(
-      <View style={styles.wrap}>
-        <View style={{alignSelf: "center"}}>
-          <Ionicons name={"md-lock"} color={colors.accent} size={64} />
-        </View>
-        {(this.props.currentUser.appFlags.customer_status == "document") ? <Text style={styles.generalText}>We need additional documents to verify your identity. Please upload a photo of a valid form of ID</Text> : <Text style={styles.generalText}>There was an issue with the original documents you sent to us. Please reupload a valid form of ID.</Text>}
-        {(this.props.currentUser.appFlags.customer_status == "document") ? <Text style={styles.generalText}>Valid forms of id include... </Text> : <Text style={styles.generalText}>Common reasons we see document submissions fail...</Text>}
-        {(this.props.currentUser.appFlags.customer_status == "document") ? <Text style={styles.generalTextBold}>{"Driver's License"}</Text> : <Text style={styles.generalTextBold}>{"Low Image Quality"}</Text>}
-        {(this.props.currentUser.appFlags.customer_status == "document") ? <Text style={styles.generalTextBold}>{"Passport Photo ID"}</Text> : <Text style={styles.generalTextBold}>{"Invalid Driver's License"}</Text>}
-        {(this.props.currentUser.appFlags.customer_status == "documentFailure") ? <Text style={styles.generalTextBold}>{"Invalid Passport Photo ID"}</Text> : null}
-      </View>
-    );
-  }
+
   _renderHeader(){
     return(
       <View style={{flex: .1, backgroundColor: colors.accent, flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
@@ -297,13 +284,8 @@ class PhotoUploader extends React.Component {
         confirmMessage: "Ok",
         confirm: () => {
           this.setState({photoUploaded: false});
-          if(this.props.brand == "photo"){
-            this.props.toggleModal(false);
-          }
-          if(this.props.brand == "document"){
             //fulfilled via Actions.pop() refer to componentes/StatusCard/AlternateStatusCard.js
             this.props.toggleModal();
-          }
         }
       });
     }
@@ -398,7 +380,7 @@ class PhotoUploader extends React.Component {
 
       { /*Main Content*/ }
       <View style={{flex: .8}}>
-        {(this.state.index == 1 && this.state.brand == "photo" || this.state.brand == "document") ? (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView() : null}
+        {(this.state.index == 1 && this.state.brand == "photo") || (this.state.index == 1 && this.state.brand == "document") ? (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView() : null}
         {(this.state.index == 2) ? this._renderPhotoTaken() : null}
       </View>
 
