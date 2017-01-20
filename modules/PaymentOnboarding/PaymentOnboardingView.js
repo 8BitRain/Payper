@@ -226,7 +226,35 @@ class PaymentOnboardingView extends React.Component {
 
     // Show success animation, page back to main view
     Animated.parallel(successAnimations).start(() => {
-      setTimeout(() => Actions.pop(), 800)
+
+      // Determine alert to show after scene pop, if any
+      var recipients = ""
+      if (who.length === 1) {
+        recipients = who[0].first_name
+      } else if (who.length === 2) {
+        recipients = who[0].first_name + " and " + who[1].first_name
+      } else {
+        for (var i = 0; i < who.length; i++) {
+          let curr = who[i]
+          recipients += (i < who.length - 1)
+            ? curr.first_name + ", "
+            : "and " + curr.first_name
+        }
+      }
+
+      var alert = (currentUser.appFlags.onboardingProgress === "need-bank")
+        ? `Your payments to ${recipients} won't commence until you've added a bank account.`
+        : null
+
+      // Pop back to MainView and alert if need be
+      setTimeout(() => {
+        Actions.pop()
+        if (alert) {
+          Actions.refresh({
+            cb: () => setTimeout(() => Alert.alert('Wait!', alert), 800)
+          })
+        }
+      }, 800)
     })
 
     this.timer.report("paymentOnboarding", this.props.currentUser.uid, {
@@ -297,7 +325,42 @@ class PaymentOnboardingView extends React.Component {
 
     // Show success animation, page back to main view
     Animated.parallel(successAnimations).start(() => {
-      setTimeout(() => Actions.pop(), 800)
+      // Determine alert to show after scene pop, if any
+      var recipients = ""
+      if (who.length === 1) {
+        recipients = who[0].first_name
+      } else if (who.length === 2) {
+        recipients = who[0].first_name + " and " + who[1].first_name
+      } else {
+        for (var i = 0; i < who.length; i++) {
+          let curr = who[i]
+          recipients += (i < who.length - 1)
+            ? curr.first_name + ", "
+            : "and " + curr.first_name
+        }
+      }
+
+      let userNeedsBank = currentUser.appFlags.onboardingProgress === "need-bank"
+        || currentUser.appFlags.onboardingProgress.indexOf("microdeposits") >= 0
+      let userNeedsToVerify = currentUser.appFlags.customer_status !== "verified"
+
+      var alert
+      if (userNeedsBank && userNeedsToVerify)
+        alert = `Your payments from ${recipients} won't commence until you've added a bank account and verified your account.`
+      else if (userNeedsBank)
+        alert = `Your payments from ${recipients} won't commence until you've added a bank account.`
+      else if (userNeedsToVerify)
+        alert = `Your payments from ${recipients} won't commence until you've verified your account.`
+
+      // Pop back to MainView and alert if need be
+      setTimeout(() => {
+        Actions.pop()
+        if (alert) {
+          Actions.refresh({
+            cb: () => setTimeout(() => Alert.alert('Wait!', alert), 800)
+          })
+        }
+      }, 800)
     })
 
     this.timer.report("paymentOnboarding", this.props.currentUser.uid, {

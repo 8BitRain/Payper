@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import * as _ from 'lodash'
 import { Actions } from 'react-native-router-flux'
-import { View, TouchableHighlight, ListView, ScrollView, RecyclerViewBackedScrollView, Dimensions, Animated, Easing, StatusBar, Text, Image, Modal } from 'react-native'
+import { View, TouchableHighlight, ListView, ScrollView, RecyclerViewBackedScrollView, Dimensions, Animated, Easing, StatusBar, Text, Image, Modal, Alert } from 'react-native'
 import { VibrancyView } from "react-native-blur"
 import Drawer from 'react-native-drawer'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -68,6 +68,10 @@ class MainView extends React.Component {
   componentWillReceiveProps(nextProps) {
     let payFlowChanged = nextProps.currentUser.paymentFlow !== this.props.currentUser.paymentFlow
     if (payFlowChanged) this.generatePayCards(nextProps.currentUser)
+    if (nextProps.cb && typeof nextProps.cb === 'function') {
+      nextProps.cb()
+      setTimeout(() => Actions.refresh({cb: null}), 20)
+    }
   }
 
   generateEmptyState() {
@@ -187,8 +191,6 @@ class MainView extends React.Component {
       case "Incoming": dataSource = this.state.inc; break;
       case "All": dataSource = this.state.all; break;
     }
-
-
 
     return(
       <Drawer

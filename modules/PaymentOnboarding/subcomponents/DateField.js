@@ -297,9 +297,13 @@ class DateField extends React.Component {
           { /* Input modal */ }
           <Modal visible={this.state.focused} animationType={"slide"} transparent={true}>
             { /* Touching background dismisses field */ }
-            <TouchableWithoutFeedback onPress={() => this.submit()}>
-              <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0}} />
+            <TouchableWithoutFeedback onPress={() => this.toggle()}>
+              <View style={{position: 'absolute', top: 0, right: 0, left: 0, height: dims.height * 0.1}} />
             </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => this.submit()}>
+              <View style={{position: 'absolute', right: 0, bottom: 0, left: 0, height: dims.height * 0.9}} />
+            </TouchableWithoutFeedback>
+
 
             { /* Input sticks to top of keyboard */ }
             <StickyView duration={0}>
