@@ -318,6 +318,7 @@ class PhotoUploader extends React.Component {
     }
 
     //Decrypt Email
+    console.log("CurrentUser: ", this.props.currentUser);
     var decryptedEmail = this.props.currentUser.decryptedEmail.replace(".", ">");
 
     //Configs for uploading photo
@@ -347,7 +348,7 @@ class PhotoUploader extends React.Component {
           //Update the user's profile picture
           Lambda.updateProfilePic({url: response.headers.Location , token: this.props.currentUser.token }, (response) => {
             console.log(response);
-            this.currentUser
+            //this.currentUser
           });
         }
       }
