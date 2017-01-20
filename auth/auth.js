@@ -48,7 +48,9 @@ exports.signout = function(currentUser) {
 }
 
 exports.signin = function(params, cb) {
-  let { type, facebookToken, facebookUserData, accessToken, email, pass, key } = params
+  let {
+    type, facebookToken, facebookUserData, accessToken, email, pass, key, uid
+  } = params
 
   // Declare signin function var
   let signin
@@ -65,7 +67,7 @@ exports.signin = function(params, cb) {
     *   User is not cached
     *   (1) use firebaseUser's accessToken to get a customToken and key
     *   (2) fetch user details from firebase database
-    *   (3) attach customToken and key to user details
+    *   (3) attach  and key to user details
     *   (4) return user details
     *   (app initialization will occur in signin's callback function)
   **/
@@ -75,6 +77,12 @@ exports.signin = function(params, cb) {
     let { accessToken } = firebaseUser.stsTokenManager
 
     getCustomTokenAndKey(accessToken, null, (res) => {
+      if (res === null) {
+        cb(null)
+        alert("couldn't sign in via cached access token")
+        return
+      }
+
       let { customToken, key } = res
 
       firebase.auth().signInWithCustomToken(customToken).then((responseData) => {
@@ -125,26 +133,39 @@ exports.signin = function(params, cb) {
 
   /**
     *   User is cached
-    *   (1) use cached user key to get new custom token
-    *   (2) use new custom token sign in and get new accessToken
-    *   (3) attach new customToken and accessToken to user object
-    *   (4) return firebaseUser to caller
+    *   (1) check to make sure user exists in Firebase (prevents loading of
+    *       an undefined user in the case of account deletion)
+    *   (2) use cached user key to get new custom token
+    *   (3) use new custom token sign in and get new accessToken
+    *   (4) attach new customToken and accessToken to user object
+    *   (5) return firebaseUser to caller
   **/
   function signinCached(cb) {
-    getCustomTokenAndKey(accessToken, key, (res) => {
-      if (!res) {
+    firebase.database().ref('users').child(uid).once('value', (snapshot) => {
+      let userData = snapshot.val()
+
+      // User does not exist (was likely deleted from another device)
+      if (!userData) {
         cb(null)
         return
       }
 
-      let { customToken, key } = res
+      // User exists. Continue signin execution
+      getCustomTokenAndKey(accessToken, key, (res) => {
+        if (!res) {
+          cb(null)
+          return
+        }
 
-      firebase.auth().signInWithCustomToken(customToken).then((user) => {
-        let firebaseUser = user.toJSON()
-        cb(firebaseUser)
-      }).catch((err) => {
-        console.log(err)
-        cb(null)
+        let { customToken, key } = res
+
+        firebase.auth().signInWithCustomToken(customToken).then((user) => {
+          let firebaseUser = user.toJSON()
+          cb(firebaseUser)
+        }).catch((err) => {
+          console.log(err)
+          cb(null)
+        })
       })
     })
   }

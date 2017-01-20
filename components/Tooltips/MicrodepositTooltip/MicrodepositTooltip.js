@@ -6,6 +6,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
+
 //External Libraries
 import Swiper from 'react-native-swiper';
 
@@ -16,8 +17,11 @@ import {colors} from '../../../globalStyles';
 import Header from '../../../components/Header/Header';
 import * as Headers from '../../../helpers/Headers';
 
+
 //Custom
 const dimensions = Dimensions.get('window');
+import {device} from '../../../helpers';
+
 
 class MicrodepositTooltip extends React.Component {
   constructor(props) {
@@ -58,51 +62,49 @@ class MicrodepositTooltip extends React.Component {
   render() {
     return(
       <View style={{flex: 1}}>
-        <View style={{padding: 0}}>
-          <Swiper style={styles.wrapper, {}}
-            showsButtons={false}
-            dot={this._renderDot()}
-            activeDot={this._renderActiveDot()}>
-            <View style={styles.slide1}>
-              <Text style={styles.header}>{"Verifying Your Bank Account"}</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
-              <Text style={styles.text}> {"Payper will notify you when 2 amounts (Less than 20 cents each) are deposited in your account."}}</Text>
-            </View>
-            <View style={styles.slide2}>
-              <Text style={styles.header}>{"Verifying Your Bank Account"}</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
-              <Text style={styles.text}>{"Check your bank account for 2 amounts deposited by Payper."}</Text>
-            </View>
-            <View style={styles.slide3}>
-              <Text style={styles.header}>{"Verifying Your Bank Account"}</Text>
-              <Image source={require('../../../assets/images/blank_image.png')} style={{width: dimensions.width * .84, height: dimensions.height * .20, marginTop: 50, marginBottom: 5}} />
-              <Text style={styles.text}>{"On the home page of this app click on your status card to enter the 2 amounts Payper deposited."}</Text>
-              <View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
-              <TouchableHighlight
-                activeOpacity={0.8}
-                underlayColor={'transparent'}
-                onPress={() => this.closeModal()}
-                style={{height: 50, width: dimensions.width * .84, backgroundColor: "#06C0A7", justifyContent: "center"}}>
-
-                    <Text style={styles.buttonText}>{"I Understand"}</Text>
-              </TouchableHighlight>
-
+        <View style={{flex: 1}}>
+          <View style={{flex: 1}}>
+            <Swiper style={styles.wrapper}
+              showsButtons={false}
+              dot={this._renderDot()}
+              activeDot={this._renderActiveDot()}>
+              <View style={styles.slide1}>
+                <Text style={styles.header}>{"Verifying Your Bank Account"}</Text>
+                <Image source={require('../../../assets/images/microdeposit_tooltip_1.png')} style={{width: dimensions.width * .84, height: dimensions.height * .40, marginTop: 20, marginBottom: 5}} />
+                <Text style={styles.text}>{"Payper will notify you when 2 amounts (Less than 20 cents each) are deposited in your account."}</Text>
               </View>
-            </View>
-          </Swiper>
+              <View style={styles.slide2}>
+                <Text style={styles.header}>{"Verifying Your Bank Account"}</Text>
+                <Image source={require('../../../assets/images/microdeposit_tooltip_2.png')} style={{width: dimensions.width * .84, height: dimensions.height * .45, marginTop: 20, marginBottom: 5}} />
+                <Text style={styles.text}>{"Check your bank account for 2 amounts deposited by Payper."}</Text>
+              </View>
+              <View style={styles.slide3}>
+                <Text style={styles.header}>{"Verifying Your Bank Account"}</Text>
+                <Image source={require('../../../assets/images/microdeposit_tooltip_3.png')} style={{width: dimensions.width * .84, height: dimensions.height * .50, marginTop: 0, marginBottom: 2.5}} />
+                <Text style={styles.text}>{"Click on your status card to enter the 2 deposited amounts."}</Text>
+                <View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
+                  <TouchableHighlight
+                    activeOpacity={0.8}
+                    underlayColor={'transparent'}
+                    onPress={() => this.closeModal()}
+                    style={{height: 50, width: dimensions.width * .84, backgroundColor: "#06C0A7", justifyContent: "center"}}>
+                        <Text style={styles.buttonText}>{"I Understand"}</Text>
+                  </TouchableHighlight>
+                </View>
+              </View>
+            </Swiper>
+          </View>
       </View>
-
-
-      <TouchableHighlight
-        activeOpacity={0.8}
-        underlayColor={'transparent'}
-        style={{position: "absolute", margin: dimensions.width * .08, marginTop: 20, marginBottom: 0, top: 0, left: 0, right: 0, bottom: 0 }}
-        onPress={() => this.closeModal()}>
-
-        <EvilIcons size={32} name="close" color={colors.accent} />
-
-      </TouchableHighlight>
-
+      { /* Close Modal */ }
+      <View style={{flex: 1, position: "absolute", left: 0, top: 0}}>
+        <TouchableHighlight
+          activeOpacity={0.8}
+          underlayColor={'transparent'}
+          style={{ margin: dimensions.width * .08, marginTop: 20 }}
+          onPress={() => this.closeModal()}>
+          <Ionicons size={34} name="md-close" color={colors.accent} />
+        </TouchableHighlight>
+      </View>
     </View>
     );
   }
@@ -153,18 +155,24 @@ var styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
-    fontSize: 16,
-    lineHeight: 16 * 1.20,
-    textAlign: "center",
+    fontSize: device == "SE" ? 16 : device == "6" ? 18 : 20,
+    lineHeight: device == "SE" ? 16 * 1.20 : device == "6" ? 18 * 1.20 : 20 * 1.20,
+    paddingLeft: device == "SE" ? 10 : device == "6" ? 10 : 10,
+    paddingRight: device == "SE" ? 20 : device == "6" ? 20 : 20,
+    marginTop: device == "SE" ? 10 : device == "6" ? 10 : 10,
+    textAlign: "left",
     fontWeight: "500"
   },
   header: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: device == "SE" ? 20 : device == "6" ? 22 : 24,
     fontWeight: 'bold',
     textAlign: 'left',
+    paddingLeft: device == "SE" ? 20 : device == "6" ? 20 : 20,
+    paddingRight: device == "SE" ? 60 : device == "6" ? 60 : 60,
     marginTop: 15,
-    lineHeight: 18 * 1.20
+    padding: 0,
+    lineHeight: device == "SE" ? 20 * 1.20 : device == "6" ? 22 * 1.40 : 24 * 1.20,
   },
   footer: {
     color: '#fff',

@@ -1,12 +1,9 @@
 import React from 'react'
 import moment from 'moment'
 import * as _ from 'lodash'
-import {Actions} from 'react-native-router-flux'
-import {
-  View, TouchableHighlight, ListView, ScrollView, Dimensions,
-  Animated, Easing, StatusBar, Text, Image, Modal
-} from 'react-native'
-import {VibrancyView} from "react-native-blur"
+import { Actions } from 'react-native-router-flux'
+import { View, TouchableHighlight, ListView, ScrollView, RecyclerViewBackedScrollView, Dimensions, Animated, Easing, StatusBar, Text, Image, Modal, Alert } from 'react-native'
+import { VibrancyView } from "react-native-blur"
 import Drawer from 'react-native-drawer'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import {colors} from '../../globalStyles'
@@ -20,6 +17,7 @@ import {MyProfile, BankAccounts, Notifications, Invite, Settings} from '../../co
 import {BankOnboarding, PaymentOnboardingView} from '../../modules'
 import {TrackOnce} from '../../classes/Metrics'
 const dims = Dimensions.get('window')
+
 
 class MainView extends React.Component {
   constructor(props) {
@@ -96,7 +94,11 @@ class MainView extends React.Component {
         tweenDuration={100}
         onOpenStart={() => this.rotateToX()}
         onCloseStart={() => this.rotateToPlus()}
-        content={<View style={{flex: 1.0, opacity: (mounted) ? 1.0 : 0.0}}><SideMenu {...this.props} /></View>}>
+        content={
+          <View style={{flex: 1.0, opacity: (mounted) ? 1.0 : 0.0}}>
+            <SideMenu {...this.props} />
+          </View>
+        }>
 
         <View style={{flex: 1.0, backgroundColor: colors.lightGrey}}>
           <StatusBar barStyle={"light-content"} />

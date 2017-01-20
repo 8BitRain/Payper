@@ -35,9 +35,6 @@ class UserSearchField extends React.Component {
     // TODO: Filter contacts so they only appear in one list.
     let { payperContacts, nativeContacts, globalUserList } = this.props.currentUser
 
-    // TODO: get rid of this debug log
-    console.log("--> payperContacts =", payperContacts)
-
     if (null === payperContacts) {
       this.allContacts = nativeContacts.concat(globalUserList)
     } else {
@@ -249,7 +246,7 @@ class UserSearchField extends React.Component {
           { /* Input modal */ }
           <Modal visible={this.state.focused} animationType={"slide"} transparent={true}>
             { /* Touching background dismisses field */ }
-            <TouchableWithoutFeedback onPress={() => this.toggle(/*(shouldContinueFlow)*/false)}>
+            <TouchableWithoutFeedback onPress={() => this.submit()}>
               <Animated.View style={{height: offsetTop + height._value, width: dims.width}} />
             </TouchableWithoutFeedback>
 

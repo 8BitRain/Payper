@@ -40,6 +40,7 @@ const dimensions = Dimensions.get('window');
 let PHOTOS_COUNT_BY_FETCH = 24;
 
 
+
 class PhotoUploader extends React.Component {
   constructor(props) {
     super(props);
@@ -72,15 +73,6 @@ class PhotoUploader extends React.Component {
       toValue: 1.0,
       velocity: 4.0,
     }).start();
-
-    // upload progress
-    /*DeviceEventEmitter.addListener('RNUploaderProgress', (data)=>{
-      let bytesWritten = data.totalBytesWritten;
-      let bytesTotal   = data.totalBytesExpectedToWrite;
-      let progress     = data.progress;
-
-      console.log( "upload progress: " + progress + "%");
-    });*/
   }
 
   componentWillUnmount() {
@@ -106,7 +98,6 @@ class PhotoUploader extends React.Component {
 
    if(this.state.selected[0]){
      console.log("Image" + this.state.selected[0].uri);
-     //this.readImage(this.state.selected[0].uri);
      this.setState({ selectedImage: this.state.selected[0].uri, index: 2});
    }
  }
@@ -338,31 +329,24 @@ class PhotoUploader extends React.Component {
   }
 
   uploadPhotoS3(uri, brand){
-    //compress the photo
-    console.log("BRAND: " +  brand);
-    console.log("STATE BRAND: " + this.state.brand);
-    if(brand == "photo"){
-      //params imageUri, newWidth, newHeight, compressFormat, quality, rotation, outputPath
-      ImageResizer.createResizedImage(uri, 64, 64, "JPEG", 10, 0).then((resizedImageUri) => {
-        // resizeImageUri is the URI of the new image that can now be displayed, uploaded...
-        console.log("FIRED COMPRESSOR");
-        console.log("RESIZED IMAGE URI:", resizedImageUri);
-      }).catch((err) => {
-        // Oops, something went wrong. Check that the filename is correct and
-        // inspect err to get more details.
-        console.log("COMPRESSION ERROR:", err);
-      });
-    }
-    var decryptedEmail = this.props.currentUser.decryptedEmail.replace(".", ">");
-    console.log(decryptedEmail);
+    //Compress the photo (Currently not being used)
+    //compressPhoto(brand);
 
+    //Optimistically Render a photo before upload (Change Profile Pic Only)
+    if(brand == "photo"){
+      this.props.setOptimisticallyRenderedImage(this.state.selectedImage);
+    }
+
+    //Decrypt Email
+    var decryptedEmail = this.props.currentUser.decryptedEmail.replace(".", ">");
+
+    //Configs for uploading photo
     let file = {
       // `uri` can also be a file system path (i.e. file://)
       uri: uri,
       name: decryptedEmail + ".png",
       type: "image/png"
     }
-
     let options = {
       bucket: (this.state.brand == "document") ? "payper-verifydocs-" + config.details.env : "payper-profilepics-" + config.details.env,
       region: "us-east-1",
@@ -370,19 +354,14 @@ class PhotoUploader extends React.Component {
       secretKey: "wPFou11SCuIgsUNnFpfe2SSPUd1GzK7CP8dmBApU",
       successActionStatus: 201
     }
-    this.props.setOptimisticallyRenderedImage(this.state.selectedImage);
-    console.log("Setting optimisticallyRenderedImage");
+
+    //Begin Photo upload to S3 bucket
     RNS3.put(file, options).then(response => {
       if (response.status !== 201){
-          console.log(response);
           throw new Error("Failed to upload image to S3");
       }
       if(response.status == 201){
-        console.log(response.headers.Location);
         var userPhoto = response.headers.Location;
-        //this.props.setOptimisticallyRenderedImage(userPhoto);
-        console.log(this.props);
-        //How can I update currentUser.profile_pic?
         this._renderAlert(this.state.brand);
         if(this.state.brand == "photo"){
           //Update the user's profile picture
@@ -392,38 +371,50 @@ class PhotoUploader extends React.Component {
           });
         }
       }
-
     }).progress((e) => {
       console.log(e.loaded / e.total)
     });
   }
 
+  compressPhoto(uri, brand){
+    if(brand == "photo"){
+      //params imageUri, newWidth, newHeight, compressFormat, quality, rotation, outputPath
+      ImageResizer.createResizedImage(uri, 64, 64, "JPEG", 10, 0).then((resizedImageUri) => {
+        // resizeImageUri is the URI of the new image that can now be displayed, uploaded...
+        console.log("FIRED COMPRESSOR");
+        console.log("RESIZED IMAGE URI:", resizedImageUri);
+        return(resizedImageUri);
+      }).catch((err) => {
+        // Oops, something went wrong. Check that the filename is correct and
+        // inspect err to get more details.
+        console.log("COMPRESSION ERROR:", err);
+      });
+    }
+  }
+
   render() {
     return(
       <View style={{flex: 1, backgroundColor: colors.snowWhite}}>
-
       {/* Header*/}
       { this.state.brand == "document" ? this._renderHeader() : null}
 
       { /*Main Content*/ }
       <View style={{flex: .8}}>
-        {(this.state.index == 0) && (this.state.brand == "document") ? this._renderDocumentUploadExplanation() : null}
-        {/*(this.state.index == 0) && (this.state.type == "document") ? null : (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView()*/}
         {(this.state.index == 1 && this.state.brand == "photo" || this.state.brand == "document") ? (this.state.mode == "photo") ? this._renderPhotoView() : this._renderLibraryView() : null}
         {(this.state.index == 2) ? this._renderPhotoTaken() : null}
       </View>
+
+      {/* Footer */}
       {this._renderFooter()}
 
+      {/* Tooltip */}
       <Modal
         animationType={"slide"}
         transparent={true}
-        visible={this.state.openTooltip}
-        >
+        visible={this.state.openTooltip}>
           <DocumentUploadTooltip toggleModal={(value) => this.toggleModal(value)}/>
         </Modal>
-
       </View>
-
     );
   }
 };

@@ -346,12 +346,10 @@ export default class User {
       fetch(baseURL + "customer/verify", {method: "POST", body: JSON.stringify(params)})
       .then((response) => response.json())
       .then((responseData) => {
-        if (!responseData.errorMessage) {
-          console.log("Customer verification succeeded! responseData:", responseData)
-          cb(true)
+        if (responseData.errorMessage) {
+          cb("failure")
         } else {
-          console.log("Error verifying customer:", responseData.errorMessage)
-          cb(false)
+          cb(responseData.customerStatus)
         }
       })
       .done()
