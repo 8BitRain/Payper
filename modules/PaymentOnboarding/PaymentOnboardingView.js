@@ -6,6 +6,7 @@ import { colors } from '../../globalStyles'
 import { StickyView, TrendingPayments } from '../../components'
 import { TextField, FrequencyField, DateField, UserSearchField } from './subcomponents'
 import { Timer } from '../../classes/Metrics'
+import { formatPayments, formatAlert } from './helpers'
 import * as Lambda from '../../services/Lambda'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const dims = Dimensions.get('window')
@@ -163,21 +164,11 @@ class PaymentOnboardingView extends React.Component {
     if (!this.state.submittable) return
     this.setState({submittable: false})
 
-    let {
-      currentUser
-    } = this.props
+    let {currentUser} = this.props
+    let {who} = this.state
+    let {successHeight, successOpacity, buttonOpacity} = this.AV
 
-    let {
-      who, howMuch, howOften, howLong, whatFor,
-      startDay, startMonth, startYear, startUTCString,
-      confirming
-    } = this.state
-
-    let {
-      successHeight, successOpacity, buttonOpacity
-    } = this.AV
-
-    // Format success animations
+    // Configure success animations
     let successAnimations = [
       Animated.timing(successHeight, {
         toValue: dims.height * 0.2,
@@ -193,79 +184,38 @@ class PaymentOnboardingView extends React.Component {
       })
     ]
 
-    // Push payments here to be passed back to MainView.js for optimistic
-    // rendering
+    // Format payments and warning alert
+    let alert = formatAlert("payment", /*is request?*/false, currentUser)
+    let formattedPayments = formatPayments(this.state, currentUser)
     let paymentListUpdates = {
-      additions: []
+      additions: formattedPayments
     }
 
-    // Format and send payments
-    for (var k in who) {
-      let user = who[k]
-      let thisUser = currentUser.getPaymentAttributes()
-      let otherUser = {
-        first_name: user.first_name,
-        last_name: user.last_name,
-        profile_pic: user.profile_pic,
-        username: user.username,
-        uid: user.uid,
-        phone: user.phone
-      }
-      let paymentInfo = {
-        sender: thisUser,
-        recip: otherUser,
-        invite: (otherUser.uid) ? false : true,
-        phoneNumber: otherUser.phone,
-        invitee: "recip",
-        amount: (howMuch.indexOf("$") >= 0) ? howMuch.slice(1) : howMuch,
-        frequency: howOften.toUpperCase(),
-        payments: howLong.split(" ")[0],
-        purpose: whatFor,
-        type: "payment",
-        token: currentUser.token,
-        start: startUTCString
-      }
+    console.log("--> formattedPayments", formattedPayments)
 
-      // To be passed back to MainView.js for optimistic rendering
-      paymentListUpdates.additions.push(paymentInfo)
-
-      // if (paymentInfo.invite) Lambda.inviteViaPayment(paymentInfo)
-      // else Lambda.createPayment(paymentInfo)
+    // Send payments to backend
+    for (var i = 0; i < formattedPayments.length; i++) {
+      let curr = formattedPayments[i]
+      // if (curr.invite) Lambda.inviteViaPayment(curr)
+      // else Lambda.createPayment(curr)
     }
 
-    // Show success animation, page back to main view
+    // (1) Show success animation
+    // (2) Pop back to MainView
+    // (3) Refresh MainView's props with paymentListUpdates and warning alert
     Animated.parallel(successAnimations).start(() => {
-
-      // Determine alert to show after scene pop, if any
-      var recipients = ""
-      if (who.length === 1) {
-        recipients = who[0].first_name
-      } else if (who.length === 2) {
-        recipients = who[0].first_name + " and " + who[1].first_name
-      } else {
-        for (var i = 0; i < who.length; i++) {
-          let curr = who[i]
-          recipients += (i < who.length - 1)
-            ? curr.first_name + ", "
-            : "and " + curr.first_name
-        }
-      }
-
-      var alert = (currentUser.appFlags.onboardingProgress === "need-bank")
-        ? `Your payments to ${recipients} won't commence until you've added a bank account.`
-        : null
-
-      // Pop back to MainView and alert if need be
       setTimeout(() => {
         Actions.pop()
-        if (alert) {
-          Actions.refresh({
-            cb: () => setTimeout(() => Alert.alert('Wait!', alert), 800)
-          })
-        }
+        Actions.refresh({
+          paymentListUpdates,
+          cb: () => (alert)
+            ? setTimeout(() => Alert.alert('Wait!', alert), 800)
+            : null
+        })
       }, 800)
     })
 
+    // Log payment onboarding session info to Firebase/userMetrics
     this.timer.report("paymentOnboarding", this.props.currentUser.uid, {
       cancelled: false
     })

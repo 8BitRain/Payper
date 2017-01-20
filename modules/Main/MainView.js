@@ -60,6 +60,10 @@ class MainView extends React.Component {
     let {paymentListUpdates} = nextProps
     if (paymentListUpdates && paymentListRef)
       paymentListRef.optimisticallyUpdate(paymentListUpdates)
+    if (nextProps.cb && typeof nextProps.cb === 'function') {
+      nextProps.cb()
+      setTimeout(() => Actions.refresh({cb: null}), 20)
+    }
   }
 
   rotateToX() {
