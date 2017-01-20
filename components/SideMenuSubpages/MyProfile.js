@@ -221,7 +221,7 @@ class MyProfile extends React.Component {
            toggleModal={(value) => this.togglePhotoUploader(value)}
            setOptimisticallyRenderedImage={(url) => this.setOptimisticallyRenderedImage(url)}
            title={"PhotoUploader"}
-           brand={"photo"} index={1} {...this.props}/>
+           brand={"photo"} index={1} currentUser={this.props.currentUser}/>
           </Modal>
 
       </View>

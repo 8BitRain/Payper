@@ -287,19 +287,7 @@ class PhotoUploader extends React.Component {
     );
   }
 
-  _renderUploadedPhoto(){
-    return(
-      <TouchableHighlight
-        activeOpacity={0.8}
-        underlayColor={'transparent'}
-        onPress={() => this.props.onPress()}>
 
-        <View style={{ height: 60, backgroundColor: colors.accent, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <Ionicons style={{}} size={48} name="ios-checkmark-outline" color={colors.accent} />
-        </View>
-      </TouchableHighlight>
-    );
-  }
 
   _renderAlert(brand){
     if(brand == "document"){
@@ -309,7 +297,13 @@ class PhotoUploader extends React.Component {
         confirmMessage: "Ok",
         confirm: () => {
           this.setState({photoUploaded: false});
-          this.props.toggleModal(false);
+          if(this.props.brand == "photo"){
+            this.props.toggleModal(false);
+          }
+          if(this.props.brand == "document"){
+            //fulfilled via Actions.pop() refer to componentes/StatusCard/AlternateStatusCard.js
+            this.props.toggleModal();
+          }
         }
       });
     }
@@ -334,7 +328,11 @@ class PhotoUploader extends React.Component {
 
     //Optimistically Render a photo before upload (Change Profile Pic Only)
     if(brand == "photo"){
-      this.props.setOptimisticallyRenderedImage(this.state.selectedImage);
+      try{
+        this.props.setOptimisticallyRenderedImage(this.state.selectedImage);
+      }catch(err){
+        console.log("Error", err);
+      }
     }
 
     //Decrypt Email
