@@ -191,9 +191,9 @@ class PhotoUploader extends React.Component {
         <TouchableHighlight
           activeOpacity={0.8}
           underlayColor={'transparent'}
-          style={{position: "absolute", top: 0, left: dimensions.width * .8 }}
+          style={{position: "absolute", top: 12, left: dimensions.width * .85 }}
           onPress={() => {this.flipCamera()}}>
-              <Ionicons style={{}} size={48} name="ios-camera" color={colors.snowWhite} />
+              <Ionicons style={{opacity: .6}} size={38} name="md-reverse-camera" color={colors.snowWhite} />
         </TouchableHighlight>
       </View>
     );
