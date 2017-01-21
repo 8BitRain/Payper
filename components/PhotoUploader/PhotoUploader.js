@@ -63,6 +63,7 @@ class PhotoUploader extends React.Component {
         loaded: null,
         total: null
       },
+      flipCamera: Camera.constants.Type.front,
       openTooltip: this.props.brand == "document" ? true : false
     };
     console.log("BRAND" + this.state.brand);
@@ -116,8 +117,19 @@ class PhotoUploader extends React.Component {
        this.setState({ selectedImage: data.path, index: 2 });
      }
      ).catch(err => console.error("Error: " + err));
-
      //Set state to show user the picture they took. Allow the user to go back or continue
+ }
+
+ flipCamera(){
+   if(this.state.flipCamera == Camera.constants.Type.front){
+     this.setState({flipCamera: Camera.constants.Type.back});
+     console.log("Camera Facing: Swap to back");
+   }
+   if(this.state.flipCamera == Camera.constants.Type.back){
+     this.setState({flipCamera: Camera.constants.Type.front});
+     console.log("Camera Facing: Swap to front");
+   }
+
  }
 
   _renderLibraryView(){
@@ -152,27 +164,37 @@ class PhotoUploader extends React.Component {
     console.log("Current Mode" + this.state.mode);
     return(
       <View style={styles.cameraContainer}>
-      <Camera
-        ref={(cam) => {
-          this.camera = cam;
-        }}
-        style={styles.preview}
-        aspect={Camera.constants.Aspect.fill}>
-      </Camera>
-      {/*<View style={styles.capture}>
-        <Ionicons onPress={this.takePicture.bind(this)} style={{}} size={48} name="ios-camera" color={"black"} />
-      </View>*/}
-      <View style={[styles.capture]}>
+        <Camera
+          ref={(cam) => {
+            this.camera = cam;
+          }}
+          style={styles.preview}
+          aspect={Camera.constants.Aspect.fill}
+          type={this.state.flipCamera}>
+        </Camera>
+        {/*<View style={styles.capture}>
+          <Ionicons onPress={this.takePicture.bind(this)} style={{}} size={48} name="ios-camera" color={"black"} />
+        </View>*/}
+        <View style={[styles.capture]}>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={this.takePicture.bind(this)}
+            style={{width: dimensions.width}}>
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+              <Ionicons style={{}} size={48} name="ios-camera" color={colors.accent} />
+            </View>
+          </TouchableHighlight>
+        </View>
+        { /*Switch Camera View*/ }
+
         <TouchableHighlight
           activeOpacity={0.8}
           underlayColor={'transparent'}
-          onPress={this.takePicture.bind(this)}
-          style={{width: dimensions.width}}>
-          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-            <Ionicons style={{}} size={48} name="ios-camera" color={colors.accent} />
-          </View>
+          style={{position: "absolute", top: 0, left: dimensions.width * .8 }}
+          onPress={() => {this.flipCamera()}}>
+              <Ionicons style={{}} size={48} name="ios-camera" color={colors.snowWhite} />
         </TouchableHighlight>
-      </View>
       </View>
     );
 
@@ -387,6 +409,8 @@ class PhotoUploader extends React.Component {
 
       {/* Footer */}
       {this._renderFooter()}
+
+
 
       {/* Tooltip */}
       <Modal
