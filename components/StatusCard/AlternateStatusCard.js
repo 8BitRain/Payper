@@ -58,7 +58,7 @@ class AlternateStatusCard extends React.Component {
         message: "We need a bit more info to verify your account.",
         action: "Next Step: Upload Photo ID",
         destination: () => Actions.GlobalModal({
-          subcomponent: <PhotoUploader title={"Document Upload"} index={1} brand={"document"}  {...this.props}/>,
+          subcomponent: <PhotoUploader title={"Document Upload"} index={1} brand={"document"}  toggleModal={() => {Actions.pop()}} currentUser={this.props.currentUser} />,
           backgroundColor: colors.snowWhite,
           showHeader: false,
           title: "Document Upload"
