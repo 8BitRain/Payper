@@ -191,7 +191,7 @@ export default class LandingScreenView extends React.Component {
               }} />
 
             { /* "Sign up with email" button */ }
-            <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={() => Actions.UserOnboardingViewContainer()}>
+            <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={() => Actions.NewUserOnboarding()}>
               <View style={{width: dims.width - 60, height: 45, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent, borderRadius: 4, marginTop: 6}}>
                 <Text style={{fontSize: 16, color: colors.snowWhite}}>
                   {"Sign up with email"}

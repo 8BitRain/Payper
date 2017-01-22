@@ -156,10 +156,10 @@ export default class UserOnboardingView extends React.Component {
       <View style={{ flex: 1.0, backgroundColor: colors.richBlack }}>
         <StatusBar barStyle='light-content' />
 
-        { /* Header */ }
+        { /* Header
         <View style={styles.headerWrap} onLayout={(e) => this.setState({ headerHeight: e.nativeEvent.layout.height})}>
           <Image source={require('../../assets/images/logo.png')} style={{ height: this.state.headerHeight * 0.4, width: (this.state.headerHeight * 0.4) * this.logoAspectRatio }} />
-        </View>
+        </View> */ }
 
         { /* Back button */ }
         <TouchableHighlight
