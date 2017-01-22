@@ -789,7 +789,7 @@ class PaymentOnboardingView extends React.Component {
             </TouchableHighlight>
 
             { /* Partial border */ }
-            <View style={{height: 38, width: (this.state.confirming === "") ? 1 : 0, backgroundColor: colors.medGrey}} />
+            <View style={{height: 38, width: (this.state.confirming === "") ? 1 : 0, backgroundColor: colors.slateGrey}} />
 
             { /* 'Pay' button */ }
             <TouchableHighlight
