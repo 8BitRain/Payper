@@ -242,16 +242,33 @@ class PaymentOnboardingView extends React.Component {
         }
       }
 
-      var alert = (currentUser.appFlags.onboardingProgress === "need-bank")
+      var alertTitle = (currentUser.appFlags.onboardingProgress === "need-bank")
+        ? "Bank Account Needed"
+        : null
+      var alertMsg = (currentUser.appFlags.onboardingProgress === "need-bank")
         ? `Your payments to ${recipients} won't commence until you've added a bank account.`
         : null
 
       // Pop back to MainView and alert if need be
       setTimeout(() => {
         Actions.pop()
-        if (alert) {
+        if (alertTitle && alertMsg) {
           Actions.refresh({
-            cb: () => setTimeout(() => Alert.alert('Wait!', alert), 800)
+            cb: () => setTimeout(() => {
+              Alert.alert(alertTitle, alertMsg,
+                [
+                  {text: 'Dismiss', style: 'cancel'},
+                  {text: 'Add Bank', onPress: () => {
+                    const IAVWebView = require('../../components/IAVWebView/IAVWebView')
+
+                    Actions.GlobalModal({
+                     subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
+                     backgroundColor: colors.accent
+                   })
+                  }},
+                ]
+              )
+            }, 800)
           })
         }
       }, 800)
@@ -344,20 +361,49 @@ class PaymentOnboardingView extends React.Component {
         || currentUser.appFlags.onboardingProgress.indexOf("microdeposits") >= 0
       let userNeedsToVerify = currentUser.appFlags.customer_status !== "verified"
 
-      var alert
-      if (userNeedsBank && userNeedsToVerify)
-        alert = `Your payments from ${recipients} won't commence until you've added a bank account and verified your account.`
-      else if (userNeedsBank)
-        alert = `Your payments from ${recipients} won't commence until you've added a bank account.`
-      else if (userNeedsToVerify)
-        alert = `Your payments from ${recipients} won't commence until you've verified your account.`
+      var alertMsg, alertTitle
+      if (userNeedsBank && userNeedsToVerify) {
+        alertTitle = "Bank and Verification Needed"
+        alertMsg = `Your payments from ${recipients} won't commence until you've added a bank account and verified your account.`
+      } else if (userNeedsBank) {
+        alertTitle = "Bank Account Needed"
+        alertMsg = `Your payments from ${recipients} won't commence until you've added a bank account.`
+      } else if (userNeedsToVerify) {
+        alertTitle = "Verification Needed"
+        alertMsg = `Your payments from ${recipients} won't commence until you've verified your account.`
+      }
 
       // Pop back to MainView and alert if need be
       setTimeout(() => {
         Actions.pop()
-        if (alert) {
+        if (alertTitle && alertMsg) {
           Actions.refresh({
-            cb: () => setTimeout(() => Alert.alert('Wait!', alert), 800)
+            cb: () => setTimeout(() => {
+              Alert.alert(alertTitle, alertMsg,
+                [
+                  {text: 'Dismiss', style: 'cancel'},
+                  (userNeedsBank)
+                    ? {text: 'Add Bank', onPress: () => {
+                        const IAVWebView = require('../../components/IAVWebView/IAVWebView')
+
+                        Actions.GlobalModal({
+                         subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
+                         backgroundColor: colors.accent
+                        })
+                      }}
+                    : {text: 'Verify Account', onPress: () => {
+                      const KYCOnboardingView = require('../../components/KYCOnboarding/KYCOnboardingView')
+
+                      Actions.GlobalModal({
+                        subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
+                        backgroundColor: colors.snowWhite,
+                        showHeader: true,
+                        title: "Account Verification"
+                      })
+                    }}
+                ]
+              )
+            }, 800)
           })
         }
       }, 800)
@@ -767,7 +813,7 @@ class PaymentOnboardingView extends React.Component {
               onPress={() => (confirming === "request") ? this.request() : this.confirm("request")}>
               <Animated.View style={{width: requestButtonWidth, opacity: requestButtonOpacity, flex: 1.0, alignItems: 'center', justifyContent: 'center'}}>
                 <Text style={{fontSize: 20, color: colors.accent, textAlign: 'center'}}>
-                  {"Request"}
+                  {(confirming === "request") ? "Confirm Request" : "Request"}
                 </Text>
 
                 { /* Payment summary */
@@ -798,7 +844,7 @@ class PaymentOnboardingView extends React.Component {
               onPress={() => (this.state.confirming === "pay") ? this.pay() : this.confirm("pay")}>
               <Animated.View style={{width: payButtonWidth, opacity: payButtonOpacity, flex: 1.0, alignItems: 'center', justifyContent: 'center'}}>
                 <Text style={{fontSize: 20, color: colors.gradientGreen}}>
-                  {"Pay"}
+                  {(confirming === "pay") ? "Confirm Pay" : "Pay"}
                 </Text>
 
                 { /* Payment summary */
