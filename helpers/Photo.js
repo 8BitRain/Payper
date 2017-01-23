@@ -32,7 +32,7 @@ exports.uploadProfilePic = function(uri, email, token, cb) {
     }
   })
   .progress((e) => {
-    console.log("-->", (e.loaded / e.total))
+    // console.log("-->", (e.loaded / e.total))
   })
   .catch((err) => {
     console.log("--> Failed to upload photo to S3")
