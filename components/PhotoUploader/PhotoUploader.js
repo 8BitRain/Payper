@@ -275,8 +275,11 @@ class PhotoUploader extends React.Component {
         return(
           <StickyView>
             <ContinueButton text={(this.state.photoUploaded) ? "Uploading..." : "Upload Photo"} onPress={() => {
-              this.uploadPhotoS3(this.state.selectedImage, this.state.brand);
-              this.setState({photoUploaded: true});
+              if (typeof this.props.insteadOfUpload === 'function')
+                this.props.insteadOfUpload(this.state.selectedImage)
+              else
+                this.uploadPhotoS3(this.state.selectedImage, this.state.brand)
+              this.setState({photoUploaded: true})
             }}/>
           </StickyView>
         );
@@ -445,7 +448,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.medGrey,
     borderRadius: 0,
-    color: '#000',
     padding: 10
   },
   imageGrid: {

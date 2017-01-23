@@ -26,7 +26,14 @@ export function phone(input) {
 
 
 export function password(input) {
-  if (typeof input === 'undefined' || !input) return { isValid: false };
+  if (typeof input === 'undefined' || !input) return {
+    isLongEnough: false,
+    hasUppercase: false,
+    hasLowercase: false,
+    hasSymbol: false,
+    hasNumber: false,
+    isValid: false
+  }
 
   var isLongEnough = /^.{8,}$/.test(input);
   var hasUppercase = /[A-Z]/.test(input);

@@ -111,43 +111,6 @@ export default class LandingScreenView extends React.Component {
     .catch((err) => {
       Alert.alert('Sorry', 'Something went wrong. Please try again later.')
     })
-
-    // signin({
-    //   type: "facebook",
-    //   facebookToken: token,
-    //   facebookUserData: userData
-    // }, (responseData, isNewUser) => {
-    //   console.log("--> signinWithFacebook was invoked with responseData:", responseData)
-    //
-    //   if (null === responseData) {
-    //     Alert.alert("Sorry", "Something went wrong. Please try again later.")
-    //     FBLoginManager.logOut()
-    //     this.toggleLoadingScreen()
-    //     return
-    //   }
-    //
-    //   let {errorMessage} = responseData
-    //   let errorCode, emailIsDupe, phoneIsDupe
-    //   if (errorMessage) {
-    //     errorMessage = JSON.parse(errorMessage)
-    //     errorCode = errorMessage[0].code
-    //     emailisDupe = errorMessage[0].path === "/email"
-    //   }
-    //
-    //   if (true === isNewUser) {
-    //     Actions.PartialUserOnboardingView({
-    //       email: userData.email,
-    //       phone: userData.phone,
-    //       emailIsDupe: emailisDupe,
-    //       phoneIsDupe: phoneIsDupe,
-    //       currentUser: this.props.currentUser,
-    //       isNewUser: isNewUser
-    //     })
-    //   } else {
-    //     this.props.currentUser.initialize(responseData)
-    //     Actions.MainViewContainer()
-    //   }
-    // })
   }
 
   render() {
@@ -191,7 +154,7 @@ export default class LandingScreenView extends React.Component {
               }} />
 
             { /* "Sign up with email" button */ }
-            <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={() => Actions.NewUserOnboarding()}>
+            <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={() => Actions.NewUserOnboardingView({currentUser: this.props.currentUser})}>
               <View style={{width: dims.width - 60, height: 45, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent, borderRadius: 4, marginTop: 6}}>
                 <Text style={{fontSize: 16, color: colors.snowWhite}}>
                   {"Sign up with email"}

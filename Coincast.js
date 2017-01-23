@@ -23,7 +23,7 @@ import { colors } from './globalStyles'
 import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
 import { Client } from 'bugsnag-react-native'
 import { PayDetails } from './components/PayCard'
-import { MainView, OnboardingView, PaymentOnboardingView, FirstPaymentView, PartialUserOnboardingView, NewUserOnboarding } from './modules'
+import { MainView, OnboardingView, PaymentOnboardingView, FirstPaymentView, PartialUserOnboardingView, NewUserOnboardingView } from './modules'
 import { GlobalModal } from './components'
 
 // Get build and version numbers
@@ -112,8 +112,8 @@ export default class Coincast extends React.Component {
               panHandlers={null} />
 
             <Scene
-              component={NewUserOnboarding}
-              key="NewUserOnboarding"
+              component={NewUserOnboardingView}
+              key="NewUserOnboardingView"
               panHandlers={null} />
 
             <Scene
