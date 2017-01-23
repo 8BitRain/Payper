@@ -7,6 +7,7 @@ import WebViewBridge from 'react-native-webview-bridge'
 import Mixpanel from 'react-native-mixpanel'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import * as Firebase from '../../services/Firebase'
 import AddBankAccountTooltip from '../Tooltips/AddBankAccountTooltip/AddBankAccountTooltip'
 import * as config from '../../config'
 const dimensions = Dimensions.get('window')
@@ -30,6 +31,13 @@ class IAVWebView extends React.Component {
     this.timer = new Timer()
     this.trackOnce = new TrackOnce()
     this.timer.start()
+  }
+
+  componentDidMount(){
+    /*var params = "users/" + this.props.currentUser.uid + "/fundingSource"
+    Firebase.listenTo(params, (callback) => {
+      console.log("RESPONSE FROM FIREBASE: ", JSON.parse(callback));
+    });*/
   }
 
   componentWillUnmount() {
@@ -96,11 +104,47 @@ class IAVWebView extends React.Component {
   }
 
   handleCancel() {
-    this.setState({cancelled: true}, () => {
-      (typeof this.props.toggleModal === 'function')
-        ? this.props.toggleModal()
-        : Actions.pop()
-    })
+    if(this.props.currentUser.fundingSource){
+      console.log("Play confetti!");
+
+      Actions.refresh({
+        subcomponent:
+          <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.snowWhite}}>
+            <BankAccountAdded
+              currentUser={this.props.currentUser}
+              shouldShowAccountVerification={!userIsVerified}
+              verifyAccountDestination={() => {
+                // Why this import syntax? https://goo.gl/gcNg7z
+                const KYCOnboardingView = require('../KYCOnboarding/KYCOnboardingView')
+
+                Actions.refresh({
+                  subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
+                  backgroundColor: colors.snowWhite,
+                  showHeader: true,
+                  title: "Account Verification"
+                })
+              }}
+              skipDestination={() => Actions.pop()} />
+          </View>,
+        backgroundColor: colors.snowWhite,
+        showHeader: true,
+        title: "Bank Account Verification"
+      })
+
+      this.setState({cancelled: true}, () => {
+        (typeof this.props.toggleModal === 'function')
+          ? this.props.toggleModal()
+          : Actions.pop()
+      })
+
+    } else {
+      this.setState({cancelled: true}, () => {
+        (typeof this.props.toggleModal === 'function')
+          ? this.props.toggleModal()
+          : Actions.pop()
+      })
+    }
+
   }
 
   onBridgeMessage(msg) {
