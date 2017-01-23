@@ -186,11 +186,6 @@ class AlternateStatusCard extends React.Component {
         && onboardingProgress !== "microdeposits-failed"
       let canReceiveMoney = onboardingProgress === "kyc-success"
 
-      console.log("")
-      console.log("")
-      console.log("--> AlternateStatusCard is rendering")
-      console.log("--> cachedProfilePic", cachedProfilePic)
-
       return(
         <Animated.View
           onLayout={(e) => this.layout(e)}
