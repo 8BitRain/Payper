@@ -8,5 +8,6 @@ exports.validatePassword = require('./Validate').password
 exports.uploadProfilePic = require('./Photo').uploadProfilePic
 
 // Miscellaneous
-exports.ListOfStates = require('./ListOfStates')
+exports.ListOfStates = require('./States').ListOfStates
+exports.ListOfStateAbbreviations = require('./States').ListOfStateAbbreviations
 exports.device = require('./DeviceType')

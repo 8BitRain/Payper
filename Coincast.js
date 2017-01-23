@@ -8,9 +8,6 @@ import SplashViewContainer from './modules/Splash/SplashViewContainer'
 import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreenView'
 import LandingScreenViewContainer from './modules/LandingScreen/LandingScreenViewContainer'
 import MainViewContainer from './modules/Main/MainViewContainer'
-import UserOnboardingViewContainer from './modules/UserOnboarding/UserOnboardingViewContainer'
-import BankOnboardingView from './modules/BankOnboarding/BankOnboardingView'
-import Phone from './modules/UserOnboarding/pages/Phone'
 import AddBankAccountTooltip from './components/Tooltips/AddBankAccountTooltip/AddBankAccountTooltip'
 import MicrodepositTooltip from './components/Tooltips/MicrodepositTooltip/MicrodepositTooltip'
 import SuspendedTooltip from './components/Tooltips/SuspendedTooltip/SuspendedTooltip'
@@ -32,7 +29,6 @@ let version = DeviceInfo.getVersion()
 
 // Uncomment to reset user cache
 // Async.set('user', '')
-// Async.set('BankOnboardingStateCache', '')
 // Async.set('betaStatus', '')
 
 const reducerCreate = (params) => {

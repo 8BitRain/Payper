@@ -16,7 +16,6 @@ import CodePush from 'react-native-code-push';
 import * as Lambda from '../../services/Lambda'
 
 // Components
-import UserOnboardingView from '../../modules/UserOnboarding/UserOnboardingView'
 import PaymentCards from './subcomponents/PaymentCards'
 import LoginModal from '../../components/LoginModal/LoginModal'
 
@@ -35,7 +34,6 @@ export default class LandingScreenView extends React.Component {
     this.state = {
       headerHeight: 0,
       loginModalVisible: false,
-      signUpModalVisible: false,
       loading: false
     }
   }
@@ -54,10 +52,6 @@ export default class LandingScreenView extends React.Component {
       toValue: (this.loadingOpacity._value === 0) ? 1.0 : 0.0,
       duration: 325
     }).start();
-  }
-
-  toggleSignUpModal() {
-    this.setState({ signUpModalVisible: !this.state.signUpModalVisible })
   }
 
   onGenericLoginSuccess() {
@@ -196,19 +190,6 @@ export default class LandingScreenView extends React.Component {
           modalVisible={this.state.loginModalVisible}
           toggleModal={() => this.toggleLoginModal()}
           onLoginSuccess={() => this.onGenericLoginSuccess()} />
-
-        { /* Generic sign up modal */ }
-        <Modal
-          animationType={"slide"}
-          transparent={true}
-          visible={this.state.signUpModalVisible}>
-
-          <UserOnboardingView
-            handleCancel={() => this.toggleSignUpModal()}
-            updateCurrentUser={this.props.updateCurrentUser}
-            currentUser={this.props.currentUser} />
-
-        </Modal>
 
         { /* Facebook login loading view */
         (this.state.loading)
