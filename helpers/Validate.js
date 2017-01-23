@@ -29,7 +29,7 @@ export function password(input) {
   if (typeof input === 'undefined' || !input) return {
     isLongEnough: false,
     hasUppercase: false,
-    hasLowercase: false,
+    // hasLowercase: false,
     hasSymbol: false,
     hasNumber: false,
     isValid: false
@@ -37,16 +37,17 @@ export function password(input) {
 
   var isLongEnough = /^.{8,}$/.test(input);
   var hasUppercase = /[A-Z]/.test(input);
-  var hasLowercase = /[a-z]/.test(input);
+  // var hasLowercase = /[a-z]/.test(input);
   var hasSymbol = /[!”#$%&’()*+`\-./:;<=>?@\]\[\\^_’{|}~]/.test(input);
   var hasNumber = /[0-9]/.test(input);
 
   return {
     isLongEnough: isLongEnough,
     hasUppercase: hasUppercase,
-    hasLowercase: hasLowercase,
+    // hasLowercase: hasLowercase,
     hasSymbol: hasSymbol,
     hasNumber: hasNumber,
-    isValid: isLongEnough && hasUppercase && hasLowercase && hasSymbol && hasNumber
+    isValid: isLongEnough && hasUppercase && hasSymbol && hasNumber
+    // isValid: isLongEnough && hasUppercase && hasLowercase && hasSymbol && hasNumber
   };
 };
