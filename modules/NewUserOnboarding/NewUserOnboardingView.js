@@ -3,7 +3,7 @@ import {Actions} from 'react-native-router-flux'
 import {View, Text, TouchableHighlight, Animated, Image, TextInput, Dimensions, StyleSheet, StatusBar, Alert, ScrollView, Modal} from 'react-native'
 import {colors} from '../../globalStyles'
 import {PhotoUploader} from '../../components'
-import {validatePhone, validateEmail, validateName, validatePassword} from '../../helpers'
+import {validatePhone, validateEmail, validateName, validatePassword, uploadProfilePic} from '../../helpers'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -134,6 +134,8 @@ class NewUserOnboardingView extends React.Component {
       securePasswordEntry: true,
       passwordIsValid: false,
       photoUploaderModalIsVisible: false,
+      signupIsPressable: true,
+      loading: false,
       firstName: "",
       lastName: "",
       email: "",
@@ -253,27 +255,40 @@ class NewUserOnboardingView extends React.Component {
 
   signup() {
     let {currentUser} = this.props
-    let {firstName, lastName, email, password, phone, profilePic} = this.state
+    let {firstName, lastName, email, password, phone, profilePic, signupIsPressable} = this.state
 
-    console.log("--> signup was invoked")
-    console.log("--> state", this.state)
-    console.log("--> currentUser", currentUser)
+    if (!signupIsPressable) return
+    this.setState({loading: true, signupIsPressable: false})
 
     currentUser.createUserWithEmailAndPassword({
       firstName,
       lastName,
       email,
       password,
-      phone,
-      profilePic
+      phone
     },
     (uid) => {
       // Success!
-      console.log("--> Signup succeeded! UID is", uid)
+      // Actions.FirstPaymentView()
+      currentUser.update({
+        decryptedEmail: email,
+        decryptedPhone: phone,
+        cachedProfilePic: profilePic
+      })
+      Actions.MainViewContainer({
+        cb: () => uploadProfilePic(profilePic, email, currentUser.token)
+      })
     },
     (errCode) => {
       // Failure :(
-      console.log("--> Signup failed. errCode is", errCode)
+      this.setState({loading: false, signupIsPressable: true})
+      if (errCode === "auth/email-already-in-use" || errCode === "dupe-email") {
+        Alert.alert('Invalid Email', 'This email is already in use.')
+      } else if (errCode === "dupe-phone") {
+        Alert.alert('Invalid Phone', 'This phone number is already in use.')
+      } else {
+        Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
+      }
     })
   }
 
@@ -501,7 +516,7 @@ class NewUserOnboardingView extends React.Component {
                   { /* Email */ }
                   <View style={{width: dims.width * 0.85, marginTop: 26}}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                      <Text style={{paddingLeft: 5, fontSize: 18, color: colors.deepBlue}}>
+                      <Text style={{paddingLeft: 5, fontSize: 18, fontWeight: '500', color: colors.deepBlue}}>
                         {"Account Summary"}
                       </Text>
                     </View>
@@ -546,7 +561,9 @@ class NewUserOnboardingView extends React.Component {
                     activeOpacity={0.75}
                     onPress={() => this.signup()}>
                     <Text style={styles.continueButton}>
-                      {"Sign Me Up"}
+                      {(this.state.loading)
+                        ? "Creating your account..."
+                        : "Sign Me Up" }
                     </Text>
                   </TouchableHighlight>
                 </Animated.View> }

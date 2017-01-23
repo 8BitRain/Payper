@@ -16,7 +16,7 @@ class MyProfile extends React.Component {
       rowHasChanged: (r1, r2) => r1 !== r2,
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2
     })
-
+    
     this.state = {
       rows: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections({}),
       modalVisible: false,
