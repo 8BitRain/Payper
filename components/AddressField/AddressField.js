@@ -7,7 +7,7 @@ import {colors} from '../../globalStyles'
 import {StickyView} from '../../components'
 import {VibrancyView} from 'react-native-blur'
 import {AddressTextInput} from './subcomponents'
-import {ListOfStates} from '../../helpers'
+import {ListOfStates, ListOfStateAbbreviations} from '../../helpers'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
@@ -126,13 +126,17 @@ class AddressField extends React.Component {
   validateInput() {
     let {street, city, state, zip} = this.state
 
-    let formattedState = (state.length >= 2)
-      ? state.charAt(0).toUpperCase() + state.slice(1).toLowerCase()
-      : ""
+    let formattedState
+    if (state.length === 2)
+      formattedState = state.toUpperCase()
+    else if (state.length >= 3)
+      formattedState = state.charAt(0).toUpperCase() + state.slice(1).toLowerCase()
+    else
+      formattedState = ""
 
     let streetIsValid = true
     let cityIsValid = true
-    let stateIsValid = ListOfStates[formattedState]
+    let stateIsValid = ListOfStates[formattedState] || ListOfStateAbbreviations[formattedState]
     let zipIsValid = zip.length === 5
 
     let addressIsValid = streetIsValid && cityIsValid && stateIsValid && zipIsValid
@@ -179,6 +183,13 @@ class AddressField extends React.Component {
       Alert.alert(title, msg, [{text: 'OK', onPress: () => (fieldToFocus) ? fieldToFocus.focus() : null}])
       return
     }
+
+    // State has already been validated at this point. Make sure it's
+    // properly formatted before passing to parent
+    if (state.length === 2)
+      state = state.toUpperCase()
+    else
+     state = state.charAt(0).toUpperCase() + state.slice(1).toLowerCase()
 
     // Show value in this component/set value in parent component
     setValues({
@@ -269,6 +280,7 @@ class AddressField extends React.Component {
                       autoFocus: true,
                       returnKeyType: "next",
                       defaultValue: street,
+                      placeholder: "ex. 1 North St",
                       onSubmitEditing: () => this.inputRefs.City.focus(),
                       onChangeText: (text) => this.setState({street: text})
                     }}
@@ -282,6 +294,7 @@ class AddressField extends React.Component {
                       autoCorrect: false,
                       returnKeyType: "next",
                       defaultValue: city,
+                      placeholder: "ex. Sacramento",
                       onSubmitEditing: () => this.inputRefs.State.focus(),
                       onChangeText: (text) => this.setState({city: text})
                     }}
@@ -297,6 +310,7 @@ class AddressField extends React.Component {
                         defaultValue: state,
                         returnKeyType: "next",
                         autoCapitalize: "words",
+                        placeholder: "ex. CA or California",
                         onSubmitEditing: () => this.inputRefs.ZIP.focus(),
                         onChangeText: (text) => this.setState({state: text})
                       }}
@@ -314,6 +328,7 @@ class AddressField extends React.Component {
                         keyboardType: "number-pad",
                         returnKeyType: "done",
                         defaultValue: zip,
+                        placeholder: "ex. 12345",
                         onSubmitEditing: () => this.submit(),
                         onChangeText: (text) => {
                           this.setState({zip: text})

@@ -16,7 +16,6 @@ import CodePush from 'react-native-code-push';
 import * as Lambda from '../../services/Lambda'
 
 // Components
-import UserOnboardingView from '../../modules/UserOnboarding/UserOnboardingView'
 import PaymentCards from './subcomponents/PaymentCards'
 import LoginModal from '../../components/LoginModal/LoginModal'
 
@@ -35,7 +34,6 @@ export default class LandingScreenView extends React.Component {
     this.state = {
       headerHeight: 0,
       loginModalVisible: false,
-      signUpModalVisible: false,
       loading: false
     }
   }
@@ -56,17 +54,13 @@ export default class LandingScreenView extends React.Component {
     }).start();
   }
 
-  toggleSignUpModal() {
-    this.setState({ signUpModalVisible: !this.state.signUpModalVisible })
-  }
-
   onGenericLoginSuccess() {
     Actions.MainViewContainer({type: 'replace'})
   }
 
   signinWithFacebook(userData) {
     console.log("--> userData", userData)
-    
+
     let {
       token, email, phone, facebook_id, first_name
     } = userData
@@ -111,43 +105,6 @@ export default class LandingScreenView extends React.Component {
     .catch((err) => {
       Alert.alert('Sorry', 'Something went wrong. Please try again later.')
     })
-
-    // signin({
-    //   type: "facebook",
-    //   facebookToken: token,
-    //   facebookUserData: userData
-    // }, (responseData, isNewUser) => {
-    //   console.log("--> signinWithFacebook was invoked with responseData:", responseData)
-    //
-    //   if (null === responseData) {
-    //     Alert.alert("Sorry", "Something went wrong. Please try again later.")
-    //     FBLoginManager.logOut()
-    //     this.toggleLoadingScreen()
-    //     return
-    //   }
-    //
-    //   let {errorMessage} = responseData
-    //   let errorCode, emailIsDupe, phoneIsDupe
-    //   if (errorMessage) {
-    //     errorMessage = JSON.parse(errorMessage)
-    //     errorCode = errorMessage[0].code
-    //     emailisDupe = errorMessage[0].path === "/email"
-    //   }
-    //
-    //   if (true === isNewUser) {
-    //     Actions.PartialUserOnboardingView({
-    //       email: userData.email,
-    //       phone: userData.phone,
-    //       emailIsDupe: emailisDupe,
-    //       phoneIsDupe: phoneIsDupe,
-    //       currentUser: this.props.currentUser,
-    //       isNewUser: isNewUser
-    //     })
-    //   } else {
-    //     this.props.currentUser.initialize(responseData)
-    //     Actions.MainViewContainer()
-    //   }
-    // })
   }
 
   render() {
@@ -161,10 +118,10 @@ export default class LandingScreenView extends React.Component {
             <Image source={require('../../assets/images/logo.png')} style={{height: dims.width * 0.22, width: (dims.width * 0.22) * this.logoAspectRatio}} />
 
             { /* Welcome message */ }
-            <Text style={{fontWeight: '500', fontSize: 26, color: colors.accent, width: dims.width - 80, marginTop: 20}}>
+            <Text style={{fontWeight: '500', fontSize: 26, color: colors.accent, textAlign: 'center', width: dims.width - 80, marginTop: 20}}>
               {"Welcome to Payper,"}
             </Text>
-            <Text style={{fontSize: 18, color: colors.accent, width: dims.width - 80}}>
+            <Text style={{fontSize: 18, color: colors.accent, textAlign: 'center', width: dims.width - 80}}>
               {"the app that makes recurring payments easy."}
             </Text>
           </View>
@@ -191,7 +148,7 @@ export default class LandingScreenView extends React.Component {
               }} />
 
             { /* "Sign up with email" button */ }
-            <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={() => Actions.UserOnboardingViewContainer()}>
+            <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={() => Actions.NewUserOnboardingView({currentUser: this.props.currentUser})}>
               <View style={{width: dims.width - 60, height: 45, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent, borderRadius: 4, marginTop: 6}}>
                 <Text style={{fontSize: 16, color: colors.snowWhite}}>
                   {"Sign up with email"}
@@ -233,19 +190,6 @@ export default class LandingScreenView extends React.Component {
           modalVisible={this.state.loginModalVisible}
           toggleModal={() => this.toggleLoginModal()}
           onLoginSuccess={() => this.onGenericLoginSuccess()} />
-
-        { /* Generic sign up modal */ }
-        <Modal
-          animationType={"slide"}
-          transparent={true}
-          visible={this.state.signUpModalVisible}>
-
-          <UserOnboardingView
-            handleCancel={() => this.toggleSignUpModal()}
-            updateCurrentUser={this.props.updateCurrentUser}
-            currentUser={this.props.currentUser} />
-
-        </Modal>
 
         { /* Facebook login loading view */
         (this.state.loading)

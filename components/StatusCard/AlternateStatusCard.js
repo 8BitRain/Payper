@@ -178,12 +178,18 @@ class AlternateStatusCard extends React.Component {
       let {height, opacity} = this.AV
       let {onboardingPercentage} = this.state
       let {message, destination, action} = configInfo
+      let {cachedProfilePic} = this.props.currentUser
       let profilePic = this.props.currentUser.profile_pic
       let canSendMoney = currentUser.fundingSource
         && onboardingProgress !== "microdeposits-initialized"
         && onboardingProgress !== "microdeposits-deposited"
         && onboardingProgress !== "microdeposits-failed"
       let canReceiveMoney = onboardingProgress === "kyc-success"
+
+      console.log("")
+      console.log("")
+      console.log("--> AlternateStatusCard is rendering")
+      console.log("--> cachedProfilePic", cachedProfilePic)
 
       return(
         <Animated.View
@@ -226,8 +232,8 @@ class AlternateStatusCard extends React.Component {
                     backgroundColor={colors.medGrey}>
                     {(fill) => <View style={styles.imageBorder} />}
                   </AnimatedCircularProgress>
-                  {(profilePic)
-                    ? <Image style={styles.image} source={{uri: profilePic}} />
+                  {(cachedProfilePic || profilePic)
+                    ? <Image style={styles.image} source={{uri: cachedProfilePic || profilePic}} />
                     : <View style={styles.image}><Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
                         {currentUser.first_name.charAt(0) + currentUser.last_name.charAt(0)}
                       </Text></View> }

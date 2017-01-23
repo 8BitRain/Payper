@@ -63,6 +63,8 @@ class MainView extends React.Component {
     setTimeout(() => {
       this.setState({mounted: true})
     }, 850)
+
+    console.log("--> main view mounted", this.props.currentUser)
   }
 
   componentWillReceiveProps(nextProps) {

@@ -120,7 +120,7 @@ class PayCard extends React.Component {
                 <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.carminePink, fontSize: 14}]}>
                   {(incoming) ? "+" : "-"}
                 </Text>
-                <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.carminePink, fontSize: 14, alignSelf: 'flex-start', paddingTop: 3}]}>
+                <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.carminePink, fontSize: 14, alignSelf: 'flex-start', paddingTop: (status.indexOf("pending") >= 0) ? 8 : 3}]}>
                   {"$"}
                 </Text>
                 <Text style={[styles.amountText, {color: (incoming) ? colors.alertGreen : colors.carminePink, fontSize: (amount > 999) ? 16 : 20}]}>
@@ -147,12 +147,18 @@ class PayCard extends React.Component {
                   </View>
                 </View>
 
-                { /* Progress bar */ }
-                <View style={{flexDirection: 'row'}}>
-                  <View style={[styles.progbarBackground, styles.shadow]} onLayout={(e) => this.layoutProgbarBackground(e)}>
-                    <Animated.View style={[styles.progbarForeground, {width: progbarWidth}]} />
-                  </View>
-                </View>
+                { /* Progress bar or '(!) PENDING' */
+                  (status.indexOf("pending") >= 0)
+                    ? <View style={{flexDirection: 'row', padding: 4, borderRadius: 4, overflow: 'hidden', backgroundColor: 'rgba(238, 116, 116, 0.5)'}}>
+                        <EvilIcons name={"exclamation"} color={colors.carminePink} size={20} />
+                        <View style={{width: 4}} />
+                        <Text style={{fontSize: 14, color: colors.snowWhite}}>{"Pending"}</Text>
+                      </View>
+                    : <View style={{flexDirection: 'row'}}>
+                        <View style={[styles.progbarBackground, styles.shadow]} onLayout={(e) => this.layoutProgbarBackground(e)}>
+                          <Animated.View style={[styles.progbarForeground, {width: progbarWidth}]} />
+                        </View>
+                      </View> }
               </View>
             </View>
           </View>
