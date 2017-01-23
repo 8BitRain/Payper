@@ -32,6 +32,11 @@ class PaymentOnboardingView extends React.Component {
 
     this.fieldNames = ['Who?', 'How much?', 'How often?', 'How long?', 'What for?', 'Starting when?']
 
+    let now = new Date()
+    let day = now.getDate()
+    let month = now.getMonth() + 1
+    let year = now.getFullYear()
+
     this.state = {
       submittable: true,
       cancellable: true,
@@ -47,9 +52,9 @@ class PaymentOnboardingView extends React.Component {
       howOften: "",
       howLong: "",
       whatFor: "",
-      startDay: "",
-      startMonth: "",
-      startYear: "",
+      startDay: day,
+      startMonth: month,
+      startYear: year,
       startUTCString: ""
     }
 
@@ -723,9 +728,9 @@ class PaymentOnboardingView extends React.Component {
             title={"Starting when?"}
             iconName={"clock"}
             complete={false}
-            dayValue={this.state.startDay}
-            monthValue={this.state.startMonth}
-            yearValue={this.state.startYear}
+            dayValue={this.state.startDay.toString()}
+            monthValue={this.state.startMonth.toString()}
+            yearValue={this.state.startYear.toString()}
             setValues={(values, cb) => {
               let buffer = values.split("-")
               let day = buffer[1]

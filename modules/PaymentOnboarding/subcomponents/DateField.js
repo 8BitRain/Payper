@@ -25,9 +25,9 @@ class DateField extends React.Component {
     this.AV = {
       opacity: new Animated.Value(1),
       height: new Animated.Value(70),
-      valueOpacity: new Animated.Value(0),
-      valueHeight: new Animated.Value(0),
-      valuePaddingBottom: new Animated.Value(0)
+      valueOpacity: new Animated.Value(1),
+      valueHeight: new Animated.Value(20),
+      valuePaddingBottom: new Animated.Value(16)
     }
 
     this.state = {
@@ -35,9 +35,9 @@ class DateField extends React.Component {
       focused: false,
       hidden: false,
       touchable: true,
-      dayInput: "",
-      monthInput: "",
-      yearInput: ""
+      dayInput: props.dayValue,
+      monthInput: props.monthValue,
+      yearInput: props.yearValue
     }
 
     this.validateInput = this.validateInput.bind(this)
@@ -257,7 +257,9 @@ class DateField extends React.Component {
     } = this.AV
 
     let values = monthValue.toString() + "-" + dayValue.toString() + "-" + yearValue.toString()
-    let calendarizedValue = moment(values, "MM-DD-YYYY").format('MMM Do[,] YYYY')
+    let date = moment(values, "MM-DD-YYYY")
+    let calendarizedValue = date.format('MMM Do[,] YYYY')
+    let dateIsToday = moment().isSame(date, 'day')
 
     return(
       <TouchableHighlight
@@ -290,7 +292,7 @@ class DateField extends React.Component {
             <EvilIcons name={iconName} size={32} color={'transparent'} />
 
             <Text style={{fontSize: 18, color: colors.gradientGreen, paddingLeft: 10}}>
-              {calendarizedValue}
+              {(dateIsToday) ? "Today" : calendarizedValue}
             </Text>
           </Animated.View>
 
