@@ -8,6 +8,9 @@ import { colors } from '../../globalStyles'
 import styles from './styles'
 const dims = Dimensions.get('window')
 
+//TODO replace with deviceOS from deviceType in /helpers
+var DeviceInfo = require('react-native-device-info');
+
 class MicrodepositOnboarding extends React.Component {
   constructor(props) {
     super(props)
@@ -52,11 +55,20 @@ class MicrodepositOnboarding extends React.Component {
     this.setState(newState, () => console.log(this.state))
   }
 
+  _renderVibrancyView(){
+    if(DeviceInfo.getSystemName() == "Android"){
+      return null;
+    } else if(DeviceInfo.getSystemName() == "iPhone OS"){
+      return <VibrancyView blurType={"light"} style={styles.blur} />
+    }
+  }
+
   render() {
     return(
       <View style={styles.wrap}>
         <StatusBar barStyle='light-content' />
-        <VibrancyView blurType={"light"} style={styles.blur} />
+        {/* <VibrancyView blurType={"light"} style={styles.blur} /> */}
+        { this._renderVibrancyView() }
 
         { /* Instructions */ }
         <View style={styles.textWrap}>

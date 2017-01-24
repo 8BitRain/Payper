@@ -4,7 +4,6 @@ import {View, Text, TouchableHighlight, WebView, Dimensions, StatusBar, Modal, S
 import {colors} from '../../globalStyles'
 import {Timer, TrackOnce} from '../../classes/Metrics'
 import WebViewBridge from 'react-native-webview-bridge'
-import Mixpanel from 'react-native-mixpanel'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import * as Firebase from '../../services/Firebase'

@@ -11,3 +11,4 @@ exports.uploadProfilePic = require('./Photo').uploadProfilePic
 exports.ListOfStates = require('./States').ListOfStates
 exports.ListOfStateAbbreviations = require('./States').ListOfStateAbbreviations
 exports.device = require('./DeviceType')
+exports.deviceOS = require('./DeviceType')

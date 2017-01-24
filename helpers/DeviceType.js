@@ -1,5 +1,7 @@
 //Dependencies
 import { Dimensions} from "react-native";
+var DeviceInfo = require('react-native-device-info');
+
 
 const dimensions = Dimensions.get('window');
 
@@ -9,7 +11,11 @@ const dimensions = Dimensions.get('window');
   * TODO Android sizing
 **/
 const device = getDeviceType(dimensions.width);
-console.log("DeviceType Dimensions.width: " + dimensions.width);
+//TODO fix exporting deviceOS
+const deviceOS = DeviceInfo.getSystemName();
+
+
+
 export function getDeviceType(dims){
   switch(dims){
     case 320:
@@ -24,4 +30,4 @@ export function getDeviceType(dims){
   }
 }
 
-module.exports = device
+module.exports = device, deviceOS

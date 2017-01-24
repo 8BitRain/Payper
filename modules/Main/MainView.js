@@ -14,6 +14,9 @@ import { BankOnboarding, PaymentOnboardingView } from '../../modules'
 import { TrackOnce } from '../../classes/Metrics'
 const dims = Dimensions.get('window')
 
+//TODO replace with deviceOS from deviceType in /helpers
+var DeviceInfo = require('react-native-device-info');
+
 
 class MainView extends React.Component {
   constructor(props) {
@@ -184,6 +187,14 @@ class MainView extends React.Component {
     })
   }
 
+  _renderVibrancyView(){
+    if(DeviceInfo.getSystemName() == "Android"){
+      return null;
+    } else if(DeviceInfo.getSystemName() == "iPhone OS"){
+      return <VibrancyView blurType="light" style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} />
+    }
+  }
+
   render() {
     let { activeFilter, mounted } = this.state
     let dataSource = []
@@ -289,7 +300,8 @@ class MainView extends React.Component {
 
           { /* Footer */ }
           <View style={{position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row', borderTopWidth: 1.0, borderColor: colors.lightGrey, backgroundColor: 'rgba(255, 255, 255, 0.64)', justifyContent: 'space-between'}}>
-            <VibrancyView blurType="light" style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} />
+            {/* <VibrancyView blurType="light" style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} /> */}
+            { this._renderVibrancyView()}
 
             { /* User button */ }
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>

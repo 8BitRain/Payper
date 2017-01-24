@@ -5,7 +5,10 @@ import { Actions } from 'react-native-router-flux';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Hyperlink from 'react-native-hyperlink'
 import { colors } from '../../globalStyles'
+//Vibrancy view is currently not implemented in Android https://github.com/react-native-community/react-native-blur#android
 import { VibrancyView } from 'react-native-blur'
+import { deviceOS } from '../../helpers'
+var DeviceInfo = require('react-native-device-info');
 
 // Helpers
 import * as Validators from '../../helpers/validators';
@@ -136,10 +139,19 @@ class BetaLandingScreenView extends React.Component {
     }
   }
 
+  _renderVibrancyView(){
+    if(DeviceInfo.getSystemName() == "Android"){
+      return (null);
+    } else if (DeviceInfo.getSystemName() == "iPhone OS"){
+      return(<VibrancyView blurType={"light"} style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} />);
+    }
+  }
+
   _getPhoneOnboarding() {
     return(
       <View style={wrappers.modalWrap}>
-        <VibrancyView blurType={"light"} style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} />
+        {/*<VibrancyView blurType={"light"} style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} />*/}
+        {this._renderVibrancyView()}
 
         { /* Header */ }
         <View style={wrappers.modalHeader}>

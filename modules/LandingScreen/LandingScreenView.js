@@ -3,7 +3,6 @@ import React from 'react'
 import firebase from 'firebase'
 import {View, ScrollView, Text, TouchableHighlight, Modal, Animated, Easing, Dimensions, Linking, StatusBar, Image} from 'react-native'
 import {Actions} from 'react-native-router-flux'
-import Mixpanel from 'react-native-mixpanel'
 import Hyperlink from 'react-native-hyperlink'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const FBSDK = require('react-native-fbsdk')

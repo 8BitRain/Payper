@@ -1,4 +1,3 @@
-import Mixpanel from 'react-native-mixpanel'
 import firebase from 'firebase'
 import * as config from '../config'
 import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk'
@@ -35,7 +34,6 @@ exports.requestFacebookUserData = function(token, cb) {
   // Handle failure
   function onFailure(err) {
     alert("Something went wrong. Please try again later.")
-    Mixpanel.trackWithProperties('Failed Facebook Signin', { err: err })
     cb(null)
   }
 }

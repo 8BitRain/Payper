@@ -8,6 +8,7 @@ import com.facebook.appevents.AppEventsLogger;
 
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.bugsnag.BugsnagReactNative;
+import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
 
 import com.facebook.react.ReactApplication;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
@@ -65,6 +66,7 @@ public class MainApplication extends Application implements ReactApplication {
                     new FBSDKPackage(mCallbackManager),
                     new RCTCameraPackage(),
                     new RNDeviceInfo(),
+                    new WebViewBridgePackage(),
                     BugsnagReactNative.getPackage(),
                     new CodePush("PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3", MainApplication.this, com.example.BuildConfig.DEBUG),
                     new ReactNativeContacts()

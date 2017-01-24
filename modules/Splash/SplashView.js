@@ -3,7 +3,6 @@ import React from 'react'
 import { View, Text, Image, NetInfo, TouchableHighlight, Animated, Easing, Dimensions, StatusBar } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import { signin } from '../../auth'
-import Mixpanel from 'react-native-mixpanel'
 import Entypo from 'react-native-vector-icons/Entypo'
 import CodePush from 'react-native-code-push'
 import * as config from '../../config'
@@ -36,7 +35,7 @@ class SplashView extends React.Component {
   componentWillMount() {
     const _this = this
     FBLoginManager.logOut()
-    Mixpanel.timeEvent('Load Time: Splash View')
+
 
     this.ConnectivityListener = NetInfo.isConnected.addEventListener('change', (isConnected) => {
       if (_this.state.reconnecting && !_this.state.connected)
@@ -50,7 +49,6 @@ class SplashView extends React.Component {
   }
 
   componentWillUnmount() {
-    Mixpanel.track('Load Time: Splash View')
     this.ConnectivityListener.remove()
   }
 
@@ -120,7 +118,6 @@ class SplashView extends React.Component {
   }
 
   _onDisconnect() {
-    Mixpanel.track('Connection Failed')
     this.setState({ connected: false })
   }
 
