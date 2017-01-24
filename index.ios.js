@@ -6,6 +6,8 @@ import store from './redux/store';
 // Creates a persistent connection to Firebase right when the app starts
 import Firebase from './services/Firebase';
 
+var Symbol = require('es6-symbol');
+
 // @todo remove when RN upstream is fixed
 console.ignoredYellowBox = ['Warning: Failed propType: SceneView'];
 

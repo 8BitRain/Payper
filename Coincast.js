@@ -1,6 +1,5 @@
 import React from 'react'
 import firebase from 'firebase'
-import Mixpanel from 'react-native-mixpanel'
 import Error from './components/Error'
 import DeviceInfo from 'react-native-device-info'
 import * as Async from './helpers/Async'
@@ -22,6 +21,7 @@ import { Client } from 'bugsnag-react-native'
 import { PayDetails } from './components/PayCard'
 import { MainView, OnboardingView, PaymentOnboardingView, FirstPaymentView, PartialUserOnboardingView, NewUserOnboardingView } from './modules'
 import { GlobalModal } from './components'
+
 
 // Get build and version numbers
 let build = DeviceInfo.getBuildNumber()
@@ -68,8 +68,6 @@ export default class Coincast extends React.Component {
     this.client = new Client('f8be20d13dd76c17ff352c44d395270a')
     let clientId = DeviceInfo.getUniqueID()
 
-    Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6')
-    Mixpanel.timeEvent('Session Duration')
 
     ga = new Analytics('UA-87368863-1', clientId, 1, DeviceInfo.getUserAgent())
     var screenView = new GAHits.ScreenView(

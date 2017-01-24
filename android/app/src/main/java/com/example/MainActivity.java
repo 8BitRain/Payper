@@ -3,7 +3,7 @@ package com.example;
 
 import com.facebook.react.ReactActivity;
 import com.bugsnag.BugsnagReactNative;
-
+import android.content.Intent;
 
 
 public class MainActivity extends ReactActivity {
@@ -15,6 +15,12 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "<%= name %>";
+        return "Coincast";
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        MainApplication.getCallbackManager().onActivityResult(requestCode, resultCode, data);
     }
 }

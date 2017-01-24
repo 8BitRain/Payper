@@ -3,8 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node_modules/react-native/packager/packager.sh",
-    "sync-rnrf": "rm -rf ./node_modules/react-native-router-flux; sane '/usr/bin/rsync -v -a --exclude .git --exclude Example --exclude node_modules ../ ./node_modules/react-native-router-flux/' .. --glob='{**/*.json,**/*.js}'"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "sync-rnrf": "rm -rf ./node_modules/react-native-router-flux; sane '/usr/bin/rsync -v -a --exclude .git --exclude Example --exclude node_modules ../ ./node_modules/react-native-router-flux/' .. --glob='{**/*.json,**/*.js}'",
+    "build": "(cd android/ && ./gradlew assembleDebug)",
+    "bundle-android": "react-native bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --sourcemap-output android/app/src/main/assets/index.android.map --assets-dest android/app/src/main/res/"
   },
   "dependencies": {
     "buffer": "^5.0.0",
@@ -28,7 +30,6 @@
     "react-native-button": "github:ide/react-native-button",
     "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
     "react-native-camera-roll-picker": "^1.1.9",
-    "react-native-carousel": "*",
     "react-native-circular-progress": "0.0.8",
     "react-native-code-push": "*",
     "react-native-confetti": "0.0.4",
@@ -38,7 +39,6 @@
     "react-native-dismiss-keyboard": "*",
     "react-native-drawer": "*",
     "react-native-easy-grid-view": "^0.1.1",
-    "react-native-fabric": "*",
     "react-native-facebook-login": "*",
     "react-native-fbsdk": "*",
     "react-native-flip-card": "^3.3.1",
@@ -46,7 +46,6 @@
     "react-native-google-places-autocomplete": "*",
     "react-native-hyperlink": "*",
     "react-native-image-resizer": "0.0.12",
-    "react-native-mixpanel": "*",
     "react-native-modalbox": "*",
     "react-native-router-flux": "./libs/react-native-router-flux-master",
     "react-native-side-menu": "*",
