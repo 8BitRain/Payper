@@ -1,7 +1,7 @@
 <resources>
 
     <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey"></string>
-    <string name="fb_app_id">{FB_APP_ID}</string>
-    <string name="fb_login_protocol_scheme">fb{FB_APP_ID}</string>
+    <string name="facebook_app_id">269191293459465</string>
+    <string name="fb_login_protocol_scheme">269191293459465</string>
     <string name="app_name">Payper</string>
 </resources>
