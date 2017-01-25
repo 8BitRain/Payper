@@ -5,6 +5,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.appevents.AppEventsLogger;
+import com.magus.fblogin.FacebookLoginPackage;
 
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.bugsnag.BugsnagReactNative;
@@ -68,6 +69,7 @@ public class MainApplication extends Application implements ReactApplication {
                     new RNDeviceInfo(),
                     new WebViewBridgePackage(),
                     BugsnagReactNative.getPackage(),
+                    new FacebookLoginPackage(),
                     new CodePush("PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3", MainApplication.this, com.example.BuildConfig.DEBUG),
                     new ReactNativeContacts()
             );

@@ -117,7 +117,7 @@ class SideMenu extends React.Component {
               let message = "Are you sure you'd like to sign out?"
               Alert.alert("Wait!", message, [
                 {text: 'Cancel', onPress: () => null, style: 'cancel'},
-                {text: 'Yes', onPress: () => Linking.openURL("https://www.getpayper.io/faq").catch(err => null)},
+                {text: 'Yes', onPress: () => signout(this.props.currentUser)/*Linking.openURL("https://www.getpayper.io/faq").catch(err => null)*/},
               ])
             }
           }
@@ -155,7 +155,7 @@ class SideMenu extends React.Component {
     return(
       <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', paddingTop: 10, backgroundColor: "rgba(255, 251, 252, 0.8)"}}>
         {/* <VibrancyView blurType={"light"} style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}}  /> */}
-        { this._renderVibrancyView() } 
+        { this._renderVibrancyView() }
 
         { /* Header (opens profile page) */ }
         <TouchableHighlight
