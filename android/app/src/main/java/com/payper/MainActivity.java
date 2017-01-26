@@ -1,8 +1,8 @@
 
-package com.example;
+package com.payper;
 
 import com.facebook.react.ReactActivity;
-import com.bugsnag.BugsnagReactNative;
+
 import android.content.Intent;
 
 

@@ -374,7 +374,7 @@ var styles = StyleSheet.create({
   buttonText:{
     color: '#fff',
     fontSize: 18,
-    lineHeight: 18 * 1.20,
+    lineHeight: Math.round(18 * 1.20),
     textAlign: "center",
     fontWeight: "bold",
     alignSelf: "center"
@@ -382,28 +382,28 @@ var styles = StyleSheet.create({
   text: {
     color: '#fff',
     fontSize: 16,
-    lineHeight: 16 * 1.20,
+    lineHeight: Math.round(16 * 1.20),
     textAlign: "center",
     fontWeight: "500"
   },
   lockText: {
     color: colors.medGrey,
     fontSize: 16,
-    lineHeight: 16 * 1.20,
+    lineHeight: Math.round(16 * 1.20),
     textAlign: "center",
     fontWeight: "500"
   },
   unlockedText:{
     color: colors.snowWhite,
     fontSize: 16,
-    lineHeight: 16 * 1.20,
+    lineHeight: Math.round(16 * 1.20),
     textAlign: "center",
     fontWeight: "500"
   },
   text2: {
     color: '#fff',
     fontSize: 16,
-    lineHeight: 16 * 1.20,
+    lineHeight: Math.round(16 * 1.20),
     textAlign: "center",
     fontWeight: "500",
     marginTop: 15
@@ -414,7 +414,7 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 15,
-    lineHeight: 18 * 1.20
+    lineHeight: Math.round(18 * 1.20)
   },
   header2:{
     color: "#fff",
@@ -422,12 +422,12 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 5,
-    lineHeight: 14 * 1.20
+    lineHeight: Math.round(14 * 1.20)
   },
   footer: {
     color: '#fff',
     fontSize: 14,
-    lineHeight: 14 * 1.20,
+    lineHeight: Math.round(14 * 1.20),
     textAlign: "center",
     fontWeight: "300"
   }

@@ -148,7 +148,7 @@ var styles = StyleSheet.create({
   buttonText:{
     color: '#fff',
     fontSize: 18,
-    lineHeight: 18 * 1.20,
+    lineHeight: Math.round(18 * 1.20),
     textAlign: "center",
     fontWeight: "bold",
     alignSelf: "center"
@@ -156,7 +156,7 @@ var styles = StyleSheet.create({
   text: {
     color: '#fff',
     fontSize: device == "SE" ? 16 : device == "6" ? 18 : 20,
-    lineHeight: device == "SE" ? 16 * 1.20 : device == "6" ? 18 * 1.20 : 20 * 1.20,
+    lineHeight: device == "SE" ? Math.round(16 * 1.20) : device == "6" ? Math.round(18 * 1.20) : Math.round(20 * 1.20),
     paddingLeft: device == "SE" ? 10 : device == "6" ? 10 : 10,
     paddingRight: device == "SE" ? 20 : device == "6" ? 20 : 20,
     marginTop: device == "SE" ? 10 : device == "6" ? 10 : 10,
@@ -172,12 +172,12 @@ var styles = StyleSheet.create({
     paddingRight: device == "SE" ? 60 : device == "6" ? 60 : 60,
     marginTop: 15,
     padding: 0,
-    lineHeight: device == "SE" ? 20 * 1.20 : device == "6" ? 22 * 1.40 : 24 * 1.20,
+    lineHeight: device == "SE" ? Math.round(20 * 1.20) : device == "6" ? Math.round(22 * 1.40) : Math.round(24 * 1.20),
   },
   footer: {
     color: '#fff',
     fontSize: 14,
-    lineHeight: 14 * 1.20,
+    lineHeight: Math.round(14 * 1.20),
     textAlign: "center",
     fontWeight: "300"
   }

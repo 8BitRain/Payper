@@ -107,7 +107,7 @@ var styles = StyleSheet.create({
   buttonText:{
     color: '#fff',
     fontSize: 18,
-    lineHeight: 18 * 1.20,
+    lineHeight: Math.round(18 * 1.20),
     textAlign: "center",
     fontWeight: "bold",
     alignSelf: "center"
@@ -115,14 +115,14 @@ var styles = StyleSheet.create({
   text: {
     color: '#fff',
     fontSize: 16,
-    lineHeight: 16 * 1.20,
+    lineHeight: Math.round(16 * 1.20),
     textAlign: "left",
     fontWeight: "500"
   },
   text2: {
     color: '#fff',
     fontSize: device == "SE" ? 16 : device == "6" ? 18 : 20,
-    lineHeight: device == "SE" ? 16 * 1.20 : device == "6" ? 16 * 1.20 : 16 * 1.20,
+    lineHeight: device == "SE" ? Math.round(16 * 1.20) : device == "6" ? Math.round(16 * 1.20) : Math.round(16 * 1.20),
     paddingLeft: 10,
     paddingRight: 10,
     textAlign: "center",
@@ -132,7 +132,7 @@ var styles = StyleSheet.create({
   text3: {
     color: '#fff',
     fontSize: device == "SE" ? 14 : device == "6" ? 16 : 18,
-    lineHeight: device == "SE" ? 14 * 1.20 : device == "6" ? 16 * 1.20 : 18 * 1.20,
+    lineHeight: device == "SE" ? Math.round(14 * 1.20) : device == "6" ? Math.round(16 * 1.20) : Math.round(18 * 1.20),
     paddingLeft: 10,
     paddingRight: 10,
     textAlign: "center",
@@ -146,7 +146,7 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'left',
     paddingTop: device == "SE" ? 45 : device == "6" ? 70 : 95,
-    lineHeight: device == "SE" ? 18 * 1.20 : device == "6" ? 20 * 1.20 : 22 * 1.20
+    lineHeight: device == "SE" ? Math.round(18 * 1.20) : device == "6" ? Math.round(20 * 1.20) : Math.round(22 * 1.20)
   },
   header2: {
     color: "#fff",
@@ -154,12 +154,12 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'left',
     marginTop: 15,
-    lineHeight: device == "SE" ? 18 * 1.20 : device == "6" ? 20 * 1.20 : 22 * 1.20
+    lineHeight: device == "SE" ? Math.round(18 * 1.20) : device == "6" ? Math.round(20 * 1.20) : Math.round(22 * 1.20)
   },
   footer: {
     color: '#fff',
     fontSize: 14,
-    lineHeight: 14 * 1.20,
+    lineHeight: Math.round(14 * 1.20),
     textAlign: "center",
     fontWeight: "300"
   }

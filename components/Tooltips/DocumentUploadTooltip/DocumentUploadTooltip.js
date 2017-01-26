@@ -217,7 +217,7 @@ var styles = StyleSheet.create({
   buttonText:{
     color: '#fff',
     fontSize: 18,
-    lineHeight: 18 * 1.20,
+    lineHeight: Math.round(18 * 1.20),
     textAlign: "center",
     fontWeight: "bold",
     alignSelf: "center",
@@ -233,14 +233,14 @@ var styles = StyleSheet.create({
     fontSize: device == "SE" ? 18 : device == "6" ? 18 : 22,
     paddingLeft: 10,
     paddingRight: 10,
-    lineHeight: device == "SE" ? 18 * 1.20 : device == "6" ? 18 * 1.20 : 22 * 1.20,
+    lineHeight: device == "SE" ? Math.round(18 * 1.20) : device == "6" ? Math.round(18 * 1.20) : Math.round(22 * 1.20),
     textAlign: "center",
     fontWeight: "500"
   },
   textL: {
     color: '#fff',
     fontSize: 16,
-    lineHeight: 16 * 1.20,
+    lineHeight: Math.round(16 * 1.20),
     textAlign: "left",
     fontWeight: "500",
     padding: 15
@@ -248,7 +248,7 @@ var styles = StyleSheet.create({
   text3: {
     color: '#fff',
     fontSize: device == "SE" ? 16 : device == "6" ? 18 : 20,
-    lineHeight: 16 * 1.20,
+    lineHeight: Math.round(16 * 1.20),
     textAlign: "center",
     fontWeight: "500",
     padding: 0
@@ -259,7 +259,7 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: device == "SE" ? 0: device == "6" ? 0 : 0,
-    lineHeight: device == "SE" ? 18 * 1.20 : device == "6" ? 21 * 1.20 : 23 * 1.20,
+    lineHeight: device == "SE" ? Math.round(18 * 1.20) : device == "6" ? Math.round(21 * 1.20) : Math.round(23 * 1.20),
   },
 
   headerL: {
@@ -271,7 +271,7 @@ var styles = StyleSheet.create({
     paddingRight: device == "SE" ? 40 : device == "6" ? 40 : 40,
     marginTop: 15,
     padding: 0,
-    lineHeight: device == "SE" ? 20 * 1.20 : device == "6" ? 22 * 1.20 : 24 * 1.20,
+    lineHeight: device == "SE" ? Math.round(20 * 1.20) : device == "6" ? Math.round(22 * 1.20) : Math.round(24 * 1.20),
   },
   header2: {
     color: "#fff",
@@ -282,12 +282,12 @@ var styles = StyleSheet.create({
     paddingRight: device == "SE" ? 40 : device == "6" ? 40 : 40,
     marginTop: 15,
     padding: 0,
-    lineHeight: device == "SE" ? 20 * 1.20 : device == "6" ? 22 * 1.20 : 24 * 1.20,
+    lineHeight: device == "SE" ? Math.round(20 * 1.20) : device == "6" ? Math.round(22 * 1.20) : Math.round(24 * 1.20),
   },
 
   footer: {
     fontSize: 14,
-    lineHeight: 14 * 1.20,
+    lineHeight: Math.round(14 * 1.20),
     textAlign: "center",
     fontWeight: "300"
   }

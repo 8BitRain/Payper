@@ -219,7 +219,7 @@ var styles = StyleSheet.create({
   text: {
     color: '#fff',
     fontSize: device == "SE" ? 16 : device == "6" ? 18 : 20,
-    lineHeight: device == "SE" ? 16 * 1.20 : device == "6" ? 18 * 1.20 : 20 * 1.20,
+    lineHeight: device == "SE" ? Math.round(16 * 1.20) : device == "6" ? Math.round(18 * 1.20) : Math.round(20 * 1.20),
     paddingLeft: device == "SE" ? 10 : device == "6" ? 10 : 10,
     paddingRight: device == "SE" ? 10 : device == "6" ? 10 : 10,
     paddingTop: device == "SE" ? 10 : device == "6" ? 10 : 10,
@@ -245,7 +245,7 @@ var styles = StyleSheet.create({
     marginTop: 15,
     paddingLeft: 10,
     paddingRight: 10,
-    lineHeight: device == "SE" ? 18 * 1.20 : device == "6" ? 20 * 1.20 : 22 * 1.20
+    lineHeight: device == "SE" ? Math.round(18 * 1.20) : device == "6" ? Math.round(20 * 1.20) : Math.round(22 * 1.20)
   },
   finalHeader: {
     color: "#fff",
@@ -253,12 +253,12 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'left',
     marginTop: 15,
-    lineHeight: 24 * 1.20
+    lineHeight: Math.round(24 * 1.20)
   },
   footer: {
     color: '#fff',
     fontSize: 14,
-    lineHeight: 14 * 1.20,
+    lineHeight: Math.round(14 * 1.20),
     textAlign: "center",
     fontWeight: "300"
   }

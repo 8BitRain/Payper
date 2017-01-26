@@ -1,4 +1,4 @@
-package com.example;
+package com.payper;
 import android.app.Application;
 
 import com.facebook.CallbackManager;
@@ -55,7 +55,7 @@ public class MainApplication extends Application implements ReactApplication {
 
         @Override
         protected boolean getUseDeveloperSupport() {
-            return com.example.BuildConfig.DEBUG;
+            return com.payper.BuildConfig.DEBUG;
         }
 
         @Override
@@ -70,7 +70,7 @@ public class MainApplication extends Application implements ReactApplication {
                     new WebViewBridgePackage(),
                     BugsnagReactNative.getPackage(),
                     new FacebookLoginPackage(),
-                    new CodePush("PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3", MainApplication.this, com.example.BuildConfig.DEBUG),
+                    new CodePush("PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3", MainApplication.this, com.payper.BuildConfig.DEBUG),
                     new ReactNativeContacts()
             );
         }

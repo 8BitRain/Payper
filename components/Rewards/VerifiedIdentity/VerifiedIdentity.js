@@ -282,7 +282,7 @@ var styles = StyleSheet.create({
   buttonText:{
     color: '#fff',
     fontSize: 18,
-    lineHeight: 18 * 1.20,
+    lineHeight: Math.round(18 * 1.20),
     textAlign: "center",
     fontWeight: "bold",
     alignSelf: "center"
@@ -290,7 +290,7 @@ var styles = StyleSheet.create({
   text: {
     color: '#fff',
     fontSize: 16,
-    lineHeight: 16 * 1.20,
+    lineHeight: Math.round(16 * 1.20),
     textAlign: "center",
     fontWeight: "500",
     marginTop: 2.5
@@ -298,7 +298,7 @@ var styles = StyleSheet.create({
   textL: {
     color: '#fff',
     fontSize: 16,
-    lineHeight: 16 * 1.20,
+    lineHeight: Math.round(16 * 1.20),
     textAlign: "left",
     fontWeight: "500",
     padding: 15
@@ -306,7 +306,7 @@ var styles = StyleSheet.create({
   text2: {
     color: '#fff',
     fontSize: 16,
-    lineHeight: 16 * 1.20,
+    lineHeight: Math.round(16 * 1.20),
     textAlign: "center",
     fontWeight: "500",
     marginTop: 15
@@ -317,7 +317,7 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: 15,
-    lineHeight: 18 * 1.20
+    lineHeight: Math.round(18 * 1.20)
   },
   headerL: {
     color: "#fff",
@@ -328,7 +328,7 @@ var styles = StyleSheet.create({
     marginLeft: 10,
     marginTop: 15,
     padding: 0,
-    lineHeight: 18 * 1.,
+    lineHeight: Math.round(18 * 1.20),
   },
   footer: {
     color: '#fff',
