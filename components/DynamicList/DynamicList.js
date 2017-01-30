@@ -101,13 +101,13 @@ class DynamicList extends React.Component {
 
     console.log("--> optimisticallyUpdate was invoked...")
 
-    add(additions, this)
-    if (removals) remove(removals)
-    if (mutations) mutate(mutations)
+    if (additions) add(additions, this)
+    if (removals) remove(removals, this)
+    if (mutations) mutate(mutations, this)
 
     function add(additions, scope) {
       additions = {out: additions}
-      
+
       if (additions.out)
         data.out = Object.assign({}, data.out, additions.out)
       if (additions.in)
@@ -118,12 +118,12 @@ class DynamicList extends React.Component {
       // scope.setState({dataSource: newDataSource})
     }
 
-    function remove(removals) {
+    function remove(removals, scope) {
       console.log("--> optimisticallyUpdate.remove() was invoked...")
       console.log("--> removals", removals)
     }
 
-    function mutate(mutations) {
+    function mutate(mutations, scope) {
       console.log("--> optimisticallyUpdate.mutate() was invoked...")
       console.log("--> mutations", mutations)
     }

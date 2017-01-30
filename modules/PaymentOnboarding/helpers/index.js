@@ -1,2 +1,2 @@
-exports.formatPayments = require('./formatPayments')
+exports.generatePayments = require('./paymentGenerator').generatePayments
 exports.formatAlert = require('./formatAlert')

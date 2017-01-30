@@ -224,8 +224,7 @@ class paydetails extends React.Component {
 
   renderDetailRow(params) {
     let { key, val } = params
-    let { status } = this.props
-    let splitVal = val.split(" - ")
+    let splitVal = (val) ? val.split(" - ") : ""
 
     return(
       <View style={{flexDirection: 'column', borderColor: colors.slateGrey, borderBottomWidth: 1.0}}>
