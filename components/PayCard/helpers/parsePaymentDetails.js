@@ -2,13 +2,13 @@ import moment from 'moment'
 
 function parsePaymentDetails(props) {
   let { payment, currentUser } = props
-
-  console.log("--> parsePaymentDetails was invoked with props", props)
+  
+  let isOutgoingPayment = payment.sender_id === currentUser.uid
 
   let user = {
-    name: (payment.flow == "in") ? payment.sender_name : payment.recip_name,
-    username: (payment.flow == "in") ? payment.sender_username : payment.recip_username,
-    pic: (payment.flow == "in") ? payment.sender_pic : payment.recip_pic
+    name: (isOutgoingPayment) ? payment.recip_name : payment.sender_name,
+    username: (isOutgoingPayment) ? payment.recip_username : payment.sender_username,
+    pic: (isOutgoingPayment) ? payment.recip_pic : payment.sender_pic
   }
 
   let frequency = payment.frequency.charAt(0).toUpperCase() + payment.frequency.slice(1).toLowerCase()
@@ -31,10 +31,8 @@ function parsePaymentDetails(props) {
     pid: payment.pid,
     token: currentUser.token,
     paymentType: payment.type,
-    incoming: payment.flow === "in"
+    incoming: !isOutgoingPayment
   }
-
-  console.log("--> returning details", details)
 
   return details
 }

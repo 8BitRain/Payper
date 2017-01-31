@@ -163,7 +163,6 @@ class PaymentOnboardingView extends React.Component {
   submit() {
     if (!this.state.submittable) return
     this.setState({submittable: false})
-
     let {currentUser} = this.props
     let {who} = this.state
     let {successHeight, successOpacity, buttonOpacity} = this.AV
@@ -184,37 +183,39 @@ class PaymentOnboardingView extends React.Component {
       })
     ]
 
-    let alert = formatAlert(this.state.who, /*is request?*/false, currentUser)
+    let alert = formatAlert(this.state.who, this.state.confirming === "request", currentUser)
 
     generatePayments({
       currentUser,
       paymentOnboardingState: this.state
-    }, (payment) => {
-      console.log("payment", payment)
+    }, (payments) => {
+      let paymentListUpdates = (this.state.confirming === "request")
+        ? {additions: {in: payments}}
+        : {additions: {out: payments}}
 
-      // // (1) Show success animation
-      // // (2) Pop back to MainView
-      // // (3) Refresh MainView's props with paymentListUpdates and warning alert
-      // Animated.parallel(successAnimations).start(() => {
-      //   setTimeout(() => {
-      //     Actions.pop()
-      //     Actions.refresh({
-      //       paymentListUpdates,
-      //       cb: () => (alert)
-      //         ? setTimeout(() => Alert.alert('Wait!', alert), 800)
-      //         : null
-      //     })
-      //   }, 800)
-      // })
-      //
-      // // Log payment onboarding session info to Firebase/userMetrics
-      // this.timer.report("paymentOnboarding", this.props.currentUser.uid, {
-      //   cancelled: false
-      // })
+      // (1) Show success animation
+      // (2) Pop back to MainView
+      // (3) Refresh MainView's props with paymentListUpdates and warning alert
+      Animated.parallel(successAnimations).start(() => {
+        setTimeout(() => {
+          Actions.pop()
+          Actions.refresh({
+            paymentListUpdates,
+            cb: () => (alert)
+              ? setTimeout(() => Alert.alert('Wait!', alert), 800)
+              : null
+          })
+        }, 800)
+      })
+
+      // Log payment onboarding session info to Firebase/userMetrics
+      this.timer.report("paymentOnboarding", this.props.currentUser.uid, {
+        cancelled: false
+      })
     })
   }
 
-  showConfirmButton(payOrRequest) {
+  toggleConfirmButton(payOrRequest) {
     // Make sure no fields are blank
     let {
       who, howMuch, howOften, howLong, whatFor, startDay, startMonth, startYear
@@ -595,7 +596,7 @@ class PaymentOnboardingView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.75}
               underlayColor={'transparent'}
-              onPress={() => this.showConfirmButton(this.state.confirming)}>
+              onPress={() => this.toggleConfirmButton(this.state.confirming)}>
               <Animated.View style={{flexDirection: 'row', width: cancelButtonWidth, opacity: cancelButtonOpacity, flex: 1.0, alignItems: 'center', justifyContent: 'center'}}>
                 <EvilIcons name={"close-o"} color={colors.carminePink} size={26} />
 
@@ -610,7 +611,7 @@ class PaymentOnboardingView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.75}
               underlayColor={'transparent'}
-              onPress={() => (confirming === "request") ? this.submit() : this.showConfirmButton("request")}>
+              onPress={() => (confirming === "request") ? this.submit() : this.toggleConfirmButton("request")}>
               <Animated.View style={{width: requestButtonWidth, opacity: requestButtonOpacity, flex: 1.0, alignItems: 'center', justifyContent: 'center'}}>
                 <Text style={{fontSize: 20, color: colors.accent, textAlign: 'center'}}>
                   {"Request"}
@@ -641,7 +642,7 @@ class PaymentOnboardingView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.75}
               underlayColor={'transparent'}
-              onPress={() => (this.state.confirming === "pay") ? this.submit() : this.showConfirmButton("pay")}>
+              onPress={() => (this.state.confirming === "pay") ? this.submit() : this.toggleConfirmButton("pay")}>
               <Animated.View style={{width: payButtonWidth, opacity: payButtonOpacity, flex: 1.0, alignItems: 'center', justifyContent: 'center'}}>
                 <Text style={{fontSize: 20, color: colors.gradientGreen}}>
                   {"Pay"}

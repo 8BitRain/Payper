@@ -4,15 +4,12 @@
     - [X] Add header functionality
     - [X] Add footer functionality
     - [X] Add section header functionality
-    - [ ] Implement optimisticallyAdd function
-    - [ ] Implement optimisticallyRemove function
+    - [ ] Implement optimistic additions
+    - [ ] Implement optimistic removals
     - [ ] Implement exit animations for DynamicListRows
 **/
 import React from 'react'
-import {
-  View, ListView, Animated, RecyclerViewBackedScrollView
-} from 'react-native'
-
+import {View, ListView, Animated, RecyclerViewBackedScrollView} from 'react-native'
 
 class DynamicListRow extends React.Component {
   constructor(props) {
@@ -99,23 +96,13 @@ class DynamicList extends React.Component {
     let {dataSource} = this.state
     let {data} = this.props
 
-    console.log("--> optimisticallyUpdate was invoked...")
-
     if (additions) add(additions, this)
     if (removals) remove(removals, this)
     if (mutations) mutate(mutations, this)
 
     function add(additions, scope) {
-      additions = {out: additions}
-
-      if (additions.out)
-        data.out = Object.assign({}, data.out, additions.out)
-      if (additions.in)
-        data.in = Object.assign({}, data.in, additions.in)
-
-      console.log("--> data", data)
-
-      // scope.setState({dataSource: newDataSource})
+      if (additions.out) data.out = Object.assign({}, data.out, additions.out)
+      if (additions.in) data.in = Object.assign({}, data.in, additions.in)
     }
 
     function remove(removals, scope) {
@@ -130,12 +117,8 @@ class DynamicList extends React.Component {
   }
 
   render() {
-    let {
-      dataSource
-    } = this.state
-    let {
-      renderHeader, renderFooter, renderSectionHeader
-    } = this.props
+    let {dataSource} = this.state
+    let {renderHeader, renderFooter, renderSectionHeader} = this.props
 
     return(
       <View style={{flex: 1.0}}>
