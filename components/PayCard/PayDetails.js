@@ -74,21 +74,25 @@ class paydetails extends React.Component {
       "Are you sure you'd like to cancel this payment series?",
       [
         {text: 'Nevermind', onPress: () => console.log('Nevermind'), style: 'cancel'},
-        {text: 'Yes', onPress: () => confirm()},
+        {text: 'Yes', onPress: () => confirm(/* (scope) */this.props)},
       ]
     )
 
-    function confirm() {
+    function confirm(props) {
+      let { token, pid, paymentType, status } = props
+
       // TODO: Optimistically delete payment card
-      Lambda.cancelPayment({
-        token: token,
-        payment_id: pid,
-        type: paymentType,
-        status: status,
-        invite: status === "pendingInvite"
-      })
+      // Lambda.cancelPayment({
+      //   token: token,
+      //   payment_id: pid,
+      //   type: paymentType,
+      //   status: status,
+      //   invite: status === "pendingInvite"
+      // })
 
       Actions.pop()
+      let paymentListUpdates = {removals: [pid]}
+      Actions.refresh({paymentListUpdates})
     }
   }
 

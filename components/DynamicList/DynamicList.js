@@ -30,12 +30,37 @@ class DynamicListRow extends React.Component {
     }).start()
   }
 
+  beforeUnmount(cb) {
+    let {defaultTransition, rowOpacity, rowHeight} = this.AV
+
+    let animations = [
+      Animated.timing(rowHeight, {
+        toValue: 0,
+        duration: 200
+      }),
+      Animated.timing(rowOpacity, {
+        toValue: 0,
+        duration: 160
+      })
+    ]
+
+    Animated.parallel(animations).start(() => {
+      if (typeof cb === 'function')
+        cb()
+    })
+  }
+
+  layout(e) {
+    let {height} = e.nativeEvent.layout
+    this.AV.rowHeight = new Animated.Value(height)
+  }
+
   render() {
     let {children} = this.props
-    let {rowOpacity} = this.AV
+    let {rowOpacity, rowHeight} = this.AV
 
     return(
-      <Animated.View style={{opacity: rowOpacity}}>
+      <Animated.View style={{opacity: rowOpacity, height: rowHeight}} onLayout={(e) => this.layout(e)}>
         {children}
       </Animated.View>
     )
@@ -59,6 +84,8 @@ class DynamicList extends React.Component {
         : this.emptyDataSource,
       refreshing: false
     }
+
+    this.rowRefs = []
 
     this.renderRow = this.renderRow.bind(this)
   }
@@ -84,8 +111,8 @@ class DynamicList extends React.Component {
       ? renderRow(rowData, sectionID, rowID)
       : <View style={{flex: 1.0, height: 100, marginTop: 20, backgroundColor: 'blue'}} />
 
-    return (
-      <DynamicListRow>
+    return(
+      <DynamicListRow rowID={rowID} ref={(ref) => this.rowRefs[rowID] = ref}>
         {row}
       </DynamicListRow>
     )
@@ -106,8 +133,14 @@ class DynamicList extends React.Component {
     }
 
     function remove(removals, scope) {
-      console.log("--> optimisticallyUpdate.remove() was invoked...")
-      console.log("--> removals", removals)
+      for (var i = 0; i < removals.length; i++) {
+        const curr = removals[i]
+        let ref = scope.rowRefs[curr]
+        ref.beforeUnmount(() => {
+          console.log(`Safe to unmount row ${curr}`)
+          
+        })
+      }
     }
 
     function mutate(mutations, scope) {

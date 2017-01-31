@@ -10,6 +10,7 @@ export function generatePayments(params, cb) {
     let pid = generatePID()
 
     let payment = formatPaymentOnboardingState({
+      pid,
       state: paymentOnboardingState,
       paymentType: paymentOnboardingState.confirming,
       currentUser: currentUser,
@@ -81,7 +82,7 @@ export function generatePaymentStatus(params, cb) {
 }
 
 export function formatPaymentOnboardingState(params) {
-  let {state, paymentType, currentUser, otherUser} = params
+  let {pid, state, paymentType, currentUser, otherUser} = params
 
   let sender = {
     sender_id: (paymentType === "request") ? otherUser.uid : currentUser.uid,
@@ -112,7 +113,8 @@ export function formatPaymentOnboardingState(params) {
     startTime: state.startUTCString,
     type: (state.confirming === "pay") ? "payment" : "request",
     created_at: Date.now(),
-    token: currentUser.token
+    token: currentUser.token,
+    pid
   }
 
   return Object.assign({}, sender, recip, inviteDetails, paymentDetails)
