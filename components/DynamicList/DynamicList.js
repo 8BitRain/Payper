@@ -9,6 +9,7 @@
     - [ ] Implement exit animations for DynamicListRows
 **/
 import React from 'react'
+import * as _ from 'lodash'
 import {View, ListView, Animated, RecyclerViewBackedScrollView} from 'react-native'
 
 class DynamicListRow extends React.Component {
@@ -81,8 +82,7 @@ class DynamicList extends React.Component {
       loading: true,
       dataSource: (props.data)
         ? this.emptyDataSource.cloneWithRowsAndSections(props.data)
-        : this.emptyDataSource,
-      refreshing: false
+        : this.emptyDataSource
     }
 
     this.rowRefs = []
@@ -128,17 +128,30 @@ class DynamicList extends React.Component {
     if (mutations) mutate(mutations, this)
 
     function add(additions, scope) {
-      if (additions.out) data.out = Object.assign({}, data.out, additions.out)
-      if (additions.in) data.in = Object.assign({}, data.in, additions.in)
+      for (var k in additions)
+        data[k] = Object.assign({}, data[k], additions[k])
     }
 
     function remove(removals, scope) {
+      let omittances = []
+
       for (var i = 0; i < removals.length; i++) {
+        const INDEX = i
         const curr = removals[i]
-        let ref = scope.rowRefs[curr]
+        const ref = scope.rowRefs[curr]
+
         ref.beforeUnmount(() => {
-          console.log(`Safe to unmount row ${curr}`)
-          
+          // Done animating rows out, create new dataSource & trigger re-render
+          if (INDEX === removals.length - 1) {
+            for (var k in data) {
+              let section = data[k]
+              if (section[curr]) data[k] = _.omit(section, curr)
+            }
+
+            let updatedDataSource = scope.emptyDataSource.cloneWithRowsAndSections(data)
+
+            scope.setState({dataSource: updatedDataSource})
+          }
         })
       }
     }
