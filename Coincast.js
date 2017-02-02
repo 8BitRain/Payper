@@ -38,7 +38,6 @@ let version = DeviceInfo.getVersion()
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params)
   return (state, action) => {
-    // console.log("ACTION:", action)
     return defaultReducer(state, action)
   }
 }
@@ -91,13 +90,11 @@ export default class Coincast extends React.Component {
       <Router key={Math.random()} createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar hideTabBar>
-
             <Scene
               component={SplashViewContainer}
               key="SplashViewContainer"
               type="replace"
               panHandlers={null} />
-
 
             <Scene
               component={BetaLandingScreenView}

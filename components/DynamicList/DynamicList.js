@@ -79,7 +79,7 @@ class DynamicList extends React.Component {
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2
     })
 
-    this.state = {
+    this.state = props.state || {
       loading: true,
       query: "",
       dataSource: (props.data)
@@ -216,11 +216,6 @@ class DynamicList extends React.Component {
   render() {
     let {dataSource, filteredDataSource, renderHeader, renderFooter} = this.state
     let {renderSectionHeader} = this.props
-
-    console.log("")
-    console.log("Render was invoked")
-    console.log("dataSource\n", dataSource)
-    console.log("filteredDataSource\n", filteredDataSource)
 
     return(
       <View style={{flex: 1.0}}>

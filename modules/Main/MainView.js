@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import * as _ from 'lodash'
 import { Actions } from 'react-native-router-flux'
-import { View, TouchableHighlight, ListView, ScrollView, RecyclerViewBackedScrollView, Dimensions, Animated, Easing, StatusBar, Text, Image, Modal, Alert } from 'react-native'
+import { View, TouchableHighlight, ListView, ScrollView, RecyclerViewBackedScrollView, Dimensions, Animated, Easing, StatusBar, Text, Image, Modal, Alert, TextInput } from 'react-native'
 import { VibrancyView } from "react-native-blur"
 import Drawer from 'react-native-drawer'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -26,7 +26,9 @@ class MainView extends React.Component {
     let plusAngleInterpolator = new Animated.Value(0)
     let chevronAngleInterpolator = new Animated.Value(0)
 
-    this.animatedValues = {
+
+    this.AV = {
+      searchBarBGOpacity: new Animated.Value(0),
       chevronAngleInterpolator: chevronAngleInterpolator,
       chevronAngle: chevronAngleInterpolator.interpolate({inputRange: [0, 150], outputRange: ['0deg', '180deg']}),
       plusAngleInterpolator: plusAngleInterpolator,
@@ -34,6 +36,7 @@ class MainView extends React.Component {
     }
 
     this.state = {
+      searchBarVisible: false,
       mounted: false
     }
   }
@@ -67,7 +70,7 @@ class MainView extends React.Component {
   }
 
   rotateToX() {
-    let { plusAngleInterpolator } = this.animatedValues
+    let { plusAngleInterpolator } = this.AV
 
     Animated.timing(plusAngleInterpolator, {
       toValue: 150,
@@ -77,13 +80,35 @@ class MainView extends React.Component {
   }
 
   rotateToPlus() {
-    let { plusAngleInterpolator } = this.animatedValues
+    let { plusAngleInterpolator } = this.AV
 
     Animated.timing(plusAngleInterpolator, {
       toValue: 0,
       duration: 320,
       easing: Easing.elastic(1.0)
     }).start()
+  }
+
+  toggleSearchBar() {
+    this.setState({searchBarVisible: !this.state.searchBarVisible}, () => {
+      let {searchBarBGOpacity} = this.AV
+
+      // Toggle search bar background color
+      Animated.timing(searchBarBGOpacity, {
+        toValue: (this.state.searchBarVisible) ? 1 : 0,
+        duration: 200
+      }).start()
+
+      // Toggle payment list header/footer visibility
+      if (this.state.searchBarVisible) {
+        this.state.paymentListRef.hideHeader()
+        this.state.paymentListRef.hideFooter()
+      } else {
+        this.state.paymentListRef.filter("")
+        this.state.paymentListRef.showHeader()
+        this.state.paymentListRef.showFooter()
+      }
+    })
   }
 
   render() {
@@ -105,34 +130,53 @@ class MainView extends React.Component {
         }>
 
         <View style={{flex: 1.0, backgroundColor: colors.lightGrey}}>
-          <StatusBar barStyle={"light-content"} />
+          <StatusBar barStyle={(this.state.searchBarVisible) ? "default" : "light-content"} />
 
           { /* Header */ }
-          <View style={{overflow: 'hidden'}}>
+          <View style={{flexDirection: 'row', height: 60, overflow: 'hidden', borderBottomWidth: (this.state.searchBarVisible) ? 1 : 0, borderColor: colors.accent}}>
             <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
+            <Animated.View style={{opacity: this.AV.searchBarBGOpacity, position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.snowWhite}} />
 
-            <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>
-              <Text style={{color: colors.lightGrey, fontSize: 17, backgroundColor: 'transparent'}}>
-                {"My Payments"}
-              </Text>
+            { /* Hamburger / X icon */ }
+            <TouchableHighlight
+              style={{flex: 0.15}}
+              activeOpacity={0.75}
+              underlayColor={'transparent'}
+              onPress={() => (this.state.searchBarVisible) ? this.toggleSearchBar() : this.drawer.open()}>
+              <View style={{flex: 1.0, paddingTop: 18, justifyContent: 'center', alignItems: 'center'}}>
+                {(this.state.searchBarVisible)
+                  ? <EvilIcons name={"close"} color={(this.state.searchBarVisible) ? colors.accent : colors.snowWhite} size={26} />
+                  : <EvilIcons name={"navicon"} color={colors.snowWhite} size={26} /> }
+              </View>
+            </TouchableHighlight>
+
+            { /* Title */ }
+            <View style={{flex: 0.7, paddingTop: 18, justifyContent: 'center', alignItems: 'center'}}>
+              {(!this.state.searchBarVisible)
+                ? <Text style={{color: colors.snowWhite, fontSize: 18, backgroundColor: 'transparent'}}>
+                    {"My Payments"}
+                  </Text>
+                : <TextInput
+                    autoFocus
+                    autoCorrect={false}
+                    returnKeyType={"done"}
+                    style={{height: 30}}
+                    placeholder={"Filter by name or purpose"}
+                    placeholderTextColor={colors.slateGrey}
+                    onChangeText={(text) => this.state.paymentListRef.filter(text)} /> }
             </View>
-          </View>
 
-          { /* Search Bar (TODO: DESIGN IT) */ }
-          <SearchBar
-            onFocus={() => {
-              this.state.paymentListRef.hideHeader()
-              this.state.paymentListRef.hideFooter()
-            }}
-            onBlur={() => {
-              this.state.paymentListRef.showHeader()
-              this.state.paymentListRef.showFooter()
-            }}
-            onChangeText={(e) => this.state.paymentListRef.filter(e)}
-            textInputProps={{
-              placeholder: "Filter by name or purpose",
-              placeholderTextColor: colors.slateGrey
-            }} />
+            { /* Hamburger / X icon */ }
+            <TouchableHighlight
+              style={{flex: 0.15}}
+              activeOpacity={0.75}
+              underlayColor={'transparent'}
+              onPress={() => this.toggleSearchBar()}>
+              <View style={{flex: 1.0, paddingTop: 18, justifyContent: 'center', alignItems: 'center'}}>
+                <EvilIcons name={"search"} color={(this.state.searchBarVisible) ? colors.accent : colors.snowWhite} size={26} />
+              </View>
+            </TouchableHighlight>
+          </View>
 
           { /* StatusCard (header), PayCards (dataSource), TrendingPayments (footer) */ }
           <DynamicList
@@ -204,7 +248,7 @@ class MainView extends React.Component {
                 this.trackOnce.report("buttonPress/newPayment", this.props.currentUser.uid)
               }}
               style={{padding: 14, paddingRight: 20}}>
-              <Animated.View style={{justifyContent: 'center', alignItems: 'center', transform: [{ rotate: this.animatedValues.plusAngle }]}}>
+              <Animated.View style={{justifyContent: 'center', alignItems: 'center', transform: [{ rotate: this.AV.plusAngle }]}}>
                 <EvilIcons name={"plus"} size={40} color={colors.accent} />
               </Animated.View>
             </TouchableHighlight>

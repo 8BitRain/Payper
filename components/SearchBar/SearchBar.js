@@ -37,15 +37,6 @@ class SearchBar extends React.Component {
           onFocus={this.onFocus}
           onBlur={this.onBlur}
           onChangeText={this.props.onChangeText} />
-
-        <View style={styles.divider} />
-
-        <View style={styles.iconWrap}>
-          <EvilIcons
-            name={"search"}
-            size={24}
-            color={(this.state.focused) ? colors.accent : colors.medGrey} />
-        </View>
       </View>
     )
   }
@@ -53,23 +44,15 @@ class SearchBar extends React.Component {
 
 const styles = {
   wrap: {
-    width: dims.width, height: 50,
+    flex: 1.0, height: 50,
     backgroundColor: colors.snowWhite,
     borderColor: colors.medGrey, borderBottomWidth: 1,
     flexDirection: 'row',
     justifyContent: 'center', alignItems: 'center'
   },
   textInput: {
-    flex: 0.85,
+    flex: 1.0,
     paddingLeft: 16
-  },
-  iconWrap: {
-    flex: 0.15,
-    justifyContent: 'center', alignItems: 'center'
-  },
-  divider: {
-    width: 1, height: 25,
-    backgroundColor: colors.medGrey
   }
 }
 
