@@ -21,9 +21,11 @@ import com.facebook.react.shell.MainReactPackage;
 
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import com.microsoft.codepush.react.CodePush;
+import com.microsoft.codepush.react.ReactInstanceHolder;
 
 import java.util.Arrays;
 import java.util.List;
+
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -70,7 +72,7 @@ public class MainApplication extends Application implements ReactApplication {
                     new WebViewBridgePackage(),
                     BugsnagReactNative.getPackage(),
                     new FacebookLoginPackage(),
-                    new CodePush("PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3", MainApplication.this, com.payper.BuildConfig.DEBUG),
+                    new CodePush(BuildConfig.CODEPUSH_KEY, MainApplication.this, com.payper.BuildConfig.DEBUG),
                     new ReactNativeContacts()
             );
         }

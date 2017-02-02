@@ -85,8 +85,8 @@ android {
         applicationId "com.payper"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.3"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -99,10 +99,26 @@ android {
             include "armeabi-v7a", "x86"
         }
     }
+    signingConfigs {
+        release {
+            storeFile file(MYAPP_RELEASE_STORE_FILE)
+            storePassword MYAPP_RELEASE_STORE_PASSWORD
+            keyAlias MYAPP_RELEASE_KEY_ALIAS
+            keyPassword MYAPP_RELEASE_KEY_PASSWORD
+        }
+    }
+
     buildTypes {
+        debug {
+            buildConfigField "String", "CODEPUSH_KEY", '"AarYhu5gwn2uwqhzXiLJ3Rglm9MBVkksGQK3"'
+        }
+
+
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            buildConfigField "String", "CODEPUSH_KEY", '"PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3"'
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
