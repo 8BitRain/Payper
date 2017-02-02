@@ -10,7 +10,7 @@ import {colors} from '../../globalStyles'
 import {
   SideMenu, PayCard, StatusCard, PhotoUploader, MicrodepositOnboarding,
   TrendingPayments, DynamicList, ExploreTrendingPaymentsButton, EmptyState,
-  AlternateStatusCard, SearchBar
+  AlternateStatusCard
 } from '../../components'
 import KYCOnboardingView from '../../components/KYCOnboarding/KYCOnboardingView'
 import {MyProfile, BankAccounts, Notifications, Invite, Settings} from '../../components/SideMenuSubpages'

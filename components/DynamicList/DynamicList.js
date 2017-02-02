@@ -171,6 +171,8 @@ class DynamicList extends React.Component {
     let {data} = this.props
     let filteredData = {}
 
+    query = query.toString().toLowerCase()
+
     // Filter data
     for (var sectionKey in data) {
       const section = data[sectionKey]
@@ -179,7 +181,13 @@ class DynamicList extends React.Component {
       for (var i = 0; i < keys.length; i++) {
         const key = keys[i]
         const curr = section[key]
-        const isMatch = curr.recip_name.indexOf(query) >= 0
+        const isMatch =
+          curr.recip_name.toLowerCase().indexOf(query) >= 0
+          || curr.sender_name.toLowerCase().indexOf(query) >= 0
+          || curr.recip_username && curr.recip_username.toLowerCase().indexOf(query) >= 0
+          || curr.sender_username && curr.sender_username.toLowerCase().indexOf(query) >= 0
+          || curr.purpose.toLowerCase().indexOf(query) >= 0
+          || curr.amount.toString().toLowerCase().indexOf(query) >= 0
         if (isMatch) filteredData[sectionKey][key] = curr
       }
     }
