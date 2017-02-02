@@ -10,7 +10,7 @@ import {colors} from '../../globalStyles'
 import {
   SideMenu, PayCard, StatusCard, PhotoUploader, MicrodepositOnboarding,
   TrendingPayments, DynamicList, ExploreTrendingPaymentsButton, EmptyState,
-  AlternateStatusCard
+  AlternateStatusCard, SearchBar
 } from '../../components'
 import KYCOnboardingView from '../../components/KYCOnboarding/KYCOnboardingView'
 import {MyProfile, BankAccounts, Notifications, Invite, Settings} from '../../components/SideMenuSubpages'
@@ -118,15 +118,21 @@ class MainView extends React.Component {
             </View>
           </View>
 
-          { /* Banner info and payment list
-            <ListView
-              dataSource={dataSource}
-              renderRow={this.renderRow.bind(this)}
-              renderHeader={() => <StatusCard {...this.props} />}
-              renderFooter={() => <View style={{height: 90}} />}
-              renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-              enableEmptySections />
-          */ }
+          { /* Search Bar (TODO: DESIGN IT) */ }
+          <SearchBar
+            onFocus={() => {
+              this.state.paymentListRef.hideHeader()
+              this.state.paymentListRef.hideFooter()
+            }}
+            onBlur={() => {
+              this.state.paymentListRef.showHeader()
+              this.state.paymentListRef.showFooter()
+            }}
+            onChangeText={(e) => this.state.paymentListRef.filter(e)}
+            textInputProps={{
+              placeholder: "Filter by name or purpose",
+              placeholderTextColor: colors.slateGrey
+            }} />
 
           { /* StatusCard (header), PayCards (dataSource), TrendingPayments (footer) */ }
           <DynamicList

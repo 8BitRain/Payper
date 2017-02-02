@@ -4,9 +4,10 @@
     - [X] Add header functionality
     - [X] Add footer functionality
     - [X] Add section header functionality
-    - [ ] Implement optimistic additions
-    - [ ] Implement optimistic removals
-    - [ ] Implement exit animations for DynamicListRows
+    - [X] Implement optimistic additions
+    - [X] Implement optimistic removals
+    - [X] Implement exit animations for DynamicListRows
+    - [ ] Implement search bar
 **/
 import React from 'react'
 import * as _ from 'lodash'
@@ -80,12 +81,16 @@ class DynamicList extends React.Component {
 
     this.state = {
       loading: true,
+      query: "",
       dataSource: (props.data)
         ? this.emptyDataSource.cloneWithRowsAndSections(props.data)
-        : this.emptyDataSource
+        : this.emptyDataSource,
+      filteredDataSource: null,
+      renderHeader: props.renderHeader,
+      renderFooter: props.renderFooter
     }
 
-    this.rowRefs = []
+    this.rowRefs = {}
 
     this.renderRow = this.renderRow.bind(this)
   }
@@ -162,15 +167,66 @@ class DynamicList extends React.Component {
     }
   }
 
+  filter(query) {
+    let {data} = this.props
+    let filteredData = {}
+
+    // Filter data
+    for (var sectionKey in data) {
+      const section = data[sectionKey]
+      const keys = Object.keys(section)
+      filteredData[sectionKey] = {}
+      for (var i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        const curr = section[key]
+        const isMatch = curr.recip_name.indexOf(query) >= 0
+        if (isMatch) filteredData[sectionKey][key] = curr
+      }
+    }
+
+    // Trigger re-render
+    if (Object.keys(filteredData).length > 0) {
+      let filteredDataSource = this.emptyDataSource.cloneWithRowsAndSections(filteredData)
+      this.setState({filteredDataSource})
+    } else {
+      this.setState({filteredDataSource: null})
+    }
+  }
+
+  showHeader() {
+    if (!this.props.renderHeader) return
+    this.setState({renderHeader: this.props.renderHeader})
+  }
+
+  hideHeader() {
+    if (!this.props.renderHeader) return
+    this.setState({renderHeader: () => <View />})
+  }
+
+  showFooter() {
+    if (!this.props.renderFooter) return
+    this.setState({renderFooter: this.props.renderFooter})
+  }
+
+  hideFooter() {
+    if (!this.props.renderFooter) return
+    this.setState({renderFooter: () => <View />})
+  }
+
   render() {
-    let {dataSource} = this.state
-    let {renderHeader, renderFooter, renderSectionHeader} = this.props
+    let {dataSource, filteredDataSource, renderHeader, renderFooter} = this.state
+    let {renderSectionHeader} = this.props
+
+    console.log("")
+    console.log("Render was invoked")
+    console.log("dataSource\n", dataSource)
+    console.log("filteredDataSource\n", filteredDataSource)
 
     return(
       <View style={{flex: 1.0}}>
         <ListView
           enableEmptySections
-          dataSource={dataSource}
+          dataSource={filteredDataSource || dataSource}
           renderRow={this.renderRow}
           renderSectionHeader={renderSectionHeader}
           renderHeader={renderHeader}
