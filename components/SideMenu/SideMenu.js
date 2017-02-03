@@ -18,6 +18,9 @@ let imageDims = {
   height: dims.width * 0.15,
 }
 
+
+
+
 class Row extends React.Component {
   constructor(props) {
     super(props)
@@ -57,6 +60,8 @@ class SideMenu extends React.Component {
 
     let { currentUser } = this.props
     let trackOnce = new TrackOnce()
+
+    this.sideOpacity = (DeviceInfo.getSystemName("Android") ? 1 : .8  );
 
     this.state = {
       options: [
@@ -153,7 +158,8 @@ class SideMenu extends React.Component {
     let initials = initialsBuffer.join("")
 
     return(
-      <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', paddingTop: 10, backgroundColor: "rgba(255, 251, 252, 0.8)"}}>
+      <View style={{flex: 1.0, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', paddingTop: 10, backgroundColor: "rgba(255, 251, 252, " + this.sideOpacity + ")"}}>
+      {console.log(this.sideOpacity)}
         {/* <VibrancyView blurType={"light"} style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}}  /> */}
         { this._renderVibrancyView() }
 
