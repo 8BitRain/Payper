@@ -26,7 +26,6 @@ class MainView extends React.Component {
     let plusAngleInterpolator = new Animated.Value(0)
     let chevronAngleInterpolator = new Animated.Value(0)
 
-
     this.AV = {
       searchBarBGOpacity: new Animated.Value(0),
       chevronAngleInterpolator: chevronAngleInterpolator,
@@ -186,6 +185,7 @@ class MainView extends React.Component {
             renderSectionHeader={(rowData, sectionID) => {
               let numRows = Object.keys(rowData).length
               let title
+              
               switch (sectionID) {
                 case "in": title = `Incoming Payments (${numRows})`; break;
                 case "out": title = `Outgoing Payments (${numRows})`; break;

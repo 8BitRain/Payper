@@ -122,6 +122,12 @@ class AlternateStatusCard extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.setState({
+      onboardingPercentage: getOnboardingPercentage(this.props.currentUser.appFlags)
+    })
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       onboardingPercentage: getOnboardingPercentage(nextProps.currentUser.appFlags)
