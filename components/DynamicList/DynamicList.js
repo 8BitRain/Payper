@@ -151,18 +151,25 @@ class DynamicList extends React.Component {
         ref.beforeUnmount(() => {
           // Done animating row out, create new dataSource & trigger re-render
           if (INDEX === removals.length - 1) {
+            // Remove row data from data source
             for (var sectionKey in data) {
               let section = data[sectionKey]
               if (section[curr]) data[sectionKey] = _.omit(section, curr)
             }
 
+            // Create new data source
             let updatedDataSource = scope.emptyDataSource.cloneWithRowsAndSections(data)
 
             // Re-filter
             if (scope.state.filteredDataSource && scope.state.query)
               scope.filter(scope.state.query)
 
+            // Trigger re-render
             scope.setState({dataSource: updatedDataSource})
+
+            // Invoke callback (if any)
+            if (scope.props.afterRemove)
+              scope.props.afterRemove()
           }
         })
       }

@@ -156,6 +156,7 @@ class MainView extends React.Component {
                     {"My Payments"}
                   </Text>
                 : <TextInput
+                    ref="searchBar"
                     autoFocus
                     autoCorrect={false}
                     returnKeyType={"done"}
@@ -180,6 +181,7 @@ class MainView extends React.Component {
           { /* StatusCard (header), PayCards (dataSource), TrendingPayments (footer) */ }
           <DynamicList
             data={this.props.currentUser.paymentFlow}
+            afterRemove={() => (this.state.searchBarVisible) ? this.refs.searchBar.focus() : null}
             induceRef={(ref) => this.setState({paymentListRef: ref})}
             renderRow={(rowData, sectionID, rowID) => <PayCard {...this.props} payment={rowData} />}
             renderSectionHeader={(rowData, sectionID) => {
