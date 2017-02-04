@@ -7,7 +7,10 @@
     - [X] Implement optimistic additions
     - [X] Implement optimistic removals
     - [X] Implement exit animations for DynamicListRows
-    - [ ] Implement search bar
+    - [ ] Implement filter
+
+    TODO (BACKBURNER)
+    - [ ]
 **/
 import React from 'react'
 import * as _ from 'lodash'
@@ -146,14 +149,18 @@ class DynamicList extends React.Component {
         const ref = scope.rowRefs[curr]
 
         ref.beforeUnmount(() => {
-          // Done animating rows out, create new dataSource & trigger re-render
+          // Done animating row out, create new dataSource & trigger re-render
           if (INDEX === removals.length - 1) {
-            for (var k in data) {
-              let section = data[k]
-              if (section[curr]) data[k] = _.omit(section, curr)
+            for (var sectionKey in data) {
+              let section = data[sectionKey]
+              if (section[curr]) data[sectionKey] = _.omit(section, curr)
             }
 
             let updatedDataSource = scope.emptyDataSource.cloneWithRowsAndSections(data)
+
+            // Re-filter
+            if (scope.state.filteredDataSource && scope.state.query)
+              scope.filter(scope.state.query)
 
             scope.setState({dataSource: updatedDataSource})
           }
@@ -192,13 +199,14 @@ class DynamicList extends React.Component {
       }
     }
 
-    // Trigger re-render
-    if (Object.keys(filteredData).length > 0) {
-      let filteredDataSource = this.emptyDataSource.cloneWithRowsAndSections(filteredData)
-      this.setState({filteredDataSource})
-    } else {
-      this.setState({filteredDataSource: null})
+    let updatedState = {
+      query: query,
+      filteredDataSource: (Object.keys(filteredData).length > 0)
+        ? this.emptyDataSource.cloneWithRowsAndSections(filteredData)
+        : null
     }
+
+    this.setState(updatedState)
   }
 
   showHeader() {
@@ -228,7 +236,6 @@ class DynamicList extends React.Component {
     return(
       <View style={{flex: 1.0}}>
         <ListView
-          enableEmptySections
           dataSource={filteredDataSource || dataSource}
           renderRow={this.renderRow}
           renderSectionHeader={renderSectionHeader}

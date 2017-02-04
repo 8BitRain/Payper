@@ -185,7 +185,7 @@ class MainView extends React.Component {
             renderSectionHeader={(rowData, sectionID) => {
               let numRows = Object.keys(rowData).length
               let title
-              
+
               switch (sectionID) {
                 case "in": title = `Incoming Payments (${numRows})`; break;
                 case "out": title = `Outgoing Payments (${numRows})`; break;
