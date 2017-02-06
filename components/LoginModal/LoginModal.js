@@ -8,6 +8,7 @@ import User from '../../classes/User'
 import { colors } from '../../globalStyles'
 import * as Validate from '../../helpers/Validate'
 import StickyTextInput from './subcomponents/StickyTextInput'
+import DeviceInfo from 'react-native-device-info'
 const dims = Dimensions.get('window')
 
 export default class LoginModal extends React.Component {

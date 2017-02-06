@@ -9,7 +9,7 @@ import { colors } from '../../../globalStyles'
 // Screen dimensions
 const dims = Dimensions.get('window')
 const AnimatedTouchableHighlight = Animated.createAnimatedComponent(TouchableHighlight)
-import { DeviceInfo } from "react-native-device-info"
+import  DeviceInfo  from "react-native-device-info"
 
 export default class StickyTextInput extends React.Component {
   constructor(props) {
@@ -105,7 +105,7 @@ export default class StickyTextInput extends React.Component {
 
   render() {
     return(
-      <View style={{ flex: 1.0, backgroundColor: colors.snowWhiteOpaque }}>
+      <View style={styles.modalWrap}>
         {/* <VibrancyView blurType="light" style={styles.blur} /> */}
         { this._renderVibrancyView() }
 
@@ -187,6 +187,10 @@ export default class StickyTextInput extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  modalWrap: {
+    flex: 1.0,
+    backgroundColor: DeviceInfo.getSystemName() == "Android" ? colors.snowWhite : colors.snowWhiteOpaque,
+  },
   blur: {
     position: 'absolute',
     top: 0, left: 0, right: 0, bottom: 0
