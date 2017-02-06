@@ -208,7 +208,7 @@ class BankAccountAdded extends React.Component {
             underlayColor={'transparent'}
             onPress={() => {
               // If user is unverified, show money bag animation
-              /*if (this.props.shouldShowAccountVerification) {
+              if (this.props.shouldShowAccountVerification) {
                 this.setState({buttonFadeState: 1});
                 this.fade_confetti();
                 this.transistion_view();
@@ -217,10 +217,7 @@ class BankAccountAdded extends React.Component {
               // Otherwise, go back to app
               else {
                 this.props.skipDestination()
-              }*/
-              this.setState({buttonFadeState: 1});
-              this.fade_confetti();
-              this.transistion_view();
+              }
             }}
             style={{height: DeviceInfo.getSystemName() == "Android" ? 60 : 40, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
                 <Text style={styles.buttonText}>{"Great!"}</Text>

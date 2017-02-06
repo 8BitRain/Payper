@@ -99,13 +99,6 @@ export default class Coincast extends React.Component {
               type="replace"
               panHandlers={null} />
 
-              <Scene
-                initial
-                component={BankAccountAdded}
-                key="BankAccountAdded"
-                type="replace"
-                panHandlers={null} />
-
             <Scene
               component={LandingScreenViewContainer}
               key="LandingScreenViewContainer"
