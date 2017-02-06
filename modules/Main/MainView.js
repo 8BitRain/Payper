@@ -140,11 +140,11 @@ class MainView extends React.Component {
               style={{flex: 0.15}}
               activeOpacity={0.75}
               underlayColor={'transparent'}
-              onPress={() => (this.state.searchBarVisible) ? this.toggleSearchBar() : this.drawer.open()}>
+              onPress={() => (this.state.searchBarVisible) ? this.toggleSearchBar() : null /* this.drawer.open() */}>
               <View style={{flex: 1.0, paddingTop: 18, justifyContent: 'center', alignItems: 'center'}}>
                 {(this.state.searchBarVisible)
                   ? <EvilIcons name={"close"} color={(this.state.searchBarVisible) ? colors.accent : colors.snowWhite} size={26} />
-                  : <EvilIcons name={"navicon"} color={colors.snowWhite} size={26} /> }
+                  : null /* <EvilIcons name={"navicon"} color={colors.snowWhite} size={26} /> } */}
               </View>
             </TouchableHighlight>
 
