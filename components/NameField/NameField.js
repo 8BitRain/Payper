@@ -6,6 +6,7 @@ import {VibrancyView} from 'react-native-blur'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
+import DeviceInfo from 'react-native-device-info'
 const dims = Dimensions.get('window')
 
 class NameField extends React.Component {
@@ -19,7 +20,8 @@ class NameField extends React.Component {
       height: new Animated.Value(70),
       valueOpacity: new Animated.Value((value) ? 1 : 0),
       valueHeight: new Animated.Value((value) ? 20 : 0),
-      valuePaddingBottom: new Animated.Value((value) ? 16 : 0)
+      valuePaddingBottom: new Animated.Value((value) ? DeviceInfo.getSystemName() == "Android" ? 9 : 16 : 0)
+
     }
 
     this.state = {

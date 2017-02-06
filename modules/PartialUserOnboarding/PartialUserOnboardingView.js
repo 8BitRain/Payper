@@ -110,7 +110,7 @@ export default class PartialUserOnboardingView extends React.Component {
         <StatusBar barStyle={"light-content"} />
 
         { /* Header */ }
-        <View style={{overflow: 'hidden'}} onLayout={(e) => this.setState({headerHeight: e.nativeEvent.layout.height})}>
+        <View style={{overflow: 'hidden', zIndex: 0}} onLayout={(e) => this.setState({headerHeight: e.nativeEvent.layout.height})}>
           <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
 
           <View style={{padding: 12, paddingTop: 27, flexDirection: 'row', justifyContent: 'center', backgroundColor: 'transparent'}}>

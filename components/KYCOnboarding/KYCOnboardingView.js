@@ -226,7 +226,7 @@ class KYCOnboardingView extends React.Component {
             <TouchableHighlight
               underlayColor={'transparent'}
               onPress={() => (this.state.loading) ? null : this.verify()}>
-              <Text style={{textAlign: 'center', width: dims.width * 0.85, marginTop: 15, fontSize: 16, color: colors.snowWhite, backgroundColor: colors.gradientGreen, padding: 14, borderRadius: 4, overflow: 'hidden'}}>
+              <Text style={{textAlign: 'center', width: dims.width * 0.85, marginTop: 15, fontSize: 16, color: colors.snowWhite, backgroundColor: colors.gradientGreen, padding: 14, borderRadius: 4, overflow: 'hidden', zIndex: 0}}>
                 {(this.state.loading)
                   ? "Verifying your account..."
                   : "Verify"}

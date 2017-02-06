@@ -8,6 +8,7 @@ import {StickyView} from '../../components'
 import {VibrancyView} from 'react-native-blur'
 import {AddressTextInput} from './subcomponents'
 import {ListOfStates, ListOfStateAbbreviations} from '../../helpers'
+import DeviceInfo from 'react-native-device-info'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
@@ -115,7 +116,7 @@ class AddressField extends React.Component {
         duration: 140
       }),
       Animated.timing(this.AV.valuePaddingBottom, {
-        toValue: 16,
+        toValue: DeviceInfo.getSystemName() == "Android" ? 9 : 16,
         duration: 140
       })
     ]

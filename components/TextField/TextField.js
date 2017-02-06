@@ -6,6 +6,7 @@ import {VibrancyView} from 'react-native-blur'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
+import DeviceInfo from 'react-native-device-info'
 const dims = Dimensions.get('window')
 
 class TextField extends React.Component {
@@ -87,7 +88,7 @@ class TextField extends React.Component {
         duration: 140
       }),
       Animated.timing(this.AV.valuePaddingBottom, {
-        toValue: 16,
+        toValue: DeviceInfo.getSystemName() == "Android" ? 9 : 16,
         duration: 140
       })
     ]

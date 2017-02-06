@@ -224,7 +224,7 @@ class MainView extends React.Component {
           <StatusBar barStyle={"light-content"} />
 
           { /* Header */ }
-          <View style={{overflow: 'hidden'}}>
+          <View style={{overflow: 'hidden', zIndex: 0}}>
             <Image source={require('../../assets/images/bg-header.jpg')} style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
 
             <TouchableHighlight
