@@ -78,6 +78,8 @@ class PaymentOnboardingView extends React.Component {
   }
 
   toggleFieldFocus(title, shouldContinueFlow) {
+    shouldContinueFlow = false // comment out to enable auto flow
+
     let {scrollTop, scrollTopCache, inFlow, haventFocusedAFieldYet} = this.state
     let fieldIsFocused = this.fieldRefs[title].state.focused
 
