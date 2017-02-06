@@ -1,7 +1,8 @@
 import firebase from 'firebase'
+import moment from 'moment'
 
 export function generatePayments(params, cb) {
-  let {paymentOnboardingState, currentUser} = params
+  let {paymentOnboardingState, currentUser, appFlagMap} = params
   let payments = {}
 
   for (var i = 0; i < paymentOnboardingState.who.length; i++) {
@@ -18,7 +19,7 @@ export function generatePayments(params, cb) {
     })
 
     let paymentStatus = generatePaymentStatus({
-      currentUser,
+      currentUser, appFlagMap,
       paymentType: paymentOnboardingState.confirming,
       senderID: payment.sender_id,
       recipID: payment.recip_id
@@ -26,8 +27,6 @@ export function generatePayments(params, cb) {
       payment.status = status
       payments[pid] = payment
       if (INDEX === paymentOnboardingState.who.length - 1) {
-        console.log("INDEX", INDEX)
-        console.log("paymentOnboardingState.who.length", paymentOnboardingState.who.length)
         cb(payments) // return payments to caller for optimistic rendering
         storePayments(payments) // store payments in Firebase
       }
@@ -44,44 +43,34 @@ export function generatePID() {
 }
 
 export function generatePaymentStatus(params, cb) {
-  let {paymentType, senderID, recipID, currentUser} = params
+  let {appFlagMap, paymentType, senderID, recipID, currentUser} = params
 
   if (!senderID || !recipID) {
     cb("pendingInvite")
   } else {
     let currentUserIsSender = currentUser.uid === senderID
-    let path = `/appFlags/${(currentUserIsSender) ? recipID : senderID}`
 
-    fetchAppFlags(path, (res) => {
-      let senderAppFlags = (currentUserIsSender) ? currentUser.appFlags : res
-      let recipAppFlags = (currentUserIsSender) ? res : currentUser.appFlags
+    let senderAppFlags = (currentUserIsSender) ? currentUser.appFlags : appFlagMap[senderID]
+    let recipAppFlags = (currentUserIsSender) ? appFlagMap[recipID] : currentUser.appFlags
 
-      let senderOnboardingProgress = senderAppFlags.onboardingProgress
-      let recipOnboardingProgress = recipAppFlags.onboardingProgress
+    let senderOnboardingProgress = senderAppFlags.onboardingProgress
+    let recipOnboardingProgress = recipAppFlags.onboardingProgress
 
-      let senderNeedsBank = senderOnboardingProgress === "need-bank" || senderOnboardingProgress.indexOf("microdeposits") >= 0
-      let recipNeedsBank = recipOnboardingProgress === "need-bank" || recipOnboardingProgress.indexOf("microdeposits") >= 0
-      let recipNeedsKYC = recipOnboardingProgress.indexOf("kyc") >= 0 && recipOnboardingProgress !== "kyc-success" && recipOnboardingProgress !== "kyc-successDismissed"
+    let senderNeedsBank = senderOnboardingProgress === "need-bank" || senderOnboardingProgress.indexOf("microdeposits") >= 0
+    let recipNeedsBank = recipOnboardingProgress === "need-bank" || recipOnboardingProgress.indexOf("microdeposits") >= 0
+    let recipNeedsKYC = recipOnboardingProgress.indexOf("kyc") >= 0 && recipOnboardingProgress !== "kyc-success" && recipOnboardingProgress !== "kyc-successDismissed"
 
-      let paymentStatus
-      if (senderNeedsBank && recipNeedsBank || recipNeedsKYC)
-        paymentStatus = "pendingBothFundingSource"
-      else if (senderNeedsBank)
-        paymentStatus = "pendingSenderFundingSource"
-      else if (recipNeedsBank)
-        paymentStatus = "pendingRecipFundingSource"
-      else
-        paymentStatus = "active"
+    let paymentStatus
+    if (senderNeedsBank && recipNeedsBank || recipNeedsKYC)
+      paymentStatus = "pendingBothFundingSource"
+    else if (senderNeedsBank)
+      paymentStatus = "pendingSenderFundingSource"
+    else if (recipNeedsBank)
+      paymentStatus = "pendingRecipFundingSource"
+    else
+      paymentStatus = "active"
 
-      cb(paymentStatus)
-    })
-  }
-
-  function fetchAppFlags(path, callback) {
-    firebase.database().ref(path).once('value', (snapshot) => {
-      let val = snapshot.val()
-      callback(val)
-    })
+    cb(paymentStatus)
   }
 }
 
@@ -115,6 +104,7 @@ export function formatPaymentOnboardingState(params) {
     purpose: state.whatFor,
     frequency: state.howOften,
     startTime: state.startUTCString,
+    nextPayment: state.startUTCString,
     type: (state.confirming === "pay") ? "payment" : "request",
     created_at: Date.now(),
     token: currentUser.token,
@@ -130,22 +120,7 @@ export function storePayments(payments) {
       storePayment(payments[pid])
   }, 100)
 
-  /**
-
-
-  where'd you leave off?
-
-  there's an issue where some payments aren't properly being written to
-  Firebase, specifically when sending payments in batches
-    - log payments and look for missing vars
-    - log firebase paths
-
-
-  **/
-
   function storePayment(payment) {
-    console.log("storing payment", payment)
-
     let {pid, type, sender_id, recip_id, invite} = payment
 
     let activePaymentsPath = (!invite) ? `activePayments/${pid}` : null

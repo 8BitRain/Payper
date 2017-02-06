@@ -18,7 +18,6 @@ import {BankOnboarding, PaymentOnboardingView} from '../../modules'
 import {TrackOnce} from '../../classes/Metrics'
 const dims = Dimensions.get('window')
 
-
 class MainView extends React.Component {
   constructor(props) {
     super(props)

@@ -187,7 +187,8 @@ class PaymentOnboardingView extends React.Component {
 
     generatePayments({
       currentUser,
-      paymentOnboardingState: this.state
+      paymentOnboardingState: this.state,
+      appFlagMap: this.fieldRefs["Who?"].appFlagMap
     }, (payments) => {
       let paymentListUpdates = (this.state.confirming === "request")
         ? {additions: {in: payments}}
