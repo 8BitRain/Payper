@@ -5,8 +5,10 @@ import { View, Text, TouchableHighlight, Animated, Easing, Image, Dimensions, St
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Confetti from 'react-native-confetti';
+
+import DeviceInfo from 'react-native-device-info';
 
 // Stylesheets
 import {colors} from '../../../globalStyles';
@@ -200,13 +202,13 @@ class BankAccountAdded extends React.Component {
 
     if(this.state.buttonState == 0){
       return(
-        <Animated.View style={{flex: 1, alignItems: "center", borderRadius: dimensions.width / 32.0, borderTopLeftRadius: 0, borderTopRightRadius: 0, overflow: "hidden", opacity: fade_confirmation_button, position: "absolute", top: dimensions.height * .71}}>
+        <Animated.View style={{flex: 1, alignItems: "center", borderRadius: dimensions.width / 32.0, borderTopLeftRadius: 0, borderTopRightRadius: 0, overflow: "hidden", opacity: fade_confirmation_button, position: "absolute", top: DeviceInfo.getSystemName() == "Android" ? dimensions.height * .68 : dimensions.height * .71}}>
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
             onPress={() => {
               // If user is unverified, show money bag animation
-              if (this.props.shouldShowAccountVerification) {
+              /*if (this.props.shouldShowAccountVerification) {
                 this.setState({buttonFadeState: 1});
                 this.fade_confetti();
                 this.transistion_view();
@@ -215,10 +217,12 @@ class BankAccountAdded extends React.Component {
               // Otherwise, go back to app
               else {
                 this.props.skipDestination()
-              }
+              }*/
+              this.setState({buttonFadeState: 1});
+              this.fade_confetti();
+              this.transistion_view();
             }}
-            style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
-
+            style={{height: DeviceInfo.getSystemName() == "Android" ? 60 : 40, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
                 <Text style={styles.buttonText}>{"Great!"}</Text>
           </TouchableHighlight>
         </Animated.View>
@@ -227,20 +231,20 @@ class BankAccountAdded extends React.Component {
 
     if(this.state.buttonState == 1){
       return(
-        <Animated.View style={{flex: 1, alignItems: "center", borderRadius: dimensions.width / 32.0, borderTopLeftRadius: 0, borderTopRightRadius: 0, overflow: "hidden", opacity: fade_confirmation_button, position: "absolute", top: dimensions.height * .71}}>
+        <Animated.View style={{flex: 1, alignItems: "center", borderRadius: dimensions.width / 32.0, borderTopLeftRadius: 0, borderTopRightRadius: 0, overflow: "hidden", opacity: fade_confirmation_button, position: "absolute", top: DeviceInfo.getSystemName() == "Android" ? dimensions.height * .68 : dimensions.height * .71}}>
           <View style={{flexDirection: "row"}}>
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={'transparent'}
               onPress={() => this.props.verifyAccountDestination()}
-              style={{height: 50, width: dimensions.width * .44, backgroundColor: colors.lightAccent, justifyContent: "center", borderRightColor: colors.accent, borderRightWidth: 3.0}}>
+              style={{height: DeviceInfo.getSystemName() == "Android" ? 60 : 50, width: dimensions.width * .44, backgroundColor: colors.lightAccent, justifyContent: "center", borderRightColor: colors.accent, borderRightWidth: 3.0}}>
                   <Text style={styles.buttonText}>{"Verify Account"}</Text>
             </TouchableHighlight>
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={'transparent'}
               onPress={() => this.props.skipDestination()}
-              style={{height: 50, width: dimensions.width * .44, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
+              style={{height: DeviceInfo.getSystemName() == "Android" ? 60 : 50, width: dimensions.width * .44, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
                   <Text style={styles.buttonText}>{"Skip"}</Text>
             </TouchableHighlight>
           </View>
@@ -373,7 +377,7 @@ class BankAccountAdded extends React.Component {
             </TouchableHighlight>
           </Animated.View>
           {/* Key */}
-          <Animated.View style={{flex: 1, position: "absolute", justifyContent: "center", alignItems: "center", left: 100, top: 120, opacity: transistion_view_opacity, transform: [{translateX: transistion_view}]}}>
+          <Animated.View style={{flex: 1, width: 200, height: 200, overflow: "visible", position: "absolute", justifyContent: "center", alignItems: "center", left: DeviceInfo.getSystemName() == "Android" ? 50 : 100, top: DeviceInfo.getSystemName() == "Android" ? 90 : 120, opacity: transistion_view_opacity, transform: [{translateX: transistion_view}]}}>
             <Animated.Image style={{width: 64, height: 64, transform: [{scaleX: loadKey_scaleChange}, {scaleY: loadKey_scaleChange}], opacity: 1}} source={require('../../../assets/images/key.png')}/>
           </Animated.View>
           {/* Money Bag */}
@@ -381,7 +385,7 @@ class BankAccountAdded extends React.Component {
             <Animated.Image style={{width: 60, height: 81}} source={require('../../../assets/images/moneybag.png')}/>
           </Animated.View>}
           {/* Extended Hand*/}
-          <Animated.View  style={{flex: 1, position: "absolute", justifyContent: "center", alignItems: "center", left: 100, top: 200, transform: [{translateY: transition_money_hand}], opacity: extendedhand_transition, width: 64, height: 64}}>
+          <Animated.View  style={{flex: 1, width: 122, height: 56, position: "absolute", justifyContent: "center", alignItems: "center", left: DeviceInfo.getSystemName() == "Android" ? 75 : 100, top: 200, transform: [{translateY: transition_money_hand}], opacity: extendedhand_transition}}>
             <Animated.Image style={{width: 122, height: 56}} source={require('../../../assets/images/extendedhand.png')}/>
           </Animated.View>
           {/* Send Money With Payper */}

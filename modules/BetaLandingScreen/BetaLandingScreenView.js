@@ -149,7 +149,7 @@ class BetaLandingScreenView extends React.Component {
 
   _getPhoneOnboarding() {
     return(
-      <View style={wrappers.modalWrap}>
+      <View style={[wrappers.modalWrap]}>
         {/*<VibrancyView blurType={"light"} style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}} />*/}
         {this._renderVibrancyView()}
 
@@ -309,7 +309,7 @@ const wrappers = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.snowWhiteOpaque,
+    backgroundColor: DeviceInfo.getSystemName() == "Android" ?  colors.snowWhite : colors.snowWhiteOpaque,
     width: dims.width,
   },
   modalHeader: {
@@ -334,6 +334,7 @@ const wrappers = StyleSheet.create({
   modalInputPhone: {
     width: dims.width * 0.6,
     marginLeft: dims.width * 0.2,
+    marginRight: DeviceInfo.getSystemName() == "Android" ? dims.width * .2 : 0,
     marginTop: 10,
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     height: 50,

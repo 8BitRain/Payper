@@ -129,7 +129,7 @@ export default class LandingScreenView extends React.Component {
           <View style={{flex: 1.0, justifyContent: 'center', alignItems: 'center'}}>
             { /* "Sign in with Facebook" button */ }
             <LoginButton
-              style={{width: dims.width - 60, height: 45, marginTop: 20}}
+              style={{width: dims.width - 60, height: 45, marginTop: 20, alignSelf: "center"}}
               readPermissions={["email", "public_profile", "user_friends"]}
               onLoginFinished={(err, res) => {
                 if (err) {
