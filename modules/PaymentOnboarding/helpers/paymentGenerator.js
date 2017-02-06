@@ -25,8 +25,12 @@ export function generatePayments(params, cb) {
     }, (status) => {
       payment.status = status
       payments[pid] = payment
-      if (INDEX === paymentOnboardingState.who.length - 1)
-        cb(payments) // return payments to caller
+      if (INDEX === paymentOnboardingState.who.length - 1) {
+        console.log("INDEX", INDEX)
+        console.log("paymentOnboardingState.who.length", paymentOnboardingState.who.length)
+        cb(payments) // return payments to caller for optimistic rendering
+        storePayments(payments) // store payments in Firebase
+      }
     })
   }
 }
@@ -118,4 +122,44 @@ export function formatPaymentOnboardingState(params) {
   }
 
   return Object.assign({}, sender, recip, inviteDetails, paymentDetails)
+}
+
+export function storePayments(payments) {
+  setTimeout(() => {
+    for (var pid in payments)
+      storePayment(payments[pid])
+  }, 100)
+
+  /**
+
+
+  where'd you leave off?
+
+  there's an issue where some payments aren't properly being written to
+  Firebase, specifically when sending payments in batches
+    - log payments and look for missing vars
+    - log firebase paths
+
+
+  **/
+
+  function storePayment(payment) {
+    console.log("storing payment", payment)
+
+    let {pid, type, sender_id, recip_id, invite} = payment
+
+    let activePaymentsPath = (!invite) ? `activePayments/${pid}` : null
+    let payFlowPath = `paymentFlow/${(type === 'request') ? recip_id : sender_id}/${(type === 'request') ? 'in' : 'out'}/${pid}`
+
+    // Strip payment JSON of 'undefined's
+    for (var k in payment)
+      if (typeof payment[k] === 'undefined')
+        delete payment[k]
+
+    // Write to Firebase
+    firebase.database().ref(payFlowPath).set(payment)
+    if (activePaymentsPath) firebase.database().ref(activePaymentsPath).set(payment)
+
+    // TODO: Hit queuePaymentSeries endpoint
+  }
 }
