@@ -82,13 +82,13 @@ class paydetails extends React.Component {
       let { token, pid, paymentType, status } = props
 
       // TODO: Optimistically delete payment card
-      // Lambda.cancelPayment({
-      //   token: token,
-      //   payment_id: pid,
-      //   type: paymentType,
-      //   status: status,
-      //   invite: status === "pendingInvite"
-      // })
+      Lambda.cancelPayment({
+        token: token,
+        payment_id: pid,
+        type: paymentType,
+        status: status,
+        invite: status === "pendingInvite"
+      })
 
       Actions.pop()
       let paymentListUpdates = {removals: [pid]}
@@ -104,11 +104,13 @@ class paydetails extends React.Component {
       "Are you sure you'd like to accept this payment request?",
       [
         {text: 'Nevermind', onPress: () => console.log('Nevermind'), style: 'cancel'},
-        {text: 'Yes', onPress: () => confirm()},
+        {text: 'Yes', onPress: () => confirm(this.props)},
       ]
     )
 
-    function confirm() {
+    function confirm(props) {
+      let { token, pid, paymentType, status } = props
+
       // TODO: Optimistically delete payment card
       Lambda.confirmPayment({
         token: token,
@@ -118,6 +120,8 @@ class paydetails extends React.Component {
       })
 
       Actions.pop()
+      let paymentListUpdates = {removals: [pid]}
+      Actions.refresh({paymentListUpdates})
     }
   }
 
@@ -129,11 +133,13 @@ class paydetails extends React.Component {
       "Are you sure you'd like to reject this payment request?",
       [
         {text: 'Nevermind', onPress: () => console.log('Nevermind'), style: 'cancel'},
-        {text: 'Yes', onPress: () => confirm()},
+        {text: 'Yes', onPress: () => confirm(this.props)},
       ]
     )
 
     function confirm() {
+      let { token, pid, paymentType, status } = props
+
       // TODO: Optimistically delete payment card
       Lambda.rejectPayment({
         token: token,
@@ -143,6 +149,8 @@ class paydetails extends React.Component {
       })
 
       Actions.pop()
+      let paymentListUpdates = {removals: [pid]}
+      Actions.refresh({paymentListUpdates})
     }
   }
 

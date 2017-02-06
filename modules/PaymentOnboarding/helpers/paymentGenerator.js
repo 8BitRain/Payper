@@ -62,7 +62,7 @@ export function generatePaymentStatus(params, cb) {
 
     let paymentStatus
     if (senderNeedsBank && recipNeedsBank || recipNeedsKYC)
-      paymentStatus = "pendingBothFundingSource"
+      paymentStatus = "pendingBothFundingSources"
     else if (senderNeedsBank)
       paymentStatus = "pendingSenderFundingSource"
     else if (recipNeedsBank)
