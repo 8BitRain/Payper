@@ -9,6 +9,7 @@ import { StickyView } from '../../../components'
 import { VibrancyView } from 'react-native-blur'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
+import DeviceInfo from 'react-native-device-info'
 const dims = Dimensions.get('window')
 
 class DateField extends React.Component {
@@ -94,7 +95,7 @@ class DateField extends React.Component {
         duration: 110
       }),
       Animated.timing(this.AV.valueHeight, {
-        toValue: 20,
+        toValue: DeviceInfo.getSystemName() == "Android" ? 30 : 20,
         duration: 140
       }),
       Animated.timing(this.AV.valuePaddingBottom, {

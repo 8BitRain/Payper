@@ -13,6 +13,7 @@ import { UserPic } from '../../../components'
 import * as SetMaster5000 from '../../../helpers/SetMaster5000'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
+import DeviceInfo from 'react-native-device-info'
 const dims = Dimensions.get('window')
 
 class UserSearchField extends React.Component {
@@ -108,7 +109,7 @@ class UserSearchField extends React.Component {
         duration: 110
       }),
       Animated.timing(this.AV.valueHeight, {
-        toValue: 38,
+        toValue: DeviceInfo.getSystemName() == "Android" ? 58 : 38,
         duration: 140
       }),
       Animated.timing(this.AV.valuePaddingBottom, {
