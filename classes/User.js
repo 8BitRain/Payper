@@ -403,22 +403,16 @@ export default class User {
           if (!res) {
             updateViaRedux({paymentFlow: {}})
           } else {
-
-            if (res.out) {
-              for (var k of Object.keys(res.out)) {
-                res.out[k].flow = "out"
-                res.out[k].pid = k
-              }
-            }
-
-            if (res.in) {
-              for (var k of Object.keys(res.in)) {
-                res.in[k].flow = "out"
-                res.in[k].pid = k
-              }
-            }
+            if (res.out) res.out = processPayments(res.out)
+            if (res.in) res.in = processPayments(res.in)
 
             updateViaRedux({paymentFlow: res})
+
+            function processPayments(payments) {
+              let arr = []
+              for (var k in payments) arr.push(payments[k])
+              return arr
+            }
           }
         }
       },

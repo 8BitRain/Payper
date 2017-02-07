@@ -3,7 +3,7 @@ import moment from 'moment'
 
 export function generatePayments(params, cb) {
   let {paymentOnboardingState, currentUser, appFlagMap} = params
-  let payments = {}
+  let payments = []
 
   for (var i = 0; i < paymentOnboardingState.who.length; i++) {
     const INDEX = i
@@ -25,7 +25,7 @@ export function generatePayments(params, cb) {
       recipID: payment.recip_id
     }, (status) => {
       payment.status = status
-      payments[pid] = payment
+      payments.push(payment)
       if (INDEX === paymentOnboardingState.who.length - 1) {
         cb(payments) // return payments to caller for optimistic rendering
         storePayments(payments) // store payments in Firebase

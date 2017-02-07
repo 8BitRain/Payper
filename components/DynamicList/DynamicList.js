@@ -15,6 +15,7 @@
 import React from 'react'
 import * as _ from 'lodash'
 import {View, ListView, Animated, RecyclerViewBackedScrollView} from 'react-native'
+import {err} from './'
 
 class DynamicListRow extends React.Component {
   constructor(props) {
@@ -72,7 +73,6 @@ class DynamicListRow extends React.Component {
   }
 }
 
-
 class DynamicList extends React.Component {
   constructor(props) {
     super(props)
@@ -82,12 +82,12 @@ class DynamicList extends React.Component {
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2
     })
 
+    this.rawData = {}
+
     this.state = props.state || {
       loading: true,
       query: "",
-      dataSource: (props.data)
-        ? this.emptyDataSource.cloneWithRowsAndSections(props.data)
-        : this.emptyDataSource,
+      dataSource: this.emptyDataSource.cloneWithRowsAndSections(this.rawData),
       filteredDataSource: null,
       renderHeader: props.renderHeader,
       renderFooter: props.renderFooter
@@ -104,29 +104,48 @@ class DynamicList extends React.Component {
       induceRef(this)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.data) {
-      this.setState({
-        dataSource: this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
-      })
-    }
-  }
+  /**
+
+
+  where'd you leave off?
+  ------------------------------------------
+  optimistic rendering might be pointless for additions now that payment
+  generation is handled in the front end. i.e., the direct write to firebase
+  pretty much negated the delay that made optimistic rendering necessary in
+  the first place.
+
+  should still use it for deletion though.
+
+  next steps:
+    - remove optimistic addition code
+    - continue to work on dynamic list in a different repo, generalize, and
+      open source it (eventually)
+
+
+  **/
 
   renderRow(rowData, sectionID, rowID) {
-    let {renderRow} = this.props
+    let {renderRow, rowIdentifier} = this.props
 
     let row = (renderRow)
       ? renderRow(rowData, sectionID, rowID)
       : <View style={{flex: 1.0, height: 100, marginTop: 20, backgroundColor: 'blue'}} />
 
+    // Determine unique row identifier
+    if (rowIdentifier) rowID = rowData[rowIdentifier]
+    else if (rowData.id) rowID = rowData.id
+    else throw err['no-row-id']
+
     return(
-      <DynamicListRow rowID={rowID} ref={(ref) => this.rowRefs[rowID] = ref}>
+      <DynamicListRow
+        rowID={rowID}
+        ref={(ref) => this.rowRefs[rowID] = ref}>
         {row}
       </DynamicListRow>
     )
   }
 
-  optimisticallyUpdate(params, cb) {
+  update(params, cb) {
     let {additions, removals, mutations} = params
     let {dataSource} = this.state
     let {data} = this.props
@@ -136,20 +155,60 @@ class DynamicList extends React.Component {
     if (mutations) mutate(mutations, this)
 
     function add(additions, scope) {
-      for (var k in additions)
-        data[k] = Object.assign({}, data[k], additions[k])
+      // for (var k in additions) {
+      //   const sectionHeader = k
+      //   const sectionData = additions[k]
+      //   console.log(`--> adding to ${sectionHeader}:`, sectionData)
+      // }
+
+      console.log("--> add() was invoked")
+      console.log("--> additions", additions)
+
+      for (var sectionHeader in additions) {
+        const rowsToAdd = additions[sectionHeader]
+
+        // Section doesn't exist yet
+        // --> Assign array of rows to section header
+        if (!scope.rawData[sectionHeader])
+          scope.rawData[sectionHeader] = rowsToAdd
+
+        // Section exists
+        // --> Remove dupes (if any)
+        // --> Prepend new rows
+        else {
+          for (var i = 0; i < scope.rawData[sectionHeader].length; i++) {
+            var rowToCheckAgainst = scope.rawData[sectionHeader][i]
+            for (var j = 0; j < rowsToAdd.length; j++) {
+              var rowToCheck = rowsToAdd[j]
+              var rowToCheckID = rowToCheck[scope.props.rowIdentifier || "id"]
+              var rowToCheckAgainstID = rowToCheckAgainst[scope.props.rowIdentifier || "id"]
+              if (rowToCheckID === rowToCheckAgainstID) rowsToAdd.splice(j, 1)
+            }
+          }
+
+          scope.rawData[sectionHeader] = rowsToAdd.concat(scope.rawData[sectionHeader])
+        }
+
+        // Trigger re-render
+        updateDataSource(scope.rawData, scope)
+      }
     }
 
     function remove(removals, scope) {
-      let omittances = []
-
       for (var i = 0; i < removals.length; i++) {
         const INDEX = i
-        const curr = removals[i]
+        const curr = removals[INDEX]
         const ref = scope.rowRefs[curr]
 
+        console.log("--> remove() was invoked ")
+        console.log("--> curr", curr)
+        console.log("--> scope", scope)
+        console.log("--> rowRefs", scope.rowRefs)
+        console.log("--> ref", ref)
+
         ref.beforeUnmount(() => {
-          // Done animating row out, create new dataSource & trigger re-render
+          // Done animating row out
+          // Create new dataSource & trigger re-render
           if (INDEX === removals.length - 1) {
             // Remove row data from data source
             for (var sectionKey in data) {
@@ -164,12 +223,12 @@ class DynamicList extends React.Component {
             if (scope.state.filteredDataSource && scope.state.query)
               scope.filter(scope.state.query)
 
-            // Trigger re-render
-            scope.setState({dataSource: updatedDataSource})
-
-            // Invoke callback (if any)
+            // Invoke post-removal callback (if any)
             if (scope.props.afterRemove)
               scope.props.afterRemove()
+
+            // Trigger re-render
+            updatedDataSource(data, scope)
           }
         })
       }
@@ -178,6 +237,11 @@ class DynamicList extends React.Component {
     function mutate(mutations, scope) {
       console.log("--> optimisticallyUpdate.mutate() was invoked...")
       console.log("--> mutations", mutations)
+    }
+
+    function updateDataSource(newRawData, scope, cb) {
+      let newDataSource = scope.emptyDataSource.cloneWithRowsAndSections(newRawData)
+      scope.setState({dataSource: newDataSource}, () => (typeof cb === 'function') ? cb() : null)
     }
   }
 
@@ -243,6 +307,7 @@ class DynamicList extends React.Component {
     return(
       <View style={{flex: 1.0}}>
         <ListView
+          ref="ListView"
           dataSource={filteredDataSource || dataSource}
           renderRow={this.renderRow}
           renderSectionHeader={renderSectionHeader}

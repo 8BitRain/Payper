@@ -58,9 +58,29 @@ class MainView extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     let {paymentListRef} = this.state
-    let {paymentListUpdates} = nextProps
-    if (paymentListUpdates && paymentListRef)
-      paymentListRef.optimisticallyUpdate(paymentListUpdates)
+    let {paymentListUpdates, currentUser} = nextProps
+
+    // Update payment list
+    if (paymentListUpdates && paymentListRef) {
+      console.log("-->\n-->\n--> Updating Payment List")
+      paymentListRef.update(paymentListUpdates)
+      setTimeout(() => Actions.refresh({paymentListUpdates: null}), 20)
+    }
+
+    // Initialize payment list
+    let currPayFlowIsEmpty = Object.keys(this.props.currentUser.paymentFlow).length === 0
+    let nextPayFlowIsEmpty = Object.keys(nextProps.currentUser.paymentFlow).length === 0
+    if (currPayFlowIsEmpty && !nextPayFlowIsEmpty) {
+      console.log("-->\n-->\n--> Initializing Payment List")
+
+      paymentListRef.update({
+        additions: {
+          in: (nextProps.currentUser.paymentFlow.in) ? nextProps.currentUser.paymentFlow.in : [],
+          out: (nextProps.currentUser.paymentFlow.out) ? nextProps.currentUser.paymentFlow.out : []
+        }
+      })
+    }
+
     if (nextProps.cb && typeof nextProps.cb === 'function') {
       nextProps.cb()
       setTimeout(() => Actions.refresh({cb: null}), 20)
@@ -180,11 +200,12 @@ class MainView extends React.Component {
           { /* StatusCard (header), PayCards (dataSource), TrendingPayments (footer) */ }
           <DynamicList
             data={this.props.currentUser.paymentFlow}
+            rowIdentifier={'pid'}
             afterRemove={() => (this.state.searchBarVisible) ? this.refs.searchBar.focus() : null}
             induceRef={(ref) => this.setState({paymentListRef: ref})}
             renderRow={(rowData, sectionID, rowID) => <PayCard {...this.props} payment={rowData} />}
-            renderSectionHeader={(rowData, sectionID) => {
-              let numRows = Object.keys(rowData).length
+            renderSectionHeader={(sectionData, sectionID) => {
+              let numRows = sectionData.length
               let title
 
               switch (sectionID) {

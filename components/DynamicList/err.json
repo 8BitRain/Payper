@@ -1,0 +1,3 @@
+{
+  "no-row-id": "DynamicList expects each piece of row data to have a unique 'id' attribute. To use a different attribute as the row's unique identifier, pass your DynamicList the 'rowIdentifier' prop."
+}
