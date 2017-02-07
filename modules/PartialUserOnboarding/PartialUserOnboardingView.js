@@ -195,10 +195,10 @@ export default class PartialUserOnboardingView extends React.Component {
         <TouchableHighlight
           activeOpacity={0.8}
           underlayColor={'transparent'}
-          onPress={() => { this.setState({input: "Weekly"}, () => this.submit()) }}>
+          onPress={() => this.submit()}>
           <View
             style={{
-              position: 'absolute', bottom: 36, left: dims.width * 0.075,
+               marginBottom: 15, left: dims.width * 0.075,
               width: dims.width * 0.85, height: 50, backgroundColor: colors.gradientGreen, borderRadius: 4, justifyContent: 'center', alignItems: 'center',
               shadowColor: colors.medGrey, shadowOpacity: 0.75, shadowRadius: 2, shadowOffset: { height: 0, width: 0 }
             }}>

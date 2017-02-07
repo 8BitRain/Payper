@@ -27,6 +27,7 @@
     "react-native-autocomplete-input": "*",
     "react-native-aws3": "0.0.2",
     "react-native-blur": "*",
+    "react-native-bottom-sheet": "^1.0.1",
     "react-native-button": "github:ide/react-native-button",
     "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
     "react-native-camera-roll-picker": "^1.1.9",

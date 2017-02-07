@@ -20,7 +20,7 @@ class TextField extends React.Component {
       opacity: new Animated.Value(1),
       height: new Animated.Value((subtitle) ? 90 : 70),
       valueOpacity: new Animated.Value((value) ? 1 : 0),
-      valueHeight: new Animated.Value((value) ? 20 : 0),
+      valueHeight: new Animated.Value((value) ? 30 : 0),
       valuePaddingBottom: new Animated.Value((value) ? 16 : 0)
     }
 
@@ -84,7 +84,7 @@ class TextField extends React.Component {
         duration: 110
       }),
       Animated.timing(this.AV.valueHeight, {
-        toValue: 20,
+        toValue: DeviceInfo.getSystemName() == "Android" ? 30 : 20,
         duration: 140
       }),
       Animated.timing(this.AV.valuePaddingBottom, {
@@ -171,7 +171,7 @@ class TextField extends React.Component {
           </View>
 
           { /* Value */ }
-          <Animated.View style={{paddingBottom: valuePaddingBottom, height: valueHeight, opacity: valueOpacity, flexDirection: 'row', alignItems: 'center'}}>
+          <Animated.View style={{ paddingBottom: valuePaddingBottom, height: valueHeight, opacity: valueOpacity, flexDirection: 'row', alignItems: 'center'}}>
             <View style={{width: 32}} />
 
             <Text style={{fontSize: 18, color: colors.gradientGreen, paddingLeft: 10}}>

@@ -10,6 +10,7 @@ import com.magus.fblogin.FacebookLoginPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.bugsnag.BugsnagReactNative;
 import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
+import com.gnet.bottomsheet.RNBottomSheetPackage;
 
 import com.facebook.react.ReactApplication;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
@@ -71,6 +72,7 @@ public class MainApplication extends Application implements ReactApplication {
                     new RNDeviceInfo(),
                     new WebViewBridgePackage(),
                     BugsnagReactNative.getPackage(),
+                    new RNBottomSheetPackage(),
                     new FacebookLoginPackage(),
                     new CodePush(BuildConfig.CODEPUSH_KEY, MainApplication.this, com.payper.BuildConfig.DEBUG),
                     new ReactNativeContacts()

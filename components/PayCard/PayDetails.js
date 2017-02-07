@@ -6,6 +6,8 @@ import moment from 'moment'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import { colors } from '../../globalStyles'
+import BottomSheet from 'react-native-bottom-sheet'
+import DeviceInfo from 'react-native-device-info'
 
 const dims = Dimensions.get('window')
 let imageDims = {
@@ -144,6 +146,18 @@ class paydetails extends React.Component {
 
   blockUser() {
     console.log("blockUser was invoked...")
+  }
+
+  /* The Android equivalent of ActionSheets */
+  showBottomSheet() {
+    BottomSheet.showBottomSheetWithOptions(this.ACTION_SHEET_CONFIG, (i) => {
+      switch (this.ACTION_SHEET_CONFIG.options[i]) {
+        case "Cancel Payment Series": this.cancelPayment()
+          break;
+        case "Block User": this.blockUser()
+          break;
+      }
+    });
   }
 
   showActionSheet() {
@@ -431,7 +445,7 @@ class paydetails extends React.Component {
             activeOpacity={0.8}
             underlayColor={colors.snowWhite}
             style={{padding: 25, paddingTop: 0}}
-            onPress={() => this.showActionSheet()}>
+            onPress={() => DeviceInfo.getSystemName() == "Android" ? this.showBottomSheet() : this.showActionSheet()}>
             <Entypo name={"dots-three-horizontal"} size={22} color={colors.deepBlue} />
           </TouchableHighlight>
         </View>
