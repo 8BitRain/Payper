@@ -7,6 +7,7 @@ import {validatePhone, validateEmail, validateName, validatePassword, uploadProf
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import DeviceInfo from 'react-native-device-info'
 const dims = Dimensions.get('window')
 const imageDims = { width: 56, height: 56 }
 const styles = StyleSheet.create({
@@ -80,7 +81,9 @@ const styles = StyleSheet.create({
     shadowOffset: {
       height: 0,
       width: 0
-    }
+    },
+    borderWidth: DeviceInfo.getSystemName() == "Android" ? 1 : 0,
+    borderColor: colors.slateGrey
   },
   image: {
     position: 'absolute',
@@ -476,7 +479,7 @@ class NewUserOnboardingView extends React.Component {
                       {(this.state.profilePic)
                         ? <Image style={styles.image} source={{uri: this.state.profilePic}} />
                         : <View style={styles.image}>
-                            <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
+                            <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200', paddingRight: DeviceInfo.getSystemName() == ("Android") ? 2 : 0, paddingBottom: DeviceInfo.getSystemName() == ("Android") ? 2 : 0}}>
                               {this.state.firstName.charAt(0) + this.state.lastName.charAt(0)}
                             </Text>
                           </View> }
