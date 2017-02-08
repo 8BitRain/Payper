@@ -238,8 +238,8 @@ class TrendingPayments extends React.Component {
 
              </View>
            </FlipCard>
-       </View>)
-       ;
+       </View>
+     );
    }
 
   render() {

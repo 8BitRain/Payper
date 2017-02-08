@@ -128,28 +128,30 @@ export default class LandingScreenView extends React.Component {
 
           <View style={{flex: 1.0, justifyContent: 'center', alignItems: 'center'}}>
             { /* "Sign in with Facebook" button */ }
-            <LoginButton
-              style={{width: dims.width - 60, height: 45, marginTop: 20, alignSelf: "center"}}
-              readPermissions={["email", "public_profile", "user_friends"]}
-              onLoginFinished={(err, res) => {
-                if (err) {
-                  console.log("Facebook login failed...", JSON.stringify(err));
-                } else if (res.isCancelled) {
-                  console.log("Facebook login was cancelled...");
-                } else {
-                  this.toggleLoadingScreen()
-                  AccessToken.getCurrentAccessToken().then((data) => {
-                    requestFacebookUserData(data.accessToken, (userData) => {
-                      this.signinWithFacebook(userData)
+            <View style={{width: dims.width - 60, height: dims.height * .075, backgroundColor: "#4267B2", alignItems: "center", justifyContent: "center", borderRadius: 4}}>
+              <LoginButton
+                style={{width: dims.width - 60, height: /*30*/ dims.height * .0475}}
+                readPermissions={["email", "public_profile", "user_friends"]}
+                onLoginFinished={(err, res) => {
+                  if (err) {
+                    console.log("Facebook login failed...", JSON.stringify(err));
+                  } else if (res.isCancelled) {
+                    console.log("Facebook login was cancelled...");
+                  } else {
+                    this.toggleLoadingScreen()
+                    AccessToken.getCurrentAccessToken().then((data) => {
+                      requestFacebookUserData(data.accessToken, (userData) => {
+                        this.signinWithFacebook(userData)
+                      })
                     })
-                  })
-                }
-              }} />
+                  }
+                }} />
+              </View>
 
             { /* "Sign up with email" button */ }
             <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={() => Actions.NewUserOnboardingView({currentUser: this.props.currentUser})}>
               <View style={{width: dims.width - 60, height: 45, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.accent, borderRadius: 4, marginTop: 6}}>
-                <Text style={{fontSize: 16, color: colors.snowWhite}}>
+                <Text style={{fontSize: 14, fontWeight: "bold", color: colors.snowWhite}}>
                   {"Sign up with email"}
                 </Text>
               </View>
@@ -158,7 +160,7 @@ export default class LandingScreenView extends React.Component {
             { /* "Sign in with email" button */ }
             <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={this.toggleLoginModal.bind(this)}>
               <View style={{width: dims.width - 60, height: 45, justifyContent: 'flex-start', alignItems: 'center', borderRadius: 4, marginTop: 6, paddingTop: 6}}>
-                <Text style={{fontSize: 16, color: colors.deepBlue}}>
+                <Text style={{fontSize: 15, color: colors.deepBlue}}>
                   {"Sign in with email"}
                 </Text>
               </View>
