@@ -155,15 +155,6 @@ class DynamicList extends React.Component {
     if (mutations) mutate(mutations, this)
 
     function add(additions, scope) {
-      // for (var k in additions) {
-      //   const sectionHeader = k
-      //   const sectionData = additions[k]
-      //   console.log(`--> adding to ${sectionHeader}:`, sectionData)
-      // }
-
-      console.log("--> add() was invoked")
-      console.log("--> additions", additions)
-
       for (var sectionHeader in additions) {
         const rowsToAdd = additions[sectionHeader]
 
@@ -176,13 +167,10 @@ class DynamicList extends React.Component {
         // --> Remove dupes (if any)
         // --> Prepend new rows
         else {
-          for (var i = 0; i < scope.rawData[sectionHeader].length; i++) {
-            var rowToCheckAgainst = scope.rawData[sectionHeader][i]
-            for (var j = 0; j < rowsToAdd.length; j++) {
-              var rowToCheck = rowsToAdd[j]
-              var rowToCheckID = rowToCheck[scope.props.rowIdentifier || "id"]
-              var rowToCheckAgainstID = rowToCheckAgainst[scope.props.rowIdentifier || "id"]
-              if (rowToCheckID === rowToCheckAgainstID) rowsToAdd.splice(j, 1)
+          for (var i = 0; i < rowsToAdd.length; i++) {
+            var rowID = rowsToAdd[i][scope.props.rowIdentifier || "id"]
+            if (scope.rowRefs[rowID]) {
+              rowsToAdd.splice(i, 1)
             }
           }
 
@@ -195,43 +183,72 @@ class DynamicList extends React.Component {
     }
 
     function remove(removals, scope) {
-      for (var i = 0; i < removals.length; i++) {
-        const INDEX = i
-        const curr = removals[INDEX]
-        const ref = scope.rowRefs[curr]
+      for (var k in removals) {
+        const sectionHeader = k
+        const rowsToRemove = removals[sectionHeader]
 
-        console.log("--> remove() was invoked ")
-        console.log("--> curr", curr)
-        console.log("--> scope", scope)
-        console.log("--> rowRefs", scope.rowRefs)
-        console.log("--> ref", ref)
+        for (var i = 0; i < scope.rawData[sectionHeader].length; i++) {
+          const index = i
+          const rowID = scope.rawData[sectionHeader][index][scope.props.rowIdentifier || "id"]
+          if (rowsToRemove.includes(rowID)) {
+            // Animate row out
+            scope.rowRefs[rowID].beforeUnmount(() => {
 
-        ref.beforeUnmount(() => {
-          // Done animating row out
-          // Create new dataSource & trigger re-render
-          if (INDEX === removals.length - 1) {
-            // Remove row data from data source
-            for (var sectionKey in data) {
-              let section = data[sectionKey]
-              if (section[curr]) data[sectionKey] = _.omit(section, curr)
-            }
+              // Splice from array
+              scope.rawData[sectionHeader].splice(index, 1)
 
-            // Create new data source
-            let updatedDataSource = scope.emptyDataSource.cloneWithRowsAndSections(data)
+              // Delete DynamicRow reference
+              // delete scope.rowRefs[rowID]
 
-            // Re-filter
-            if (scope.state.filteredDataSource && scope.state.query)
-              scope.filter(scope.state.query)
+              console.log("--> Removed row", rowID)
+              console.log("--> rawData", scope.rawData)
+              console.log("--> rowRefs", scope.rowRefs)
 
-            // Invoke post-removal callback (if any)
-            if (scope.props.afterRemove)
-              scope.props.afterRemove()
-
-            // Trigger re-render
-            updatedDataSource(data, scope)
+              // Trigger re-render
+              updateDataSource(scope.rawData, scope)
+            })
           }
-        })
+        }
       }
+
+
+      // for (var i = 0; i < removals.length; i++) {
+      //   var rowID = removals[i]
+      //   var rowRef = scope.rowRefs[rowID]
+      //
+      //   rowRef.beforeUnmount(() => {
+      //     // Done animating row out
+      //     // Create new dataSource & trigger re-render
+      //     if (i === removals.length - 1) {
+      //       // TODO: Splice rows from array
+      //       // TODO: Delete rowRefs from scope
+      //
+      //       // // Remove row data from data source
+      //       // for (var sectionKey in data) {
+      //       //   let section = data[sectionKey]
+      //       //   if (section[curr]) data[sectionKey] = _.omit(section, curr)
+      //       // }
+      //       //
+      //       // // Create new data source
+      //       // let updatedDataSource = scope.emptyDataSource.cloneWithRowsAndSections(data)
+      //
+      //       // Re-filter
+      //       if (scope.state.filteredDataSource && scope.state.query)
+      //         scope.filter(scope.state.query)
+      //
+      //       // Invoke post-removal callback (if any)
+      //       if (scope.props.afterRemove)
+      //         scope.props.afterRemove()
+      //
+      //       // Trigger re-render
+      //       updateDataSource(scope.rawData, scope)
+      //     }
+      //   })
+      // }
+
+
+
+
     }
 
     function mutate(mutations, scope) {

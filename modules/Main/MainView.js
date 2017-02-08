@@ -62,7 +62,6 @@ class MainView extends React.Component {
 
     // Update payment list
     if (paymentListUpdates && paymentListRef) {
-      console.log("-->\n-->\n--> Updating Payment List")
       paymentListRef.update(paymentListUpdates)
       setTimeout(() => Actions.refresh({paymentListUpdates: null}), 20)
     }
@@ -71,8 +70,6 @@ class MainView extends React.Component {
     let currPayFlowIsEmpty = Object.keys(this.props.currentUser.paymentFlow).length === 0
     let nextPayFlowIsEmpty = Object.keys(nextProps.currentUser.paymentFlow).length === 0
     if (currPayFlowIsEmpty && !nextPayFlowIsEmpty) {
-      console.log("-->\n-->\n--> Initializing Payment List")
-
       paymentListRef.update({
         additions: {
           in: (nextProps.currentUser.paymentFlow.in) ? nextProps.currentUser.paymentFlow.in : [],
@@ -199,7 +196,6 @@ class MainView extends React.Component {
 
           { /* StatusCard (header), PayCards (dataSource), TrendingPayments (footer) */ }
           <DynamicList
-            data={this.props.currentUser.paymentFlow}
             rowIdentifier={'pid'}
             afterRemove={() => (this.state.searchBarVisible) ? this.refs.searchBar.focus() : null}
             induceRef={(ref) => this.setState({paymentListRef: ref})}
