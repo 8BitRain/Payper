@@ -15,6 +15,7 @@ import Camera from 'react-native-camera';
 var ReadImageData = require('NativeModules').ReadImageData;
 import { RNS3 } from 'react-native-aws3';
 import ImageResizer from 'react-native-image-resizer';
+import DeviceInfo from 'react-native-device-info'
 
 
 // Components
@@ -180,7 +181,7 @@ class PhotoUploader extends React.Component {
             activeOpacity={0.8}
             underlayColor={'transparent'}
             onPress={this.takePicture.bind(this)}
-            style={{width: dimensions.width}}>
+            style={{width: dimensions.width, height: DeviceInfo.getSystemName() == "Android" ? 50 : 0}}>
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
               <Ionicons style={{}} size={48} name="ios-camera" color={colors.accent} />
             </View>
@@ -432,14 +433,14 @@ const styles = StyleSheet.create({
     flex: 1
   },
   cameraContainer:{
-    flex: dimensions.height * .66,
-    height: dimensions.height * .66
+    flex: 1,
+    height: DeviceInfo.getSystemName() == "Android" ? 400 : dimensions.height * 1
   },
   preview: {
-    flex: dimensions.height * .66,
+    flex:  DeviceInfo.getSystemName() == "Android" ? 0 : 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
-    height: dimensions.height * .66,
+    height: DeviceInfo.getSystemName() == "Android" ? 400 : dimensions.height * 1,
     width: Dimensions.get('window').width
   },
   capture: {

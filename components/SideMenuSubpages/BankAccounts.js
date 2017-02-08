@@ -6,6 +6,8 @@ import {IAVWebView} from '../../components'
 const dims = Dimensions.get('window')
 import * as Lambda from '../../services/Lambda'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import DeviceInfo from 'react-native-device-info'
+import BottomSheet from 'react-native-bottom-sheet'
 
 class BankAccounts extends React.Component {
   constructor(props) {
@@ -58,34 +60,59 @@ class BankAccounts extends React.Component {
   toggleBankAccountMenu(bankAccount) {
     let options = ["Delete", "Cancel"]
 
-    ActionSheetIOS.showActionSheetWithOptions({
-      title: bankAccount.name,
-      options: options,
-      cancelButtonIndex: 1,
-      destructiveButtonIndex: 0
-    }, (buttonIndex) => {
-      if (options[buttonIndex] === "Delete") {
-        let message = "Are you sure you'd like to delete this bank account?"
-        Alert.alert("Wait!", message, [
-          {text: 'Nevermind', onPress: () => null, style: 'cancel'},
-          {text: 'Delete', onPress: () => this.deleteBankAccount(bankAccount), style: 'destructive'},
-        ])
-      }
-    })
+    if(DeviceInfo.getSystemName() == "Android"){
+      BottomSheet.showBottomSheetWithOptions({
+        title: bankAccount.name,
+        options: options,
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0
+      }, (buttonIndex) => {
+        if (options[buttonIndex] === "Delete") {
+          let message = "Are you sure you'd like to delete this bank account?"
+          Alert.alert("Wait!", message, [
+            {text: 'Nevermind', onPress: () => null, style: 'cancel'},
+            {text: 'Delete', onPress: () => this.deleteBankAccount(bankAccount), style: 'destructive'},
+          ])
+        }
+      })
+    }
+
+    if(DeviceInfo.getSystemName() == "iPhone OS"){
+      ActionSheetIOS.showActionSheetWithOptions({
+        title: bankAccount.name,
+        options: options,
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0
+      }, (buttonIndex) => {
+        if (options[buttonIndex] === "Delete") {
+          let message = "Are you sure you'd like to delete this bank account?"
+          Alert.alert("Wait!", message, [
+            {text: 'Nevermind', onPress: () => null, style: 'cancel'},
+            {text: 'Delete', onPress: () => this.deleteBankAccount(bankAccount), style: 'destructive'},
+          ])
+        }
+      })
+    }
+
   }
 
   renderRow(rowData) {
+      { console.log("Rendering Row!!!!!") }
+      { console.log("Row Data", rowData) }
     return(
       <TouchableHighlight
         onPress={() => (rowData.notTouchable) ? null : this.toggleBankAccountMenu(rowData)}
         underlayColor={'transparent'}
+        style={{flex: .5, width: dims.width, height: 500}}
         activeOpacity={0.75}>
-        <View style={{width: dims.width, flexDirection: 'row', justifyContent: 'space-between', padding: 12, paddingTop: 14, paddingBottom: 14}}>
+
+        <View style={{flex: .5, width: dims.width, height: 500, flexDirection: 'row', justifyContent: 'space-between', padding: 12, paddingTop: 14, paddingBottom: 14}}>
           <Text style={{fontSize: 18}}>{rowData.name}</Text>
           {(rowData.notTouchable)
             ? null
             : <EvilIcons name={"trash"} color={colors.carminePink} size={28} /> }
         </View>
+
       </TouchableHighlight>
     )
   }
@@ -124,7 +151,7 @@ class BankAccounts extends React.Component {
 
         { /* Bank account list */ }
         <ListView
-          style={{marginTop: 18}}
+          style={{height: 250, width: dims.width, marginTop: 18}}
           dataSource={this.state.rows}
           renderRow={this.renderRow.bind(this)}
           renderSectionHeader={this.renderSectionHeader.bind(this)}
