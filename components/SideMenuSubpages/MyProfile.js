@@ -7,6 +7,7 @@ import {PhotoUploader} from '../'
 let dims = Dimensions.get('window')
 let imageDims = { width: 56, height: 56 }
 import { colors } from '../../globalStyles'
+import DeviceInfo from 'react-native-device-info'
 
 class MyProfile extends React.Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class MyProfile extends React.Component {
       rowHasChanged: (r1, r2) => r1 !== r2,
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2
     })
-    
+
     this.state = {
       rows: this.EMPTY_DATA_SOURCE.cloneWithRowsAndSections({}),
       modalVisible: false,
@@ -129,7 +130,7 @@ class MyProfile extends React.Component {
             onPress={() => this.togglePhotoUploader(true)}>
             <View style={{flex: 1, marginBottom: 10}}>
               <View style={{width: imageDims.width, height: imageDims.height, borderRadius: imageDims.width / 2, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
+                <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200', paddingRight: DeviceInfo.getSystemName() == "Android" ? 2: 0, paddingBottom:  DeviceInfo.getSystemName() == "Android" ? 2: 0}}>
                   {initials}
                 </Text>
               </View>
@@ -250,7 +251,9 @@ const styles = {
     shadowOffset: {
       height: 0,
       width: 0
-    }
+    },
+    borderWidth: DeviceInfo.getSystemName() == ("Android") ? 1 : 0,
+    borderColor: colors.slateGrey
   }
 }
 
