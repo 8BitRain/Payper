@@ -21,7 +21,7 @@ class AlternateStatusCard extends React.Component {
     this.AV = {
       opacity: new Animated.Value(1),
       shadowOpacity: new Animated.Value(1),
-      marginTop: new Animated.Value(20),
+      marginTop: new Animated.Value(16),
       marginLeft: new Animated.Value(0)
     }
 
