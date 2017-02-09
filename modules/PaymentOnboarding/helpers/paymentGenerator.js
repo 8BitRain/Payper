@@ -169,11 +169,6 @@ export function storePayments(payments) {
       let path = (type === "request") ? pendingPaymentsPath : activePaymentsPath
       let endpoint = (payment.type === "request") ? "payments/request" : "payments/queue"
 
-      console.log("--> type", type)
-      console.log("--> params", params)
-      console.log("--> path", path)
-      console.log("--> endpoint", endpoint)
-
       firebase.database().ref(path).set(payment, () => {
         try {
           fetch(baseURL + endpoint, {method: "POST", body: JSON.stringify(params)})

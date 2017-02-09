@@ -81,7 +81,6 @@ class paydetails extends React.Component {
     function confirm(props) {
       let { token, pid, paymentType, status } = props
 
-      // TODO: Optimistically delete payment card
       Lambda.cancelPayment({
         token: token,
         payment_id: pid,
@@ -111,7 +110,6 @@ class paydetails extends React.Component {
     function confirm(props) {
       let { token, pid, paymentType, status } = props
 
-      // TODO: Optimistically delete payment card
       Lambda.confirmPayment({
         token: token,
         payment_id: pid,
@@ -140,7 +138,6 @@ class paydetails extends React.Component {
     function confirm() {
       let { token, pid, paymentType, status } = props
 
-      // TODO: Optimistically delete payment card
       Lambda.rejectPayment({
         token: token,
         payment_id: pid,
