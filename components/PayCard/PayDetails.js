@@ -29,6 +29,7 @@ class paydetails extends React.Component {
 
     let firstName = this.props.name.split(" ")[0]
     let endsInS = firstName.charAt(firstName.length - 1) === 's'
+
     this.outgoingTransferStatuses = {
       "arrived": "Arrived in " + firstName + ((endsInS) ? "'" : "'s") + " bank account.",
       "uninitiated": "Will initiate on the specified date.",
@@ -118,8 +119,6 @@ class paydetails extends React.Component {
       })
 
       Actions.pop()
-      let paymentListUpdates = {removals: [pid]}
-      Actions.refresh({paymentListUpdates})
     }
   }
 

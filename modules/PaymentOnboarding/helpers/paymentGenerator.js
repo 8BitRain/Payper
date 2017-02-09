@@ -64,7 +64,10 @@ export function generatePaymentStatus(params, cb) {
     let recipNeedsKYC = recipOnboardingProgress.indexOf("kyc") >= 0 && recipOnboardingProgress !== "kyc-success" && recipOnboardingProgress !== "kyc-successDismissed"
 
     let paymentStatus
-    if (senderNeedsBank && recipNeedsBank || recipNeedsKYC)
+
+    if (paymentType === "request")
+      paymentStatus = "pendingConfirmation"
+    else if (senderNeedsBank && recipNeedsBank || recipNeedsKYC)
       paymentStatus = "pendingBothFundingSources"
     else if (senderNeedsBank)
       paymentStatus = "pendingSenderFundingSource"
