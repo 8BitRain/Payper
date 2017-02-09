@@ -216,7 +216,7 @@ class MainView extends React.Component {
               return(
                 <View style={{paddingBottom: 100}}>
                   { /* Empty state */
-                    (data.in || data.out)
+                    (data && data.in || data && data.out)
                       ? null
                       : <EmptyState /> }
 
