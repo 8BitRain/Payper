@@ -241,7 +241,11 @@ class AlternateStatusCard extends React.Component {
               </View>
 
               { /* Profile pic and onboarding percentage */ }
-              <View style={{marginLeft: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+              <View
+                style={{
+                  marginLeft: 8, flexDirection: 'row', alignItems: 'center',
+                  justifyContent: 'center', paddingTop: 10, paddingBottom: 6
+                }}>
                 <View style={styles.imageWrap}>
                   <AnimatedCircularProgress
                     size={imageWrapDims.width}
@@ -253,9 +257,11 @@ class AlternateStatusCard extends React.Component {
                   </AnimatedCircularProgress>
                   {(cachedProfilePic || profilePic)
                     ? <Image style={styles.image} source={{uri: cachedProfilePic || profilePic}} />
-                    : <View style={styles.image}><Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
-                        {currentUser.first_name.charAt(0) + currentUser.last_name.charAt(0)}
-                      </Text></View> }
+                    : <View style={styles.image}>
+                        <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
+                          {currentUser.first_name.charAt(0) + currentUser.last_name.charAt(0)}
+                        </Text>
+                      </View> }
                 </View>
 
                 <View style={{width: 20}} />
@@ -264,7 +270,7 @@ class AlternateStatusCard extends React.Component {
                   <Text style={{fontSize: 56, color: colors.accent, fontWeight: '200'}}>
                     {onboardingPercentage}
                   </Text>
-                  <Text style={{fontSize: 28, color: colors.accent, fontWeight: '200', marginLeft: 6}}>
+                  <Text style={{fontSize: 28, color: colors.accent, fontWeight: '200', marginLeft: 6, marginTop: 7}}>
                     {"%"}
                   </Text>
                 </View>
