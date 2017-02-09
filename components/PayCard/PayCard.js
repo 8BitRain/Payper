@@ -33,9 +33,9 @@ class PayCard extends React.Component {
     if (nextProps === this.props) return
     let details = parsePaymentDetails(nextProps)
 
-    // '(this.state.progbarDims.width)' ternary conditional is needed because,
+    // Ternary conditional is needed because,
     // without it, the progbar width value is overwritten when layoutProgbar is
-    // called from within the render function
+    // called from within the render function.
     this.setState({details}, () => (this.state.progbarDims.width) ? this.layoutProgbarForeground() : null)
   }
 
@@ -172,7 +172,7 @@ class PayCard extends React.Component {
           <View style={{position: 'absolute', top: 0, right: 0, padding: 8}}>
             {(paymentsMade === payments)
               ? <EvilIcons name={"check"} color={colors.alertGreen} size={24} />
-              : (status.indexOf("pending") === -1)
+              : (!status || status.indexOf("pending") === -1)
                 ? null
                 : <EvilIcons name={"exclamation"} color={colors.alertRed} size={24} /> }
           </View>

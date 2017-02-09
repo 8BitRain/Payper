@@ -74,11 +74,13 @@ class paydetails extends React.Component {
       "Are you sure you'd like to cancel this payment series?",
       [
         {text: 'Nevermind', onPress: () => console.log('Nevermind'), style: 'cancel'},
-        {text: 'Yes', onPress: () => confirm()},
+        {text: 'Yes', onPress: () => confirm(/* (scope) */this.props)},
       ]
     )
 
-    function confirm() {
+    function confirm(props) {
+      let { token, pid, paymentType, status } = props
+
       // TODO: Optimistically delete payment card
       Lambda.cancelPayment({
         token: token,
@@ -89,6 +91,8 @@ class paydetails extends React.Component {
       })
 
       Actions.pop()
+      let paymentListUpdates = {removals: [pid]}
+      Actions.refresh({paymentListUpdates})
     }
   }
 
@@ -100,11 +104,13 @@ class paydetails extends React.Component {
       "Are you sure you'd like to accept this payment request?",
       [
         {text: 'Nevermind', onPress: () => console.log('Nevermind'), style: 'cancel'},
-        {text: 'Yes', onPress: () => confirm()},
+        {text: 'Yes', onPress: () => confirm(this.props)},
       ]
     )
 
-    function confirm() {
+    function confirm(props) {
+      let { token, pid, paymentType, status } = props
+
       // TODO: Optimistically delete payment card
       Lambda.confirmPayment({
         token: token,
@@ -114,6 +120,8 @@ class paydetails extends React.Component {
       })
 
       Actions.pop()
+      let paymentListUpdates = {removals: [pid]}
+      Actions.refresh({paymentListUpdates})
     }
   }
 
@@ -125,11 +133,13 @@ class paydetails extends React.Component {
       "Are you sure you'd like to reject this payment request?",
       [
         {text: 'Nevermind', onPress: () => console.log('Nevermind'), style: 'cancel'},
-        {text: 'Yes', onPress: () => confirm()},
+        {text: 'Yes', onPress: () => confirm(this.props)},
       ]
     )
 
     function confirm() {
+      let { token, pid, paymentType, status } = props
+
       // TODO: Optimistically delete payment card
       Lambda.rejectPayment({
         token: token,
@@ -139,6 +149,8 @@ class paydetails extends React.Component {
       })
 
       Actions.pop()
+      let paymentListUpdates = {removals: [pid]}
+      Actions.refresh({paymentListUpdates})
     }
   }
 
@@ -224,8 +236,7 @@ class paydetails extends React.Component {
 
   renderDetailRow(params) {
     let { key, val } = params
-    let { status } = this.props
-    let splitVal = val.split(" - ")
+    let splitVal = (val) ? val.split(" - ") : ""
 
     return(
       <View style={{flexDirection: 'column', borderColor: colors.slateGrey, borderBottomWidth: 1.0}}>

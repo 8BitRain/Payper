@@ -80,6 +80,12 @@ export function generatePaymentStatus(params, cb) {
 export function formatPaymentOnboardingState(params) {
   let {pid, state, paymentType, currentUser, otherUser} = params
 
+  // Default to five minutes from now for start time
+  if (!state.startUTCString) {
+    let startUTCString = moment().add(5, 'minutes').utc().valueOf()
+    state.startUTCString = startUTCString
+  }
+
   let sender = {
     sender_id: (paymentType === "request") ? otherUser.uid : currentUser.uid,
     sender_username: (paymentType === "request") ? otherUser.username : currentUser.username,
@@ -98,7 +104,7 @@ export function formatPaymentOnboardingState(params) {
     last_name: (paymentType === "pay") ? otherUser.last_name : currentUser.last_name
   }
 
-  // Remove 'undefined'
+  // Remove 'undefined's
   for (var k in recip)
     if (typeof recip[k] === 'undefined') delete recip[k]
   for (var k in sender)
@@ -138,7 +144,8 @@ export function storePayments(payments) {
   function storePayment(payment) {
     let {pid, type, sender_id, recip_id, invite} = payment
 
-    let activePaymentsPath = (!invite) ? `activePayments/${pid}` : null
+    let activePaymentsPath = `activePayments/${pid}`
+    let pendingPaymentsPath = `pendingPayments/${pid}`
     let payFlowPath = `paymentFlow/${(type === 'request') ? recip_id : sender_id}/${(type === 'request') ? 'in' : 'out'}/${pid}`
 
     // Strip payment JSON of 'undefined's
@@ -147,7 +154,7 @@ export function storePayments(payments) {
         delete payment[k]
     }
 
-    // Write to Firebase
+    // Write to payFlow in Firebase
     firebase.database().ref(payFlowPath).set(payment)
 
     // Queue the invite
@@ -155,23 +162,28 @@ export function storePayments(payments) {
       Lambda.inviteViaPayment(payment)
     }
 
-    // Write to activePayments then queue the payment
+    // Write to activePayments in Firebase
+    // then queue the payment
     else {
       let params = {token: payment.token, pid: payment.pid}
+      let path = (type === "request") ? pendingPaymentsPath : activePaymentsPath
+      let endpoint = (payment.type === "request") ? "payments/request" : "payments/queue"
 
-      firebase.database().ref(activePaymentsPath).set(payment, () => {
+      console.log("--> type", type)
+      console.log("--> params", params)
+      console.log("--> path", path)
+      console.log("--> endpoint", endpoint)
 
-        console.log("--> hitting payments/queue with params:", params)
-
+      firebase.database().ref(path).set(payment, () => {
         try {
-          fetch(baseURL + "payments/queue", {method: "POST", body: JSON.stringify(params)})
+          fetch(baseURL + endpoint, {method: "POST", body: JSON.stringify(params)})
           .then((response) => response.json())
           .then((responseData) => {
-            console.log("--> queue payment responseData", responseData)
+            console.log(`--> ${endpoint} responseData`, responseData)
           })
           .done()
         } catch(err) {
-          console.log("Error queueing payment:", err)
+          console.log(err)
         }
       })
     }

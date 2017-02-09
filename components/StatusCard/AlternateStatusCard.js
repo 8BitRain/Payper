@@ -27,6 +27,7 @@ class AlternateStatusCard extends React.Component {
       'need-bank': {
         title: "Bank Account Needed",
         action: "Next Step: Add Bank Account",
+        message: "Add a bank account to unlock the ability to send money.",
         destination: () => Actions.GlobalModal({
           subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
           backgroundColor: colors.accent
@@ -119,6 +120,12 @@ class AlternateStatusCard extends React.Component {
     this.state = {
       onboardingPercentage: 0
     }
+  }
+
+  componentDidMount() {
+    this.setState({
+      onboardingPercentage: getOnboardingPercentage(this.props.currentUser.appFlags)
+    })
   }
 
   componentWillReceiveProps(nextProps) {
