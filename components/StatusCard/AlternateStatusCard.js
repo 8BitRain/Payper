@@ -27,6 +27,7 @@ class AlternateStatusCard extends React.Component {
       'need-bank': {
         title: "Bank Account Needed",
         action: "Next Step: Add Bank Account",
+        message: "Add a bank account to unlock the ability to send money.",
         destination: () => Actions.GlobalModal({
           subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
           backgroundColor: colors.accent
@@ -121,6 +122,12 @@ class AlternateStatusCard extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.setState({
+      onboardingPercentage: getOnboardingPercentage(this.props.currentUser.appFlags)
+    })
+  }
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       onboardingPercentage: getOnboardingPercentage(nextProps.currentUser.appFlags)
@@ -185,11 +192,6 @@ class AlternateStatusCard extends React.Component {
         && onboardingProgress !== "microdeposits-deposited"
         && onboardingProgress !== "microdeposits-failed"
       let canReceiveMoney = onboardingProgress === "kyc-success"
-
-      console.log("")
-      console.log("")
-      console.log("--> AlternateStatusCard is rendering")
-      console.log("--> cachedProfilePic", cachedProfilePic)
 
       return(
         <Animated.View

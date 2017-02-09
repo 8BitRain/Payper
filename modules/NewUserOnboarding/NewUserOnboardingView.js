@@ -296,6 +296,10 @@ class NewUserOnboardingView extends React.Component {
   }
 
   render() {
+    let hiddenPassword = ""
+    for (var i = 0; i < this.state.password.length; i++)
+      hiddenPassword += "•"
+
     return(
       <View style={{flex: 1.0, backgroundColor: colors.snowWhite}}>
         <StatusBar barStyle='light-content' />
@@ -553,8 +557,17 @@ class NewUserOnboardingView extends React.Component {
                       <EvilIcons name={"lock"} size={32} color={colors.accent} />
                       <View style={{width: 8}} />
                       <Text style={{fontSize: 18, color: colors.deepBlue}}>
-                        {this.state.password}
+                        {(this.state.securePasswordEntry)
+                          ? hiddenPassword
+                          : this.state.password }
                       </Text>
+                    </View>
+
+                    <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, width: 40, justifyContent: 'center', alignItems: 'center'}}>
+                      <Entypo
+                        name={(this.state.securePasswordEntry) ? "eye" : "eye-with-line" }
+                        color={colors.accent} size={22}
+                        onPress={() => this.setState({ securePasswordEntry: !this.state.securePasswordEntry })} />
                     </View>
                   </View>
 

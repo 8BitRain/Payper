@@ -10,6 +10,7 @@ import { StickyView } from '../../../components'
 import { UserRow } from './index'
 import { VibrancyView } from 'react-native-blur'
 import { UserPic } from '../../../components'
+import { getAppFlags } from '../helpers'
 import * as SetMaster5000 from '../../../helpers/SetMaster5000'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
@@ -44,6 +45,7 @@ class UserSearchField extends React.Component {
 
     this.allContactsMap = SetMaster5000.arrayToMap(this.allContacts)
     this.filteredContactsMap = {}
+    this.appFlagMap = {}
 
     this.state = {
       ...this.props,
@@ -100,7 +102,6 @@ class UserSearchField extends React.Component {
       this.props.toggleFieldFocus(this.state.title, shouldContinueFlow)
     })
   }
-
 
   showValue() {
     let animations = [
@@ -169,6 +170,10 @@ class UserSearchField extends React.Component {
 
     // Update state and show or hide user preview list
     this.setState(this.state, () => (this.state.selectedUsers.length === 0) ? this.hideValue() : this.showValue())
+
+    if (user.uid) {
+      getAppFlags(user.uid, (res) => this.appFlagMap[user.uid] = res)
+    }
   }
 
   filterContacts(query) {
@@ -254,7 +259,7 @@ class UserSearchField extends React.Component {
             { /* Contact ListView */ }
             <ListView
               keyboardShouldPersistTaps
-              style={{backgroundColor: colors.snowWhite}}
+              style={{backgroundColor: colors.snowWhite, marginLeft: 17}}
               contentContainerStyle={{width: dims.width, alignItems: 'center'}}
               dataSource={this.state.dataSource}
               renderRow={this.renderRow.bind(this)}

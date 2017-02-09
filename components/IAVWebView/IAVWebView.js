@@ -236,7 +236,7 @@ class IAVWebView extends React.Component {
             underlayColor={'transparent'}
             style={{}}
             onPress={() => {this.toggleTooltip(true)}}>
-                <Ionicons style={{}} size={32} name="ios-help-circle" color={colors.snowWhite} />
+            <Ionicons style={{}} size={32} name="ios-help-circle" color={colors.snowWhite} />
           </TouchableHighlight>
         </View>
         <View style={{ flex: 0.9 }}>

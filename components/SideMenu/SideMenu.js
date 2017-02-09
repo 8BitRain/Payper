@@ -89,7 +89,7 @@ class SideMenu extends React.Component {
           icon: 'chart',
           destination: () => {
             Actions.GlobalModal({
-              subcomponent: <TrendingPayments {...this.props} />,
+              subcomponent: <TrendingPayments />,
               showHeader: true,
               title: "Trending Payments"
             })

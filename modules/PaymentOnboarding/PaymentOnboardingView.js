@@ -6,6 +6,7 @@ import { colors } from '../../globalStyles'
 import { StickyView, TrendingPayments } from '../../components'
 import { TextField, FrequencyField, DateField, UserSearchField } from './subcomponents'
 import { Timer } from '../../classes/Metrics'
+import { generatePayments, formatAlert } from './helpers'
 import * as Lambda from '../../services/Lambda'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 const dims = Dimensions.get('window')
@@ -82,6 +83,8 @@ class PaymentOnboardingView extends React.Component {
   }
 
   toggleFieldFocus(title, shouldContinueFlow) {
+    shouldContinueFlow = false // comment out to enable auto flow
+
     let {scrollTop, scrollTopCache, inFlow, haventFocusedAFieldYet} = this.state
     let fieldIsFocused = this.fieldRefs[title].state.focused
 
@@ -164,25 +167,14 @@ class PaymentOnboardingView extends React.Component {
     Animated.parallel(animations).start()
   }
 
-  pay() {
+  submit() {
     if (!this.state.submittable) return
     this.setState({submittable: false})
+    let {currentUser} = this.props
+    let {who} = this.state
+    let {successHeight, successOpacity, buttonOpacity} = this.AV
 
-    let {
-      currentUser
-    } = this.props
-
-    let {
-      who, howMuch, howOften, howLong, whatFor,
-      startDay, startMonth, startYear, startUTCString,
-      confirming
-    } = this.state
-
-    let {
-      successHeight, successOpacity, buttonOpacity
-    } = this.AV
-
-    // Format success animations
+    // Configure success animations
     let successAnimations = [
       Animated.timing(successHeight, {
         toValue: dims.height * 0.2,
@@ -198,220 +190,49 @@ class PaymentOnboardingView extends React.Component {
       })
     ]
 
-    // Format and send payments
-    for (var k in who) {
-      let user = who[k]
-      let thisUser = currentUser.getPaymentAttributes()
-      let otherUser = {
-        first_name: user.first_name,
-        last_name: user.last_name,
-        profile_pic: user.profile_pic,
-        username: user.username,
-        uid: user.uid,
-        phone: user.phone
-      }
-      let paymentInfo = {
-        sender: thisUser,
-        recip: otherUser,
-        invite: (otherUser.uid) ? false : true,
-        phoneNumber: otherUser.phone,
-        invitee: "recip",
-        amount: (howMuch.indexOf("$") >= 0) ? howMuch.slice(1) : howMuch,
-        frequency: howOften.toUpperCase(),
-        payments: howLong.split(" ")[0],
-        purpose: whatFor,
-        type: "payment",
-        token: currentUser.token,
-        start: startUTCString
-      }
+    let alert = formatAlert(this.state.who, this.state.confirming === "request", currentUser)
+    console.log("--> alert", alert)
 
-      if (paymentInfo.invite) Lambda.inviteViaPayment(paymentInfo)
-      else Lambda.createPayment(paymentInfo)
-    }
+    generatePayments({
+      currentUser,
+      paymentOnboardingState: this.state,
+      appFlagMap: this.fieldRefs["Who?"].appFlagMap
+    }, (payments) => {
+      let paymentListUpdates = (this.state.confirming === "request")
+        ? {additions: {in: payments}}
+        : {additions: {out: payments}}
 
-    // Show success animation, page back to main view
-    Animated.parallel(successAnimations).start(() => {
-
-      // Determine alert to show after scene pop, if any
-      var recipients = ""
-      if (who.length === 1) {
-        recipients = who[0].first_name
-      } else if (who.length === 2) {
-        recipients = who[0].first_name + " and " + who[1].first_name
-      } else {
-        for (var i = 0; i < who.length; i++) {
-          let curr = who[i]
-          recipients += (i < who.length - 1)
-            ? curr.first_name + ", "
-            : "and " + curr.first_name
-        }
-      }
-
-      var alertTitle = (currentUser.appFlags.onboardingProgress === "need-bank")
-        ? "Bank Account Needed"
-        : null
-      var alertMsg = (currentUser.appFlags.onboardingProgress === "need-bank")
-        ? `Your payments to ${recipients} won't commence until you've added a bank account.`
-        : null
-
-      // Pop back to MainView and alert if need be
-      setTimeout(() => {
-        Actions.pop()
-        if (alertTitle && alertMsg) {
+      // (1) Show success animation
+      // (2) Pop back to MainView
+      // (3) Refresh MainView's props with paymentListUpdates and warning alert
+      Animated.parallel(successAnimations).start(() => {
+        setTimeout(() => {
+          Actions.pop()
           Actions.refresh({
-            cb: () => setTimeout(() => {
-              Alert.alert(alertTitle, alertMsg,
-                [
-                  {text: 'Dismiss', style: 'cancel'},
-                  {text: 'Add Bank', onPress: () => {
-                    const IAVWebView = require('../../components/IAVWebView/IAVWebView')
-
-                    Actions.GlobalModal({
-                     subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
-                     backgroundColor: colors.accent
-                   })
-                  }},
-                ]
-              )
-            }, 800)
-          })
-        }
-      }, 800)
-    })
-
-    this.timer.report("paymentOnboarding", this.props.currentUser.uid, {
-      cancelled: false
-    })
-  }
-
-  request() {
-    if (!this.state.submittable) return
-    this.setState({submittable: false})
-
-    let {
-      currentUser
-    } = this.props
-
-    let {
-      who, howMuch, howOften, howLong, whatFor,
-      startDay, startMonth, startYear, startUTCString,
-      confirming
-    } = this.state
-
-    let {
-      successHeight, successOpacity, buttonOpacity
-    } = this.AV
-
-    // Format success animations
-    let successAnimations = [
-      Animated.timing(successOpacity, {
-        toValue: 1,
-        duration: 120
-      }),
-      Animated.timing(buttonOpacity, {
-        toValue: 0,
-        duration: 100
-      })
-    ]
-
-    // Format and send payments
-    for (var k in who) {
-      let user = who[k]
-      let thisUser = currentUser.getPaymentAttributes()
-      let otherUser = {
-        first_name: user.first_name,
-        last_name: user.last_name,
-        profile_pic: user.profile_pic,
-        username: user.username,
-        uid: user.uid,
-        phone: user.phone
-      }
-      let paymentInfo = {
-        sender: otherUser,
-        recip: thisUser,
-        invite: (otherUser.uid) ? false : true,
-        phoneNumber: otherUser.phone,
-        invitee: "sender",
-        amount: (howMuch.indexOf("$") >= 0) ? howMuch.slice(1) : howMuch,
-        frequency: howOften.toUpperCase(),
-        payments: howLong.split(" ")[0],
-        purpose: whatFor,
-        type: "request",
-        token: currentUser.token,
-        start: startUTCString
-      }
-
-      if (paymentInfo.invite) Lambda.inviteViaPayment(paymentInfo)
-      else Lambda.createPayment(paymentInfo)
-    }
-
-    // Show success animation, page back to main view
-    Animated.parallel(successAnimations).start(() => {
-      // Determine alert to show after scene pop, if any
-      var recipients = ""
-      if (who.length === 1) {
-        recipients = who[0].first_name
-      } else if (who.length === 2) {
-        recipients = who[0].first_name + " and " + who[1].first_name
-      } else {
-        for (var i = 0; i < who.length; i++) {
-          let curr = who[i]
-          recipients += (i < who.length - 1)
-            ? curr.first_name + ", "
-            : "and " + curr.first_name
-        }
-      }
-
-      let userNeedsBank = currentUser.appFlags.onboardingProgress === "need-bank"
-        || currentUser.appFlags.onboardingProgress.indexOf("microdeposits") >= 0
-      let userNeedsToVerify = currentUser.appFlags.customer_status !== "verified"
-
-      var alertMsg, alertTitle
-      if (userNeedsBank && userNeedsToVerify) {
-        alertTitle = "Bank and Verification Needed"
-        alertMsg = `Your payments from ${recipients} won't commence until you've added a bank account and verified your account.`
-      } else if (userNeedsBank) {
-        alertTitle = "Bank Account Needed"
-        alertMsg = `Your payments from ${recipients} won't commence until you've added a bank account.`
-      } else if (userNeedsToVerify) {
-        alertTitle = "Verification Needed"
-        alertMsg = `Your payments from ${recipients} won't commence until you've verified your account.`
-      }
-
-      // Pop back to MainView and alert if need be
-      setTimeout(() => {
-        Actions.pop()
-        if (alertTitle && alertMsg) {
-          Actions.refresh({
-            cb: () => setTimeout(() => {
-              Alert.alert(alertTitle, alertMsg,
-                [
-                  {text: 'Dismiss', style: 'cancel'},
-                  (userNeedsBank)
-                    ? {text: 'Add Bank', onPress: () => {
+            paymentListUpdates,
+            cb: () => {
+              if (alert.title && alert.msg) {
+                console.log("--> Will alert!")
+                setTimeout(() => {
+                  Alert.alert(alert.title, alert.msg,
+                    [
+                      {text: 'Dismiss', style: 'cancel'},
+                      {text: 'Add Bank', onPress: () => {
                         const IAVWebView = require('../../components/IAVWebView/IAVWebView')
 
                         Actions.GlobalModal({
                          subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
                          backgroundColor: colors.accent
-                        })
-                      }}
-                    : {text: 'Verify Account', onPress: () => {
-                      const KYCOnboardingView = require('../../components/KYCOnboarding/KYCOnboardingView')
-
-                      Actions.GlobalModal({
-                        subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
-                        backgroundColor: colors.snowWhite,
-                        showHeader: true,
-                        title: "Account Verification"
-                      })
-                    }}
-                ]
-              )
-            }, 800)
+                       })
+                      }},
+                    ]
+                  )
+                }, 800)
+              }
+            }
           })
-        }
-      }, 800)
+        }, 800)
+      })
     })
 
     this.timer.report("paymentOnboarding", this.props.currentUser.uid, {
@@ -419,7 +240,7 @@ class PaymentOnboardingView extends React.Component {
     })
   }
 
-  confirm(payOrRequest) {
+  toggleConfirmButton(payOrRequest) {
     // Make sure no fields are blank
     let {
       who, howMuch, howOften, howLong, whatFor, startDay, startMonth, startYear
@@ -800,7 +621,7 @@ class PaymentOnboardingView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.75}
               underlayColor={'transparent'}
-              onPress={() => this.confirm(this.state.confirming)}>
+              onPress={() => this.toggleConfirmButton(this.state.confirming)}>
               <Animated.View style={{flexDirection: 'row', width: cancelButtonWidth, opacity: cancelButtonOpacity, flex: 1.0, alignItems: 'center', justifyContent: 'center'}}>
                 <EvilIcons name={"close-o"} color={colors.carminePink} size={26} />
 
@@ -815,7 +636,7 @@ class PaymentOnboardingView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.75}
               underlayColor={'transparent'}
-              onPress={() => (confirming === "request") ? this.request() : this.confirm("request")}>
+              onPress={() => (confirming === "request") ? this.submit() : this.toggleConfirmButton("request")}>
               <Animated.View style={{width: requestButtonWidth, opacity: requestButtonOpacity, flex: 1.0, alignItems: 'center', justifyContent: 'center'}}>
                 <Text style={{fontSize: 20, color: colors.accent, textAlign: 'center'}}>
                   {(confirming === "request") ? "Confirm Request" : "Request"}
@@ -846,7 +667,7 @@ class PaymentOnboardingView extends React.Component {
             <TouchableHighlight
               activeOpacity={0.75}
               underlayColor={'transparent'}
-              onPress={() => (this.state.confirming === "pay") ? this.pay() : this.confirm("pay")}>
+              onPress={() => (this.state.confirming === "pay") ? this.submit() : this.toggleConfirmButton("pay")}>
               <Animated.View style={{width: payButtonWidth, opacity: payButtonOpacity, flex: 1.0, alignItems: 'center', justifyContent: 'center'}}>
                 <Text style={{fontSize: 20, color: colors.gradientGreen}}>
                   {(confirming === "pay") ? "Confirm Pay" : "Pay"}

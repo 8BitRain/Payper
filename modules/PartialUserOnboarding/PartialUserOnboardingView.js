@@ -88,7 +88,6 @@ export default class PartialUserOnboardingView extends React.Component {
         this.setState({loading: false})
         responseData.decryptedEmail = email
         responseData.decryptedPhone = phone
-        console.log("\n\n\n--> Facebook user creation responseData", responseData)
         this.props.currentUser.initialize(responseData)
         Actions.MainViewContainer()
       }
