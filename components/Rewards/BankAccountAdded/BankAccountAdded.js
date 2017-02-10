@@ -15,6 +15,8 @@ import {colors} from '../../../globalStyles';
 import Header from '../../../components/Header/Header';
 import * as Headers from '../../../helpers/Headers';
 
+import {device} from '../../../helpers';
+
 //Custom
 const dimensions = Dimensions.get('window');
 
@@ -200,7 +202,7 @@ class BankAccountAdded extends React.Component {
 
     if(this.state.buttonState == 0){
       return(
-        <Animated.View style={{flex: 1, alignItems: "center", borderRadius: dimensions.width / 32.0, borderTopLeftRadius: 0, borderTopRightRadius: 0, overflow: "hidden", opacity: fade_confirmation_button, position: "absolute", top: dimensions.height * .71}}>
+        <Animated.View style={{flex: 1, alignItems: "center", borderRadius: dimensions.width / 32.0, borderTopLeftRadius: 0, borderTopRightRadius: 0, overflow: "hidden", opacity: fade_confirmation_button, position: "absolute", top: device == "SE" ? dimensions.height * .71: device == "6" ? dimensions.height * .725 : dimensions.height * .725}}>
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
@@ -227,7 +229,7 @@ class BankAccountAdded extends React.Component {
 
     if(this.state.buttonState == 1){
       return(
-        <Animated.View style={{flex: 1, alignItems: "center", borderRadius: dimensions.width / 32.0, borderTopLeftRadius: 0, borderTopRightRadius: 0, overflow: "hidden", opacity: fade_confirmation_button, position: "absolute", top: dimensions.height * .71}}>
+        <Animated.View style={{flex: 1, alignItems: "center", borderRadius: dimensions.width / 32.0, borderTopLeftRadius: 0, borderTopRightRadius: 0, overflow: "hidden", opacity: fade_confirmation_button, position: "absolute", top: device == "SE" ? dimensions.height * .71: device == "6" ? dimensions.height * .725 : dimensions.height * .725}}>
           <View style={{flexDirection: "row"}}>
             <TouchableHighlight
               activeOpacity={0.8}
@@ -363,7 +365,7 @@ class BankAccountAdded extends React.Component {
       <View style={{flex: 1}}>
         <View style={styles.wrapper}>
           {/* Tooltip */}
-          <Animated.View style={{flex: 1, position: "absolute", top: 15, left: 233, opacity: fadein_verifyid_text}}>
+          <Animated.View style={{flex: 1, position: "absolute", top: 15, left: device == "SE" ? 223 : device == "6" ? 260 : 260, opacity: fadein_verifyid_text}}>
             <TouchableHighlight
               activeOpacity={0.8}
               underlayColor={'transparent'}
@@ -373,15 +375,15 @@ class BankAccountAdded extends React.Component {
             </TouchableHighlight>
           </Animated.View>
           {/* Key */}
-          <Animated.View style={{flex: 1, position: "absolute", justifyContent: "center", alignItems: "center", left: 100, top: 120, opacity: transistion_view_opacity, transform: [{translateX: transistion_view}]}}>
+          <Animated.View style={{flex: 1, position: "absolute", justifyContent: "center", alignItems: "center", left: device == "SE" ? 100 : device == "6" ? 125 : 125, top: 120, opacity: transistion_view_opacity, transform: [{translateX: transistion_view}]}}>
             <Animated.Image style={{width: 64, height: 64, transform: [{scaleX: loadKey_scaleChange}, {scaleY: loadKey_scaleChange}], opacity: 1}} source={require('../../../assets/images/key.png')}/>
           </Animated.View>
           {/* Money Bag */}
-          {<Animated.View style={{flex: 1, position: "absolute", justifyContent: "center", alignItems: "center", left: 110, top: this.state.moneyBagContainerTop, transform: [{translateY: moneybag_transition}], opacity: moneybag_transition_opacity}}>
+          {<Animated.View style={{flex: 1, position: "absolute", justifyContent: "center", alignItems: "center", left: device == "SE" ? 110 : device == "6" ? 130 : 130, top: this.state.moneyBagContainerTop, transform: [{translateY: moneybag_transition}], opacity: moneybag_transition_opacity}}>
             <Animated.Image style={{width: 60, height: 81}} source={require('../../../assets/images/moneybag.png')}/>
           </Animated.View>}
           {/* Extended Hand*/}
-          <Animated.View  style={{flex: 1, position: "absolute", justifyContent: "center", alignItems: "center", left: 100, top: 200, transform: [{translateY: transition_money_hand}], opacity: extendedhand_transition, width: 64, height: 64}}>
+          <Animated.View  style={{flex: 1, position: "absolute", justifyContent: "center", alignItems: "center", left: device == "SE" ? 100 : device == "6" ? 120 : 120, top: 200, transform: [{translateY: transition_money_hand}], opacity: extendedhand_transition, width: 64, height: 64}}>
             <Animated.Image style={{width: 122, height: 56}} source={require('../../../assets/images/extendedhand.png')}/>
           </Animated.View>
           {/* Send Money With Payper */}
