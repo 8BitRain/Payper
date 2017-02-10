@@ -20,16 +20,18 @@ function formatAlert(users, isRequest, currentUser) {
   }
 
   // Format alert
-  let title, msg
+  let title, msg, btn
   if (userNeedsBank) {
     title = "Bank Account Needed"
     msg = `Your payments ${(isRequest) ? `from` : `to`} ${recipients} won't commence until you've added a bank account.`
+    btn = "Add Bank"
   } else if (isRequest && userNeedsToVerifyAccount) {
     title = "Account Verification Needed"
     msg = `Your payments from ${recipients} won't commence until you've verified your account.`
+    btn = "Verify Account"
   }
 
-  return {title, msg}
+  return {title, msg, btn}
 }
 
 module.exports = formatAlert
