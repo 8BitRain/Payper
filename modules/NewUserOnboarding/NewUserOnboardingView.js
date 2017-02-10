@@ -321,7 +321,11 @@ class NewUserOnboardingView extends React.Component {
               activeOpacity={0.75}
               underlayColor={'transparent'}
               style={{position: 'absolute', top: 0, left: 0, bottom: 0, padding: 14, paddingTop: 30, justifyContent: 'center'}}
-              onPress={() => (this.state.index === 0) ? Actions.pop() : this.paginate("prev")}>
+              onPress={() => {
+                if (!this.state.signupIsPressable) return
+                if (this.state.index === 0) Actions.pop()
+                else this.paginate("prev")
+              }}>
               <EvilIcons name={(this.state.index === 0) ? "close" : "chevron-left"} color={colors.snowWhite} size={(this.state.index === 0) ? 24 : 30} />
             </TouchableHighlight>
           </View>
