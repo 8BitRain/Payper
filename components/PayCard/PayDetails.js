@@ -134,7 +134,7 @@ class paydetails extends React.Component {
       ]
     )
 
-    function confirm() {
+    function confirm(props) {
       let { token, pid, paymentType, status } = props
 
       Lambda.rejectPayment({
