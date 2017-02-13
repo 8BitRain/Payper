@@ -123,6 +123,8 @@ export function globalUserListToArray(options) {
   for (var username in options.users) {
     if (username != options.username) {
       curr = options.users[username];
+      if (curr.uid === options.uid) continue
+
       curr.username = username;
       curr.sectionTitle = options.sectionTitle;
       curr.selected = false;
