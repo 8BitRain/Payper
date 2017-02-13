@@ -212,18 +212,28 @@ class PaymentOnboardingView extends React.Component {
             paymentListUpdates,
             cb: () => {
               if (alert.title && alert.msg) {
-                console.log("--> Will alert!")
                 setTimeout(() => {
                   Alert.alert(alert.title, alert.msg,
                     [
                       {text: 'Dismiss', style: 'cancel'},
-                      {text: 'Add Bank', onPress: () => {
-                        const IAVWebView = require('../../components/IAVWebView/IAVWebView')
+                      {text: alert.btn, onPress: () => {
+                        if (alert.btn === "Add Bank") {
+                          const IAVWebView = require('../../components/IAVWebView/IAVWebView')
+                          
+                          Actions.GlobalModal({
+                            subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
+                            backgroundColor: colors.accent
+                          })
+                        } else if (alert.btn === "Verify Account") {
+                          const KYCOnboardingView = require('../../components/KYCOnboarding/KYCOnboardingView')
 
-                        Actions.GlobalModal({
-                         subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
-                         backgroundColor: colors.accent
-                       })
+                          Actions.GlobalModal({
+                            subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
+                            backgroundColor: colors.snowWhite,
+                            showHeader: true,
+                            title: "Account Verification"
+                          })
+                        }
                       }},
                     ]
                   )

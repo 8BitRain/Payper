@@ -64,7 +64,10 @@ export function generatePaymentStatus(params, cb) {
     let recipNeedsKYC = recipOnboardingProgress.indexOf("kyc") >= 0 && recipOnboardingProgress !== "kyc-success" && recipOnboardingProgress !== "kyc-successDismissed"
 
     let paymentStatus
-    if (senderNeedsBank && recipNeedsBank || recipNeedsKYC)
+
+    if (paymentType === "request")
+      paymentStatus = "pendingConfirmation"
+    else if (senderNeedsBank && recipNeedsBank || recipNeedsKYC)
       paymentStatus = "pendingBothFundingSources"
     else if (senderNeedsBank)
       paymentStatus = "pendingSenderFundingSource"
@@ -168,11 +171,6 @@ export function storePayments(payments) {
       let params = {token: payment.token, pid: payment.pid}
       let path = (type === "request") ? pendingPaymentsPath : activePaymentsPath
       let endpoint = (payment.type === "request") ? "payments/request" : "payments/queue"
-
-      console.log("--> type", type)
-      console.log("--> params", params)
-      console.log("--> path", path)
-      console.log("--> endpoint", endpoint)
 
       firebase.database().ref(path).set(payment, () => {
         try {

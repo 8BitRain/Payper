@@ -14,7 +14,7 @@
 **/
 import React from 'react'
 import * as _ from 'lodash'
-import {View, ListView, Animated, RecyclerViewBackedScrollView} from 'react-native'
+import {View, ListView, Animated, RecyclerViewBackedScrollView, UIManager, findNodeHandle} from 'react-native'
 
 class DynamicListRow extends React.Component {
   constructor(props) {
@@ -22,50 +22,59 @@ class DynamicListRow extends React.Component {
 
     this.AV = {
       defaultTransition: 600,
-      rowOpacity: new Animated.Value(0)
+      opacity: new Animated.Value(0),
+      marginTop: new Animated.Value(0),
+      marginLeft: new Animated.Value(0)
     }
   }
 
   componentDidMount() {
-    let {defaultTransition, rowOpacity} = this.AV
+    let {defaultTransition, opacity} = this.AV
 
-    Animated.timing(rowOpacity, {
+    Animated.timing(opacity, {
       toValue: 1,
       duration: defaultTransition
     }).start()
   }
 
-  beforeUnmount(cb) {
-    let {defaultTransition, rowOpacity, rowHeight} = this.AV
-
-    let animations = [
-      Animated.timing(rowHeight, {
-        toValue: 0,
-        duration: 200
-      }),
-      Animated.timing(rowOpacity, {
-        toValue: 0,
-        duration: 160
-      })
-    ]
-
-    Animated.parallel(animations).start(() => {
-      if (typeof cb === 'function')
-        cb()
-    })
+  measure(cb) {
+    UIManager.measure(findNodeHandle(this.wrap), (x, y, w, h) => cb({x, y, w, h}))
   }
 
-  layout(e) {
-    let {height} = e.nativeEvent.layout
-    this.AV.rowHeight = new Animated.Value(height)
+  beforeUnmount(cb) {
+    this.measure((dims) => {
+      let {marginLeft, marginTop, opacity} = this.AV
+      let {w, h} = dims
+
+      let animations = [
+        Animated.parallel([
+          Animated.timing(marginLeft, {
+            toValue: -1 * w,
+            duration: 140
+          }),
+          Animated.timing(opacity, {
+            toValue: 0,
+            duration: 200
+          })
+        ]),
+        Animated.timing(marginTop, {
+          toValue: -1 * h,
+          duration: 160
+        })
+      ]
+
+      Animated.sequence(animations).start(() => cb())
+    })
   }
 
   render() {
     let {children} = this.props
-    let {rowOpacity, rowHeight} = this.AV
+    let {opacity, marginLeft, marginTop} = this.AV
 
     return(
-      <Animated.View style={{opacity: rowOpacity, height: rowHeight}} onLayout={(e) => this.layout(e)}>
+      <Animated.View
+        ref={ref => this.wrap = ref}
+        style={{opacity, marginLeft, marginTop}}>
         {children}
       </Animated.View>
     )

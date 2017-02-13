@@ -1,7 +1,7 @@
 import React from 'react'
 import firebase from 'firebase'
 import {Actions} from 'react-native-router-flux'
-import {View, Text, TouchableHighlight, Animated, Dimensions, Modal, Image, StyleSheet} from 'react-native'
+import {View, Text, TouchableHighlight, Animated, Dimensions, Modal, Image, StyleSheet, UIManager, findNodeHandle} from 'react-native'
 import {colors} from '../../globalStyles'
 import {IAVWebView, KYCOnboardingView, PhotoUploader, MicrodepositOnboarding, MicrodepositTooltip, SuspendedTooltip} from '../index'
 import {AnimatedCircularProgress} from 'react-native-circular-progress'
@@ -20,7 +20,9 @@ class AlternateStatusCard extends React.Component {
 
     this.AV = {
       opacity: new Animated.Value(1),
-      height: undefined // defined on mount in layout()
+      shadowOpacity: new Animated.Value(1),
+      marginTop: new Animated.Value(16),
+      marginLeft: new Animated.Value(0)
     }
 
     this.config = {
@@ -145,29 +147,40 @@ class AlternateStatusCard extends React.Component {
       destination()
   }
 
-  layout(e) {
-    let height = e.nativeEvent.layout.height
-    this.AV.height = new Animated.Value(height)
+  measure(cb) {
+    UIManager.measure(findNodeHandle(this.wrap), (x, y, w, h) => cb({x, y, w, h}))
   }
 
   dismiss() {
-    let {height, opacity} = this.AV
+    this.measure((dims) => {
+      let {marginLeft, marginTop, opacity, shadowOpacity} = this.AV
+      let {w, h} = dims
 
-    let animations = [
-      Animated.timing(height, {
-        toValue: 0,
-        duration: 200
-      }),
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 180
+      let animations = [
+        Animated.timing(shadowOpacity, {
+          toValue: 0,
+          duration: 70
+        }),
+        Animated.parallel([
+          Animated.timing(marginLeft, {
+            toValue: -1 * w,
+            duration: 140
+          }),
+          Animated.timing(opacity, {
+            toValue: 0,
+            duration: 200
+          })
+        ]),
+        Animated.timing(marginTop, {
+          toValue: -1 * h,
+          duration: 160
+        })
+      ]
+
+      Animated.sequence(animations).start(() => {
+        let path = `/appFlags/${this.props.currentUser.uid}/onboardingProgress`
+        firebase.database().ref(path).set('kyc-successDismissed')
       })
-    ]
-
-    Animated.parallel(animations).start(() => {
-      let {uid} = this.props.currentUser
-      let path = `/appFlags/${uid}/onboardingProgress`
-      firebase.database().ref(path).set('kyc-successDismissed')
     })
   }
 
@@ -182,7 +195,6 @@ class AlternateStatusCard extends React.Component {
         <View />
       )
     } else {
-      let {height, opacity} = this.AV
       let {onboardingPercentage} = this.state
       let {message, destination, action} = configInfo
       let {cachedProfilePic} = this.props.currentUser
@@ -195,22 +207,27 @@ class AlternateStatusCard extends React.Component {
 
       return(
         <Animated.View
-          onLayout={(e) => this.layout(e)}
-          style={{height, opacity}}>
+          ref={ref => this.wrap = ref}
+          style={{
+            marginLeft: this.AV.marginLeft,
+            marginTop: this.AV.marginTop,
+            opacity: this.AV.opacity
+          }}>
 
           { /* Shadow must be absolutely position due to 'overflow: hidden'
                style on actual container */ }
-          <View
-            style={{position: 'absolute', top: 22, left: dims.width * 0.06, right: dims.width * 0.06, bottom: 12, borderRadius: 5,
+          <Animated.View
+            style={{
+              position: 'absolute', top: 0, left: dims.width * 0.06, right: dims.width * 0.06, bottom: 0, borderRadius: 5,
               shadowColor: colors.medGrey,
-              shadowOpacity: 1.0,
+              shadowOpacity: this.AV.shadowOpacity,
               shadowRadius: 2,
               shadowOffset: { height: 0, width: 0}
             }} />
 
           <View
             style={{
-              width: dims.width * 0.88, marginLeft: dims.width * 0.06, marginTop: 22, marginBottom: 12, backgroundColor: colors.snowWhite,
+              width: dims.width * 0.88, marginLeft: dims.width * 0.06, backgroundColor: colors.snowWhite,
               borderRadius: 5, overflow: 'hidden'
             }}>
 
@@ -224,7 +241,11 @@ class AlternateStatusCard extends React.Component {
               </View>
 
               { /* Profile pic and onboarding percentage */ }
-              <View style={{marginTop: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+              <View
+                style={{
+                  marginLeft: 8, flexDirection: 'row', alignItems: 'center',
+                  justifyContent: 'center', paddingTop: 10, paddingBottom: 6
+                }}>
                 <View style={styles.imageWrap}>
                   <AnimatedCircularProgress
                     size={imageWrapDims.width}
@@ -236,9 +257,11 @@ class AlternateStatusCard extends React.Component {
                   </AnimatedCircularProgress>
                   {(cachedProfilePic || profilePic)
                     ? <Image style={styles.image} source={{uri: cachedProfilePic || profilePic}} />
-                    : <View style={styles.image}><Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
-                        {currentUser.first_name.charAt(0) + currentUser.last_name.charAt(0)}
-                      </Text></View> }
+                    : <View style={styles.image}>
+                        <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
+                          {currentUser.first_name.charAt(0) + currentUser.last_name.charAt(0)}
+                        </Text>
+                      </View> }
                 </View>
 
                 <View style={{width: 20}} />
@@ -247,14 +270,14 @@ class AlternateStatusCard extends React.Component {
                   <Text style={{fontSize: 56, color: colors.accent, fontWeight: '200'}}>
                     {onboardingPercentage}
                   </Text>
-                  <Text style={{fontSize: 28, color: colors.accent, fontWeight: '200', marginTop: 6}}>
+                  <Text style={{fontSize: 28, color: colors.accent, fontWeight: '200', marginLeft: 6, marginTop: 7}}>
                     {"%"}
                   </Text>
                 </View>
               </View>
 
               { /* Locked and unlocked features */ }
-              <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10}}>
+              <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginLeft: 10}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <EvilIcons name={(canSendMoney) ? "unlock" : "lock"} size={24} color={(canSendMoney) ? colors.deepBlue : colors.slateGrey} />
                   <Text style={{fontSize: 17, color: (canSendMoney) ? colors.deepBlue : colors.slateGrey, fontWeight: '200'}}>

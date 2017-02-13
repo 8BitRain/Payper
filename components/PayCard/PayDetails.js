@@ -31,6 +31,7 @@ class paydetails extends React.Component {
 
     let firstName = this.props.name.split(" ")[0]
     let endsInS = firstName.charAt(firstName.length - 1) === 's'
+
     this.outgoingTransferStatuses = {
       "arrived": "Arrived in " + firstName + ((endsInS) ? "'" : "'s") + " bank account.",
       "uninitiated": "Will initiate on the specified date.",
@@ -83,7 +84,6 @@ class paydetails extends React.Component {
     function confirm(props) {
       let { token, pid, paymentType, status } = props
 
-      // TODO: Optimistically delete payment card
       Lambda.cancelPayment({
         token: token,
         payment_id: pid,
@@ -113,7 +113,6 @@ class paydetails extends React.Component {
     function confirm(props) {
       let { token, pid, paymentType, status } = props
 
-      // TODO: Optimistically delete payment card
       Lambda.confirmPayment({
         token: token,
         payment_id: pid,
@@ -122,8 +121,6 @@ class paydetails extends React.Component {
       })
 
       Actions.pop()
-      let paymentListUpdates = {removals: [pid]}
-      Actions.refresh({paymentListUpdates})
     }
   }
 
@@ -139,10 +136,9 @@ class paydetails extends React.Component {
       ]
     )
 
-    function confirm() {
+    function confirm(props) {
       let { token, pid, paymentType, status } = props
 
-      // TODO: Optimistically delete payment card
       Lambda.rejectPayment({
         token: token,
         payment_id: pid,

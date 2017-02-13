@@ -63,13 +63,14 @@ class MainView extends React.Component {
     let {paymentListRef} = this.state
     let {paymentListUpdates} = nextProps
 
-    if (paymentListUpdates && paymentListRef) {
+    if (nextProps.paymentListUpdates && !this.props.paymentListUpdates && paymentListRef) {
       paymentListRef.optimisticallyUpdate(paymentListUpdates)
+      setTimeout(() => Actions.refresh({paymentListUpdates: null}), 5)
     }
 
-    if (nextProps.cb && typeof nextProps.cb === 'function') {
+    if (nextProps.cb && typeof nextProps.cb === 'function' && !this.props.cb) {
       nextProps.cb()
-      setTimeout(() => Actions.refresh({cb: null}), 20)
+      setTimeout(() => Actions.refresh({cb: null}), 5)
     }
   }
 
@@ -227,7 +228,7 @@ class MainView extends React.Component {
               return(
                 <View style={{paddingBottom: 100}}>
                   { /* Empty state */
-                    (data.in || data.out)
+                    (data && data.in || data && data.out)
                       ? null
                       : <EmptyState /> }
 
