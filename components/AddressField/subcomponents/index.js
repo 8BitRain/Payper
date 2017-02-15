@@ -1,1 +1,0 @@
-exports.AddressTextInput = require('./AddressTextInput')
