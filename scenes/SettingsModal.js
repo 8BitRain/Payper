@@ -14,15 +14,15 @@ const styles = StyleSheet.create({
   }
 })
 
-class FacebookLoginModal extends React.Component {
+class SettingsModal extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Button onPress={Actions.Main}>{'Complete Facebook Login'}</Button>
-        <Button onPress={Actions.pop}>{'Cancel Facebook Login'}</Button>
+        <Text>{'Settings'}</Text>
+        <Button onPress={Actions.pop}>{'Back'}</Button>
       </View>
     )
   }
 }
 
-module.exports = FacebookLoginModal
+module.exports = SettingsModal

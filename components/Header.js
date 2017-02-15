@@ -6,7 +6,6 @@ import {TabBar} from './'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 const dims = Dimensions.get('window')
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.accent,
@@ -23,9 +22,15 @@ const styles = StyleSheet.create({
     }
   },
   navWrap: {
-    width: dims.width,
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: dims.width
+  },
+  navIconWrap: {
+    paddingTop: 5,
     paddingLeft: 8,
-    paddingTop: 5
+    paddingRight: 50,
+    paddingBottom: 0
   }
 })
 
@@ -46,8 +51,9 @@ class Header extends React.Component {
           <TouchableHighlight
             activeOpacity={0.75}
             underlayColor={'transparent'}
-            onPress={this.toggleSideMenu}>
-            <EvilIcons name={"navicon"} size={36} color={colors.snowWhite} />
+            onPress={this.toggleSideMenu}
+            style={styles.navIconWrap}>
+            <EvilIcons name={"navicon"} size={32} color={colors.snowWhite} />
           </TouchableHighlight>
         </View>
         {this.props.showTabBar ? <TabBar {...this.props} /> : null}

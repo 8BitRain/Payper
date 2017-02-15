@@ -19,7 +19,7 @@ class Lander extends React.Component {
     return (
       <View style={styles.container}>
         <Text>{"Welcome to Payper"}</Text>
-        <Button onPress={Actions.FacebookLoginModal}>{"Login with Facebook"}</Button>
+        <Button onPress={Actions.FacebookLogin}>{"Login with Facebook"}</Button>
       </View>
     )
   }
