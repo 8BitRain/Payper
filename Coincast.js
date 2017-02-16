@@ -15,6 +15,7 @@ import DocumentUploadTooltip from './components/Tooltips/DocumentUploadTooltip/D
 import BankAccountAdded from './components/Rewards/BankAccountAdded/BankAccountAdded'
 import VerifiedIdentity from './components/Rewards/VerifiedIdentity/VerifiedIdentity'
 import StatusCard from './components/StatusCard/StatusCard'
+import Want from './components/InterestOnboarding/Want'
 import { Scene, Reducer, Router, Modal } from 'react-native-router-flux'
 import { colors } from './globalStyles'
 import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
@@ -97,6 +98,14 @@ export default class Coincast extends React.Component {
               key="BetaLandingScreenView"
               type="replace"
               panHandlers={null} />
+
+            <Scene
+              initial
+              component={Want}
+              key="Want"
+              type="replace"
+              panHandlers={null} />
+
 
             <Scene
               component={LandingScreenViewContainer}
