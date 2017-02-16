@@ -30,7 +30,7 @@ import {
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params)
   return (state, action) => {
-    console.log("ACTION:", action)
+    // console.log("ACTION:", action)
     return defaultReducer(state, action)
   }
 }
@@ -48,7 +48,7 @@ export default class Coincast extends React.Component {
             <Scene key="Lander"           component={Lander}           panHandlers={null} />
 
             { /* Drawer/Tab Scenes */ }
-            <Scene key="Main" component={NavigationDrawer} open={false} >
+            <Scene key="Main" component={NavigationDrawer} open={false}>
               <Scene key="TabScenes" tabs={true}>
                 <Scene key="Broadcasts" component={Main} title="Broadcasts" hideTabBar hideNavBar panhandlers={null} initial={true} />
                 <Scene key="Explore"    component={Main} title="Explore"    hideTabBar hideNavBar panhandlers={null} />
@@ -71,6 +71,7 @@ export default class Coincast extends React.Component {
             </Scene>
           </Scene>
 
+          { /* Included in react-native-router-flux */ }
           <Scene key="error" component={Error} />
         </Scene>
       </Router>

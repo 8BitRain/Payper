@@ -1,0 +1,66 @@
+{
+  "user": {
+    "uid1": {
+      "firstName": "Brady",
+      "lastName": "Sheridan",
+      "username": "@Brady-Sheridan",
+      "phone": "1111111111",
+      "email": "bradysheridan@example.com"
+    },
+    "uid2": {
+      "firstName": "Eric",
+      "lastName": "Smith",
+      "username": "@Eric-Smith",
+      "phone": "2222222222",
+      "email": "ericsmith@example.com"
+    },
+    "uid3": {
+      "firstName": "Vash",
+      "lastName": "Marada",
+      "username": "@Vash-Marada",
+      "phone": "3333333333",
+      "email": "vashmarada@example.com"
+    },
+    "uid4": {
+      "firstName": "Mohsin",
+      "lastName": "Khan",
+      "username": "@Mohsin-Khan",
+      "phone": "4444444444",
+      "email": "mohsinkhan@example.com"
+    },
+    "uid5": {
+      "firstName": "Luke",
+      "lastName": "Odell",
+      "username": "@Luke-Odell",
+      "phone": "5555555555",
+      "email": "lukeodell@example.com"
+    },
+  },
+  "userBroadcastFeed": {
+    "uid1": "cid1"
+  },
+  "broadcasts": {
+    "cid1": {
+      "title": "Netflix!!!",
+      "amount": 5,
+      "frequency": "MONTHLY",
+      "memo": "Hop on my Netflix subscription!",
+      "hiddenInfo": "f4zxcmjJhf31j812n3uxm9w",
+      "casterID": "uid2",
+      "memberIDs": "uid3",
+      "memberLimit": 2,
+      "tag": "Netflix"
+    },
+    "cid2": {
+      "title": "Hulu+",
+      "amount": 4.50,
+      "frequency": "WEEKLY",
+      "memo": "Need two people to split my Hulu subscription with.",
+      "hiddenInfo": "kKFS391mJFasjdf94813n",
+      "casterID": "uid4",
+      "memberIDs": "",
+      "memberLimit": 2,
+      "tag": "Hulu"
+    }
+  }
+}
