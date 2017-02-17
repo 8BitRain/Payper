@@ -7,11 +7,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 7,
     paddingLeft: 10,
-    backgroundColor: '#ededed'
+    backgroundColor: '#eff1f4'
   },
   text: {
     color: colors.deepBlue,
-    fontSize: 17
+    fontSize: 16
   }
 })
 

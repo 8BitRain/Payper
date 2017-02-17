@@ -21,6 +21,7 @@ import {
   BankAccountsModal,
   SettingsModal,
   NewBroadcastModal,
+  BroadcastDetailsModal,
   Main,
   Broadcasts,
   Explore,
@@ -68,6 +69,9 @@ export default class Coincast extends React.Component {
             </Scene>
             <Scene key="NewBroadcast" direction="vertical">
               <Scene key="NewBroadcastModal" component={NewBroadcastModal} schema="modal" title="New Broadcast" />
+            </Scene>
+            <Scene key="BroadcastDetails">
+              <Scene key="BroadcastDetailsModal" component={BroadcastDetailsModal} schema="modal" title="Broadcast Details" />
             </Scene>
           </Scene>
 

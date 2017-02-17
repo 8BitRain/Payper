@@ -15,3 +15,4 @@ exports.DynamicList = require('./DynamicList')
 // Specific
 exports.BroadcastPreview = require('./BroadcastPreview')
 exports.BroadcastFeedSectionHeader = require('./BroadcastFeedSectionHeader')
+exports.PullToRefreshPillButton = require('./PullToRefreshPillButton')

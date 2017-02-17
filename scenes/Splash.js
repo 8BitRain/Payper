@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 
 class Splash extends React.Component {
   componentDidMount() {
-    setTimeout(Actions.Main, 600)
+    setTimeout(Actions.Lander, 600)
   }
 
   render() {

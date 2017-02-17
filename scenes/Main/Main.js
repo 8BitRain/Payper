@@ -33,6 +33,10 @@ class Main extends React.Component {
     super(props)
   }
 
+  componentWillMount() {
+    this.props.currentUser.listen((updates) => this.props.updateCurrentUser(updates))
+  }
+
   render() {
     return (
       <View style={{flex: 1}}>

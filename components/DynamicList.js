@@ -1,17 +1,17 @@
-/**
-    Based on https://goo.gl/hC4u7t
-    TODO
-    - [X] Add header functionality
-    - [X] Add footer functionality
-    - [X] Add section header functionality
-    - [X] Implement optimistic additions
-    - [X] Implement optimistic removals
-    - [X] Implement exit animations for DynamicListRows
-    - [X] Implement filter
-**/
 import React from 'react'
 import * as _ from 'lodash'
-import {View, ListView, Animated, RecyclerViewBackedScrollView, UIManager, findNodeHandle} from 'react-native'
+import {
+  View,
+  ListView,
+  Animated,
+  RecyclerViewBackedScrollView,
+  RefreshControl,
+  UIManager,
+  findNodeHandle
+} from 'react-native'
+import {
+  PullToRefreshPillButton
+} from './'
 
 class DynamicListRow extends React.Component {
   constructor(props) {
@@ -96,11 +96,14 @@ class DynamicList extends React.Component {
         : this.emptyDataSource,
       filteredDataSource: null,
       renderHeader: props.renderHeader,
-      renderFooter: props.renderFooter
+      renderFooter: props.renderFooter,
+      refreshContent: null,
+      refreshing: false
     }
 
     this.rowRefs = {}
-
+    this.onPullToRefreshButtonPress = this.onPullToRefreshButtonPress.bind(this)
+    this.onRefresh = this.onRefresh.bind(this)
     this.renderRow = this.renderRow.bind(this)
     this.renderSectionHeader = this.renderSectionHeader.bind(this)
   }
@@ -112,11 +115,21 @@ class DynamicList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.data) {
-      this.setState({
-        dataSource: this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
-      })
+    let updatedState = {}
+
+    if (nextProps.data !== this.props.data) {
+      // Auto update list (with pulling to refresh)
+      // Occurs in a refreshable list if the list is empty
+      // Always occurs on a nonrefreshable list
+      if (!this.props.refreshable || this.state.dataSource._cachedRowCount === 0)
+        updatedState.dataSource = this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
+
+      // Wait to update list until user pulls to refresh
+      else
+        updatedState.refreshContent = this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
     }
+
+    this.setState(updatedState)
   }
 
   optimisticallyUpdate(params, cb) {
@@ -170,38 +183,40 @@ class DynamicList extends React.Component {
   }
 
   filter(query) {
-    let {data} = this.props
-    let filteredData = {}
+    // TODO: GENERALIZE THIS FUNCTION
 
-    query = query.toString().toLowerCase()
-
-    // Filter data
-    for (var sectionKey in data) {
-      const section = data[sectionKey]
-      const keys = Object.keys(section)
-      filteredData[sectionKey] = {}
-      for (var i = 0; i < keys.length; i++) {
-        const key = keys[i]
-        const curr = section[key]
-        const isMatch =
-          curr.recip_name.toLowerCase().indexOf(query) >= 0
-          || curr.sender_name.toLowerCase().indexOf(query) >= 0
-          || curr.recip_username && curr.recip_username.toLowerCase().indexOf(query) >= 0
-          || curr.sender_username && curr.sender_username.toLowerCase().indexOf(query) >= 0
-          || curr.purpose.toLowerCase().indexOf(query) >= 0
-          || curr.amount.toString().toLowerCase().indexOf(query) >= 0
-        if (isMatch) filteredData[sectionKey][key] = curr
-      }
-    }
-
-    let updatedState = {
-      query: query,
-      filteredDataSource: (Object.keys(filteredData).length > 0)
-        ? this.emptyDataSource.cloneWithRowsAndSections(filteredData)
-        : null
-    }
-
-    this.setState(updatedState)
+    // let {data} = this.props
+    // let filteredData = {}
+    //
+    // query = query.toString().toLowerCase()
+    //
+    // // Filter data
+    // for (var sectionKey in data) {
+    //   const section = data[sectionKey]
+    //   const keys = Object.keys(section)
+    //   filteredData[sectionKey] = {}
+    //   for (var i = 0; i < keys.length; i++) {
+    //     const key = keys[i]
+    //     const curr = section[key]
+    //     const isMatch =
+    //       curr.recip_name.toLowerCase().indexOf(query) >= 0
+    //       || curr.sender_name.toLowerCase().indexOf(query) >= 0
+    //       || curr.recip_username && curr.recip_username.toLowerCase().indexOf(query) >= 0
+    //       || curr.sender_username && curr.sender_username.toLowerCase().indexOf(query) >= 0
+    //       || curr.purpose.toLowerCase().indexOf(query) >= 0
+    //       || curr.amount.toString().toLowerCase().indexOf(query) >= 0
+    //     if (isMatch) filteredData[sectionKey][key] = curr
+    //   }
+    // }
+    //
+    // let updatedState = {
+    //   query: query,
+    //   filteredDataSource: (Object.keys(filteredData).length > 0)
+    //     ? this.emptyDataSource.cloneWithRowsAndSections(filteredData)
+    //     : null
+    // }
+    //
+    // this.setState(updatedState)
   }
 
   showHeader() {
@@ -245,6 +260,35 @@ class DynamicList extends React.Component {
     return this.props.renderSectionHeader(rowData, sectionID)
   }
 
+  onPullToRefreshButtonPress() {
+    this.listView.scrollTo({y: 0})
+    this.onRefresh()
+  }
+
+  onRefresh() {
+    let refreshContent = this.state.refreshContent
+
+    // Refresh rows if they have onRefresh functions
+    for (var k in this.rowRefs) {
+
+    }
+
+    if (!refreshContent) return
+
+    this.setState({
+      refreshing: true,
+      refreshContentAvailable: null
+    })
+
+    setTimeout(() => {
+      this.setState({
+        dataSource: refreshContent,
+        refreshContent: null,
+        refreshing: false
+      })
+    }, 1000)
+  }
+
   render() {
     let {dataSource, filteredDataSource, renderHeader, renderFooter} = this.state
     let {renderSectionHeader} = this.props
@@ -252,13 +296,24 @@ class DynamicList extends React.Component {
     return(
       <View style={{flex: 1.0}}>
         <ListView
+          ref={ref => this.listView = ref}
           enableEmptySections
           dataSource={filteredDataSource || dataSource}
+          refreshControl={(this.props.refreshable)
+            ? <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />
+            : null
+          }
           renderRow={this.renderRow}
           renderSectionHeader={this.renderSectionHeader}
           renderHeader={renderHeader}
           renderFooter={renderFooter}
           renderScrollComponent={(props) => <RecyclerViewBackedScrollView {...props} />} />
+
+        {(this.props.showPullToRefresh && this.state.refreshContent)
+          ? <View style={{position: 'absolute', bottom: 26, right: 0, left: 0, justifyContent: 'center', alignItems: 'center'}}>
+              <PullToRefreshPillButton onPress={this.onPullToRefreshButtonPress} />
+            </View>
+          : null }
       </View>
     )
   }

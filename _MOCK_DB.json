@@ -1,4 +1,7 @@
 {
+  "userBroadcastFeed": {
+    "uid1": "bid1"
+  },
   "user": {
     "uid1": {
       "firstName": "Brady",
@@ -36,31 +39,54 @@
       "email": "lukeodell@example.com"
     },
   },
-  "userBroadcastFeed": {
-    "uid1": "cid1"
-  },
   "broadcasts": {
-    "cid1": {
+    "bid1": {
       "title": "Netflix!!!",
       "amount": 5,
       "frequency": "MONTHLY",
       "memo": "Hop on my Netflix subscription!",
-      "hiddenInfo": "f4zxcmjJhf31j812n3uxm9w",
+      "hiddenInfo": "ENCRYPTED_INFO",
       "casterID": "uid2",
       "memberIDs": "uid3",
       "memberLimit": 2,
-      "tag": "Netflix"
+      "tag": "Netflix",
+      "createdAt": "1487365867878"
     },
-    "cid2": {
+    "bid2": {
       "title": "Hulu+",
       "amount": 4.50,
-      "frequency": "WEEKLY",
+      "frequency": "MONTHLY",
       "memo": "Need two people to split my Hulu subscription with.",
-      "hiddenInfo": "kKFS391mJFasjdf94813n",
+      "hiddenInfo": "ENCRYPTED_INFO",
       "casterID": "uid4",
       "memberIDs": "",
       "memberLimit": 2,
-      "tag": "Hulu"
+      "tag": "Hulu",
+      "createdAt": "1487365867878"
+    },
+    "bid3": {
+      "title": "Bike Rental",
+      "amount": 62,
+      "frequency": "WEEKLY",
+      "memo": "Rent my bicycle on a weekly basis. Will give more info in the hidden info section",
+      "hiddenInfo": "ENCRYPTED_INFO",
+      "casterID": "uid2",
+      "memberIDs": "",
+      "memberLimit": 1,
+      "tag": "Rental",
+      "createdAt": "1487365867878"
+    },
+    "bid4": {
+      "title": "Something",
+      "amount": 193,
+      "frequency": "MONHLY",
+      "memo": "A memo!",
+      "hiddenInfo": "ENCRYPTED_INFO",
+      "casterID": "uid4",
+      "memberIDs": "uid3,uid2",
+      "memberLimit": 3,
+      "tag": "Rental",
+      "createdAt": "1487365867878"
     }
   }
 }
