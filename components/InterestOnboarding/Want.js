@@ -16,18 +16,78 @@ import { device } from '../../helpers'
 //Rows
 import Row from './Row'
 
+let servicesDB = {
+  'VideoStreaming': {
+    'Netflix': {
+      tag: '#Netflix',
+      logo: 'Netflix-logo.jpg'
+    },
+    'Spotify': {
+      tag: '#Spotify',
+      logo: 'Netflix-logo.jpg'
+    },
+    'Hulu':{
+      tag: '#Hulu',
+      logo: 'Netflix-logo.jpg'
+    },
+  },
+  'Game Subscriptions': {
+    'Gamefly': {
+      tag: '#Gamefly',
+      logo: 'Netflix-logo.jpg'
+    },
+    'Pink Molly': {
+      tag: '#Pink Molly',
+      logo: 'Netflix-logo.jpg'
+    },
+  }
+}
+
 class Want extends React.Component {
   constructor(props) {
     super(props);
     //this.height = new Animated.Value(0);
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.data = [{logo: 'Netflix-logo.jpg', title: "Netflix", selected: false, tag: "#Netflix"}, {logo: 'Netflix-logo.jpg', title: "Spotify", selected: false, tag: "#Spotify"}, {logo: 'Netflix-logo.jpg', title: "Hulu", selected: false, tag: "#Hulu"}];
+    //How do I append selected to services?
+
+    this.servicesStore = [];
+
+
+
+    var categories = servicesDB;
+    //Loop through categories
+    for (var categoryKey in categories) {
+      var category = categoryKey;
+      var services = categories[categoryKey];
+
+      //Loop through services
+      for(var serviceKey in services){
+        var service = serviceKey;
+        var logo = services[service];
+        var tag = services[service];
+
+        //append title, selected, and category to each service obj.
+        console.log("Service OBJ Initial: ", services);
+        services[serviceKey]["selected"] = false;
+        services[serviceKey]["title"] = service;
+        services[serviceKey]["category"] = category;
+        //Push manipulated object into datasource ready (readable) array
+        this.servicesStore.push(services[service]);
+
+
+        console.log("Service  OBJ Updated: ", services);
+      }
+    }
+
+    console.log("Categories OBJ: + ", categories);
+    console.log("Service Store", this.servicesStore);
+
+
+    this.data = this.servicesStore;
+
     this.state = {
       dataSource: ds.cloneWithRows(this.data),
       selectedTags: {
-        "#Netflix": false,
-        "#Hulu": false,
-        "#Spotify": false
       }
     }
   }
@@ -36,23 +96,16 @@ class Want extends React.Component {
 
   }
 
-  /*updateRow(rowData){
-    console.log("RowData: ", rowData);
-    this.data = this.data.concat(rowData);
-    this.setState({dataSource:this.state.dataSource.cloneWithRows(this.data)});
-  }*/
-
   updateSelectedTags(tag, selected){
-    //this.setState({selectedTags[tag]: selected});
-    //console.log("Selected Tags ", this.state.selectedTags);
-    var updatedTag = Object.assign({}, this.state.selectedTags, {"#Netflix":selected});
-    this.setState({"Netflix":updatedTag});
-    console.log("Selected Tags State: ", this.state.selectedTags);
+    this.state.selectedTags[tag] = selected;
+    this.setState(this.state);
   }
 
+  updateFirebaseTags(){
+    console.log("Tags to Submit: ", this.state.selectedTags);
+  }
 
   render() {
-    console.log("DataSource", this.state.dataSource);
     return(
       <View style={styles.wrapper}>
         {/* HEADER*/}
@@ -64,14 +117,14 @@ class Want extends React.Component {
         <ListView
           style={styles.container}
           dataSource={this.state.dataSource}
-          renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected) => this.updateSelectedTags(tag, selected)}/>}
+          renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected) => this.updateSelectedTags(tag, selected)} />}
         />
         {/* FOOTER*/}
         <View>
         <TouchableHighlight
           activeOpacity={0.8}
           underlayColor={'transparent'}
-          onPress={() => console.log("Continue Pressed")}
+          onPress={() => this.updateFirebaseTags()}
           style={{height: 50, width: dimensions.width, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
               <Text style={styles.buttonText}>{"Continue"}</Text>
         </TouchableHighlight>
@@ -118,7 +171,12 @@ var styles = StyleSheet.create({
   container: {
    flex: 1,
    marginTop: 20,
- },
+  },
+  separator: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: '#8E8E8E',
+  },
 })
 
 module.exports = Want

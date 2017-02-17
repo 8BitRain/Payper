@@ -28,16 +28,16 @@ class Row extends React.Component {
   * Helps determine which tags to send to the db.
   */
   toggleSelected(){
-    //this.props.updateRow([{logo: this.props.logo, title: this.props.title, selected: true, tag: this.props.tag}]);
     if(this.state.selected){
       this.setState({selected: false});
+      this.props.updateSelectedTags(this.props.tag, false);
     }
     if(this.state.selected == false){
       this.setState({selected: true})
+      this.props.updateSelectedTags(this.props.tag, true);
     }
     //Update selected tags to send to firebase
-    console.log("Row selected?: " + this.state.selected)
-    this.props.updateSelectedTags(this.props.tag, true);
+    //console.log("Row selected?: " + this.state.selected);
 
   }
 
