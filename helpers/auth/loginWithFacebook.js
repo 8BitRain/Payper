@@ -29,7 +29,6 @@ function loginWithFacebook(params) {
           .then((user) => {
             let firebaseUserData = user.toJSON()
             firebaseUserData.token = firebaseUserData.stsTokenManager.accessToken
-            console.log(firebaseUserData)
             createOrGetUser(firebaseUserData, (userData) => onSuccess(userData))
           })
           .catch((err) => onFailure(err))

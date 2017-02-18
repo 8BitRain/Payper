@@ -26,11 +26,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: dims.width
   },
-  navIconWrap: {
+  sideMenuButtonWrap: {
     paddingTop: 5,
     paddingLeft: 8,
     paddingRight: 50,
     paddingBottom: 0
+  },
+  sideMenuButtonWrap: {
+    padding: 8,
+    paddingTop: 5
+  },
+  titleWrap: {
+    position: 'absolute',
+    top: (Platform.OS === 'ios') ? 20 : 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: 18,
+    color: colors.snowWhite
   }
 })
 
@@ -47,16 +64,39 @@ class Header extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.navWrap}>
-          <TouchableHighlight
-            activeOpacity={0.75}
-            underlayColor={'transparent'}
-            onPress={this.toggleSideMenu}
-            style={styles.navIconWrap}>
-            <EvilIcons name={"navicon"} size={32} color={colors.snowWhite} />
-          </TouchableHighlight>
-        </View>
-        {this.props.showTabBar ? <TabBar {...this.props} /> : null}
+        {this.props.title && this.props.showTitle
+          ? <View style={styles.titleWrap}>
+              <Text style={styles.title}>{this.props.title}</Text>
+            </View>
+          : null }
+
+        {this.props.showSideMenuButton
+          ? <View style={styles.navWrap}>
+              <TouchableHighlight
+                activeOpacity={0.75}
+                underlayColor={'transparent'}
+                onPress={this.toggleSideMenu}
+                style={styles.sideMenuButtonWrap}>
+                <EvilIcons name={"navicon"} size={32} color={colors.snowWhite} />
+              </TouchableHighlight>
+            </View>
+          : null}
+
+        {this.props.showBackButton
+          ? <View style={styles.navWrap}>
+              <TouchableHighlight
+                activeOpacity={0.75}
+                underlayColor={'transparent'}
+                onPress={Actions.pop}
+                style={styles.backButtonWrap}>
+                <EvilIcons name={"chevron-left"} size={42} color={colors.snowWhite} />
+              </TouchableHighlight>
+            </View>
+          : null}
+
+        {this.props.showTabBar
+          ? <TabBar {...this.props} />
+          : null}
       </View>
     )
   }

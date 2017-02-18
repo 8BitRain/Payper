@@ -71,7 +71,7 @@ export default class Coincast extends React.Component {
               <Scene key="NewBroadcastModal" component={NewBroadcastModal} schema="modal" title="New Broadcast" />
             </Scene>
             <Scene key="BroadcastDetails">
-              <Scene key="BroadcastDetailsModal" component={BroadcastDetailsModal} schema="modal" title="Broadcast Details" />
+              <Scene key="BroadcastDetailsModal" component={BroadcastDetailsModal} schema="modal" title="Broadcast Details" hideNavBar />
             </Scene>
           </Scene>
 

@@ -3,7 +3,10 @@ const baseURL = config[config.env].lambdaBaseURL
 
 function createOrGetUser(facebookUserData) {
   try {
-    fetch(baseURL + "user/create", {method: "POST", body: JSON.stringify(facebookUserData)})
+    fetch(baseURL + "users/create", {
+      method: "POST",
+      body: JSON.stringify(facebookUserData)
+    })
     .then((response) => response.json())
     .then((responseData) => {
       console.log(responseData)

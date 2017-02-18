@@ -42,7 +42,7 @@ class Main extends React.Component {
       <View style={{flex: 1}}>
 
         { /* Header */ }
-        <Header {...this.props} showTabBar={true} />
+        <Header {...this.props} showSideMenuButton showTabBar />
 
         { /* Inner content */ }
         <View style={styles.container}>
