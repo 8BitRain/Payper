@@ -18,8 +18,15 @@ function formatBroadcastTimestamp(utc) {
   else if (timeToNow.indexOf('year') >= 0)
     suffix = "y"
 
-  if (suffix)
+  if (suffix) {
     timeToNow = timeToNow.split(" ")[0].concat(suffix)
+  }
+
+  if (timeToNow.charAt(0) === 'a') {
+    let charBuffer = timeToNow.split("")
+    charBuffer[0] = "1"
+    timeToNow = charBuffer.join("")
+  }
 
   return timeToNow
 }
