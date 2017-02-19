@@ -88,7 +88,7 @@ class BroadcastPreview extends React.Component {
           </View>
           <View style={styles.center}>
             <Text style={styles.title}>{this.props.title}</Text>
-            <Text style={styles.username}>{this.props.casterID}</Text>
+            <Text style={styles.username}>{this.props.caster.username}</Text>
             <Text style={styles.spots}>{`${this.spotsAvailable} spot${(this.spotsAvailable === 1) ? '' : 's'} available.`}</Text>
           </View>
           <View style={styles.right}>

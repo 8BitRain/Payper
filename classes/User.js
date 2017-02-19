@@ -1,14 +1,16 @@
-import {firebase, callbackForLoop} from '../helpers'
 import db from '../_MOCK_DB'
+import {
+  firebase,
+  callbackForLoop
+} from '../helpers'
+import {
+  handleUserBroadcastFeed
+} from '../helpers/dataHandlers'
 
 export default class User {
   constructor() {
     this.uid = "uid1"
-    this.broadcastFeed = {
-      "Friends": {},
-      "Local": {},
-      "Global": {}
-    }
+    this.broadcastFeed = {}
     this.initialize()
   }
 
@@ -28,31 +30,9 @@ export default class User {
         endpoint: `testTree/userBroadcastFeed/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => {
-          if (!res) return
-
-          let bidBuffer = res.split(",")
-          let broadcasts = {}
-
-          callbackForLoop(0, bidBuffer.length, {
-            onIterate: (loop) => {
-              let buffer = bidBuffer[loop.index].split(":")
-              let section = buffer[0]
-              let bid = buffer[1]
-
-              firebase.get(`testTree/broadcasts/${bid}`, (res) => {
-                if (res) {
-                  if (!broadcasts[section]) broadcasts[section] = {}
-                  broadcasts[section][bid] = res
-                }
-                loop.continue()
-              })
-            },
-            onComplete: () => {
-              updateViaRedux({broadcastFeed: broadcasts})
-            }
-          })
-        }
+        callback: (res) => handleUserBroadcastFeed(res, (broadcastFeed) => {
+          updateViaRedux({broadcastFeed})
+        })
       }
     ]
 
