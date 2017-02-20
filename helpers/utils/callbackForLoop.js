@@ -1,4 +1,4 @@
-export function callbackForLoop(start, stop, params) {
+function callbackForLoop(start, stop, params) {
   if (start === stop) {
     params.onComplete()
     return
@@ -10,3 +10,5 @@ export function callbackForLoop(start, stop, params) {
     stop: () => { params.onComplete(); return }
   })
 }
+
+module.exports = callbackForLoop

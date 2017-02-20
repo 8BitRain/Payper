@@ -1,8 +1,10 @@
 import db from '../_MOCK_DB'
 import {
-  firebase,
-  callbackForLoop
+  Firebase
 } from '../helpers'
+import {
+  callbackForLoop
+} from '../helpers/utils'
 import {
   handleUserBroadcastFeed
 } from '../helpers/dataHandlers'
@@ -37,6 +39,6 @@ export default class User {
     ]
 
     for (var i in this.endpoints)
-      firebase.listenTo(this.endpoints[i])
+      Firebase.listenTo(this.endpoints[i])
   }
 }

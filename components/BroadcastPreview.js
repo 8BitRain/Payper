@@ -5,7 +5,7 @@ import {colors} from '../globalStyles'
 import {
   formatBroadcastTimestamp,
   formatFrequency
-} from '../helpers/strings'
+} from '../helpers/utils'
 
 const styles = StyleSheet.create({
   container: {

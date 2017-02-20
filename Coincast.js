@@ -1,18 +1,9 @@
 import React from 'react'
 import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native'
-import Launch from './exampleComponents/Launch'
-import Register from './exampleComponents/Register'
-import Login from './exampleComponents/Login'
-import Login2 from './exampleComponents/Login2'
-import { Scene, Router, TabBar, Modal, Schema, Actions, Reducer, ActionConst } from 'react-native-router-flux'
-import Error from './exampleComponents/Error'
-import Home from './exampleComponents/Home'
-import TabView from './exampleComponents/TabView'
-
+import {Scene, Router, TabBar, Modal, Schema, Actions, Reducer, ActionConst} from 'react-native-router-flux'
 import {
   NavigationDrawer
 } from './components'
-
 import {
   Splash,
   InviteOnlyLander,

@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, Platform, StatusBar, TouchableHighlight, Dimensi
 import {Actions} from 'react-native-router-flux'
 import {Header} from '../components'
 import {colors} from '../globalStyles'
-import {formatFrequency} from '../helpers/strings'
+import {formatFrequency} from '../helpers/utils'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -110,14 +110,14 @@ class BroadcastDetailsModal extends React.Component {
         <View style={styles.icon}>
           <FontAwesome name={"tv"} size={26} color={colors.deepBlue} style={{backgroundColor: 'transparent'}} />
         </View>
-        <View style={{height: 12}} />
+        <View style={{height: 18}} />
 
         { /* Title */ }
         <Text style={styles.title}>{this.props.title}</Text>
 
         { /* Broadcast owner's username */ }
-        <Text style={styles.username}>{this.props.casterID}</Text>
-        <View style={{height: 12}} />
+        <Text style={styles.username}>{this.props.caster.username}</Text>
+        <View style={{height: 18}} />
 
         { /* Amount, frequency, spot availability, join button */ }
         <View style={styles.row}>
@@ -145,7 +145,7 @@ class BroadcastDetailsModal extends React.Component {
           <Text style={styles.memoTitle}>{"Memo"}</Text>
           <Text style={styles.memoBody}>{this.props.memo}</Text>
         </View>
-        <View style={{height: 12}} />
+        <View style={{height: 18}} />
 
         { /* Hidden info */ }
         <View style={{width: dims.width * 0.85}}>

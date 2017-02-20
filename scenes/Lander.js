@@ -39,12 +39,16 @@ class Lander extends React.Component {
 
     loginWithFacebook({
       onNewUserDetection: (userData) => {
+        // TODO: Handle partial user onboarding
         console.log("New user detected. User data:", userData)
       },
       onSuccess: (userData) => {
+        // TODO: Handle successful login
         console.log("Logged in with Facebook! User data:", userData)
       },
       onFailure: (err) => {
+        // TODO: Handle failed login
+        // (reference firebase docs for possible errors)
         console.log("Facebook login failed. Error:", err)
       }
     })
