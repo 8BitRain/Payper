@@ -7,11 +7,11 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 
 // Stylesheets
-import {colors} from '../../globalStyles';
+import {colors} from '../../../globalStyles';
 
 //Custom
 const dimensions = Dimensions.get('window');
-import { device } from '../../helpers'
+import { device } from '../../../helpers'
 
 class Row extends React.Component {
   constructor(props) {
@@ -46,7 +46,7 @@ class Row extends React.Component {
       <View>
        <TouchableHighlight
          activeOpacity={0.8}
-         underlayColor={'green'}
+         underlayColor={'transparent'}
          onPress={() => this.toggleSelected()}>
          <View style={styles.container}>
             {/** Where are images stored?
@@ -71,6 +71,15 @@ var styles = StyleSheet.create({
     padding: 12,
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: colors.lightGrey
+  },
+  rowSelected:{
+    flex: 1,
+    height: 10,
+    width: dimensions.width,
+    flexDirection: 'row',
+    backgroundColor: 'green',
+    opacity: .8
   },
   text: {
     marginLeft: 12,

@@ -3,15 +3,19 @@ import React from 'react';
 import { View, Text, TouchableHighlight, Animated, Easing, Image, Dimensions, StyleSheet, ListView } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+
+//Routing
+import {Actions} from 'react-native-router-flux';
 
 
 // Stylesheets
-import {colors} from '../../globalStyles';
+import {colors} from '../../../globalStyles';
 
 //Custom
 const dimensions = Dimensions.get('window');
-import { device } from '../../helpers'
+import { device } from '../../../helpers'
+
 
 //Rows
 import Row from './Row'
@@ -48,11 +52,8 @@ class Want extends React.Component {
     super(props);
     //this.height = new Animated.Value(0);
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    //How do I append selected to services?
 
     this.servicesStore = [];
-
-
 
     var categories = servicesDB;
     //Loop through categories
@@ -73,8 +74,6 @@ class Want extends React.Component {
         services[serviceKey]["category"] = category;
         //Push manipulated object into datasource ready (readable) array
         this.servicesStore.push(services[service]);
-
-
         console.log("Service  OBJ Updated: ", services);
       }
     }
@@ -88,7 +87,8 @@ class Want extends React.Component {
     this.state = {
       dataSource: ds.cloneWithRows(this.data),
       selectedTags: {
-      }
+      },
+      selectedNum: 0
     }
   }
 
@@ -98,7 +98,16 @@ class Want extends React.Component {
 
   updateSelectedTags(tag, selected){
     this.state.selectedTags[tag] = selected;
+    console.log("Selected?: " + selected);
+    console.log("Selected Num: " + this.state.selectedNum);
+
     this.setState(this.state);
+    selected == true ? this.setState({selectedNum: this.state.selectedNum + 1}) : this.setState({selectedNum: this.state.selectedNum - 1});
+  }
+
+  handleContinuePress(){
+    this.updateFirebaseTags();
+    Actions.Own();
   }
 
   updateFirebaseTags(){
@@ -118,15 +127,16 @@ class Want extends React.Component {
           style={styles.container}
           dataSource={this.state.dataSource}
           renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected) => this.updateSelectedTags(tag, selected)} />}
+          renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
         />
         {/* FOOTER*/}
         <View>
         <TouchableHighlight
           activeOpacity={0.8}
           underlayColor={'transparent'}
-          onPress={() => this.updateFirebaseTags()}
-          style={{height: 50, width: dimensions.width, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
-              <Text style={styles.buttonText}>{"Continue"}</Text>
+          onPress={() => this.handleContinuePress()}
+          style={this.state.selectedNum >= 3 ? styles.buttonActive : styles.buttonInactive}>
+              <Text style={this.state.selectedNum >= 3 ? styles.buttonActiveText : styles.buttonInactiveText}>{"Continue"}</Text>
         </TouchableHighlight>
         </View>
       </View>
@@ -139,14 +149,38 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
-
-  buttonText:{
+  separator: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: '#8E8E8E',
+  },
+  buttonActiveText:{
     color: '#fff',
     fontSize: 18,
     lineHeight: 18 * 1.20,
     textAlign: "center",
     fontWeight: "bold",
     alignSelf: "center"
+  },
+  buttonInactiveText:{
+    color: 'black',
+    fontSize: 18,
+    lineHeight: 18 * 1.20,
+    textAlign: "center",
+    fontWeight: "bold",
+    alignSelf: "center"
+  },
+  buttonActive:{
+    height: 50,
+    width: dimensions.width,
+    backgroundColor: colors.lightAccent,
+    justifyContent: "center"
+  },
+  buttonInactive:{
+    height: 50,
+    width: dimensions.width,
+    backgroundColor: colors.lightGrey,
+    justifyContent: "center"
   },
 
   title: {
