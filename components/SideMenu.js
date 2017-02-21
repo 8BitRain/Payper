@@ -4,6 +4,8 @@ import {Actions} from 'react-native-router-flux'
 import {colors} from '../globalStyles'
 import {logout} from '../helpers/auth'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import {connect} from 'react-redux'
+import * as dispatchers from '../scenes/Main/MainState'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -95,4 +97,10 @@ class SideMenu extends React.Component {
   }
 }
 
-module.exports = SideMenu
+function mapStateToProps(state) {
+  return {
+    currentUser: state.getIn(['main', 'currentUser'])
+  }
+}
+
+module.exports = connect(mapStateToProps)(SideMenu)

@@ -44,44 +44,47 @@ function login(params) {
       .then((response) => response.toJSON())
       .then((responseData) => {
         let {customToken, key} = res
-        // checkIfUserExists({
-        //   facebookID: facebookUser.facebook_id,
-        //   token: customToken
-        // }, (userExistsResponse) => {
-        //   if (true === userExistsResponse) {
-            let formattedUser = {
-              firstName: facebookUser.first_name,
-              lastName: facebookUser.last_name,
-              name: firebaseUser.displayName,
-              phone: facebookUser.phone,
-              email: facebookUser.email,
-              gender: facebookUser.gender,
-              dateOfBirth: facebookUser.birthday,
-              friends: facebookUser.friends.data,
-              facebookID: facebookUser.facebook_id,
-              profilePic: facebookUser.profile_pic,
-              token: responseData.stsTokenManager.accessToken,
-              key: key
-            }
+        checkIfUserExists({
+          facebookID: facebookUser.facebook_id,
+          token: customToken
+        }, (userExistsResponse) => {
+          let formattedUser = {
+            firstName: facebookUser.first_name,
+            lastName: facebookUser.last_name,
+            name: firebaseUser.displayName,
+            phone: facebookUser.phone,
+            email: facebookUser.email,
+            gender: facebookUser.gender,
+            dateOfBirth: facebookUser.birthday,
+            friends: facebookUser.friends.data,
+            facebookID: facebookUser.facebook_id,
+            profilePic: facebookUser.profile_pic,
+            token: responseData.stsTokenManager.accessToken,
+            key: key
+          }
 
+          // Return user data to caller and onboarding missing info. User
+          // creation is handled in scenes/FacebookLoginModal
+          if (false === userExistsResponse) {
+            onNewUserDetection(formattedUser)
+            return
+          }
+
+          // Get existing user's data and return it to caller. App
+          // initialization is handled in scenes/Lander
+          if (true === userExistsResponse) {
             createOrGetUser(formattedUser, (response) => {
-              console.log(response)
               if (!response.message && !response.errorMessage)
                 onSuccess(response)
               else
                 onFailure(response)
             })
+            return
+          }
 
-        //     return
-        //   }
-        //
-        //   if (false === userExistsResponse) {
-        //     onNewUserDetection()
-        //     return
-        //   }
-        //
-        //   onFailure(userExistsResponse)
-        // })
+          // users/checkFacebook response is neither true nor false
+          onFailure()
+        })
       })
       .catch((err) => {
         console.log(err)

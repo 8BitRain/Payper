@@ -5,7 +5,7 @@ import {Actions} from 'react-native-router-flux'
 import {colors} from '../globalStyles'
 import {Header} from '../components'
 import {validateEmail, validatePhone} from '../helpers/validators'
-import {login} from '../helpers/auth'
+import {createOrGetUser} from '../helpers/lambda'
 import {FBLoginManager} from 'NativeModules'
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -105,6 +105,9 @@ class FacebookLoginModal extends React.Component {
   submit() {
     if (this.state.submitting) return
 
+    onSuccess = onSuccess.bind(this)
+    onFailure = onFailure.bind(this)
+
     if (!this.state.emailIsValid) {
       Alert.alert('Invalid Email Address', 'Please enter a valid email address (ex. johndoe@example.com).')
       return
@@ -117,26 +120,30 @@ class FacebookLoginModal extends React.Component {
 
     this.setState({submitting: true})
 
-    login({
-      mode: "facebook",
-      facebookUser: this.state.userData,
-      onSuccess: (firebaseUserData) => {
-        console.log("Login succeeded! Firebase user data:", firebaseUserData)
-        this.props.currentUser.initialize(firebaseUserData)
-        Actions.Main()
-      },
-      onFailure: (err) => {
-        console.log("Login failed. Error:", err)
-        Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
-        FBLoginManager.logout()
-        Actions.pop()
-      },
-      onNewUserDetection: () => {
-        console.log("--> User does not exist.")
+    createOrGetUser(this.state.userData, (response) => {
+      this.setState({submitting: false})
+
+      if (!response.message && !response.errorMessage) {
+        for (var k in this.state.userData) {
+          if (response.user[k] !== this.state.userData[k])
+            response.user[k] = this.state.userData[k]
+        }
+        onSuccess(response.user)
+      } else {
+        onFailure(response)
       }
     })
 
-    setTimeout(() => this.setState({submitting: false}), 1200)
+    function onSuccess(userData) {
+      this.props.currentUser.initialize(userData)
+      Actions.Main()
+    }
+
+    function onFailure(err) {
+      Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
+      FBLoginManager.logOut()
+      Actions.pop()
+    }
   }
 
   render() {

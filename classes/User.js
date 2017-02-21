@@ -24,7 +24,6 @@ import {
 export default class User {
   constructor() {
     this.broadcastFeed = {}
-    this.initialize()
   }
 
   update(updates) {

@@ -5,8 +5,10 @@ import {Actions} from 'react-native-router-flux'
 import {FBLoginManager} from 'NativeModules'
 import {login, getFacebookUserData} from '../helpers/auth'
 import {colors} from '../globalStyles'
+import {connect} from 'react-redux'
 import Button from 'react-native-button'
 import Hyperlink from 'react-native-hyperlink'
+import * as dispatchers from './Main/MainState'
 
 const FBSDK = require('react-native-fbsdk')
 const {LoginButton} = FBSDK
@@ -60,8 +62,25 @@ class Lander extends React.Component {
 
     getFacebookUserData({
       onSuccess: (userData) => {
-        Actions.FacebookLogin({userData})
-        this.setState({loading: false})
+        login({
+          mode: "facebook",
+          facebookUser: userData,
+          onSuccess: (response) => {
+            this.setState({loading: false})
+            this.props.currentUser.initialize(response.user)
+            Actions.Main()
+          },
+          onFailure: (err) => {
+            Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
+            this.setState({loading: false})
+            FBLoginManager.logOut()
+            Actions.pop()
+          },
+          onNewUserDetection: (firebaseUserData) => {
+            this.setState({loading: false})
+            Actions.FacebookLogin({userData: firebaseUserData})
+          }
+        })
       },
       onFailure: () => {
         alert("Something went wrong on our end. Please try again later.")
@@ -120,4 +139,16 @@ class Lander extends React.Component {
   }
 }
 
-module.exports = Lander
+function mapStateToProps(state) {
+  return {
+    currentUser: state.getIn(['main', 'currentUser'])
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updateCurrentUser: (input) => dispatch(dispatchers.updateCurrentUser(input))
+  }
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(Lander)
