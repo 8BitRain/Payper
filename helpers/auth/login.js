@@ -6,6 +6,7 @@ const {AccessToken} = FBSDK
 function login(params) {
   let {
     mode,
+    cachedUser,
     facebookUser,
     onSuccess,
     onFailure,
@@ -17,7 +18,8 @@ function login(params) {
 
   // Initialize login function depending on login mode
   switch (mode) {
-    case "facebook": login = (cb) => loginFacebook(cb); break;
+    case "facebook": login = (cb) => loginWithFacebook(cb); break;
+    case "cache": login = (cb) => cb(cachedUser, null); break;
     default: login = () => onFailure()
   }
 
@@ -39,11 +41,21 @@ function login(params) {
       return
     }
 
-    getCustomTokenAndKey(firebaseUser.stsTokenManager.accessToken, null, (res) => {
+    console.log("firebaseUser", firebaseUser)
+
+    getCustomTokenAndKey(firebaseUser.token || firebaseUser.stsTokenManager.accessToken, firebaseUser.key || null, (res) => {
       firebase.auth().signInWithCustomToken(res.customToken)
       .then((response) => response.toJSON())
       .then((responseData) => {
         let {customToken, key} = res
+
+        if ("cache" === mode) {
+          cachedUser.token = responseData.stsTokenManager.accessToken
+          cachedUser.key = key
+          onSuccess(cachedUser)
+          return
+        }
+
         checkIfUserExists({
           facebookID: facebookUser.facebook_id,
           token: customToken
@@ -99,7 +111,7 @@ function login(params) {
   *   (2) Call firebase auth's signInWithCredential
   *   (3) Return firebaseUser to caller
 **/
-function loginFacebook(cb) {
+function loginWithFacebook(cb) {
   AccessToken.getCurrentAccessToken().then((res) => {
     let facebookAccessToken = res.accessToken
     let FacebookAuth = firebase.auth.FacebookAuthProvider
@@ -114,9 +126,11 @@ function loginFacebook(cb) {
   })
 }
 
-
-function loginWithCredential() {
-
+/**
+  *
+**/
+function loginWithCachedUser(cachedUser, cb) {
+  console.log("Cached User:", cachedUser)
 }
 
 module.exports = login

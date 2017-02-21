@@ -51,7 +51,12 @@ export default class User {
   }
 
   destroy() {
-
+    setInAsyncStorage('user', '')
+    this.stopListeningToFirebase()
+    clearInterval(this.tokenRefreshInterval)
+    for (var i in this)
+      if (typeof this[i] !== 'function')
+        this[i] = null
   }
 
   handleAppStateChange(state) {
@@ -75,7 +80,7 @@ export default class User {
     .catch((err) => console.log("Error getting new token:", err))
   }
 
-  listen(updateViaRedux) {
+  startListeningToFirebase(updateViaRedux) {
     this.endpoints = [
       {
         endpoint: `testTree/userBroadcastFeed/${this.uid}`,
@@ -89,5 +94,11 @@ export default class User {
 
     for (var i in this.endpoints)
       Firebase.listenTo(this.endpoints[i])
+  }
+
+  stopListeningToFirebase() {
+    for (var e in this.endpoints)
+      Firebase.stopListeningTo(this.endpoints[e])
+    this.endpoints = null
   }
 }

@@ -34,7 +34,7 @@ class Main extends React.Component {
   }
 
   componentWillMount() {
-    this.props.currentUser.listen((updates) => this.props.updateCurrentUser(updates))
+    this.props.currentUser.startListeningToFirebase((updates) => this.props.updateCurrentUser(updates))
   }
 
   render() {
