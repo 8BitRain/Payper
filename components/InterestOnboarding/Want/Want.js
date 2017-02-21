@@ -19,6 +19,8 @@ import { device } from '../../../helpers'
 
 //Rows
 import Row from './Row'
+import SectionHeader from './SectionHeader'
+
 
 let servicesDB = {
   'VideoStreaming': {
@@ -50,15 +52,15 @@ let servicesDB = {
 class Want extends React.Component {
   constructor(props) {
     super(props);
-    //this.height = new Animated.Value(0);
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     this.servicesStore = [];
+    this.categoryStore = [];
 
     var categories = servicesDB;
     //Loop through categories
     for (var categoryKey in categories) {
       var category = categoryKey;
+      this.categoryStore.push(category);
       var services = categories[categoryKey];
 
       //Loop through services
@@ -83,9 +85,26 @@ class Want extends React.Component {
 
 
     this.data = this.servicesStore;
+    const getSectionData = (dataBlob, sectionId) => dataBlob[sectionId];
+    const getRowData = (dataBlob, sectionId, rowId) => dataBlob[`${rowId}`];
 
+    //DS with section headers
+    const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
+      sectionHeaderHasChanged : (s1, s2) => s1 !== s2,
+      getSectionData,
+      getRowData,
+    });
+
+    const { dataBlob, sectionIds, rowIds } = this.formatData(this.data, this.categoryStore);
+
+    //DS without section headers
+    //const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
+    //datasource without section headers
+    //datasource: ds.cloneWithRows(this.data);
     this.state = {
-      dataSource: ds.cloneWithRows(this.data),
+      dataSource: ds.cloneWithRowsAndSections( dataBlob, sectionIds, rowIds),
       selectedTags: {
       },
       selectedNum: 0
@@ -96,6 +115,52 @@ class Want extends React.Component {
 
   }
 
+  formatData(data, categoryStore) {
+
+    // Need somewhere to store our data
+    const dataBlob = {};
+    const sectionIds = [];
+    const rowIds = [];
+
+    //Loop through categories
+    for(let sectionId = 0; sectionId < categoryStore.length; sectionId++ ){
+
+      const category = categoryStore[sectionId];
+      console.log("Category: " + category);
+
+      //Get the services belonging to a certain category
+      const services = data.filter((service) => service.category == category);
+      console.log("Services", services);
+
+      if(services.length > 0){
+        // Add a section id to our array so the listview knows that we've got a new section
+
+        sectionIds.push(sectionId);
+
+        //This is what names the section
+        dataBlob[sectionId] = {title: category};
+        rowIds.push([]);
+
+        // Loop over the services for the section
+        for (let i = 0; i < services.length; i++) {
+          // Create a unique row id for the data blob that the listview can use for reference
+          const rowId = `${sectionId}:${i}`;
+          console.log("Row_ID" + rowId);
+
+          // Push the row id to the row ids array. This is what listview will reference to pull
+          // data from our data blob
+          rowIds[rowIds.length - 1].push(rowId);
+
+          // Store the data we care about for this row
+          console.log("Service: ", services[i]);
+          dataBlob[rowId] = services[i];
+        }
+      }
+    }
+    return { dataBlob, sectionIds, rowIds };
+  }
+
+
   updateSelectedTags(tag, selected){
     this.state.selectedTags[tag] = selected;
     console.log("Selected?: " + selected);
@@ -103,6 +168,8 @@ class Want extends React.Component {
 
     this.setState(this.state);
     selected == true ? this.setState({selectedNum: this.state.selectedNum + 1}) : this.setState({selectedNum: this.state.selectedNum - 1});
+
+
   }
 
   handleContinuePress(){
@@ -112,6 +179,12 @@ class Want extends React.Component {
 
   updateFirebaseTags(){
     console.log("Tags to Submit: ", this.state.selectedTags);
+    //Loop through selected tags
+    //Way to format the data
+    /*data: {
+      own: "val1, val2, val3",
+      want: "val1, val2, val3"
+    }*/
   }
 
   render() {
@@ -128,6 +201,7 @@ class Want extends React.Component {
           dataSource={this.state.dataSource}
           renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected) => this.updateSelectedTags(tag, selected)} />}
           renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+          renderSectionHeader={(sectionData) => <SectionHeader {...sectionData} />}
         />
         {/* FOOTER*/}
         <View>
