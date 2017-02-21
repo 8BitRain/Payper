@@ -2,6 +2,7 @@ import React from 'react'
 import {View, Text, TouchableHighlight, Dimensions, StyleSheet, Linking, Alert, Platform, ActionSheetIOS} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../globalStyles'
+import {logout} from '../helpers/auth'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 const dims = Dimensions.get('window')
@@ -65,19 +66,18 @@ class SideMenu extends React.Component {
           title: 'Sign Out',
           icon: 'arrow-left',
           destination: () => {
-            // TODO: Replace with actual signout code
             if (Platform.OS === 'ios') {
               ActionSheetIOS.showActionSheetWithOptions({
                 title: "Signed in as Brady Sheridan",
                 options: ['Sign out', 'Cancel'],
                 cancelButtonIndex: 1,
                 destructiveButtonIndex: 1
-              }, (buttonIndex) => (buttonIndex === 0) ? Actions.Lander({type: 'reset'}) : null)
+              }, (buttonIndex) => (buttonIndex === 0) ? logout(this.props.currentUser) : null)
             } else {
               let message = "Are you sure you'd like to sign out?"
               Alert.alert("Signed in as Brady Sheridan", message, [
                 {text: 'Cancel', onPress: () => null, style: 'cancel'},
-                {text: 'Yes', onPress: () => Actions.Lander({type: 'reset'})},
+                {text: 'Yes', onPress: () => logout(this.props.currentUser)},
               ])
             }
           }

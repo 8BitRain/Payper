@@ -3,7 +3,7 @@ import {FBLoginManager} from 'NativeModules'
 import firebase from 'firebase'
 
 function logout(currentUser) {
-  Actions.Lander()
+  Actions.Lander({type: 'reset'})
   firebase.auth().signOut()
   FBLoginManager.logOut()
   currentUser.destroy()

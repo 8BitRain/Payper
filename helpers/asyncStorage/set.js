@@ -7,7 +7,7 @@ function set(name, data, cb) {
     throw "helpers/asyncStorage/set expected a string for variable 'data'."
 
   AsyncStorage.setItem(`@Store:${name}`, data)
-  .then(() => cb())
+  .then(() => (typeof cb === 'function') ? cb() : null)
   .done()
 }
 

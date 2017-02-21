@@ -5,7 +5,7 @@ function remove(name, cb) {
     throw "helpers/asyncStorage/remove expected a string for variable 'name'."
 
   AsyncStorage.removeItem(`@Store:${name}`)
-  .then(() => cb())
+  .then(() => (typeof cb === 'function') ? cb() : null)
   .done()
 }
 

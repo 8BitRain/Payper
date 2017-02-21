@@ -8,7 +8,8 @@ function login(params) {
     mode,
     facebookUser,
     onSuccess,
-    onFailure
+    onFailure,
+    onNewUserDetection
   } = params
 
   // Declare login function var
@@ -43,21 +44,44 @@ function login(params) {
       .then((response) => response.toJSON())
       .then((responseData) => {
         let {customToken, key} = res
-        let formattedUser = {
-          name: firebaseUser.displayName,
-          phone: facebookUser.phone,
-          email: facebookUser.email,
-          friends: facebookUser.friends.data,
-          facebookID: facebookUser.facebook_id,
-          profilePic: facebookUser.profile_pic,
-          token: responseData.stsTokenManager.accessToken,
-          key: key
-        }
+        // checkIfUserExists({
+        //   facebookID: facebookUser.facebook_id,
+        //   token: customToken
+        // }, (userExistsResponse) => {
+        //   if (true === userExistsResponse) {
+            let formattedUser = {
+              firstName: facebookUser.first_name,
+              lastName: facebookUser.last_name,
+              name: firebaseUser.displayName,
+              phone: facebookUser.phone,
+              email: facebookUser.email,
+              gender: facebookUser.gender,
+              dateOfBirth: facebookUser.birthday,
+              friends: facebookUser.friends.data,
+              facebookID: facebookUser.facebook_id,
+              profilePic: facebookUser.profile_pic,
+              token: responseData.stsTokenManager.accessToken,
+              key: key
+            }
 
-        createOrGetUser(formattedUser, (response) => {
-          if (response) onSuccess(response)
-          else onFailure(response)
-        })
+            createOrGetUser(formattedUser, (response) => {
+              console.log(response)
+              if (!response.message && !response.errorMessage)
+                onSuccess(response)
+              else
+                onFailure(response)
+            })
+
+        //     return
+        //   }
+        //
+        //   if (false === userExistsResponse) {
+        //     onNewUserDetection()
+        //     return
+        //   }
+        //
+        //   onFailure(userExistsResponse)
+        // })
       })
       .catch((err) => {
         console.log(err)
@@ -85,6 +109,11 @@ function loginFacebook(cb) {
       cb(null, err)
     })
   })
+}
+
+
+function loginWithCredential() {
+
 }
 
 module.exports = login

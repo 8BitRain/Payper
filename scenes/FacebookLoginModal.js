@@ -1,13 +1,16 @@
 import React from 'react'
 import {View, Text, StyleSheet, TextInput, TouchableHighlight, Platform, Dimensions, StatusBar, ScrollView, Alert} from 'react-native'
-import Button from 'react-native-button'
+import {connect} from 'react-redux'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../globalStyles'
 import {Header} from '../components'
 import {validateEmail, validatePhone} from '../helpers/validators'
 import {login} from '../helpers/auth'
+import {FBLoginManager} from 'NativeModules'
+import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
+import * as dispatchers from './Main/MainState'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -49,7 +52,7 @@ const styles = StyleSheet.create({
     padding: 4,
     fontSize: 16,
     color: colors.slateGrey,
-    textAlign: 'left'
+    textAlign: 'center'
   },
   continueButton: {
     position: 'absolute',
@@ -117,8 +120,20 @@ class FacebookLoginModal extends React.Component {
     login({
       mode: "facebook",
       facebookUser: this.state.userData,
-      onSuccess: (firebaseUserData) => console.log(firebaseUserData),
-      onFailure: (err) => console.log("Error:", err)
+      onSuccess: (firebaseUserData) => {
+        console.log("Login succeeded! Firebase user data:", firebaseUserData)
+        this.props.currentUser.initialize(firebaseUserData)
+        Actions.Main()
+      },
+      onFailure: (err) => {
+        console.log("Login failed. Error:", err)
+        Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
+        FBLoginManager.logout()
+        Actions.pop()
+      },
+      onNewUserDetection: () => {
+        console.log("--> User does not exist.")
+      }
     })
 
     setTimeout(() => this.setState({submitting: false}), 1200)
@@ -192,7 +207,7 @@ class FacebookLoginModal extends React.Component {
           </View>
 
           <Text style={styles.moreInfo}>
-            {"We won't share your phone number or email address with anyone else."}
+            {"We won't share your contact information with anyone."}
           </Text>
         </ScrollView>
 
@@ -212,4 +227,16 @@ class FacebookLoginModal extends React.Component {
   }
 }
 
-module.exports = FacebookLoginModal
+function mapStateToProps(state) {
+  return {
+    currentUser: state.getIn(['main', 'currentUser'])
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updateCurrentUser: (input) => dispatch(dispatchers.updateCurrentUser(input))
+  }
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(FacebookLoginModal)

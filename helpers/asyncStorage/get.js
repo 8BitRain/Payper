@@ -5,7 +5,7 @@ function get(name, cb) {
     throw "helpers/asyncStorage/get expected a string for variable 'name'."
 
   AsyncStorage.getItem(`@Store:${name}`)
-  .then((val) => cb(val))
+  .then((val) => (typeof cb === 'function') ? cb(val) : null)
   .done()
 }
 

@@ -40,7 +40,8 @@ class BroadcastsFeed extends React.Component {
           afterRemove={() => alert("Removed!")}
           induceRef={(ref) => this.setState({paymentListRef: ref})}
           renderRow={(rowData, sectionID, rowID) => <BroadcastPreview {...rowData} />}
-          renderSectionHeader={(rowData, sectionID) => <BroadcastFeedSectionHeader sectionID={sectionID} />} />
+          renderSectionHeader={(rowData, sectionID) => <BroadcastFeedSectionHeader sectionID={sectionID} />}
+          renderEmptyState={() => <BroadcastFeedEmptyState />} />
       </View>
     )
   }
