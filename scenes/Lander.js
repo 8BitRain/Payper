@@ -4,7 +4,8 @@ import {View, Text, StyleSheet, Dimensions} from 'react-native'
 import Button from 'react-native-button'
 import {Actions} from 'react-native-router-flux'
 import {FBLoginManager} from 'NativeModules'
-import {loginWithFacebook} from '../helpers/auth'
+import {login, getFacebookUserData} from '../helpers/auth'
+import {colors} from '../globalStyles'
 
 const FBSDK = require('react-native-fbsdk')
 const {LoginButton} = FBSDK
@@ -22,34 +23,48 @@ const styles = StyleSheet.create({
     width: dims.width - 60,
     height: 45,
     marginTop: 20
+  },
+  loadingModal: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: colors.accent
   }
 })
 
 class Lander extends React.Component {
   constructor(props) {
     super(props)
-    this.onLoginFinished = this.onLoginFinished.bind(this)
+
+    this.state = {
+      loading: false
+    }
+
+    this.onLogin = this.onLogin.bind(this)
   }
 
-  onLoginFinished(err, res) {
-    if (err || res.isCancelled) {
-      // TODO: Handle login failure
+  onLogin(err, res) {
+    if (err) {
+      alert("Something went wrong on our end. Please try again later.")
       return
     }
 
-    loginWithFacebook({
-      onNewUserDetection: (userData) => {
-        // TODO: Handle partial user onboarding
-        console.log("New user detected. User data:", userData)
-      },
+    if (res.isCancelled) {
+      return
+    }
+
+    this.setState({loading: true})
+
+    getFacebookUserData({
       onSuccess: (userData) => {
-        // TODO: Handle successful login
-        console.log("Logged in with Facebook! User data:", userData)
+        Actions.FacebookLogin({userData})
+        this.setState({loading: false})
       },
-      onFailure: (err) => {
-        // TODO: Handle failed login
-        // (reference firebase docs for possible errors)
-        console.log("Facebook login failed. Error:", err)
+      onFailure: () => {
+        alert("Something went wrong on our end. Please try again later.")
+        this.setState({loading: false})
       }
     })
   }
@@ -58,8 +73,9 @@ class Lander extends React.Component {
     return (
       <View style={styles.container}>
         <Text>{'Welcome to Payper'}</Text>
-        <LoginButton style={styles.loginButton} readPermissions={["email", "public_profile", "user_friends"]} onLoginFinished={this.onLoginFinished} />
+        <LoginButton style={styles.loginButton} readPermissions={["email", "public_profile", "user_friends"]} onLoginFinished={this.onLogin} />
         <Button onPress={Actions.Main} style={{margin: 10}}>{"Bypass Login"}</Button>
+        {(this.state.loading) ? <View style={styles.loadingModal} /> : null}
       </View>
     )
   }

@@ -7,7 +7,7 @@ function getCustomTokenAndKey(firebaseToken, key, cb) {
     key: key
   }
 
-  fetch("https://www.getpayper.io/getToken", {
+  fetch("http://localhost:8080/getToken", {
     method: "POST",
     headers: {
       'Accept': 'application/json',
@@ -15,10 +15,8 @@ function getCustomTokenAndKey(firebaseToken, key, cb) {
     },
     body: JSON.stringify(body)
   })
-  // .then((response) => response.json())
-  .then((response) => response.text())
-  // .then((responseData) => cb(responseData))
-  .then((res) => console.log("--> res", res))
+  .then((response) => response.json())
+  .then((responseData) => cb(responseData))
   .catch((err) => { console.log(err); cb(null) })
   .done()
 }

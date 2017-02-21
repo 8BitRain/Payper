@@ -1,11 +1,11 @@
 import config from '../../config'
 const baseURL = config[config.env].lambdaBaseURL
 
-function createOrGetUser(facebookUserData, cb) {
+function createOrGetUser(userData, cb) {
   try {
     fetch(baseURL + "users/create", {
       method: "POST",
-      body: JSON.stringify(facebookUserData)
+      body: JSON.stringify(userData)
     })
     .then((response) => response.json())
     .then((responseData) => {

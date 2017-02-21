@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    minHeight: 60,
     paddingTop: (Platform.OS === 'ios') ? 20 : 0,
     shadowColor: colors.slateGrey,
     shadowOpacity: 1.0,

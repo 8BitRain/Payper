@@ -1,4 +1,3 @@
-import db from '../_MOCK_DB'
 import {
   Firebase
 } from '../helpers'
@@ -8,10 +7,13 @@ import {
 import {
   handleUserBroadcastFeed
 } from '../helpers/dataHandlers'
+import {
+  getFromAsyncStorage,
+  setInAsyncStorage
+} from '../helpers/asyncStorage'
 
 export default class User {
   constructor() {
-    this.uid = "uid1"
     this.broadcastFeed = {}
     this.initialize()
   }
@@ -19,11 +21,11 @@ export default class User {
   update(updates) {
     console.log("User updates:", updates)
     for (var k in updates) this[k] = updates[k]
+    setInAsyncStorage('user', JSON.stringify(this))
   }
 
   initialize() {
-    let userData = db.user[this.uid]
-    this.update(userData)
+    // TODO: errythang
   }
 
   listen(updateViaRedux) {
