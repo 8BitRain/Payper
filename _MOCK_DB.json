@@ -1,0 +1,92 @@
+{
+  "userBroadcastFeed": {
+    "uid1": "bid1"
+  },
+  "user": {
+    "uid1": {
+      "firstName": "Brady",
+      "lastName": "Sheridan",
+      "username": "@Brady-Sheridan",
+      "phone": "1111111111",
+      "email": "bradysheridan@example.com"
+    },
+    "uid2": {
+      "firstName": "Eric",
+      "lastName": "Smith",
+      "username": "@Eric-Smith",
+      "phone": "2222222222",
+      "email": "ericsmith@example.com"
+    },
+    "uid3": {
+      "firstName": "Vash",
+      "lastName": "Marada",
+      "username": "@Vash-Marada",
+      "phone": "3333333333",
+      "email": "vashmarada@example.com"
+    },
+    "uid4": {
+      "firstName": "Mohsin",
+      "lastName": "Khan",
+      "username": "@Mohsin-Khan",
+      "phone": "4444444444",
+      "email": "mohsinkhan@example.com"
+    },
+    "uid5": {
+      "firstName": "Luke",
+      "lastName": "Odell",
+      "username": "@Luke-Odell",
+      "phone": "5555555555",
+      "email": "lukeodell@example.com"
+    },
+  },
+  "broadcasts": {
+    "bid1": {
+      "title": "Netflix!!!",
+      "amount": 5,
+      "frequency": "MONTHLY",
+      "memo": "Hop on my Netflix subscription!",
+      "hiddenInfo": "ENCRYPTED_INFO",
+      "casterID": "uid2",
+      "memberIDs": "uid3",
+      "memberLimit": 2,
+      "tag": "Netflix",
+      "createdAt": "1487365867878"
+    },
+    "bid2": {
+      "title": "Hulu+",
+      "amount": 4.50,
+      "frequency": "MONTHLY",
+      "memo": "Need two people to split my Hulu subscription with.",
+      "hiddenInfo": "ENCRYPTED_INFO",
+      "casterID": "uid4",
+      "memberIDs": "",
+      "memberLimit": 2,
+      "tag": "Hulu",
+      "createdAt": "1487365867878"
+    },
+    "bid3": {
+      "title": "Bike Rental",
+      "amount": 62,
+      "frequency": "WEEKLY",
+      "memo": "Rent my bicycle on a weekly basis. Will give more info in the hidden info section",
+      "hiddenInfo": "ENCRYPTED_INFO",
+      "casterID": "uid2",
+      "memberIDs": "",
+      "memberLimit": 1,
+      "tag": "Rental",
+      "createdAt": "1487365867878"
+    },
+    "bid4": {
+      "title": "Something",
+      "amount": 193,
+      "frequency": "MONHLY",
+      "memo": "A memo!",
+      "hiddenInfo": "ENCRYPTED_INFO",
+      "casterID": "uid4",
+      "memberIDs": "uid3,uid2",
+      "memberLimit": 3,
+      "tag": "Rental",
+      "createdAt": "1487365867878"
+    }
+  }
+}
