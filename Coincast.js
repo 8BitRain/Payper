@@ -1,169 +1,89 @@
 import React from 'react'
-import firebase from 'firebase'
-import Mixpanel from 'react-native-mixpanel'
-import Error from './components/Error'
-import DeviceInfo from 'react-native-device-info'
-import * as Async from './helpers/Async'
-import SplashViewContainer from './modules/Splash/SplashViewContainer'
-import BetaLandingScreenView from './modules/BetaLandingScreen/BetaLandingScreenView'
-import LandingScreenViewContainer from './modules/LandingScreen/LandingScreenViewContainer'
-import MainViewContainer from './modules/Main/MainViewContainer'
-import AddBankAccountTooltip from './components/Tooltips/AddBankAccountTooltip/AddBankAccountTooltip'
-import MicrodepositTooltip from './components/Tooltips/MicrodepositTooltip/MicrodepositTooltip'
-import SuspendedTooltip from './components/Tooltips/SuspendedTooltip/SuspendedTooltip'
-import DocumentUploadTooltip from './components/Tooltips/DocumentUploadTooltip/DocumentUploadTooltip'
-import BankAccountAdded from './components/Rewards/BankAccountAdded/BankAccountAdded'
-import VerifiedIdentity from './components/Rewards/VerifiedIdentity/VerifiedIdentity'
-import StatusCard from './components/StatusCard/StatusCard'
-import Want from './components/InterestOnboarding/Want/Want'
-import Own from './components/InterestOnboarding/Own/Own'
-import InterestTab from './components/InterestsTab/Interests'
-import { Scene, Reducer, Router, Modal } from 'react-native-router-flux'
-import { colors } from './globalStyles'
-import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
-import { Client } from 'bugsnag-react-native'
-import { PayDetails } from './components/PayCard'
-import { MainView, OnboardingView, PaymentOnboardingView, FirstPaymentView, PartialUserOnboardingView, NewUserOnboardingView } from './modules'
-import { GlobalModal } from './components'
+import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native'
+import Launch from './exampleComponents/Launch'
+import Register from './exampleComponents/Register'
+import Login from './exampleComponents/Login'
+import Login2 from './exampleComponents/Login2'
+import { Scene, Router, TabBar, Modal, Schema, Actions, Reducer, ActionConst } from 'react-native-router-flux'
+import Error from './exampleComponents/Error'
+import Home from './exampleComponents/Home'
+import TabView from './exampleComponents/TabView'
 
-// Get build and version numbers
-let build = DeviceInfo.getBuildNumber()
-let version = DeviceInfo.getVersion()
+import {
+  NavigationDrawer
+} from './components'
 
-// Uncomment to reset user cache
-// Async.set('user', '')
-// Async.set('betaStatus', '')
+import {
+  Splash,
+  InviteOnlyLander,
+  Lander,
+  FacebookLoginModal,
+  Main,
+  Broadcasts,
+  Explore,
+  Me
+} from './scenes'
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params)
   return (state, action) => {
+    // console.log("ACTION:", action)
     return defaultReducer(state, action)
   }
 }
 
-var ga = this.ga = null
-
-const getSceneStyle = function(props, computedProps) {
-  const style = {
-    flex: 1,
-    shadowColor: null,
-    shadowOffset: null,
-    shadowOpacity: null,
-    shadowRadius: null,
-    backgroundColor: colors.snowWhite
-  }
-
-  if (computedProps.isActive) {
-    style.marginTop = computedProps.hideNavBar ? 0 : 64
-    style.marginBottom = computedProps.hideTabBar ? 0 : 50
-  }
-
-  return style
-}
-
 export default class Coincast extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
-  componentWillMount() {
-    this.client = new Client('f8be20d13dd76c17ff352c44d395270a')
-    let clientId = DeviceInfo.getUniqueID()
-
-    Mixpanel.sharedInstanceWithToken('507a107870150092ca92fa76ca7c66d6')
-    Mixpanel.timeEvent('Session Duration')
-
-    ga = new Analytics('UA-87368863-1', clientId, 1, DeviceInfo.getUserAgent())
-    var screenView = new GAHits.ScreenView(
-      'Example App',
-      'Welcome Screen',
-      DeviceInfo.getReadableVersion(),
-      DeviceInfo.getBundleId()
-    )
-
-    ga.send(screenView)
-  }
-
   render() {
-    return (
-      <Router key={Math.random()} createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
+    return(
+      <Router createReducer={reducerCreate} sceneStyle={{backgroundColor:'#F7F7F7'}}>
         <Scene key="modal" component={Modal}>
-          <Scene key="root" hideNavBar hideTabBar>
-            <Scene
-              component={SplashViewContainer}
-              key="SplashViewContainer"
-              type="replace"
-              panHandlers={null} />
+          <Scene key="root" hideNavBar={true}>
 
-            <Scene
-              component={BetaLandingScreenView}
-              key="BetaLandingScreenView"
-              type="replace"
-              panHandlers={null} />
+            { /* Linear Scenes */ }
+            <Scene key="Splash"           component={Splash}           panHandlers={null} initial={true} />
+            <Scene key="InviteOnlyLander" component={InviteOnlyLander} panHandlers={null} />
+            <Scene key="Lander"           component={Lander}           panHandlers={null} />
 
-            <Scene
-              component={Want}
-              key="Want"
-              title="Want"
-              type="replace"
-              panHandlers={null} />
+            { /* Drawer/Tab Scenes */ }
+            <Scene key="Main" component={NavigationDrawer} open={false} >
+              <Scene key="TabScenes" tabs={true}>
+                <Scene key="Broadcasts" component={Main} title="Broadcasts" hideTabBar hideNavBar panhandlers={null} initial={true} />
+                <Scene key="Explore"    component={Main} title="Explore"    hideTabBar hideNavBar panhandlers={null} />
+                <Scene key="Me"         component={Main} title="Me"         hideTabBar hideNavBar panhandlers={null} />
+              </Scene>
+            </Scene>
 
-            <Scene
-              component={Own}
-              key="Own"
-              title="Own"
-              type="replace"
-              panHandlers={null} />
+            { /* Modal Scenes */ }
+            <Scene key="FacebookLoginModal" direction="vertical">
+              <Scene key="FBLoginModal" component={FacebookLoginModal} schema="modal" title="Facebook Login" />
+            </Scene>
 
-            <Scene
-              initial
-              component={InterestTab}
-              key="InterestTab"
-              title="InterestTab"
-              type="replace"
-              panHandlers={null} />
-
-
-            <Scene
-              component={LandingScreenViewContainer}
-              key="LandingScreenViewContainer"
-              type="replace"
-              panHandlers={null} />
-
-            <Scene
-              component={NewUserOnboardingView}
-              key="NewUserOnboardingView"
-              panHandlers={null} />
-
-            <Scene
-              component={FirstPaymentView}
-              key="FirstPaymentView"
-              panHandlers={null} />
-
-            <Scene
-              component={PartialUserOnboardingView}
-              key="PartialUserOnboardingView"
-              direction="vertical"
-              panHandlers={null} />
-
-            <Scene
-              component={MainViewContainer}
-              key="MainViewContainer"
-              panHandlers={null} />
-
-            <Scene
-              component={PayDetails}
-              key="PaymentDetails"
-              panHandlers={null} />
+            { /*
+            <Scene key="register" component={Register} title="Register" />
+            <Scene key="register2" component={Register} title="Register2" duration={1} />
+            <Scene key="home" component={Home} title="Replace" type={ActionConst.REPLACE} />
+            <Scene key="launch" component={Launch} title="Launch" initial={true} style={{flex:1, backgroundColor:'transparent'}} />
+            <Scene key="login" direction="vertical">
+              <Scene key="loginModal" component={Login} schema="modal" title="Login" />
+              <Scene key="loginModal2" hideNavBar={true} component={Login2} title="Login2" />
+            </Scene>
+            <Scene key="tabbar" tabs={true}>
+              <Scene key="tab1" title="Tab #1" icon={TabIcon} navigationBarStyle={{backgroundColor:'red'}} titleStyle={{color:'white'}}>
+                <Scene key="tab1_1" component={TabView} title="Tab #1_1" onRight={()=>alert("Right button")} rightTitle="Right" />
+                <Scene key="tab1_2" component={TabView} title="Tab #1_2" titleStyle={{color:'black'}} />
+              </Scene>
+              <Scene key="tab2" initial={true} title="Tab #2" icon={TabIcon}>
+                <Scene key="tab2_1" component={TabView} title="Tab #2_1" onLeft={()=>alert("Left button!")} leftTitle="Left" />
+                <Scene key="tab2_2" component={TabView} title="Tab #2_2" />
+              </Scene>
+              <Scene key="tab3" component={TabView} title="Tab #3" hideTabBar={true} icon={TabIcon} />
+              <Scene key="tab4" component={TabView} title="Tab #4" hideNavBar={true} icon={TabIcon} />
+              <Scene key="tab5" component={TabView} title="Tab #5" icon={TabIcon} />
+            </Scene>
+          */ }
           </Scene>
 
-          <Scene
-            key="GlobalModal"
-            component={GlobalModal} />
-
-          <Scene
-            key="error"
-            component={Error} />
+          <Scene key="error" component={Error} />
         </Scene>
       </Router>
     )
