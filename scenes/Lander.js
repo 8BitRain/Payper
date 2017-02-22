@@ -108,9 +108,9 @@ class Lander extends React.Component {
         { /* Facebook Login Button */ }
         <LoginButton style={styles.loginButton} readPermissions={["email", "public_profile", "user_friends"]} onLoginFinished={this.onLogin} />
 
-        <Button onPress={Actions.Main}>
-          {"Skip Login"}
-        </Button>
+        { /* NOTE: Uncomment to bypass login
+          <Button onPress={Actions.Main}>{"Skip Login"}</Button>
+        */ }
 
         { /* Filler */ }
         <View style={{height: 70}} />

@@ -1,5 +1,7 @@
+import firebase from 'firebase'
 import {
-  AppState
+  AppState,
+  GeoLocation
 } from 'react-native'
 import {
   Timer
@@ -11,6 +13,7 @@ import {
   callbackForLoop
 } from '../helpers/utils'
 import {
+  handleUserData,
   handleUserBroadcastFeed
 } from '../helpers/dataHandlers'
 import {
@@ -24,6 +27,7 @@ import {
 export default class User {
   constructor() {
     this.broadcastFeed = {}
+    this.handleAppStateChange = this.handleAppStateChange.bind(this)
   }
 
   update(updates) {
@@ -42,7 +46,9 @@ export default class User {
     getDecryptedUserData({
       uid: this.uid,
       token: this.token
-    }, (res) => (res) ? this.update(res) : null)
+    }, (res) => {
+      if (res) console.log("--> decrypted user data", res)
+    })
 
     this.timer = new Timer()
     this.timer.start()
@@ -65,6 +71,12 @@ export default class User {
         return
       case "background":
         this.timer.report("sessionDuration", this.uid)
+        navigator.geolocation.getCurrentPosition((res) => {
+          res.token = this.token
+          res.state = "WI"
+          updateGeoLocation(pos)
+        })
+        console.log("--> Would update current location.")
         break
       case "active":
         this.timer = new Timer()
@@ -82,6 +94,12 @@ export default class User {
 
   startListeningToFirebase(updateViaRedux) {
     this.endpoints = [
+      {
+        endpoint: `users/${this.uid}`,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => (res) ? updateViaRedux(res) : null
+      },
       {
         endpoint: `testTree/userBroadcastFeed/${this.uid}`,
         eventType: 'value',
