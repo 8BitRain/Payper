@@ -1,25 +1,24 @@
 import React from 'react'
 import {View, Text, StyleSheet} from 'react-native'
-import Button from 'react-native-button'
 import {Actions} from 'react-native-router-flux'
+import {colors} from '../globalStyles'
+import {Header} from '../components'
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: 'red'
+    backgroundColor: colors.snowWhite,
+    flex: 1.0,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
   }
 })
 
 class SettingsModal extends React.Component {
   render() {
-    return (
+    return(
       <View style={styles.container}>
-        <Text>{'Settings'}</Text>
-        <Button onPress={Actions.pop}>{'Back'}</Button>
+        <Header showTitle showBackButton title="Settings" />
       </View>
     )
   }

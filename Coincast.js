@@ -57,10 +57,10 @@ export default class Coincast extends React.Component {
 
             { /* Modal Scenes */ }
             <Scene key="FacebookLogin" direction="vertical">
-              <Scene key="FacebookLoginModal" component={FacebookLoginModal} schema="modal" panHandlers={null} title="Facebook Login" hideNavBar />
+              <Scene key="FacebookLoginModal" component={FacebookLoginModal} schema="modal" title="Facebook Login" panHandlers={null} hideNavBar />
             </Scene>
             <Scene key="Settings" direction="vertical">
-              <Scene key="SettingsModal" component={SettingsModal} schema="modal" title="Settings" />
+              <Scene key="SettingsModal" component={SettingsModal} schema="modal" title="Settings" panHandlers={null} hideNavBar />
             </Scene>
             <Scene key="BankAccounts" direction="vertical">
               <Scene key="BankAccountsModal" component={BankAccountsModal} schema="modal" panHandlers={null} title="Bank Accounts" hideNavBar />
