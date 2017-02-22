@@ -16,7 +16,11 @@ import {
   Main,
   Broadcasts,
   Explore,
-  Me
+  Me,
+  IAVModal,
+  KYCOnboardingView,
+  BankAccountAdded,
+  MicrodepositTooltip
 } from './scenes'
 
 const reducerCreate = (params) => {
@@ -35,9 +39,12 @@ export default class Coincast extends React.Component {
           <Scene key="root" hideNavBar={true}>
 
             { /* Linear Scenes */ }
-            <Scene key="Splash"           component={Splash}           panHandlers={null} initial={true} />
-            <Scene key="InviteOnlyLander" component={InviteOnlyLander} panHandlers={null} />
-            <Scene key="Lander"           component={Lander}           panHandlers={null} />
+            <Scene key="Splash"               component={Splash}              panHandlers={null} initial={true} />
+            <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
+            <Scene key="Lander"               component={Lander}              panHandlers={null} />
+            <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
+            <Scene key="MicrodepositTooltip"  component={MicrodepositTooltip} panHandlers={null} />
+            <Scene key="BankAccountAdded"     component={BankAccountAdded}    panHandlers={null} />
 
             { /* Drawer/Tab Scenes */ }
             <Scene key="Main" component={NavigationDrawer} open={false}>
@@ -56,7 +63,10 @@ export default class Coincast extends React.Component {
               <Scene key="SettingsModal" component={SettingsModal} schema="modal" title="Settings" />
             </Scene>
             <Scene key="BankAccounts" direction="vertical">
-              <Scene key="BankAccountsModal" component={BankAccountsModal} schema="modal" title="Bank Accounts" />
+              <Scene key="BankAccountsModal" component={BankAccountsModal} schema="modal" panHandlers={null} title="Bank Accounts" hideNavBar />
+            </Scene>
+            <Scene key="IAV" direction="vertical">
+              <Scene key="IAVModal" component={IAVModal} schema="modal" panHandlers={null} title="IAV" hideNavBar />
             </Scene>
             <Scene key="NewBroadcast" direction="vertical">
               <Scene key="NewBroadcastModal" component={NewBroadcastModal} schema="modal" title="New Broadcast" />
@@ -68,6 +78,7 @@ export default class Coincast extends React.Component {
 
           { /* Included in react-native-router-flux */ }
           <Scene key="error" component={Error} />
+
         </Scene>
       </Router>
     )

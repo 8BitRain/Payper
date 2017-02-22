@@ -9,11 +9,12 @@ exports.BroadcastsFeed = require('./BroadcastsFeed')
 exports.ExploreFeed = require('./ExploreFeed')
 exports.MeFeed = require('./MeFeed')
 
-// Generic
-exports.DynamicList = require('./DynamicList')
-
-// Specific
+// Broadcasts
 exports.BroadcastFeedEmptyState = require('./BroadcastFeedEmptyState')
 exports.BroadcastFeedSectionHeader = require('./BroadcastFeedSectionHeader')
 exports.BroadcastPreview = require('./BroadcastPreview')
+
+// Other
+exports.DynamicList = require('./DynamicList')
 exports.PullToRefreshPillButton = require('./PullToRefreshPillButton')
+exports.StickyView = require('./StickyView')

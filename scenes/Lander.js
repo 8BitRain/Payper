@@ -1,6 +1,6 @@
 import React from 'react'
 import firebase from 'firebase'
-import {View, Text, StyleSheet, Dimensions, StatusBar, Image} from 'react-native'
+import {View, Text, StyleSheet, Dimensions, StatusBar, Image, Alert} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {FBLoginManager} from 'NativeModules'
 import {login, getFacebookUserData} from '../helpers/auth'
@@ -74,7 +74,6 @@ class Lander extends React.Component {
             Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
             this.setState({loading: false})
             FBLoginManager.logOut()
-            Actions.pop()
           },
           onNewUserDetection: (firebaseUserData) => {
             this.setState({loading: false})

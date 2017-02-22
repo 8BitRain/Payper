@@ -38,10 +38,6 @@ export default class User {
 
   initialize(userData) {
     this.update(userData)
-  }
-
-  initialize(userData) {
-    this.update(userData)
 
     getDecryptedUserData({
       uid: this.uid,
