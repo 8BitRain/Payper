@@ -17,6 +17,7 @@ import VerifiedIdentity from './components/Rewards/VerifiedIdentity/VerifiedIden
 import StatusCard from './components/StatusCard/StatusCard'
 import Want from './components/InterestOnboarding/Want/Want'
 import Own from './components/InterestOnboarding/Own/Own'
+import InterestTab from './components/InterestsTab/Interests'
 import { Scene, Reducer, Router, Modal } from 'react-native-router-flux'
 import { colors } from './globalStyles'
 import { Analytics, Hits as GAHits } from 'react-native-google-analytics'
@@ -101,7 +102,6 @@ export default class Coincast extends React.Component {
               panHandlers={null} />
 
             <Scene
-              initial
               component={Want}
               key="Want"
               title="Want"
@@ -112,6 +112,14 @@ export default class Coincast extends React.Component {
               component={Own}
               key="Own"
               title="Own"
+              type="replace"
+              panHandlers={null} />
+
+            <Scene
+              initial
+              component={InterestTab}
+              key="InterestTab"
+              title="InterestTab"
               type="replace"
               panHandlers={null} />
 
