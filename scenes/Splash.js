@@ -1,15 +1,10 @@
-// TODO: HANDLE CONNECTIVITY CHECK
 import React from 'react'
-import {View, Text, Image, NetInfo, TouchableHighlight, Animated, Easing, Dimensions, StatusBar, StyleSheet} from 'react-native'
+import {View, Image, StyleSheet, Dimensions} from 'react-native'
 import {Actions} from 'react-native-router-flux'
-import {FBLoginManager} from 'NativeModules'
 import {colors} from '../globalStyles'
-import {login} from '../helpers/auth'
-import {getFromAsyncStorage} from '../helpers/asyncStorage'
-import {connect} from 'react-redux'
-import * as dispatchers from './Main/MainState'
 
 const dims = Dimensions.get('window')
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -21,44 +16,8 @@ const styles = StyleSheet.create({
 })
 
 class Splash extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
-  componentWillMount() {
-    FBLoginManager.logOut()
-    this.onConnect()
-  }
-
-  onConnect() {
-    getFromAsyncStorage('hasAccess', (val) => {
-      // User does not have access. Go to InviteOnlyLander
-      if ("yes" !== val) {
-        Actions.InviteOnlyLander()
-        return
-      }
-
-      getFromAsyncStorage('user', (cachedUser) => {
-        // No user is cached. Go to Lander
-        if (!cachedUser) {
-          Actions.Lander()
-          return
-        }
-
-        login({
-          mode: "cache",
-          cachedUser: JSON.parse(cachedUser),
-          onSuccess: (response) => {
-            this.props.currentUser.initialize(response)
-            Actions.Main()
-          },
-          onFailure: (err) => {
-            console.log("Cache login failed. Error:", err)
-            Actions.Lander()
-          }
-        })
-      })
-    })
+  componentDidMount() {
+    setTimeout(Actions.Want, 600)
   }
 
   render() {
@@ -70,16 +29,4 @@ class Splash extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    currentUser: state.getIn(['main', 'currentUser'])
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    updateCurrentUser: (input) => dispatch(dispatchers.updateCurrentUser(input))
-  }
-}
-
-module.exports = connect(mapStateToProps, mapDispatchToProps)(Splash)
+module.exports = Splash

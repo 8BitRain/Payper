@@ -2,7 +2,9 @@ import React from 'react'
 import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native'
 import {Scene, Router, TabBar, Modal, Schema, Actions, Reducer, ActionConst} from 'react-native-router-flux'
 import {
-  NavigationDrawer
+  NavigationDrawer,
+  Want,
+  Own
 } from './components'
 import {
   Splash,
@@ -38,6 +40,8 @@ export default class Coincast extends React.Component {
             <Scene key="Splash"           component={Splash}           panHandlers={null} initial={true} />
             <Scene key="InviteOnlyLander" component={InviteOnlyLander} panHandlers={null} />
             <Scene key="Lander"           component={Lander}           panHandlers={null} />
+            <Scene key="Want"           component={Want}           panHandlers={null} />
+            <Scene key="Own"           component={Own}           panHandlers={null} />
 
             { /* Drawer/Tab Scenes */ }
             <Scene key="Main" component={NavigationDrawer} open={false}>

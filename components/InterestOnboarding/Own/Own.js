@@ -95,9 +95,9 @@ class Own extends React.Component {
     });
 
     const { dataBlob, sectionIds, rowIds } = this.formatData(this.data, this.categoryStore);
-
+    console.log("OWN Props: ", this.props);
     this.state = {
-      dataSource: ds.cloneWithRowsAndSections(dataBlob, sectionIds, rowIds),
+      dataSource: this.props.cleanDataSource,
       selectedTags: {
       },
       selectedNum: 0

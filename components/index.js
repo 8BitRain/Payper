@@ -12,6 +12,10 @@ exports.MeFeed = require('./MeFeed')
 // Generic
 exports.DynamicList = require('./DynamicList')
 
+//Onboarding
+exports.Want = require('./InterestOnboarding/Want/Want')
+exports.Own = require('./InterestOnboarding/Own/Own')
+
 // Specific
 exports.BroadcastFeedEmptyState = require('./BroadcastFeedEmptyState')
 exports.BroadcastFeedSectionHeader = require('./BroadcastFeedSectionHeader')

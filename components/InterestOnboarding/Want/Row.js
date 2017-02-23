@@ -43,7 +43,7 @@ class Row extends React.Component {
 
   render() {
     return(
-      <View>
+      <View style={{flex: 1}}>
        <TouchableHighlight
          activeOpacity={0.8}
          underlayColor={'transparent'}
@@ -54,7 +54,7 @@ class Row extends React.Component {
              /* Android: android/app/src/main/res/drawable/
              **/
             }
-           <Image source={{uri:this.props.logo}} style={styles.photo} />
+           {/*<Image source={{uri:this.props.logo}} style={styles.photo} />*/}
            <Text style={styles.text}>{this.props.title}</Text>
            <Text style={styles.text}>{this.props.tag}</Text>
            <Text style={styles.text}>{this.state.selected ? "True" : "False"}</Text>
