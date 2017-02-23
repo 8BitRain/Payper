@@ -11,7 +11,7 @@ import {
   FacebookLoginModal,
   BankAccountsModal,
   SettingsModal,
-  NewBroadcastModal,
+  BroadcastOnboardingFlowRoot,
   BroadcastDetailsModal,
   Main,
   Broadcasts,
@@ -63,16 +63,16 @@ export default class Coincast extends React.Component {
               <Scene key="SettingsModal" component={SettingsModal} schema="modal" title="Settings" panHandlers={null} hideNavBar />
             </Scene>
             <Scene key="BankAccounts" direction="vertical">
-              <Scene key="BankAccountsModal" component={BankAccountsModal} schema="modal" panHandlers={null} title="Bank Accounts" hideNavBar />
+              <Scene key="BankAccountsModal" component={BankAccountsModal} schema="modal"  title="Bank Accounts" panHandlers={null} hideNavBar />
             </Scene>
             <Scene key="IAV" direction="vertical">
               <Scene key="IAVModal" component={IAVModal} schema="modal" panHandlers={null} title="IAV" hideNavBar />
             </Scene>
-            <Scene key="NewBroadcast" direction="vertical">
-              <Scene key="NewBroadcastModal" component={NewBroadcastModal} schema="modal" title="New Broadcast" />
+            <Scene key="BroadcastOnboardingFlow" direction="vertical">
+              <Scene key="BroadcastOnboardingFlowRoot" component={BroadcastOnboardingFlowRoot} schema="modal" title="New Broadcast" panHandlers={null} hideNavBar />
             </Scene>
             <Scene key="BroadcastDetails">
-              <Scene key="BroadcastDetailsModal" component={BroadcastDetailsModal} schema="modal" title="Broadcast Details" hideNavBar />
+              <Scene key="BroadcastDetailsModal" component={BroadcastDetailsModal} schema="modal" title="Broadcast Details" panHandlers={null} hideNavBar />
             </Scene>
           </Scene>
 

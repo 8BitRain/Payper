@@ -88,7 +88,7 @@ class Header extends React.Component {
               <TouchableHighlight
                 activeOpacity={0.75}
                 underlayColor={'transparent'}
-                onPress={Actions.pop}
+                onPress={this.props.onBack || Actions.pop}
                 style={styles.backButtonWrap}>
                 <EvilIcons name={"chevron-left"} size={42} color={colors.snowWhite} />
               </TouchableHighlight>
