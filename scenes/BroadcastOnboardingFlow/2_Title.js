@@ -59,7 +59,7 @@ class Title extends React.Component {
         <View style={styles.infoWrap}>
           <Entypo name={"info-with-circle"} color={colors.accent} size={22} />
           <Text style={styles.infoText}>
-            {"The title of your broadcast is the first thing users will see. Be descriptive but concise."}
+            {"Your broadcast's title is the first thing prospective members will see. Be descriptive but concise!"}
           </Text>
         </View>
 
@@ -76,7 +76,8 @@ class Title extends React.Component {
               returnKeyType: "done",
               defaultValue: this.state.titleInput,
               placeholder: "ex. Netflix Subscription",
-              placeholderTextColor: colors.slateGrey
+              placeholderTextColor: colors.slateGrey,
+              onSubmitEditing: this.props.next
             }}
             iconProps={{
               name: "pencil",

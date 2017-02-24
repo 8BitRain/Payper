@@ -183,7 +183,9 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         <Animated.View style={[{opacity: this.AV.opacity}, styles.innerContentWrap]}>
           {React.cloneElement(currPage.reactComponent, {
             state: currPageState,
-            title: currPageTitle
+            title: currPageTitle,
+            next: this.next,
+            prev: this.prev
           })}
         </Animated.View>
 
