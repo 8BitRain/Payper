@@ -1,20 +1,23 @@
 import React from 'react'
-import {View, Animated, StyleSheet, Text, Alert} from 'react-native'
+import {View, Animated, StyleSheet, Text, Alert, Keyboard, TouchableHighlight} from 'react-native'
 import {colors} from '../../globalStyles'
 import {
   Header,
-  ContinueButton
+  ContinueButton,
+  StickyView
 } from '../../components'
 import {
   Visibility,
   Title,
-  Amount,
+  AmountAndFrequency,
   Spots,
   Tags,
   DetailsOfAgreement,
   Secret
 } from './'
+import dismissKeyboard from 'react-native-dismiss-keyboard'
 import Button from 'react-native-button'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 const styles = StyleSheet.create({
   container: {
@@ -23,6 +26,15 @@ const styles = StyleSheet.create({
   },
   innerContentWrap: {
     flex: 1
+  },
+  hideKeyboardWrap: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    padding: 10,
+    borderColor: colors.medGrey,
+    borderTopWidth: 1,
+    borderBottomWidth: 1
   }
 })
 
@@ -38,7 +50,8 @@ class BroadcastOnboardingFlowRoot extends React.Component {
       index: 0,
       visibilityState: null,
       canPaginate: true,
-      substates: {}
+      substates: {},
+      keyboardIsVisible: false
     }
 
     this.next = this.next.bind(this)
@@ -46,6 +59,9 @@ class BroadcastOnboardingFlowRoot extends React.Component {
   }
 
   componentWillMount() {
+    this.KeyboardListener = Keyboard.addListener("keyboardWillShow", () => this.setState({keyboardIsVisible: true}))
+    this.KeyboardListener = Keyboard.addListener("keyboardWillHide", () => this.setState({keyboardIsVisible: false}))
+
     this.pages = [
       {
         title: "Broadcast Visibility",
@@ -71,7 +87,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
       },
       {
         title: "Amount and Frequency",
-        reactComponent: <Amount induceState={this.induceState.bind(this)} />,
+        reactComponent: <AmountAndFrequency induceState={this.induceState.bind(this)} />,
         validateInput: (input) => {
           return true
         }
@@ -105,6 +121,11 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         }
       }
     ]
+  }
+
+  componentWillUnmount() {
+    this.KeyboardListener = Keyboard.removeListener("keyboardWillShow")
+    this.KeyboardListener = Keyboard.removeListener("keyboardWillHide")
   }
 
   induceState(substate, pageTitle) {
@@ -193,6 +214,17 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         <View style={{alignItems: 'center', marginTop: 15, marginBottom: 30}}>
           <ContinueButton onPress={this.next} />
         </View>
+
+        <StickyView>
+          { /* Hide keyboard button */
+            (this.state.keyboardIsVisible)
+              ? <TouchableHighlight underlayColor={'transparent'} activeOpacity={0.75} onPress={() => dismissKeyboard()}>
+                  <View style={styles.hideKeyboardWrap}>
+                    <EvilIcons name={"chevron-down"} color={colors.slateGrey} size={28} />
+                  </View>
+                </TouchableHighlight>
+              : null }
+        </StickyView>
       </View>
     )
   }

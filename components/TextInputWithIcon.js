@@ -43,7 +43,7 @@ class TextInputWithIcon extends React.Component {
 
     if (typeof props.textInputProps !== 'object')
       throw "TextInputWithIcon expected 'textInputProps' JSON prop."
-    if (typeof props.iconProps !== 'object')
+    if (typeof props.iconProps !== 'object' && !props.insteadOfIcon)
       throw "TextInputWithIcon expected 'iconProps' JSON prop."
 
     this.onChangeText = this.onChangeText.bind(this)
@@ -63,7 +63,11 @@ class TextInputWithIcon extends React.Component {
 
         { /* Icon */ }
         <View style={styles.iconWrap}>
-          <EvilIcons {...this.props.iconProps} />
+          {
+            (this.props.insteadOfIcon)
+              ? this.props.insteadOfIcon()
+              : <EvilIcons {...this.props.iconProps} />
+          }
         </View>
 
         <View style={styles.divider} />
