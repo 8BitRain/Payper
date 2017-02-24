@@ -76,6 +76,9 @@ class Checklist extends React.Component {
       }
     }
 
+    // Update inputs in caller
+    if (this.props.onChange) this.props.onChange(this.state.checkboxes)
+
     this.setState(this.state)
   }
 

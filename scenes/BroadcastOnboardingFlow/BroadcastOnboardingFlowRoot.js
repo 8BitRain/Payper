@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Animated, StyleSheet, Text} from 'react-native'
+import {View, Animated, StyleSheet, Text, Alert} from 'react-native'
 import {colors} from '../../globalStyles'
 import {
   Header,
@@ -34,19 +34,39 @@ class BroadcastOnboardingFlowRoot extends React.Component {
       opacity: new Animated.Value(1)
     }
 
+    this.state = {
+      index: 0,
+      visibilityState: null,
+      canPaginate: true,
+      substates: {}
+    }
+
+    this.next = this.next.bind(this)
+    this.prev = this.prev.bind(this)
+  }
+
+  componentWillMount() {
     this.pages = [
       {
         title: "Broadcast Visibility",
-        reactComponent: <Visibility induceState={this.induceState.bind(this)} />,
-        validateInput: (input) => {
-          return true
+        invalidInputMessage: "You must check at least one of the boxes.",
+        reactComponent: <Visibility ref={ref => this.VisibilityPage = ref} induceState={this.induceState.bind(this)} />,
+        validateInput: (substate) => {
+          let {checkboxes} = substate
+          let valid = false
+          for (var i in checkboxes)
+            if (true === checkboxes[i].selected)
+              valid = true
+          return valid
         }
       },
       {
         title: "Title",
+        invalidInputMessage: "You must enter a broadcast title.",
         reactComponent: <Title induceState={this.induceState.bind(this)} />,
-        validateInput: (input) => {
-          return true
+        validateInput: (substate) => {
+          if (!substate) return false
+          return substate.inputIsValid
         }
       },
       {
@@ -85,26 +105,23 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         }
       }
     ]
-
-    this.state = {
-      index: 0,
-      visibilityState: null,
-      canPaginate: true,
-      substates: {}
-    }
-
-    this.next = this.next.bind(this)
-    this.prev = this.prev.bind(this)
   }
 
   induceState(substate, pageTitle) {
     this.state.substates[pageTitle] = substate
-    this.setState(this.state, () => console.log(this.state))
+    this.setState(this.state)
   }
 
   next() {
     if (this.state.index === this.pages.length - 1 || !this.state.canPaginate)
       return
+
+    let currPage = this.pages[this.state.index]
+    let inputIsValid = currPage.validateInput(this.state.substates[currPage.title])
+    if (!inputIsValid) {
+      Alert.alert('Invalid Input', currPage.invalidInputMessage)
+      return
+    }
 
     this.fadeOut(() => {
       this.setState({index: this.state.index + 1}, () => {

@@ -35,16 +35,16 @@ const styles = StyleSheet.create({
 class Visibility extends React.Component {
   constructor(props) {
     super(props)
+    this.onChecklistChange = this.onChecklistChange.bind(this)
   }
 
-  componentWillUnmount() {
-    this.props.induceState(this.checklist.state, this.props.title)
+  onChecklistChange(checkboxes) {
+    this.props.induceState({checkboxes}, this.props.title) // update state in root
   }
 
   render() {
     return(
       <View style={styles.container}>
-
         <View style={styles.infoWrap}>
           <Entypo name={"info-with-circle"} color={colors.accent} size={22} />
           <Text style={styles.infoText}>
@@ -56,9 +56,9 @@ class Visibility extends React.Component {
           <Checklist
             ref={ref => this.checklist = ref}
             state={this.props.state}
-            checkedIndices={[0]}
             checkboxes={["Anyone", "Local", "Friends"]}
-            cascadeSelection />
+            cascadeSelection
+            onChange={this.onChecklistChange} />
         </View>
       </View>
     )
