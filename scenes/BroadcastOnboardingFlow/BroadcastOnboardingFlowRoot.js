@@ -68,6 +68,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         invalidInputMessage: "You must check at least one of the boxes.",
         reactComponent: <Visibility ref={ref => this.VisibilityPage = ref} induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {
+          if (!substate) return false
           let {checkboxes} = substate
           let valid = false
           for (var i in checkboxes)
@@ -87,9 +88,11 @@ class BroadcastOnboardingFlowRoot extends React.Component {
       },
       {
         title: "Amount and Frequency",
+        invalidInputMessage: "You must enter a valid amount between $1 and $3,000.",
         reactComponent: <AmountAndFrequency induceState={this.induceState.bind(this)} />,
-        validateInput: (input) => {
-          return true
+        validateInput: (substate) => {
+          if (!substate) return false
+          return substate.amountInputIsValid
         }
       },
       {

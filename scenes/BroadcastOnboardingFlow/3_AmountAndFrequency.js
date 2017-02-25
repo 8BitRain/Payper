@@ -1,8 +1,9 @@
 import React from 'react'
-import {View, StyleSheet, Dimensions, Text} from 'react-native'
+import {View, StyleSheet, Dimensions, Text, TouchableHighlight} from 'react-native'
 import {colors} from '../../globalStyles'
 import {TextInputWithIcon} from '../../components'
 import Entypo from 'react-native-vector-icons/Entypo'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -27,6 +28,37 @@ const styles = StyleSheet.create({
     color: colors.deepBlue,
     textAlign: 'center',
     flexWrap: 'wrap'
+  },
+  warningText: {
+    fontSize: 14,
+    padding: 4,
+    color: colors.slateGrey
+  },
+  frequencyButtonsWrap: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: dims.width * 0.9,
+    paddingTop: 10
+  },
+  frequencyButtonWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 9,
+    paddingRight: 11,
+    borderWidth: 1,
+    borderColor: colors.medGrey,
+    borderRadius: 5
+  },
+  inactiveFrequencyButtonText: {
+    fontSize: 18,
+    paddingLeft: 7,
+    color: colors.slateGrey
+  },
+  activeFrequencyButtonText: {
+    fontSize: 18,
+    paddingLeft: 7,
+    color: colors.deepBlue
   }
 })
 
@@ -34,10 +66,10 @@ class AmountAndFrequency extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
+    this.state = props.state || {
       amountInput: "",
       frequencyInput: "MONTHLY",
-      amountamountInputIsValid: false
+      amountInputIsValid: false
     }
 
     this.onAmountChangeText = this.onAmountChangeText.bind(this)
@@ -45,7 +77,11 @@ class AmountAndFrequency extends React.Component {
   }
 
   onAmountChangeText(input) {
-    this.setState({amount: input}, () => this.props.induceState(this.state, this.props.title))
+    this.setState({amountInput: input}, () => this.props.induceState(this.state, this.props.title))
+  }
+
+  onFrequencyChange(input) {
+    this.setState({frequencyInput: input}, () => this.props.induceState(this.state, this.props.title))
   }
 
   validateInput(input) {
@@ -87,11 +123,12 @@ class AmountAndFrequency extends React.Component {
   render() {
     return(
       <View style={styles.container}>
+
         { /* More info */ }
         <View style={styles.infoWrap}>
           <Entypo name={"info-with-circle"} color={colors.accent} size={22} />
           <Text style={styles.infoText}>
-            {"More info."}
+            {"Enter payment amount per cast member, per interval."}
           </Text>
         </View>
 
@@ -99,7 +136,7 @@ class AmountAndFrequency extends React.Component {
         <View>
           <TextInputWithIcon
             validateInput={this.validateInput}
-            onChangeText={this.onChangeText}
+            onChangeText={this.onAmountChangeText}
             inputIsValid={this.state.amountInputIsValid}
             textInputProps={{
               keyboardType: "decimal-pad",
@@ -114,8 +151,36 @@ class AmountAndFrequency extends React.Component {
 
         { /* Invalid payment amount warning */
           (this.state.amountIsOutOfRange)
-          ? <Text>{"Payment amount must be between $1 and $3000."}</Text>
+          ? <Text style={styles.warningText}>{"Payment amount must be between $1 and $3,000."}</Text>
           : null }
+
+        { /* Frequency buttons */ }
+        <View style={styles.frequencyButtonsWrap}>
+          <TouchableHighlight
+            activeOpacity={0.75}
+            underlayColor={'transparent'}
+            onPress={() => this.onFrequencyChange("MONTHLY")}>
+            <View style={styles.frequencyButtonWrap}>
+              <EvilIcons size={30} name={"check"} color={(this.state.frequencyInput === "MONTHLY") ? colors.gradientGreen : colors.slateGrey} />
+              <Text style={(this.state.frequencyInput === "MONTHLY") ? styles.activeFrequencyButtonText : styles.inactiveFrequencyButtonText}>
+                {"Per Month"}
+              </Text>
+            </View>
+          </TouchableHighlight>
+
+          <TouchableHighlight
+            activeOpacity={0.75}
+            underlayColor={'transparent'}
+            onPress={() => this.onFrequencyChange("WEEKLY")}>
+            <View style={styles.frequencyButtonWrap}>
+              <EvilIcons size={30} name={"check"} color={(this.state.frequencyInput === "WEEKLY") ? colors.gradientGreen : colors.slateGrey} />
+              <Text style={(this.state.frequencyInput === "WEEKLY") ? styles.activeFrequencyButtonText : styles.inactiveFrequencyButtonText}>
+                {"Per Week"}
+              </Text>
+            </View>
+          </TouchableHighlight>
+        </View>
+
       </View>
     )
   }
