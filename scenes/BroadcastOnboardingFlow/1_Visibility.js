@@ -2,7 +2,8 @@ import React from 'react'
 import {View, StyleSheet, Text, Dimensions} from 'react-native'
 import {colors} from '../../globalStyles'
 import {
-  Checklist
+  Checklist,
+  InfoBox
 } from '../../components'
 import Entypo from 'react-native-vector-icons/Entypo'
 
@@ -12,23 +13,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: 'transparent'
-  },
-  infoWrap: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 12,
-    marginTop: 15,
-    borderWidth: 1,
-    borderColor: colors.medGrey,
-    borderRadius: 4,
-    width: dims.width * 0.85
-  },
-  infoText: {
-    marginTop: 6,
-    fontSize: 17,
-    color: colors.deepBlue,
-    textAlign: 'center',
-    flexWrap: 'wrap'
   }
 })
 
@@ -45,13 +29,11 @@ class Visibility extends React.Component {
   render() {
     return(
       <View style={styles.container}>
-        <View style={styles.infoWrap}>
-          <Entypo name={"info-with-circle"} color={colors.accent} size={22} />
-          <Text style={styles.infoText}>
-            {"Broadcast visibility determines who can see and join your cast."}
-          </Text>
-        </View>
 
+        { /* Info Box */ }
+        <InfoBox text={"Broadcast visibility determines who can see and join your cast."} />
+
+        { /* Check List */ }
         <View style={{paddingTop: 10}}>
           <Checklist
             ref={ref => this.checklist = ref}
@@ -60,6 +42,7 @@ class Visibility extends React.Component {
             cascadeSelection
             onChange={this.onChecklistChange} />
         </View>
+
       </View>
     )
   }

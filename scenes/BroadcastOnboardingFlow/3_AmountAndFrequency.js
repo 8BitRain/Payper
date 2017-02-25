@@ -1,7 +1,7 @@
 import React from 'react'
 import {View, StyleSheet, Dimensions, Text, TouchableHighlight} from 'react-native'
 import {colors} from '../../globalStyles'
-import {TextInputWithIcon} from '../../components'
+import {TextInputWithIcon, InfoBox} from '../../components'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
@@ -11,23 +11,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: 'transparent'
-  },
-  infoWrap: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 12,
-    marginTop: 15,
-    borderWidth: 1,
-    borderColor: colors.medGrey,
-    borderRadius: 4,
-    width: dims.width * 0.85
-  },
-  infoText: {
-    marginTop: 6,
-    fontSize: 17,
-    color: colors.deepBlue,
-    textAlign: 'center',
-    flexWrap: 'wrap'
   },
   warningText: {
     fontSize: 14,
@@ -124,13 +107,8 @@ class AmountAndFrequency extends React.Component {
     return(
       <View style={styles.container}>
 
-        { /* More info */ }
-        <View style={styles.infoWrap}>
-          <Entypo name={"info-with-circle"} color={colors.accent} size={22} />
-          <Text style={styles.infoText}>
-            {"Enter payment amount per cast member, per interval."}
-          </Text>
-        </View>
+        { /* Info Box */ }
+        <InfoBox text={"Enter payment amount per cast member, per interval."} />
 
         { /* Text Input */ }
         <View>
@@ -140,6 +118,7 @@ class AmountAndFrequency extends React.Component {
             inputIsValid={this.state.amountInputIsValid}
             textInputProps={{
               keyboardType: "decimal-pad",
+              autoFocus: true,
               autoCorrect: false,
               defaultValue: this.state.amountInput,
               placeholder: "0.00",

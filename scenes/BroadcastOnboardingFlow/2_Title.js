@@ -1,6 +1,6 @@
 import React from 'react'
 import {View, StyleSheet, Dimensions, Text} from 'react-native'
-import {TextInputWithIcon} from '../../components'
+import {TextInputWithIcon, InfoBox} from '../../components'
 import {colors} from '../../globalStyles'
 import Entypo from 'react-native-vector-icons/Entypo'
 
@@ -10,23 +10,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: 'transparent'
-  },
-  infoWrap: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 12,
-    marginTop: 15,
-    borderWidth: 1,
-    borderColor: colors.medGrey,
-    borderRadius: 4,
-    width: dims.width * 0.85
-  },
-  infoText: {
-    marginTop: 6,
-    fontSize: 17,
-    color: colors.deepBlue,
-    textAlign: 'center',
-    flexWrap: 'wrap'
   }
 })
 
@@ -55,13 +38,9 @@ class Title extends React.Component {
   render() {
     return(
       <View style={styles.container}>
-        { /* More info */ }
-        <View style={styles.infoWrap}>
-          <Entypo name={"info-with-circle"} color={colors.accent} size={22} />
-          <Text style={styles.infoText}>
-            {"Your broadcast's title is the first thing prospective members will see. Be descriptive but concise!"}
-          </Text>
-        </View>
+
+        { /* Info Box */ }
+        <InfoBox text={"Your broadcast's title is the first thing prospective members will see. Be descriptive but concise!"} />
 
         { /* Text Input */ }
         <View>
@@ -85,6 +64,7 @@ class Title extends React.Component {
               size: 30
             }} />
         </View>
+
       </View>
     )
   }
