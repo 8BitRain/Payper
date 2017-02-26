@@ -37,7 +37,7 @@ class Spots extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
+    this.state = props.state || {
       spotsInput: 2
     }
 
@@ -45,7 +45,6 @@ class Spots extends React.Component {
   }
 
   onSliderValueChange(value) {
-    value = Math.round(value)
     this.setState({spotsInput: value}, () => this.props.induceState(this.state, this.props.title))
   }
 
@@ -60,15 +59,15 @@ class Spots extends React.Component {
         <View style={styles.sliderWrap}>
           <View style={styles.stepValuesWrap}>
             <View style={styles.stepDivider} />
-            <Text style={[styles.stepValue, {color: (this.state.spotsInput === 1) ? colors.accent : colors.slateGrey}]}>
+            <Text style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 1) ? colors.accent : colors.slateGrey}]}>
               {"1"}
             </Text>
             <View style={styles.stepDivider} />
-            <Text style={[styles.stepValue, {color: (this.state.spotsInput === 2) ? colors.accent : colors.slateGrey}]}>
+            <Text style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 2) ? colors.accent : colors.slateGrey}]}>
               {"2"}
             </Text>
             <View style={styles.stepDivider} />
-            <Text style={[styles.stepValue, {color: (this.state.spotsInput === 3) ? colors.accent : colors.slateGrey}]}>
+            <Text style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 3) ? colors.accent : colors.slateGrey}]}>
               {"3"}
             </Text>
             <View style={styles.stepDivider} />
@@ -76,14 +75,14 @@ class Spots extends React.Component {
 
           <Slider
             style={styles.slider}
-            value={2}
+            value={this.state.spotsInput}
             minimumValue={1}
             maximumValue={3}
             minimumTrackTintColor={colors.accent}
             maximumTrackTintColor={colors.slateGrey}
             onValueChange={this.onSliderValueChange} />
         </View>
-        
+
       </View>
     )
   }

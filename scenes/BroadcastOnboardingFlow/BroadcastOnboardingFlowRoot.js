@@ -98,7 +98,8 @@ class BroadcastOnboardingFlowRoot extends React.Component {
       {
         title: "Spots",
         reactComponent: <Spots induceState={this.induceState.bind(this)} />,
-        validateInput: (input) => {
+        validateInput: (substate) => {
+          console.log("--> Validating substate", substate)
           return true
         }
       },
