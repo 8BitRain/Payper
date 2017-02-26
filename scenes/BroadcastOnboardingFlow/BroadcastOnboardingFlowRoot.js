@@ -111,9 +111,11 @@ class BroadcastOnboardingFlowRoot extends React.Component {
       },
       {
         title: "Details of Agreement",
+        invalidInputMessage: "Your Details of Agreement must be between 1 and 140 characters.",
         reactComponent: <DetailsOfAgreement induceState={this.induceState.bind(this)} />,
-        validateInput: (input) => {
-          return true
+        validateInput: (substate) => {
+          if (!substate) return false
+          return substate.inputIsValid
         }
       },
       {
