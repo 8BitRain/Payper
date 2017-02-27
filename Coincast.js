@@ -1,6 +1,7 @@
 import React from 'react'
 import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native'
 import {Scene, Router, TabBar, Modal, Schema, Actions, Reducer, ActionConst} from 'react-native-router-flux'
+import {colors} from './globalStyles'
 import {
   NavigationDrawer
 } from './components'
@@ -34,7 +35,7 @@ const reducerCreate = (params) => {
 export default class Coincast extends React.Component {
   render() {
     return(
-      <Router createReducer={reducerCreate} sceneStyle={{backgroundColor:'#F7F7F7'}}>
+      <Router createReducer={reducerCreate} sceneStyle={{backgroundColor: colors.snowWhite}}>
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar={true}>
 

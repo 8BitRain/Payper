@@ -89,8 +89,6 @@ class SideMenu extends React.Component {
   }
 
   render() {
-
-    console.log(this.props.currentUser)
     return(
       <View style={styles.container}>
         { /* Header (opens profile page) */ }

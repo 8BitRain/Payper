@@ -27,6 +27,7 @@ import {
 export default class User {
   constructor() {
     this.broadcastFeed = {}
+    this.meFeed = {}
     this.handleAppStateChange = this.handleAppStateChange.bind(this)
   }
 

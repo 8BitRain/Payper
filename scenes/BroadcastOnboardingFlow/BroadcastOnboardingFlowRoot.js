@@ -1,5 +1,6 @@
 import React from 'react'
 import {View, Animated, StyleSheet, Text, Alert, Keyboard, TouchableHighlight} from 'react-native'
+import {Actions} from 'react-native-router-flux'
 import {colors} from '../../globalStyles'
 import {
   Header,
@@ -15,6 +16,7 @@ import {
   DetailsOfAgreement,
   Secret
 } from './'
+import {formatBroadcast} from '../../helpers'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -109,12 +111,13 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         invalidInputMessage: "You must select a tag.",
         reactComponent: <Tags induceState={this.induceState.bind(this)} tags={this.props.currentUser.tags} />,
         validateInput: (substate) => {
+          if (!substate) return false
           return Object.keys(substate.selectedTags).length > 0
         }
       },
       {
         title: "Details of Agreement",
-        invalidInputMessage: "Your Details of Agreement must be between 1 and 140 characters.",
+        invalidInputMessage: "Your cast's Details of Agreement must be between 1 and 140 characters.",
         reactComponent: <DetailsOfAgreement induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {
           if (!substate) return false
@@ -123,9 +126,11 @@ class BroadcastOnboardingFlowRoot extends React.Component {
       },
       {
         title: "Secret",
+        invalidInputMessage: "Your cast's Secret must be between 1 and 140 characters.",
         reactComponent: <Secret induceState={this.induceState.bind(this)} />,
-        validateInput: (input) => {
-          return true
+        validateInput: (substate) => {
+          if (!substate) return false
+          return substate.inputIsValid
         }
       }
     ]
@@ -141,14 +146,34 @@ class BroadcastOnboardingFlowRoot extends React.Component {
     this.setState(this.state)
   }
 
+  submit() {
+
+    // Convert onboarding state to formatted broadcast JSON
+    let broadcast = formatBroadcast(this.state.substates, this.props.currentUser)
+
+    // Update current user's meFeed data source
+    let meFeed = this.props.currentUser.meFeed || {}
+    if (!meFeed["My Broadcasts"]) meFeed["My Broadcasts"] = {}
+    meFeed["My Broadcasts"] = Object.assign({}, broadcast, meFeed["My Broadcasts"])
+    this.props.updateCurrentUser({meFeed: meFeed})
+
+    // Page back to Main view and switch to 'Me' tab
+    Actions.pop()
+    setTimeout(() => Actions.refresh({test: 'val'}), 1000)
+  }
+
   next() {
-    if (this.state.index === this.pages.length - 1 || !this.state.canPaginate)
-      return
+    if (!this.state.canPaginate) return
 
     let currPage = this.pages[this.state.index]
     let inputIsValid = currPage.validateInput(this.state.substates[currPage.title])
     if (!inputIsValid) {
       Alert.alert('Invalid Input', currPage.invalidInputMessage)
+      return
+    }
+
+    if (this.state.index === this.pages.length - 1) {
+      this.submit()
       return
     }
 

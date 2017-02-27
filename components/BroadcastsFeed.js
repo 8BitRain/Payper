@@ -1,7 +1,8 @@
 import React from 'react'
-import {firebase} from '../helpers'
-import {View, Text, StyleSheet, TouchableHighlight, ListView, Dimensions} from 'react-native'
+import {View, StyleSheet, Dimensions} from 'react-native'
 import {colors} from '../globalStyles'
+import {connect} from 'react-redux'
+import * as dispatchers from '../scenes/Main/MainState'
 import {
   DynamicList,
   BroadcastPreview,
@@ -17,28 +18,14 @@ const styles = StyleSheet.create({
 })
 
 class BroadcastsFeed extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      listData: props.currentUser.broadcastFeed
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.currentUser.broadcastFeed !== this.props.currentUser.broadcastFeed)
-      this.setState({listData: nextProps.currentUser.broadcastFeed})
-  }
-
   render() {
     return(
       <View style={styles.container}>
         <DynamicList
           refreshable={true}
           showPullToRefresh={true}
-          data={this.state.listData}
+          data={this.props.currentUser.broadcastFeed}
           afterRemove={() => alert("Removed!")}
-          induceRef={(ref) => this.setState({paymentListRef: ref})}
           renderRow={(rowData, sectionID, rowID) => <BroadcastPreview {...rowData} />}
           renderSectionHeader={(rowData, sectionID) => <BroadcastFeedSectionHeader sectionID={sectionID} />}
           renderEmptyState={() => <BroadcastFeedEmptyState />} />
@@ -47,4 +34,17 @@ class BroadcastsFeed extends React.Component {
   }
 }
 
-module.exports = BroadcastsFeed
+function mapStateToProps(state) {
+  return {
+    currentUser: state.getIn(['main', 'currentUser'])
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setCurrentUser: (input) => dispatch(dispatchers.setCurrentUser(input)),
+    updateCurrentUser: (input) => dispatch(dispatchers.updateCurrentUser(input))
+  }
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(BroadcastsFeed)

@@ -44,8 +44,12 @@ class Spots extends React.Component {
     this.onSliderValueChange = this.onSliderValueChange.bind(this)
   }
 
+  componentWillUnmount() {
+    this.props.induceState(this.state, this.props.title)
+  }
+
   onSliderValueChange(value) {
-    this.setState({spotsInput: value}, () => this.props.induceState(this.state, this.props.title))
+    this.setState({spotsInput: value})
   }
 
   render() {
