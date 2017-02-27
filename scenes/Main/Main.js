@@ -71,7 +71,7 @@ class Main extends React.Component {
         <TouchableHighlight
           activeOpacity={0.75}
           underlayColor={'transparent'}
-          onPress={Actions.NewBroadcast}>
+          onPress={Actions.BroadcastOnboardingFlow}>
           <View style={styles.newBroadcastButton}>
             <EvilIcons name={"plus"} color={colors.accent} size={48} />
           </View>

@@ -1,0 +1,7 @@
+exports.Visibility = require('./1_Visibility')
+exports.Title = require('./2_Title')
+exports.AmountAndFrequency = require('./3_AmountAndFrequency')
+exports.Spots = require('./4_Spots')
+exports.Tags = require('./5_Tags')
+exports.DetailsOfAgreement = require('./6_DetailsOfAgreement')
+exports.Secret = require('./7_Secret')

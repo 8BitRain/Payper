@@ -37,12 +37,11 @@ export default class User {
   }
 
   initialize(userData) {
-    this.update(userData)
-  }
 
-  initialize(userData) {
+    // Initialize JSON attributes
     this.update(userData)
 
+    // Get decrypted email and phone
     getDecryptedUserData({
       uid: this.uid,
       token: this.token
@@ -50,10 +49,18 @@ export default class User {
       if (res) console.log("--> decrypted user data", res)
     })
 
+    // Initalize timer and app state change listener to be used for session
+    // duration measurement
     this.timer = new Timer()
     this.timer.start()
-
     AppState.addEventListener('change', this.handleAppStateChange)
+
+    // Get tag data from Firebase
+    Firebase.get('Services', (val) => {
+      if (!val) return
+      this.update({tags: val})
+    })
+
   }
 
   destroy() {

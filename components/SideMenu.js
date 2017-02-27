@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, TouchableHighlight, Dimensions, StyleSheet, Linking, Alert, Platform, ActionSheetIOS} from 'react-native'
+import {View, Text, TouchableHighlight, Dimensions, StyleSheet, Linking, Alert, Platform, ActionSheetIOS, Image, } from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../globalStyles'
 import {logout} from '../helpers/auth'
@@ -26,7 +26,7 @@ class Row extends React.Component {
         activeOpacity={0.75}
         underlayColor={'transparent'}
         onPress={this.props.destination}>
-        <View style={{width: dims.width * 0.725, padding: 10, paddingLeft: 14, backgroundColor: 'transparent', flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{width: dims.width * 0.725, padding: 10, paddingTop: (this.props.index > 0) ? 10 : 0, paddingLeft: 14, backgroundColor: 'transparent', flexDirection: 'row', alignItems: 'center'}}>
           <EvilIcons name={this.props.icon} size={30} color={colors.accent} />
           <Text style={{color: colors.accent, fontWeight: '400', fontSize: 17, paddingLeft: 10, paddingBottom: 2}}>
             {this.props.title}
@@ -89,9 +89,39 @@ class SideMenu extends React.Component {
   }
 
   render() {
+
+    console.log(this.props.currentUser)
     return(
       <View style={styles.container}>
-        {this.config.rows.map((o) => <Row {...o} {...this.props} key={o.title} />)}
+        { /* Header (opens profile page) */ }
+        <TouchableHighlight
+          activeOpacity={0.75}
+          underlayColor={'transparent'}
+          onPress={() => alert("My Profile")}>
+          <View style={{flexDirection: 'row', padding: 20, alignItems: 'center'}}>
+            {(this.props.currentUser.profilePic)
+              ? <Image style={{width: 48, height: 48, borderRadius: 24}} source={{uri: this.props.currentUser.profilePic}} />
+              : <View style={{width: 48, height: 48, borderRadius: 24, borderWidth: 1, borderColor: colors.medGrey, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
+                    {"BS"}
+                  </Text>
+                </View> }
+
+            <View style={{flexDirection: 'column', justifyContent: 'center', paddingLeft: 12}}>
+              <Text style={{fontSize: 18, color: colors.maastrichtBlue}}>
+                {`${this.props.currentUser.firstName} ${this.props.currentUser.lastName}`}
+              </Text>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={{fontSize: 14, color: colors.accent}}>
+                  {"My Profile"}
+                </Text>
+                <EvilIcons name={"chevron-right"} color={colors.accent} size={20} style={{paddingLeft: -3, paddingTop: 1}} />
+              </View>
+            </View>
+          </View>
+        </TouchableHighlight>
+
+        {this.config.rows.map((o, i) => <Row index={i} {...o} {...this.props} key={o.title} />)}
       </View>
     )
   }
