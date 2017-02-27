@@ -53,7 +53,7 @@ class Spots extends React.Component {
       <View style={styles.container}>
 
         { /* Info Box */ }
-        <InfoBox text={"Your cast's spot limit determines how many users are allowed to join."} />
+        <InfoBox text={"Your cast's member limit determines how many users are allowed to join."} />
 
         { /* Slider with step labels */ }
         <View style={styles.sliderWrap}>

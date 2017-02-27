@@ -96,17 +96,17 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         }
       },
       {
-        title: "Spots",
+        title: "Member Limit",
         reactComponent: <Spots induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {
-          console.log("--> Validating substate", substate)
           return true
         }
       },
       {
         title: "Tags",
         reactComponent: <Tags induceState={this.induceState.bind(this)} />,
-        validateInput: (input) => {
+        validateInput: (substate) => {
+          console.log("--> Validating substate", substate)
           return true
         }
       },
@@ -199,6 +199,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
 
     return(
       <View style={styles.container}>
+
         { /* Header */ }
         <Header
           showTitle
@@ -221,16 +222,17 @@ class BroadcastOnboardingFlowRoot extends React.Component {
           <ContinueButton onPress={this.next} />
         </View>
 
+        { /* Hide keyboard button */ }
         <StickyView>
-          { /* Hide keyboard button */
-            (this.state.keyboardIsVisible)
-              ? <TouchableHighlight underlayColor={'transparent'} activeOpacity={0.75} onPress={() => dismissKeyboard()}>
-                  <View style={styles.hideKeyboardWrap}>
-                    <EvilIcons name={"chevron-down"} color={colors.slateGrey} size={28} />
-                  </View>
-                </TouchableHighlight>
-              : null }
+          {(this.state.keyboardIsVisible)
+            ? <TouchableHighlight underlayColor={'transparent'} activeOpacity={0.75} onPress={() => dismissKeyboard()}>
+                <View style={styles.hideKeyboardWrap}>
+                  <EvilIcons name={"chevron-down"} color={colors.slateGrey} size={28} />
+                </View>
+              </TouchableHighlight>
+            : null}
         </StickyView>
+
       </View>
     )
   }
