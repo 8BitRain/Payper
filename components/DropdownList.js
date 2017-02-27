@@ -164,6 +164,7 @@ class DropdownList extends React.Component {
       throw "DropdownList expected 'data' prop."
 
     this.state = props.state || {
+      selectedTags: {},
       data: props.data
     }
 
@@ -177,8 +178,13 @@ class DropdownList extends React.Component {
         for (var j in curr.rows) {
           let currRow = curr.rows[j]
           if (currRow.title === row) {
-            if (currRow.selected) currRow.selected = false
-            else currRow.selected = true
+            if (currRow.selected) {
+              delete this.state.selectedTags[currRow.title]
+              currRow.selected = false
+            } else {
+              this.state.selectedTags[currRow.title] = true
+              currRow.selected = true
+            }
           }
         }
       }

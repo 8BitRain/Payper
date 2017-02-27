@@ -104,10 +104,10 @@ class BroadcastOnboardingFlowRoot extends React.Component {
       },
       {
         title: "Tags",
+        invalidInputMessage: "You must select a tag.",
         reactComponent: <Tags induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {
-          console.log("--> Validating substate", substate)
-          return true
+          return Object.keys(substate.selectedTags).length > 0
         }
       },
       {
