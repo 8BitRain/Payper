@@ -9,6 +9,7 @@ import {
   ExploreFeed,
   MeFeed
 } from '../../components'
+import { updateFCMToken} from '../../helpers/lambda'
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import * as dispatchers from './MainState'
@@ -33,6 +34,21 @@ class Main extends React.Component {
     super(props)
   }
 
+  componentDidMount() {
+    FCM.requestPermissions(); // for iOS
+        FCM.getFCMToken().then(token => {
+            console.log("FCM Token: " + token);
+            let data = {
+              token: this.props.token,
+              FCMToken: token
+            }
+            updateFCMToken(data, (callback) =>{
+              console.log("Callback: ", callback);
+            });
+
+            // store fcm token in your server
+        });
+  }
   componentWillMount() {
     this.props.currentUser.startListeningToFirebase((updates) => this.props.updateCurrentUser(updates))
   }

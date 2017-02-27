@@ -2,6 +2,8 @@ import React from 'react'
 import {View, Image, StyleSheet, Dimensions} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../globalStyles'
+import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from 'react-native-fcm';
+
 
 const dims = Dimensions.get('window')
 
@@ -17,7 +19,7 @@ const styles = StyleSheet.create({
 
 class Splash extends React.Component {
   componentDidMount() {
-    setTimeout(Actions.Want, 600)
+    setTimeout(Actions.Lander, 600)
   }
 
   render() {

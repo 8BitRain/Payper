@@ -19,6 +19,7 @@
 #import "CodePush.h"
 
 #import "RNFIRMessaging.h"
+#import "Firebase.h"
 
 
 @implementation AppDelegate
