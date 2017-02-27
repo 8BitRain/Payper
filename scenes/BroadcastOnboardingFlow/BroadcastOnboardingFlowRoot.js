@@ -18,6 +18,8 @@ import {
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import {connect} from 'react-redux'
+import * as dispatchers from '../Main/MainState'
 
 const styles = StyleSheet.create({
   container: {
@@ -105,7 +107,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
       {
         title: "Tags",
         invalidInputMessage: "You must select a tag.",
-        reactComponent: <Tags induceState={this.induceState.bind(this)} />,
+        reactComponent: <Tags induceState={this.induceState.bind(this)} tags={this.props.currentUser.tags} />,
         validateInput: (substate) => {
           return Object.keys(substate.selectedTags).length > 0
         }
@@ -218,7 +220,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         </Animated.View>
 
         { /* Continue button */ }
-        <View style={{alignItems: 'center', marginTop: 15, marginBottom: 30}}>
+        <View style={{alignItems: 'center', paddingTop: 22.5, paddingBottom: 22.5, borderTopWidth: 1, borderColor: colors.lightGrey}}>
           <ContinueButton onPress={this.next} />
         </View>
 
@@ -238,4 +240,17 @@ class BroadcastOnboardingFlowRoot extends React.Component {
   }
 }
 
-module.exports = BroadcastOnboardingFlowRoot
+function mapStateToProps(state) {
+  return {
+    currentUser: state.getIn(['main', 'currentUser'])
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setCurrentUser: (input) => dispatch(dispatchers.setCurrentUser(input)),
+    updateCurrentUser: (input) => dispatch(dispatchers.updateCurrentUser(input))
+  }
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(BroadcastOnboardingFlowRoot)

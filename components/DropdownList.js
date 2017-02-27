@@ -5,14 +5,14 @@
   -----------------------------------------------------------------------------
   {
     "Category 1": [
-      {title: "Service 1.1"},
-      {title: "Service 1.2"},
-      {title: "Service 1.3"}
+      {displayName: "Service 1.1"},
+      {displayName: "Service 1.2"},
+      {displayName: "Service 1.3"}
     ],
     "Category 2": [
-      {title: "Service 2.1"},
-      {title: "Service 2.2"},
-      {title: "Service 2.3"}
+      {displayName: "Service 2.1"},
+      {displayName: "Service 2.2"},
+      {displayName: "Service 2.3"}
     ]
   }
 
@@ -66,9 +66,9 @@ class Row extends React.Component {
       <TouchableHighlight
         activeOpacity={0.75}
         underlayColor={'transparent'}
-        onPress={() => this.props.toggle(this.props.category, this.props.title)}>
+        onPress={() => this.props.toggle(this.props.category, this.props.displayName)}>
         <View style={styles.row}>
-          <Text style={styles.rowText}>{this.props.title}</Text>
+          <Text style={styles.rowText}>{this.props.displayName}</Text>
           <EvilIcons name={(this.props.selected) ? "check" : "plus"} size={26} color={(this.props.selected) ? colors.gradientGreen : colors.slateGrey} />
         </View>
       </TouchableHighlight>
@@ -104,7 +104,7 @@ class Category extends React.Component {
   showRows() {
     let animations = [
       Animated.timing(this.AV.rowsHeight, {
-        toValue: this.props.rows.length * 50,
+        toValue: (Object.keys(this.props.rows).length - 1) * 50, // '- 1' because of 'displayName' attribute that doesn't contain any row data
         duration: 100
       }),
       Animated.timing(this.AV.rowsOpacity, {
@@ -135,7 +135,7 @@ class Category extends React.Component {
     return(
       <View>
 
-        { /* Category (title and chevron) */ }
+        { /* Category (displayName and chevron) */ }
         <TouchableHighlight
           activeOpacity={0.75}
           underlayColor={'transparent'}
@@ -148,7 +148,12 @@ class Category extends React.Component {
 
         { /* Rows */ }
         <Animated.View style={{height: this.AV.rowsHeight, opacity: this.AV.rowsOpacity, overflow: 'hidden'}}>
-          {this.props.rows.map((o, i) => <Row {...o} key={i} category={this.props.category} toggle={this.props.toggle} />)}
+          {
+            Object.keys(this.props.rows).map((k, i) => {
+              if (typeof this.props.rows[k] !== 'object') return <View key={i} /> // avoid error thrown by 'displayName' string attribute
+              return <Row {...this.props.rows[k]} key={i} category={this.props.category} toggle={this.props.toggle} />
+            })
+          }
         </Animated.View>
 
       </View>
@@ -177,12 +182,12 @@ class DropdownList extends React.Component {
       if (curr.category === category) {
         for (var j in curr.rows) {
           let currRow = curr.rows[j]
-          if (currRow.title === row) {
+          if (currRow.displayName === row) {
             if (currRow.selected) {
-              delete this.state.selectedTags[currRow.title]
+              delete this.state.selectedTags[currRow.displayName]
               currRow.selected = false
             } else {
-              this.state.selectedTags[currRow.title] = true
+              this.state.selectedTags[currRow.displayName] = true
               currRow.selected = true
             }
           }

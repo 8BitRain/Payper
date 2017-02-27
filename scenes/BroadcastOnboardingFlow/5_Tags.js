@@ -13,24 +13,24 @@ const styles = StyleSheet.create({
 })
 
 class Tags extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.data = []
+
+    for (var cat in props.tags) {
+      let data = props.tags[cat]
+      this.data.push({category: data.displayName, rows: data})
+    }
+  }
+
   render() {
     return(
       <View style={styles.container}>
         <DropdownList
           induceState={(substate) => this.props.induceState(substate, this.props.title)}
           state={this.props.state}
-          data={
-            [
-              {
-                category: "Category 1",
-                rows: [{title: "Row 1.1"}, {title: "Row 1.2"}]
-              },
-              {
-                category: "Category 2",
-                rows: [{title: "Row 2.1"}, {title: "Row 2.2"}, {title: "Row 2.3"}, {title: "Row 2.4"}]
-              }
-            ]
-          } />
+          data={this.data} />
       </View>
     )
   }
