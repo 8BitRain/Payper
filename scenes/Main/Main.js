@@ -1,5 +1,6 @@
 import React from 'react'
 import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
+import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from 'react-native-fcm';
 import {connect} from 'react-redux'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../globalStyles'
@@ -36,21 +37,263 @@ class Main extends React.Component {
 
   componentDidMount() {
     FCM.requestPermissions(); // for iOS
-        FCM.getFCMToken().then(token => {
-            console.log("FCM Token: " + token);
-            let data = {
-              token: this.props.token,
-              FCMToken: token
-            }
-            updateFCMToken(data, (callback) =>{
-              console.log("Callback: ", callback);
-            });
+    FCM.getFCMToken().then(token => {
+      console.log("FCM Token: " + token);
+      console.log("FB Token: " + this.props.currentUser.token);
+        let data = {
+          token: this.props.currentUser.token,
+          FCMToken: token
+        }
+        updateFCMToken(data, (callback) =>{
+        console.log("Callback: ", callback);
+        FCM.presentLocalNotification({
+             id: "My First Notification",                               // (optional for instant notification)
+             title: "First Notification Evaa",                     // as FCM payload
+             body: "This is a notification, wild huh",                    // as FCM payload (required)
+             sound: "default",                                   // as FCM payload
+             priority: "high",                                   // as FCM payload
+             click_action: "ACTION",                             // as FCM payload
+             badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+             large_icon: "ic_launcher",                           // Android only
+             icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+             my_custom_data:'my_custom_field_value',             // extra data you want to throw
+             lights: true,                                       // Android only, LED blinking (default false)
+             show_in_foreground: true
+         });
+        });
 
             // store fcm token in your server
         });
+
+
+
+
   }
+
+  testPushNotif(notif){
+    switch (notif_num) {
+      case "payment_renewal":
+      FCM.presentLocalNotification({
+           id: "payment_renewal",                               // (optional for instant notification)
+           title: "Your payment in [cast] is being renewed",                     // as FCM payload
+           body: "",                    // as FCM payload (required)
+           sound: "default",                                   // as FCM payload
+           priority: "high",                                   // as FCM payload
+           click_action: "ACTION",                             // as FCM payload
+           badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+           large_icon: "ic_launcher",                           // Android only
+           icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+           my_custom_data:'my_custom_field_value',             // extra data you want to throw
+           lights: true,                                       // Android only, LED blinking (default false)
+           show_in_foreground: true
+       });
+        break;
+      case "user_joined_broadcast":
+      FCM.presentLocalNotification({
+           id: "user_joined_broadcast",                               // (optional for instant notification)
+           title: "[Name] has joined your cast for [cast]",                     // as FCM payload
+           body: "",                    // as FCM payload (required)
+           sound: "default",                                   // as FCM payload
+           priority: "high",                                   // as FCM payload
+           click_action: "ACTION",                             // as FCM payload
+           badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+           large_icon: "ic_launcher",                           // Android only
+           icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+           my_custom_data:'my_custom_field_value',             // extra data you want to throw
+           lights: true,                                       // Android only, LED blinking (default false)
+           show_in_foreground: true
+       });
+        break;
+      case "user_left_broadcast":
+      FCM.presentLocalNotification({
+           id: "user_left_broadcast",                               // (optional for instant notification)
+           title: "[user] has left your broadcast [cast]",                     // as FCM payload
+           body: "This is a notification, wild huh",                    // as FCM payload (required)
+           sound: "default",                                   // as FCM payload
+           priority: "high",                                   // as FCM payload
+           click_action: "ACTION",                             // as FCM payload
+           badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+           large_icon: "ic_launcher",                           // Android only
+           icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+           my_custom_data:'my_custom_field_value',             // extra data you want to throw
+           lights: true,                                       // Android only, LED blinking (default false)
+           show_in_foreground: true
+       });
+        break;
+      case "removed_from_broadcast":
+      FCM.presentLocalNotification({
+           id: "removed_from_broadcast",                               // (optional for instant notification)
+           title: "You have been removed from [broadcast]",                     // as FCM payload
+           body: "",                    // as FCM payload (required)
+           sound: "default",                                   // as FCM payload
+           priority: "high",                                   // as FCM payload
+           click_action: "ACTION",                             // as FCM payload
+           badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+           large_icon: "ic_launcher",                           // Android only
+           icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+           my_custom_data:'my_custom_field_value',             // extra data you want to throw
+           lights: true,                                       // Android only, LED blinking (default false)
+           show_in_foreground: true
+       });
+        break;
+      case "microdeposits":
+      FCM.presentLocalNotification({
+           id: "microdeposits",                               // (optional for instant notification)
+           title: "Microdeposits initiated/posted",                     // as FCM payload
+           body: "",                    // as FCM payload (required)
+           sound: "default",                                   // as FCM payload
+           priority: "high",                                   // as FCM payload
+           click_action: "ACTION",                             // as FCM payload
+           badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+           large_icon: "ic_launcher",                           // Android only
+           icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+           my_custom_data:'my_custom_field_value',             // extra data you want to throw
+           lights: true,                                       // Android only, LED blinking (default false)
+           show_in_foreground: true
+       });
+        break;
+      case "kyc_document_uploaded":
+        FCM.presentLocalNotification({
+             id: "kyc_document_uploaded",                               // (optional for instant notification)
+             title: "Your document has been uploaded",                     // as FCM payload
+             body: "This is a notification, wild huh",                    // as FCM payload (required)
+             sound: "default",                                   // as FCM payload
+             priority: "high",                                   // as FCM payload
+             click_action: "ACTION",                             // as FCM payload
+             badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+             large_icon: "ic_launcher",                           // Android only
+             icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+             my_custom_data:'my_custom_field_value',             // extra data you want to throw
+             lights: true,                                       // Android only, LED blinking (default false)
+             show_in_foreground: true
+         });
+        break;
+      case "kyc_document_processed":
+        FCM.presentLocalNotification({
+             id: "kyc_document_processed",                               // (optional for instant notification)
+             title: "Your document is being processed",                     // as FCM payload
+             body: "",                    // as FCM payload (required)
+             sound: "default",                                   // as FCM payload
+             priority: "high",                                   // as FCM payload
+             click_action: "ACTION",                             // as FCM payload
+             badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+             large_icon: "ic_launcher",                           // Android only
+             icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+             my_custom_data:'my_custom_field_value',             // extra data you want to throw
+             lights: true,                                       // Android only, LED blinking (default false)
+             show_in_foreground: true
+         });
+        break;
+      case "kyc_document_failed":
+        FCM.presentLocalNotification({
+             id: "kyc_document_failed",                               // (optional for instant notification)
+             title: "Your document failed to be uploaded",                     // as FCM payload
+             body: "This is a notification, wild huh",                    // as FCM payload (required)
+             sound: "default",                                   // as FCM payload
+             priority: "high",                                   // as FCM payload
+             click_action: "ACTION",                             // as FCM payload
+             badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+             large_icon: "ic_launcher",                           // Android only
+             icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+             my_custom_data:'my_custom_field_value',             // extra data you want to throw
+             lights: true,                                       // Android only, LED blinking (default false)
+             show_in_foreground: true
+         });
+        break;
+      case "kyc_document_success":
+        FCM.presentLocalNotification({
+             id: "kyc_document_success",                               // (optional for instant notification)
+             title: "Your document succeeded",                     // as FCM payload
+             body: "",                    // as FCM payload (required)
+             sound: "default",                                   // as FCM payload
+             priority: "high",                                   // as FCM payload
+             click_action: "ACTION",                             // as FCM payload
+             badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+             large_icon: "ic_launcher",                           // Android only
+             icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+             my_custom_data:'my_custom_field_value',             // extra data you want to throw
+             lights: true,                                       // Android only, LED blinking (default false)
+             show_in_foreground: true
+         });
+        break;
+      case "hidden_info_edited":
+        FCM.presentLocalNotification({
+             id: "hidden_info_edited",                               // (optional for instant notification)
+             title: "Hidden info was edited in [cast]",                     // as FCM payload
+             body: "",                    // as FCM payload (required)
+             sound: "default",                                   // as FCM payload
+             priority: "high",                                   // as FCM payload
+             click_action: "ACTION",                             // as FCM payload
+             badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+             large_icon: "ic_launcher",                           // Android only
+             icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+             my_custom_data:'my_custom_field_value',             // extra data you want to throw
+             lights: true,                                       // Android only, LED blinking (default false)
+             show_in_foreground: true
+         });
+        break;
+      case "payment_failed":
+        FCM.presentLocalNotification({
+             id: "payment_failed",                               // (optional for instant notification)
+             title: "Your payment to [name] in [cast] failed",                     // as FCM payload
+             body: "",                    // as FCM payload (required)
+             sound: "default",                                   // as FCM payload
+             priority: "high",                                   // as FCM payload
+             click_action: "ACTION",                             // as FCM payload
+             badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+             large_icon: "ic_launcher",                           // Android only
+             icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+             my_custom_data:'my_custom_field_value',             // extra data you want to throw
+             lights: true,                                       // Android only, LED blinking (default false)
+             show_in_foreground: true
+         });
+        break;
+      case "happy_birthday":
+        FCM.presentLocalNotification({
+             id: "happy_birthday",                               // (optional for instant notification)
+             title: "Happy Birthday [Name]",                     // as FCM payload
+             body: "",                    // as FCM payload (required)
+             sound: "default",                                   // as FCM payload
+             priority: "high",                                   // as FCM payload
+             click_action: "ACTION",                             // as FCM payload
+             badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+             large_icon: "ic_launcher",                           // Android only
+             icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+             my_custom_data:'my_custom_field_value',             // extra data you want to throw
+             lights: true,                                       // Android only, LED blinking (default false)
+             show_in_foreground: true
+         });
+        break;
+      case "friend_broadcasting":
+        FCM.presentLocalNotification({
+             id: "friend_broadcasting",                               // (optional for instant notification)
+             title: "Your Friend [Name] is broadcasting",                     // as FCM payload
+             body: "",                    // as FCM payload (required)
+             sound: "default",                                   // as FCM payload
+             priority: "high",                                   // as FCM payload
+             click_action: "ACTION",                             // as FCM payload
+             badge: 10,                                          // as FCM payload IOS only, set 0 to clear badges
+             large_icon: "ic_launcher",                           // Android only
+             icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+             my_custom_data:'my_custom_field_value',             // extra data you want to throw
+             lights: true,                                       // Android only, LED blinking (default false)
+             show_in_foreground: true
+         });
+        break;
+
+
+
+    }
+  }
+
   componentWillMount() {
-    this.props.currentUser.startListeningToFirebase((updates) => this.props.updateCurrentUser(updates))
+    this.props.currentUser.startListeningToFirebase((updates) => this.props.updateCurrentUser(updates));
+
+  }
+
+  componentWillUnmount(){
+    //this.notificationListener.remove();
+    //this.refreshTokenListener.remove();
   }
 
   render() {

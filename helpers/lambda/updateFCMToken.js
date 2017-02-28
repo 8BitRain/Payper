@@ -10,7 +10,7 @@ function updateFCMToken(userData, cb) {
     .then((response) => response.json())
     .then((responseData) => {
       if (responseData.errorMessage) {
-        console.log(`Error from ${users/storeFCMToken} endpoint:`, responseData.errorMessage)
+        console.log(`Error from users/storeFCMToken endpoint:`, responseData.errorMessage)
         cb(null)
       } else {
         cb(responseData)

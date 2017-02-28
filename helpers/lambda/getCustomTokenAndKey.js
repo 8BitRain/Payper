@@ -7,7 +7,7 @@ function getCustomTokenAndKey(firebaseToken, key, cb) {
     key: key
   }
 
-  fetch("http://localhost:8080/getToken", {
+  fetch("http://192.168.1.3:8080/getToken", {
     method: "POST",
     headers: {
       'Accept': 'application/json',
