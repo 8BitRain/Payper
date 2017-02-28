@@ -4,7 +4,8 @@ import {Scene, Router, TabBar, Modal, Schema, Actions, Reducer, ActionConst} fro
 import {
   NavigationDrawer,
   Want,
-  Own
+  Own,
+  Interests
 } from './components'
 import {
   Splash,
@@ -42,6 +43,7 @@ export default class Coincast extends React.Component {
             <Scene key="Lander"           component={Lander}           panHandlers={null} />
             <Scene key="Want"           component={Want}           panHandlers={null} />
             <Scene key="Own"           component={Own}           panHandlers={null} />
+            <Scene key="Interests"           component={Interests}           panHandlers={null} />
 
             { /* Drawer/Tab Scenes */ }
             <Scene key="Main" component={NavigationDrawer} open={false}>

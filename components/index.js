@@ -15,6 +15,7 @@ exports.DynamicList = require('./DynamicList')
 //Onboarding
 exports.Want = require('./InterestOnboarding/Want/Want')
 exports.Own = require('./InterestOnboarding/Own/Own')
+exports.Interests = require('./InterestsTab/Interests')
 
 // Specific
 exports.BroadcastFeedEmptyState = require('./BroadcastFeedEmptyState')
