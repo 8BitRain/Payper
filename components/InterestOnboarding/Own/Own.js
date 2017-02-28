@@ -18,6 +18,9 @@ import { device } from '../../../helpers'
 import Row from './Row'
 import SectionHeader from './SectionHeader'
 
+//Firebase
+import { Firebase } from '../../../helpers'
+
 let servicesDB = {
   'VideoStreaming': {
     'Netflix': {
@@ -49,63 +52,78 @@ class Own extends React.Component {
   constructor(props) {
     super(props);
 
-    this.servicesStore = [];
-    this.categoryStore = [];
-
-    var categories = servicesDB;
-    //Loop through categories
-    for (var categoryKey in categories) {
-      var category = categoryKey;
-      this.categoryStore.push(category);
-      var services = categories[categoryKey];
-
-      //Loop through services
-      for(var serviceKey in services){
-        var service = serviceKey;
-        var logo = services[service];
-        var tag = services[service];
-
-        //append title, selected, and category to each service obj.
-        console.log("Service OBJ Initial: ", services);
-        services[serviceKey]["selected"] = false;
-        services[serviceKey]["title"] = service;
-        services[serviceKey]["category"] = category;
-        //Push manipulated object into datasource ready (readable) array
-        this.servicesStore.push(services[service]);
-
-
-        console.log("Service  OBJ Updated: ", services);
-      }
-    }
-
-    console.log("Categories OBJ: + ", categories);
-    console.log("Service Store", this.servicesStore);
-
-
-    this.data = this.servicesStore;
-    const getSectionData = (dataBlob, sectionId) => dataBlob[sectionId];
-    const getRowData = (dataBlob, sectionId, rowId) => dataBlob[`${rowId}`];
-
-    //DS with section headers
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
-      sectionHeaderHasChanged : (s1, s2) => s1 !== s2,
-      getSectionData,
-      getRowData,
-    });
-
-    const { dataBlob, sectionIds, rowIds } = this.formatData(this.data, this.categoryStore);
-    console.log("OWN Props: ", this.props);
     this.state = {
-      dataSource: this.props.cleanDataSource,
+      dataSource: null,
+      displayList: false,
       selectedTags: {
       },
       selectedNum: 0
     }
   }
 
-  componentDidMount() {
 
+
+  componentDidMount() {
+    Firebase.getServices((cb) => {
+      console.log("Services pulled from Firebase: ", cb);
+      var categories = cb;
+      let servicesStore = [];
+      let categoryStore = [];
+      //Loop through categories
+      for (var categoryKey in categories) {
+        var category = categoryKey;
+        categoryStore.push(category);
+        var services = categories[categoryKey];
+
+        //Loop through services
+        for(var serviceKey in services){
+          var service = serviceKey;
+          var logo = services[service];
+          var tag = services[service];
+
+          //append title, selected, and category to each service obj.
+          console.log("Service OBJ Initial: ", services);
+          services[serviceKey]["selected"] = false;
+          services[serviceKey]["title"] = service;
+          services[serviceKey]["category"] = category;
+          //Push manipulated object into datasource ready (readable) array
+          servicesStore.push(services[service]);
+          console.log("Service  OBJ Updated: ", services);
+        }
+      }
+
+      //Set up RowData and SectionData
+      const getSectionData = (dataBlob, sectionId) => dataBlob[sectionId];
+      const getRowData = (dataBlob, sectionId, rowId) => dataBlob[`${rowId}`];
+
+      //DS with section headers
+      const ds = new ListView.DataSource({
+        rowHasChanged: (r1, r2) => r1 !== r2,
+        sectionHeaderHasChanged : (s1, s2) => s1 !== s2,
+        getSectionData,
+        getRowData,
+      });
+
+      const { dataBlob, sectionIds, rowIds } = this.formatData(servicesStore, categoryStore);
+
+      //Update state
+      //Note cleanDataSource is created to pass an un-edited datasource to the "Own" portion of Interest Onboarding
+      this.setState({displayList: true, dataSource: ds.cloneWithRowsAndSections(dataBlob, sectionIds, rowIds), cleanDataSource: ds.cloneWithRowsAndSections(dataBlob, sectionIds, rowIds)})
+    });
+  }
+
+  _renderListView(){
+    if(this.state.displayList){
+      return(
+        <ListView
+          style={styles.container}
+          dataSource={this.state.dataSource}
+          renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected) => this.updateSelectedTags(tag, selected)} />}
+          renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+          renderSectionHeader={(sectionData) => <SectionHeader {...sectionData} />}
+        />
+      );
+    }
   }
 
   formatData(data, categoryStore) {
@@ -184,13 +202,7 @@ class Own extends React.Component {
         </View>
 
         {/* CONTENT*/}
-        <ListView
-          style={styles.container}
-          dataSource={this.state.dataSource}
-          renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected) => this.updateSelectedTags(tag, selected)} />}
-          renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-          renderSectionHeader={(sectionData) => <SectionHeader {...sectionData} />}
-        />
+        { this._renderListView()}
         {/* FOOTER*/}
         <View>
         <TouchableHighlight

@@ -41,9 +41,24 @@ class Row extends React.Component {
 
   }
 
+  _renderLogo(){
+    if(this.state.fallbackImageNeeded){
+      return(
+        <Image source={{uri:this.props.category + ".png"}} style={styles.photo} />
+      );
+    }
+    if(!this.state.fallbackImageNeeded){
+      return(
+        <Image source={{uri:this.props.logo}}
+               style={styles.photo}
+               onError={() => this.setState({fallbackImageNeeded: true})}/>
+      );
+    }
+  }
+
   render() {
     return(
-      <View>
+      <View style={{flex: 1}}>
        <TouchableHighlight
          activeOpacity={0.8}
          underlayColor={'transparent'}
@@ -54,7 +69,7 @@ class Row extends React.Component {
              /* Android: android/app/src/main/res/drawable/
              **/
             }
-           <Image source={{uri:this.props.logo}} style={styles.photo} />
+           {this._renderLogo()}
            <Text style={styles.text}>{this.props.title}</Text>
            <Text style={styles.text}>{this.props.tag}</Text>
            <Text style={styles.text}>{this.state.selected ? "True" : "False"}</Text>
