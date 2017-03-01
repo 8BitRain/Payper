@@ -6,9 +6,9 @@ function checkIfUserExists(params, cb) {
     fetch(baseURL + "users/checkFacebook", {method: "POST", body: JSON.stringify(params)})
     .then((response) => response.json())
     .then((responseData) => cb(responseData))
-    .catch((err) => console.log(err))
+    .catch((err) => {console.log(err); cb(err)})
     .done()
-  } catch (err) {console.log(err)}
+  } catch (err) {console.log(err); cb(err)}
 }
 
 module.exports = checkIfUserExists

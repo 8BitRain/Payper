@@ -41,14 +41,19 @@ function login(params) {
       return
     }
 
-    console.log("firebaseUser", firebaseUser)
-
     getCustomTokenAndKey(firebaseUser.token || firebaseUser.stsTokenManager.accessToken, firebaseUser.key || null, (res) => {
+      if (!res) {
+        onFailure(`getCustomTokenAndKey response: ${res}`)
+        return
+      }
+
       firebase.auth().signInWithCustomToken(res.customToken)
       .then((response) => response.toJSON())
       .then((responseData) => {
         let {customToken, key} = res
 
+        // User data is cached. Attach fresh customToken and key and return
+        // user data to caller
         if ("cache" === mode) {
           cachedUser.token = responseData.stsTokenManager.accessToken
           cachedUser.key = key
@@ -60,6 +65,7 @@ function login(params) {
           facebookID: facebookUser.facebook_id,
           token: customToken
         }, (userExistsResponse) => {
+          console.log("userExistsResponse", userExistsResponse)
           let formattedUser = {
             firstName: facebookUser.first_name,
             lastName: facebookUser.last_name,
@@ -86,11 +92,10 @@ function login(params) {
           // initialization is handled in scenes/Lander
           if (true === userExistsResponse) {
             createOrGetUser(formattedUser, (response) => {
-              if (!response.message && !response.errorMessage)
-                onSuccess(response)
-              else
-                onFailure(response)
+              if (!response.message && !response.errorMessage) onSuccess(response)
+              else onFailure(response)
             })
+
             return
           }
 
@@ -124,13 +129,6 @@ function loginWithFacebook(cb) {
       cb(null, err)
     })
   })
-}
-
-/**
-  *
-**/
-function loginWithCachedUser(cachedUser, cb) {
-  console.log("Cached User:", cachedUser)
 }
 
 module.exports = login
