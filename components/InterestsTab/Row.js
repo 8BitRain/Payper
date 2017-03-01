@@ -18,7 +18,8 @@ class Row extends React.Component {
     super(props);
     this.state = {
       ownSelected: false,
-      wantSelected: false
+      wantSelected: false,
+      fallbackImageNeeded: false
     }
   }
 
@@ -52,16 +53,31 @@ class Row extends React.Component {
 
   }
 
+  _renderLogo(){
+    if(this.state.fallbackImageNeeded){
+      return(
+        <Image source={{uri:this.props.category + ".png"}} style={styles.photo} />
+      );
+    }
+    if(!this.state.fallbackImageNeeded){
+      return(
+        <Image source={{uri:this.props.logo}}
+               style={styles.photo}
+               onError={() => this.setState({fallbackImageNeeded: true})}/>
+      );
+    }
+  }
+
   render() {
     return(
-      <View>
+      <View style={{flex: 1}}>
          <View style={styles.container}>
             {/** Where are images stored?
              /* iOS: Image.xcassets
              /* Android: android/app/src/main/res/drawable/
              **/
             }
-           <Image source={{uri:this.props.logo}} style={styles.photo} />
+           {this._renderLogo()}
            <Text style={styles.text}>{this.props.title}</Text>
 
            <View style={styles.buttonContainer}>
