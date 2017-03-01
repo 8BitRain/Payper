@@ -56,6 +56,7 @@ class Interests extends React.Component {
     this.state = {
       dataSource: null,
       displayList: false,
+      loadedFirebase: false,
       selectedTags: {},
       ownedTags:{},
       wantedTags:{},
@@ -64,41 +65,56 @@ class Interests extends React.Component {
   }
 
   componentDidMount() {
-    Firebase.getServices((cb) => {
-      var servicesStore = [];
-      var categoryStore = [];
-
-      var categories = cb;
-      //Loop through categories
-      for (var categoryKey in categories) {
-        var category = categoryKey;
-        categoryStore.push(category);
-        var services = categories[categoryKey];
-
-        //Loop through services
-        for(var serviceKey in services){
-          var service = serviceKey;
-          var logo = services[service];
-          var tag = services[service];
-
-          //append title, selected, and category to each service obj.
-          //console.log("Service OBJ Initial: ", services);
-          services[serviceKey]["selected"] = false;
-          services[serviceKey]["title"] = service;
-          services[serviceKey]["category"] = category;
-          //Push manipulated object into datasource ready (readable) array
-          if(typeof(services[service]) != 'string'){
-            servicesStore.push(services[service]);
-          }
-          console.log("Service  : ", services[service]);
-        }
+    this.listenerConfig = {
+        endpoint: `Services`,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => {
+          console.log("An update was made to fb", res);
+          this.formatRowData(res);
       }
+    }
+    Firebase.listenTo(this.listenerConfig);
+  }
 
-      console.log("Services: ", servicesStore);
-      const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-      this.setState({displayList: true, dataSource: ds.cloneWithRows(servicesStore)});
+  componentWillUnmount() {
+    Firebase.stopListeningTo(this.listenerConfig);
+  }
 
-    });
+  formatRowData(rowData){
+    var servicesStore = [];
+    var categoryStore = [];
+
+    var categories = rowData;
+    //Loop through categories
+    for (var categoryKey in categories) {
+      var category = categoryKey;
+      categoryStore.push(category);
+      var services = categories[categoryKey];
+
+      //Loop through services
+      for(var serviceKey in services){
+        var service = serviceKey;
+        var logo = services[service];
+        var tag = services[service];
+
+        //append title, selected, and category to each service obj.
+        //console.log("Service OBJ Initial: ", services);
+        services[serviceKey]["selected"] = false;
+        services[serviceKey]["title"] = service;
+        services[serviceKey]["category"] = category;
+        //Push manipulated object into datasource ready (readable) array
+        if(typeof(services[service]) != 'string'){
+          servicesStore.push(services[service]);
+        }
+        //console.log("Service  : ", services[service]);
+      }
+    }
+
+    //console.log("Services: ", servicesStore);
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.setState({loadedFirebase: true, displayList: true, dataSource: ds.cloneWithRows(servicesStore)});
+
   }
 
   formatData(data, categoryStore) {

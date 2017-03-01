@@ -24,7 +24,7 @@ class Row extends React.Component {
   }
 
   componentDidMount() {
-    console.log("Props", this.props);
+    //console.log("Props", this.props);
   }
   /*Toggles betweens whether or not the row has been selected.
   * Helps determine which tags to send to the db.
@@ -55,8 +55,40 @@ class Row extends React.Component {
 
   _renderLogo(){
     if(this.state.fallbackImageNeeded){
+      switch (this.props.category) {
+        case "Books":
+          return(<Ionicons name={"ios-book-outline"} size={32}/>);
+          break;
+        case "Education":
+          return(<Ionicons name={"ios-school-outline"} size={32}/>);
+          break;
+        case "Exercise":
+          return(<Ionicons name={"md-heart"} size={32}/>);
+          break;
+        case "FoodDelivery":
+          return(<Ionicons name={"md-restaurant"} size={32}/>);
+          break;
+        case "Gaming":
+          return(<Ionicons name={"ios-game-controller-b-outline"} size={32}/>);
+          break;
+        case "LiveTv":
+          return(<Ionicons name={"md-desktop"} size={32}/>);
+          break;
+        case "MusicStreaming":
+          return(<Ionicons name={"ios-musical-notes"} size={32}/>);
+          break;
+        case "News":
+          return(<Ionicons name={"logo-rss"} size={32}/>);
+          break;
+        case "Sports":
+          return(<Ionicons name={"md-american-football"} size={32}/>);
+          break;
+        case "VideoStreaming":
+          return(<Ionicons name={"logo-youtube"} size={32}/>);
+          break;
+      }
       return(
-        <Image source={{uri:this.props.category + ".png"}} style={styles.photo} />
+        <Ionicons name={"md-heart"} size={32}/>
       );
     }
     if(!this.state.fallbackImageNeeded){
@@ -163,7 +195,6 @@ var styles = StyleSheet.create({
   photo: {
     height: 40,
     width: 40,
-    borderRadius: 20,
   },
 })
 

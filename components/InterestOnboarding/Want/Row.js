@@ -18,7 +18,8 @@ class Row extends React.Component {
     super(props);
     this.state = {
       selected: this.props.selected,
-      fallbackImageNeeded: false
+      fallbackImageNeeded: false,
+      pulledFromFirebase: false
     }
   }
 
