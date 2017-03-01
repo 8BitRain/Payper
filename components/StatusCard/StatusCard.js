@@ -126,15 +126,23 @@ class StatusCard extends React.Component {
 
   componentDidMount() {
     console.log("StatusCard Props: ", this.props);
-    this.setState({
-      onboardingPercentage: getOnboardingPercentage(this.props.currentUser.appFlags)
-    })
+    try{
+      this.setState({
+        onboardingPercentage: getOnboardingPercentage(this.props.currentUser.appFlags)
+      })
+    } catch(err){
+      console.log("Error: ", err);
+    }
+
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      onboardingPercentage: getOnboardingPercentage(nextProps.currentUser.appFlags)
-    })
+    try{
+      this.setState({
+        onboardingPercentage: getOnboardingPercentage(nextProps.currentUser.appFlags)
+      })
+    } catch(err){}
+
   }
 
   handlePress(destination) {

@@ -95,7 +95,7 @@ class SideMenu extends React.Component {
         { /* Header (opens profile page) */ }
         { /*StatusCard */}
         {console.log("Props: ", this.props)}
-        <StatusCard {...this.props}/>
+        <StatusCard currentUser={this.props.currentUser}/>
         <TouchableHighlight
           activeOpacity={0.75}
           underlayColor={'transparent'}
