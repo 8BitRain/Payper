@@ -184,8 +184,6 @@ class Own extends React.Component {
   handleContinuePress(){
     wantedTags = "";
     ownedTags = "";
-    console.log("Handling continue press");
-    //Loop through wanted Tags
 
     for (var tag in this.props.wantedTags){
       if(this.props.wantedTags[tag]){
@@ -204,8 +202,8 @@ class Own extends React.Component {
     console.log("Owned Tags: " + ownedTags);
 
     var data = {
-      want : "",
-      own : "rhodia,clowns,crysis",
+      want : wantedTags,
+      own : ownedTags,
       token : this.props.currentUser.token
     }
 
@@ -213,10 +211,13 @@ class Own extends React.Component {
       console.log("Callback: ", cb);
     });
 
+    Actions.Main();
+
   }
 
   handleSkipPress(){
     //Load MainView
+    Actions.Main();
   }
 
   updateFirebaseTags(){
