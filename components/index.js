@@ -12,7 +12,6 @@ exports.MeFeed = require('./MeFeed')
 // Broadcasts
 exports.BroadcastFeedEmptyState = require('./BroadcastFeedEmptyState')
 exports.BroadcastFeedSectionHeader = require('./BroadcastFeedSectionHeader')
-exports.BroadcastPreview = require('./BroadcastPreview')
 
 // Other
 exports.DynamicList = require('./DynamicList')
@@ -25,3 +24,4 @@ exports.TextArea = require('./TextArea')
 exports.TextInputWithIcon = require('./TextInputWithIcon')
 exports.InfoBox = require('./InfoBox')
 exports.DropdownList = require('./DropdownList')
+exports.DropdownView = require('./DropdownView')

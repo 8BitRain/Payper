@@ -4,6 +4,7 @@ import {Actions} from 'react-native-router-flux'
 import {colors} from '../globalStyles'
 import {TabBar} from './'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import Entypo from 'react-native-vector-icons/Entypo'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -25,17 +26,25 @@ const styles = StyleSheet.create({
   navWrap: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     width: dims.width
   },
-  sideMenuButtonWrap: {
-    paddingTop: 5,
-    paddingLeft: 8,
-    paddingRight: 50,
-    paddingBottom: 0
-  },
+  // sideMenuButtonWrap: {
+  //   paddingTop: 5,
+  //   paddingLeft: 8,
+  //   paddingRight: 50,
+  //   paddingBottom: 0
+  // },
   sideMenuButtonWrap: {
     padding: 8,
     paddingTop: 5
+  },
+  backButtonWrap: {
+    padding: 6,
+  },
+  dotsWrap: {
+    padding: 6,
+    paddingRight: 18
   },
   titleWrap: {
     position: 'absolute',
@@ -71,29 +80,37 @@ class Header extends React.Component {
             </View>
           : null }
 
-        {this.props.showSideMenuButton
-          ? <View style={styles.navWrap}>
-              <TouchableHighlight
-                activeOpacity={0.75}
-                underlayColor={'transparent'}
-                onPress={this.toggleSideMenu}
-                style={styles.sideMenuButtonWrap}>
-                <EvilIcons name={"navicon"} size={32} color={colors.snowWhite} />
-              </TouchableHighlight>
-            </View>
-          : null}
-
-        {this.props.showBackButton
-          ? <View style={styles.navWrap}>
-              <TouchableHighlight
+        <View style={styles.navWrap}>
+          {this.props.showBackButton
+            ? <TouchableHighlight
                 activeOpacity={0.75}
                 underlayColor={'transparent'}
                 onPress={this.props.onBack || Actions.pop}
                 style={styles.backButtonWrap}>
                 <EvilIcons name={"chevron-left"} size={42} color={colors.snowWhite} />
               </TouchableHighlight>
-            </View>
-          : null}
+            : null}
+
+          {this.props.showSideMenuButton
+            ? <TouchableHighlight
+                activeOpacity={0.75}
+                underlayColor={'transparent'}
+                onPress={this.toggleSideMenu}
+                style={styles.sideMenuButtonWrap}>
+                <EvilIcons name={"navicon"} size={32} color={colors.snowWhite} />
+              </TouchableHighlight>
+            : null}
+
+          {this.props.showDots
+            ? <TouchableHighlight
+                activeOpacity={0.75}
+                underlayColor={'transparent'}
+                onPress={this.props.onDotsPress || null}
+                style={styles.dotsWrap}>
+                <Entypo name={"dots-three-horizontal"} size={28} color={colors.snowWhite} />
+              </TouchableHighlight>
+            : null}
+        </View>
 
         {this.props.showTabBar
           ? <TabBar {...this.props} />

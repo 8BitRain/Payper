@@ -1,20 +1,19 @@
 import config from '../../config'
 const baseURL = config[config.env].lambdaBaseURL
 
-function updateGeoLocation(params, cb) {
+function createBroadcast(broadcastData, cb) {
   try {
-    fetch(baseURL + "users/updateLocation", {
+    fetch(baseURL + "casts/createBroadcast", {
       method: "POST",
-      body: JSON.stringify(params)
+      body: JSON.stringify(broadcastData)
     })
     .then((response) => response.json())
     .then((responseData) => {
-      if (responseData.errorMessage) {
-        console.log(`Error from ${users/updateLocation} endpoint:`, responseData.errorMessage)
+      console.log("broadcasts/create response:", responseData)
+      if (responseData.errorMessage || responseData.message)
         if (typeof cb === 'function') cb(null)
-      } else {
+      else
         if (typeof cb === 'function') cb(responseData)
-      }
     })
     .catch((err) => {
       console.log(err)
@@ -27,4 +26,4 @@ function updateGeoLocation(params, cb) {
   }
 }
 
-module.exports = updateGeoLocation
+module.exports = createBroadcast

@@ -9,16 +9,19 @@ function createOrGetUser(userData, cb) {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      if (responseData.errorMessage) {
-        console.log(`Error from ${users/create} endpoint:`, responseData.errorMessage)
-        cb(null)
-      } else {
-        cb(responseData)
-      }
+      console.log("users/create response:", responseData)
+      if (responseData.errorMessage || responseData.message) cb(null)
+      else cb(responseData)
     })
-    .catch((err) => console.log(err))
+    .catch((err) => {
+      console.log(err)
+      cb(null)
+    })
     .done()
-  } catch (err) {console.log(err)}
+  } catch (err) {
+    console.log(err)
+    cb(null)
+  }
 }
 
 module.exports = createOrGetUser

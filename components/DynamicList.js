@@ -129,7 +129,7 @@ class DynamicList extends React.Component {
         updatedState.refreshContent = this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
     // }
 
-    this.setState(updatedState, () => console.log("DynamicList state:", this.state))
+    this.setState(updatedState)
   }
 
   optimisticallyUpdate(params, cb) {

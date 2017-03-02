@@ -16,7 +16,8 @@ import {
   DetailsOfAgreement,
   Secret
 } from './'
-import {formatBroadcast} from '../../helpers'
+import {createBroadcast} from '../../helpers/lambda'
+import {formatAfterOnboarding} from '../../helpers/broadcasts'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -147,19 +148,16 @@ class BroadcastOnboardingFlowRoot extends React.Component {
   }
 
   submit() {
+    // TODO: Optimistically update
 
-    // Convert onboarding state to formatted broadcast JSON
-    let broadcast = formatBroadcast(this.state.substates, this.props.currentUser)
-
-    // Update current user's meFeed data source
-    let meFeed = this.props.currentUser.meFeed || {}
-    if (!meFeed["My Broadcasts"]) meFeed["My Broadcasts"] = {}
-    meFeed["My Broadcasts"] = Object.assign({}, broadcast, meFeed["My Broadcasts"])
-    this.props.updateCurrentUser({meFeed: meFeed})
+    // Send to backend
+    let broadcast = formatAfterOnboarding(this.state.substates, this.props.currentUser)
+    broadcast.token = this.props.currentUser.token
+    createBroadcast(broadcast)
 
     // Page back to Main view and switch to 'Me' tab
     Actions.pop()
-    setTimeout(() => Actions.refresh({test: 'val'}), 1000)
+    setTimeout(() => Actions.refresh({newTab: 'Me'}))
   }
 
   next() {

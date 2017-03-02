@@ -1,13 +1,12 @@
 import React from 'react'
 import {View, TouchableHighlight, Text, StyleSheet, Dimensions} from 'react-native'
-import {colors} from '../globalStyles'
+import {colors} from '../../../globalStyles'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.snowWhite,
-    paddingTop: 12,
-    paddingBottom: 12,
+    padding: 12,
     borderWidth: 1,
     borderColor: colors.medGrey,
     borderRadius: 4,
@@ -23,11 +22,11 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    color: colors.deepBlue
+    color: colors.gradientGreen
   }
 })
 
-class JoinButton extends React.Component {
+class SubscribeButton extends React.Component {
   render() {
     return(
       <TouchableHighlight
@@ -35,11 +34,11 @@ class JoinButton extends React.Component {
         underlayColor={'transparent'}
         onPress={() => {
           if (this.props.onPress) this.props.onPress()
-          else throw "JoinButton expected 'onPress' prop."
+          else throw "SubscribeButton expected 'onPress' prop."
         }}>
         <View style={styles.container}>
-          <Text style={styles.text}>
-            {this.props.customText || "Join"}
+          <Text style={[styles.text, {color: (this.props.color) ? this.props.color : colors.gradientGreen}]}>
+            {this.props.text || "Subscribe"}
           </Text>
         </View>
       </TouchableHighlight>
@@ -47,4 +46,4 @@ class JoinButton extends React.Component {
   }
 }
 
-module.exports = JoinButton
+module.exports = SubscribeButton

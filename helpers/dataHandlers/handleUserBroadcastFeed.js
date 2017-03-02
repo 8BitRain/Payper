@@ -2,25 +2,28 @@ import {Firebase} from '../'
 import {callbackForLoop} from '../utils'
 
 function handleUserBroadcastFeed(userBroadcastFeed, cb) {
-  if (!userBroadcastFeed) return {}
+  if (!userBroadcastFeed) {
+    cb({})
+    return
+  }
 
-  let bidBuffer = userBroadcastFeed.split(",")
+  let castIDBuffer = Object.keys(userBroadcastFeed)
   let broadcasts = {}
 
-  callbackForLoop(0, bidBuffer.length, {
+  callbackForLoop(0, castIDBuffer.length, {
     onIterate: (loop) => {
-      let buffer = bidBuffer[loop.index].split(":")
+      let buffer = castIDBuffer[loop.index].split(":")
       let section = buffer[0]
-      let bid = buffer[1]
+      let castID = buffer[1]
 
-      Firebase.get(`testTree/broadcasts/${bid}`, (broadcastData) => {
+      Firebase.get(`broadcasts/${castID}`, (broadcastData) => {
         if (!broadcastData) {
           loop.continue()
         } else {
-          Firebase.get(`testTree/user/${broadcastData.casterID}`, (casterData) => {
+          Firebase.get(`users/${broadcastData.casterID}`, (casterData) => {
             broadcastData.caster = casterData
             if (!broadcasts[section]) broadcasts[section] = {}
-            broadcasts[section][bid] = broadcastData
+            broadcasts[section][castID] = broadcastData
             loop.continue()
           })
         }
