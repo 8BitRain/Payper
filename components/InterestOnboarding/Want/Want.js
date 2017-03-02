@@ -24,6 +24,9 @@ import SectionHeader from './SectionHeader'
 //Firebase
 import { Firebase } from '../../../helpers'
 
+import {connect} from 'react-redux'
+import * as dispatchers from '../../../scenes/Main/MainState'
+
 
 
 let servicesDB = {
@@ -68,6 +71,7 @@ class Want extends React.Component {
   }
 
   componentDidMount() {
+    console.log("Current User", this.props);
     Firebase.getServices((cb) => {
       console.log("Services pulled from Firebase: ", cb);
       var categories = cb;
@@ -175,7 +179,7 @@ class Want extends React.Component {
 
   handleContinuePress(){
     this.updateFirebaseTags();
-    Actions.Own();
+    Actions.Own({wantedTags: this.state.selectedTags});
   }
 
   updateFirebaseTags(){
@@ -296,4 +300,17 @@ var styles = StyleSheet.create({
   },
 })
 
-module.exports = Want
+function mapStateToProps(state) {
+  return {
+    currentUser: state.getIn(['main', 'currentUser'])
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setCurrentUser: (input) => dispatch(dispatchers.setCurrentUser(input)),
+    updateCurrentUser: (input) => dispatch(dispatchers.updateCurrentUser(input))
+  }
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(Want)

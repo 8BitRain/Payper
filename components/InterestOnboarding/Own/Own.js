@@ -4,13 +4,8 @@ import { View, Text, TouchableHighlight, Animated, Easing, Image, Dimensions, St
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
-
-//Routing
 import { Actions } from 'react-native-router-flux';
-// Stylesheets
 import {colors} from '../../../globalStyles';
-
-//Custom
 const dimensions = Dimensions.get('window');
 import { device } from '../../../helpers'
 
@@ -20,6 +15,11 @@ import SectionHeader from './SectionHeader'
 
 //Firebase
 import { Firebase } from '../../../helpers'
+//Lambda
+import { updateUserTags } from '../../../helpers/lambda'
+
+import {connect} from 'react-redux'
+import * as dispatchers from '../../../scenes/Main/MainState'
 
 let servicesDB = {
   'VideoStreaming': {
@@ -64,6 +64,7 @@ class Own extends React.Component {
 
 
   componentDidMount() {
+    console.log("Own Props: ", this.props);
     Firebase.getServices((cb) => {
       console.log("Services pulled from Firebase: ", cb);
       var categories = cb;
@@ -181,7 +182,37 @@ class Own extends React.Component {
   }
 
   handleContinuePress(){
-    updateFirebaseTags();
+    wantedTags = "";
+    ownedTags = "";
+    console.log("Handling continue press");
+    //Loop through wanted Tags
+
+    for (var tag in this.props.wantedTags){
+      if(this.props.wantedTags[tag]){
+        //Remove the # & append a ,
+        wantedTags += tag.substring(1) + ",";
+      }
+    }
+
+    for (var tag2 in this.state.selectedTags){
+      if(this.state.selectedTags[tag2]){
+        ownedTags += tag2.substring(1) + ",";
+      }
+    }
+
+    console.log("Wanted Tags: " + wantedTags);
+    console.log("Owned Tags: " + ownedTags);
+
+    var data = {
+      want : "",
+      own : "rhodia,clowns,crysis",
+      token : this.props.currentUser.token
+    }
+
+    updateUserTags(data, (cb) => {
+      console.log("Callback: ", cb);
+    });
+
   }
 
   handleSkipPress(){
@@ -208,7 +239,7 @@ class Own extends React.Component {
         <TouchableHighlight
           activeOpacity={0.8}
           underlayColor={'transparent'}
-          onPress={() => this.updateFirebaseTags()}
+          onPress={() => this.handleContinuePress()}
           style={this.state.selectedNum >= 1 ? styles.buttonActive : styles.buttonInactive}>
               <Text style={this.state.selectedNum >= 1 ? styles.buttonActiveText : styles.buttonInactiveText}>{"Continue"}</Text>
         </TouchableHighlight>
@@ -308,4 +339,17 @@ var styles = StyleSheet.create({
   },
 })
 
-module.exports = Own
+function mapStateToProps(state) {
+  return {
+    currentUser: state.getIn(['main', 'currentUser'])
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setCurrentUser: (input) => dispatch(dispatchers.setCurrentUser(input)),
+    updateCurrentUser: (input) => dispatch(dispatchers.updateCurrentUser(input))
+  }
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(Own)

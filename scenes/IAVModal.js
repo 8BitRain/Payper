@@ -42,7 +42,7 @@ class IAVModal extends React.Component {
       this.generateInjectedJS({
         IAVToken: IAVToken,
         firebaseToken: this.props.currentUser.token,
-        dwollaEnv: config.env == "dev" ? "sandbox" : "prod" ,
+        dwollaEnv: config.env == "dev" ? "sandbox" : "prod",
         payperEnv: config.env
       }, () => {
         this.refs.webviewbridge.reload()
