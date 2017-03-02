@@ -1,36 +1,35 @@
 import {Firebase} from '../'
 import {callbackForLoop} from '../utils'
+import * as _ from 'lodash'
 
-function handleUserBroadcastFeed(userBroadcastFeed, cb) {
-  if (!userBroadcastFeed) {
-    cb({})
+function handleUserBroadcastFeed(casts, cb) {
+  if (!casts) {
+    cb([])
     return
   }
 
-  let castIDBuffer = Object.keys(userBroadcastFeed)
+  let castIDBuffer = Object.keys(casts)
   let broadcasts = {}
 
   callbackForLoop(0, castIDBuffer.length, {
     onIterate: (loop) => {
-      let buffer = castIDBuffer[loop.index].split(":")
-      let section = buffer[0]
-      let castID = buffer[1]
-
+      let castID = castIDBuffer[loop.index]
       Firebase.get(`broadcasts/${castID}`, (broadcastData) => {
         if (!broadcastData) {
           loop.continue()
         } else {
+          broadcastData.castID = castID
           Firebase.get(`users/${broadcastData.casterID}`, (casterData) => {
             broadcastData.caster = casterData
-            if (!broadcasts[section]) broadcasts[section] = {}
-            broadcasts[section][castID] = broadcastData
+            broadcasts[castID] = broadcastData
             loop.continue()
           })
         }
       })
     },
     onComplete: () => {
-      cb(broadcasts)
+      let arr = _.sortBy(broadcasts, [function(o) { return o.createdAt }]).reverse()
+      cb(arr)
     }
   })
 }

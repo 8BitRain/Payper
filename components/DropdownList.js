@@ -1,26 +1,6 @@
-/*
-
-
-  NOTE: MOCK DATA
-  -----------------------------------------------------------------------------
-  {
-    "Category 1": [
-      {displayName: "Service 1.1"},
-      {displayName: "Service 1.2"},
-      {displayName: "Service 1.3"}
-    ],
-    "Category 2": [
-      {displayName: "Service 2.1"},
-      {displayName: "Service 2.2"},
-      {displayName: "Service 2.3"}
-    ]
-  }
-
-
-*/
-
 import React from 'react'
-import {View, TouchableHighlight, Text, Dimensions, StyleSheet, Animated, ScrollView} from 'react-native'
+import * as _ from 'lodash'
+import {View, TouchableHighlight, Text, Dimensions, StyleSheet, Animated, ScrollView, Alert} from 'react-native'
 import {colors} from '../globalStyles'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
@@ -170,7 +150,8 @@ class DropdownList extends React.Component {
 
     this.state = props.state || {
       selectedTags: {},
-      data: props.data
+      data: props.data,
+      filteredData: []
     }
 
     this.toggle = this.toggle.bind(this)
@@ -187,6 +168,14 @@ class DropdownList extends React.Component {
               delete this.state.selectedTags[currRow.displayName]
               currRow.selected = false
             } else {
+
+              // Enforce selection limit
+              if (this.props.selectionLimit && Object.keys(this.state.selectedTags).length >= this.props.selectionLimit) {
+                alert(`You may only select ${this.props.selectionLimit} tag.`)
+                return
+              }
+
+              this.state.query = currRow.displayName
               this.state.selectedTags[currRow.displayName] = true
               currRow.selected = true
             }
@@ -198,10 +187,38 @@ class DropdownList extends React.Component {
     this.setState(this.state, () => (this.props.induceState) ? this.props.induceState(this.state) : null)
   }
 
+  filter(query) {
+
+    query = query.trim().toLowerCase()
+
+    let filteredData = _.filter(this.state.data, (o) => {
+      let categoryMatchesQuery = o.category.toLowerCase().indexOf(query) >= 0
+      let serviceMatchesQuery = false
+
+      for (var i in o.rows) {
+        if (typeof o.rows[i] !== 'object') continue
+        if (o.rows[i].displayName.toLowerCase().indexOf(query) >= 0) {
+          serviceMatchesQuery = true
+          break
+        }
+      }
+
+      return categoryMatchesQuery || serviceMatchesQuery
+    })
+
+    this.setState({filteredData})
+  }
+
   render() {
     return(
-      <ScrollView style={styles.container}>
-        {this.state.data.map((o, i) => <Category {...o} key={i} toggle={this.toggle} />)}
+      <ScrollView
+        style={styles.container}
+        keyboardDismissMode={this.props.keyboardDismissMode || "none"}>
+        {
+          (this.state.filteredData.length > 0)
+            ? this.state.filteredData.map((o, i) => <Category {...o} key={i} toggle={this.toggle} />)
+            : this.state.data.map((o, i) => <Category {...o} key={i} toggle={this.toggle} />)
+        }
       </ScrollView>
     )
   }

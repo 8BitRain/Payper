@@ -2,6 +2,7 @@ import React from 'react'
 import {View, Animated, StyleSheet, Text, Alert, Keyboard, TouchableHighlight} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../globalStyles'
+import {Firebase} from '../../helpers'
 import {
   Header,
   ContinueButton,
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderColor: colors.medGrey,
+    backgroundColor: colors.snowWhite,
     borderTopWidth: 1,
     borderBottomWidth: 1
   }
@@ -64,9 +66,15 @@ class BroadcastOnboardingFlowRoot extends React.Component {
   }
 
   componentWillMount() {
+
+    // Initialize keyboard listeners
     this.KeyboardListener = Keyboard.addListener("keyboardWillShow", () => this.setState({keyboardIsVisible: true}))
     this.KeyboardListener = Keyboard.addListener("keyboardWillHide", () => this.setState({keyboardIsVisible: false}))
 
+    // Get tag data from Firebase
+    Firebase.get('Services', (val) => (val) ? this.setState({tags: val}) : null)
+
+    // Configure page components
     this.pages = [
       {
         title: "Broadcast Visibility",
@@ -110,7 +118,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
       {
         title: "Tags",
         invalidInputMessage: "You must select a tag.",
-        reactComponent: <Tags induceState={this.induceState.bind(this)} tags={this.props.currentUser.tags} />,
+        reactComponent: <Tags induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {
           if (!substate) return false
           return Object.keys(substate.selectedTags).length > 0
@@ -238,7 +246,8 @@ class BroadcastOnboardingFlowRoot extends React.Component {
             state: currPageState,
             title: currPageTitle,
             next: this.next,
-            prev: this.prev
+            prev: this.prev,
+            tags: this.state.tags
           })}
         </Animated.View>
 

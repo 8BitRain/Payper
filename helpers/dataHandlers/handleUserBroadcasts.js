@@ -4,7 +4,7 @@ import * as _ from 'lodash'
 
 function handleUserBroadcasts(casts, cb) {
   if (!casts) {
-    cb({})
+    cb([])
     return
   }
 

@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
   inputWrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: dims.width * 0.9,
     backgroundColor: colors.lightGrey,
     marginTop: 14,
     height: 44,
@@ -59,7 +58,7 @@ class TextInputWithIcon extends React.Component {
 
   render() {
     return(
-      <View style={styles.inputWrap}>
+      <View style={[styles.inputWrap, {width: this.props.width || dims.width * 0.9}]}>
 
         { /* Icon */ }
         <View style={styles.iconWrap}>

@@ -91,8 +91,10 @@ function login(params) {
           // initialization is handled in scenes/Lander
           if (true === userExistsResponse) {
             createOrGetUser(formattedUser, (response) => {
-              if (response) onSuccess(response)
-              else onFailure()
+              if (null === response || response.errorMessage || response.message)
+                onFailure(response)
+              else
+                onSuccess(response)
             })
 
             return

@@ -2,6 +2,7 @@ import config from '../../config'
 const baseURL = config[config.env].lambdaBaseURL
 
 function createOrGetUser(userData, cb) {
+  console.log("--> Hitting 'users/create' with userData:", userData)
   try {
     fetch(baseURL + "users/create", {
       method: "POST",
@@ -10,17 +11,16 @@ function createOrGetUser(userData, cb) {
     .then((response) => response.json())
     .then((responseData) => {
       console.log("users/create response:", responseData)
-      if (responseData.errorMessage || responseData.message) cb(null)
-      else cb(responseData)
+      cb(responseData)
     })
     .catch((err) => {
       console.log(err)
-      cb(null)
+      if (typeof cb === 'function') cb(null)
     })
     .done()
   } catch (err) {
-    console.log(err)
-    cb(null)
+    console.log("Error creating user:", err)
+    if (typeof cb === 'function') cb(null)
   }
 }
 

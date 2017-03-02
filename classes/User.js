@@ -58,13 +58,6 @@ export default class User {
     this.timer = new Timer()
     this.timer.start()
     AppState.addEventListener('change', this.handleAppStateChange)
-
-    // Get tag data from Firebase
-    Firebase.get('Services', (val) => {
-      if (!val) return
-      this.update({tags: val})
-    })
-
   }
 
   destroy() {
@@ -123,6 +116,14 @@ export default class User {
           if (!this.meFeed) this.meFeed = {}
           this.meFeed["My Broadcasts"] = myBroadcasts
           updateViaRedux({meFeed: this.meFeed})
+        })
+      },
+      {
+        endpoint: `userBroadcastFeed/${this.uid}`,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => handleUserBroadcastFeed(res, (broadcastFeed) => {
+          console.log("--> broadcastFeed:", broadcastFeed)
         })
       },
       {

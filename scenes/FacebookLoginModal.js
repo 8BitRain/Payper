@@ -123,7 +123,9 @@ class FacebookLoginModal extends React.Component {
     createOrGetUser(this.state.userData, (response) => {
       this.setState({submitting: false})
 
-      if (!response.message && !response.errorMessage) {
+      console.log("--> createOrGetUser response:", response)
+
+      if (response && !response.message && !response.errorMessage) {
         for (var k in this.state.userData) {
           if (response.user[k] !== this.state.userData[k])
             response.user[k] = this.state.userData[k]
@@ -167,7 +169,7 @@ class FacebookLoginModal extends React.Component {
           { /* Welcome message and info message */ }
           <View style={{width: dims.width * 0.9, padding: 12, marginTop: 12, backgroundColor: colors.lightGrey, borderRadius: 4, justifyContent: 'center'}}>
             <Text style={{color: colors.deepBlue, fontSize: 20, padding: 4, backgroundColor: 'transparent', textAlign: 'left'}}>
-              {`Hey ${userData.first_name},`}
+              {`Hey ${userData.firstName},`}
             </Text>
             <Text style={{color: colors.deepBlue, fontSize: 14, padding: 4, backgroundColor: 'transparent', textAlign: 'left'}}>
               {info}

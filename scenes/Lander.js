@@ -66,6 +66,7 @@ class Lander extends React.Component {
           mode: "facebook",
           facebookUser: userData,
           onSuccess: (response) => {
+            console.log("--> Success", response)
             this.setState({loading: false})
             this.props.currentUser.initialize(response.user)
             Actions.Main()
