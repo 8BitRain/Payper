@@ -28,7 +28,14 @@ class Splash extends React.Component {
   }
 
   componentWillMount() {
-    codePush.sync({ deploymentKey: config[config.env].codePushKey });
+
+    // Sync with codepush
+    codePush.sync({
+      deploymentKey: config[config.env].codePushKey,
+      updateDialog: false,
+      installMode: codePush.InstallMode.IMMEDIATE
+    })
+
     FBLoginManager.logOut()
     this.onConnect()
   }
