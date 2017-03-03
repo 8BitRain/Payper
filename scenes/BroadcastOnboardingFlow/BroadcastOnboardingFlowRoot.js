@@ -121,7 +121,8 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         reactComponent: <Tags induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {
           if (!substate) return false
-          return Object.keys(substate.selectedTags).length > 0
+          if (substate.inputIsValid) return true
+          return substate.selectedTags && Object.keys(substate.selectedTags).length > 0
         }
       },
       {
@@ -161,6 +162,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
     // Send to backend
     let broadcast = formatAfterOnboarding(this.state.substates, this.props.currentUser)
     broadcast.token = this.props.currentUser.token
+    console.log("BROADCAST:", broadcast)
     createBroadcast(broadcast)
 
     // Page back to Main view and switch to 'Me' tab

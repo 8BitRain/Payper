@@ -33,12 +33,13 @@ class Tags extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.state && nextProps.state.query)
-      this.setState({query: nextProps.state.query, inputIsValid: true})
+    if (nextProps.state && nextProps.state.dropdownListState && nextProps.state.dropdownListState.query)
+      this.setState({query: nextProps.state.dropdownListState.query, inputIsValid: true})
   }
 
   onChangeText(input) {
     this.dropdownList.filter(input)
+    this.setState({query: input}, () => this.props.induceState(this.state, this.props.title))
   }
 
   validateInput(input) {
@@ -72,10 +73,14 @@ class Tags extends React.Component {
         { /* List of tags */ }
         <DropdownList
           ref={(ref) => (this.dropdownList) ? null : this.dropdownList = ref}
-          induceState={(substate) => this.props.induceState(substate, this.props.title)}
+          induceState={(substate) => {
+            this.setState({dropdownListState: substate}, () => {
+              this.props.induceState(this.state, this.props.title)
+            })
+          }}
           keyboardDismissMode={"on-drag"}
           selectionLimit={1}
-          state={this.props.state}
+          state={(this.props.state) ? this.props.state.dropdownListState : null}
           data={this.data} />
 
       </View>

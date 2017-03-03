@@ -44,7 +44,7 @@ export default class Coincast extends React.Component {
           <Scene key="root" hideNavBar={true}>
 
             { /* Linear Scenes */ }
-            <Scene key="Splash"               component={Splash}              panHandlers={null} initial={false} />
+            <Scene key="Splash"               component={Splash}              panHandlers={null} initial={true} />
             <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
@@ -69,7 +69,7 @@ export default class Coincast extends React.Component {
             <Scene key="IAV" direction="vertical">
               <Scene key="IAVModal" component={IAVModal} schema="modal" panHandlers={null} title="IAV" hideNavBar />
             </Scene>
-            <Scene key="BroadcastOnboardingFlow" direction="vertical" initial={true}>
+            <Scene key="BroadcastOnboardingFlow" direction="vertical">
               <Scene key="BroadcastOnboardingFlowRoot" component={BroadcastOnboardingFlowRoot} schema="modal" title="New Broadcast" panHandlers={null} hideNavBar />
             </Scene>
 

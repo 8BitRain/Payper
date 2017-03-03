@@ -1,5 +1,7 @@
 function formatAfterOnboarding(substates, currentUser) {
 
+  console.log("--> formatAfterOnboarding was invoke with substates", substates)
+
   // Generate broadcast id
   let buffer = []
   let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -8,8 +10,7 @@ function formatAfterOnboarding(substates, currentUser) {
   let castID = buffer.join('')
 
   // Format tags
-  let tags = []
-  for (var k in substates["Tags"].selectedTags) tags.push(k)
+  let tag = substates["Tags"].dropdownListState.selectedTags[0] || substates["Tags"].query
 
   // Format visibility
   let visibility = ""
@@ -40,7 +41,7 @@ function formatAfterOnboarding(substates, currentUser) {
     secret: substates["Secret"].secretInput,
     memberLimit: Math.round(substates["Member Limit"].spotsInput),
     type: visibility,
-    tag: tags[0],
+    tag: tag,
     memberIDs: "",
     createdAt: Date.now(),
     casterID: currentUser.uid,

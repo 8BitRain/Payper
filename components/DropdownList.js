@@ -148,6 +148,8 @@ class DropdownList extends React.Component {
     if (!props.data)
       throw "DropdownList expected 'data' prop."
 
+    console.log("props", props)
+
     this.state = props.state || {
       selectedTags: {},
       data: props.data,
@@ -155,6 +157,7 @@ class DropdownList extends React.Component {
     }
 
     this.toggle = this.toggle.bind(this)
+    this.filter = this.filter.bind(this)
   }
 
   toggle(category, row) {
@@ -188,7 +191,6 @@ class DropdownList extends React.Component {
   }
 
   filter(query) {
-
     query = query.trim().toLowerCase()
 
     let filteredData = _.filter(this.state.data, (o) => {
@@ -206,7 +208,7 @@ class DropdownList extends React.Component {
       return categoryMatchesQuery || serviceMatchesQuery
     })
 
-    this.setState({filteredData})
+    this.setState({filteredData}, () => (this.props.induceState) ? this.props.induceState(this.state) : null)
   }
 
   render() {
@@ -215,7 +217,7 @@ class DropdownList extends React.Component {
         style={styles.container}
         keyboardDismissMode={this.props.keyboardDismissMode || "none"}>
         {
-          (this.state.filteredData.length > 0)
+          (this.state.filteredData && this.state.filteredData.length > 0)
             ? this.state.filteredData.map((o, i) => <Category {...o} key={i} toggle={this.toggle} />)
             : this.state.data.map((o, i) => <Category {...o} key={i} toggle={this.toggle} />)
         }
