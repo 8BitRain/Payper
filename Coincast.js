@@ -23,9 +23,14 @@ import {
 } from './scenes'
 import {
   InviteOnlyLander,
-  Lander,
-  PromoLander
+  Lander
 } from './scenes/Landers'
+import {
+  PromoLander,
+  PromoWants,
+  PromoRoulette,
+  PromoSignup
+} from './scenes/Promo'
 import {
   AdminBroadcastView,
   JoinedBroadcastView,
@@ -48,13 +53,18 @@ class Coincast extends React.Component {
           <Scene key="root" hideNavBar={true}>
 
             { /* Linear Scenes */ }
-            <Scene key="Splash"               component={Splash}              panHandlers={null} initial={true} />
-            <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} />
+            <Scene key="Splash"               component={Splash}              panHandlers={null} />
             <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
             <Scene key="MicrodepositTooltip"  component={MicrodepositTooltip} panHandlers={null} />
             <Scene key="BankAccountAdded"     component={BankAccountAdded}    panHandlers={null} />
+
+            { /* SXSW Promo Scenes */ }
+            <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} initial />
+            <Scene key="PromoWants"           component={PromoWants}          panHandlers={null} />
+            <Scene key="PromoRoulette"        component={PromoRoulette}       panHandlers={null} />
+            <Scene key="PromoSignup"          component={PromoSignup}         panHandlers={null} />
 
             { /* Drawer/Tab Scenes */ }
             <Scene key="Main" component={NavigationDrawer} open={false}>
@@ -88,7 +98,6 @@ class Coincast extends React.Component {
             <Scene key="UnjoinedBroadcast">
               <Scene key="UnjoinedBroadcastModal" component={UnjoinedBroadcastView} schema="modal" panHandlers={null} hideNavBar />
             </Scene>
-
           </Scene>
 
           <Scene key="error" component={Error} />

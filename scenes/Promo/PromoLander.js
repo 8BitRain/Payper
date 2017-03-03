@@ -49,12 +49,14 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '600',
     color: colors.snowWhite,
+    textAlign: 'center',
     backgroundColor: 'transparent'
   },
   taglineText: {
     fontSize: 24,
     fontWeight: '400',
     color: colors.snowWhite,
+    textAlign: 'center',
     backgroundColor: 'transparent'
   }
 })
@@ -77,7 +79,7 @@ class PromoLander extends React.Component {
           <Image source={require('../../assets/images/app-icon.png')} style={styles.logo} />
 
           { /* Spacer */ }
-          <View style={{height: 32}} />
+          <View style={{height: 28}} />
 
           { /* Welcome */ }
           <Text style={styles.welcomeText}>
@@ -99,7 +101,7 @@ class PromoLander extends React.Component {
           <TouchableHighlight
             activeOpacity={0.75}
             underlayColor={'transparent'}
-            onPress={() => alert("Would paginate")}>
+            onPress={Actions.PromoWants}>
             <View style={styles.buttonWrap}>
               <Text style={styles.buttonText}>
                 {"Pick a Free Subscription"}
