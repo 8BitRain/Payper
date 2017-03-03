@@ -15,7 +15,7 @@ import {
 import {
   handleUserData,
   handleUserBroadcasts,
-  handleUserBroadcastFeed
+  handleUserFeed
 } from '../helpers/dataHandlers'
 import {
   getFromAsyncStorage,
@@ -119,11 +119,11 @@ export default class User {
         })
       },
       {
-        endpoint: `userBroadcastFeed/${this.uid}`,
+        endpoint: `userFeed/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => handleUserBroadcastFeed(res, (broadcastFeed) => {
-          console.log("--> broadcastFeed:", broadcastFeed)
+        callback: (res) => handleUserFeed(res, (feed) => {
+          console.log("--> feed:", feed)
         })
       },
       {

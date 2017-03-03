@@ -1,6 +1,6 @@
 import React from 'react'
 import firebase from 'firebase'
-import {View, Text, StyleSheet, Dimensions, StatusBar, Image, Alert} from 'react-native'
+import {View, Text, StyleSheet, Dimensions, StatusBar, Image, Alert, Linking} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {FBLoginManager} from 'NativeModules'
 import {login, getFacebookUserData} from '../helpers/auth'
@@ -46,6 +46,7 @@ class Lander extends React.Component {
     }
 
     this.onLogin = this.onLogin.bind(this)
+    this.handleURLClick = this.handleURLClick.bind(this)
   }
 
   onLogin(err, res) {
@@ -87,6 +88,10 @@ class Lander extends React.Component {
         this.setState({loading: false})
       }
     })
+  }
+
+  handleURLClick(url) {
+    Linking.openURL(url).catch(err => console.error('An error occurred', err));
   }
 
   render() {
