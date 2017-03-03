@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   inputWrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: dims.width * 0.9,
+    width: dims.width * 0.8,
     backgroundColor: colors.lightGrey,
     marginTop: 14,
     height: 44,
@@ -133,8 +133,8 @@ class InviteOnlyLander extends React.Component {
 
         { /* Submit button */ }
         <StickyView>
-          <View style={{alignItems: 'center', paddingBottom: 15}}>
-            <ContinueButton onPress={this.submit} />
+          <View style={{alignItems: 'center', paddingBottom: 20}}>
+            <ContinueButton onPress={this.submit} containerStyles={{shadowColor: colors.slateGrey}} />
           </View>
         </StickyView>
       </View>
