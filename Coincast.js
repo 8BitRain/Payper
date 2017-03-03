@@ -6,7 +6,8 @@ import {
   NavigationDrawer,
   Want,
   Own,
-  Interests
+  Interests,
+  Roullette
 } from './components'
 import {
   Splash,
@@ -43,7 +44,7 @@ export default class Coincast extends React.Component {
           <Scene key="root" hideNavBar={true}>
 
             { /* Linear Scenes */ }
-            <Scene key="Splash"           component={Splash}           panHandlers={null} initial={true} />
+            <Scene key="Splash"           component={Splash}           panHandlers={null} />
             <Scene key="InviteOnlyLander" component={InviteOnlyLander} panHandlers={null} />
             <Scene key="Lander"           component={Lander}           panHandlers={null} />
             <Scene key="Want"           component={Want}           panHandlers={null} />
@@ -52,6 +53,7 @@ export default class Coincast extends React.Component {
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
             <Scene key="MicrodepositTooltip"  component={MicrodepositTooltip} panHandlers={null} />
             <Scene key="BankAccountAdded"     component={BankAccountAdded}    panHandlers={null} />
+            <Scene key="Roullette" component={Roullette} panHandlers={null} initial={true}>
 
 
             { /* Drawer/Tab Scenes */ }
