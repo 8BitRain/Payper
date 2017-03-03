@@ -45,7 +45,7 @@ export default class Coincast extends React.Component {
 
             { /* Linear Scenes */ }
             <Scene key="Splash"               component={Splash}              panHandlers={null} initial={true} />
-            <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
+            <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} initial={true} />
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
             <Scene key="MicrodepositTooltip"  component={MicrodepositTooltip} panHandlers={null} />
