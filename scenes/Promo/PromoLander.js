@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, Dimensions, TextInput, Keyboard, TouchableHighlight, Alert, Image} from 'react-native'
+import {View, Text, StyleSheet, Dimensions, TextInput, Keyboard, TouchableHighlight, Alert, Image, Animated} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {ContinueButton} from '../../components'
 import {colors} from '../../globalStyles'
@@ -64,6 +64,42 @@ const styles = StyleSheet.create({
 class PromoLander extends React.Component {
   constructor(props) {
     super(props)
+
+    this.AV = {
+      logo: {opacity: new Animated.Value(0)},
+      welcome: {opacity: new Animated.Value(0)},
+      tagline: {opacity: new Animated.Value(0)},
+      continueButton: {opacity: new Animated.Value(0)}
+    }
+
+    this.fadeIn = this.fadeIn.bind(this)
+  }
+
+  componentDidMount() {
+    setTimeout(this.fadeIn, 1000)
+  }
+
+  fadeIn() {
+    let animations = [
+      Animated.timing(this.AV.logo.opacity, {
+        toValue: 1,
+        duration: 250
+      }),
+      Animated.timing(this.AV.welcome.opacity, {
+        toValue: 1,
+        duration: 250
+      }),
+      Animated.timing(this.AV.tagline.opacity, {
+        toValue: 1,
+        duration: 250
+      }),
+      Animated.timing(this.AV.continueButton.opacity, {
+        toValue: 1,
+        duration: 250
+      })
+    ]
+
+    Animated.sequence(animations).start()
   }
 
   render() {
@@ -76,41 +112,48 @@ class PromoLander extends React.Component {
         <View style={{flex: 0.85, width: dims.width * 0.85, alignItems: 'center', justifyContent: 'center'}}>
 
           { /* Logo */ }
-          <Image source={require('../../assets/images/app-icon.png')} style={styles.logo} />
+          <Animated.View style={this.AV.logo}>
+            <Image source={require('../../assets/images/app-icon.png')} style={styles.logo} />
+          </Animated.View>
 
           { /* Spacer */ }
           <View style={{height: 28}} />
 
           { /* Welcome */ }
-          <Text style={styles.welcomeText}>
-            {"Welcome to Payper"}
-          </Text>
+          <Animated.View style={this.AV.welcome}>
+            <Text style={styles.welcomeText}>
+              {"Welcome to Payper"}
+            </Text>
+          </Animated.View>
 
           { /* Spacer */ }
           <View style={{height: 10}} />
 
           { /* Tagline */ }
-          <Text style={styles.taglineText}>
-            {"Subscriptions made social."}
-          </Text>
-
+          <Animated.View style={this.AV.tagline}>
+            <Text style={styles.taglineText}>
+              {"Subscriptions made social."}
+            </Text>
+          </Animated.View>
         </View>
 
         { /* Submit button */ }
         <View style={{flex: 0.15, justifyContent: 'center', alignItems: 'center', paddingBottom: 20}}>
-          <TouchableHighlight
-            activeOpacity={0.75}
-            underlayColor={'transparent'}
-            onPress={Actions.PromoWants}>
-            <View style={styles.buttonWrap}>
-              <Text style={styles.buttonText}>
-                {"Pick a Free Subscription"}
-              </Text>
-              <View style={{paddingTop: 2}}>
-                <EvilIcons name={"chevron-right"} size={34} color={colors.accent} />
+          <Animated.View style={this.AV.continueButton}>
+            <TouchableHighlight
+              activeOpacity={0.75}
+              underlayColor={'transparent'}
+              onPress={Actions.PromoWants}>
+              <View style={styles.buttonWrap}>
+                <Text style={styles.buttonText}>
+                  {"Pick a Free Subscription"}
+                </Text>
+                <View style={{paddingTop: 2}}>
+                  <EvilIcons name={"chevron-right"} size={34} color={colors.accent} />
+                </View>
               </View>
-            </View>
-          </TouchableHighlight>
+            </TouchableHighlight>
+          </Animated.View>
         </View>
       </View>
     )
