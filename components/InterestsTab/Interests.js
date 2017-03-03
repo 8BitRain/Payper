@@ -21,6 +21,12 @@ import Row from './Row'
 
 import { Firebase } from '../../helpers'
 
+//Lambda
+import { updateUserTags } from '../../helpers/lambda'
+
+import {connect} from 'react-redux'
+import * as dispatchers from '../../scenes/Main/MainState'
+
 
 let servicesDB = {
   'VideoStreaming': {
@@ -77,6 +83,11 @@ class Interests extends React.Component {
     Firebase.listenTo(this.listenerConfig);
   }
 
+  componentWillUpdate(nextProps, nextState){
+    // perform any preparations for an upcoming update
+    this.updateUserTagsDb(nextState);
+}
+
   componentWillUnmount() {
     Firebase.stopListeningTo(this.listenerConfig);
   }
@@ -131,8 +142,44 @@ class Interests extends React.Component {
       this.state.wantedTags[tag] = selected;
     }
     this.setState(this.state);
-    console.log("Wanted Tags: ", this.state.wantedTags);
-    console.log("Owned Tags: ", this.state.ownedTags);
+    console.log("Update Selected Tags : Wanted Tags --> ", this.state.wantedTags);
+    console.log("Update Selected Tags : Owned Tags --> ", this.state.ownedTags);
+  }
+
+
+
+  updateUserTagsDb(tagInfo){
+    wantedTags = tagInfo.wantedTags;
+    ownedTags = tagInfo.ownedTags;
+
+    dbReadyWantedTags = "";
+    dbReadyOwnedTags = "";
+
+    for (var tag in wantedTags){
+      if(wantedTags[tag]){
+        //Remove the # & append a ,
+        dbReadyWantedTags += tag.substring(1) + ",";
+      }
+    }
+
+    for (var tag2 in ownedTags){
+      if(ownedTags[tag2]){
+        dbReadyOwnedTags += tag2.substring(1) + ",";
+      }
+    }
+
+    console.log("Wanted Tags: " + dbReadyWantedTags);
+    console.log("Owned Tags: " + dbReadyOwnedTags);
+
+    var data = {
+      want : dbReadyWantedTags,
+      own : dbReadyOwnedTags,
+      token : this.props.currentUser.token
+    }
+
+    updateUserTags(data, (cb) => {
+      console.log("Callback: ", cb);
+    });
   }
 
   handleContinuePress(){
@@ -165,7 +212,7 @@ class Interests extends React.Component {
 
   render() {
     return(
-      <View style={styles.wrapper}>
+      <View style={{width: dimensions.width, height: dimensions.height * .91}}>
         {/* HEADER*/}
         {/* CONTENT*/}
         {this._renderListView()}
@@ -244,4 +291,17 @@ var styles = StyleSheet.create({
   },
 })
 
-module.exports = Interests
+function mapStateToProps(state) {
+  return {
+    currentUser: state.getIn(['main', 'currentUser'])
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setCurrentUser: (input) => dispatch(dispatchers.setCurrentUser(input)),
+    updateCurrentUser: (input) => dispatch(dispatchers.updateCurrentUser(input))
+  }
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(Interests)

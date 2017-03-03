@@ -181,7 +181,7 @@ class Own extends React.Component {
     selected == true ? this.setState({selectedNum: this.state.selectedNum + 1}) : this.setState({selectedNum: this.state.selectedNum - 1});
   }
 
-  handleContinuePress(){
+  handlePress(){
     wantedTags = "";
     ownedTags = "";
 
@@ -240,7 +240,7 @@ class Own extends React.Component {
         <TouchableHighlight
           activeOpacity={0.8}
           underlayColor={'transparent'}
-          onPress={() => this.handleContinuePress()}
+          onPress={() => this.handlePress()}
           style={this.state.selectedNum >= 1 ? styles.buttonActive : styles.buttonInactive}>
               <Text style={this.state.selectedNum >= 1 ? styles.buttonActiveText : styles.buttonInactiveText}>{"Continue"}</Text>
         </TouchableHighlight>
@@ -250,7 +250,7 @@ class Own extends React.Component {
         <TouchableHighlight
           activeOpacity={0.8}
           underlayColor={'transparent'}
-          onPress={() => this.updateFirebaseTags()}
+          onPress={() => this.handlePress()}
           style={{position: "absolute", top: 10, left: dimensions.width * .8,height: 50, width: 50}}>
               <Text style={styles.skipText}>{"skip"}</Text>
         </TouchableHighlight>

@@ -6,7 +6,7 @@ exports.TabBar = require('./TabBar')
 
 // Feeds
 exports.BroadcastsFeed = require('./BroadcastsFeed')
-exports.ExploreFeed = require('./ExploreFeed')
+exports.ExploreFeed = require('./InterestsTab/Interests')
 exports.MeFeed = require('./MeFeed')
 
 // Generic
