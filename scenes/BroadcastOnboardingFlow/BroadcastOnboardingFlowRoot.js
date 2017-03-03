@@ -162,7 +162,6 @@ class BroadcastOnboardingFlowRoot extends React.Component {
     // Send to backend
     let broadcast = formatAfterOnboarding(this.state.substates, this.props.currentUser)
     broadcast.token = this.props.currentUser.token
-    console.log("BROADCAST:", broadcast)
     createBroadcast(broadcast)
 
     // Page back to Main view and switch to 'Me' tab
