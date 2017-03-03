@@ -1,9 +1,9 @@
 import React from 'react'
 import {View, Text, StyleSheet, Dimensions, TextInput, Keyboard, TouchableHighlight, Alert, Image} from 'react-native'
 import {Actions} from 'react-native-router-flux'
-import {ContinueButton, StickyView} from '../components'
-import {setInAsyncStorage} from '../helpers/asyncStorage'
-import {colors} from '../globalStyles'
+import {ContinueButton, StickyView} from '../../components'
+import {setInAsyncStorage} from '../../helpers/asyncStorage'
+import {colors} from '../../globalStyles'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 
@@ -99,12 +99,12 @@ class InviteOnlyLander extends React.Component {
       <View style={styles.container}>
 
         { /* Background image */ }
-        <Image source={require('./../assets/images/lander-background.jpg')} style={styles.backgroundImage} />
+        <Image source={require('./../../assets/images/lander-background.jpg')} style={styles.backgroundImage} />
 
         <View style={{flex: 0.6, justifyContent: 'center', alignItems: 'center'}}>
 
           { /* Logo */ }
-          <Image source={require('./../assets/images/app-icon.png')} style={styles.logo} />
+          <Image source={require('./../../assets/images/app-icon.png')} style={styles.logo} />
 
           { /* Filler */ }
           <View style={{height: 35}} />

@@ -1,6 +1,4 @@
 exports.Splash = require('./Splash')
-exports.InviteOnlyLander = require('./InviteOnlyLander')
-exports.Lander = require('./Lander')
 exports.Main = require('./Main/Main')
 exports.IAVModal = require('./IAVModal')
 exports.KYCOnboardingView = require('./KYCOnboardingView')

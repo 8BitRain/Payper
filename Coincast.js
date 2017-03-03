@@ -1,4 +1,5 @@
 import React from 'react'
+import codePush from 'react-native-code-push'
 import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native'
 import {Scene, Router, TabBar, Modal, Schema, Actions, Reducer, ActionConst} from 'react-native-router-flux'
 import {colors} from './globalStyles'
@@ -7,8 +8,6 @@ import {
 } from './components'
 import {
   Splash,
-  InviteOnlyLander,
-  Lander,
   FacebookLoginModal,
   BankAccountsModal,
   SettingsModal,
@@ -23,6 +22,11 @@ import {
   MicrodepositTooltip
 } from './scenes'
 import {
+  InviteOnlyLander,
+  Lander,
+  PromoLander
+} from './scenes/Landers'
+import {
   AdminBroadcastView,
   JoinedBroadcastView,
   UnjoinedBroadcastView
@@ -36,7 +40,7 @@ const reducerCreate = (params) => {
   }
 }
 
-export default class Coincast extends React.Component {
+class Coincast extends React.Component {
   render() {
     return(
       <Router createReducer={reducerCreate} sceneStyle={{backgroundColor: colors.snowWhite}}>
@@ -45,7 +49,8 @@ export default class Coincast extends React.Component {
 
             { /* Linear Scenes */ }
             <Scene key="Splash"               component={Splash}              panHandlers={null} initial={true} />
-            <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} initial={true} />
+            <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} />
+            <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
             <Scene key="MicrodepositTooltip"  component={MicrodepositTooltip} panHandlers={null} />
@@ -93,3 +98,7 @@ export default class Coincast extends React.Component {
     )
   }
 }
+
+Coincast = codePush(Coincast)
+
+module.exports = Coincast

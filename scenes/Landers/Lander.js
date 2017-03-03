@@ -3,12 +3,12 @@ import firebase from 'firebase'
 import {View, Text, StyleSheet, Dimensions, StatusBar, Image, Alert, Linking} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {FBLoginManager} from 'NativeModules'
-import {login, getFacebookUserData} from '../helpers/auth'
-import {colors} from '../globalStyles'
+import {login, getFacebookUserData} from '../../helpers/auth'
+import {colors} from '../../globalStyles'
 import {connect} from 'react-redux'
 import Button from 'react-native-button'
 import Hyperlink from 'react-native-hyperlink'
-import * as dispatchers from './Main/MainState'
+import * as dispatchers from '../Main/MainState'
 
 const FBSDK = require('react-native-fbsdk')
 const {LoginButton} = FBSDK
@@ -100,7 +100,7 @@ class Lander extends React.Component {
         <StatusBar barStyle="default" />
 
         { /* Logo */ }
-        <Image source={require('../assets/images/logo.png')} style={{height: dims.width * 0.22, width: (dims.width * 0.22) * logoAspectRatio}} />
+        <Image source={require('../../assets/images/logo.png')} style={{height: dims.width * 0.22, width: (dims.width * 0.22) * logoAspectRatio}} />
 
         { /* Welcome Message */ }
         <Text style={{fontWeight: '500', fontSize: 26, color: colors.accent, textAlign: 'center', width: dims.width - 80, marginTop: 20}}>

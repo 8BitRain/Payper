@@ -38,6 +38,11 @@
   
   NSURL *jsCodeLocation;
   
+  #ifdef DEBUG
+    jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
+  #else
+    jsCodeLocation = [CodePush bundleURL];
+  #endif
   
   /**
    * Loading JavaScript code - uncomment the one you want.
