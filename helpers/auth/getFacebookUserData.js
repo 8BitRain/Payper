@@ -6,14 +6,13 @@ import {GraphRequest, GraphRequestManager} from 'react-native-fbsdk'
 **/
 function getFacebookUserData(params) {
   // Format request
-  let graphParams = '/me/?fields=email,age_range,first_name,last_name,gender,friends,birthday,picture&type=square'
+  let graphParams = '/me/?fields=email,age_range,first_name,last_name,gender,friends,birthday,picture.type(large)'
   let graphRequest = new GraphRequest(graphParams, null, (err: ?Object, result: ?Object) => {
+    console.log("err", err)
+    console.log("result", result)
     if (err) params.onFailure(err)
     else onSuccess(result)
   })
-
-  // Send request
-  new GraphRequestManager().addRequest(graphRequest).start()
 
   // Handle success
   function onSuccess(result) {

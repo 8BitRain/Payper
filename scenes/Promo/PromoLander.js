@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, Dimensions, TextInput, Keyboard, TouchableHighli
 import {Actions} from 'react-native-router-flux'
 import {ContinueButton} from '../../components'
 import {colors} from '../../globalStyles'
+import {FBLoginManager} from 'NativeModules'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 const dims = Dimensions.get('window')
@@ -76,26 +77,27 @@ class PromoLander extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(this.fadeIn, 1000)
+    FBLoginManager.logOut()
+    setTimeout(this.fadeIn, 400)
   }
 
   fadeIn() {
     let animations = [
       Animated.timing(this.AV.logo.opacity, {
         toValue: 1,
-        duration: 250
+        duration: 320
       }),
       Animated.timing(this.AV.welcome.opacity, {
         toValue: 1,
-        duration: 250
+        duration: 380
       }),
       Animated.timing(this.AV.tagline.opacity, {
         toValue: 1,
-        duration: 250
+        duration: 400
       }),
       Animated.timing(this.AV.continueButton.opacity, {
         toValue: 1,
-        duration: 250
+        duration: 500
       })
     ]
 

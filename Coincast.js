@@ -29,7 +29,8 @@ import {
   PromoLander,
   PromoWants,
   PromoRoulette,
-  PromoSignup
+  PromoSignup,
+  PromoWaitingRoom
 } from './scenes/Promo'
 import {
   AdminBroadcastView,
@@ -45,6 +46,9 @@ const reducerCreate = (params) => {
   }
 }
 
+import {setInAsyncStorage} from './helpers/asyncStorage'
+setInAsyncStorage('userData', '')
+
 class Coincast extends React.Component {
   render() {
     return(
@@ -53,7 +57,7 @@ class Coincast extends React.Component {
           <Scene key="root" hideNavBar={true}>
 
             { /* Linear Scenes */ }
-            <Scene key="Splash"               component={Splash}              panHandlers={null} />
+            <Scene key="Splash"               component={Splash}              panHandlers={null} initial />
             <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
@@ -61,10 +65,11 @@ class Coincast extends React.Component {
             <Scene key="BankAccountAdded"     component={BankAccountAdded}    panHandlers={null} />
 
             { /* SXSW Promo Scenes */ }
-            <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} initial />
+            <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} />
             <Scene key="PromoWants"           component={PromoWants}          panHandlers={null} />
             <Scene key="PromoRoulette"        component={PromoRoulette}       panHandlers={null} />
             <Scene key="PromoSignup"          component={PromoSignup}         panHandlers={null} />
+            <Scene key="PromoWaitingRoom"     component={PromoWaitingRoom}    panHandlers={null} />
 
             { /* Drawer/Tab Scenes */ }
             <Scene key="Main" component={NavigationDrawer} open={false}>

@@ -23,10 +23,6 @@ const styles = StyleSheet.create({
 })
 
 class Splash extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
   componentWillMount() {
 
     // Sync with codepush
@@ -36,40 +32,15 @@ class Splash extends React.Component {
       installMode: codePush.InstallMode.IMMEDIATE
     })
 
+    // Log out of Facebook auth so button doesn't say 'log out'
     FBLoginManager.logOut()
-    this.onConnect()
-  }
 
-  onConnect() {
-    getFromAsyncStorage('hasAccess', (val) => {
-      // NOTE: Beta lander code
-      // User does not have access. Go to InviteOnlyLander
-      // if ("yes" !== val) {
-      //   Actions.InviteOnlyLander()
-      //   return
-      // }
-
-      getFromAsyncStorage('user', (cachedUser) => {
-        // No user is cached. Go to Lander
-        if (!cachedUser) {
-          Actions.Lander()
-          return
-        }
-
-        login({
-          mode: "cache",
-          cachedUser: JSON.parse(cachedUser),
-          onSuccess: (response) => {
-            this.props.currentUser.initialize(response)
-            Actions.Main()
-          },
-          onFailure: (err) => {
-            console.log("Cache login failed. Error:", err)
-            Actions.Lander()
-          }
-        })
-      })
+    // Continue in app flow
+    getFromAsyncStorage('userData', (userData) => {
+      if (!userData) Actions.PromoLander()
+      else Actions.PromoWaitingRoom({userData})
     })
+
   }
 
   render() {
