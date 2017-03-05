@@ -63,6 +63,8 @@ class PromoSignup extends React.Component {
         <Image
           style={styles.subscriptionLogo}
           source={require('../../assets/images/logos/netflix.png')} />
+
+        { /* Spacer */ }
         <View style={{height: 20}} />
 
         { /* More info */ }
@@ -70,12 +72,16 @@ class PromoSignup extends React.Component {
           <Text style={{fontSize: 20, fontWeight: '600', color: colors.deepBlue, backgroundColor: 'transparent'}}>
             {"Great choice!"}
           </Text>
+
+          { /* Spacer */ }
           <View style={{height: 4}} />
+          
           <Text style={{fontSize: 18, fontWeight: '400', color: colors.deepBlue, backgroundColor: 'transparent'}}>
             {"Log in via Facebook and we'll notify you with your complimentary subscription when Payper launches."}
           </Text>
         </View>
 
+        { /* Spacer */ }
         <View style={{height: 14}} />
 
         { /* Facebook Login Button */ }
