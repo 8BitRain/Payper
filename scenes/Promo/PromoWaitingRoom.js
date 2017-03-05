@@ -22,8 +22,6 @@ const styles = StyleSheet.create({
 
 class PromoWaitingRoom extends React.Component {
   render() {
-    console.log(this.props.userData)
-
     return (
       <View style={styles.container}>
 
@@ -59,7 +57,6 @@ class PromoWaitingRoom extends React.Component {
             </Text>
           </View>
         </View>
-
       </View>
     )
   }

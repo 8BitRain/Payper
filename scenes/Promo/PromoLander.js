@@ -4,6 +4,7 @@ import {Actions} from 'react-native-router-flux'
 import {ContinueButton} from '../../components'
 import {colors} from '../../globalStyles'
 import {FBLoginManager} from 'NativeModules'
+import Carousel from 'react-native-carousel'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 const dims = Dimensions.get('window')
@@ -59,6 +60,13 @@ const styles = StyleSheet.create({
     color: colors.snowWhite,
     textAlign: 'center',
     backgroundColor: 'transparent'
+  },
+  carouselItem: {
+    width: dims.width,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.carminePink
   }
 })
 
@@ -70,6 +78,7 @@ class PromoLander extends React.Component {
       logo: {opacity: new Animated.Value(0)},
       welcome: {opacity: new Animated.Value(0)},
       tagline: {opacity: new Animated.Value(0)},
+      carousel: {opacity: new Animated.Value(0)},
       continueButton: {opacity: new Animated.Value(0)}
     }
 
@@ -95,6 +104,10 @@ class PromoLander extends React.Component {
         toValue: 1,
         duration: 400
       }),
+      Animated.timing(this.AV.carousel.opacity, {
+        toValue: 1,
+        duration: 400
+      }),
       Animated.timing(this.AV.continueButton.opacity, {
         toValue: 1,
         duration: 500
@@ -111,27 +124,17 @@ class PromoLander extends React.Component {
         { /* Background image */ }
         <Image source={require('../../assets/images/lander-background.jpg')} style={styles.backgroundImage} />
 
-        <View style={{flex: 0.85, width: dims.width * 0.85, alignItems: 'center', justifyContent: 'center'}}>
-
-          { /* Logo */ }
+        { /* Logo/Welcome/Tagline */ }
+        <View style={{flex: 0.4, justifyContent: 'flex-end', alignItems: 'center'}}>
           <Animated.View style={this.AV.logo}>
             <Image source={require('../../assets/images/app-icon.png')} style={styles.logo} />
           </Animated.View>
-
-          { /* Spacer */ }
-          <View style={{height: 28}} />
-
-          { /* Welcome */ }
+          <View style={{height: 10}} />
           <Animated.View style={this.AV.welcome}>
             <Text style={styles.welcomeText}>
               {"Welcome to Payper"}
             </Text>
           </Animated.View>
-
-          { /* Spacer */ }
-          <View style={{height: 10}} />
-
-          { /* Tagline */ }
           <Animated.View style={this.AV.tagline}>
             <Text style={styles.taglineText}>
               {"Subscriptions made social."}
@@ -139,8 +142,23 @@ class PromoLander extends React.Component {
           </Animated.View>
         </View>
 
+        { /* Carousel */ }
+        <Animated.View style={[this.AV.carousel, {flex: 0.5}]}>
+          <Carousel hideIndicators animate={false}>
+            <View style={styles.carouselItem}>
+              <Text>{"1"}</Text>
+            </View>
+            <View style={styles.carouselItem}>
+              <Text>{"2"}</Text>
+            </View>
+            <View style={styles.carouselItem}>
+              <Text>{"3"}</Text>
+            </View>
+          </Carousel>
+        </Animated.View>
+
         { /* Submit button */ }
-        <View style={{flex: 0.15, justifyContent: 'center', alignItems: 'center', paddingBottom: 20}}>
+        <View style={{flex: 0.2, justifyContent: 'center'}}>
           <Animated.View style={this.AV.continueButton}>
             <TouchableHighlight
               activeOpacity={0.75}
