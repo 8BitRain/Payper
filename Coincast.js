@@ -29,6 +29,7 @@ import {
   PromoLander,
   PromoWants,
   PromoRoulette,
+  PromoInvite,
   PromoSignup,
   PromoWaitingRoom
 } from './scenes/Promo'
@@ -68,6 +69,7 @@ class Coincast extends React.Component {
             <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} />
             <Scene key="PromoWants"           component={PromoWants}          panHandlers={null} />
             <Scene key="PromoRoulette"        component={PromoRoulette}       panHandlers={null} />
+            <Scene key="PromoInvite"          component={PromoInvite}         panHandlers={null} />
             <Scene key="PromoSignup"          component={PromoSignup}         panHandlers={null} />
             <Scene key="PromoWaitingRoom"     component={PromoWaitingRoom}    panHandlers={null} />
 

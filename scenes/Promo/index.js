@@ -1,3 +1,4 @@
+exports.PromoInvite = require('./PromoInvite')
 exports.PromoLander = require('./PromoLander')
 exports.PromoRoulette = require('./PromoRoulette')
 exports.PromoWants = require('./PromoWants')

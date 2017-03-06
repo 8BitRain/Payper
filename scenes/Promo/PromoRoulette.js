@@ -18,7 +18,7 @@ class PromoRoulette extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Button onPress={() => Actions.PromoSignup({
+        <Button onPress={() => Actions.PromoInvite({
           subscription: {
             name: 'Netflix',
             logo: '../../assets/images/logos/netflix.png'
