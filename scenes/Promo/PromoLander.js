@@ -1,11 +1,12 @@
 import React from 'react'
 import {View, Text, StyleSheet, Dimensions, TextInput, Keyboard, TouchableHighlight, Alert, Image, Animated} from 'react-native'
 import {Actions} from 'react-native-router-flux'
-import {ContinueButton} from '../../components'
+import {ContinueButton, HowItWorksCarousel} from '../../components'
 import {colors} from '../../globalStyles'
 import {FBLoginManager} from 'NativeModules'
 import Carousel from 'react-native-carousel'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import Entypo from 'react-native-vector-icons/Entypo'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -34,7 +35,9 @@ const styles = StyleSheet.create({
     padding: 8,
     paddingLeft: 14,
     borderRadius: 5,
-    backgroundColor: colors.snowWhite,
+    borderWidth: 2,
+    borderColor: colors.lightGrey,
+    backgroundColor: colors.accent,
     shadowColor: colors.lightGrey,
     shadowOpacity: 1.0,
     shadowRadius: 2,
@@ -44,18 +47,19 @@ const styles = StyleSheet.create({
     }
   },
   buttonText: {
-    fontSize: 16,
-    fontWeight: '500'
+    fontSize: 18,
+    fontWeight: '500',
+    color: colors.snowWhite
   },
   welcomeText: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: '600',
     color: colors.snowWhite,
     textAlign: 'center',
     backgroundColor: 'transparent'
   },
   taglineText: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '400',
     color: colors.snowWhite,
     textAlign: 'center',
@@ -66,7 +70,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.carminePink
+    borderColor: colors.carminePink,
+    backgroundColor: 'transparent'
   }
 })
 
@@ -75,11 +80,11 @@ class PromoLander extends React.Component {
     super(props)
 
     this.AV = {
-      logo: {opacity: new Animated.Value(0)},
-      welcome: {opacity: new Animated.Value(0)},
-      tagline: {opacity: new Animated.Value(0)},
-      carousel: {opacity: new Animated.Value(0)},
-      continueButton: {opacity: new Animated.Value(0)}
+      logo: {opacity: new Animated.Value(1)},
+      welcome: {opacity: new Animated.Value(1)},
+      tagline: {opacity: new Animated.Value(1)},
+      carousel: {opacity: new Animated.Value(1)},
+      continueButton: {opacity: new Animated.Value(1)}
     }
 
     this.fadeIn = this.fadeIn.bind(this)
@@ -125,7 +130,7 @@ class PromoLander extends React.Component {
         <Image source={require('../../assets/images/lander-background.jpg')} style={styles.backgroundImage} />
 
         { /* Logo/Welcome/Tagline */ }
-        <View style={{flex: 0.4, justifyContent: 'flex-end', alignItems: 'center'}}>
+        <View style={{flex: 0.4, width: dims.width * 0.9, justifyContent: 'flex-end', alignItems: 'center'}}>
           <Animated.View style={this.AV.logo}>
             <Image source={require('../../assets/images/app-icon.png')} style={styles.logo} />
           </Animated.View>
@@ -143,18 +148,8 @@ class PromoLander extends React.Component {
         </View>
 
         { /* Carousel */ }
-        <Animated.View style={[this.AV.carousel, {flex: 0.5}]}>
-          <Carousel hideIndicators animate={false}>
-            <View style={styles.carouselItem}>
-              <Text>{"1"}</Text>
-            </View>
-            <View style={styles.carouselItem}>
-              <Text>{"2"}</Text>
-            </View>
-            <View style={styles.carouselItem}>
-              <Text>{"3"}</Text>
-            </View>
-          </Carousel>
+        <Animated.View style={[this.AV.carousel, {flex: 0.5, justifyContent: 'center'}]}>
+          <HowItWorksCarousel />
         </Animated.View>
 
         { /* Submit button */ }
@@ -169,7 +164,7 @@ class PromoLander extends React.Component {
                   {"Pick a Free Subscription"}
                 </Text>
                 <View style={{paddingTop: 2}}>
-                  <EvilIcons name={"chevron-right"} size={34} color={colors.accent} />
+                  <EvilIcons name={"chevron-right"} size={34} color={colors.snowWhite} />
                 </View>
               </View>
             </TouchableHighlight>
