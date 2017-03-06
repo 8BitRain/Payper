@@ -40,7 +40,7 @@ export var details = {
       "databaseURL": "https://coincast.firebaseio.com",
       "storageBucket": "firebase-coincast.appspot.com"
     },
-    "codePushKey": "AarYhu5gwn2uwqhzXiLJ3Rglm9MBVkksGQK3-"
+    "codePushKey": "ZDStxBd3TrIdUmZard0_CS0jZsuSN1-bdfOMf"
   },
   "test": {
     "lambdaBaseURL": "https://mey71fma7i.execute-api.us-east-1.amazonaws.com/test/",
