@@ -60,6 +60,6 @@ export var details = {
       "databaseURL": "https://payper-prod.firebaseio.com",
       "storageBucket": "payper-prod.appspot.com"
     },
-    "codePushKey": "PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3-"
+    "codePushKey": "K_ZdLkFh_YZfn4maYSWLojqlsjD3N1-bdfOMf"
   }
 };

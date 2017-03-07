@@ -7,7 +7,6 @@ import Mixpanel from 'react-native-mixpanel'
 import Entypo from 'react-native-vector-icons/Entypo'
 import CodePush from 'react-native-code-push'
 import * as config from '../../config'
-const codePushKey = config.details[config.details.env].codePushKey
 var FBLoginManager = require('NativeModules').FBLoginManager
 
 // Helpers
@@ -42,13 +41,13 @@ class SplashView extends React.Component {
       if (_this.state.reconnecting && !_this.state.connected)
         clearInterval(_this.rotationInterval)
 
-      // NOTE: Articial load time to allow for CodePush version download
+      // NOTE: Artificial load time to allow for CodePush version download
       setTimeout(() => {
         if (isConnected)
           _this._onConnect()
         else
           _this._onDisconnect()
-      }, 5000)
+      }, 8000)
     })
   }
 
@@ -91,7 +90,7 @@ class SplashView extends React.Component {
 
     // Sync with codepush
     CodePush.sync({
-      deploymentKey: codePushKey,
+      deploymentKey: config.details[config.details.env].codePushKey,
       updateDialog: false,
       installMode: CodePush.InstallMode.IMMEDIATE
     })
