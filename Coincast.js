@@ -7,7 +7,8 @@ import {
   Want,
   Own,
   Interests,
-  Roullette
+  Roullette,
+  UserWants
 } from './components'
 import {
   Splash,
@@ -53,7 +54,9 @@ export default class Coincast extends React.Component {
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
             <Scene key="MicrodepositTooltip"  component={MicrodepositTooltip} panHandlers={null} />
             <Scene key="BankAccountAdded"     component={BankAccountAdded}    panHandlers={null} />
-            <Scene key="Roullette"            component={Roullette} panHandlers={null} initial={true} />
+            <Scene key="Roullette"            component={Roullette} panHandlers={null}  />
+            <Scene key="UserWants"            component={UserWants} panHandlers={null} initial={true} />
+
 
 
             { /* Drawer/Tab Scenes */ }

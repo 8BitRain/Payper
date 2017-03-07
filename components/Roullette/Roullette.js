@@ -34,15 +34,11 @@ class Roullette extends React.Component {
     super(props);
 
     this.state = {
-      dataSource: null,
-      cleanDataSource: null,
-      displayList: false,
-      selectedTags: {
-      },
       selectedSubscription: "",
       rouletteLoop: -1,
       rouletteFinished: true,
-      showSubscription: false
+      showSubscription: false,
+      wantedTags: null
 
     }
 
@@ -54,12 +50,24 @@ class Roullette extends React.Component {
 
   componentDidMount() {
     //this.imageAnim(4, 0);
+    console.log("Props: ", this.props);
+    let wantedTagsDirty = this.props.wantedTags;
+    let wantedTagsClean = [];
+    for (var tag in wantedTagsDirty){
+      if(wantedTagsDirty[tag]){
+        //Remove the # & append a ,
+        wantedTagsClean.push(tag)
+      }
+    }
+    console.log("Wanted Tags: " + wantedTagsClean);
+    this.setState({wantedTags: wantedTagsClean});
+
   }
 
   imageAnim(loop, pos){
     //Is this the first time the loop has ran?
     if(loop == 4){
-      this.setState({rouletteFinished: false, showSubscription: false});
+      this.setState({rouletteFinished: false, showSubscription: false, rouletteLoop: 4});
     }
     if(pos == 0){
       console.log("Loop: " + loop);
@@ -96,7 +104,7 @@ class Roullette extends React.Component {
     if(pos == 2 ){
       if(this.state.rouletteLoop == 0){
         console.log("Final Anim");
-        this.animLogo_Selected.setValue(0);
+        //this.animLogo_Selected.setValue(0);
         Animated.timing(
         this.animLogo_Selected,
         {
@@ -179,9 +187,8 @@ class Roullette extends React.Component {
             activeOpacity={0.8}
             underlayColor={'transparent'}
             onPress={() => {
-              this.imageAnim(4, 0);
               this.setState({rouletteLoop: -2});
-
+              this.imageAnim(4, 0);
             }}
             style={styles.buttonActive}>
                 <Text style={styles.buttonActiveText}>{this.state.rouletteLoop == -1 ? "Roll" : "Re-Roll"}</Text>
@@ -207,6 +214,8 @@ class Roullette extends React.Component {
 
 
   _renderRouletteView(){
+
+    console.log("RoulletteLoop: " + this.state.rouletteLoop);
     var fade_logo0 = this.animLogo_0.interpolate({inputRange: [0, 1],outputRange: [1.0, 0.0]});
     var fade_logo1 = this.animLogo_1.interpolate({inputRange: [0, 1],outputRange: [1.0, 0.0]});
     var fade_logo2 = this.animLogo_2.interpolate({inputRange: [0, 1],outputRange: [1.0, 0.0]});
@@ -222,12 +231,12 @@ class Roullette extends React.Component {
 
 
     if(this.state.rouletteLoop == 0){
-      //The final image should contain
+      //The final image should be here
       return(
         <View style={{ height: dimensions.height * .2,  backgroundColor: colors.carminePink, overflow: "hidden"}}>
           <Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}><Ionicons name={"ios-book-outline"} size={64}/></Animated.View>
           <Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}><Ionicons name={"ios-school-outline"} size={64}/></Animated.View>
-          <Animated.View style={{position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}><Ionicons name={this.state.selectedSubscription} size={64}/></Animated.View>
+          <Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}><Ionicons name={this.state.selectedSubscription} size={64}/></Animated.View>
         </View>
       );
     } else {
@@ -235,7 +244,7 @@ class Roullette extends React.Component {
         <View style={{ height: dimensions.height * .2,  backgroundColor: colors.carminePink, overflow: "hidden"}}>
           <Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}><Ionicons name={"md-restaurant"} size={64}/></Animated.View>
           <Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}><Ionicons name={"ios-game-controller-b-outline"} size={64}/></Animated.View>
-          <Animated.View style={{position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}><Ionicons name={"ios-musical-notes"} size={64}/></Animated.View>
+          <Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}><Ionicons name={"ios-musical-notes"} size={64}/></Animated.View>
         </View>
       );
     }
