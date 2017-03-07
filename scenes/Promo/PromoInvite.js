@@ -1,7 +1,7 @@
 import React from 'react'
-import {View, Text, StyleSheet, Dimensions, TextInput, Keyboard, TouchableHighlight, Alert, Image, Animated, Easing} from 'react-native'
+import {View, Text, StyleSheet, Dimensions, TextInput, Keyboard, TouchableHighlight, Alert, Image, Animated, Easing, Modal} from 'react-native'
 import {Actions} from 'react-native-router-flux'
-import {ContinueButton, HowItWorksCarousel} from '../../components'
+import {ContinueButton, HowItWorksCarousel, Header, Invite} from '../../components'
 import {colors} from '../../globalStyles'
 import {FBLoginManager} from 'NativeModules'
 import Carousel from 'react-native-carousel'
@@ -54,12 +54,21 @@ const styles = StyleSheet.create({
       height: 0,
       width: 0
     }
+  },
+  modalWrap: {
+    flex: 1,
+    backgroundColor: colors.snowWhite
   }
 })
 
 class PromoInvite extends React.Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      modalIsVisible: false
+    }
+
     this.AV = {
       logoWrap: {paddingBottom: new Animated.Value(0)},
       textWrap: {opacity: new Animated.Value(0)}
@@ -107,13 +116,13 @@ class PromoInvite extends React.Component {
 
             <View style={{padding: 12, paddingBottom: 0, backgroundColor: colors.lightGrey, width: dims.width * 0.85}}>
               <Text style={{fontSize: 15, fontWeight: '300'}}>
-                {`We'll set up your ${this.props.subscription.name} subscription and notify you when Payper launches. Would you like to join with friends or other users from SXSW?`}
+                {`We'll set up your ${/*this.props.subscription.name*/'Netflix'} subscription and notify you when Payper launches. Would you like to join with friends or other users from SXSW?`}
               </Text>
             </View>
 
             <View style={{borderBottomRightRadius: 6, borderBottomLeftRadius: 6, padding: 12, backgroundColor: colors.lightGrey, width: dims.width * 0.85}}>
               <TouchableHighlight
-                onPress={() => alert("Invite Friends")}
+                onPress={() => this.setState({modalIsVisible: true})}
                 underlayColor={'transparent'}>
                 <View style={[styles.button, {backgroundColor: colors.accent}]}>
                   <Text style={{fontSize: 15, fontWeight: '500', color: colors.snowWhite}}>
@@ -134,6 +143,20 @@ class PromoInvite extends React.Component {
             </View>
           </View>
         </Animated.View>
+
+        <Modal animationType={'slide'} visible={this.state.modalIsVisible}>
+          <View style={styles.modalWrap}>
+            <Header
+              showTitle
+              showBackButton
+              title={"Invite Contacts"}
+              onBack={() => this.setState({modalIsVisible: false})} />
+            <Invite
+              induceState={(substate) => this.setState(substate, () => console.log(this.state))}
+              closeModal={() => this.setState({modalIsVisible: false})} />
+          </View>
+        </Modal>
+
       </View>
     )
   }
