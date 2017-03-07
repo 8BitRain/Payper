@@ -39,7 +39,7 @@ class JoinButton extends React.Component {
         }}>
         <View style={styles.container}>
           <Text style={styles.text}>
-            {"Join"}
+            {this.props.customText || "Join"}
           </Text>
         </View>
       </TouchableHighlight>

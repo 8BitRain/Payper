@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, TouchableHighlight, Animated, Easing, Image, Dimensions, StyleSheet, ListView } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 //Routing
@@ -267,6 +268,9 @@ class Roullette extends React.Component {
         {/* HEADER*/}
         <View style={{flex: .2}}>
           <Text style={styles.title}>{"And your free subscription is.."}</Text>
+          <Button onPress={Actions.pop}>
+            {"Back"}
+          </Button>
         </View>
         {/* CONTENT*/}
         <View style={{flex: .7, height: dimensions.height * .7, marginTop: 150}}>
@@ -282,7 +286,12 @@ class Roullette extends React.Component {
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => this.handleContinuePress()}
+            onPress={() => Actions.PromoInvite({
+              subscription: {
+                name: 'Netflix',
+                logo: '../../assets/images/logos/netflix.png'
+              }
+            })}
             style={styles.buttonInactive}>
                 <Text style={ styles.buttonInactiveText}>{"Continue"}</Text>
           </TouchableHighlight>

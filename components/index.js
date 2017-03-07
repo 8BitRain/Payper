@@ -22,7 +22,6 @@ exports.Interests = require('./InterestsTab/Interests')
 // Broadcasts
 exports.BroadcastFeedEmptyState = require('./BroadcastFeedEmptyState')
 exports.BroadcastFeedSectionHeader = require('./BroadcastFeedSectionHeader')
-exports.BroadcastPreview = require('./BroadcastPreview')
 
 // Other
 exports.DynamicList = require('./DynamicList')
@@ -37,3 +36,6 @@ exports.InfoBox = require('./InfoBox')
 exports.DropdownList = require('./DropdownList')
 exports.Roullette = require('./Roullette/Roullette')
 exports.UserWants = require('./Roullette/Want')
+exports.DropdownView = require('./DropdownView')
+exports.HowItWorksCarousel = require('./HowItWorksCarousel')
+exports.Invite = require('./Invite')

@@ -65,7 +65,6 @@ function login(params) {
           facebookID: facebookUser.facebook_id,
           token: customToken
         }, (userExistsResponse) => {
-          console.log("userExistsResponse", userExistsResponse)
           let formattedUser = {
             firstName: facebookUser.first_name,
             lastName: facebookUser.last_name,
@@ -92,8 +91,10 @@ function login(params) {
           // initialization is handled in scenes/Lander
           if (true === userExistsResponse) {
             createOrGetUser(formattedUser, (response) => {
-              if (!response.message && !response.errorMessage) onSuccess(response)
-              else onFailure(response)
+              if (null === response || response.errorMessage || response.message)
+                onFailure(response)
+              else
+                onSuccess(response)
             })
 
             return

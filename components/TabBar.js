@@ -1,6 +1,5 @@
 import React from 'react'
 import {View, TouchableHighlight, Text, StyleSheet, StatusBar, Platform} from 'react-native'
-import {Actions} from 'react-native-router-flux'
 import {colors} from '../globalStyles'
 
 const styles = StyleSheet.create({
@@ -42,8 +41,8 @@ class TabBar extends React.Component {
               key={tabName}
               activeOpacity={0.75}
               underlayColor={'transparent'}
-              onPress={(this.props.title === tabName) ? null : Actions[tabName]}
-              style={[styles.tabWrap, {borderColor: (this.props.title === tabName) ? colors.lightGrey : colors.accent}]}>
+              onPress={() => this.props.changeTab(tabName)}
+              style={[styles.tabWrap, {borderColor: (this.props.activeTab === tabName) ? colors.lightGrey : colors.accent}]}>
               <Text style={styles.tabText}>{tabName}</Text>
             </TouchableHighlight>
           )

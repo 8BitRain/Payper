@@ -1,4 +1,5 @@
 import React from 'react'
+import codePush from 'react-native-code-push'
 import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native'
 import {Scene, Router, TabBar, Modal, Schema, Actions, Reducer, ActionConst} from 'react-native-router-flux'
 import {colors} from './globalStyles'
@@ -12,13 +13,10 @@ import {
 } from './components'
 import {
   Splash,
-  InviteOnlyLander,
-  Lander,
   FacebookLoginModal,
   BankAccountsModal,
   SettingsModal,
   BroadcastOnboardingFlowRoot,
-  BroadcastDetailsModal,
   Main,
   Broadcasts,
   Explore,
@@ -28,6 +26,23 @@ import {
   BankAccountAdded,
   MicrodepositTooltip
 } from './scenes'
+import {
+  InviteOnlyLander,
+  Lander
+} from './scenes/Landers'
+import {
+  PromoLander,
+  PromoWants,
+  PromoRoulette,
+  PromoInvite,
+  PromoSignup,
+  PromoWaitingRoom
+} from './scenes/Promo'
+import {
+  AdminBroadcastView,
+  JoinedBroadcastView,
+  UnjoinedBroadcastView
+} from './components/Broadcasts'
 
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params)
@@ -37,7 +52,10 @@ const reducerCreate = (params) => {
   }
 }
 
-export default class Coincast extends React.Component {
+import {setInAsyncStorage} from './helpers/asyncStorage'
+setInAsyncStorage('userData', '')
+
+class Coincast extends React.Component {
   render() {
     return(
       <Router createReducer={reducerCreate} sceneStyle={{backgroundColor: colors.snowWhite}}>
@@ -45,27 +63,24 @@ export default class Coincast extends React.Component {
           <Scene key="root" hideNavBar={true}>
 
             { /* Linear Scenes */ }
-            <Scene key="Splash"           component={Splash}           panHandlers={null} />
-            <Scene key="InviteOnlyLander" component={InviteOnlyLander} panHandlers={null} />
-            <Scene key="Lander"           component={Lander}           panHandlers={null} />
-            <Scene key="Want"           component={Want}           panHandlers={null} />
-            <Scene key="Own"           component={Own}           panHandlers={null} />
-            <Scene key="Interests"           component={Interests}           panHandlers={null} />
+            <Scene key="Splash"               component={Splash}              panHandlers={null} />
+            <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
+            <Scene key="Lander"               component={Lander}              panHandlers={null} />
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
             <Scene key="MicrodepositTooltip"  component={MicrodepositTooltip} panHandlers={null} />
             <Scene key="BankAccountAdded"     component={BankAccountAdded}    panHandlers={null} />
-            <Scene key="Roullette"            component={Roullette} panHandlers={null}  />
-            <Scene key="UserWants"            component={UserWants} panHandlers={null} initial={true} />
 
-
+            { /* SXSW Promo Scenes */ }
+            <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} initial/>
+            <Scene key="PromoWants"           component={PromoWants}          panHandlers={null} />
+            <Scene key="PromoRoulette"        component={PromoRoulette}       panHandlers={null} />
+            <Scene key="PromoInvite"          component={PromoInvite}         panHandlers={null} />
+            <Scene key="PromoSignup"          component={PromoSignup}         panHandlers={null} />
+            <Scene key="PromoWaitingRoom"     component={PromoWaitingRoom}    panHandlers={null} />
 
             { /* Drawer/Tab Scenes */ }
             <Scene key="Main" component={NavigationDrawer} open={false}>
-              <Scene key="TabScenes" tabs={true}>
-                <Scene key="Broadcasts" component={Main} title="Broadcasts" hideTabBar hideNavBar panhandlers={null} initial={true} />
-                <Scene key="Explore"    component={Main} title="Explore"    hideTabBar hideNavBar panhandlers={null} />
-                <Scene key="Me"         component={Main} title="Me"         hideTabBar hideNavBar panhandlers={null} />
-              </Scene>
+              <Scene key="MainView" component={Main} title="MainView" hideTabBar hideNavBar panhandlers={null} />
             </Scene>
 
             { /* Modal Scenes */ }
@@ -84,12 +99,19 @@ export default class Coincast extends React.Component {
             <Scene key="BroadcastOnboardingFlow" direction="vertical">
               <Scene key="BroadcastOnboardingFlowRoot" component={BroadcastOnboardingFlowRoot} schema="modal" title="New Broadcast" panHandlers={null} hideNavBar />
             </Scene>
-            <Scene key="BroadcastDetails">
-              <Scene key="BroadcastDetailsModal" component={BroadcastDetailsModal} schema="modal" title="Broadcast Details" panHandlers={null} hideNavBar />
+
+            { /* Broadcast Modals */ }
+            <Scene key="AdminBroadcast">
+              <Scene key="AdminBroadcastModal" component={AdminBroadcastView} schema="modal" panHandlers={null} hideNavBar />
+            </Scene>
+            <Scene key="JoinedBroadcast">
+              <Scene key="JoinedBroadcastModal" component={JoinedBroadcastView} schema="modal" panHandlers={null} hideNavBar />
+            </Scene>
+            <Scene key="UnjoinedBroadcast">
+              <Scene key="UnjoinedBroadcastModal" component={UnjoinedBroadcastView} schema="modal" panHandlers={null} hideNavBar />
             </Scene>
           </Scene>
 
-          { /* Included in react-native-router-flux */ }
           <Scene key="error" component={Error} />
 
         </Scene>
@@ -97,3 +119,7 @@ export default class Coincast extends React.Component {
     )
   }
 }
+
+Coincast = codePush(Coincast)
+
+module.exports = Coincast

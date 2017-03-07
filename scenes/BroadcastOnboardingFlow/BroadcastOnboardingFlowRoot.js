@@ -2,6 +2,7 @@ import React from 'react'
 import {View, Animated, StyleSheet, Text, Alert, Keyboard, TouchableHighlight} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../globalStyles'
+import {Firebase} from '../../helpers'
 import {
   Header,
   ContinueButton,
@@ -16,7 +17,8 @@ import {
   DetailsOfAgreement,
   Secret
 } from './'
-import {formatBroadcast} from '../../helpers'
+import {createBroadcast} from '../../helpers/lambda'
+import {formatAfterOnboarding} from '../../helpers/broadcasts'
 import dismissKeyboard from 'react-native-dismiss-keyboard'
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -37,6 +39,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderColor: colors.medGrey,
+    backgroundColor: colors.snowWhite,
     borderTopWidth: 1,
     borderBottomWidth: 1
   }
@@ -63,9 +66,15 @@ class BroadcastOnboardingFlowRoot extends React.Component {
   }
 
   componentWillMount() {
+
+    // Initialize keyboard listeners
     this.KeyboardListener = Keyboard.addListener("keyboardWillShow", () => this.setState({keyboardIsVisible: true}))
     this.KeyboardListener = Keyboard.addListener("keyboardWillHide", () => this.setState({keyboardIsVisible: false}))
 
+    // Get tag data from Firebase
+    Firebase.get('Services', (val) => (val) ? this.setState({tags: val}) : null)
+
+    // Configure page components
     this.pages = [
       {
         title: "Broadcast Visibility",
@@ -109,10 +118,11 @@ class BroadcastOnboardingFlowRoot extends React.Component {
       {
         title: "Tags",
         invalidInputMessage: "You must select a tag.",
-        reactComponent: <Tags induceState={this.induceState.bind(this)} tags={this.props.currentUser.tags} />,
+        reactComponent: <Tags induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {
           if (!substate) return false
-          return Object.keys(substate.selectedTags).length > 0
+          if (substate.inputIsValid) return true
+          return substate.selectedTags && Object.keys(substate.selectedTags).length > 0
         }
       },
       {
@@ -147,19 +157,16 @@ class BroadcastOnboardingFlowRoot extends React.Component {
   }
 
   submit() {
+    // TODO: Optimistically update
 
-    // Convert onboarding state to formatted broadcast JSON
-    let broadcast = formatBroadcast(this.state.substates, this.props.currentUser)
-
-    // Update current user's meFeed data source
-    let meFeed = this.props.currentUser.meFeed || {}
-    if (!meFeed["My Broadcasts"]) meFeed["My Broadcasts"] = {}
-    meFeed["My Broadcasts"] = Object.assign({}, broadcast, meFeed["My Broadcasts"])
-    this.props.updateCurrentUser({meFeed: meFeed})
+    // Send to backend
+    let broadcast = formatAfterOnboarding(this.state.substates, this.props.currentUser)
+    broadcast.token = this.props.currentUser.token
+    createBroadcast(broadcast)
 
     // Page back to Main view and switch to 'Me' tab
     Actions.pop()
-    setTimeout(() => Actions.refresh({test: 'val'}), 1000)
+    setTimeout(() => Actions.refresh({newTab: 'Me'}))
   }
 
   next() {
@@ -240,7 +247,8 @@ class BroadcastOnboardingFlowRoot extends React.Component {
             state: currPageState,
             title: currPageTitle,
             next: this.next,
-            prev: this.prev
+            prev: this.prev,
+            tags: this.state.tags
           })}
         </Animated.View>
 

@@ -3,11 +3,8 @@ import {View, StyleSheet, Dimensions} from 'react-native'
 import {colors} from '../globalStyles'
 import {connect} from 'react-redux'
 import * as dispatchers from '../scenes/Main/MainState'
-import {
-  DynamicList,
-  BroadcastPreview,
-  BroadcastFeedSectionHeader
-} from './'
+import {JoinedBroadcastPreview, AdminBroadcastPreview} from './Broadcasts'
+import {DynamicList, BroadcastFeedSectionHeader} from './'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -22,8 +19,13 @@ class MeFeed extends React.Component {
     return(
       <View style={styles.container}>
         <DynamicList
-          data={this.props.currentUser.meFeed}
-          renderRow={(rowData, sectionID, rowID) => <BroadcastPreview {...rowData} />}
+          data={this.props.currentUser.meFeed || {}}
+          renderRow={(rowData, sectionID, rowID) => {
+            if (sectionID === "My Subscriptions")
+              return <JoinedBroadcastPreview broadcast={rowData} />
+            if (sectionID === "My Broadcasts")
+              return <AdminBroadcastPreview broadcast={rowData} />
+          }}
           renderSectionHeader={(rowData, sectionID) => <BroadcastFeedSectionHeader sectionID={sectionID} />} />
       </View>
     )

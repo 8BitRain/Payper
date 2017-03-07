@@ -1,15 +1,20 @@
 import React from 'react'
+import moment from 'moment'
 import {View, Text, TouchableHighlight, StyleSheet} from 'react-native'
 import {Actions} from 'react-native-router-flux'
-import {colors} from '../globalStyles'
+import {colors} from '../../../globalStyles'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import {
   formatBroadcastTimestamp,
   formatFrequency
-} from '../helpers/utils'
+} from '../../../helpers/utils'
+import {
+  subscribe
+} from '../../../helpers/broadcasts'
 import {
   JoinButton
-} from './'
+} from '../'
 
 const styles = StyleSheet.create({
   container: {
@@ -40,12 +45,12 @@ const styles = StyleSheet.create({
   }
 })
 
-class BroadcastPreview extends React.Component {
+class JoinedBroadcastPreview extends React.Component {
   constructor(props) {
     super(props)
-    this.timestamp = formatBroadcastTimestamp(props.createdAt)
-    this.frequency = formatFrequency(props.frequency)
-    this.spotsAvailable = props.memberLimit - props.memberIDs.split(",").length
+    this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
+    this.frequency = formatFrequency(props.broadcast.freq)
+    this.spotsAvailable = props.broadcast.memberLimit - props.broadcast.memberIDs.split(",").length
   }
 
   render() {
@@ -53,7 +58,7 @@ class BroadcastPreview extends React.Component {
       <TouchableHighlight
         activeOpacity={0.75}
         underlayColor={'transparent'}
-        onPress={() => Actions.BroadcastDetails({...this.props})}>
+        onPress={() => Actions.JoinedBroadcast({...this.props})}>
         <View style={styles.container}>
 
           { /* Title, Frequency, Amount */ }
@@ -64,21 +69,21 @@ class BroadcastPreview extends React.Component {
           </View>
 
           { /* Spots Availability */ }
-          <View style={{flex: 0.5}}>
+          <View style={{flex: 0.6}}>
             <Text style={{color: colors.deepBlue, fontSize: 16, fontWeight: '700'}}>
-              {this.props.title}
+              {this.props.broadcast.title}
             </Text>
             <Text style={{color: colors.deepBlue, fontSize: 14, paddingTop: 2}}>
-              {`$${this.props.amount} per ${this.frequency}`}
+              {`$${this.props.broadcast.amount} per ${this.frequency}`}
             </Text>
-            <Text style={{color: colors.deepBlue, fontSize: 14, paddingTop: 2}}>
-              {`${this.spotsAvailable} spot${(this.spotsAvailable === 1) ? '' : 's'} available.`}
+            <Text style={{color: colors.slateGrey, fontSize: 14, paddingTop: 2}}>
+              {`Joined ${moment(this.props.broadcast.joinedAt).format("MMM D, YYYY")}`}
             </Text>
           </View>
 
-          { /* Join Button */ }
-          <View style={{flex: 0.25, paddingTop: 10}}>
-            <JoinButton onPress={() => alert("Would join...")} />
+          { /* Chevron connoting pressability */ }
+          <View style={{flex: 0.15, alignItems: 'flex-end', paddingTop: 10}}>
+            <EvilIcons name={"chevron-right"} size={32} color={colors.slateGrey} />
           </View>
 
           { /* Timestamp */ }
@@ -94,4 +99,4 @@ class BroadcastPreview extends React.Component {
   }
 }
 
-module.exports = BroadcastPreview
+module.exports = JoinedBroadcastPreview

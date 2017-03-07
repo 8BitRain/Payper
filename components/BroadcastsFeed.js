@@ -3,9 +3,9 @@ import {View, StyleSheet, Dimensions} from 'react-native'
 import {colors} from '../globalStyles'
 import {connect} from 'react-redux'
 import * as dispatchers from '../scenes/Main/MainState'
+import {UnjoinedBroadcastPreview} from './Broadcasts'
 import {
   DynamicList,
-  BroadcastPreview,
   BroadcastFeedSectionHeader
 } from './'
 
@@ -24,9 +24,9 @@ class BroadcastsFeed extends React.Component {
         <DynamicList
           refreshable={true}
           showPullToRefresh={true}
-          data={this.props.currentUser.broadcastFeed}
+          data={this.props.currentUser.broadcastFeed || {}}
           afterRemove={() => alert("Removed!")}
-          renderRow={(rowData, sectionID, rowID) => <BroadcastPreview {...rowData} />}
+          renderRow={(rowData, sectionID, rowID) => <UnjoinedBroadcastPreview broadcast={rowData} />}
           renderSectionHeader={(rowData, sectionID) => <BroadcastFeedSectionHeader sectionID={sectionID} />}
           renderEmptyState={() => <BroadcastFeedEmptyState />} />
       </View>
