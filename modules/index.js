@@ -1,5 +1,0 @@
-exports.MainView = require('./Main/MainView')
-exports.PaymentOnboardingView = require('./PaymentOnboarding/PaymentOnboardingView')
-exports.FirstPaymentView = require('./FirstPayment/FirstPaymentView')
-exports.PartialUserOnboardingView = require('./PartialUserOnboarding/PartialUserOnboardingView')
-exports.NewUserOnboardingView = require('./NewUserOnboarding/NewUserOnboardingView')

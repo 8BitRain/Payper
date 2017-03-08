@@ -1,1 +1,0 @@
-exports.sampleSnapshot = require('./sampleSnapshot')

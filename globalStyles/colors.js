@@ -6,6 +6,7 @@ const colors = {
   maastrichtBlue: "#011936",
   deeperBlue: "#000a14",
   slateGrey: "#acbdba",
+  gradientGreen: "#23CE6B",
 
   // Alert colors
   carminePink: "#FF6B6B",
@@ -30,10 +31,13 @@ const colors = {
   snowWhiteOpaque: "rgba(255, 251, 252, 0.5)",
   accentOpaque: "rgba(0, 207, 179, 0.7)",
 
-  //old colors
+  // Muted colors
+  mutedGradientGreen: "rgba(35, 207, 107, 0.48)",
+  mutedSlateGrey: "rgba(172, 189, 186, 0.48)",
+
+  // Old colors
   obisdian: "#08090A",
   white: "#fefeff",
-  gradientGreen: "#23CE6B"
 }
 
 module.exports = colors
