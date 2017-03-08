@@ -6,8 +6,18 @@ exports.TabBar = require('./TabBar')
 
 // Feeds
 exports.BroadcastsFeed = require('./BroadcastsFeed')
-exports.ExploreFeed = require('./ExploreFeed')
+exports.ExploreFeed = require('./InterestsTab/Interests')
 exports.MeFeed = require('./MeFeed')
+
+// Generic
+exports.DynamicList = require('./DynamicList')
+
+//Onboarding
+exports.Want = require('./InterestOnboarding/Want/Want')
+exports.Own = require('./InterestOnboarding/Own/Own')
+exports.Interests = require('./InterestsTab/Interests')
+
+// Specific
 
 // Broadcasts
 exports.BroadcastFeedEmptyState = require('./BroadcastFeedEmptyState')
@@ -24,6 +34,8 @@ exports.TextArea = require('./TextArea')
 exports.TextInputWithIcon = require('./TextInputWithIcon')
 exports.InfoBox = require('./InfoBox')
 exports.DropdownList = require('./DropdownList')
+exports.Roullette = require('./Roullette/Roullette')
+exports.UserWants = require('./Roullette/Want')
 exports.DropdownView = require('./DropdownView')
 exports.HowItWorksCarousel = require('./HowItWorksCarousel')
 exports.Invite = require('./Invite')

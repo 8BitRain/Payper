@@ -4,7 +4,12 @@ import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native'
 import {Scene, Router, TabBar, Modal, Schema, Actions, Reducer, ActionConst} from 'react-native-router-flux'
 import {colors} from './globalStyles'
 import {
-  NavigationDrawer
+  NavigationDrawer,
+  Want,
+  Own,
+  Interests,
+  Roullette,
+  UserWants
 } from './components'
 import {
   Splash,
@@ -66,7 +71,7 @@ class Coincast extends React.Component {
             <Scene key="BankAccountAdded"     component={BankAccountAdded}    panHandlers={null} />
 
             { /* SXSW Promo Scenes */ }
-            <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} />
+            <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} initial/>
             <Scene key="PromoWants"           component={PromoWants}          panHandlers={null} />
             <Scene key="PromoRoulette"        component={PromoRoulette}       panHandlers={null} />
             <Scene key="PromoInvite"          component={PromoInvite}         panHandlers={null} />
