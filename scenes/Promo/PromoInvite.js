@@ -73,43 +73,35 @@ class PromoInvite extends React.Component {
     }
 
     this.AV = {
-      logoWrap: {paddingBottom: new Animated.Value(0)},
-      textWrap: {opacity: new Animated.Value(0)},
-      successIndicator: {right: new Animated.Value(dims.width)},
+      logoWrap: {
+        paddingBottom: new Animated.Value(0)
+      },
+      successIndicator: {
+        right: new Animated.Value(dims.width)
+      },
+      textWrap: {
+        opacity: new Animated.Value(0)
+      },
       buttons: {
         marginTop: new Animated.Value(0),
         opacity: new Animated.Value(1)
+      },
+      header: {
+        borderBottomLeftRadius: new Animated.Value(0),
+        borderBottomRightRadius: new Animated.Value(0)
       }
     }
   }
 
   componentDidMount() {
     setTimeout(() => this.positionLogo(), 400)
-    console.log("--> PromoInvite.props =", this.props)
-  }
-
-  positionLogo() {
-    UIManager.measure(findNodeHandle(this.nowWhat), (x, y, w, h) => {
-      let animations = [
-        Animated.timing(this.AV.logoWrap.paddingBottom, {
-          toValue: h + 60,
-          duration: 200,
-          easing: Easing.elastic(0.9)
-        }),
-        Animated.timing(this.AV.textWrap.opacity, {
-          toValue: 1,
-          duration: 150,
-          easing: Easing.elastic(0.9)
-        })
-      ]
-
-      Animated.parallel(animations).start()
-    })
   }
 
   submit() {
     // Hide buttons/reposition logo
-    this.hideButtons(() => this.positionLogo())
+    this.hideButtons(() => {
+      this.positionLogo(() => this.setState({buttonsVisible: false}))
+    })
 
     // Extract invitees' phone numbers
     let invitees = ""
@@ -138,8 +130,7 @@ class PromoInvite extends React.Component {
   }
 
   hideButtons(cb) {
-    if (this.AV.buttons.opacity._value === 0)
-      return
+    if (!this.state.buttonsVisible) return
 
     UIManager.measure(findNodeHandle(this.buttons), (x, y, w, h) => {
       let animations = [
@@ -150,11 +141,37 @@ class PromoInvite extends React.Component {
         Animated.timing(this.AV.buttons.marginTop, {
           toValue: -1 * h,
           duration: 140
+        }),
+        Animated.timing(this.AV.header.borderBottomLeftRadius, {
+          toValue: 6,
+          duration: 140
+        }),
+        Animated.timing(this.AV.header.borderBottomRightRadius, {
+          toValue: 6,
+          duration: 140
         })
       ]
 
       Animated.parallel(animations).start(() => (cb) ? cb() : null)
-      this.setState({buttonsVisible: false})
+    })
+  }
+
+  positionLogo(cb) {
+    UIManager.measure(findNodeHandle(this.nowWhat), (x, y, w, h) => {
+      let animations = [
+        Animated.timing(this.AV.logoWrap.paddingBottom, {
+          toValue: h + 60,
+          duration: 200,
+          easing: Easing.elastic(0.9)
+        }),
+        Animated.timing(this.AV.textWrap.opacity, {
+          toValue: 1,
+          duration: 150,
+          easing: Easing.elastic(0.9)
+        })
+      ]
+
+      Animated.parallel(animations).start(() => (cb) ? cb() : null)
     })
   }
 
@@ -176,54 +193,57 @@ class PromoInvite extends React.Component {
         <Animated.View ref={ref => this.nowWhat = ref} style={[{paddingTop: 40}, this.AV.textWrap]}>
           <View style={{width: dims.width, justifyContent: 'center', alignItems: 'center'}}>
 
-            { /* Header */ }
-            <View style={{flexDirection: 'row', alignItems: 'center', borderTopRightRadius: 6, borderTopLeftRadius: 6, paddingLeft: 14, paddingTop: 10, paddingBottom: 10, backgroundColor: 'rgba(255, 255, 255, 0.8)', width: dims.width * 0.85}}>
-              <EvilIcons name={"question"} size={28} color={colors.deepBlue} />
-              <Text style={{fontSize: 18, fontWeight: '400', paddingLeft: 10}}>
-                {"Now What?"}
-              </Text>
-            </View>
+          { /* Top of Header */ }
+          <View style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 14, paddingTop: 10, paddingBottom: 10, backgroundColor: 'rgba(255, 255, 255, 0.8)', width: dims.width * 0.85, borderTopLeftRadius: 6, borderTopRightRadius: 6}}>
+            <EvilIcons name={"question"} size={28} color={colors.deepBlue} />
+            <Text style={{fontSize: 18, fontWeight: '400', paddingLeft: 10}}>
+              {"Now What?"}
+            </Text>
+          </View>
 
-            { /* Prompt */ }
-            <View style={{padding: 12, backgroundColor: colors.lightGrey, width: dims.width * 0.85, borderBottomLeftRadius: (this.state.buttonsVisible) ? 0 : 6, borderBottomRightRadius: (this.state.buttonsVisible) ? 0 : 6}}>
-              <Text style={{fontSize: 15, fontWeight: '400'}}>
-                {`We'll set up your ${this.props.subscription.name} subscription and notify you when Payper launches.`}
-              </Text>
-            </View>
+          { /* Bottom of Header */ }
+          <Animated.View style={[this.AV.header, {padding: 12, backgroundColor: colors.lightGrey, width: dims.width * 0.85}]}>
+            <Text style={{fontSize: 15, fontWeight: '400'}}>
+              {`We'll set up your ${this.props.subscription.name} subscription and notify you when Payper launches.`}
+            </Text>
+          </Animated.View>
 
-            <Animated.View ref={ref => this.buttons = ref} style={[this.AV.buttons, {borderBottomRightRadius: 6, borderBottomLeftRadius: 6, padding: 12, paddingTop: 0, backgroundColor: colors.lightGrey, width: dims.width * 0.85}]}>
-              <View>
-                { /* Partial Border */ }
-                <View style={{width: 100, height: 1, backgroundColor: colors.medGrey, alignSelf: 'center'}} />
+            { /* Buttons */
+              (!this.state.buttonsVisible)
+              ? null
+              : <Animated.View ref={ref => this.buttons = ref} style={[this.AV.buttons, {borderBottomRightRadius: 6, borderBottomLeftRadius: 6, padding: 12, paddingTop: 0, backgroundColor: colors.lightGrey, width: dims.width * 0.85}]}>
+                  <View>
+                    { /* Partial Border */ }
+                    <View style={{width: 100, height: 1, backgroundColor: colors.medGrey, alignSelf: 'center'}} />
 
-                { /* Prompt */ }
-                <Text style={{fontSize: 14, fontWeight: '400', color: colors.slateGrey, padding: 6}}>
-                  {`Would you like to join with friends or other users from SXSW?`}
-                </Text>
-
-                { /* Join with SXSW Users Button */ }
-                <TouchableHighlight
-                  onPress={() => alert("Join w/ SXSW Users")}
-                  underlayColor={'transparent'}>
-                  <View style={[styles.button, {backgroundColor: colors.accent}]}>
-                    <Text style={{fontSize: 15, fontWeight: '500', color: colors.snowWhite}}>
-                      {"Join with SXSW Users"}
+                    { /* Prompt */ }
+                    <Text style={{fontSize: 14, fontWeight: '400', color: colors.slateGrey, padding: 6}}>
+                      {`Would you like to join with friends or other users from SXSW?`}
                     </Text>
-                  </View>
-                </TouchableHighlight>
-              </View>
 
-              { /* Invite Friends Button */ }
-              <TouchableHighlight
-                onPress={() => this.setState({modalIsVisible: true})}
-                underlayColor={'transparent'}>
-                <View style={[styles.button, {backgroundColor: colors.gradientGreen}]}>
-                  <Text style={{fontSize: 15, fontWeight: '500', color: colors.snowWhite}}>
-                    {"Invite Friends"}
-                  </Text>
-                </View>
-              </TouchableHighlight>
-            </Animated.View>
+                    { /* Join with SXSW Users Button */ }
+                    <TouchableHighlight
+                      onPress={() => alert("Join w/ SXSW Users")}
+                      underlayColor={'transparent'}>
+                      <View style={[styles.button, {backgroundColor: colors.accent}]}>
+                        <Text style={{fontSize: 15, fontWeight: '500', color: colors.snowWhite}}>
+                          {"Join with SXSW Users"}
+                        </Text>
+                      </View>
+                    </TouchableHighlight>
+                  </View>
+
+                  { /* Invite Friends Button */ }
+                  <TouchableHighlight
+                    onPress={() => this.setState({modalIsVisible: true})}
+                    underlayColor={'transparent'}>
+                    <View style={[styles.button, {backgroundColor: colors.gradientGreen}]}>
+                      <Text style={{fontSize: 15, fontWeight: '500', color: colors.snowWhite}}>
+                        {"Invite Friends"}
+                      </Text>
+                    </View>
+                  </TouchableHighlight>
+                </Animated.View>}
           </View>
         </Animated.View>
 

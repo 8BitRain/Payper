@@ -335,6 +335,9 @@ class PromoRoulette extends React.Component {
         { /* Facebook Login Button */
           (this.state.selectedSubscription)
           ? <Animated.View style={[this.AV.loginButton, {position: 'absolute', bottom: 0, left: 0, right: 0, padding: 22, justifyContent: 'center', alignItems: 'center'}]}>
+              <Text style={{fontSize: 15, color: colors.slateGrey, width: dimensions.width -60, paddingBottom: 8, textAlign: 'center'}}>
+                {"Login to redeem your subscription."}
+              </Text>
               <LoginButton
                 style={{width: dimensions.width - 60, height: 45}}
                 readPermissions={["email", "public_profile", "user_friends"]}
