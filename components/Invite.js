@@ -1,6 +1,6 @@
 import React from 'react'
 import * as _ from 'lodash'
-import {View, Text, StyleSheet, Dimensions, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Animated} from 'react-native'
+import {View, Text, StyleSheet, Dimensions, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Animated, Easing} from 'react-native'
 import Contacts from 'react-native-contacts'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import {TextInputWithIcon, ContinueButton} from '../components'
@@ -93,13 +93,16 @@ class Invite extends React.Component {
 
   showSuccessAnimation(cb) {
     let animations = [
-      Animated.spring(this.AV.successIndicator.right, {
+      Animated.timing(this.AV.successIndicator.right, {
         toValue: 0,
-        duration: 300
+        duration: 300,
+        easing: Easing.elastic(0.5)
       }),
-      Animated.spring(this.AV.successIndicator.right, {
+      Animated.delay(400),
+      Animated.timing(this.AV.successIndicator.right, {
         toValue: dims.width,
-        duration: 150
+        duration: 150,
+        easing: Easing.elastic(0.5)
       })
     ]
 

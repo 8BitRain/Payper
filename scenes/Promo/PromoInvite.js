@@ -89,13 +89,15 @@ class PromoInvite extends React.Component {
   positionLogo() {
     UIManager.measure(findNodeHandle(this.nowWhat), (x, y, w, h) => {
       let animations = [
-        Animated.spring(this.AV.logoWrap.paddingBottom, {
+        Animated.timing(this.AV.logoWrap.paddingBottom, {
           toValue: h + 60,
-          duration: 200
+          duration: 200,
+          easing: Easing.elastic(0.9)
         }),
-        Animated.spring(this.AV.textWrap.opacity, {
+        Animated.timing(this.AV.textWrap.opacity, {
           toValue: 1,
-          duration: 150
+          duration: 150,
+          easing: Easing.elastic(0.9)
         })
       ]
 
@@ -128,11 +130,11 @@ class PromoInvite extends React.Component {
 
     UIManager.measure(findNodeHandle(this.buttons), (x, y, w, h) => {
       let animations = [
-        Animated.spring(this.AV.buttons.opacity, {
+        Animated.timing(this.AV.buttons.opacity, {
           toValue: 0,
           duration: 140
         }),
-        Animated.spring(this.AV.buttons.marginTop, {
+        Animated.timing(this.AV.buttons.marginTop, {
           toValue: -1 * h,
           duration: 140
         })
