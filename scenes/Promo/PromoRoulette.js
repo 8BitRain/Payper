@@ -30,6 +30,8 @@ var subscriptionList = [
   "ios-musical-notes"
 ]
 
+const animLoop = 4;
+
 class PromoRoulette extends React.Component {
   constructor(props) {
     super(props);
@@ -50,13 +52,10 @@ class PromoRoulette extends React.Component {
   }
 
   componentDidMount() {
-    //this.imageAnim(4, 0);
-
 
   }
 
   componentWillMount() {
-    console.log("Props: ", this.props);
     let wantedTagsDirty = this.props.wantedTags;
     let wantedTagsClean = [];
     for (var tag in wantedTagsDirty){
@@ -71,12 +70,17 @@ class PromoRoulette extends React.Component {
 
   imageAnim(loop, pos){
     //Is this the first time the loop has ran?
-    if(loop == 4){
+    console.log("RoulletteLoop? " + this.state.rouletteLoop);
+    if(loop == animLoop){
       this.setState({rouletteFinished: false, showSubscription: false, rouletteLoop: 4});
     }
+
+    if(animLoop == 1){
+      this.animLogo_Selected.setValue(0);
+    }
+
+    //ANIM 0
     if(pos == 0){
-      console.log("Loop: " + loop);
-      console.log("Anim0");
       this.animLogo_0.setValue(0);
       Animated.timing(
       this.animLogo_0,
@@ -90,8 +94,8 @@ class PromoRoulette extends React.Component {
       });
     }
 
+    //ANIM 1
     if(pos == 1){
-      console.log("Anim1");
       this.animLogo_1.setValue(0);
       Animated.timing(
       this.animLogo_1,
@@ -105,11 +109,11 @@ class PromoRoulette extends React.Component {
       });
     }
 
-
+    //ANIM 2 or ANIM Final
     if(pos == 2 ){
       if(this.state.rouletteLoop == 0){
         console.log("Final Anim");
-        //this.animLogo_Selected.setValue(0);
+        this.animLogo_Selected.setValue(0);
         Animated.timing(
         this.animLogo_Selected,
         {
@@ -119,7 +123,7 @@ class PromoRoulette extends React.Component {
         }
       ).start(() => {
         if(loop == 0){
-          console.log("Stop Anim");
+          console.log("Stop Final Anim");
           this.setState({rouletteFinished: true, showSubscription: true })
         }});
       } else {
@@ -139,12 +143,12 @@ class PromoRoulette extends React.Component {
           let subscription;
           if(loop == 1){
             subscription = this.generateSubscription(this.state.wantedTags);
+            this.setState({rouletteLoop: next_loop, selectedSubscription: subscription});
+            //this.imageAnim(next_loop, 2 );
+            this.imageAnim(next_loop, 2 );
+          } else {
+            this.imageAnim(next_loop, 0 );
           }
-          this.imageAnim(next_loop, 0);
-          this.setState({rouletteLoop: next_loop, selectedSubscription: subscription})
-        }
-        if(loop == 0){
-          console.log("Stop Anim");
         }});
       }
     }
@@ -187,7 +191,7 @@ class PromoRoulette extends React.Component {
             underlayColor={'transparent'}
             onPress={() => {
               this.setState({rouletteLoop: -2});
-              this.imageAnim(4, 0);
+              this.imageAnim(animLoop, 0);
             }}
             style={styles.buttonActive}>
                 <Text style={styles.buttonActiveText}>{this.state.rouletteLoop == -1 ? "Roll" : "Re-Roll"}</Text>
@@ -214,7 +218,6 @@ class PromoRoulette extends React.Component {
 
   _renderRouletteView(){
 
-    console.log("RoulletteLoop: " + this.state.rouletteLoop);
     var fade_logo0 = this.animLogo_0.interpolate({inputRange: [0, 1],outputRange: [1.0, 0.0]});
     var fade_logo1 = this.animLogo_1.interpolate({inputRange: [0, 1],outputRange: [1.0, 0.0]});
     var fade_logo2 = this.animLogo_2.interpolate({inputRange: [0, 1],outputRange: [1.0, 0.0]});
@@ -226,8 +229,6 @@ class PromoRoulette extends React.Component {
     var scale_logo2 = this.animLogo_2.interpolate({inputRange: [0, .5, 1],outputRange: [1, 1.5, 1]});
     var translate_logoFinal = this.animLogo_Selected.interpolate({inputRange: [0, 1],outputRange: [-40.0, 80.0]});
     var scale_logoFinal = this.animLogo_Selected.interpolate({inputRange: [0, .5, 1],outputRange: [1, 1.5, 1]});
-
-
 
     if(this.state.rouletteLoop == 0){
       //The final image should be here
