@@ -1,5 +1,6 @@
 import React from 'react'
-import {View, Text, StyleSheet, Dimensions, TextInput, Keyboard, TouchableHighlight, Alert, Image, Animated, Easing, Modal} from 'react-native'
+import firebase from 'firebase'
+import {View, Text, StyleSheet, Dimensions, TextInput, Keyboard, TouchableHighlight, Alert, Image, Animated, Easing, Modal, UIManager, findNodeHandle} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {ContinueButton, HowItWorksCarousel, Header, Invite} from '../../components'
 import {colors} from '../../globalStyles'
@@ -66,28 +67,80 @@ class PromoInvite extends React.Component {
     super(props)
 
     this.state = {
-      modalIsVisible: false
+      modalIsVisible: false,
+      buttonsVisible: true
     }
 
     this.AV = {
       logoWrap: {paddingBottom: new Animated.Value(0)},
-      textWrap: {opacity: new Animated.Value(0)}
+      textWrap: {opacity: new Animated.Value(0)},
+      successIndicator: {right: new Animated.Value(dims.width)},
+      buttons: {
+        marginTop: new Animated.Value(0),
+        opacity: new Animated.Value(1)
+      }
     }
   }
 
   componentDidMount() {
-    let animations = [
-      Animated.spring(this.AV.logoWrap.paddingBottom, {
-        toValue: dims.height * 0.65,
-        duration: 200
-      }),
-      Animated.spring(this.AV.textWrap.opacity, {
-        toValue: 1,
-        duration: 150
-      })
-    ]
+    setTimeout(() => this.positionLogo(), 400)
+  }
 
-    setTimeout(() => Animated.parallel(animations).start(), 400)
+  positionLogo() {
+    UIManager.measure(findNodeHandle(this.nowWhat), (x, y, w, h) => {
+      let animations = [
+        Animated.spring(this.AV.logoWrap.paddingBottom, {
+          toValue: h + 60,
+          duration: 200
+        }),
+        Animated.spring(this.AV.textWrap.opacity, {
+          toValue: 1,
+          duration: 150
+        })
+      ]
+
+      Animated.parallel(animations).start()
+    })
+  }
+
+  submit() {
+    // Hide buttons/reposition logo
+    this.hideButtons(() => this.positionLogo())
+
+    // Extract invitees' phone numbers
+    let invitees = ""
+    if (this.state.selectedNums) {
+      for (var i in this.state.selectedNums) {
+        let curr = this.state.selectedNums[i]
+        let num = curr.split(":")[0]
+        if (invitees === "") invitees = invitees.concat(num)
+        else invitees = invitees.concat(",".concat(num))
+      }
+    }
+
+    // Persist to Firebase
+    firebase.database().ref('/SXSW/users').push({invitees})
+  }
+
+  hideButtons(cb) {
+    if (this.AV.buttons.opacity._value === 0)
+      return
+
+    UIManager.measure(findNodeHandle(this.buttons), (x, y, w, h) => {
+      let animations = [
+        Animated.spring(this.AV.buttons.opacity, {
+          toValue: 0,
+          duration: 140
+        }),
+        Animated.spring(this.AV.buttons.marginTop, {
+          toValue: -1 * h,
+          duration: 140
+        })
+      ]
+
+      Animated.parallel(animations).start(() => (cb) ? cb() : null)
+      this.setState({buttonsVisible: false})
+    })
   }
 
   render() {
@@ -105,8 +158,10 @@ class PromoInvite extends React.Component {
         </Animated.View>
 
         { /* Text and buttons */ }
-        <Animated.View style={[{paddingTop: 40}, this.AV.textWrap]}>
+        <Animated.View ref={ref => this.nowWhat = ref} style={[{paddingTop: 40}, this.AV.textWrap]}>
           <View style={{width: dims.width, justifyContent: 'center', alignItems: 'center'}}>
+
+            { /* Header */ }
             <View style={{flexDirection: 'row', alignItems: 'center', borderTopRightRadius: 6, borderTopLeftRadius: 6, paddingLeft: 14, paddingTop: 10, paddingBottom: 10, backgroundColor: 'rgba(255, 255, 255, 0.8)', width: dims.width * 0.85}}>
               <EvilIcons name={"question"} size={28} color={colors.deepBlue} />
               <Text style={{fontSize: 18, fontWeight: '400', paddingLeft: 10}}>
@@ -114,36 +169,50 @@ class PromoInvite extends React.Component {
               </Text>
             </View>
 
-            <View style={{padding: 12, paddingBottom: 0, backgroundColor: colors.lightGrey, width: dims.width * 0.85}}>
-              <Text style={{fontSize: 15, fontWeight: '300'}}>
-                {`We'll set up your ${/*this.props.subscription.name*/'Netflix'} subscription and notify you when Payper launches. Would you like to join with friends or other users from SXSW?`}
+            { /* Prompt */ }
+            <View style={{padding: 12, backgroundColor: colors.lightGrey, width: dims.width * 0.85, borderBottomLeftRadius: (this.state.buttonsVisible) ? 0 : 6, borderBottomRightRadius: (this.state.buttonsVisible) ? 0 : 6}}>
+              <Text style={{fontSize: 15, fontWeight: '400'}}>
+                {`We'll set up your ${this.props.subscription.name} subscription and notify you when Payper launches.`}
               </Text>
             </View>
 
-            <View style={{borderBottomRightRadius: 6, borderBottomLeftRadius: 6, padding: 12, backgroundColor: colors.lightGrey, width: dims.width * 0.85}}>
+            <Animated.View ref={ref => this.buttons = ref} style={[this.AV.buttons, {borderBottomRightRadius: 6, borderBottomLeftRadius: 6, padding: 12, paddingTop: 0, backgroundColor: colors.lightGrey, width: dims.width * 0.85}]}>
+              <View>
+                { /* Partial Border */ }
+                <View style={{width: 100, height: 1, backgroundColor: colors.medGrey, alignSelf: 'center'}} />
+
+                { /* Prompt */ }
+                <Text style={{fontSize: 14, fontWeight: '400', color: colors.slateGrey, padding: 6}}>
+                  {`Would you like to join with friends or other users from SXSW?`}
+                </Text>
+
+                { /* Join with SXSW Users Button */ }
+                <TouchableHighlight
+                  onPress={() => alert("Join w/ SXSW Users")}
+                  underlayColor={'transparent'}>
+                  <View style={[styles.button, {backgroundColor: colors.accent}]}>
+                    <Text style={{fontSize: 15, fontWeight: '500', color: colors.snowWhite}}>
+                      {"Join with SXSW Users"}
+                    </Text>
+                  </View>
+                </TouchableHighlight>
+              </View>
+
+              { /* Invite Friends Button */ }
               <TouchableHighlight
                 onPress={() => this.setState({modalIsVisible: true})}
                 underlayColor={'transparent'}>
-                <View style={[styles.button, {backgroundColor: colors.accent}]}>
+                <View style={[styles.button, {backgroundColor: colors.gradientGreen}]}>
                   <Text style={{fontSize: 15, fontWeight: '500', color: colors.snowWhite}}>
                     {"Invite Friends"}
                   </Text>
                 </View>
               </TouchableHighlight>
-
-              <TouchableHighlight
-                onPress={() => alert("Join w/ SXSW Users")}
-                underlayColor={'transparent'}>
-                <View style={[styles.button, {backgroundColor: colors.gradientGreen}]}>
-                  <Text style={{fontSize: 15, fontWeight: '500', color: colors.snowWhite}}>
-                    {"Join with SXSW Users"}
-                  </Text>
-                </View>
-              </TouchableHighlight>
-            </View>
+            </Animated.View>
           </View>
         </Animated.View>
 
+        { /* Modal */ }
         <Modal animationType={'slide'} visible={this.state.modalIsVisible}>
           <View style={styles.modalWrap}>
             <Header
@@ -152,11 +221,13 @@ class PromoInvite extends React.Component {
               title={"Invite Contacts"}
               onBack={() => this.setState({modalIsVisible: false})} />
             <Invite
-              induceState={(substate) => this.setState(substate, () => console.log(this.state))}
-              closeModal={() => this.setState({modalIsVisible: false})} />
+              induceState={(substate, shouldSubmit) => {
+                this.setState(substate, () => (shouldSubmit) ? this.submit() : null)
+              }}
+              closeModal={() => this.setState({modalIsVisible: false})}
+              submit={() => this.submit()} />
           </View>
         </Modal>
-
       </View>
     )
   }
