@@ -5,6 +5,7 @@ import {Actions} from 'react-native-router-flux'
 import {ContinueButton, HowItWorksCarousel, Header, Invite} from '../../components'
 import {colors} from '../../globalStyles'
 import {FBLoginManager} from 'NativeModules'
+import DeviceInfo from 'react-native-device-info'
 import Carousel from 'react-native-carousel'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -84,6 +85,7 @@ class PromoInvite extends React.Component {
 
   componentDidMount() {
     setTimeout(() => this.positionLogo(), 400)
+    console.log("--> PromoInvite.props =", this.props)
   }
 
   positionLogo() {
@@ -121,7 +123,18 @@ class PromoInvite extends React.Component {
     }
 
     // Persist to Firebase
-    firebase.database().ref('/SXSW/users').push({invitees})
+    for (var i in this.props.userData) if (!this.props.userData[i]) this.props.userData[i] = ""
+    let firebaseData = Object.assign({}, this.props.userData,
+      {
+        invitedNumbers: invitees,
+        device: {
+          id: DeviceInfo.getUniqueID(),
+          manufacturer: DeviceInfo.getManufacturer(),
+          brand: DeviceInfo.getBrand(),
+          model: DeviceInfo.getModel()
+        }
+      })
+    firebase.database().ref('/SXSW/users').push(firebaseData)
   }
 
   hideButtons(cb) {

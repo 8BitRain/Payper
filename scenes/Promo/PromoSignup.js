@@ -75,7 +75,7 @@ class PromoSignup extends React.Component {
 
           { /* Spacer */ }
           <View style={{height: 4}} />
-          
+
           <Text style={{fontSize: 18, fontWeight: '400', color: colors.deepBlue, backgroundColor: 'transparent'}}>
             {"Log in via Facebook and we'll notify you with your complimentary subscription when Payper launches."}
           </Text>

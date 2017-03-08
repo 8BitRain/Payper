@@ -5,6 +5,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import {getFacebookUserData} from '../../helpers/auth'
+import {setInAsyncStorage} from '../../helpers/asyncStorage'
 
 //Routing
 import {Actions} from 'react-native-router-flux';
@@ -21,6 +23,9 @@ import { device } from '../../helpers'
 //Firebase
 import { Firebase } from '../../helpers'
 
+const FBSDK = require('react-native-fbsdk')
+const {LoginButton} = FBSDK
+
 var subscriptionList = [
   "ios-book-outline",
   "ios-school-outline",
@@ -33,6 +38,10 @@ var subscriptionList = [
 class PromoRoulette extends React.Component {
   constructor(props) {
     super(props);
+
+    this.AV = {
+      loginButton: {opacity: new Animated.Value(0)}
+    }
 
     this.state = {
       selectedSubscription: "",
@@ -63,6 +72,38 @@ class PromoRoulette extends React.Component {
     console.log("Wanted Tags: " + wantedTagsClean);
     this.setState({wantedTags: wantedTagsClean});
 
+  }
+
+  showLoginButton() {
+    Animated.timing(this.AV.loginButton.opacity, {
+      toValue: 1,
+      duration: 250
+    }).start()
+  }
+
+  onLoginFinished(err, res) {
+    if (err) { onFailure(); return }
+    if (res.isCancelled) return
+
+    getFacebookUserData({
+      onFailure,
+      onSuccess: (facebookUserData) => {
+        Actions.FacebookLogin({
+          userData: facebookUserData,
+          destination: (userData) => {
+            setInAsyncStorage('userData', JSON.stringify(userData))
+            Actions.PromoInvite({
+              userData,
+              subscription: this.state.selectedSubscription
+            })
+          }
+        })
+      }
+    })
+
+    function onFailure() {
+      alert("Something went wrong on our end. Please try again later.")
+    }
   }
 
   imageAnim(loop, pos){
@@ -117,6 +158,7 @@ class PromoRoulette extends React.Component {
         if(loop == 0){
           console.log("Stop Anim");
           this.setState({rouletteFinished: true, showSubscription: true })
+          this.showLoginButton()
         }});
       } else {
         this.animLogo_2.setValue(0);
@@ -255,7 +297,6 @@ class PromoRoulette extends React.Component {
     }
   }
 
-
   render() {
     return(
       <View style={styles.wrapper}>
@@ -290,6 +331,16 @@ class PromoRoulette extends React.Component {
                 <Text style={ styles.buttonInactiveText}>{"Continue"}</Text>
           </TouchableHighlight>
         </View>
+
+        { /* Facebook Login Button */
+          (this.state.selectedSubscription)
+          ? <Animated.View style={[this.AV.loginButton, {position: 'absolute', bottom: 0, left: 0, right: 0, padding: 22, justifyContent: 'center', alignItems: 'center'}]}>
+              <LoginButton
+                style={{width: dimensions.width - 60, height: 45}}
+                readPermissions={["email", "public_profile", "user_friends"]}
+                onLoginFinished={(err, res) => this.onLoginFinished(err, res)} />
+            </Animated.View>
+          : null }
       </View>
     );
   }
