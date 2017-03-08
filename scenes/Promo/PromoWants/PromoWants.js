@@ -71,7 +71,7 @@ class PromoWants extends React.Component {
   componentDidMount() {
     //this.formatRowData(servicesDB);
     this.listenerConfig = {
-        endpoint: `SXSWServices`,
+        endpoint: `SXSW/services`,
         eventType: 'value',
         listener: null,
         callback: (res) => {

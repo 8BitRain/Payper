@@ -51,6 +51,11 @@ class PromoRoulette extends React.Component {
 
   componentDidMount() {
     //this.imageAnim(4, 0);
+
+
+  }
+
+  componentWillMount() {
     console.log("Props: ", this.props);
     let wantedTagsDirty = this.props.wantedTags;
     let wantedTagsClean = [];
@@ -62,7 +67,6 @@ class PromoRoulette extends React.Component {
     }
     console.log("Wanted Tags: " + wantedTagsClean);
     this.setState({wantedTags: wantedTagsClean});
-
   }
 
   imageAnim(loop, pos){
@@ -134,7 +138,7 @@ class PromoRoulette extends React.Component {
           //Generate selectedSubscription
           let subscription;
           if(loop == 1){
-            subscription = this.generateSubscription(subscriptionList);
+            subscription = this.generateSubscription(this.state.wantedTags);
           }
           this.imageAnim(next_loop, 0);
           this.setState({rouletteLoop: next_loop, selectedSubscription: subscription})
@@ -229,17 +233,23 @@ class PromoRoulette extends React.Component {
       //The final image should be here
       return(
         <View style={{ height: dimensions.height * .2,  backgroundColor: colors.carminePink, overflow: "hidden"}}>
-          <Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}><Ionicons name={"ios-book-outline"} size={64}/></Animated.View>
-          <Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}><Ionicons name={"ios-school-outline"} size={64}/></Animated.View>
-          <Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}><Ionicons name={this.state.selectedSubscription} size={64}/></Animated.View>
+          {/*<Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}><Ionicons name={"ios-book-outline"} size={64}/></Animated.View>*/}
+          <Animated.Image  source={{uri:this.state.wantedTags[0] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}/>
+          <Animated.Image  source={{uri:this.state.wantedTags[1] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}/>
+          <Animated.Image  source={{uri:this.state.selectedSubscription + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}/>
+          {/*<Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}><Ionicons name={"ios-school-outline"} size={64}/></Animated.View>
+          <Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}><Ionicons name={this.state.selectedSubscription} size={64}/></Animated.View>*/}
         </View>
       );
     } else {
       return(
         <View style={{ height: dimensions.height * .2,  backgroundColor: colors.carminePink, overflow: "hidden"}}>
-          <Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}><Ionicons name={"md-restaurant"} size={64}/></Animated.View>
-          <Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}><Ionicons name={"ios-game-controller-b-outline"} size={64}/></Animated.View>
-          <Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}><Ionicons name={"ios-musical-notes"} size={64}/></Animated.View>
+          {/*<Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}><Ionicons name={"md-restaurant"} size={64}/></Animated.View>*/}
+          <Animated.Image  source={{uri:this.state.wantedTags[0] + ".png"}} style={{width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}/>
+          <Animated.Image  source={{uri:this.state.wantedTags[1] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}/>
+          <Animated.Image  source={{uri:this.state.wantedTags[2] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}/>
+          {/*<Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}><Ionicons name={"ios-game-controller-b-outline"} size={64}/></Animated.View>
+          <Animated.View style={{position: "absolute", overflow: "visible", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}><Ionicons name={"ios-musical-notes"} size={64}/></Animated.View>*/}
         </View>
       );
     }
@@ -257,6 +267,7 @@ class PromoRoulette extends React.Component {
 
 
   render() {
+
     return(
       <View style={styles.wrapper}>
         {/* HEADER*/}
