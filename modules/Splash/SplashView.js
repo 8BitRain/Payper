@@ -41,13 +41,19 @@ class SplashView extends React.Component {
       if (_this.state.reconnecting && !_this.state.connected)
         clearInterval(_this.rotationInterval)
 
-      // NOTE: Artificial load time to allow for CodePush version download
+      // Sync with codepush
+      CodePush.sync({
+        deploymentKey: config.details[config.details.env].codePushKey,
+        updateDialog: false,
+        installMode: CodePush.InstallMode.IMMEDIATE
+      })
+
       setTimeout(() => {
         if (isConnected)
           _this._onConnect()
         else
           _this._onDisconnect()
-      }, 8000)
+      }, 8500)
     })
   }
 
@@ -87,17 +93,6 @@ class SplashView extends React.Component {
   _onConnect() {
     const _this = this
     this.setState({ connected: true })
-
-    // Sync with codepush
-    CodePush.sync({
-      deploymentKey: config.details[config.details.env].codePushKey,
-      updateDialog: false,
-      installMode: CodePush.InstallMode.IMMEDIATE
-    })
-
-    // CodePush.sync({deploymentKey: codePushKey})
-    // let start = codePushKey.substring(0, 5)
-    // alert("codePushKey starts with " + start)
 
     // Check beta status
     Async.get('betaStatus', (val) => {
