@@ -136,7 +136,9 @@ class PromoWants extends React.Component {
   }
 
   handleContinuePress(){
-    Actions.PromoRoulette({wantedTags: this.state.selectedTags, wantedTagsCategories: this.state.selectedTagsCategories});
+    if(this.state.selectedNum >= 3){
+      Actions.PromoRoulette({wantedTags: this.state.selectedTags, wantedTagsCategories: this.state.selectedTagsCategories});
+    }
   }
 
   _renderListView(){

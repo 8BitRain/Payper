@@ -108,7 +108,7 @@ class Row extends React.Component {
                underlayColor={'transparent'}
                onPress={() => this.toggleSelected("want")}>
                <View style={this.state.wantSelected ? styles.wantButtonActive : styles.wantButtonInactive}>
-                 <Text style={styles.buttonText}>{"want"}</Text>
+                 <Text style={this.state.wantSelected ? styles.wantButtonActiveText : styles.wantButtonInactiveText}>{"want"}</Text>
                </View>
              </TouchableHighlight>
 
@@ -149,7 +149,8 @@ var styles = StyleSheet.create({
     fontSize: 16,
   },
   buttonText: {
-    fontSize: 16
+    fontSize: 16,
+    fontWeight: "500"
   },
   buttonContainer:{
     flexDirection: "row",
@@ -162,12 +163,14 @@ var styles = StyleSheet.create({
     borderRadius: 4,
     marginLeft: 16,
     backgroundColor: "green",
+
   },
   infoButtonInactive: {
     padding: 10,
     borderRadius: 4,
     marginLeft: 16,
-    backgroundColor: colors.medGrey
+    backgroundColor: colors.medGrey,
+
   },
   wantButtonActive: {
     padding: 10,
@@ -180,6 +183,16 @@ var styles = StyleSheet.create({
     borderRadius: 4,
     marginLeft: 16,
     backgroundColor: colors.medGrey
+  },
+  wantButtonActiveText: {
+    fontSize: 16,
+    color: colors.snowWhite,
+    fontWeight: "500"
+  },
+  wantButtonInactiveText: {
+    fontSize: 16,
+    color: "black",
+    fontWeight: "500"
   },
   photo: {
     height: 40,
