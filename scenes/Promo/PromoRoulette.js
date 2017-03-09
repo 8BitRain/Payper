@@ -43,7 +43,8 @@ class PromoRoulette extends React.Component {
       showSubscription: false,
       wantedTags: null,
       wantedTagsCategories: null,
-      rouletteActive: null
+      rouletteActive: null,
+      canContinue: false
 
     }
 
@@ -132,7 +133,7 @@ class PromoRoulette extends React.Component {
         ).start(() => {
           if(loop == 0){
             console.log("Stop Final Anim");
-            this.setState({rouletteFinished: true, showSubscription: true })
+            this.setState({rouletteFinished: true, showSubscription: true, canContinue: true })
           }});
         } else {
           this.animLogo_2.setValue(0);
@@ -199,7 +200,7 @@ class PromoRoulette extends React.Component {
             activeOpacity={0.8}
             underlayColor={'transparent'}
             onPress={() => {
-              this.setState({rouletteLoop: -2});
+              this.setState({rouletteLoop: -2, canContinue: false});
               this.imageAnim(animLoop, 0);
             }}
             style={styles.rouletteButtonActive}>
@@ -217,6 +218,41 @@ class PromoRoulette extends React.Component {
             onPress={() => console.log("nothing")}
             style={styles.rouletteButtonInactive}>
                 <Text style={styles.buttonInactiveText}>{"Re-Roll"}</Text>
+          </TouchableHighlight>
+        </View>
+      );
+    }
+  }
+
+  _renderContinueButton(){
+    if(this.state.canContinue){
+      let logoName = this.getLogoName(this.state.selectedSubscription);
+      return(
+        <View style={{flex: .1, backgroundColor: colors.lightAccent}}>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => Actions.PromoInvite({
+              subscription: {
+                name: this.state.selectedSubscription,
+                logo: logoName
+              }
+            })}
+            style={styles.buttonActive}>
+                <Text style={styles.buttonActiveText}>{"Continue"}</Text>
+          </TouchableHighlight>
+        </View>
+      );
+    }
+    if(!this.state.canContinue){
+      return(
+        <View style={{flex: .1, backgroundColor: "white"}}>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => console.log("Can't Continue")}
+            style={styles.buttonInactive}>
+                <Text style={styles.buttonInactiveText}>{"Continue"}</Text>
           </TouchableHighlight>
         </View>
       );
@@ -350,20 +386,8 @@ class PromoRoulette extends React.Component {
           {this._renderReRollButton()}
         </View>
         {/* FOOTER*/}
-        <View style={{flex: .1, backgroundColor: "white"}}>
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={'transparent'}
-            onPress={() => Actions.PromoInvite({
-              subscription: {
-                name: 'Netflix',
-                logo: '../../assets/images/logos/netflix.png'
-              }
-            })}
-            style={styles.buttonInactive}>
-                <Text style={ styles.buttonInactiveText}>{"Continue"}</Text>
-          </TouchableHighlight>
-        </View>
+        {this._renderContinueButton()}
+
       </View>
     );
   }
@@ -398,7 +422,7 @@ var styles = StyleSheet.create({
   buttonActive:{
     height: 50,
     width: dimensions.width,
-    backgroundColor: colors.carminePink,
+    backgroundColor: colors.lightAccent,
     justifyContent: "center"
   },
   buttonInactive:{
