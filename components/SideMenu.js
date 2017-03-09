@@ -6,7 +6,7 @@ import {logout} from '../helpers/auth'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import {connect} from 'react-redux'
 import * as dispatchers from '../scenes/Main/MainState'
-import StatusCard from './StatusCard/StatusCard'
+//import StatusCard from './StatusCard/StatusCard'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -95,7 +95,7 @@ class SideMenu extends React.Component {
         { /* Header (opens profile page) */ }
         { /*StatusCard */}
         {console.log("Props: ", this.props)}
-        <StatusCard currentUser={this.props.currentUser}/>
+        {/*<StatusCard currentUser={this.props.currentUser}/>*/}
         <TouchableHighlight
           activeOpacity={0.75}
           underlayColor={'transparent'}
