@@ -132,7 +132,6 @@ dependencies {
     compile project(':react-native-webview-bridge')
     compile project(':react-native-facebook-login')
     compile project(':react-native-fbsdk')
-    compile project(':react-native-mixpanel')
     compile project(':react-native-vector-icons')
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"

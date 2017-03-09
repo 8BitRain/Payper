@@ -8,7 +8,6 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
-import com.kevinejohn.RNMixpanel.*;
 import com.microsoft.codepush.react.CodePush;
 import com.smixx.fabric.FabricPackage;
 
@@ -39,7 +38,6 @@ public class MainApplication extends Application implements ReactApplication {
         @Override
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
-                    new RNMixpanel(),
                     new MainReactPackage(),
             new RNDeviceInfo(),
                     new FabricPackage(),

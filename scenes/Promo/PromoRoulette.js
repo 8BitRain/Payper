@@ -274,7 +274,9 @@ class PromoRoulette extends React.Component {
         {/* HEADER*/}
         <View style={{flex: .2}}>
           <Text style={styles.title}>{"And your free subscription is.."}</Text>
-          <Button onPress={Actions.pop}>
+          <Button onPress={() => {
+            Actions.pop();
+            }}>
             {"Back"}
           </Button>
         </View>
@@ -320,7 +322,7 @@ var styles = StyleSheet.create({
   buttonActiveText:{
     color: '#fff',
     fontSize: 18,
-    lineHeight: 18 * 1.20,
+    lineHeight: Math.round(18 * 1.20),
     textAlign: "center",
     fontWeight: "bold",
     alignSelf: "center"
@@ -328,7 +330,7 @@ var styles = StyleSheet.create({
   buttonInactiveText:{
     color: 'black',
     fontSize: 18,
-    lineHeight: 18 * 1.20,
+    lineHeight: Math.round(18 * 1.20),
     textAlign: "center",
     fontWeight: "bold",
     alignSelf: "center"
@@ -354,12 +356,12 @@ var styles = StyleSheet.create({
     marginLeft: 25,
     marginRight: 15,
     paddingTop: device == "SE" ? 45 : device == "6" ? 20 : 95,
-    lineHeight: device == "SE" ? 18 * 1.20 : device == "6" ? 35 * 1.20 : 22 * 1.20
+    lineHeight: device == "SE" ? Math.round(18 * 1.20) : device == "6" ? Math.round(35 * 1.20) : Math.round(22 * 1.20)
   },
   description: {
     color: 'black',
     fontSize: 20,
-    lineHeight: 20 * 1.20,
+    lineHeight: Math.round(20 * 1.20),
     marginLeft: 20,
     marginRight: 20,
     textAlign: "left",
