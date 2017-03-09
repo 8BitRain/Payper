@@ -64,10 +64,10 @@ class Coincast extends React.Component {
           <Scene key="root" hideNavBar={true}>
 
             { /* Mockups */ }
-            <Scene key="CastCardMockup"       component={CastCardMockup}      panHandlers={null} initial />
+            <Scene key="CastCardMockup"       component={CastCardMockup}      panHandlers={null} />
 
             { /* Linear Scenes */ }
-            <Scene key="Splash"               component={Splash}              panHandlers={null} />
+            <Scene key="Splash"               component={Splash}              panHandlers={null} initial />
             <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />

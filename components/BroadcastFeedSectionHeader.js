@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 7,
     paddingLeft: 10,
-    backgroundColor: '#eff1f4'
+    backgroundColor: colors.snowWhite
   },
   text: {
     color: colors.deepBlue,
