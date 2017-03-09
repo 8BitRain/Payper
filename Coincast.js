@@ -24,7 +24,8 @@ import {
   IAVModal,
   KYCOnboardingView,
   BankAccountAdded,
-  MicrodepositTooltip
+  MicrodepositTooltip,
+  CastCardMockup
 } from './scenes'
 import {
   InviteOnlyLander,
@@ -62,8 +63,11 @@ class Coincast extends React.Component {
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar={true}>
 
+            { /* Mockups */ }
+            <Scene key="CastCardMockup"       component={CastCardMockup}      panHandlers={null} initial />
+
             { /* Linear Scenes */ }
-            <Scene key="Splash"               component={Splash}              panHandlers={null} initial />
+            <Scene key="Splash"               component={Splash}              panHandlers={null} />
             <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
