@@ -19,7 +19,7 @@ class Row extends React.Component {
     this.state = {
       wantSelected: false,
       infoSelected: false,
-      fallbackImageNeeded: false
+      fallbackImageNeeded: true
     }
   }
 
@@ -33,11 +33,11 @@ class Row extends React.Component {
     if(tagType == "want"){
       if(this.state.wantSelected){
         this.setState({wantSelected: false});
-        this.props.updateSelectedTags(this.props.tag, false, tagType);
+        this.props.updateSelectedTags(this.props.tag, false, this.props.category);
       }
       if(!this.state.wantSelected){
         this.setState({wantSelected: true});
-        this.props.updateSelectedTags(this.props.tag, true, tagType);
+        this.props.updateSelectedTags(this.props.tag, true, this.props.category);
       }
     }
   }

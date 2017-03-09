@@ -62,9 +62,9 @@ class PromoWants extends React.Component {
       dataSource: null,
       displayList: false,
       loadedFirebase: false,
-      selectedTags: {
-      },
-      selectedNum: 0
+      selectedTags: {},
+      selectedNum: 0,
+      selectedTagsCategories:{},
     }
   }
 
@@ -123,22 +123,20 @@ class PromoWants extends React.Component {
   }
 
 
-  updateSelectedTags(tag, selected){
-    //Uncomment to get working
+  updateSelectedTags(tag, selected, category){
     this.state.selectedTags[tag] = selected;
-    //let tags = this.state.selectedTags;
-    //var index = this.state.selectedTags.indexOf({tag})
-
+    this.state.selectedTagsCategories[tag] = category;
     console.log("Selected?: " + selected);
     console.log("Selected Num: " + this.state.selectedNum);
 
     this.setState(this.state);
+    console.log("Categories: ", this.state.selectedTagsCategories);
+    console.log("Services: ", this.state.selectedTags);
     selected == true ? this.setState({selectedNum: this.state.selectedNum + 1}) : this.setState({selectedNum: this.state.selectedNum - 1});
-
   }
 
   handleContinuePress(){
-    Actions.PromoRoulette({wantedTags: this.state.selectedTags});
+    Actions.PromoRoulette({wantedTags: this.state.selectedTags, wantedTagsCategories: this.state.selectedTagsCategories});
   }
 
   _renderListView(){
@@ -147,7 +145,7 @@ class PromoWants extends React.Component {
         <ListView
           style={styles.container}
           dataSource={this.state.dataSource}
-          renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected) => this.updateSelectedTags(tag, selected)} />}
+          renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected, category) => this.updateSelectedTags(tag, selected, category)} />}
           renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
         />
       );
@@ -159,9 +157,7 @@ class PromoWants extends React.Component {
       <View style={styles.wrapper}>
         {/* HEADER*/}
         <View>
-          <Text style={styles.title}>{"Customize your experience"}</Text>
-          <Text style={styles.description}>{"Please select 3 or more services you would like."}</Text>
-          <Button onPress={Actions.pop}>{"Back"}</Button>
+          <Text style={styles.title}>{"Select at least 3 subscriptions"}</Text>
         </View>
         {/* CONTENT*/}
         { this._renderListView()}
@@ -183,7 +179,7 @@ class PromoWants extends React.Component {
 var styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: colors.accent,
   },
   separator: {
     flex: 1,
@@ -220,7 +216,7 @@ var styles = StyleSheet.create({
   },
 
   title: {
-    color: "black",
+    color: colors.snowWhite,
     fontSize: 35,
     fontWeight: 'bold',
     textAlign: 'left',

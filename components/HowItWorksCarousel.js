@@ -38,7 +38,7 @@ class HowItWorksCarousel extends React.Component {
 
   render() {
     return (
-      <View style={{flex: 1, width: 500, height: 500, marginTop: 25}}>
+      <View>
 
         { /* Swipable Pages */ }
         <Carousel ref={(ref) => (this.carousel) ? null : this.carousel = ref} animate={false} hideIndicators>
@@ -64,7 +64,7 @@ class HowItWorksCarousel extends React.Component {
         </Carousel>
 
         { /* Pagination Indicators */ }
-        <View style={{ position: "absolute", flexDirection: 'row', left: dims.width * .45, top: dims.height * .225}}>
+        <View style={{flexDirection: 'row',  backgroundColor: 'transparent', justifyContent: "center", alignItems: "center"}}>
           {
             this.pages.map((page, i) => {
               return(
