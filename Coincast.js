@@ -71,7 +71,7 @@ class Coincast extends React.Component {
             <Scene key="BankAccountAdded"     component={BankAccountAdded}    panHandlers={null} />
 
             { /* SXSW Promo Scenes */ }
-            <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} initial/>
+            <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} />
             <Scene key="PromoWants"           component={PromoWants}          panHandlers={null} />
             <Scene key="PromoRoulette"        component={PromoRoulette}       panHandlers={null} />
             <Scene key="PromoInvite"          component={PromoInvite}         panHandlers={null} />
