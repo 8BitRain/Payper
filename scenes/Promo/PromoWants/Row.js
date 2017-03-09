@@ -1,9 +1,10 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TouchableHighlight, Animated, Easing, Image, Dimensions, StyleSheet, ListView } from 'react-native';
+import { View, Text, TouchableHighlight, Animated, Easing, Image, Dimensions, StyleSheet, ListView, Modal } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import {Actions} from 'react-native-router-flux';
 
 
 // Stylesheets
@@ -19,7 +20,8 @@ class Row extends React.Component {
     this.state = {
       wantSelected: false,
       infoSelected: false,
-      fallbackImageNeeded: true
+      fallbackImageNeeded: true,
+      modalOpened: false
     }
   }
 
@@ -89,9 +91,48 @@ class Row extends React.Component {
     }
   }
 
+  _renderInfoModal(){
+    return(
+      <View style={styles.wrapper2}>
+           <View style={{marginTop: 15, justifyContent: "center", alignItems: "center"}}>
+             {this._renderLogo()}
+             <Text style={styles.modalTitle}>{this.props.displayName}</Text>
+           </View>
+
+           <View style={{marginTop: 5}}>
+            <Text style={styles.infoText}>{this.props.info}</Text>
+           </View>
+
+           <View style={{flex: 1, justifyContent: "flex-end", alignItems: "center", borderRadius: dimensions.width / 32.0, overflow: "hidden"}}>
+             <TouchableHighlight
+               activeOpacity={0.8}
+               underlayColor={'transparent'}
+               onPress={() => {this.toggleTooltip(false)}}
+               style={{height: 50, width: dimensions.width * .84, backgroundColor: colors.lightAccent, justifyContent: "center"}}>
+                   <View style={{flexDirection: "row", justifyContent: "center", width: dimensions.width * .84}}>
+                     <Text style={styles.modalButtonText}>{"Okay"}</Text>
+                   </View>
+             </TouchableHighlight>
+           </View>
+     </View>
+    );
+  }
+
+  toggleTooltip(toggle){
+    this.setState({modalOpened: toggle });
+  }
+
   render() {
     return(
       <View style={{flex: 1}}>
+
+        <Modal
+        animationType={"slide"}
+        transparent={true}
+        visible={this.state.modalOpened}>
+          { this._renderInfoModal()}
+        </Modal>
+
          <View style={styles.container}>
             {/** Where are images stored?
              /* iOS: Image.xcassets
@@ -116,11 +157,12 @@ class Row extends React.Component {
              <TouchableHighlight
                activeOpacity={0.8}
                underlayColor={'transparent'}
-               onPress={() => console.log("Open modal")}>
+               onPress={() => {this.toggleTooltip(true)}}>
                <View style={this.state.infoSelected ? styles.infoButtonActive : styles.infoButtonInactive}>
                  <Text style={styles.buttonText}>{"info"}</Text>
                </View>
              </TouchableHighlight>
+
            </View>
          </View>
      </View>
@@ -136,6 +178,16 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.lightGrey
   },
+  wrapper2: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: colors.accent,
+    margin: dimensions.width * .12,
+    marginTop: dimensions.height * .25,
+    marginBottom: dimensions.height * .25,
+    borderRadius: dimensions.width / 32.0,
+  },
   rowSelected:{
     flex: 1,
     height: 10,
@@ -148,9 +200,30 @@ var styles = StyleSheet.create({
     marginLeft: 12,
     fontSize: 16,
   },
+  infoText: {
+    color: colors.snowWhite,
+    marginLeft: 12,
+    fontSize: 18,
+    lineHeight: device == "SE" ? 18 : device == "6" ? 18 : 18,
+    fontWeight: "500",
+    lineHeight: device == "SE" ? Math.round(18 * 1.20) : device == "6" ? Math.round(18 * 1.20) : Math.round(18 * 1.20),
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "500",
+    color: colors.snowWhite
+  },
   buttonText: {
     fontSize: 16,
     fontWeight: "500"
+  },
+  modalButtonText:{
+    color: '#fff',
+    fontSize: 18,
+    lineHeight: 18 * 1.20,
+    textAlign: "center",
+    fontWeight: "bold",
+    alignSelf: "center"
   },
   buttonContainer:{
     flexDirection: "row",

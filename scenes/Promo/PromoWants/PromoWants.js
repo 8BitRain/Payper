@@ -100,14 +100,15 @@ class PromoWants extends React.Component {
       //Loop through services
       for(var serviceKey in services){
         var service = serviceKey;
-        var logo = services[service];
-        var tag = services[service];
+         console.log("Info: ", services[service]);
+
 
         //append title, selected, and category to each service obj.
         //console.log("Service OBJ Initial: ", services);
         services[serviceKey]["selected"] = false;
         services[serviceKey]["title"] = service;
         services[serviceKey]["category"] = category;
+        //services[serviceKey]["info"] =
         //Push manipulated object into datasource ready (readable) array
         if(typeof(services[service]) != 'string'){
           servicesStore.push(services[service]);
