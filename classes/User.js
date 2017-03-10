@@ -58,6 +58,7 @@ export default class User {
     this.timer = new Timer()
     this.timer.start()
     AppState.addEventListener('change', this.handleAppStateChange)
+
   }
 
   destroy() {

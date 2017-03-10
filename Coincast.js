@@ -24,7 +24,8 @@ import {
   IAVModal,
   KYCOnboardingView,
   BankAccountAdded,
-  MicrodepositTooltip
+  MicrodepositTooltip,
+  CastCardMockup
 } from './scenes'
 import {
   InviteOnlyLander,
@@ -36,7 +37,8 @@ import {
   PromoRoulette,
   PromoInvite,
   PromoSignup,
-  PromoWaitingRoom
+  PromoWaitingRoom,
+  InfoModal
 } from './scenes/Promo'
 import {
   AdminBroadcastView,
@@ -63,8 +65,11 @@ class Coincast extends React.Component {
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar={true}>
 
+            { /* Mockups */ }
+            <Scene key="CastCardMockup"       component={CastCardMockup}      panHandlers={null} />
+
             { /* Linear Scenes */ }
-            <Scene key="Splash"               component={Splash}              panHandlers={null} />
+            <Scene key="Splash"               component={Splash}              panHandlers={null} initial />
             <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
@@ -72,17 +77,20 @@ class Coincast extends React.Component {
             <Scene key="BankAccountAdded"     component={BankAccountAdded}    panHandlers={null} />
 
             { /* SXSW Promo Scenes */ }
-            <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} initial/>
+            <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} />
             <Scene key="PromoWants"           component={PromoWants}          panHandlers={null} />
             <Scene key="PromoRoulette"        component={PromoRoulette}       panHandlers={null} />
             <Scene key="PromoInvite"          component={PromoInvite}         panHandlers={null} />
             <Scene key="PromoSignup"          component={PromoSignup}         panHandlers={null} />
             <Scene key="PromoWaitingRoom"     component={PromoWaitingRoom}    panHandlers={null} />
+            <Scene key="InfoModal"            component={InfoModal}           panhandlers={null} />
 
             { /* Drawer/Tab Scenes */ }
             <Scene key="Main" component={NavigationDrawer} open={false}>
               <Scene key="MainView" component={Main} title="MainView" hideTabBar hideNavBar panhandlers={null} />
             </Scene>
+
+
 
             { /* Modal Scenes */ }
             <Scene key="FacebookLogin" direction="vertical">
@@ -111,7 +119,12 @@ class Coincast extends React.Component {
             <Scene key="UnjoinedBroadcast">
               <Scene key="UnjoinedBroadcastModal" component={UnjoinedBroadcastView} schema="modal" panHandlers={null} hideNavBar />
             </Scene>
+
           </Scene>
+
+
+
+
 
           <Scene key="error" component={Error} />
 

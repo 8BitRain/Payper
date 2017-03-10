@@ -2,6 +2,7 @@
 exports.AdminBroadcastPreview = require('./Previews/AdminBroadcastPreview')
 exports.JoinedBroadcastPreview = require('./Previews/JoinedBroadcastPreview')
 exports.UnjoinedBroadcastPreview = require('./Previews/UnjoinedBroadcastPreview')
+exports.CastCard = require('./Previews/CastCard')
 
 // Views
 exports.AdminBroadcastView = require('./Views/AdminBroadcastView')

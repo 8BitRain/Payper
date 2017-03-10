@@ -62,10 +62,18 @@ class PromoWants extends React.Component {
       dataSource: null,
       displayList: false,
       loadedFirebase: false,
-      selectedTags: {
-      },
-      selectedNum: 0
+      selectedTags: {},
+      selectedNum: 0,
+      selectedTagsCategories:{},
+      selectedTagsDisplayNames:{}
     }
+
+
+      this.anim_title = new Animated.Value(0);
+      this.anim_list = new Animated.Value(0);
+      this.anim_continue = new Animated.Value(0);
+
+
   }
 
   componentDidMount() {
@@ -77,13 +85,56 @@ class PromoWants extends React.Component {
         callback: (res) => {
           console.log("An update was made to fb", res);
           this.formatRowData(res);
+          this.levitateList();
       }
     }
     Firebase.listenTo(this.listenerConfig);
+    //Animated
+    this.levitateTitle();
   }
 
   componentWillUnmount() {
     Firebase.stopListeningTo(this.listenerConfig);
+  }
+
+  levitateTitle(){
+    this.anim_title.setValue(0);
+    Animated.timing(
+    this.anim_title,
+    {
+      toValue: 1,
+      duration: 400,
+      easing: Easing.ease
+    }
+    ).start(() => {
+
+    });
+  }
+
+  levitateList(){
+    this.anim_list.setValue(0);
+    Animated.timing(
+    this.anim_list,
+    {
+      toValue: 1,
+      duration: 500,
+      easing: Easing.ease
+    }
+    ).start(() => {
+      this.levitateContinue();
+    });
+  }
+
+  levitateContinue(){
+    this.anim_continue.setValue(0);
+    Animated.timing(
+    this.anim_continue,
+    {
+      toValue: 1,
+      duration: 400,
+      easing: Easing.ease
+    }
+  ).start();
   }
 
   formatRowData(rowData){
@@ -100,14 +151,15 @@ class PromoWants extends React.Component {
       //Loop through services
       for(var serviceKey in services){
         var service = serviceKey;
-        var logo = services[service];
-        var tag = services[service];
+         console.log("Info: ", services[service]);
+
 
         //append title, selected, and category to each service obj.
         //console.log("Service OBJ Initial: ", services);
         services[serviceKey]["selected"] = false;
         services[serviceKey]["title"] = service;
         services[serviceKey]["category"] = category;
+        //services[serviceKey]["info"] =
         //Push manipulated object into datasource ready (readable) array
         if(typeof(services[service]) != 'string'){
           servicesStore.push(services[service]);
@@ -123,58 +175,64 @@ class PromoWants extends React.Component {
   }
 
 
-  updateSelectedTags(tag, selected){
-    //Uncomment to get working
+  updateSelectedTags(tag, selected, category, displayName){
     this.state.selectedTags[tag] = selected;
-    //let tags = this.state.selectedTags;
-    //var index = this.state.selectedTags.indexOf({tag})
+    this.state.selectedTagsCategories[tag] = category;
+    this.state.selectedTagsDisplayNames[tag] = displayName;
 
     console.log("Selected?: " + selected);
     console.log("Selected Num: " + this.state.selectedNum);
 
     this.setState(this.state);
+    console.log("Categories: ", this.state.selectedTagsCategories);
+    console.log("Services: ", this.state.selectedTags);
     selected == true ? this.setState({selectedNum: this.state.selectedNum + 1}) : this.setState({selectedNum: this.state.selectedNum - 1});
-
   }
 
   handleContinuePress(){
-    Actions.PromoRoulette({wantedTags: this.state.selectedTags});
+    if(this.state.selectedNum >= 3){
+      Actions.PromoRoulette({wantedTags: this.state.selectedTags, wantedTagsCategories: this.state.selectedTagsCategories, wantedTagsDisplayNames: this.state.selectedTagsDisplayNames});
+    }
   }
 
   _renderListView(){
+
     if(this.state.displayList){
+      var fade_list = this.anim_list.interpolate({inputRange: [0, 1],outputRange: [0.0, 1.0]});
       return(
-        <ListView
-          style={styles.container}
-          dataSource={this.state.dataSource}
-          renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected) => this.updateSelectedTags(tag, selected)} />}
-          renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-        />
+        <Animated.View style={{flex: 1, opacity: fade_list}}>
+          <ListView
+            style={styles.container}
+            dataSource={this.state.dataSource}
+            renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected, category, displayName) => this.updateSelectedTags(tag, selected, category, displayName)} />}
+            renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+          />
+        </Animated.View>
       );
     }
   }
 
   render() {
+    var fade_title = this.anim_title.interpolate({inputRange: [0, 1],outputRange: [0.0, 1.0]});
+    var fade_continue = this.anim_continue.interpolate({inputRange: [0, 1],outputRange: [0.0, 1.0]});
     return(
       <View style={styles.wrapper}>
         {/* HEADER*/}
-        <View>
-          <Text style={styles.title}>{"Customize your experience"}</Text>
-          <Text style={styles.description}>{"Please select 3 or more services you would like."}</Text>
-          <Button onPress={Actions.pop}>{"Back"}</Button>
-        </View>
+        <Animated.View style={{opacity: fade_title}}>
+          <Text style={styles.title}>{"Select at least 3 subscriptions"}</Text>
+        </Animated.View>
         {/* CONTENT*/}
         { this._renderListView()}
         {/* FOOTER*/}
-        <View>
-        <TouchableHighlight
-          activeOpacity={0.8}
-          underlayColor={'transparent'}
-          onPress={() => this.handleContinuePress()}
-          style={this.state.selectedNum >= 3 ? styles.buttonActive : styles.buttonInactive}>
-              <Text style={this.state.selectedNum >= 3 ? styles.buttonActiveText : styles.buttonInactiveText}>{"Continue"}</Text>
-        </TouchableHighlight>
-        </View>
+        <Animated.View style={{opacity: fade_continue}}>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => this.handleContinuePress()}
+            style={this.state.selectedNum >= 3 ? styles.buttonActive : styles.buttonInactive}>
+                <Text style={this.state.selectedNum >= 3 ? styles.buttonActiveText : styles.buttonInactiveText}>{"Continue"}</Text>
+          </TouchableHighlight>
+        </Animated.View>
       </View>
     );
   }
@@ -183,7 +241,7 @@ class PromoWants extends React.Component {
 var styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: colors.accent,
   },
   separator: {
     flex: 1,
@@ -220,7 +278,7 @@ var styles = StyleSheet.create({
   },
 
   title: {
-    color: "black",
+    color: colors.snowWhite,
     fontSize: 35,
     fontWeight: 'bold',
     textAlign: 'left',

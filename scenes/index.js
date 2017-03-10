@@ -8,3 +8,6 @@ exports.SettingsModal = require('./SettingsModal')
 exports.NewBroadcastModal = require('./NewBroadcastModal')
 exports.BroadcastOnboardingFlowRoot = require('./BroadcastOnboardingFlow/BroadcastOnboardingFlowRoot')
 exports.MicrodepositTooltip = require('./MicrodepositTooltip')
+
+// Mockups
+exports.CastCardMockup = require('./Mockups/CastCardMockup')
