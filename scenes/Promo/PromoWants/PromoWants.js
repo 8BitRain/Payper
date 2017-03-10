@@ -205,7 +205,7 @@ class PromoWants extends React.Component {
             style={styles.container}
             dataSource={this.state.dataSource}
             renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected, category, displayName) => this.updateSelectedTags(tag, selected, category, displayName)} />}
-            renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+            
           />
         </Animated.View>
       );

@@ -171,7 +171,7 @@ class Row extends React.Component {
 
   render() {
     return(
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, borderBottomWidth: 1, borderBottomColor: colors.medGrey}}>
 
         <Modal
         animationType={"slide"}
