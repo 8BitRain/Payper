@@ -68,6 +68,8 @@ class PromoInvite extends React.Component {
   constructor(props) {
     super(props)
 
+    console.log("--> PromoInvite was constructed with props:", props)
+
     this.state = {
       modalIsVisible: false,
       buttonsVisible: (props.userWasCached) ? false : true
@@ -210,7 +212,7 @@ class PromoInvite extends React.Component {
           { /* Bottom of Header */ }
           <Animated.View style={[this.AV.header, {padding: 12, backgroundColor: colors.lightGrey, width: dims.width * 0.85}]}>
             <Text style={{fontSize: 15, fontWeight: '400'}}>
-              {`We'll set up your ${(this.props.subscription) ? this.props.subscription.name : "undefined"} subscription and notify you when Payper launches.`}
+              {`We'll set up your ${(this.props.subscription && this.props.subscription.displayName) ? this.props.subscription.displayName + " " : ""}subscription and notify you when Payper launches.`}
             </Text>
           </Animated.View>
 
