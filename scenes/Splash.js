@@ -37,12 +37,16 @@ class Splash extends React.Component {
     FBLoginManager.logOut()
 
     // Continue in app flow
-    getFromAsyncStorage('userData', (userData) => {
-      if (!userData) Actions.PromoLander()
-      else Actions.PromoInvite({
-        userWasCached: true,
-        userData: JSON.parse(userData)
-      })
+    getFromAsyncStorage('userData', (cachedData) => {
+      if (!cachedData) Actions.PromoLander()
+      else {
+        cachedData = JSON.parse(cachedData)
+        Actions.PromoInvite({
+          userWasCached: true,
+          userData: cachedData,
+          subscription: cachedData.subscription
+        })
+      }
     })
   }
 
