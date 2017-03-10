@@ -55,7 +55,7 @@ const reducerCreate = (params) => {
 }
 
 import {setInAsyncStorage} from './helpers/asyncStorage'
-setInAsyncStorage('userData', '')
+// setInAsyncStorage('userData', '')
 
 class Coincast extends React.Component {
   render() {
