@@ -27,11 +27,11 @@ class Splash extends React.Component {
   componentWillMount() {
 
     // Sync with codepush
-    // codePush.sync({
-    //   deploymentKey: config[config.env].codePushKey,
-    //   updateDialog: false,
-    //   installMode: codePush.InstallMode.IMMEDIATE
-    // })
+    codePush.sync({
+      deploymentKey: config[config.env].codePushKey,
+      updateDialog: false,
+      installMode: codePush.InstallMode.IMMEDIATE
+    })
 
     // Log out of Facebook auth so button doesn't say 'log out'
     FBLoginManager.logOut()
