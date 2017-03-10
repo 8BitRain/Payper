@@ -64,7 +64,7 @@ class HowItWorksCarousel extends React.Component {
         </Carousel>
 
         { /* Pagination Indicators */ }
-        <View style={{flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{flexDirection: 'row',  backgroundColor: 'transparent', justifyContent: "center", alignItems: "center"}}>
           {
             this.pages.map((page, i) => {
               return(

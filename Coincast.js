@@ -37,7 +37,8 @@ import {
   PromoRoulette,
   PromoInvite,
   PromoSignup,
-  PromoWaitingRoom
+  PromoWaitingRoom,
+  InfoModal
 } from './scenes/Promo'
 import {
   AdminBroadcastView,
@@ -81,11 +82,14 @@ class Coincast extends React.Component {
             <Scene key="PromoInvite"          component={PromoInvite}         panHandlers={null} />
             <Scene key="PromoSignup"          component={PromoSignup}         panHandlers={null} />
             <Scene key="PromoWaitingRoom"     component={PromoWaitingRoom}    panHandlers={null} />
+            <Scene key="InfoModal"            component={InfoModal}           panhandlers={null} />
 
             { /* Drawer/Tab Scenes */ }
             <Scene key="Main" component={NavigationDrawer} open={false}>
               <Scene key="MainView" component={Main} title="MainView" hideTabBar hideNavBar panhandlers={null} />
             </Scene>
+
+
 
             { /* Modal Scenes */ }
             <Scene key="FacebookLogin" direction="vertical">
@@ -114,7 +118,12 @@ class Coincast extends React.Component {
             <Scene key="UnjoinedBroadcast">
               <Scene key="UnjoinedBroadcastModal" component={UnjoinedBroadcastView} schema="modal" panHandlers={null} hideNavBar />
             </Scene>
+
           </Scene>
+
+
+
+
 
           <Scene key="error" component={Error} />
 

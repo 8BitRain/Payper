@@ -62,16 +62,17 @@ class PromoWants extends React.Component {
       dataSource: null,
       displayList: false,
       loadedFirebase: false,
-      selectedTags: {
-      },
-      selectedNum: 0
+      selectedTags: {},
+      selectedNum: 0,
+      selectedTagsCategories:{},
+      selectedTagsDisplayNames:{}
     }
   }
 
   componentDidMount() {
     //this.formatRowData(servicesDB);
     this.listenerConfig = {
-        endpoint: `SXSWServices`,
+        endpoint: `SXSW/services`,
         eventType: 'value',
         listener: null,
         callback: (res) => {
@@ -100,14 +101,15 @@ class PromoWants extends React.Component {
       //Loop through services
       for(var serviceKey in services){
         var service = serviceKey;
-        var logo = services[service];
-        var tag = services[service];
+         console.log("Info: ", services[service]);
+
 
         //append title, selected, and category to each service obj.
         //console.log("Service OBJ Initial: ", services);
         services[serviceKey]["selected"] = false;
         services[serviceKey]["title"] = service;
         services[serviceKey]["category"] = category;
+        //services[serviceKey]["info"] =
         //Push manipulated object into datasource ready (readable) array
         if(typeof(services[service]) != 'string'){
           servicesStore.push(services[service]);
@@ -123,22 +125,24 @@ class PromoWants extends React.Component {
   }
 
 
-  updateSelectedTags(tag, selected){
-    //Uncomment to get working
+  updateSelectedTags(tag, selected, category, displayName){
     this.state.selectedTags[tag] = selected;
-    //let tags = this.state.selectedTags;
-    //var index = this.state.selectedTags.indexOf({tag})
+    this.state.selectedTagsCategories[tag] = category;
+    this.state.selectedTagsDisplayNames[tag] = displayName;
 
     console.log("Selected?: " + selected);
     console.log("Selected Num: " + this.state.selectedNum);
 
     this.setState(this.state);
+    console.log("Categories: ", this.state.selectedTagsCategories);
+    console.log("Services: ", this.state.selectedTags);
     selected == true ? this.setState({selectedNum: this.state.selectedNum + 1}) : this.setState({selectedNum: this.state.selectedNum - 1});
-
   }
 
   handleContinuePress(){
-    Actions.PromoRoulette({wantedTags: this.state.selectedTags});
+    if(this.state.selectedNum >= 3){
+      Actions.PromoRoulette({wantedTags: this.state.selectedTags, wantedTagsCategories: this.state.selectedTagsCategories, wantedTagsDisplayNames: this.state.selectedTagsDisplayNames});
+    }
   }
 
   _renderListView(){
@@ -147,7 +151,7 @@ class PromoWants extends React.Component {
         <ListView
           style={styles.container}
           dataSource={this.state.dataSource}
-          renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected) => this.updateSelectedTags(tag, selected)} />}
+          renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected, category, displayName) => this.updateSelectedTags(tag, selected, category, displayName)} />}
           renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
         />
       );
@@ -159,9 +163,7 @@ class PromoWants extends React.Component {
       <View style={styles.wrapper}>
         {/* HEADER*/}
         <View>
-          <Text style={styles.title}>{"Customize your experience"}</Text>
-          <Text style={styles.description}>{"Please select 3 or more services you would like."}</Text>
-          <Button onPress={Actions.pop}>{"Back"}</Button>
+          <Text style={styles.title}>{"Select at least 3 subscriptions"}</Text>
         </View>
         {/* CONTENT*/}
         { this._renderListView()}
@@ -183,7 +185,7 @@ class PromoWants extends React.Component {
 var styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: colors.accent,
   },
   separator: {
     flex: 1,
@@ -193,7 +195,7 @@ var styles = StyleSheet.create({
   buttonActiveText:{
     color: '#fff',
     fontSize: 18,
-    lineHeight: 18 * 1.20,
+    lineHeight: Math.round(18 * 1.20),
     textAlign: "center",
     fontWeight: "bold",
     alignSelf: "center"
@@ -201,7 +203,7 @@ var styles = StyleSheet.create({
   buttonInactiveText:{
     color: 'black',
     fontSize: 18,
-    lineHeight: 18 * 1.20,
+    lineHeight: Math.round(18 * 1.20),
     textAlign: "center",
     fontWeight: "bold",
     alignSelf: "center"
@@ -220,19 +222,19 @@ var styles = StyleSheet.create({
   },
 
   title: {
-    color: "black",
+    color: colors.snowWhite,
     fontSize: 35,
     fontWeight: 'bold',
     textAlign: 'left',
     marginLeft: 25,
     marginRight: 15,
     paddingTop: device == "SE" ? 45 : device == "6" ? 20 : 95,
-    lineHeight: device == "SE" ? 18 * 1.20 : device == "6" ? 35 * 1.20 : 22 * 1.20
+    lineHeight: device == "SE" ? Math.round(18 * 1.20) : device == "6" ? Math.round(35 * 1.20) : Math.round(22 * 1.20)
   },
   description: {
     color: 'black',
     fontSize: 20,
-    lineHeight: 20 * 1.20,
+    lineHeight: Math.round(20 * 1.20),
     marginLeft: 20,
     marginRight: 20,
     textAlign: "left",
