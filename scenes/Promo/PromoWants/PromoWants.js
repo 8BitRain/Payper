@@ -67,6 +67,13 @@ class PromoWants extends React.Component {
       selectedTagsCategories:{},
       selectedTagsDisplayNames:{}
     }
+
+
+      this.anim_title = new Animated.Value(0);
+      this.anim_list = new Animated.Value(0);
+      this.anim_continue = new Animated.Value(0);
+
+
   }
 
   componentDidMount() {
@@ -78,13 +85,56 @@ class PromoWants extends React.Component {
         callback: (res) => {
           console.log("An update was made to fb", res);
           this.formatRowData(res);
+          this.levitateList();
       }
     }
     Firebase.listenTo(this.listenerConfig);
+    //Animated
+    this.levitateTitle();
   }
 
   componentWillUnmount() {
     Firebase.stopListeningTo(this.listenerConfig);
+  }
+
+  levitateTitle(){
+    this.anim_title.setValue(0);
+    Animated.timing(
+    this.anim_title,
+    {
+      toValue: 1,
+      duration: 400,
+      easing: Easing.ease
+    }
+    ).start(() => {
+
+    });
+  }
+
+  levitateList(){
+    this.anim_list.setValue(0);
+    Animated.timing(
+    this.anim_list,
+    {
+      toValue: 1,
+      duration: 500,
+      easing: Easing.ease
+    }
+    ).start(() => {
+      this.levitateContinue();
+    });
+  }
+
+  levitateContinue(){
+    this.anim_continue.setValue(0);
+    Animated.timing(
+    this.anim_continue,
+    {
+      toValue: 1,
+      duration: 400,
+      easing: Easing.ease
+    }
+  ).start();
   }
 
   formatRowData(rowData){
@@ -146,37 +196,43 @@ class PromoWants extends React.Component {
   }
 
   _renderListView(){
+
     if(this.state.displayList){
+      var fade_list = this.anim_list.interpolate({inputRange: [0, 1],outputRange: [0.0, 1.0]});
       return(
-        <ListView
-          style={styles.container}
-          dataSource={this.state.dataSource}
-          renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected, category, displayName) => this.updateSelectedTags(tag, selected, category, displayName)} />}
-          renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-        />
+        <Animated.View style={{flex: 1, opacity: fade_list}}>
+          <ListView
+            style={styles.container}
+            dataSource={this.state.dataSource}
+            renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected, category, displayName) => this.updateSelectedTags(tag, selected, category, displayName)} />}
+            renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+          />
+        </Animated.View>
       );
     }
   }
 
   render() {
+    var fade_title = this.anim_title.interpolate({inputRange: [0, 1],outputRange: [0.0, 1.0]});
+    var fade_continue = this.anim_continue.interpolate({inputRange: [0, 1],outputRange: [0.0, 1.0]});
     return(
       <View style={styles.wrapper}>
         {/* HEADER*/}
-        <View>
+        <Animated.View style={{opacity: fade_title}}>
           <Text style={styles.title}>{"Select at least 3 subscriptions"}</Text>
-        </View>
+        </Animated.View>
         {/* CONTENT*/}
         { this._renderListView()}
         {/* FOOTER*/}
-        <View>
-        <TouchableHighlight
-          activeOpacity={0.8}
-          underlayColor={'transparent'}
-          onPress={() => this.handleContinuePress()}
-          style={this.state.selectedNum >= 3 ? styles.buttonActive : styles.buttonInactive}>
-              <Text style={this.state.selectedNum >= 3 ? styles.buttonActiveText : styles.buttonInactiveText}>{"Continue"}</Text>
-        </TouchableHighlight>
-        </View>
+        <Animated.View style={{opacity: fade_continue}}>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => this.handleContinuePress()}
+            style={this.state.selectedNum >= 3 ? styles.buttonActive : styles.buttonInactive}>
+                <Text style={this.state.selectedNum >= 3 ? styles.buttonActiveText : styles.buttonInactiveText}>{"Continue"}</Text>
+          </TouchableHighlight>
+        </Animated.View>
       </View>
     );
   }

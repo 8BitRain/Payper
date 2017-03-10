@@ -7,6 +7,7 @@ import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {getFacebookUserData} from '../../helpers/auth'
 import {setInAsyncStorage} from '../../helpers/asyncStorage'
+import Confetti from 'react-native-confetti';
 
 //Routing
 import {Actions} from 'react-native-router-flux';
@@ -62,10 +63,13 @@ class PromoRoulette extends React.Component {
     this.animLogo_1 = new Animated.Value(0);
     this.animLogo_2 = new Animated.Value(0);
     this.animLogo_Selected = new Animated.Value(0);
+
+    this.anim_title = new Animated.Value(0);
+    this.anim_roulette = new Animated.Value(0);
   }
 
   componentDidMount() {
-
+    this.levitateTitle();
   }
 
   componentWillMount() {
@@ -84,6 +88,33 @@ class PromoRoulette extends React.Component {
   componentWillUnmount() {
     console.log("Component unmounted");
     this.setState({rouletteActive: false});
+  }
+
+  levitateTitle(){
+    this.anim_title.setValue(0);
+    Animated.timing(
+    this.anim_title,
+    {
+      toValue: 1,
+      duration: 400,
+      easing: Easing.ease
+    }
+    ).start(() => {
+      this.levitateRoulette()
+    });
+  }
+
+  levitateRoulette(){
+    this.anim_roulette.setValue(0);
+    Animated.timing(
+    this.anim_roulette,
+    {
+      toValue: 1,
+      duration: 700,
+      easing: Easing.ease
+    }
+    ).start(() => {
+    });
   }
 
   showLoginButton() {
@@ -176,6 +207,7 @@ class PromoRoulette extends React.Component {
           if(loop == 0){
             console.log("Stop Final Anim");
             this.setState({rouletteFinished: true, showSubscription: true, canContinue: true });
+            this._confettiView.startConfetti();
             this.showLoginButton();
           }});
         } else {
@@ -373,11 +405,13 @@ class PromoRoulette extends React.Component {
     var translate_logoFinal = this.animLogo_Selected.interpolate({inputRange: [0, 1],outputRange: [-60.0, 80.0]});
     var scale_logoFinal = this.animLogo_Selected.interpolate({inputRange: [0, .5, 1],outputRange: [1, 1.5, 1]});
 
+
+
     if(this.state.rouletteLoop == -1 || this.state.rouletteLoop == -2 ){
       return(
-        <View style={{ height: dimensions.height * .2, overflow: "hidden"}}>
+        <Animated.View style={{ height: dimensions.height * .2, overflow: "hidden"}}>
           <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: 0, left: dimensions.width * .20, right: dimensions.width * .20,  opacity: 1}}><Ionicons color={colors.snowWhite} name={this.getLogoName(this.state.wantedTags[0])} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[0])}</Text></Animated.View>
-        </View>
+        </Animated.View>
       );
     }
     if(this.state.rouletteLoop == 0){
@@ -415,11 +449,13 @@ class PromoRoulette extends React.Component {
   }
 
   render() {
+    var fade_roulette = this.anim_roulette.interpolate({inputRange: [0, 1],outputRange: [0.0, 1.0]});
+    var fade_title = this.anim_title.interpolate({inputRange: [0, 1],outputRange: [0.0, 1.0]});
 
     return(
       <View style={styles.wrapper}>
         {/* HEADER*/}
-        <View style={{flex: .2}}>
+        <Animated.View style={{flex: .2, opacity: fade_roulette}}>
           <Text style={styles.title}>{"Roll to recieve your free subscription!"}</Text>
           {/* Back Button*/}
           <TouchableHighlight
@@ -432,15 +468,16 @@ class PromoRoulette extends React.Component {
             style={{position: "absolute", top: 20, marginLeft: 5}}>
                 <Ionicons name={"ios-arrow-back"} size={48} color={colors.snowWhite}/>
           </TouchableHighlight>
-        </View>
+        </Animated.View>
         {/* CONTENT*/}
-        <View style={{flex: .7, height: dimensions.height * .7, marginTop: 150}}>
+        <Animated.View style={{flex: .7, height: dimensions.height * .7, marginTop: 150, opacity: fade_roulette}}>
           {/* Roulette //Animated View with Animated images */}
           {this._renderRouletteView()}
           {/* ReRoll optionalText*/}
           {this._renderReRollButton()}
-        </View>
+        </Animated.View>
         {/* FOOTER*/}
+        <Confetti duration={1000} ref={(node) => this._confettiView = node}/>
 
         { /* Facebook Login Button */
           (this.state.selectedSubscription)
