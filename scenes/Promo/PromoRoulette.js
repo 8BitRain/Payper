@@ -409,7 +409,7 @@ class PromoRoulette extends React.Component {
 
     if(this.state.rouletteLoop == -1 || this.state.rouletteLoop == -2 ){
       return(
-        <Animated.View style={{ height: dimensions.height * .2, overflow: "hidden"}}>
+        <Animated.View style={{ height: dimensions.height * .2, overflow: "hidden", zIndex: 1}}>
           <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: 0, left: dimensions.width * .20, right: dimensions.width * .20,  opacity: 1}}><Ionicons color={colors.snowWhite} name={this.getLogoName(this.state.wantedTags[0])} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[0])}</Text></Animated.View>
         </Animated.View>
       );
@@ -417,8 +417,8 @@ class PromoRoulette extends React.Component {
     if(this.state.rouletteLoop == 0){
       //The final image should be here
       return(
-        <View style={{ height: dimensions.height * .2, overflow: "hidden"}}>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.selectedSubscription)} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.selectedSubscription)}</Text></Animated.View>
+        <View style={{ height: dimensions.height * .2, overflow: "hidden", zIndex: 1}}>
+          <Animated.View style={{position: "absolute", alignItems: "center",  top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.selectedSubscription)} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.selectedSubscription)}</Text></Animated.View>
           {/*<Animated.Image  source={{uri:this.state.wantedTags[0] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.wantedTags[1] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.selectedSubscription + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}/>*/}
@@ -426,10 +426,10 @@ class PromoRoulette extends React.Component {
       );
     } else {
       return(
-        <View style={{ height: dimensions.height * .2, overflow: "hidden"}}>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[0])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[0])}</Text></Animated.View>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[1])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[1])}</Text></Animated.View>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[2])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[2])}</Text></Animated.View>
+        <View style={{ height: dimensions.height * .2, overflow: "hidden", zIndex: 1}}>
+          <Animated.View style={{position: "absolute", alignItems: "center",  top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[0])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[0])}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center",  top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[1])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[1])}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center",  top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[2])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[2])}</Text></Animated.View>
           {/*<Animated.Image  source={{uri:this.state.wantedTags[0] + ".png"}} style={{width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.wantedTags[1] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.wantedTags[2] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}/> */}
@@ -559,8 +559,8 @@ var styles = StyleSheet.create({
     textAlign: 'left',
     marginLeft: 35,
     marginRight: 15,
-    paddingTop: device == "SE" ? 45 : device == "6" ? 20 : 95,
-    lineHeight: device == "SE" ? Math.round(18 * 1.20) : device == "6" ? Math.round(35 * 1.20) : Math.round(22 * 1.20)
+    paddingTop: 20,
+
   },
   logoName: {
     color: colors.snowWhite,

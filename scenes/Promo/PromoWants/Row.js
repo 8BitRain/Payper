@@ -176,6 +176,7 @@ class Row extends React.Component {
         <Modal
         animationType={"slide"}
         transparent={true}
+        onRequestClose={()=> console.log("nothing")}
         visible={this.state.modalOpened}>
           { this._renderInfoModal()}
         </Modal>
@@ -253,7 +254,6 @@ var styles = StyleSheet.create({
     marginLeft: 25,
     textAlign: "left",
     fontSize: 18,
-    lineHeight: device == "SE" ? 18 : device == "6" ? 18 : 18,
     fontWeight: "500",
     lineHeight: device == "SE" ? Math.round(18 * 1.20) : device == "6" ? Math.round(18 * 1.20) : Math.round(18 * 1.20),
   },
@@ -269,7 +269,7 @@ var styles = StyleSheet.create({
   modalButtonText:{
     color: '#fff',
     fontSize: 18,
-    lineHeight: 18 * 1.20,
+    lineHeight: Math.round(18 * 1.20),
     textAlign: "center",
     fontWeight: "bold",
     alignSelf: "center"
