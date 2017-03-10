@@ -284,7 +284,7 @@ class PromoRoulette extends React.Component {
         </View>
       );
     }
-    if(!this.state.rouletteFinished){
+    if(this.state.rouletteFinished == false){
       return(
         <View>
           <TouchableHighlight

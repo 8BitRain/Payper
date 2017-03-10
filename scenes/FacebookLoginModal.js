@@ -61,13 +61,8 @@ const styles = StyleSheet.create({
     width: dims.width * 0.85,
     height: 50,
     backgroundColor: colors.gradientGreen,
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: colors.medGrey,
-    shadowOpacity: 0.75,
-    shadowRadius: 2,
-    shadowOffset: {height: 0, width: 0}
+    flex: 1
+
   },
   continueButtonText: {
     color: colors.snowWhite,
