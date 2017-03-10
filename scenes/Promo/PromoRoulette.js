@@ -43,6 +43,7 @@ class PromoRoulette extends React.Component {
       showSubscription: false,
       wantedTags: null,
       wantedTagsCategories: null,
+      wantedTagsDisplayNames: null,
       rouletteActive: null,
       canContinue: false
 
@@ -68,7 +69,7 @@ class PromoRoulette extends React.Component {
       }
     }
     console.log("Wanted Tags: " + wantedTagsClean);
-    this.setState({wantedTags: wantedTagsClean,  rouletteActive: true, wantedTagsCategories: this.props.wantedTagsCategories});
+    this.setState({wantedTags: wantedTagsClean,  rouletteActive: true, wantedTagsCategories: this.props.wantedTagsCategories, wantedTagsDisplayNames: this.props.wantedTagsDisplayNames});
   }
 
   componentWillUnmount() {
@@ -227,17 +228,19 @@ class PromoRoulette extends React.Component {
   _renderContinueButton(){
     if(this.state.canContinue){
       let logoName = this.getLogoName(this.state.selectedSubscription);
+      let displayName = this.getDisplayName(this.state.selectedSubscription);
       return(
         <View style={{flex: .1, backgroundColor: colors.lightAccent}}>
           <TouchableHighlight
             activeOpacity={0.8}
             underlayColor={'transparent'}
-            onPress={() => Actions.PromoInvite({
+            onPress={() => {
+              Actions.PromoInvite({
               subscription: {
-                name: this.state.selectedSubscription,
-                logo: logoName
+                name: displayName,
+              }})
               }
-            })}
+            }
             style={styles.buttonActive}>
                 <Text style={styles.buttonActiveText}>{"Continue"}</Text>
           </TouchableHighlight>
@@ -256,6 +259,17 @@ class PromoRoulette extends React.Component {
           </TouchableHighlight>
         </View>
       );
+    }
+  }
+  getDisplayName(tagName){
+    let displayName = "BLK Magick"
+    let wantedTagsDisplayNames = this.state.wantedTagsDisplayNames;
+    console.log("wantedTagsDisplayNames, ", wantedTagsDisplayNames);
+    for(tag in wantedTagsDisplayNames){
+      if(tagName == tag){
+        displayName = wantedTagsDisplayNames[tag];
+        return displayName;
+      }
     }
   }
 
@@ -320,7 +334,7 @@ class PromoRoulette extends React.Component {
     if(this.state.rouletteLoop == -1 || this.state.rouletteLoop == -2 ){
       return(
         <View style={{ height: dimensions.height * .2, overflow: "hidden"}}>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: 0, left: dimensions.width * .20, right: dimensions.width * .20,  opacity: 1}}><Ionicons color={colors.snowWhite} name={this.getLogoName(this.state.wantedTags[0])} size={64}/><Text style={styles.logoName}>{this.state.wantedTags[0]}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: 0, left: dimensions.width * .20, right: dimensions.width * .20,  opacity: 1}}><Ionicons color={colors.snowWhite} name={this.getLogoName(this.state.wantedTags[0])} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[0])}</Text></Animated.View>
         </View>
       );
     }
@@ -328,7 +342,7 @@ class PromoRoulette extends React.Component {
       //The final image should be here
       return(
         <View style={{ height: dimensions.height * .2, overflow: "hidden"}}>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.selectedSubscription)} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.state.selectedSubscription}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.selectedSubscription)} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.selectedSubscription)}</Text></Animated.View>
           {/*<Animated.Image  source={{uri:this.state.wantedTags[0] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.wantedTags[1] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.selectedSubscription + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}/>*/}
@@ -337,9 +351,9 @@ class PromoRoulette extends React.Component {
     } else {
       return(
         <View style={{ height: dimensions.height * .2, overflow: "hidden"}}>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[0])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.state.wantedTags[0]}</Text></Animated.View>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[1])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.state.wantedTags[1]}</Text></Animated.View>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[2])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.state.wantedTags[2]}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[0])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[0])}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[1])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[1])}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[2])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[2])}</Text></Animated.View>
           {/*<Animated.Image  source={{uri:this.state.wantedTags[0] + ".png"}} style={{width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.wantedTags[1] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.wantedTags[2] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}/> */}

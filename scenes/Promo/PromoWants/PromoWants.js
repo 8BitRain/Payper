@@ -65,6 +65,7 @@ class PromoWants extends React.Component {
       selectedTags: {},
       selectedNum: 0,
       selectedTagsCategories:{},
+      selectedTagsDisplayNames:{}
     }
   }
 
@@ -124,9 +125,11 @@ class PromoWants extends React.Component {
   }
 
 
-  updateSelectedTags(tag, selected, category){
+  updateSelectedTags(tag, selected, category, displayName){
     this.state.selectedTags[tag] = selected;
     this.state.selectedTagsCategories[tag] = category;
+    this.state.selectedTagsDisplayNames[tag] = displayName;
+
     console.log("Selected?: " + selected);
     console.log("Selected Num: " + this.state.selectedNum);
 
@@ -138,7 +141,7 @@ class PromoWants extends React.Component {
 
   handleContinuePress(){
     if(this.state.selectedNum >= 3){
-      Actions.PromoRoulette({wantedTags: this.state.selectedTags, wantedTagsCategories: this.state.selectedTagsCategories});
+      Actions.PromoRoulette({wantedTags: this.state.selectedTags, wantedTagsCategories: this.state.selectedTagsCategories, wantedTagsDisplayNames: this.state.selectedTagsDisplayNames});
     }
   }
 
@@ -148,7 +151,7 @@ class PromoWants extends React.Component {
         <ListView
           style={styles.container}
           dataSource={this.state.dataSource}
-          renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected, category) => this.updateSelectedTags(tag, selected, category)} />}
+          renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected, category, displayName) => this.updateSelectedTags(tag, selected, category, displayName)} />}
           renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
         />
       );

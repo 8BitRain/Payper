@@ -35,11 +35,11 @@ class Row extends React.Component {
     if(tagType == "want"){
       if(this.state.wantSelected){
         this.setState({wantSelected: false});
-        this.props.updateSelectedTags(this.props.tag, false, this.props.category);
+        this.props.updateSelectedTags(this.props.tag, false, this.props.category, this.props.displayName);
       }
       if(!this.state.wantSelected){
         this.setState({wantSelected: true});
-        this.props.updateSelectedTags(this.props.tag, true, this.props.category);
+        this.props.updateSelectedTags(this.props.tag, true, this.props.category, this.props.displayName);
       }
     }
   }
@@ -91,11 +91,58 @@ class Row extends React.Component {
     }
   }
 
+  _renderLogo2(){
+    if(this.state.fallbackImageNeeded){
+      switch (this.props.category) {
+        case "Books":
+          return(<Ionicons name={"ios-book-outline"} size={48} color={colors.obsidian}/>);
+          break;
+        case "Education":
+          return(<Ionicons name={"ios-school-outline"} size={48} color={colors.obsidian}/>);
+          break;
+        case "Exercise":
+          return(<Ionicons name={"md-heart"} size={48} color={colors.obsidian}/>);
+          break;
+        case "FoodDelivery":
+          return(<Ionicons name={"md-restaurant"} size={48} color={colors.obsidian}/>);
+          break;
+        case "Gaming":
+          return(<Ionicons name={"ios-game-controller-b-outline"} size={48} color={colors.obsidian}/>);
+          break;
+        case "LiveTv":
+          return(<Ionicons name={"md-desktop"} size={48} color={colors.obsidian}/>);
+          break;
+        case "MusicStreaming":
+          return(<Ionicons name={"ios-musical-notes"} size={48} color={colors.obsidian}/>);
+          break;
+        case "News":
+          return(<Ionicons name={"logo-rss"} size={48} color={colors.obsidian}/>);
+          break;
+        case "Sports":
+          return(<Ionicons name={"md-american-football"} size={48} color={colors.obsidian}/>);
+          break;
+        case "VideoStreaming":
+          return(<Ionicons name={"logo-youtube"} size={48} color={colors.obsidian}/>);
+          break;
+      }
+      return(
+        <Ionicons name={"md-heart"} size={48}/>
+      );
+    }
+    if(!this.state.fallbackImageNeeded){
+      return(
+        <Image source={{uri:this.props.tag}}
+               style={styles.photo}
+               onError={() => this.setState({fallbackImageNeeded: true})}/>
+      );
+    }
+  }
+
   _renderInfoModal(){
     return(
       <View style={styles.wrapper2}>
            <View style={{marginTop: 15, justifyContent: "center", alignItems: "center"}}>
-             {this._renderLogo()}
+             {this._renderLogo2()}
              <Text style={styles.modalTitle}>{this.props.displayName}</Text>
            </View>
 
@@ -199,10 +246,12 @@ var styles = StyleSheet.create({
   text: {
     marginLeft: 12,
     fontSize: 16,
+    fontWeight: "bold"
   },
   infoText: {
     color: colors.snowWhite,
-    marginLeft: 12,
+    marginLeft: 25,
+    textAlign: "left",
     fontSize: 18,
     lineHeight: device == "SE" ? 18 : device == "6" ? 18 : 18,
     fontWeight: "500",
