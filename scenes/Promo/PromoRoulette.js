@@ -42,6 +42,8 @@ class PromoRoulette extends React.Component {
   constructor(props) {
     super(props);
 
+    console.log("--> PromoRoulette props:", props)
+
     this.AV = {
       loginButton: {opacity: new Animated.Value(0)}
     }
@@ -137,7 +139,10 @@ class PromoRoulette extends React.Component {
             setInAsyncStorage('userData', JSON.stringify(userData))
             Actions.PromoInvite({
               userData,
-              subscription: this.state.selectedSubscription
+              subscription: {
+                name: this.state.selectedSubscription,
+                displayName: this.props.wantedTagsDisplayNames[this.state.selectedSubscription]
+              }
             })
           }
         })
