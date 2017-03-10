@@ -392,17 +392,17 @@ class PromoRoulette extends React.Component {
   }
 
   _renderRouletteView(){
-
+    var initialHeight = (device == "SE") ? -80.0 : device == "6" ? -60.0 : -60.0;
     var fade_logo0 = this.animLogo_0.interpolate({inputRange: [0, 1],outputRange: [1.0, 0.0]});
     var fade_logo1 = this.animLogo_1.interpolate({inputRange: [0, 1],outputRange: [1.0, 0.0]});
     var fade_logo2 = this.animLogo_2.interpolate({inputRange: [0, 1],outputRange: [1.0, 0.0]});
-    var translate_logo0 = this.animLogo_0.interpolate({inputRange: [0, 1],outputRange: [-60.0, 200.0]});
-    var translate_logo1 = this.animLogo_1.interpolate({inputRange: [0, 1],outputRange: [-60.0, 200.0]});
-    var translate_logo2 = this.animLogo_2.interpolate({inputRange: [0, 1],outputRange: [-60.0, 200.0]});
+    var translate_logo0 = this.animLogo_0.interpolate({inputRange: [0, 1],outputRange: [initialHeight, 200.0]});
+    var translate_logo1 = this.animLogo_1.interpolate({inputRange: [0, 1],outputRange: [initialHeight, 200.0]});
+    var translate_logo2 = this.animLogo_2.interpolate({inputRange: [0, 1],outputRange: [initialHeight, 200.0]});
     var scale_logo0 = this.animLogo_0.interpolate({inputRange: [0, .5, 1],outputRange: [1, 1.5, 1]});
     var scale_logo1 = this.animLogo_1.interpolate({inputRange: [0, .5, 1],outputRange: [1, 1.5, 1]});
     var scale_logo2 = this.animLogo_2.interpolate({inputRange: [0, .5, 1],outputRange: [1, 1.5, 1]});
-    var translate_logoFinal = this.animLogo_Selected.interpolate({inputRange: [0, 1],outputRange: [-60.0, 80.0]});
+    var translate_logoFinal = this.animLogo_Selected.interpolate({inputRange: [0, 1],outputRange: [initialHeight, 80.0]});
     var scale_logoFinal = this.animLogo_Selected.interpolate({inputRange: [0, .5, 1],outputRange: [1, 1.5, 1]});
 
 
@@ -418,7 +418,7 @@ class PromoRoulette extends React.Component {
       //The final image should be here
       return(
         <View style={{ height: dimensions.height * .2, overflow: "hidden"}}>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.selectedSubscription)} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.selectedSubscription)}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: initialHeight, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.selectedSubscription)} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.selectedSubscription)}</Text></Animated.View>
           {/*<Animated.Image  source={{uri:this.state.wantedTags[0] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.wantedTags[1] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.selectedSubscription + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}/>*/}
@@ -427,9 +427,9 @@ class PromoRoulette extends React.Component {
     } else {
       return(
         <View style={{ height: dimensions.height * .2, overflow: "hidden"}}>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[0])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[0])}</Text></Animated.View>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[1])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[1])}</Text></Animated.View>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[2])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[2])}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: initialHeight, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[0])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[0])}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: initialHeight, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[1])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[1])}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: initialHeight, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[2])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[2])}</Text></Animated.View>
           {/*<Animated.Image  source={{uri:this.state.wantedTags[0] + ".png"}} style={{width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.wantedTags[1] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.wantedTags[2] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}/> */}
@@ -538,6 +538,7 @@ var styles = StyleSheet.create({
   rouletteButtonActive:{
     height: 50,
     width: dimensions.width * .5,
+    marginTop: device == "SE" ? 12 : device == "6" ? 0 : 0,
     backgroundColor: colors.carminePink,
     justifyContent: "center",
     alignSelf: "center",
@@ -546,6 +547,7 @@ var styles = StyleSheet.create({
   rouletteButtonInactive:{
     height: 50,
     width: dimensions.width * .5,
+    marginTop: device == "SE" ? 12 : device == "6" ? 0 : 0,
     backgroundColor: colors.lightGrey,
     justifyContent: "center",
     alignSelf: "center",
@@ -554,13 +556,13 @@ var styles = StyleSheet.create({
 
   title: {
     color: colors.snowWhite,
-    fontSize: 35,
+    fontSize: device == "SE" ? 32.5 : device == "6" ? 35 : 35,
     fontWeight: 'bold',
     textAlign: 'left',
     marginLeft: 35,
     marginRight: 15,
-    paddingTop: device == "SE" ? 45 : device == "6" ? 20 : 95,
-    lineHeight: device == "SE" ? Math.round(18 * 1.20) : device == "6" ? Math.round(35 * 1.20) : Math.round(22 * 1.20)
+    paddingTop: device == "SE" ? 20 : device == "6" ? 20 : 20,
+    lineHeight: device == "SE" ? Math.round(32.5 * 1.20) : device == "6" ? Math.round(35 * 1.20) : Math.round(35 * 1.20)
   },
   logoName: {
     color: colors.snowWhite,

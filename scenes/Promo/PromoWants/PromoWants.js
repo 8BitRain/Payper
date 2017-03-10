@@ -279,13 +279,13 @@ var styles = StyleSheet.create({
 
   title: {
     color: colors.snowWhite,
-    fontSize: 35,
+    fontSize: device == "SE" ? 32.5 : device == "6" ? 35 : 35,
     fontWeight: 'bold',
     textAlign: 'left',
     marginLeft: 25,
     marginRight: 15,
-    paddingTop: device == "SE" ? 45 : device == "6" ? 20 : 95,
-    lineHeight: device == "SE" ? Math.round(18 * 1.20) : device == "6" ? Math.round(35 * 1.20) : Math.round(22 * 1.20)
+    paddingTop: device == "SE" ? 30 : device == "6" ? 20 : 20,
+    lineHeight: device == "SE" ? Math.round(32.5 * 1.20) : device == "6" ? Math.round(35 * 1.20) : Math.round(35 * 1.20)
   },
   description: {
     color: 'black',

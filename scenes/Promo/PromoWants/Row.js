@@ -245,17 +245,16 @@ var styles = StyleSheet.create({
   },
   text: {
     marginLeft: 12,
-    fontSize: 16,
+    fontSize: device == "SE" ? 13 : device == "6" ? 16 : 16,
     fontWeight: "bold"
   },
   infoText: {
     color: colors.snowWhite,
-    marginLeft: 25,
+    paddingLeft: 25,
     textAlign: "left",
-    fontSize: 18,
-    lineHeight: device == "SE" ? 18 : device == "6" ? 18 : 18,
+    fontSize: device == "SE" ? 14 : device == "6" ? 18 : 18,
     fontWeight: "500",
-    lineHeight: device == "SE" ? Math.round(18 * 1.20) : device == "6" ? Math.round(18 * 1.20) : Math.round(18 * 1.20),
+    lineHeight: device == "SE" ? Math.round(14 * 1.20) : device == "6" ? Math.round(18 * 1.20) : Math.round(18 * 1.20),
   },
   modalTitle: {
     fontSize: 20,
@@ -290,7 +289,7 @@ var styles = StyleSheet.create({
   infoButtonInactive: {
     padding: 10,
     borderRadius: 4,
-    marginLeft: 16,
+    marginLeft: device == "SE" ? 4 : device == "6" ? 16 : 16,
     backgroundColor: colors.medGrey,
 
   },
