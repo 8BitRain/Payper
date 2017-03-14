@@ -66,7 +66,10 @@ class CastCard extends React.Component {
 
   render() {
     return(
-      <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={() => null}>
+      <TouchableHighlight
+        activeOpacity={0.75}
+        underlayColor={'transparent'}
+        onPress={() => Actions.UnjoinedBroadcast({broadcast: this.props.broadcast})}>
         <View style={styles.container}>
 
           { /* Chevron (absolutely positioned) */ }

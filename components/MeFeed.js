@@ -19,6 +19,7 @@ class MeFeed extends React.Component {
     return(
       <View style={styles.container}>
         <DynamicList
+          shouldAnimateIn={false}
           data={this.props.currentUser.meFeed || {}}
           renderRow={(rowData, sectionID, rowID) => {
             if (sectionID === "My Subscriptions")

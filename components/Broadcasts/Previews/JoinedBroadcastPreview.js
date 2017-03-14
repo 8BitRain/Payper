@@ -50,7 +50,8 @@ class JoinedBroadcastPreview extends React.Component {
     super(props)
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
     this.frequency = formatFrequency(props.broadcast.freq)
-    this.spotsAvailable = props.broadcast.memberLimit - props.broadcast.memberIDs.split(",").length
+    this.spotsFilled = (!props.broadcast.memberIDs) ? 0 : props.broadcast.memberIDs.split(",").length
+    this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
   }
 
   render() {

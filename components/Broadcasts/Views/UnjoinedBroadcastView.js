@@ -23,7 +23,8 @@ class UnjoinedBroadcastView extends React.Component {
 
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
     this.frequency = formatFrequency(props.broadcast.freq)
-    this.spotsAvailable = props.broadcast.memberLimit - props.broadcast.memberIDs.split(",").length
+    this.spotsFilled = (!props.broadcast.memberIDs) ? 0 : props.broadcast.memberIDs.split(",").length
+    this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
 
     this.onSubscribe = this.onSubscribe.bind(this)
   }
@@ -31,17 +32,14 @@ class UnjoinedBroadcastView extends React.Component {
   onSubscribe() {
 
     // Update current user's meFeed data source
-    let meFeed = this.props.currentuser.meFeed
+    let meFeed = this.props.currentUser.meFeed
 
     // Add joinedAt timestamp
     this.props.broadcast.joinedAt = Date.now()
 
-    console.log("--> onSubscribe was invoked...")
-    console.log("--> meFeed", meFeed)
-    console.log("--> broadcast to add", this.props.broadcast)
-
-    if (!meFeed["My Subscriptions"]) meFeed["My Subscriptions"] = {}
-    meFeed["My Subscriptions"] = Object.assign({}, updates, meFeed["My Subscriptions"])
+    // Mutate meFeed object via Redux
+    if (!meFeed["My Subscriptions"]) meFeed["My Subscriptions"] = []
+    meFeed["My Subscriptions"].unshift(this.props.broadcast)
     this.props.updateCurrentUser({meFeed: meFeed})
 
     // Page back to Main view and switch to 'Me' tab

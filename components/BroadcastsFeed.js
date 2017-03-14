@@ -95,8 +95,8 @@ class BroadcastsFeed extends React.Component {
         <DynamicList
           refreshable={true}
           showPullToRefresh={true}
-          data={this.props.currentUser.broadcastsFeed || []}
           shouldAnimateIn={false}
+          data={this.props.currentUser.broadcastsFeed || []}
           afterRemove={() => alert("Removed!")}
           renderRow={(rowData, sectionID, rowID) => <CastCard broadcast={rowData} />}
           renderSectionHeader={(rowData, sectionID) => <BroadcastFeedSectionHeader sectionID={sectionID} />}

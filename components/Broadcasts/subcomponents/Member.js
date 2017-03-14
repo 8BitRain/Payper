@@ -8,7 +8,7 @@ class Member extends React.Component {
   constructor(props) {
     super(props)
     let buffer = this.props.member.displayName.split(" ")
-    this.initials = `${buffer[0].charAt(0)}${buffer[1].charAt(0)}`
+    this.initials = buffer[0].charAt(0).concat(buffer[1].charAt(0))
   }
   render() {
     return(
