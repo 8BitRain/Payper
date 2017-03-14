@@ -1,11 +1,12 @@
 import React from 'react'
 import {View, Text, TouchableHighlight, StyleSheet} from 'react-native'
-import {colors} from '../globalStyles'
+import {colors} from '../../globalStyles'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 10,
     borderColor: colors.medGrey,
     borderBottomWidth: 1
@@ -20,7 +21,7 @@ class BroadcastFeedEmptyState extends React.Component {
   render() {
     return(
       <View style={styles.container}>
-        <Text>{"The empty state."}</Text>
+        <Text>{"EMPTY STATE"}</Text>
       </View>
     )
   }

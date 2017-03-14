@@ -8,33 +8,51 @@ function handleUserFeed(casts, cb) {
     return
   }
 
-  console.log("--> handleUserFeed was invoked...")
-  console.log("--> casts", casts)
+  let castIDBuffer = Object.keys(casts)
+  let broadcasts = {
+    "Global": {},
+    "Local": {},
+    "Friends of Friends": {},
+    "Friends": {}
+  }
 
-  // let castIDBuffer = Object.keys(casts)
-  // let broadcasts = {}
-  //
-  // callbackForLoop(0, castIDBuffer.length, {
-  //   onIterate: (loop) => {
-  //     let castID = castIDBuffer[loop.index]
-  //     Firebase.get(`broadcasts/${castID}`, (broadcastData) => {
-  //       if (!broadcastData) {
-  //         loop.continue()
-  //       } else {
-  //         broadcastData.castID = castID
-  //         Firebase.get(`users/${broadcastData.casterID}`, (casterData) => {
-  //           broadcastData.caster = casterData
-  //           broadcasts[castID] = broadcastData
-  //           loop.continue()
-  //         })
-  //       }
-  //     })
-  //   },
-  //   onComplete: () => {
-  //     let arr = _.sortBy(broadcasts, [function(o) { return o.createdAt }]).reverse()
-  //     cb(arr)
-  //   }
-  // })
+  callbackForLoop(0, castIDBuffer.length, {
+    onIterate: (loop) => {
+      let castID = castIDBuffer[loop.index]
+      Firebase.get(`broadcasts/${castID}`, (broadcastData) => {
+        if (!broadcastData) {
+          loop.continue()
+        } else {
+          broadcastData.castID = castID
+
+          Firebase.get(`users/${broadcastData.casterID}`, (casterData) => {
+            broadcastData.caster = casterData
+
+            if (broadcastData.type === "global")
+              broadcasts["Global"][castID] = broadcastData
+            if (broadcastData.type === "local")
+              broadcasts["Local"][castID] = broadcastData
+            if (broadcastData.type === "friendNetwork")
+              broadcasts["Friends of Friends"][castID] = broadcastData
+            if (broadcastData.type === "friends")
+              broadcasts["Friends"][castID] = broadcastData
+
+            loop.continue()
+          })
+        }
+      })
+    },
+    onComplete: () => {
+      let broadcastFeed = {
+        "Global": _.sortBy(broadcasts["Global"], [function(o) { return o.createdAt }]).reverse(),
+        "Local": _.sortBy(broadcasts["Local"], [function(o) { return o.createdAt }]).reverse(),
+        "Friends of Friends": _.sortBy(broadcasts["Friends of Friends"], [function(o) { return o.createdAt }]).reverse(),
+        "Friends": _.sortBy(broadcasts["Friends"], [function(o) { return o.createdAt }]).reverse()
+      }
+
+      cb(broadcastFeed)
+    }
+  })
 }
 
 module.exports = handleUserFeed

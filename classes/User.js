@@ -58,6 +58,7 @@ export default class User {
     this.timer = new Timer()
     this.timer.start()
     AppState.addEventListener('change', this.handleAppStateChange)
+    
   }
 
   destroy() {
@@ -122,8 +123,8 @@ export default class User {
         endpoint: `userFeed/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => handleUserFeed(res, (feed) => {
-          console.log("--> feed:", feed)
+        callback: (res) => handleUserFeed(res, (broadcastsFeed) => {
+          updateViaRedux({broadcastsFeed})
         })
       },
       {

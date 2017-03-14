@@ -10,7 +10,6 @@ exports.ExploreFeed = require('./ExploreFeed')
 exports.MeFeed = require('./MeFeed')
 
 // Broadcasts
-exports.BroadcastFeedEmptyState = require('./BroadcastFeedEmptyState')
 exports.BroadcastFeedSectionHeader = require('./BroadcastFeedSectionHeader')
 
 // Other

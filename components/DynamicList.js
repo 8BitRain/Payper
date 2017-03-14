@@ -19,13 +19,15 @@ class DynamicListRow extends React.Component {
 
     this.AV = {
       defaultTransition: 600,
-      opacity: new Animated.Value(0),
+      opacity: new Animated.Value((props.shouldAnimateIn) ? 0 : 1),
       marginTop: new Animated.Value(0),
       marginLeft: new Animated.Value(0)
     }
   }
 
   componentDidMount() {
+    if (!this.props.shouldAnimateIn) return
+
     let {defaultTransition, opacity} = this.AV
 
     Animated.timing(opacity, {
@@ -247,7 +249,9 @@ class DynamicList extends React.Component {
       : <View style={{flex: 1.0, height: 100, marginTop: 20, backgroundColor: 'blue'}} />
 
     return(
-      <DynamicListRow rowID={rowID} ref={(ref) => this.rowRefs[rowID] = ref}>
+      <DynamicListRow
+        shouldAnimateIn={this.props.shouldAnimateIn || false}
+        rowID={rowID} ref={(ref) => this.rowRefs[rowID] = ref}>
         {row}
       </DynamicListRow>
     )
@@ -268,7 +272,7 @@ class DynamicList extends React.Component {
   onRefresh() {
     let refreshContent = this.state.refreshContent
 
-    // Refresh rows if they have onRefresh functions
+    // TODO: Refresh rows if they have onRefresh functions
     for (var k in this.rowRefs) {
 
     }
@@ -295,6 +299,13 @@ class DynamicList extends React.Component {
 
     return(
       <View style={{flex: 1.0}}>
+
+        {(!dataSource || dataSource._dataBlob.length === 0)
+          ? <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0}}>
+              {this.props.renderEmptyState()}
+            </View>
+          : null}
+
         <ListView
           ref={ref => this.listView = ref}
           enableEmptySections
@@ -313,7 +324,8 @@ class DynamicList extends React.Component {
           ? <View style={{position: 'absolute', bottom: 26, right: 0, left: 0, justifyContent: 'center', alignItems: 'center'}}>
               <PullToRefreshPillButton onPress={this.onPullToRefreshButtonPress} />
             </View>
-          : null }
+          : null}
+
       </View>
     )
   }
