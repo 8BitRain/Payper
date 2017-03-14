@@ -5,6 +5,7 @@ function formatBroadcastTimestamp(utc) {
   let timeToNow = then.toNow(true)
   let suffix
 
+  // Decide custom suffix
   if (timeToNow.indexOf('seconds') >= 0)
     timeToNow = "< 1m"
   else if (timeToNow.indexOf('minute') >= 0)
@@ -18,12 +19,14 @@ function formatBroadcastTimestamp(utc) {
   else if (timeToNow.indexOf('year') >= 0)
     suffix = "y"
 
-  if (suffix) {
+  // Apply custom suffix
+  if (suffix)
     timeToNow = timeToNow.split(" ")[0].concat(suffix)
-  }
 
+  // Reformat 'a' and 'an' prefixes
   if (timeToNow.charAt(0) === 'a') {
     let charBuffer = timeToNow.split("")
+    if (charBuffer[1] === 'n') delete charBuffer[1] // handle 'an'
     charBuffer[0] = "1"
     timeToNow = charBuffer.join("")
   }

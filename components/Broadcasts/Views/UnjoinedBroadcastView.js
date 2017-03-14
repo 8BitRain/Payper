@@ -3,6 +3,7 @@ import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions} from
 import {colors} from '../../../globalStyles'
 import {formatBroadcastTimestamp, formatFrequency} from '../../../helpers/utils'
 import {subscribe} from '../../../helpers/broadcasts'
+import {subscribeToCast} from '../../../helpers/lambda'
 import {Icon, SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret} from '../'
 import {Header} from '../../'
 import {Actions} from 'react-native-router-flux'
@@ -41,6 +42,12 @@ class UnjoinedBroadcastView extends React.Component {
     if (!meFeed["My Subscriptions"]) meFeed["My Subscriptions"] = []
     meFeed["My Subscriptions"].unshift(this.props.broadcast)
     this.props.updateCurrentUser({meFeed: meFeed})
+
+    // Hit backend
+    subscribeToCast({
+      castID: this.props.broadcast.castID,
+      token: this.props.currentUser.token
+    })
 
     // Page back to Main view and switch to 'Me' tab
     Actions.pop()
