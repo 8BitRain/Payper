@@ -15,6 +15,7 @@ import {
 import {
   handleUserData,
   handleUserBroadcasts,
+  handleUserSubscribedBroadcasts,
   handleUserFeed
 } from '../helpers/dataHandlers'
 import {
@@ -114,14 +115,13 @@ export default class User {
         callback: (res) => (res) ? updateViaRedux(res) : null
       },
       {
-        endpoint: `userBroadcasts/${this.uid}`,
+        endpoint: `appFlags/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => handleUserBroadcasts(res, (myBroadcasts) => {
-          if (!this.meFeed) this.meFeed = {}
-          this.meFeed["My Broadcasts"] = myBroadcasts
-          updateViaRedux({meFeed: this.meFeed})
-        })
+        callback: (res) => {
+          if (!res) return
+          updateViaRedux({appFlags: res})
+        }
       },
       {
         endpoint: `userFeed/${this.uid}`,
@@ -132,13 +132,24 @@ export default class User {
         })
       },
       {
-        endpoint: `appFlags/${this.uid}`,
+        endpoint: `userBroadcasts/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => {
-          if (!res) return
-          updateViaRedux({appFlags: res})
-        }
+        callback: (res) => handleUserBroadcasts(res, (myBroadcasts) => {
+          if (!this.meFeed) this.meFeed = {}
+          this.meFeed["My Broadcasts"] = myBroadcasts
+          updateViaRedux({meFeed: this.meFeed})
+        })
+      },
+      {
+        endpoint: `subscribedBroadcasts/${this.uid}`,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => handleUserSubscribedBroadcasts(res, (mySubscriptions) => {
+          if (!this.meFeed) this.meFeed = {}
+          this.meFeed["My Subscriptions"] = mySubscriptions
+          updateViaRedux({meFeed: this.meFeed})
+        })
       }
     ]
 
