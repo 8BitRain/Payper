@@ -5,6 +5,8 @@ import {Header, ProfilePic, Wallet} from '../../components'
 import {colors} from '../../globalStyles'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Button from 'react-native-button'
+import {connect} from 'react-redux'
+import * as dispatchers from '../Main/MainState'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -74,4 +76,17 @@ class MyProfileModal extends React.Component {
   }
 }
 
-module.exports = MyProfileModal
+function mapStateToProps(state) {
+  return {
+    currentUser: state.getIn(['main', 'currentUser'])
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setCurrentUser: (input) => dispatch(dispatchers.setCurrentUser(input)),
+    updateCurrentUser: (input) => dispatch(dispatchers.updateCurrentUser(input))
+  }
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(MyProfileModal)

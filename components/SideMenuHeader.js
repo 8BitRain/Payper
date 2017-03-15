@@ -1,5 +1,6 @@
 import React from 'react'
 import {View, TouchableHighlight, Image, StyleSheet, Dimensions, Text, Platform} from 'react-native'
+import {Actions} from 'react-native-router-flux'
 import {colors} from '../globalStyles'
 import {ProfilePic} from './'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
 class SideMenuHeader extends React.Component {
   render() {
     return(
-      <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={() => alert("My Profile")}>
+      <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={Actions.MyProfileModal}>
         <View>
 
           { /* Background gradient */ }
