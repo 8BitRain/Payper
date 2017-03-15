@@ -17,8 +17,8 @@ class NavigationDrawer extends React.Component {
         type="overlay"
         content={<SideMenu />}
         tapToClose={true}
-        openDrawerOffset={0.2}
-        panCloseMask={0.2}
+        openDrawerOffset={0.275}
+        panCloseMask={0.275}
         negotiatePan={true}
         tweenDuration={120}
         tweenHandler={(ratio) => ({

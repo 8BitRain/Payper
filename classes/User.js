@@ -42,6 +42,10 @@ export default class User {
 
   initialize(userData) {
 
+    // Determine user's initials
+    if (userData.firstName && userData.lastName)
+      userData.initials = userData.firstName.charAt(0).concat(userData.lastName.charAt(0))
+
     // Initialize JSON attributes
     this.update(userData)
 
@@ -58,7 +62,7 @@ export default class User {
     this.timer = new Timer()
     this.timer.start()
     AppState.addEventListener('change', this.handleAppStateChange)
-    
+
   }
 
   destroy() {
