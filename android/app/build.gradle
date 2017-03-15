@@ -84,9 +84,9 @@ android {
     defaultConfig {
         applicationId "com.payper"
         minSdkVersion 16
-        targetSdkVersion 22
-        versionCode 5
-        versionName "1.5"
+        targetSdkVersion 23
+        versionCode 9
+        versionName "1.9"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

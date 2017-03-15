@@ -57,9 +57,17 @@ const reducerCreate = (params) => {
 import {setInAsyncStorage} from './helpers/asyncStorage'
 setInAsyncStorage('userData', '')
 
+import { Client } from 'bugsnag-react-native';
+var client = new Client('f8be20d13dd76c17ff352c44d395270a');
 
 class Coincast extends React.Component {
   render() {
+    try {
+    var string = nothing;
+    } catch (error) {
+      client.notify(error);
+      console.log("Bugsnag Error: ", error);
+    }
     return(
       <Router createReducer={reducerCreate} sceneStyle={{backgroundColor: colors.snowWhite}}>
         <Scene key="modal" component={Modal}>
