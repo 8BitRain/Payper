@@ -35,14 +35,14 @@ class MyProfileModal extends React.Component {
 
           { /* Profile pic, name, username */ }
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <ProfilePic currentUser={{profilePic: "", initials: "BS"}} size={58} />
+            <ProfilePic currentUser={this.props.currentUser} size={58} />
             <View style={{width: 10}} />
             <View>
               <Text style={{fontSize: 24, color: colors.deepBlue}}>
-                {"Brady Sheridan"}
+                {`${this.props.currentUser.firstName} ${this.props.currentUser.lastName}`}
               </Text>
               <Text style={{fontSize: 16, color: colors.accent}}>
-                {"@Brady-Sheridan"}
+                {this.props.currentUser.username}
               </Text>
             </View>
           </View>
@@ -51,25 +51,27 @@ class MyProfileModal extends React.Component {
           <View style={{height: 15}} />
 
           { /* Upload profile pic button */ }
-          <TouchableHighlight
-            activeOpacity={0.75}
-            underlayColor={'transparent'}
-            onPress={() => this.setState({photoUploaderModalIsVisible: true})}>
-            <View style={[styles.shadow, {width: dims.width * 0.72, height: 40, borderRadius: 4, flexDirection: 'row'}]}>
-              <View style={{flex: 0.2, backgroundColor: colors.lightGrey, justifyContent: 'center', alignItems: 'center', borderTopLeftRadius: 4, borderBottomLeftRadius: 4}}>
-                <EvilIcons name={"camera"} size={28} color={colors.accent} />
+          <View style={[styles.shadow, {borderRadius: 4}]}>
+            <TouchableHighlight
+              activeOpacity={0.75}
+              underlayColor={'transparent'}
+              onPress={() => this.setState({photoUploaderModalIsVisible: true})}>
+              <View style={{width: dims.width * 0.72, height: 40, flexDirection: 'row'}}>
+                <View style={{flex: 0.2, backgroundColor: colors.lightGrey, justifyContent: 'center', alignItems: 'center', borderTopLeftRadius: 4, borderBottomLeftRadius: 4}}>
+                  <EvilIcons name={"camera"} size={28} color={colors.accent} />
+                </View>
+                <View style={{flex: 0.75, backgroundColor: colors.accent, justifyContent: 'center', alignItems: 'center', borderTopRightRadius: 4, borderBottomRightRadius: 4}}>
+                  <Text style={{fontSize: 16, fontWeight: '400', color: colors.snowWhite}}>
+                    {"Upload Profile Picture"}
+                  </Text>
+                </View>
               </View>
-              <View style={{flex: 0.75, backgroundColor: colors.accent, justifyContent: 'center', alignItems: 'center', borderTopRightRadius: 4, borderBottomRightRadius: 4}}>
-                <Text style={{fontSize: 16, fontWeight: '400', color: colors.snowWhite}}>
-                  {"Upload Profile Picture"}
-                </Text>
-              </View>
-            </View>
-          </TouchableHighlight>
+            </TouchableHighlight>
+          </View>
         </View>
 
         { /* Wallet */ }
-        <Wallet />
+        <Wallet currentUser={this.props.currentUser} />
 
       </View>
     )

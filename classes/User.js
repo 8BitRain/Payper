@@ -29,6 +29,7 @@ import {
 
 export default class User {
   constructor() {
+    this.balances = {total: 100, available: 70, pending: 30} // TODO: populate with Dwolla customer balance
     this.broadcastFeed = {}
     this.meFeed = {}
     this.handleAppStateChange = this.handleAppStateChange.bind(this)
@@ -46,6 +47,10 @@ export default class User {
     // Determine user's initials
     if (userData.firstName && userData.lastName)
       userData.initials = userData.firstName.charAt(0).concat(userData.lastName.charAt(0))
+
+    Firebase.get(`usersPublicInfo/${userData.uid}`, (publicInfo) => {
+      this.update(publicInfo)
+    })
 
     // Initialize JSON attributes
     this.update(userData)

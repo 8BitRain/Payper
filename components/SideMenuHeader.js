@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
 class SideMenuHeader extends React.Component {
   render() {
     return(
-      <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={Actions.MyProfileModal}>
+      <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={Actions.MyProfile}>
         <View>
 
           { /* Background gradient */ }
@@ -59,17 +59,17 @@ class SideMenuHeader extends React.Component {
                 {`${this.props.currentUser.firstName} ${this.props.currentUser.lastName}`}
               </Text>
               <Text style={{fontSize: 13, color: colors.deepBlue}}>
-                { /* TODO: Populate with Dwolla customer balance */
-                  `$${30} in Payper`
-                }
+                {`$${this.props.currentUser.balances.total} in Payper`}
               </Text>
             </View>
 
             { /* Icons */ }
             <View style={styles.iconWrap}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                { /*
                 <EvilIcons name={"user"} size={25} color={colors.deepBlue} />
                 <View style={{marginLeft: -8}} />
+                */ }
                 <EvilIcons name={"chevron-right"} size={22} color={colors.deepBlue} />
               </View>
             </View>

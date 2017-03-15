@@ -24,11 +24,6 @@ const styles = StyleSheet.create({
 })
 
 class Wallet extends React.Component {
-  constructor(props) {
-    super(props)
-    this.balances = {total: 70, available: 47, pending: 33} // TODO: replace dummy data
-  }
-
   render() {
     return (
       <View style={styles.container}>
@@ -39,7 +34,7 @@ class Wallet extends React.Component {
             {`$`}
           </Text>
           <Text style={{fontSize: 40, color: colors.gradientGreen}}>
-            {this.balances.total}
+            {this.props.currentUser.balances.total}
           </Text>
 
           { /* Spacer */ }
@@ -52,7 +47,7 @@ class Wallet extends React.Component {
                 {`$`}
               </Text>
               <Text style={{fontSize: 20, color: colors.gradientGreen}}>
-                {this.balances.available}
+                {this.props.currentUser.balances.available}
               </Text>
             </View>
             <Text style={{fontSize: 12, color: colors.deepBlue}}>
@@ -70,7 +65,7 @@ class Wallet extends React.Component {
                 {`$`}
               </Text>
               <Text style={{fontSize: 20, color: colors.carminePink}}>
-                {this.balances.pending}
+                {this.props.currentUser.balances.pending}
               </Text>
             </View>
             <Text style={{fontSize: 12, color: colors.deepBlue}}>
@@ -83,16 +78,18 @@ class Wallet extends React.Component {
         <View style={{height: 10}} />
 
         { /* Cash out button */ }
-        <TouchableHighlight
-          activeOpacity={0.75}
-          underlayColor={'transparent'}
-          onPress={() => alert("Transfer to Bank")}>
-          <View style={[styles.shadow, {width: dims.width * 0.72, height: 40, borderRadius: 4, flexDirection: 'row', backgroundColor: colors.accent, justifyContent: 'center', alignItems: 'center'}]}>
-            <Text style={{fontSize: 16, fontWeight: '400', color: colors.snowWhite}}>
-              {"Transfer to Bank"}
-            </Text>
-          </View>
-        </TouchableHighlight>
+        <View style={[styles.shadow, {borderRadius: 4}]}>
+          <TouchableHighlight
+            activeOpacity={0.75}
+            underlayColor={colors.lightGrey}
+            onPress={() => alert("Transfer to Bank")}>
+            <View style={{width: dims.width * 0.72, height: 40, borderRadius: 4, flexDirection: 'row', backgroundColor: colors.accent, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{fontSize: 16, fontWeight: '400', color: colors.snowWhite}}>
+                {"Transfer to Bank"}
+              </Text>
+            </View>
+          </TouchableHighlight>
+        </View>
 
       </View>
     )

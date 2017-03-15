@@ -52,7 +52,7 @@ class Coincast extends React.Component {
           <Scene key="root" hideNavBar={true}>
 
             { /* Linear Scenes */ }
-            <Scene key="Splash"               component={Splash}              panHandlers={null} />
+            <Scene key="Splash"               component={Splash}              panHandlers={null} initial />
             <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} />
             <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
@@ -81,7 +81,7 @@ class Coincast extends React.Component {
             <Scene key="BroadcastOnboardingFlow" direction="vertical">
               <Scene key="BroadcastOnboardingFlowRoot" component={BroadcastOnboardingFlowRoot} schema="modal" title="New Broadcast" panHandlers={null} hideNavBar />
             </Scene>
-            <Scene key="MyProfile" direction="vertical" initial>
+            <Scene key="MyProfile" direction="vertical">
               <Scene key="MyProfileModal" component={MyProfileModal} schema="modal" title="My Profile" panHandlers={null} hideNavBar />
             </Scene>
 
