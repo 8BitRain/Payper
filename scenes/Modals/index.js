@@ -1,0 +1,6 @@
+exports.IAVModal = require('./IAVModal')
+exports.FacebookLoginModal = require('./FacebookLoginModal')
+exports.BankAccountsModal = require('./BankAccountsModal')
+exports.MyProfileModal = require('./MyProfileModal')
+exports.NewBroadcastModal = require('./NewBroadcastModal')
+exports.SettingsModal = require('./SettingsModal')

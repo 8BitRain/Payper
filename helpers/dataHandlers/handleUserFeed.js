@@ -19,7 +19,7 @@ function handleUserFeed(casts, cb) {
   callbackForLoop(0, castIDBuffer.length, {
     onIterate: (loop) => {
       let castID = castIDBuffer[loop.index]
-      
+
       Firebase.get(`broadcasts/${castID}`, (broadcastData) => {
         if (!broadcastData) {
           loop.continue()

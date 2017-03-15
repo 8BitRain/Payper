@@ -55,10 +55,12 @@ class SideMenuHeader extends React.Component {
             { /* Text */ }
             <View style={styles.textWrap}>
               <Text style={{fontSize: 17, color: colors.deepBlue, fontWeight: '500'}}>
-                {this.props.currentUser.name}
+                {`${this.props.currentUser.firstName} ${this.props.currentUser.lastName}`}
               </Text>
               <Text style={{fontSize: 13, color: colors.deepBlue}}>
-                {`$${30} in Payper`}
+                { /* TODO: Populate with Dwolla customer balance */
+                  `$${30} in Payper`
+                }
               </Text>
             </View>
 

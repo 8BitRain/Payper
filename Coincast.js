@@ -8,19 +8,23 @@ import {
 } from './components'
 import {
   Splash,
-  FacebookLoginModal,
-  BankAccountsModal,
-  SettingsModal,
   BroadcastOnboardingFlowRoot,
   Main,
   Broadcasts,
   Explore,
   Me,
-  IAVModal,
   KYCOnboardingView,
   BankAccountAdded,
-  MicrodepositTooltip
+  MicrodepositTooltip,
+  MyProfile
 } from './scenes'
+import {
+  IAVModal,
+  FacebookLoginModal,
+  BankAccountsModal,
+  SettingsModal,
+  MyProfileModal
+} from './scenes/Modals'
 import {
   InviteOnlyLander,
   Lander,
@@ -48,7 +52,7 @@ class Coincast extends React.Component {
           <Scene key="root" hideNavBar={true}>
 
             { /* Linear Scenes */ }
-            <Scene key="Splash"               component={Splash}              panHandlers={null} initial={true} />
+            <Scene key="Splash"               component={Splash}              panHandlers={null} />
             <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} />
             <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
@@ -76,6 +80,9 @@ class Coincast extends React.Component {
             </Scene>
             <Scene key="BroadcastOnboardingFlow" direction="vertical">
               <Scene key="BroadcastOnboardingFlowRoot" component={BroadcastOnboardingFlowRoot} schema="modal" title="New Broadcast" panHandlers={null} hideNavBar />
+            </Scene>
+            <Scene key="MyProfile" direction="vertical" initial>
+              <Scene key="MyProfileModal" component={MyProfileModal} schema="modal" title="My Profile" panHandlers={null} hideNavBar />
             </Scene>
 
             { /* Broadcast Modals */ }

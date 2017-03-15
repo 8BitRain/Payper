@@ -2,10 +2,10 @@ import React from 'react'
 import {Actions} from 'react-native-router-flux'
 import {connect} from 'react-redux'
 import {View, Text, Modal, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions, Alert, ActionSheetIOS} from 'react-native'
-import {colors} from '../globalStyles'
-import {IAVWebView, Header} from '../components'
+import {colors} from '../../globalStyles'
+import {IAVWebView, Header} from '../../components'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
-import * as dispatchers from './Main/MainState'
+import * as dispatchers from '../Main/MainState'
 
 const dims = Dimensions.get('window')
 const styles = {

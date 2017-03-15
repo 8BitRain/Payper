@@ -4,6 +4,7 @@ import {colors} from '../../../globalStyles'
 import {formatBroadcastTimestamp, formatFrequency} from '../../../helpers/utils'
 import {subscribe} from '../../../helpers/broadcasts'
 import {subscribeToCast} from '../../../helpers/lambda'
+import {Firebase} from '../../../helpers'
 import {Icon, SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret} from '../'
 import {Header} from '../../'
 import {Actions} from 'react-native-router-flux'
@@ -47,6 +48,12 @@ class UnjoinedBroadcastView extends React.Component {
     subscribeToCast({
       castID: this.props.broadcast.castID,
       token: this.props.currentUser.token
+    })
+
+    // Update userFeed in Firebase
+    Firebase.get(`userFeed/${this.props.currentUser.uid}`, (userFeed) => {
+      delete userFeed[this.props.broadcast.castID]
+      Firebase.set(`userFeed/${this.props.currentUser.uid}`, userFeed)
     })
 
     // Page back to Main view and switch to 'Me' tab

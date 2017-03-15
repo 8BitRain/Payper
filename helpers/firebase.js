@@ -189,6 +189,12 @@ export function get(endpoint, cb) {
   .catch((err) => cb(err))
 }
 
+export function set(endpoint, val, cb) {
+  firebase.database().ref(endpoint)
+  .set(val, () => (cb) ? cb() :null)
+  .catch((err) => console.log(err))
+}
+
 /**
   *   Send the specified email a password reset link
 **/

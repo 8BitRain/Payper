@@ -1,14 +1,14 @@
 import React from 'react'
 import {Actions} from 'react-native-router-flux'
 import {View, Text, TouchableHighlight, WebView, Dimensions, StatusBar, Modal, StyleSheet} from 'react-native'
-import {colors} from '../globalStyles'
-import {AddBankAccountTooltip} from '../components/Tooltips'
-import {getIAVToken} from '../helpers/lambda'
+import {colors} from '../../globalStyles'
+import {AddBankAccountTooltip} from '../../components/Tooltips'
+import {getIAVToken} from '../../helpers/lambda'
 import WebViewBridge from 'react-native-webview-bridge'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {connect} from 'react-redux'
-import * as dispatchers from './Main/MainState'
+import * as dispatchers from '../Main/MainState'
 
 const dimensions = Dimensions.get('window')
 
