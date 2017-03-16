@@ -20,11 +20,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'transparent'
   },
-  newBroadcastButton: {
+  newBroadcastButtonWrap: {
     position: 'absolute',
-    bottom: 0,
-    right: 0,
-    padding: 20
+    bottom: 20,
+    right: 20,
+    backgroundColor: 'transparent',
+    // shadowColor: colors.medGrey,
+    // shadowOpacity: 1.0,
+    // shadowRadius: 3,
+    // shadowOffset: {height: 0, width: 0}
   }
 })
 
@@ -85,10 +89,9 @@ class Main extends React.Component {
         <TouchableHighlight
           activeOpacity={0.75}
           underlayColor={'transparent'}
+          style={styles.newBroadcastButtonWrap}
           onPress={Actions.BroadcastOnboardingFlow}>
-          <View style={styles.newBroadcastButton}>
-            <EvilIcons name={"plus"} color={colors.accent} size={48} />
-          </View>
+          <EvilIcons name={"plus"} size={50} color={colors.accent} />
         </TouchableHighlight>
 
       </View>

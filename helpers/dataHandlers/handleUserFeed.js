@@ -8,8 +8,6 @@ function handleUserFeed(casts, cb) {
     return
   }
 
-  console.log("--> casts", casts)
-
   let castIDBuffer = Object.keys(casts)
   let broadcasts = {
     "Global": {},
@@ -21,10 +19,8 @@ function handleUserFeed(casts, cb) {
   callbackForLoop(0, castIDBuffer.length, {
     onIterate: (loop) => {
       let castID = castIDBuffer[loop.index]
-      console.log("--> castID", castID)
 
       Firebase.get(`broadcasts/${castID}`, (broadcastData) => {
-        console.log("--> broadcastData", broadcastData)
         if (!broadcastData) {
           loop.continue()
         } else {
