@@ -97,7 +97,7 @@ export default class User {
         coords: {lat: pos.coords.latitude, long: pos.coords.longitude},
         timestamp: Date.now(),
         token: this.token
-      }, (res) => console.log(res))
+      }, (res) => console.log("--> updateGeoLocation response:", res))
     })
   }
 

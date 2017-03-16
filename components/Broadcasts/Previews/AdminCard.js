@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   }
 })
 
-class CastCard extends React.Component {
+class AdminCard extends React.Component {
   constructor(props) {
     super(props)
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
@@ -54,7 +54,7 @@ class CastCard extends React.Component {
       <TouchableHighlight
         activeOpacity={0.75}
         underlayColor={'transparent'}
-        onPress={() => Actions.UnjoinedBroadcast({broadcast: this.props.broadcast})}>
+        onPress={() => Actions.AdminBroadcast({broadcast: this.props.broadcast})}>
         <View style={styles.container}>
 
           { /* Chevron (absolutely positioned) */ }
@@ -74,7 +74,7 @@ class CastCard extends React.Component {
 
             { /* Profile picture or Initials */ }
             <View style={{flex: 0.2, justifyContent: 'center', alignItems: 'center'}}>
-              <ProfilePic currentUser={this.props.broadcast.caster} size={46} />
+              <ProfilePic currentUser={this.props.currentUser} size={46} />
             </View>
 
             { /* Cast Title and Caster Username */ }
@@ -84,7 +84,7 @@ class CastCard extends React.Component {
                   {this.props.broadcast.title}
                 </Text>
                 <Text style={{color: colors.maastrichtBlue, fontSize: 15, fontWeight: '400'}}>
-                  {this.props.broadcast.caster.username}
+                  {this.props.currentUser.username}
                 </Text>
               </View>
             </View>
@@ -118,7 +118,7 @@ class CastCard extends React.Component {
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                   <EvilIcons name={"user"} color={colors.slateGrey} size={24} />
                   <Text style={{color: colors.deepBlue, fontSize: 15, paddingLeft: 4, paddingBottom: 2}}>
-                    {`${this.spotsAvailable} spot${(this.spotsAvailable === 1) ? '' : 's'} available`}
+                    {`${this.spotsFilled} of ${this.props.broadcast.memberLimit} spot${(this.spotsFilled === 1) ? '' : 's'} filled`}
                   </Text>
                 </View>
               </View>
@@ -130,4 +130,4 @@ class CastCard extends React.Component {
   }
 }
 
-module.exports = CastCard
+module.exports = AdminCard

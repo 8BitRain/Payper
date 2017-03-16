@@ -1,16 +1,18 @@
 import React from 'react'
 import {View, StyleSheet, Dimensions} from 'react-native'
 import {colors} from '../globalStyles'
+import {MeFeedEmptyState} from './EmptyStates'
+import {SubscriptionCard, AdminCard} from './Broadcasts'
+import {DynamicList, BroadcastFeedSectionHeader} from './'
 import {connect} from 'react-redux'
 import * as dispatchers from '../scenes/Main/MainState'
-import {JoinedBroadcastPreview, AdminBroadcastPreview} from './Broadcasts'
-import {DynamicList, BroadcastFeedSectionHeader} from './'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: dims.width
+    width: dims.width,
+    backgroundColor: colors.lightGrey
   }
 })
 
@@ -18,16 +20,22 @@ class MeFeed extends React.Component {
   render() {
     return(
       <View style={styles.container}>
+
+        <View style={{marginTop: -10}} />
+
         <DynamicList
           shouldAnimateIn={false}
-          data={this.props.currentUser.meFeed || {}}
+          data={this.props.currentUser.meFeed || []}
           renderRow={(rowData, sectionID, rowID) => {
             if (sectionID === "My Subscriptions")
-              return <JoinedBroadcastPreview broadcast={rowData} />
+              return <SubscriptionCard broadcast={rowData} />
             if (sectionID === "My Broadcasts")
-              return <AdminBroadcastPreview broadcast={rowData} />
+              return <AdminCard broadcast={rowData} currentUser={this.props.currentUser} />
+            return <View />
           }}
-          renderSectionHeader={(rowData, sectionID) => <BroadcastFeedSectionHeader sectionID={sectionID} />} />
+          renderSectionHeader={(rowData, sectionID) => <View style={{marginTop: 10}}><BroadcastFeedSectionHeader sectionID={sectionID} /></View>}
+          renderEmptyState={() => <MeFeedEmptyState />} />
+
       </View>
     )
   }

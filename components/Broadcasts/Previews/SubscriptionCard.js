@@ -1,9 +1,11 @@
 import React from 'react'
+import moment from 'moment'
 import {Actions} from 'react-native-router-flux'
 import {View, Text, StyleSheet, TouchableHighlight, Dimensions, Image} from 'react-native'
 import {colors} from '../../../globalStyles'
 import {formatBroadcastTimestamp, formatFrequency} from '../../../helpers/utils'
 import {ProfilePic} from '../../'
+import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 const dims = Dimensions.get('window')
@@ -40,13 +42,11 @@ const styles = StyleSheet.create({
   }
 })
 
-class CastCard extends React.Component {
+class SubscriptionCard extends React.Component {
   constructor(props) {
     super(props)
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
     this.frequency = formatFrequency(props.broadcast.freq)
-    this.spotsFilled = (!props.broadcast.memberIDs) ? 0 : props.broadcast.memberIDs.split(",").length
-    this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
   }
 
   render() {
@@ -54,7 +54,7 @@ class CastCard extends React.Component {
       <TouchableHighlight
         activeOpacity={0.75}
         underlayColor={'transparent'}
-        onPress={() => Actions.UnjoinedBroadcast({broadcast: this.props.broadcast})}>
+        onPress={() => Actions.JoinedBroadcast({broadcast: this.props.broadcast})}>
         <View style={styles.container}>
 
           { /* Chevron (absolutely positioned) */ }
@@ -116,9 +116,8 @@ class CastCard extends React.Component {
                 </View>
 
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                  <EvilIcons name={"user"} color={colors.slateGrey} size={24} />
-                  <Text style={{color: colors.deepBlue, fontSize: 15, paddingLeft: 4, paddingBottom: 2}}>
-                    {`${this.spotsAvailable} spot${(this.spotsAvailable === 1) ? '' : 's'} available`}
+                  <Text style={{color: colors.slateGrey, fontSize: 15, paddingBottom: 2}}>
+                    {`Joined ${moment(this.props.broadcast.joinedAt).format("MMM D, YYYY")}`}
                   </Text>
                 </View>
               </View>
@@ -130,4 +129,4 @@ class CastCard extends React.Component {
   }
 }
 
-module.exports = CastCard
+module.exports = SubscriptionCard

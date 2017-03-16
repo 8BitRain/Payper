@@ -63,7 +63,6 @@ class Main extends React.Component {
     if (null === nextProps.newTab && this.state.changingTab) {
       this.setState({changingTab: false})
     }
-
   }
 
   changeTab(newTab) {

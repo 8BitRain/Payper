@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   }
 })
 
-class BroadcastFeedEmptyState extends React.Component {
+class MeFeedEmptyState extends React.Component {
   constructor(props) {
     super(props)
   }
@@ -21,10 +21,10 @@ class BroadcastFeedEmptyState extends React.Component {
   render() {
     return(
       <View style={styles.container}>
-        <Text>{"BroadcastFeedEmptyState"}</Text>
+        <Text>{"MeFeedEmptyState"}</Text>
       </View>
     )
   }
 }
 
-module.exports = BroadcastFeedEmptyState
+module.exports = MeFeedEmptyState
