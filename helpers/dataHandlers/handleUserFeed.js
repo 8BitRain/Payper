@@ -8,6 +8,8 @@ function handleUserFeed(casts, cb) {
     return
   }
 
+  console.log("--> casts", casts)
+
   let castIDBuffer = Object.keys(casts)
   let broadcasts = {
     "Global": {},
@@ -19,8 +21,10 @@ function handleUserFeed(casts, cb) {
   callbackForLoop(0, castIDBuffer.length, {
     onIterate: (loop) => {
       let castID = castIDBuffer[loop.index]
+      console.log("--> castID", castID)
 
       Firebase.get(`broadcasts/${castID}`, (broadcastData) => {
+        console.log("--> broadcastData", broadcastData)
         if (!broadcastData) {
           loop.continue()
         } else {
@@ -29,7 +33,7 @@ function handleUserFeed(casts, cb) {
           Firebase.get(`usersPublicInfo/${broadcastData.casterID}`, (casterData) => {
             broadcastData.caster = casterData
 
-            if (broadcastData.type === "global")
+            if (broadcastData.type === "world")
               broadcasts["Global"][castID] = broadcastData
             if (broadcastData.type === "local")
               broadcasts["Local"][castID] = broadcastData
