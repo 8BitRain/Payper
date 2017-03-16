@@ -29,7 +29,7 @@ import {
 
 export default class User {
   constructor() {
-    this.balances = {total: 100, available: 70, pending: 30} // TODO: populate with Dwolla customer balance
+    this.balances = {total: 0, available: 0, pending: 0} // TODO: populate with Dwolla customer balance
     this.broadcastFeed = {}
     this.meFeed = {}
     this.handleAppStateChange = this.handleAppStateChange.bind(this)
@@ -48,17 +48,13 @@ export default class User {
     if (userData.firstName && userData.lastName)
       userData.initials = userData.firstName.charAt(0).concat(userData.lastName.charAt(0))
 
-    Firebase.get(`usersPublicInfo/${userData.uid}`, (publicInfo) => {
-      this.update(publicInfo)
-    })
-
     // Initialize JSON attributes
     this.update(userData)
 
     // Get decrypted email and phone
     getDecryptedUserData({
-      uid: this.uid,
-      token: this.token
+      uid: userData.uid,
+      token: userData.token
     }, (res) => {
       if (res) console.log("--> decrypted user data", res)
     })
@@ -83,26 +79,26 @@ export default class User {
   handleAppStateChange(state) {
     switch (state) {
       case "inactive":
-        return
+      return
       case "background":
         this.timer.report("sessionDuration", this.uid)
-        navigator.geolocation.getCurrentPosition((pos) => {
-          updateGeoLocation({
-            coords: {lat: pos.coords.latitude, long: pos.coords.longitude},
-            state: "WI",
-            timestamp: Date.now(),
-            token: this.token
-          }, (res) => {
-            console.log(res)
-          })
-        })
-        break
+      break
       case "active":
         this.timer = new Timer()
         this.timer.start()
         if (firebase.auth().currentUser !== null) this.refreshToken()
-        break
+      break
     }
+  }
+
+  updateLocation() {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      updateGeoLocation({
+        coords: {lat: pos.coords.latitude, long: pos.coords.longitude},
+        timestamp: Date.now(),
+        token: this.token
+      }, (res) => console.log(res))
+    })
   }
 
   refreshToken(updateViaRedux) {
@@ -115,6 +111,12 @@ export default class User {
     this.endpoints = [
       {
         endpoint: `users/${this.uid}`,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => (res) ? updateViaRedux(res) : null
+      },
+      {
+        endpoint: `usersPublicInfo/${this.uid}`,
         eventType: 'value',
         listener: null,
         callback: (res) => (res) ? updateViaRedux(res) : null
@@ -155,6 +157,18 @@ export default class User {
           this.meFeed["My Subscriptions"] = mySubscriptions
           updateViaRedux({meFeed: this.meFeed})
         })
+      },
+      {
+        endpoint: `${(this.verified) ? 'userWallet' : 'payperWallet'}/${this.uid}`,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => {
+          if (!res) return
+          updateViaRedux({
+            walletRef: res.walletRef,
+            balances: {total: res.amount || 0, available: res.withdrawableFunds || 0, pending: res.pendingFunds || 0}
+          })
+        }
       }
     ]
 

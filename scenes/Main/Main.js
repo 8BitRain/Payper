@@ -41,7 +41,7 @@ class Main extends React.Component {
 
   componentWillMount() {
     this.props.currentUser.startListeningToFirebase((updates) => this.props.updateCurrentUser(updates))
-
+    this.props.currentUser.updateLocation()
     // NOTE: Code-push test code
     // alert("Test1")
   }

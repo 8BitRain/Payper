@@ -1,7 +1,7 @@
 import React from 'react'
-import {View, Text, TouchableHighlight, StyleSheet, Dimensions} from 'react-native'
+import {View, Text, TouchableHighlight, StyleSheet, Dimensions, Modal} from 'react-native'
 import {Actions} from 'react-native-router-flux'
-import {Header, ProfilePic, Wallet} from '../../components'
+import {Header, ProfilePic, Wallet, PhotoUploader} from '../../components'
 import {colors} from '../../globalStyles'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Button from 'react-native-button'
@@ -72,6 +72,24 @@ class MyProfileModal extends React.Component {
 
         { /* Wallet */ }
         <Wallet currentUser={this.props.currentUser} />
+
+        { /* Photo Uploader Modal
+        <Modal animationType={"slide"} transparent={false} visible={this.state.photoUploaderModalIsVisible}>
+          <Header
+            showTitle
+            showBackButton
+            title="Upload Photo" />
+          <PhotoUploader
+            currentUser={this.props.currentUser}
+            title={"PhotoUploader"}
+            brand={"photo"}
+            index={1}
+            insteadOfUpload={(img) => this.setState({
+              profilePic: img,
+              photoUploaderModalIsVisible: false
+            })} />
+        </Modal>
+        */ }
 
       </View>
     )

@@ -66,10 +66,6 @@ class SideMenuHeader extends React.Component {
             { /* Icons */ }
             <View style={styles.iconWrap}>
               <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                { /*
-                <EvilIcons name={"user"} size={25} color={colors.deepBlue} />
-                <View style={{marginLeft: -8}} />
-                */ }
                 <EvilIcons name={"chevron-right"} size={22} color={colors.deepBlue} />
               </View>
             </View>
