@@ -6,7 +6,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 class SpotsAvailable extends React.Component {
   constructor(props) {
     super(props)
-    this.members = (props.broadcast.memberIDs) ? props.broadcast.memberIDs.split(",") : []
+    this.members = (props.broadcast.members) ? props.broadcast.members.split(",") : []
     this.spotsAvailable = props.broadcast.memberLimit - this.members.length
   }
 

@@ -40,7 +40,7 @@ function formatAfterOnboarding(substates, currentUser) {
     memberLimit: Math.round(substates["Member Limit"].spotsInput),
     type: visibility,
     tag: tag,
-    memberIDs: "",
+    members: "",
     createdAt: Date.now(),
     casterID: currentUser.uid,
     castID: castID

@@ -42,7 +42,7 @@ class AdminCard extends React.Component {
     super(props)
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
     this.frequency = formatFrequency(props.broadcast.freq)
-    this.spotsFilled = (!props.broadcast.memberIDs) ? 0 : props.broadcast.memberIDs.split(",").length
+    this.spotsFilled = (!props.broadcast.members) ? 0 : props.broadcast.members.split(",").length
     this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
   }
 
@@ -115,7 +115,7 @@ class AdminCard extends React.Component {
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                   <EvilIcons name={"user"} color={colors.slateGrey} size={24} />
                   <Text style={{color: colors.deepBlue, fontSize: 15, paddingLeft: 4, paddingBottom: 2}}>
-                    {`${this.spotsFilled} of ${this.props.broadcast.memberLimit} spot${(this.spotsFilled === 1) ? '' : 's'} filled`}
+                    {`${this.spotsFilled} of ${this.props.broadcast.memberLimit} spots filled`}
                   </Text>
                 </View>
               </View>

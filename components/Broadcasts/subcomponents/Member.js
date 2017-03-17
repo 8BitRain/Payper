@@ -2,32 +2,25 @@ import React from 'react'
 import moment from 'moment'
 import {View, Text, TouchableHighlight} from 'react-native'
 import {colors} from '../../../globalStyles'
+import {ProfilePic} from '../../'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 class Member extends React.Component {
   constructor(props) {
     super(props)
-    let buffer = this.props.member.displayName.split(" ")
-    this.initials = buffer[0].charAt(0).concat(buffer[1].charAt(0))
   }
   render() {
     return(
       <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8}}>
 
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          { /* Profile pic or initials */
-            (this.props.member.profilePic)
-            ? <Image style={{width: 42, height: 42, borderRadius: 21}} source={{uri: this.props.currentUser.profilePic}} />
-            : <View style={{width: 42, height: 42, borderRadius: 21, borderWidth: 1, borderColor: colors.medGrey, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{color: colors.deepBlue, fontSize: 16, fontWeight: '500'}}>
-                  {this.initials}
-                </Text>
-              </View> }
+          { /* Profile Pic */ }
+          <ProfilePic currentUser={this.props.member} size={42} />
 
           { /* Display Name */ }
           <View style={{paddingLeft: 8}}>
             <Text style={{color: colors.deepBlue, fontSize: 16, fontWeight: '400'}}>
-              {this.props.member.displayName}
+              {`${this.props.member.firstName} ${this.props.member.lastName}`}
             </Text>
             <Text style={{color: colors.slateGrey, fontSize: 13, fontWeight: '400'}}>
               {`Joined ${moment(this.props.member.joinedAt).format("MMM D, YYYY")}`}

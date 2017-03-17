@@ -3,7 +3,8 @@ import React from 'react'
 import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, ActionSheetIOS, Alert} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../../globalStyles'
-import {formatBroadcastTimestamp, formatFrequency} from '../../../helpers/utils'
+import {formatBroadcastTimestamp, formatFrequency, callbackForLoop} from '../../../helpers/utils'
+import {Firebase} from '../../../helpers'
 import {unsubscribe} from '../../../helpers/broadcasts'
 import {Icon, SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret, Member} from '../'
 import {Header} from '../../'
@@ -19,15 +20,42 @@ const styles = StyleSheet.create({
 class AdminBroadcastView extends React.Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      members: []
+    }
+
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
     this.frequency = formatFrequency(props.broadcast.freq)
-    this.spotsFilled = (!props.broadcast.memberIDs) ? 0 : props.broadcast.memberIDs.split(",").length
+    this.spotsFilled = (!props.broadcast.members) ? 0 : props.broadcast.members.split(",").length
     this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
     this.removeMember = this.removeMember.bind(this)
     this.showActionSheet = this.showActionSheet.bind(this)
     this.stopRenewal = this.stopRenewal.bind(this)
     this.resumeRenewal = this.resumeRenewal.bind(this)
     this.delete = this.delete.bind(this)
+  }
+
+  componentDidMount() {
+    if (!this.props.broadcast.members) return
+    this.populateMembers(this.props.broadcast.members)
+  }
+
+  populateMembers(memberIDs) {
+    let memberIDBuffer = memberIDs.split(",")
+    let members = []
+
+    // Fetch user data for each cast member
+    callbackForLoop(0, memberIDBuffer.length, {
+      onIterate: (loop) => {
+        let memberID = memberIDBuffer[loop.index]
+        Firebase.get(`usersPublicInfo/${memberID}`, (userData) => {
+          members.push(userData)
+          loop.continue()
+        })
+      },
+      onComplete: () => this.setState({members})
+    })
   }
 
   removeMember(member) {
@@ -121,7 +149,12 @@ class AdminBroadcastView extends React.Component {
                 <Text style={{color: colors.deepBlue, fontSize: 16, fontWeight: '700'}}>
                   {"Members"}
                 </Text>
-                {this.props.broadcast.members.map((o, i) => <Member key={i} member={o} remove={this.removeMember} />)}
+
+                {(this.state.members.length === 0)
+                  ? <Text style={{color: colors.deepBlue, fontSize: 16}}>
+                      {"None"}
+                    </Text>
+                  : this.state.members.map((o, i) => <Member key={i} member={o} remove={this.removeMember} />)}
               </View>
             : null }
 
