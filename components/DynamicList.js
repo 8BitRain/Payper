@@ -296,11 +296,11 @@ class DynamicList extends React.Component {
   render() {
     let {dataSource, filteredDataSource, renderHeader, renderFooter} = this.state
     let {renderSectionHeader} = this.props
-
+    
     return(
       <View style={{flex: 1.0}}>
 
-        {(!dataSource || dataSource._dataBlob.length === 0)
+        {(!dataSource || dataSource._dataBlob.length === 0 || dataSource._cachedRowCount === 0)
           ? <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0}}>
               {this.props.renderEmptyState()}
             </View>
