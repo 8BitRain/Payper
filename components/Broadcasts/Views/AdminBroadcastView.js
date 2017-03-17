@@ -124,12 +124,6 @@ class AdminBroadcastView extends React.Component {
             token: this.props.currentUser.token
           })
 
-          // Update subscribedBroadcasts in Firebase
-          // Firebase.get(`userBroadcasts/${this.props.currentUser.uid}`, (userBroadcasts) => {
-          //   delete userBroadcasts[this.props.broadcast.castID]
-          //   Firebase.set(`userBroadcasts/${this.props.currentUser.uid}`, userBroadcasts)
-          // })
-
           // Page back to Main view and switch to 'Me' tab
           Actions.pop()
           setTimeout(() => Actions.refresh({newTab: 'Me'}))
