@@ -42,11 +42,11 @@ class AdminBroadcastView extends React.Component {
   }
 
   componentDidMount() {
-    if (!this.props.broadcast.members) return
     this.populateMembers(this.props.broadcast.members)
   }
 
   populateMembers(memberIDs) {
+    if (!memberIDs) return
     let memberIDBuffer = memberIDs.split(",")
     let members = []
 
@@ -192,7 +192,11 @@ class AdminBroadcastView extends React.Component {
           <DetailsOfAgreement width={dims.width * 0.88} broadcast={this.props.broadcast} />
 
           { /* Secret */ }
-          <Secret width={dims.width * 0.88} broadcast={this.props.broadcast} hide={false} />
+          <Secret
+            shouldDecrypt
+            width={dims.width * 0.88}
+            broadcast={this.props.broadcast}
+            currentUser={this.props.currentUser} />
 
         </ScrollView>
       </View>

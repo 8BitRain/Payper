@@ -102,7 +102,12 @@ class UnjoinedBroadcastView extends React.Component {
           <DetailsOfAgreement width={dims.width * 0.88} broadcast={this.props.broadcast} />
 
           { /* Secret */ }
-          <Secret width={dims.width * 0.88} broadcast={this.props.broadcast} hide={true} />
+          <Secret
+            shouldDecrypt={false}
+            width={dims.width * 0.88}
+            broadcast={this.props.broadcast}
+            currentUser={this.props.currentUser} />
+
         </ScrollView>
       </View>
     )
