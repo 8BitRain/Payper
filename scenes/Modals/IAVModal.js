@@ -8,6 +8,7 @@ import WebViewBridge from 'react-native-webview-bridge'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {connect} from 'react-redux'
+import config from '../../config'
 import * as dispatchers from '../Main/MainState'
 
 const dimensions = Dimensions.get('window')
@@ -15,6 +16,9 @@ const dimensions = Dimensions.get('window')
 class IAVModal extends React.Component {
   constructor(props) {
     super(props)
+
+    this.payperEnv = config.env
+    this.dwollaEnv = (config.env === "dev") ? "sandbox" : "prod"
 
     this.state = {
       cancelled: false,
@@ -123,7 +127,7 @@ class IAVModal extends React.Component {
 
   render() {
     return(
-      <View style={{flex: 1.0, marginTop: 20, backgroundColor: colors.accent}}>
+      <View style={{flex: 1.0, paddingTop: 20, backgroundColor: colors.accent}}>
         <View style={{flex: 0.1, backgroundColor: colors.accent, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingLeft: 12.5, paddingRight: 12.5}}>
 
           { /* Header title */ }
@@ -159,7 +163,7 @@ class IAVModal extends React.Component {
             onBridgeMessage={(msg) => this.onBridgeMessage(msg)}
             javaScriptEnabled={true}
             injectedJavaScript={this.state.injectedJS}
-            source={{uri: 'http://localhost:8080/iav'}} />
+            source={{uri: 'https://www.getpayper.io/iav'}} />
         </View>
 
         { /* Add Bank Account Tooltip */ }
