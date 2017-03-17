@@ -4,6 +4,7 @@ import * as _ from 'lodash'
 import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, ActionSheetIOS, Alert} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../../globalStyles'
+import {removeFromCastAlert} from '../../../helpers/alerts'
 import {formatBroadcastTimestamp, formatFrequency, callbackForLoop} from '../../../helpers/utils'
 import {Firebase} from '../../../helpers'
 import {deleteCastAlert} from '../../../helpers/alerts'
@@ -65,7 +66,12 @@ class AdminBroadcastView extends React.Component {
   }
 
   removeMember(member) {
-    alert(`Would remove member '${member.displayName}'`)
+    removeFromCastAlert({
+      member,
+      onConfirm: () => {
+        console.log("--> Would remove from cast...")
+      }
+    })
   }
 
   showActionSheet() {

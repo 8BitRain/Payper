@@ -11,9 +11,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 14,
     paddingBottom: 14,
-    backgroundColor: colors.lightGrey,
     borderBottomWidth: 1,
-    borderColor: colors.medGrey
+    borderColor: colors.medGrey,
+    width: dims.width * 0.9
   },
   shadow: {
     shadowColor: colors.slateGrey,
@@ -27,6 +27,11 @@ class Wallet extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+
+        { /* Title */ }
+        <Text style={{color: colors.deepBlue, fontSize: 16, fontWeight: '700', paddingBottom: 2}}>
+          {"Payper Wallet"}
+        </Text>
 
         { /* Total balance */ }
         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
@@ -72,11 +77,8 @@ class Wallet extends React.Component {
                 </View> }
         </View>
 
-        { /* Spacer */ }
-        <View style={{height: 10}} />
-
         { /* Cash out button */ }
-        <View style={[styles.shadow, {borderRadius: 4}]}>
+        <View style={[styles.shadow, {borderRadius: 4, marginTop: 6}]}>
           <TouchableHighlight
             activeOpacity={0.75}
             underlayColor={colors.lightGrey}

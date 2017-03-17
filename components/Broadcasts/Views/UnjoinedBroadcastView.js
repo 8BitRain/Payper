@@ -71,8 +71,6 @@ class UnjoinedBroadcastView extends React.Component {
         <Header
           showTitle
           showBackButton
-          showDots
-          onDotsPress={() => alert("SHOW ACTION SHEET")}
           title={this.props.broadcast.title} />
 
         <ScrollView>

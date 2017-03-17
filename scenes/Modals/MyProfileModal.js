@@ -12,6 +12,7 @@ const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
     backgroundColor: colors.snowWhite
   },
   shadow: {
@@ -31,7 +32,7 @@ class MyProfileModal extends React.Component {
         <Header showTitle showBackButton title="My Profile" />
 
         { /* Name / Username */ }
-        <View style={{justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, borderColor: colors.medGrey, paddingBottom: 15, paddingTop: 15}}>
+        <View style={{justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, borderColor: colors.medGrey, paddingBottom: 15, paddingTop: 15, width: dims.width * 0.92}}>
 
           { /* Profile pic, name, username */ }
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
