@@ -8,7 +8,8 @@ import {formatBroadcastTimestamp, formatFrequency, callbackForLoop} from '../../
 import {Firebase} from '../../../helpers'
 import {deleteCastAlert} from '../../../helpers/alerts'
 import {deleteCast} from '../../../helpers/lambda'
-import {Icon, SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret, Member} from '../'
+import {ProfilePic} from '../../'
+import {SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret, Member} from '../'
 import {Header} from '../../'
 import {connect} from 'react-redux'
 import * as dispatchers from '../../../scenes/Main/MainState'
@@ -147,9 +148,9 @@ class AdminBroadcastView extends React.Component {
 
         <ScrollView>
 
-          { /* Icon, Title, Amount, Frequency */ }
+          { /* Profile Pic, Title, Amount, Frequency */ }
           <View style={{flexDirection: 'row', alignItems: 'center', padding: 10, paddingTop: 15, paddingBottom: 15, marginTop: 10, width: dims.width * 0.88}}>
-            <Icon size={26} width={57} height={57} />
+            <ProfilePic size={57} currentUser={this.props.currentUser} />
 
             <View style={{paddingLeft: 20}}>
               <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '700', backgroundColor: 'transparent'}}>
