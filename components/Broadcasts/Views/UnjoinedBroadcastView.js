@@ -2,7 +2,7 @@ import React from 'react'
 import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions} from 'react-native'
 import {colors} from '../../../globalStyles'
 import {formatBroadcastTimestamp, formatFrequency} from '../../../helpers/utils'
-import {subscribe} from '../../../helpers/broadcasts'
+import {subscribeAlert} from '../../../helpers/alerts'
 import {subscribeToCast} from '../../../helpers/lambda'
 import {Firebase} from '../../../helpers'
 import {Icon, SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret} from '../'
@@ -95,7 +95,7 @@ class UnjoinedBroadcastView extends React.Component {
           { /* Spots available, Subscribe button */ }
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, paddingTop: 15, paddingBottom: 15, width: dims.width * 0.88, borderColor: colors.medGrey, borderBottomWidth: 1}}>
             <SpotsAvailable broadcast={this.props.broadcast} />
-            <SubscribeButton onPress={() => subscribe({broadcast: this.props.broadcast, onConfirm: this.onSubscribe})} />
+            <SubscribeButton onPress={() => subscribeAlert({broadcast: this.props.broadcast, onConfirm: this.onSubscribe})} />
           </View>
 
           { /* Details of Agreement */ }

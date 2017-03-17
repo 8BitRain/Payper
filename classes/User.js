@@ -159,14 +159,14 @@ export default class User {
         })
       },
       {
-        endpoint: `${(this.verified) ? 'userWallet' : 'payperWallet'}/${this.uid}`,
+        endpoint: `${(this.verified) ? 'userWallets' : 'payperWallets'}/${this.uid}`,
         eventType: 'value',
         listener: null,
         callback: (res) => {
           if (!res) return
           updateViaRedux({
             walletRef: res.walletRef,
-            balances: {total: res.amount || 0, available: res.withdrawableFunds || 0, pending: res.pendingFunds || 0}
+            balances: {total: res.amount || 0, available: res.withdrawableFunds || null, pending: res.pendingFunds || null}
           })
         }
       }

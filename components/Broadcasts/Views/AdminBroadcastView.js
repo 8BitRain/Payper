@@ -1,13 +1,17 @@
 // TODO: Implement cross-plaftorm action sheet module
 import React from 'react'
+import * as _ from 'lodash'
 import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, ActionSheetIOS, Alert} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../../globalStyles'
 import {formatBroadcastTimestamp, formatFrequency, callbackForLoop} from '../../../helpers/utils'
 import {Firebase} from '../../../helpers'
-import {unsubscribe} from '../../../helpers/broadcasts'
+import {deleteCastAlert} from '../../../helpers/alerts'
+import {deleteCast} from '../../../helpers/lambda'
 import {Icon, SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret, Member} from '../'
 import {Header} from '../../'
+import {connect} from 'react-redux'
+import * as dispatchers from '../../../scenes/Main/MainState'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -29,6 +33,7 @@ class AdminBroadcastView extends React.Component {
     this.frequency = formatFrequency(props.broadcast.freq)
     this.spotsFilled = (!props.broadcast.members) ? 0 : props.broadcast.members.split(",").length
     this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
+
     this.removeMember = this.removeMember.bind(this)
     this.showActionSheet = this.showActionSheet.bind(this)
     this.stopRenewal = this.stopRenewal.bind(this)
@@ -98,11 +103,40 @@ class AdminBroadcastView extends React.Component {
   }
 
   delete() {
-    // TODO: Hit back end, handle optimistic deletion
-    if (this.props.broadcast.renewal)
+    if (this.props.broadcast.renewal) {
       Alert.alert("Can't Delete", "You must turn off renewal in order to delete a broadcast.")
-    else
-      Alert.alert("TODO", "Delete")
+    } else {
+      deleteCastAlert({
+        broadcast: this.props.broadcast,
+        onConfirm: () => {
+
+          // Update current user's meFeed data source
+          let meFeed = this.props.currentUser.meFeed
+
+          // Mutate meFeed object via Redux
+          let i = _.indexOf(meFeed["My Broadcasts"], function(o) { return o.castID === this.props.broadcast.castID })
+          meFeed["My Broadcasts"].splice(i, 1)
+          this.props.updateCurrentUser({meFeed: meFeed})
+
+          // Hit backend
+          deleteCast({
+            castID: this.props.broadcast.castID,
+            token: this.props.currentUser.token
+          })
+
+          // Update subscribedBroadcasts in Firebase
+          // Firebase.get(`userBroadcasts/${this.props.currentUser.uid}`, (userBroadcasts) => {
+          //   delete userBroadcasts[this.props.broadcast.castID]
+          //   Firebase.set(`userBroadcasts/${this.props.currentUser.uid}`, userBroadcasts)
+          // })
+
+          // Page back to Main view and switch to 'Me' tab
+          Actions.pop()
+          setTimeout(() => Actions.refresh({newTab: 'Me'}))
+
+        }
+      })
+    }
   }
 
   render() {
@@ -139,7 +173,9 @@ class AdminBroadcastView extends React.Component {
           { /* Renewal status */ }
           <View style={{paddingBottom: 10, width: dims.width * 0.88, borderColor: colors.medGrey, borderBottomWidth: 1}}>
             <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2, backgroundColor: 'transparent'}}>
-              {`In renewal: ${this.props.broadcast.renewal}`}
+              {(this.props.broadcast.renewal)
+                ? `Renews on ${'DATE'}.`
+                : `Renewal is disabled.`}
             </Text>
           </View>
 
@@ -170,4 +206,17 @@ class AdminBroadcastView extends React.Component {
   }
 }
 
-module.exports = AdminBroadcastView
+function mapStateToProps(state) {
+  return {
+    currentUser: state.getIn(['main', 'currentUser'])
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setCurrentUser: (input) => dispatch(dispatchers.setCurrentUser(input)),
+    updateCurrentUser: (input) => dispatch(dispatchers.updateCurrentUser(input))
+  }
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(AdminBroadcastView)

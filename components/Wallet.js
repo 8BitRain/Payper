@@ -37,41 +37,39 @@ class Wallet extends React.Component {
             {this.props.currentUser.balances.total}
           </Text>
 
-          { /* Spacer */ }
-          <View style={{width: 10}} />
+          { /* Available */
+            (!this.props.currentUser.balances.available)
+              ? null
+              : <View style={{justifyContent: 'center', alignItems: 'center', marginLeft: 10}}>
+                  <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{fontSize: 11, color: colors.gradientGreen, alignSelf: 'flex-start', paddingTop: 2}}>
+                      {`$`}
+                    </Text>
+                    <Text style={{fontSize: 20, color: colors.gradientGreen}}>
+                      {this.props.currentUser.balances.available}
+                    </Text>
+                  </View>
+                  <Text style={{fontSize: 12, color: colors.deepBlue}}>
+                    {"Available"}
+                  </Text>
+                </View> }
 
-          { /* Available */ }
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{fontSize: 11, color: colors.gradientGreen, alignSelf: 'flex-start', paddingTop: 2}}>
-                {`$`}
-              </Text>
-              <Text style={{fontSize: 20, color: colors.gradientGreen}}>
-                {this.props.currentUser.balances.available}
-              </Text>
-            </View>
-            <Text style={{fontSize: 12, color: colors.deepBlue}}>
-              {"Available"}
-            </Text>
-          </View>
-
-          { /* Spacer */ }
-          <View style={{width: 10}} />
-
-          { /* Pending */ }
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{fontSize: 11, color: colors.carminePink, alignSelf: 'flex-start', paddingTop: 2}}>
-                {`$`}
-              </Text>
-              <Text style={{fontSize: 20, color: colors.carminePink}}>
-                {this.props.currentUser.balances.pending}
-              </Text>
-            </View>
-            <Text style={{fontSize: 12, color: colors.deepBlue}}>
-              {"Pending"}
-            </Text>
-          </View>
+          { /* Pending */
+            (!this.props.currentUser.balances.pending)
+              ? null
+              : <View style={{justifyContent: 'center', alignItems: 'center', marginLeft: 10}}>
+                  <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{fontSize: 11, color: colors.carminePink, alignSelf: 'flex-start', paddingTop: 2}}>
+                      {`$`}
+                    </Text>
+                    <Text style={{fontSize: 20, color: colors.carminePink}}>
+                      {this.props.currentUser.balances.pending}
+                    </Text>
+                  </View>
+                  <Text style={{fontSize: 12, color: colors.deepBlue}}>
+                    {"Pending"}
+                  </Text>
+                </View> }
         </View>
 
         { /* Spacer */ }

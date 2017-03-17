@@ -1,9 +1,12 @@
 import React from 'react'
+import * as _ from 'lodash'
 import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../../globalStyles'
 import {formatBroadcastTimestamp, formatFrequency} from '../../../helpers/utils'
-import {unsubscribe} from '../../../helpers/broadcasts'
+import {unsubscribeAlert} from '../../../helpers/alerts'
+import {unsubscribeFromCast} from '../../../helpers/lambda'
+import {Firebase} from '../../../helpers'
 import {Icon, SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret} from '../'
 import {Header} from '../../'
 import {connect} from 'react-redux'
@@ -20,22 +23,41 @@ const styles = StyleSheet.create({
 class JoinedBroadcastView extends React.Component {
   constructor(props) {
     super(props)
+
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
     this.frequency = formatFrequency(props.broadcast.freq)
     this.spotsFilled = (!props.broadcast.members) ? 0 : props.broadcast.members.split(",").length
     this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
+
+    this.onUnsubscribe = this.onUnsubscribe.bind(this)
   }
 
   onUnsubscribe() {
-    // Delete subscription from list
-    let meFeed = this.props.currentUser.meFeed
-    delete meFeed["My Subscriptions"][this.props.broadcast.castID]
 
-    // Update current user via Redux
+    // Update current user's meFeed data source
+    let meFeed = this.props.currentUser.meFeed
+
+    // Mutate meFeed object via Redux
+    let i = _.indexOf(meFeed["My Subscriptions"], function(o) { return o.castID === this.props.broadcast.castID })
+    meFeed["My Subscriptions"].splice(i, 1)
     this.props.updateCurrentUser({meFeed: meFeed})
+
+    // Hit backend
+    unsubscribeFromCast({
+      castID: this.props.broadcast.castID,
+      token: this.props.currentUser.token
+    })
+
+    // Update subscribedBroadcasts in Firebase
+    Firebase.get(`subscribedBroadcasts/${this.props.currentUser.uid}`, (subscribedBroadcasts) => {
+      delete subscribedBroadcasts[this.props.broadcast.castID]
+      Firebase.set(`subscribedBroadcasts/${this.props.currentUser.uid}`, subscribedBroadcasts)
+    })
 
     // Page back to Main view and switch to 'Me' tab
     Actions.pop()
+    setTimeout(() => Actions.refresh({newTab: 'Me'}))
+
   }
 
   render() {
@@ -71,7 +93,7 @@ class JoinedBroadcastView extends React.Component {
           { /* Spots available, Subscribe button */ }
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, paddingTop: 15, paddingBottom: 15, width: dims.width * 0.88, borderColor: colors.medGrey, borderBottomWidth: 1}}>
             <SpotsAvailable broadcast={this.props.broadcast} />
-            <SubscribeButton text={"Unsubscribe"} color={colors.carminePink} onPress={() => unsubscribe({broadcast: this.props.broadcast, onConfirm: this.onUnsubscribe})} />
+            <SubscribeButton text={"Unsubscribe"} color={colors.carminePink} onPress={() => unsubscribeAlert({broadcast: this.props.broadcast, onConfirm: this.onUnsubscribe})} />
           </View>
 
           { /* Details of Agreement */ }
