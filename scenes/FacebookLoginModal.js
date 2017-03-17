@@ -84,6 +84,8 @@ class FacebookLoginModal extends React.Component {
       userData: props.userData,
       submitting: false,
       info: "",
+      email: props.userData.email || "",
+      phone: props.userData.phone || "",
       emailIsValid: validateEmail(props.userData.email),
       phoneIsValid: validatePhone(props.userData.phone)
     }
@@ -118,12 +120,17 @@ class FacebookLoginModal extends React.Component {
       return
     }
 
+    if (this.props.destination) {
+      this.props.destination(this.state.userData)
+      return
+    }
+
     this.setState({submitting: true})
 
     createOrGetUser(this.state.userData, (response) => {
       this.setState({submitting: false})
 
-      if (!response.message && !response.errorMessage) {
+      if (response && !response.message && !response.errorMessage) {
         for (var k in this.state.userData) {
           if (response.user[k] !== this.state.userData[k])
             response.user[k] = this.state.userData[k]
@@ -136,7 +143,7 @@ class FacebookLoginModal extends React.Component {
 
     function onSuccess(userData) {
       this.props.currentUser.initialize(userData)
-      Actions.Main()
+      Actions.Want()
     }
 
     function onFailure(err) {
@@ -167,7 +174,7 @@ class FacebookLoginModal extends React.Component {
           { /* Welcome message and info message */ }
           <View style={{width: dims.width * 0.9, padding: 12, marginTop: 12, backgroundColor: colors.lightGrey, borderRadius: 4, justifyContent: 'center'}}>
             <Text style={{color: colors.deepBlue, fontSize: 20, padding: 4, backgroundColor: 'transparent', textAlign: 'left'}}>
-              {`Hey ${userData.first_name},`}
+              {`Hey ${userData.first_name || userData.firstName},`}
             </Text>
             <Text style={{color: colors.deepBlue, fontSize: 14, padding: 4, backgroundColor: 'transparent', textAlign: 'left'}}>
               {info}
@@ -184,7 +191,7 @@ class FacebookLoginModal extends React.Component {
               ref={"emailInput"}
               autoCorrect={false}
               keyboardType={"email-address"}
-              defaultValue={userData.email || ""}
+              defaultValue={this.state.email}
               placeholder={"Email Address"}
               placeholderTextColor={colors.slateGrey}
               style={styles.input}
@@ -204,7 +211,7 @@ class FacebookLoginModal extends React.Component {
               autoCorrect={false}
               keyboardType={"number-pad"}
               maxLength={10}
-              defaultValue={userData.phone || ""}
+              defaultValue={this.state.phone}
               placeholder={"Phone Number"}
               placeholderTextColor={colors.slateGrey}
               returnKeyType={"done"}

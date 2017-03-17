@@ -41,9 +41,56 @@ class Row extends React.Component {
 
   }
 
+  _renderLogo(){
+    if(this.state.fallbackImageNeeded){
+      switch (this.props.category) {
+        case "Books":
+          return(<Ionicons name={"ios-book-outline"} size={32}/>);
+          break;
+        case "Education":
+          return(<Ionicons name={"ios-school-outline"} size={32}/>);
+          break;
+        case "Exercise":
+          return(<Ionicons name={"md-heart"} size={32}/>);
+          break;
+        case "FoodDelivery":
+          return(<Ionicons name={"md-restaurant"} size={32}/>);
+          break;
+        case "Gaming":
+          return(<Ionicons name={"ios-game-controller-b-outline"} size={32}/>);
+          break;
+        case "LiveTv":
+          return(<Ionicons name={"md-desktop"} size={32}/>);
+          break;
+        case "MusicStreaming":
+          return(<Ionicons name={"ios-musical-notes"} size={32}/>);
+          break;
+        case "News":
+          return(<Ionicons name={"logo-rss"} size={32}/>);
+          break;
+        case "Sports":
+          return(<Ionicons name={"md-american-football"} size={32}/>);
+          break;
+        case "VideoStreaming":
+          return(<Ionicons name={"logo-youtube"} size={32}/>);
+          break;
+      }
+      return(
+        <Ionicons name={"md-heart"} size={32}/>
+      );
+    }
+    if(!this.state.fallbackImageNeeded){
+      return(
+        <Image source={{uri:this.props.logo}}
+               style={styles.photo}
+               onError={() => this.setState({fallbackImageNeeded: true})}/>
+      );
+    }
+  }
+
   render() {
     return(
-      <View>
+      <View style={{flex: 1}}>
        <TouchableHighlight
          activeOpacity={0.8}
          underlayColor={'transparent'}
@@ -54,7 +101,7 @@ class Row extends React.Component {
              /* Android: android/app/src/main/res/drawable/
              **/
             }
-           <Image source={{uri:this.props.logo}} style={styles.photo} />
+           {this._renderLogo()}
            <Text style={styles.text}>{this.props.title}</Text>
            <Text style={styles.text}>{this.props.tag}</Text>
            <Text style={styles.text}>{this.state.selected ? "True" : "False"}</Text>

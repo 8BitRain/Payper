@@ -34,11 +34,11 @@ class Visibility extends React.Component {
         <InfoBox text={"Broadcast visibility determines who can see and join your cast."} />
 
         { /* Check List */ }
-        <View style={{paddingTop: 10}}>
+        <View style={{paddingTop: 7}}>
           <Checklist
             ref={ref => this.checklist = ref}
             state={this.props.state}
-            checkboxes={["Anyone", "Local", "Friends"]}
+            checkboxes={["Anyone", "Local", "Friends of Friends", "Friends"]}
             cascadeSelection
             onChange={this.onChecklistChange} />
         </View>

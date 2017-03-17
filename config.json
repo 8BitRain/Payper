@@ -1,7 +1,8 @@
 {
   "env": "dev",
   "dev": {
-    "lambdaBaseURL": "https://ab5lhvla17.execute-api.us-east-1.amazonaws.com/dev/",
+    "codePushKey": "ZDStxBd3TrIdUmZard0_CS0jZsuSN1-bdfOMf",
+    "lambdaBaseURL": "https://aywixmss12.execute-api.us-east-1.amazonaws.com/dev/",
     "firebaseCredentials": {
       "apiKey": "AIzaSyBF6Ej3cr-wbgn4Gz_seHMK4Lgt96HThxg",
       "authDomain": "payperv2-dev.firebaseio.com",

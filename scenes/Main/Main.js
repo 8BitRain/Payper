@@ -26,13 +26,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     right: 0,
-    padding: 20
+    padding: 14
   }
 })
 
 class Main extends React.Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      activeTab: "Broadcasts"
+    }
+
+    this.changeTab = this.changeTab.bind(this)
   }
 
   componentDidMount() {
@@ -296,18 +302,39 @@ class Main extends React.Component {
     //this.refreshTokenListener.remove();
   }
 
+  componentWillReceiveProps(nextProps) {
+
+    // Handle tab switching
+    if (nextProps.newTab && !this.state.changingTab) {
+      this.setState({
+        changingTab: true,
+        activeTab: nextProps.newTab
+      }, () => Actions.refresh({newTab: null}))
+    }
+
+    if (null === nextProps.newTab && this.state.changingTab) {
+      this.setState({changingTab: false})
+    }
+
+  }
+
+  changeTab(newTab) {
+    if (newTab === this.state.activeTab) return
+    this.setState({activeTab: newTab})
+  }
+
   render() {
     return (
       <View style={{flex: 1}}>
 
         { /* Header */ }
-        <Header {...this.props} showSideMenuButton showTabBar />
+        <Header activeTab={this.state.activeTab} changeTab={this.changeTab} {...this.props} showSideMenuButton showTabBar />
 
         { /* Inner content */ }
         <View style={styles.container}>
-          {this.props.title === "Broadcasts"  ? <BroadcastsFeed {...this.props} />  : null}
-          {this.props.title === "Explore"     ? <ExploreFeed {...this.props} />     : null}
-          {this.props.title === "Me"          ? <MeFeed {...this.props} />          : null}
+          {this.state.activeTab === "Broadcasts"  ? <BroadcastsFeed {...this.props} />  : null}
+          {this.state.activeTab === "Explore"     ? <ExploreFeed {...this.props} />     : null}
+          {this.state.activeTab === "Me"          ? <MeFeed {...this.props} />          : null}
         </View>
 
         { /* New broadcast button */ }

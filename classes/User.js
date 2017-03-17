@@ -14,26 +14,30 @@ import {
 } from '../helpers/utils'
 import {
   handleUserData,
-  handleUserBroadcastFeed
+  handleUserBroadcasts,
+  handleUserFeed
 } from '../helpers/dataHandlers'
 import {
   getFromAsyncStorage,
   setInAsyncStorage
 } from '../helpers/asyncStorage'
 import {
-  getDecryptedUserData
+  getDecryptedUserData,
+  updateGeoLocation
 } from '../helpers/lambda'
 
 export default class User {
   constructor() {
     this.broadcastFeed = {}
+    this.meFeed = {}
     this.handleAppStateChange = this.handleAppStateChange.bind(this)
   }
 
   update(updates) {
     console.log("User updates:", updates)
     for (var k in updates) this[k] = updates[k]
-    setInAsyncStorage('user', JSON.stringify(this))
+    let shouldCache = updates.uid || updates.appFlags
+    if (shouldCache) setInAsyncStorage('user', JSON.stringify(this))
   }
 
   initialize(userData) {
@@ -55,12 +59,6 @@ export default class User {
     this.timer.start()
     AppState.addEventListener('change', this.handleAppStateChange)
 
-    // Get tag data from Firebase
-    Firebase.get('Services', (val) => {
-      if (!val) return
-      this.update({tags: val})
-    })
-
   }
 
   destroy() {
@@ -78,12 +76,16 @@ export default class User {
         return
       case "background":
         this.timer.report("sessionDuration", this.uid)
-        navigator.geolocation.getCurrentPosition((res) => {
-          res.token = this.token
-          res.state = "WI"
-          updateGeoLocation(pos)
+        navigator.geolocation.getCurrentPosition((pos) => {
+          updateGeoLocation({
+            coords: {lat: pos.coords.latitude, long: pos.coords.longitude},
+            state: "WI",
+            timestamp: Date.now(),
+            token: this.token
+          }, (res) => {
+            console.log(res)
+          })
         })
-        console.log("--> Would update current location.")
         break
       case "active":
         this.timer = new Timer()
@@ -108,12 +110,31 @@ export default class User {
         callback: (res) => (res) ? updateViaRedux(res) : null
       },
       {
-        endpoint: `testTree/userBroadcastFeed/${this.uid}`,
+        endpoint: `userBroadcasts/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => handleUserBroadcastFeed(res, (broadcastFeed) => {
-          updateViaRedux({broadcastFeed})
+        callback: (res) => handleUserBroadcasts(res, (myBroadcasts) => {
+          if (!this.meFeed) this.meFeed = {}
+          this.meFeed["My Broadcasts"] = myBroadcasts
+          updateViaRedux({meFeed: this.meFeed})
         })
+      },
+      {
+        endpoint: `userFeed/${this.uid}`,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => handleUserFeed(res, (feed) => {
+          console.log("--> feed:", feed)
+        })
+      },
+      {
+        endpoint: `appFlags/${this.uid}`,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => {
+          if (!res) return
+          updateViaRedux({appFlags: res})
+        }
       }
     ]
 

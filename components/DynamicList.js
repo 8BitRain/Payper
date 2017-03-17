@@ -117,7 +117,7 @@ class DynamicList extends React.Component {
   componentWillReceiveProps(nextProps) {
     let updatedState = {}
 
-    if (nextProps.data !== this.props.data) {
+    // if (nextProps.data !== this.props.data) {
       // Auto update list (with pulling to refresh)
       // Occurs in a refreshable list if the list is empty
       // Always occurs on a nonrefreshable list
@@ -127,7 +127,7 @@ class DynamicList extends React.Component {
       // Wait to update list until user pulls to refresh
       else
         updatedState.refreshContent = this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
-    }
+    // }
 
     this.setState(updatedState)
   }

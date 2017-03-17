@@ -10,6 +10,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import {connect} from 'react-redux'
 import * as dispatchers from './Main/MainState'
 
+import config from '../config'
+
 const dimensions = Dimensions.get('window')
 
 class IAVModal extends React.Component {
@@ -40,8 +42,8 @@ class IAVModal extends React.Component {
       this.generateInjectedJS({
         IAVToken: IAVToken,
         firebaseToken: this.props.currentUser.token,
-        dwollaEnv: this.dwollaEnv,
-        payperEnv: this.payperEnv
+        dwollaEnv: config.env == "dev" ? "sandbox" : "prod",
+        payperEnv: config.env
       }, () => {
         this.refs.webviewbridge.reload()
       })

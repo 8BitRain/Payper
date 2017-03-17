@@ -4,19 +4,22 @@ import { View, Text, TouchableHighlight, Animated, Easing, Image, Dimensions, St
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
-
-//Routing
 import { Actions } from 'react-native-router-flux';
-// Stylesheets
 import {colors} from '../../../globalStyles';
-
-//Custom
 const dimensions = Dimensions.get('window');
 import { device } from '../../../helpers'
 
 //Rows
 import Row from './Row'
 import SectionHeader from './SectionHeader'
+
+//Firebase
+import { Firebase } from '../../../helpers'
+//Lambda
+import { updateUserTags } from '../../../helpers/lambda'
+
+import {connect} from 'react-redux'
+import * as dispatchers from '../../../scenes/Main/MainState'
 
 let servicesDB = {
   'VideoStreaming': {
@@ -49,63 +52,79 @@ class Own extends React.Component {
   constructor(props) {
     super(props);
 
-    this.servicesStore = [];
-    this.categoryStore = [];
-
-    var categories = servicesDB;
-    //Loop through categories
-    for (var categoryKey in categories) {
-      var category = categoryKey;
-      this.categoryStore.push(category);
-      var services = categories[categoryKey];
-
-      //Loop through services
-      for(var serviceKey in services){
-        var service = serviceKey;
-        var logo = services[service];
-        var tag = services[service];
-
-        //append title, selected, and category to each service obj.
-        console.log("Service OBJ Initial: ", services);
-        services[serviceKey]["selected"] = false;
-        services[serviceKey]["title"] = service;
-        services[serviceKey]["category"] = category;
-        //Push manipulated object into datasource ready (readable) array
-        this.servicesStore.push(services[service]);
-
-
-        console.log("Service  OBJ Updated: ", services);
-      }
-    }
-
-    console.log("Categories OBJ: + ", categories);
-    console.log("Service Store", this.servicesStore);
-
-
-    this.data = this.servicesStore;
-    const getSectionData = (dataBlob, sectionId) => dataBlob[sectionId];
-    const getRowData = (dataBlob, sectionId, rowId) => dataBlob[`${rowId}`];
-
-    //DS with section headers
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
-      sectionHeaderHasChanged : (s1, s2) => s1 !== s2,
-      getSectionData,
-      getRowData,
-    });
-
-    const { dataBlob, sectionIds, rowIds } = this.formatData(this.data, this.categoryStore);
-    console.log("OWN Props: ", this.props);
     this.state = {
-      dataSource: this.props.cleanDataSource,
+      dataSource: null,
+      displayList: false,
       selectedTags: {
       },
       selectedNum: 0
     }
   }
 
-  componentDidMount() {
 
+
+  componentDidMount() {
+    console.log("Own Props: ", this.props);
+    Firebase.getServices((cb) => {
+      console.log("Services pulled from Firebase: ", cb);
+      var categories = cb;
+      let servicesStore = [];
+      let categoryStore = [];
+      //Loop through categories
+      for (var categoryKey in categories) {
+        var category = categoryKey;
+        categoryStore.push(category);
+        var services = categories[categoryKey];
+
+        //Loop through services
+        for(var serviceKey in services){
+          var service = serviceKey;
+          var logo = services[service];
+          var tag = services[service];
+
+          //append title, selected, and category to each service obj.
+          console.log("Service OBJ Initial: ", services);
+          services[serviceKey]["selected"] = false;
+          services[serviceKey]["title"] = service;
+          services[serviceKey]["category"] = category;
+          //Push manipulated object into datasource ready (readable) array
+          servicesStore.push(services[service]);
+          console.log("Service  OBJ Updated: ", services);
+        }
+      }
+
+      //Set up RowData and SectionData
+      const getSectionData = (dataBlob, sectionId) => dataBlob[sectionId];
+      const getRowData = (dataBlob, sectionId, rowId) => dataBlob[`${rowId}`];
+
+      //DS with section headers
+      const ds = new ListView.DataSource({
+        rowHasChanged: (r1, r2) => r1 !== r2,
+        sectionHeaderHasChanged : (s1, s2) => s1 !== s2,
+        getSectionData,
+        getRowData,
+      });
+
+      const { dataBlob, sectionIds, rowIds } = this.formatData(servicesStore, categoryStore);
+
+      //Update state
+      //Note cleanDataSource is created to pass an un-edited datasource to the "Own" portion of Interest Onboarding
+      this.setState({displayList: true, dataSource: ds.cloneWithRowsAndSections(dataBlob, sectionIds, rowIds), cleanDataSource: ds.cloneWithRowsAndSections(dataBlob, sectionIds, rowIds)})
+    });
+  }
+
+  _renderListView(){
+    if(this.state.displayList){
+      return(
+        <ListView
+          style={styles.container}
+          dataSource={this.state.dataSource}
+          renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected) => this.updateSelectedTags(tag, selected)} />}
+          renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+          renderSectionHeader={(sectionData) => <SectionHeader {...sectionData} />}
+        />
+      );
+    }
   }
 
   formatData(data, categoryStore) {
@@ -162,12 +181,43 @@ class Own extends React.Component {
     selected == true ? this.setState({selectedNum: this.state.selectedNum + 1}) : this.setState({selectedNum: this.state.selectedNum - 1});
   }
 
-  handleContinuePress(){
-    updateFirebaseTags();
+  handlePress(){
+    wantedTags = "";
+    ownedTags = "";
+
+    for (var tag in this.props.wantedTags){
+      if(this.props.wantedTags[tag]){
+        //Remove the # & append a ,
+        wantedTags += tag.substring(1) + ",";
+      }
+    }
+
+    for (var tag2 in this.state.selectedTags){
+      if(this.state.selectedTags[tag2]){
+        ownedTags += tag2.substring(1) + ",";
+      }
+    }
+
+    console.log("Wanted Tags: " + wantedTags);
+    console.log("Owned Tags: " + ownedTags);
+
+    var data = {
+      want : wantedTags,
+      own : ownedTags,
+      token : this.props.currentUser.token
+    }
+
+    updateUserTags(data, (cb) => {
+      console.log("Callback: ", cb);
+    });
+
+    Actions.Main();
+
   }
 
   handleSkipPress(){
     //Load MainView
+    Actions.Main();
   }
 
   updateFirebaseTags(){
@@ -184,19 +234,13 @@ class Own extends React.Component {
         </View>
 
         {/* CONTENT*/}
-        <ListView
-          style={styles.container}
-          dataSource={this.state.dataSource}
-          renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected) => this.updateSelectedTags(tag, selected)} />}
-          renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-          renderSectionHeader={(sectionData) => <SectionHeader {...sectionData} />}
-        />
+        { this._renderListView()}
         {/* FOOTER*/}
         <View>
         <TouchableHighlight
           activeOpacity={0.8}
           underlayColor={'transparent'}
-          onPress={() => this.updateFirebaseTags()}
+          onPress={() => this.handlePress()}
           style={this.state.selectedNum >= 1 ? styles.buttonActive : styles.buttonInactive}>
               <Text style={this.state.selectedNum >= 1 ? styles.buttonActiveText : styles.buttonInactiveText}>{"Continue"}</Text>
         </TouchableHighlight>
@@ -206,7 +250,7 @@ class Own extends React.Component {
         <TouchableHighlight
           activeOpacity={0.8}
           underlayColor={'transparent'}
-          onPress={() => this.updateFirebaseTags()}
+          onPress={() => this.handlePress()}
           style={{position: "absolute", top: 10, left: dimensions.width * .8,height: 50, width: 50}}>
               <Text style={styles.skipText}>{"skip"}</Text>
         </TouchableHighlight>
@@ -296,4 +340,17 @@ var styles = StyleSheet.create({
   },
 })
 
-module.exports = Own
+function mapStateToProps(state) {
+  return {
+    currentUser: state.getIn(['main', 'currentUser'])
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setCurrentUser: (input) => dispatch(dispatchers.setCurrentUser(input)),
+    updateCurrentUser: (input) => dispatch(dispatchers.updateCurrentUser(input))
+  }
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(Own)

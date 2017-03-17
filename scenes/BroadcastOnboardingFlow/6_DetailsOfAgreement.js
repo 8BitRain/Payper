@@ -1,6 +1,6 @@
 import React from 'react'
 import {View, StyleSheet, Text} from 'react-native'
-import {TextArea, InfoBox} from '../../components'
+import {TextArea} from '../../components'
 import {colors} from '../../globalStyles'
 
 const styles = StyleSheet.create({

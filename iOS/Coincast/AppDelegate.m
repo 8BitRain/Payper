@@ -19,7 +19,7 @@
 #import "CodePush.h"
 
 #import "RNFIRMessaging.h"
-#import "Firebase.h"
+
 
 
 @implementation AppDelegate
@@ -31,15 +31,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  
-  
-  
-  
+
+
   NSURL *jsCodeLocation;
-  
-  
-  
-  
+
   /**
    * Loading JavaScript code - uncomment the one you want.
    *
@@ -63,18 +58,22 @@
                                                       moduleName:@"Coincast"
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
-  
+
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  
+
   [[FBSDKApplicationDelegate sharedInstance] application:application
                            didFinishLaunchingWithOptions:launchOptions];
+
   [FIRApp configure];
   [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
-  
+
+
+
+
   return YES;
 }
 
@@ -86,7 +85,7 @@
                                                         openURL:url
                                               sourceApplication:sourceApplication
                                                      annotation:annotation];
-  
+
 }
 
 
@@ -98,7 +97,7 @@
       }else{
           completionHandler(UNNotificationPresentationOptionNone);
         }
-  
+
    }
 
  - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler

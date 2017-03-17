@@ -19,6 +19,14 @@ import { device } from '../../helpers'
 
 import Row from './Row'
 
+import { Firebase } from '../../helpers'
+
+//Lambda
+import { updateUserTags } from '../../helpers/lambda'
+
+import {connect} from 'react-redux'
+import * as dispatchers from '../../scenes/Main/MainState'
+
 
 let servicesDB = {
   'VideoStreaming': {
@@ -51,14 +59,48 @@ class Interests extends React.Component {
   constructor(props) {
     super(props);
 
-    this.servicesStore = [];
-    this.categoryStore = [];
+    this.state = {
+      dataSource: null,
+      displayList: false,
+      loadedFirebase: false,
+      selectedTags: {},
+      ownedTags:{},
+      wantedTags:{},
+      selectedNum: 0
+    }
+  }
 
-    var categories = servicesDB;
+  componentDidMount() {
+    this.listenerConfig = {
+        endpoint: `Services`,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => {
+          console.log("An update was made to fb", res);
+          this.formatRowData(res);
+      }
+    }
+    Firebase.listenTo(this.listenerConfig);
+  }
+
+  componentWillUpdate(nextProps, nextState){
+    // perform any preparations for an upcoming update
+    this.updateUserTagsDb(nextState);
+}
+
+  componentWillUnmount() {
+    Firebase.stopListeningTo(this.listenerConfig);
+  }
+
+  formatRowData(rowData){
+    var servicesStore = [];
+    var categoryStore = [];
+
+    var categories = rowData;
     //Loop through categories
     for (var categoryKey in categories) {
       var category = categoryKey;
-      this.categoryStore.push(category);
+      categoryStore.push(category);
       var services = categories[categoryKey];
 
       //Loop through services
@@ -68,79 +110,25 @@ class Interests extends React.Component {
         var tag = services[service];
 
         //append title, selected, and category to each service obj.
-        console.log("Service OBJ Initial: ", services);
+        //console.log("Service OBJ Initial: ", services);
         services[serviceKey]["selected"] = false;
         services[serviceKey]["title"] = service;
         services[serviceKey]["category"] = category;
         //Push manipulated object into datasource ready (readable) array
-        this.servicesStore.push(services[service]);
-        console.log("Service  OBJ Updated: ", services);
+        if(typeof(services[service]) != 'string'){
+          servicesStore.push(services[service]);
+        }
+        //console.log("Service  : ", services[service]);
       }
     }
 
-    console.log("Categories OBJ: + ", categories);
-    console.log("Service Store", this.servicesStore);
-
-
-    this.data = this.servicesStore;
+    //console.log("Services: ", servicesStore);
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
-    this.state = {
-      dataSource: ds.cloneWithRows(this.data),
-      selectedTags: {},
-      ownedTags:{},
-      wantedTags:{},
-      selectedNum: 0
-    }
-  }
-
-  componentDidMount() {
+    this.setState({loadedFirebase: true, displayList: true, dataSource: ds.cloneWithRows(servicesStore)});
 
   }
 
   formatData(data, categoryStore) {
-
-    // Need somewhere to store our data
-    const dataBlob = {};
-    const sectionIds = [];
-    const rowIds = [];
-
-    //Loop through categories
-    for(let sectionId = 0; sectionId < categoryStore.length; sectionId++ ){
-
-      const category = categoryStore[sectionId];
-      console.log("Category: " + category);
-
-      //Get the services belonging to a certain category
-      const services = data.filter((service) => service.category == category);
-      console.log("Services", services);
-
-      if(services.length > 0){
-        // Add a section id to our array so the listview knows that we've got a new section
-
-        sectionIds.push(sectionId);
-
-        //This is what names the section
-        dataBlob[sectionId] = {title: category};
-        rowIds.push([]);
-
-        // Loop over the services for the section
-        for (let i = 0; i < services.length; i++) {
-          // Create a unique row id for the data blob that the listview can use for reference
-          const rowId = `${sectionId}:${i}`;
-          console.log("Row_ID" + rowId);
-
-          // Push the row id to the row ids array. This is what listview will reference to pull
-          // data from our data blob
-          rowIds[rowIds.length - 1].push(rowId);
-
-          // Store the data we care about for this row
-          console.log("Service: ", services[i]);
-          dataBlob[rowId] = services[i];
-        }
-      }
-    }
-    return { dataBlob, sectionIds, rowIds };
   }
 
 
@@ -154,8 +142,44 @@ class Interests extends React.Component {
       this.state.wantedTags[tag] = selected;
     }
     this.setState(this.state);
-    console.log("Wanted Tags: ", this.state.wantedTags);
-    console.log("Owned Tags: ", this.state.ownedTags);
+    console.log("Update Selected Tags : Wanted Tags --> ", this.state.wantedTags);
+    console.log("Update Selected Tags : Owned Tags --> ", this.state.ownedTags);
+  }
+
+
+
+  updateUserTagsDb(tagInfo){
+    wantedTags = tagInfo.wantedTags;
+    ownedTags = tagInfo.ownedTags;
+
+    dbReadyWantedTags = "";
+    dbReadyOwnedTags = "";
+
+    for (var tag in wantedTags){
+      if(wantedTags[tag]){
+        //Remove the # & append a ,
+        dbReadyWantedTags += tag.substring(1) + ",";
+      }
+    }
+
+    for (var tag2 in ownedTags){
+      if(ownedTags[tag2]){
+        dbReadyOwnedTags += tag2.substring(1) + ",";
+      }
+    }
+
+    console.log("Wanted Tags: " + dbReadyWantedTags);
+    console.log("Owned Tags: " + dbReadyOwnedTags);
+
+    var data = {
+      want : dbReadyWantedTags,
+      own : dbReadyOwnedTags,
+      token : this.props.currentUser.token
+    }
+
+    updateUserTags(data, (cb) => {
+      console.log("Callback: ", cb);
+    });
   }
 
   handleContinuePress(){
@@ -173,17 +197,25 @@ class Interests extends React.Component {
     }*/
   }
 
-  render() {
-    return(
-      <View style={styles.wrapper}>
-        {/* HEADER*/}
-        {/* CONTENT*/}
+  _renderListView(){
+    if(this.state.displayList){
+      return(
         <ListView
           style={styles.container}
           dataSource={this.state.dataSource}
           renderRow={(data) => <Row {...data} updateSelectedTags={(tag, selected, tagType) => this.updateSelectedTags(tag, selected, tagType)} />}
           renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
         />
+      );
+    }
+  }
+
+  render() {
+    return(
+      <View style={{width: dimensions.width, height: dimensions.height * .91}}>
+        {/* HEADER*/}
+        {/* CONTENT*/}
+        {this._renderListView()}
         {/* FOOTER*/}
       </View>
     );
@@ -259,4 +291,17 @@ var styles = StyleSheet.create({
   },
 })
 
-module.exports = Interests
+function mapStateToProps(state) {
+  return {
+    currentUser: state.getIn(['main', 'currentUser'])
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setCurrentUser: (input) => dispatch(dispatchers.setCurrentUser(input)),
+    updateCurrentUser: (input) => dispatch(dispatchers.updateCurrentUser(input))
+  }
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(Interests)
