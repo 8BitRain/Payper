@@ -29,7 +29,7 @@ import {
 
 export default class User {
   constructor() {
-    this.balances = {total: 0, available: 0, pending: 0} // TODO: populate with Dwolla customer balance
+    this.balances = {total: 0, available: 0, pending: 0}
     this.broadcastFeed = {}
     this.meFeed = {}
     this.handleAppStateChange = this.handleAppStateChange.bind(this)

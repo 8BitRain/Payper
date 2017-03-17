@@ -17,10 +17,7 @@ const styles = StyleSheet.create({
     shadowColor: colors.medGrey,
     shadowOpacity: 1.0,
     shadowRadius: 1,
-    shadowOffset: {
-      height: 0,
-      width: 0
-    }
+    shadowOffset: {height: 0, width: 0}
   },
   top: {
     flex: 1,

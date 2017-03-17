@@ -59,7 +59,7 @@ class SideMenuHeader extends React.Component {
                 {`${this.props.currentUser.firstName} ${this.props.currentUser.lastName}`}
               </Text>
               <Text style={{fontSize: 13, color: colors.deepBlue}}>
-                {`$${this.props.currentUser.balances.total} in Payper`}
+                {`$${(this.props.currentUser.balances) ? this.props.currentUser.balances.total : 0} in Payper Wallet`}
               </Text>
             </View>
 
