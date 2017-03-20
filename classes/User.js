@@ -23,6 +23,7 @@ import {
   setInAsyncStorage
 } from '../helpers/asyncStorage'
 import {
+  getBankAccount,
   getDecryptedUserData,
   updateGeoLocation
 } from '../helpers/lambda'
@@ -113,7 +114,19 @@ export default class User {
         endpoint: `users/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => (res) ? updateViaRedux(res) : null
+        callback: (res) => {
+          if (!res) return
+
+          // Get bank account
+          if (!this.bank || res.bankReference !== this.bankReference) {
+            getBankAccount({token: this.token}, (res) => {
+              if (!res || res.message || res.errorMessage) return
+              updateViaRedux({bankAccount: res})
+            })
+          }
+
+          updateViaRedux(res)
+        }
       },
       {
         endpoint: `usersPublicInfo/${this.uid}`,
