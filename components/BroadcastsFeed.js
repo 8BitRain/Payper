@@ -32,7 +32,8 @@ class BroadcastsFeed extends React.Component {
           afterRemove={() => alert("Removed!")}
           renderRow={(rowData, sectionID, rowID) => <CastCard broadcast={rowData} />}
           renderSectionHeader={(rowData, sectionID) => <BroadcastFeedSectionHeader sectionID={sectionID} />}
-          renderEmptyState={() => <BroadcastFeedEmptyState />} />
+          renderEmptyState={() => <BroadcastFeedEmptyState />}
+          renderFooter={() => <View style={{height: 25}} />} />
       </View>
     )
   }

@@ -5,7 +5,7 @@ import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, Acti
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../../globalStyles'
 import {removeFromCastAlert} from '../../../helpers/alerts'
-import {formatBroadcastTimestamp, formatFrequency, callbackForLoop, getRenewalDate} from '../../../helpers/utils'
+import {formatBroadcastTimestamp, formatFrequency, callbackForLoop} from '../../../helpers/utils'
 import {Firebase} from '../../../helpers'
 import {deleteCastAlert} from '../../../helpers/alerts'
 import {deleteCast, kickFromCast} from '../../../helpers/lambda'
@@ -28,12 +28,12 @@ class AdminBroadcastView extends React.Component {
     super(props)
 
     this.state = {
-      members: []
+      members: [],
+      datesJoined: {},
+      renewalDate: null
     }
 
-
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
-    this.renewalDate = getRenewalDate({createdAt: props.broadcast.createdAt, freq: props.broadcast.freq})
     this.frequency = formatFrequency(props.broadcast.freq)
     this.spotsFilled = (!props.broadcast.members) ? 0 : props.broadcast.members.split(",").length
     this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
@@ -43,10 +43,13 @@ class AdminBroadcastView extends React.Component {
     this.stopRenewal = this.stopRenewal.bind(this)
     this.resumeRenewal = this.resumeRenewal.bind(this)
     this.delete = this.delete.bind(this)
+    this.populateMembers = this.populateMembers.bind(this)
+    this.populateDates = this.populateDates.bind(this)
   }
 
   componentDidMount() {
     this.populateMembers(this.props.broadcast.members)
+    this.populateDates()
   }
 
   populateMembers(memberIDs) {
@@ -59,11 +62,18 @@ class AdminBroadcastView extends React.Component {
       onIterate: (loop) => {
         let memberID = memberIDBuffer[loop.index]
         Firebase.get(`usersPublicInfo/${memberID}`, (userData) => {
+          userData.uid = memberID
           members.push(userData)
           loop.continue()
         })
       },
       onComplete: () => this.setState({members})
+    })
+  }
+
+  populateDates() {
+    Firebase.get(`castPayments/${this.props.broadcast.castID}`, (res) => {
+      console.log("--> castPayments res", res)
     })
   }
 
@@ -179,13 +189,15 @@ class AdminBroadcastView extends React.Component {
             </View>
           </View>
 
-          { /* Renewal status */ }
+          { /* Renewal date */ }
           <View style={{paddingBottom: 10, width: dims.width * 0.88, borderColor: colors.medGrey, borderBottomWidth: 1}}>
-            <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2, backgroundColor: 'transparent'}}>
-              {(this.props.broadcast.renewal)
-                ? `Renews on ${this.renewalDate}.`
-                : `Renewal is disabled.`}
-            </Text>
+            {(this.state.renewalDate)
+              ? <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2, backgroundColor: 'transparent'}}>
+                  {(this.props.broadcast.renewal)
+                    ? `Renews on ${this.state.renewalDate}.`
+                    : `Renewal is disabled.`}
+                </Text>
+              : null }
           </View>
 
           { /* Cast members */
@@ -199,7 +211,7 @@ class AdminBroadcastView extends React.Component {
                   ? <Text style={{color: colors.deepBlue, fontSize: 16}}>
                       {"None"}
                     </Text>
-                  : this.state.members.map((o, i) => <Member key={i} member={o} remove={this.removeMember} />)}
+                  : this.state.members.map((o, i) => <Member key={i} member={o} dateJoined={this.state.datesJoined[o.uid]} remove={this.removeMember} />)}
               </View>
             : null }
 

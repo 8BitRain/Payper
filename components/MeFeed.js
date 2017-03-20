@@ -34,7 +34,8 @@ class MeFeed extends React.Component {
             return <View />
           }}
           renderSectionHeader={(rowData, sectionID) => <View style={{marginTop: 10}}><BroadcastFeedSectionHeader sectionID={sectionID} /></View>}
-          renderEmptyState={() => <MeFeedEmptyState />} />
+          renderEmptyState={() => <MeFeedEmptyState />}
+          renderFooter={() => <View style={{height: 25}} />} />
 
       </View>
     )
