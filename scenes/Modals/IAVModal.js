@@ -114,12 +114,15 @@ class IAVModal extends React.Component {
       if (verificationType === "microdeposits") {
         Actions.MicrodepositTooltip()
       } else {
-        let userIsVerified = this.props.currentUser.appFlags.customer_status === "verified"
+        // let userIsVerified = this.props.currentUser.appFlags.customer_status === "verified"
+        let userIsVerified = false
 
         Actions.BankAccountAdded({
+          type: 'replace',
           currentUser: this.props.currentUser,
           shouldShowAccountVerification: !userIsVerified,
-          verifyAccountDestination: Actions.KYCOnboardingView
+          verifyAccountDestination: () => Actions.KYCOnboardingView({type: 'replace', currentUser: this.props.currentUser}),
+          skipDestination: Actions.pop
         })
       }
     }

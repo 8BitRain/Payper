@@ -14,7 +14,6 @@ import {
   Explore,
   Me,
   KYCOnboardingView,
-  BankAccountAdded,
   MicrodepositTooltip,
   MyProfile
 } from './scenes'
@@ -30,6 +29,10 @@ import {
   Lander,
   PromoLander
 } from './scenes/Landers'
+import {
+  BankAccountAdded,
+  VerifiedIdentity
+} from './scenes/Rewards'
 import {
   AdminBroadcastView,
   JoinedBroadcastView,
@@ -58,7 +61,6 @@ class Coincast extends React.Component {
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
             <Scene key="MicrodepositTooltip"  component={MicrodepositTooltip} panHandlers={null} />
-            <Scene key="BankAccountAdded"     component={BankAccountAdded}    panHandlers={null} />
 
             { /* Drawer/Tab Scenes */ }
             <Scene key="Main" component={NavigationDrawer} open={false}>
@@ -94,6 +96,14 @@ class Coincast extends React.Component {
             </Scene>
             <Scene key="UnjoinedBroadcast">
               <Scene key="UnjoinedBroadcastModal" component={UnjoinedBroadcastView} schema="modal" panHandlers={null} hideNavBar />
+            </Scene>
+
+            { /* Reward Modals */ }
+            <Scene key="BankAccountAdded">
+              <Scene key="BankAccountAddedModal" component={BankAccountAdded} schema="modal" panHandlers={null} hideNavBar />
+            </Scene>
+            <Scene key="VerifiedIdentity">
+              <Scene key="VerifiedIdentityModal" component={VerifiedIdentity} schema="modal" panHandlers={null} hideNavBar />
             </Scene>
 
           </Scene>

@@ -5,10 +5,10 @@ import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, Acti
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../../globalStyles'
 import {removeFromCastAlert} from '../../../helpers/alerts'
-import {formatBroadcastTimestamp, formatFrequency, callbackForLoop} from '../../../helpers/utils'
+import {formatBroadcastTimestamp, formatFrequency, callbackForLoop, getRenewalDate} from '../../../helpers/utils'
 import {Firebase} from '../../../helpers'
 import {deleteCastAlert} from '../../../helpers/alerts'
-import {deleteCast} from '../../../helpers/lambda'
+import {deleteCast, kickFromCast} from '../../../helpers/lambda'
 import {ProfilePic} from '../../'
 import {SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret, Member} from '../'
 import {Header} from '../../'
@@ -31,7 +31,9 @@ class AdminBroadcastView extends React.Component {
       members: []
     }
 
+
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
+    this.renewalDate = getRenewalDate({createdAt: props.broadcast.createdAt, freq: props.broadcast.freq})
     this.frequency = formatFrequency(props.broadcast.freq)
     this.spotsFilled = (!props.broadcast.members) ? 0 : props.broadcast.members.split(",").length
     this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
@@ -69,7 +71,13 @@ class AdminBroadcastView extends React.Component {
     removeFromCastAlert({
       member,
       onConfirm: () => {
-        console.log("--> Would remove from cast...")
+        Firebase.get(`usernames/${member.username}`, (userData) => {
+          kickFromCast({
+            castID: this.props.broadcast.castID,
+            kickedUid: userData.uid,
+            token: this.props.currentUser.token
+          })
+        })
       }
     })
   }
@@ -175,7 +183,7 @@ class AdminBroadcastView extends React.Component {
           <View style={{paddingBottom: 10, width: dims.width * 0.88, borderColor: colors.medGrey, borderBottomWidth: 1}}>
             <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2, backgroundColor: 'transparent'}}>
               {(this.props.broadcast.renewal)
-                ? `Renews on ${'DATE'}.`
+                ? `Renews on ${this.renewalDate}.`
                 : `Renewal is disabled.`}
             </Text>
           </View>

@@ -2,6 +2,7 @@ import React from 'react'
 import {Actions} from 'react-native-router-flux'
 import {View, Text, TouchableHighlight, StatusBar, Dimensions, ScrollView, Alert, Animated} from 'react-native'
 import {colors} from '../globalStyles'
+import {Header} from '../components'
 import {NameField, TextField, DateField, AddressField} from '../components/Inputs'
 import {states} from '../helpers/geolocation'
 const dims = Dimensions.get('window')
@@ -112,6 +113,9 @@ class KYCOnboardingView extends React.Component {
     return(
       <View style={{flex: 1.0, flexDirection: 'column'}}>
         <StatusBar barStyle={"light-content"} />
+
+        { /* Header */ }
+        <Header showTitle showBackButton title="Account Verification" />
 
         { /* Fields */ }
         <ScrollView
