@@ -5,6 +5,7 @@ import {colors} from '../globalStyles'
 import {Header} from '../components'
 import {NameField, TextField, DateField, AddressField} from '../components/Inputs'
 import {states} from '../helpers/geolocation'
+import {verifyUser} from '../helpers/lambda'
 const dims = Dimensions.get('window')
 
 class KYCOnboardingView extends React.Component {
@@ -17,8 +18,8 @@ class KYCOnboardingView extends React.Component {
 
     this.state = {
       loading: false,
-      firstName: props.currentUser.first_name,
-      lastName: props.currentUser.last_name,
+      firstName: props.currentUser.firstName,
+      lastName: props.currentUser.lastName,
       street: "",
       city: "",
       state: "",
@@ -81,11 +82,12 @@ class KYCOnboardingView extends React.Component {
     let params = {
       firstName, lastName, city, state, zip, dob, ssn,
       state: (state.length === 2) ? state : states[state],
-      address: street
+      address: street,
+      token: this.props.currentUser.token
     }
 
-    // Verify
-    this.props.currentUser.verify(params, (customerStatus) => {
+    // Hit backend
+    verifyUser(params, (customerStatus) => {
       this.setState({loading: false})
 
       if (customerStatus === "verified")

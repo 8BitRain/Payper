@@ -8,7 +8,7 @@ import {removeFromCastAlert} from '../../../helpers/alerts'
 import {formatBroadcastTimestamp, formatFrequency, callbackForLoop} from '../../../helpers/utils'
 import {Firebase} from '../../../helpers'
 import {deleteCastAlert} from '../../../helpers/alerts'
-import {deleteCast, kickFromCast} from '../../../helpers/lambda'
+import {deleteCast, kickFromCast, stopRenewal, resumeRenewal} from '../../../helpers/lambda'
 import {ProfilePic} from '../../'
 import {SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret, Member} from '../'
 import {Header} from '../../'
@@ -116,15 +116,27 @@ class AdminBroadcastView extends React.Component {
   }
 
   stopRenewal() {
-    // TODO: Hit back end
+    // Optimistically re-render
     this.props.broadcast.renewal = false
     Actions.refresh()
+
+    // Hit backend
+    stopRenewal({
+      token: this.props.currentUser.token,
+      castID: this.props.broadcast.castID
+    })
   }
 
   resumeRenewal() {
-    // TODO: Hit back end
+    // Optimistically re-render
     this.props.broadcast.renewal = true
     Actions.refresh()
+
+    // Hit backend
+    resumeRenewal({
+      token: this.props.currentUser.token,
+      castID: this.props.broadcast.castID
+    })
   }
 
   delete() {
