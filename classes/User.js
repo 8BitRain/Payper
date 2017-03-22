@@ -23,6 +23,7 @@ import {
   setInAsyncStorage
 } from '../helpers/asyncStorage'
 import {
+  deleteUser,
   getBankAccount,
   getDecryptedUserData,
   updateGeoLocation

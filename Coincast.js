@@ -21,6 +21,7 @@ import {
   IAVModal,
   FacebookLoginModal,
   BankAccountsModal,
+  RenewalDateModal,
   SettingsModal,
   MyProfileModal
 } from './scenes/Modals'
@@ -73,6 +74,9 @@ class Coincast extends React.Component {
             </Scene>
             <Scene key="Settings" direction="vertical">
               <Scene key="SettingsModal" component={SettingsModal} schema="modal" title="Settings" panHandlers={null} hideNavBar />
+            </Scene>
+            <Scene key="RenewalDate" direction="vertical">
+              <Scene key="RenewalDateModal" component={RenewalDateModal} schema="modal" title="Settings" panHandlers={null} hideNavBar />
             </Scene>
             <Scene key="BankAccounts" direction="vertical">
               <Scene key="BankAccountsModal" component={BankAccountsModal} schema="modal"  title="Bank Accounts" panHandlers={null} hideNavBar />

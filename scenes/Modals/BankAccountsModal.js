@@ -41,6 +41,7 @@ class BankAccountsModal extends React.Component {
 
   componentDidMount() {
     this.generateRows(this.props.currentUser)
+    console.log("\n\n--> BankAccountsModal mounted... props:", this.props)
   }
 
   generateRows(currentUser) {

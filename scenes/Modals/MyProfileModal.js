@@ -2,6 +2,8 @@ import React from 'react'
 import {View, Text, TouchableHighlight, StyleSheet, Dimensions, Modal} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {Header, ProfilePic, Wallet, PhotoUploader} from '../../components'
+import {deleteUser} from '../../helpers/lambda'
+import {deleteAccountAlert} from '../../helpers/alerts'
 import {colors} from '../../globalStyles'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Button from 'react-native-button'
@@ -24,6 +26,22 @@ const styles = StyleSheet.create({
 })
 
 class MyProfileModal extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.deleteUser = this.deleteUser.bind(this)
+  }
+
+  deleteUser() {
+    deleteAccountAlert({
+      onConfirm: () => {
+        deleteUser({token: this.props.currentUser.token})
+        this.props.currentUser.destroy()
+        Actions.Lander({type: 'reset'})
+      }
+    })
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -73,6 +91,20 @@ class MyProfileModal extends React.Component {
 
         { /* Wallet */ }
         <Wallet currentUser={this.props.currentUser} />
+
+        { /* Delete account button */ }
+        <View style={[styles.shadow, {borderRadius: 4, marginTop: 12}]}>
+          <TouchableHighlight
+            activeOpacity={0.75}
+            underlayColor={colors.lightGrey}
+            onPress={this.deleteUser}>
+            <View style={{width: dims.width * 0.72, height: 40, borderRadius: 4, flexDirection: 'row', backgroundColor: colors.carminePink, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{fontSize: 16, fontWeight: '400', color: colors.snowWhite}}>
+              {"Delete Account"}
+              </Text>
+            </View>
+          </TouchableHighlight>
+        </View>
 
         { /* Photo Uploader Modal
         <Modal animationType={"slide"} transparent={false} visible={this.state.photoUploaderModalIsVisible}>

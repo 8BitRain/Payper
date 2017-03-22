@@ -1,7 +1,7 @@
 // TODO: Implement cross-plaftorm action sheet module
 import React from 'react'
 import * as _ from 'lodash'
-import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, ActionSheetIOS, Alert} from 'react-native'
+import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, ActionSheetIOS, Alert, Modal} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../../globalStyles'
 import {removeFromCastAlert} from '../../../helpers/alerts'
@@ -10,7 +10,7 @@ import {Firebase} from '../../../helpers'
 import {deleteCastAlert} from '../../../helpers/alerts'
 import {deleteCast, kickFromCast, stopRenewal, resumeRenewal} from '../../../helpers/lambda'
 import {ProfilePic} from '../../'
-import {SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret, Member} from '../'
+import {SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret, Member, RenewalDateModal} from '../'
 import {Header} from '../../'
 import {connect} from 'react-redux'
 import * as dispatchers from '../../../scenes/Main/MainState'
@@ -30,7 +30,8 @@ class AdminBroadcastView extends React.Component {
     this.state = {
       members: [],
       datesJoined: {},
-      renewalDate: null
+      renewalDate: null,
+      renewalDateModalIsVisible: false
     }
 
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
@@ -93,25 +94,22 @@ class AdminBroadcastView extends React.Component {
   }
 
   showActionSheet() {
-    let options = [
-      (this.props.broadcast.renewal) ? 'Stop Renewal' : 'Resume Renewal',
-      'Delete',
-      'Cancel'
-    ]
-    let cancelButtonIndex = options.indexOf('Cancel')
-    let destructiveButtonIndex = options.indexOf('Delete')
+    let options = ['Delete', 'Cancel']
     let callbacks = {
       'Stop Renewal': this.stopRenewal,
-      'Resume Renewal': this.resumeRenewal,
+      'Resume Renewal': () => this.setState({renewalDateModalIsVisible: true}),
       'Delete': this.delete,
       'Cancel': () => null
     }
 
+    // Add condition-reliant options
+    if (this.props.broadcast.members) options.unshift((this.props.broadcast.renewal) ? 'Stop Renewal' : 'Resume Renewal')
+
     // TODO: Implement cross-plaftorm action sheet module
     ActionSheetIOS.showActionSheetWithOptions({
       options,
-      cancelButtonIndex,
-      destructiveButtonIndex
+      cancelButtonIndex: options.indexOf('Cancel'),
+      destructiveButtonIndex: options.indexOf('Delete')
     }, (i) => callbacks[options[i]]())
   }
 
@@ -127,13 +125,14 @@ class AdminBroadcastView extends React.Component {
     })
   }
 
-  resumeRenewal() {
+  resumeRenewal(renewalDate) {
     // Optimistically re-render
     this.props.broadcast.renewal = true
     Actions.refresh()
 
     // Hit backend
     resumeRenewal({
+      resumeDate: renewalDate,
       token: this.props.currentUser.token,
       castID: this.props.broadcast.castID
     })
@@ -238,6 +237,18 @@ class AdminBroadcastView extends React.Component {
             currentUser={this.props.currentUser} />
 
         </ScrollView>
+
+        { /* Resume renewal input modal */ }
+        <Modal animationType={"slide"} transparent={true} visible={this.state.renewalDateModalIsVisible}>
+          <RenewalDateModal
+            broadcast={this.props.broadcast}
+            submit={(renewalDate) => {
+              this.resumeRenewal(renewalDate)
+              this.setState({renewalDateModalIsVisible: false})
+            }}
+            closeModal={() => this.setState({renewalDateModalIsVisible: false})} />
+        </Modal>
+
       </View>
     )
   }

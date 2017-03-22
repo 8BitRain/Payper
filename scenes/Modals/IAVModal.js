@@ -114,8 +114,7 @@ class IAVModal extends React.Component {
       if (verificationType === "microdeposits") {
         Actions.MicrodepositTooltip()
       } else {
-        // let userIsVerified = this.props.currentUser.appFlags.customer_status === "verified"
-        let userIsVerified = false
+        let userIsVerified = this.props.currentUser.appFlags.customer_status === "verified"
 
         Actions.BankAccountAdded({
           type: 'replace',
@@ -166,7 +165,7 @@ class IAVModal extends React.Component {
             onBridgeMessage={(msg) => this.onBridgeMessage(msg)}
             javaScriptEnabled={true}
             injectedJavaScript={this.state.injectedJS}
-            source={{uri: 'https://www.getpayper.io/iav'}} />
+            source={{uri: 'http://localhost:8080/iav'}} />
         </View>
 
         { /* Add Bank Account Tooltip */ }

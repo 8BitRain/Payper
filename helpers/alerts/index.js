@@ -1,3 +1,4 @@
+exports.deleteAccountAlert = require('./deleteAccount')
 exports.deleteCastAlert = require('./deleteCast')
 exports.removeFromCastAlert = require('./removeFromCast')
 exports.subscribeAlert = require('./subscribe')
