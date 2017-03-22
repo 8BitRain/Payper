@@ -57,7 +57,7 @@ class Coincast extends React.Component {
           <Scene key="root" hideNavBar={true}>
 
             { /* Linear Scenes */ }
-            <Scene key="Splash"               component={Splash}              panHandlers={null} />
+            <Scene key="Splash"               component={Splash}              panHandlers={null} initial />
             <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} />
             <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
@@ -91,16 +91,8 @@ class Coincast extends React.Component {
             <Scene key="MyProfile" direction="vertical">
               <Scene key="MyProfileModal" component={MyProfileModal} schema="modal" title="My Profile" panHandlers={null} hideNavBar />
             </Scene>
-            <Scene key="UserProfile" direction="vertical" initial>
-              <Scene key="UserProfileModal" component={UserProfileModal} schema="modal" panHandlers={null} hideNavBar
-                user={{
-                  firstName: "Brady",
-                  lastName: "Sheridan",
-                  username: "@Brady-Sheridan",
-                  profilePic: "https://scontent-ort2-1.xx.fbcdn.net/v/t1.0-9/17022387_1372970839390041_35582023932744800_n.jpg?oh=89f12fde03130040435030ddeda9f0c6&oe=5950F4FA",
-                  avgRating: 3,
-                  numRatings: 18
-                }} />
+            <Scene key="UserProfile" direction="vertical">
+              <Scene key="UserProfileModal" component={UserProfileModal} schema="modal" panHandlers={null} hideNavBar />
             </Scene>
 
             { /* Broadcast Modals */ }

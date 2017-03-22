@@ -75,21 +75,26 @@ class UnjoinedBroadcastView extends React.Component {
 
         <ScrollView>
           { /* Profile Pic, Title, Amount, Frequency */ }
-          <View style={{flexDirection: 'row', alignItems: 'center', padding: 10, paddingTop: 15, paddingBottom: 15, marginTop: 10, width: dims.width * 0.88, borderColor: colors.medGrey, borderBottomWidth: 1}}>
-            <ProfilePic size={57} currentUser={this.props.broadcast.caster} />
+          <TouchableHighlight
+            activeOpacity={0.75}
+            underlayColor={'transparent'}
+            onPress={() => Actions.UserProfile({user: this.props.broadcast.caster})}>
+            <View style={{flexDirection: 'row', alignItems: 'center', padding: 10, paddingTop: 15, paddingBottom: 15, marginTop: 10, width: dims.width * 0.88, borderColor: colors.medGrey, borderBottomWidth: 1}}>
+              <ProfilePic size={57} currentUser={this.props.broadcast.caster} />
 
-            <View style={{paddingLeft: 20}}>
-              <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '700'}}>
-                {this.props.broadcast.title}
-              </Text>
-              <Text style={{color: colors.accent, fontSize: 16, fontWeight: '600'}}>
-                {this.props.broadcast.caster.username}
-              </Text>
-              <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2}}>
-                {`$${this.props.broadcast.amount} per ${this.frequency}`}
-              </Text>
+              <View style={{paddingLeft: 20}}>
+                <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '700'}}>
+                  {this.props.broadcast.title}
+                </Text>
+                <Text style={{color: colors.accent, fontSize: 16, fontWeight: '600'}}>
+                  {this.props.broadcast.caster.username}
+                </Text>
+                <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2}}>
+                  {`$${this.props.broadcast.amount} per ${this.frequency}`}
+                </Text>
+              </View>
             </View>
-          </View>
+          </TouchableHighlight>
 
           { /* Spots available, Subscribe button */ }
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, paddingTop: 15, paddingBottom: 15, width: dims.width * 0.88, borderColor: colors.medGrey, borderBottomWidth: 1}}>

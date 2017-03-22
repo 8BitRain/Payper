@@ -1,12 +1,17 @@
 import React from 'react'
 import {View, Text, TouchableHighlight, StyleSheet, Dimensions, Modal} from 'react-native'
 import {Actions} from 'react-native-router-flux'
-import {Header, ProfilePic, Wallet, Rating} from '../../components'
+import {Header, ProfilePic, Wallet, Rating, DynamicList, BroadcastFeedSectionHeader} from '../../components'
+import {AdminCard, CastCard, SubscriptionCard} from '../../components/Broadcasts'
+import {BroadcastFeedEmptyState} from '../../components/EmptyStates'
+import {Firebase} from '../../helpers'
 import {deleteUser} from '../../helpers/lambda'
 import {deleteAccountAlert} from '../../helpers/alerts'
+import {handleUserBroadcasts, handleUserSubscribedBroadcasts} from '../../helpers/dataHandlers'
 import {colors} from '../../globalStyles'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Button from 'react-native-button'
+
 import {connect} from 'react-redux'
 import * as dispatchers from '../Main/MainState'
 
@@ -16,6 +21,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: colors.snowWhite
+  },
+  listViewWrap: {
+    flex: 1,
+    width: dims.width,
+    backgroundColor: colors.lightGrey,
+    borderTopWidth: 1,
+    borderColor: colors.medGrey
   },
   shadow: {
     shadowColor: colors.slateGrey,
@@ -28,6 +40,28 @@ const styles = StyleSheet.create({
 class UserProfileModal extends React.Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      broadcasts: [],
+      subscriptions: []
+    }
+  }
+
+  componentDidMount() {
+    Firebase.get(`usernames/${this.props.user.username}`, (userData) => {
+      let {uid} = userData
+      this.setState({uid})
+
+      Firebase.get(`userBroadcasts/${uid}`, (res) => {
+        if (!res) return
+        handleUserBroadcasts(res, (broadcasts) => this.setState({broadcasts}))
+      })
+
+      Firebase.get(`userSubscribedBroadcasts/${uid}`, (res) => {
+        if (!res) return
+        handleUserSubscribedBroadcasts(res, (subscriptions) => this.setState({subscriptions}))
+      })
+    })
   }
 
   render() {
@@ -38,7 +72,7 @@ class UserProfileModal extends React.Component {
         <Header showTitle showBackButton title={`${this.props.user.firstName} ${this.props.user.lastName}`} />
 
         { /* Profile pic, name, username, rating */ }
-        <View style={{justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, borderColor: colors.medGrey, paddingBottom: 5, paddingTop: 15, width: dims.width * 0.92}}>
+        <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom: 5, paddingTop: 15, width: dims.width * 0.92}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <ProfilePic currentUser={this.props.user} size={50} />
             <View style={{width: 10}} />
@@ -52,7 +86,34 @@ class UserProfileModal extends React.Component {
             </View>
           </View>
 
-          <Rating avgRating={this.props.user.avgRating} numRatings={this.props.user.numRatings} />
+          <Rating avgRating={this.props.user.rating.avg} numRatings={this.props.user.rating.numRatings} />
+        </View>
+
+        { /* Broadcasts */ }
+        <View style={styles.listViewWrap}>
+          <DynamicList
+            refreshable={true}
+            showPullToRefresh={true}
+            shouldAnimateIn={false}
+            data={{"Broadcasts": this.state.broadcasts, "Subscriptions": this.state.subscriptions}}
+            renderRow={(rowData, sectionID, rowID) => {
+              rowData.caster = this.props.user
+
+              // If current user is owner of this cast show admin card
+              if (rowData.casterID === this.props.currentUser.casterID)
+                return <AdminCard broadcast={rowData} />
+
+              // If current user is a member of this cast show subscription card
+              if (rowData.members && rowData.members.indexOf(this.props.currentUser.uid >= 0))
+                return <SubscriptionCard broadcast={rowData} />
+
+              // Otherwise, show cast card
+              else
+                return <CastCard broadcast={rowData} />
+            }}
+            renderSectionHeader={(rowData, sectionID) => <BroadcastFeedSectionHeader sectionID={sectionID} />}
+            renderEmptyState={() => <BroadcastFeedEmptyState />}
+            renderFooter={() => <View style={{height: 25}} />} />
         </View>
 
       </View>
