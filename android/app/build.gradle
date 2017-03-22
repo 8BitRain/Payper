@@ -83,7 +83,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.example"
+        applicationId "com.payper"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 9
@@ -140,6 +140,7 @@ dependencies {
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile project(':react-native-contacts')
+
 }
 
 // Run this once to be able to run the application with BUCK
