@@ -68,8 +68,55 @@ class Main extends React.Component {
          });
         });
 
+
+
             // store fcm token in your server
         });
+
+        try{
+          this.notificationListener = FCM.on('notification', (notif) => {
+         // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
+         console.log(notif);
+         try{
+           FCM.presentLocalNotification({                          // (optional for instant notification)
+                title: notif.aps.alert.title,                     // as FCM payload
+                body: notif.aps.alert.body,                    // as FCM payload (required)
+                sound: "default",                                   // as FCM payload
+                priority: "high",                                   // as FCM payload
+                click_action: "ACTION",                             // as FCM payload
+                badge: 0,                                          // as FCM payload IOS only, set 0 to clear badges
+                large_icon: "ic_launcher",                           // Android only
+                icon: "ic_launcher",                                // as FCM payload, you can relace this with custom icon you put in mipmap
+                my_custom_data:'my_custom_field_value',             // extra data you want to throw
+                lights: true,                                       // Android only, LED blinking (default false)
+                show_in_foreground: true
+            });
+         }catch(err){
+           console.log("Notification Error: " + err)
+         }
+
+         if(notif.local_notification){
+           //this is a local notification
+         }
+         if(notif.opened_from_tray){
+           //app is open/resumed because user clicked banner
+         }
+
+        });
+        } catch(err){
+          console.log("Notification Error", err);
+        }
+
+
+        try{
+          this.refreshTokenListener = FCM.on('refreshToken', (token) => {
+              console.log(token)
+              // fcm token may not be available on first load, catch it here
+          });
+        } catch(err){
+          console.log("RefreshTokenListener Error", err);
+        }
+
 
 
 
@@ -298,8 +345,8 @@ class Main extends React.Component {
   }
 
   componentWillUnmount(){
-    //this.notificationListener.remove();
-    //this.refreshTokenListener.remove();
+    this.notificationListener.remove();
+    this.refreshTokenListener.remove();
   }
 
   componentWillReceiveProps(nextProps) {

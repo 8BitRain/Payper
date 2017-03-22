@@ -7,11 +7,8 @@ function getCustomTokenAndKey(firebaseToken, key, cb) {
     key: key
   }
 
-<<<<<<< HEAD
-  fetch("http://192.168.1.3:8080/getToken", {
-=======
+
   fetch("https://www.getpayper.io/getToken", {
->>>>>>> sxsw-promo
     method: "POST",
     headers: {
       'Accept': 'application/json',

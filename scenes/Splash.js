@@ -1,13 +1,8 @@
-<<<<<<< HEAD
-// TODO: HANDLE CONNECTIVITY CHECK
-import React from 'react'
-=======
 
 // TODO: HANDLE CONNECTIVITY CHECK
 import React from 'react'
 import config from '../config'
 import codePush from 'react-native-code-push'
->>>>>>> sxsw-promo
 import {View, Text, Image, NetInfo, TouchableHighlight, Animated, Easing, Dimensions, StatusBar, StyleSheet} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {FBLoginManager} from 'NativeModules'
@@ -29,7 +24,6 @@ const styles = StyleSheet.create({
 })
 
 class Splash extends React.Component {
-<<<<<<< HEAD
   constructor(props) {
     super(props)
   }
@@ -67,31 +61,6 @@ class Splash extends React.Component {
           }
         })
       })
-=======
-  componentWillMount() {
-
-    // Sync with codepush
-    codePush.sync({
-      deploymentKey: config[config.env].codePushKey,
-      updateDialog: false,
-      installMode: codePush.InstallMode.IMMEDIATE
-    })
-
-    // Log out of Facebook auth so button doesn't say 'log out'
-    FBLoginManager.logOut()
-
-    // Continue in app flow
-    getFromAsyncStorage('userData', (cachedData) => {
-      if (!cachedData) Actions.PromoLander()
-      else {
-        cachedData = JSON.parse(cachedData)
-        Actions.PromoInvite({
-          userWasCached: true,
-          userData: cachedData,
-          subscription: cachedData.subscription
-        })
-      }
->>>>>>> sxsw-promo
     })
   }
 
