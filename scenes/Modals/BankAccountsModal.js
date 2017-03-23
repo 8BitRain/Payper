@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import {View, Text, Modal, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions, Alert, ActionSheetIOS} from 'react-native'
 import {colors} from '../../globalStyles'
 import {IAVWebView, Header} from '../../components'
+import {deleteBankAccount} from '../../helpers/lambda'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import * as dispatchers from '../Main/MainState'
 
@@ -54,7 +55,7 @@ class BankAccountsModal extends React.Component {
     this.props.updateCurrentUser({bankAccount: null})
     currentUser.bankAccount = null
     this.generateRows(currentUser)
-    Lambda.removeFundingSource({token: currentUser.token})
+    // deleteBankAccount({token: currentUser.token})
   }
 
   onlyAllowOneBankAccount() {

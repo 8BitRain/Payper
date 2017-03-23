@@ -51,7 +51,7 @@ class AdminCard extends React.Component {
       <TouchableHighlight
         activeOpacity={0.75}
         underlayColor={'transparent'}
-        onPress={() => Actions.AdminBroadcast({broadcast: this.props.broadcast})}>
+        onPress={() => Actions.AdminBroadcast({broadcast: this.props.broadcast, canViewCasterProfile: this.props.canViewCasterProfile})}>
         <View style={styles.container}>
 
           { /* Chevron (absolutely positioned) */ }

@@ -28,6 +28,8 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   loadingModal: {
+    justifyContent: 'center',
+    alignItems: 'center',
     position: 'absolute',
     top: 0,
     right: 0,
@@ -137,7 +139,9 @@ class Lander extends React.Component {
 
         { /* Loading Modal */
           (this.state.loading)
-            ? <View style={styles.loadingModal} />
+            ? <View style={styles.loadingModal}>
+                <Image source={require('../../assets/images/loading.gif')} style={{height: 100, width: 100}} />
+              </View>
             : null}
       </View>
     )

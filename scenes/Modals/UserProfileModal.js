@@ -101,15 +101,15 @@ class UserProfileModal extends React.Component {
 
               // If current user is owner of this cast show admin card
               if (rowData.casterID === this.props.currentUser.casterID)
-                return <AdminCard broadcast={rowData} />
+                return <AdminCard broadcast={rowData} canViewCasterProfile={false} />
 
               // If current user is a member of this cast show subscription card
               if (rowData.members && rowData.members.indexOf(this.props.currentUser.uid >= 0))
-                return <SubscriptionCard broadcast={rowData} />
+                return <SubscriptionCard broadcast={rowData} canViewCasterProfile={false} />
 
               // Otherwise, show cast card
               else
-                return <CastCard broadcast={rowData} />
+                return <CastCard broadcast={rowData} canViewCasterProfile={false} />
             }}
             renderSectionHeader={(rowData, sectionID) => <BroadcastFeedSectionHeader sectionID={sectionID} />}
             renderEmptyState={() => <BroadcastFeedEmptyState />}

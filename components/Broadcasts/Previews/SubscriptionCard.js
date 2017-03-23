@@ -54,7 +54,7 @@ class SubscriptionCard extends React.Component {
       <TouchableHighlight
         activeOpacity={0.75}
         underlayColor={'transparent'}
-        onPress={() => Actions.JoinedBroadcast({broadcast: this.props.broadcast})}>
+        onPress={() => Actions.JoinedBroadcast({broadcast: this.props.broadcast, canViewCasterProfile: this.props.canViewCasterProfile})}>
         <View style={styles.container}>
 
           { /* Chevron (absolutely positioned) */ }

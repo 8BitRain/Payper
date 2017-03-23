@@ -1,7 +1,7 @@
 import config from '../../config'
 const baseURL = config[config.env].lambdaBaseURL
 
-function getBankAccount(params, cb) {
+function deleteBankAccount(params, cb) {
   console.log("--> Hitting 'customers/getFundingSource' with params:", params)
   try {
     fetch(baseURL + "customers/getFundingSource", {
@@ -24,4 +24,4 @@ function getBankAccount(params, cb) {
   }
 }
 
-module.exports = getBankAccount
+module.exports = deleteBankAccount

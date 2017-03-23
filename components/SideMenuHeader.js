@@ -1,8 +1,9 @@
 import React from 'react'
-import {View, TouchableHighlight, Image, StyleSheet, Dimensions, Text, Platform} from 'react-native'
+import {View, TouchableHighlight, Image, StyleSheet, Dimensions, Text, Platform, Animated, Easing} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../globalStyles'
 import {ProfilePic} from './'
+import {getProfileStrength} from '../helpers/utils'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
 const dims = Dimensions.get('window')
@@ -33,10 +34,54 @@ const styles = StyleSheet.create({
   },
   iconWrap: {
     flex: 0.15
+  },
+  progressBarWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: dims.width * 0.725,
+    backgroundColor: 'red'
+  },
+  progressBar: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    backgroundColor: colors.gradientGreen
   }
 })
 
 class SideMenuHeader extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.AV = {
+      progressBar: {
+        width: new Animated.Value(0)
+      }
+    }
+
+    this.state = {
+      profileStrength: getProfileStrength(props.currentUser.appFlags)
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let profileStrength = getProfileStrength(nextProps.currentUser.appFlags)
+    this.animateProgressBar(profileStrength)
+    this.setState({profileStrength})
+  }
+
+  animateProgressBar(profileStrength) {
+    let newWidth = (profileStrength / 100) * (dims.width * 0.725)
+
+    Animated.timing(this.AV.progressBar.width, {
+      toValue: newWidth,
+      duration: 200
+    }).start()
+  }
+
   render() {
     return(
       <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={Actions.MyProfile}>
@@ -71,6 +116,16 @@ class SideMenuHeader extends React.Component {
             </View>
 
           </View>
+
+          { /* Profile completion bar
+          <View stye={styles.progressBarWrap}>
+            <Animated.View style={[styles.progressBar, this.AV.progressBar]} />
+            <Text style={{fontSize: 17, color: colors.deepBlue, padding: 7}}>
+              {`Profile Strength: ${this.state.profileStrength}%`}
+            </Text>
+          </View>
+          */ }
+
         </View>
       </TouchableHighlight>
     )

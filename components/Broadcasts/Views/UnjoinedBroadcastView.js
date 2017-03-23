@@ -76,9 +76,9 @@ class UnjoinedBroadcastView extends React.Component {
         <ScrollView>
           { /* Profile Pic, Title, Amount, Frequency */ }
           <TouchableHighlight
-            activeOpacity={0.75}
+            activeOpacity={(this.props.canViewCasterProfile === false) ? 1 : 0.75}
             underlayColor={'transparent'}
-            onPress={() => Actions.UserProfile({user: this.props.broadcast.caster})}>
+            onPress={() => (this.props.canViewCasterProfile === false) ? null : Actions.UserProfile({user: this.props.broadcast.caster})}>
             <View style={{flexDirection: 'row', alignItems: 'center', padding: 10, paddingTop: 15, paddingBottom: 15, marginTop: 10, width: dims.width * 0.88, borderColor: colors.medGrey, borderBottomWidth: 1}}>
               <ProfilePic size={57} currentUser={this.props.broadcast.caster} />
 
