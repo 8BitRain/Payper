@@ -126,9 +126,13 @@ repositories {
 }
 
 dependencies {
-    compile project(':react-native-fcm')
+    compile (project(':react-native-fcm')){
+        exclude group: "com.google.firebase"
+    }
+    compile (project(':react-native-device-info')){
+        exclude group: "com.google.android.gms"
+    }
     compile project(':bugsnag-react-native')
-    compile project(':react-native-device-info')
     compile project(':react-native-code-push')
     compile project(':react-native-fabric')
     compile project(':react-native-webview-bridge')
@@ -140,6 +144,9 @@ dependencies {
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile project(':react-native-contacts')
+    compile ("com.google.android.gms:play-services-gcm:10.0.1") {
+        force = true;
+    }
 
 }
 

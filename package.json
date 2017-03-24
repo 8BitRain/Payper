@@ -19,7 +19,7 @@
     "moment": "^2.14.1",
     "querystring": "^0.2.0",
     "react": "15.4.0",
-    "react-native": "0.33.x",
+    "react-native": "0.39.x",
     "react-native-animatable": "^0.6.1",
     "react-native-asset-library-to-base64": "^1.0.1",
     "react-native-autocomplete-input": "2.0.0",
