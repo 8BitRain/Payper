@@ -25,7 +25,27 @@ export function getServices(callback) {
   });
 };
 
+/**
+  * Get Wanted Tags
+**/
+export function getWantedTags(user, callback) {
+  firebase.database().ref('/usersPublicInfo/' + user + '/wantedTags').once('value', function(snapshot) {
+    if (typeof callback == 'function') callback(snapshot.val());
+  }).catch(function(err) {
+    console.log("Error code", error.code, "\nError message", error.message);
+  });
+};
 
+/**
+  * Get Owned Tags
+**/
+export function getOwnedTags(user, callback) {
+  firebase.database().ref('/usersPublicInfo/' + user + '/ownedTags').once('value', function(snapshot) {
+    if (typeof callback == 'function') callback(snapshot.val());
+  }).catch(function(err) {
+    console.log("Error code", error.code, "\nError message", error.message);
+  });
+};
 
 
 /**

@@ -38,7 +38,7 @@ class Splash extends React.Component {
 
     // Continue in app flow
     getFromAsyncStorage('userData', (userData) => {
-      if (!userData) Actions.PromoLander()
+      if (!userData) Actions.Lander()
       else Actions.PromoWaitingRoom({userData: JSON.parse(userData)})
     })
 

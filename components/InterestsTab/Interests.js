@@ -81,6 +81,22 @@ class Interests extends React.Component {
       }
     }
     Firebase.listenTo(this.listenerConfig);
+
+    //Pull wanted tags
+    Firebase.getWantedTags(this.props.currentUser.uid, (cb) => {
+      //let wantedTags = {cb: true}
+      console.log("Wanted Tags: ", cb);
+      //this.setState({wantedTags: cb});
+    });
+
+
+    //Pull owned tags
+    Firebase.getOwnedTags(this.props.currentUser.uid, (cb) =>{
+        //let ownedTags = {cb: true};
+        console.log("Owned Tags: ", cb);
+        //this.setState({ownedTags: cb});
+    });
+
   }
 
   componentWillUpdate(nextProps, nextState){
@@ -157,19 +173,30 @@ class Interests extends React.Component {
 
     for (var tag in wantedTags){
       if(wantedTags[tag]){
+        //Currently tags have #'s appended to them, they need to be removed
         //Remove the # & append a ,
-        dbReadyWantedTags += tag.substring(1) + ",";
+        if(tag.includes('#')){
+          dbReadyWantedTags += tag.substring(1) + ",";
+        } else {
+          dbReadyWantedTags += tag + ",";
+        }
       }
     }
 
     for (var tag2 in ownedTags){
       if(ownedTags[tag2]){
-        dbReadyOwnedTags += tag2.substring(1) + ",";
+        //Currently tags have #'s appended to them, they need to be removed
+        //Remove the # & append a ,
+        if(tag.includes('#')){
+          dbReadyOwnedTags += tag2.substring(1) + ",";
+        } else {
+          dbReadyOwnedTags += tag + ",";
+        }
       }
     }
 
-    console.log("Wanted Tags: " + dbReadyWantedTags);
-    console.log("Owned Tags: " + dbReadyOwnedTags);
+    //console.log("Wanted Tags: " + dbReadyWantedTags);
+    //console.log("Owned Tags: " + dbReadyOwnedTags);
 
     var data = {
       want : dbReadyWantedTags,

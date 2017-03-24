@@ -140,8 +140,8 @@ class FacebookLoginModal extends React.Component {
     })
 
     function onSuccess(userData) {
-      this.props.currentUser.initialize(userData)
-      Actions.Want()
+      this.props.currentUser.initialize(userData);
+      Actions.Want();
     }
 
     function onFailure(err) {
