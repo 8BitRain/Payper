@@ -99,7 +99,7 @@ class UnjoinedBroadcastView extends React.Component {
           { /* Spots available, Subscribe button */ }
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, paddingTop: 15, paddingBottom: 15, width: dims.width * 0.88, borderColor: colors.medGrey, borderBottomWidth: 1}}>
             <SpotsAvailable broadcast={this.props.broadcast} />
-            <SubscribeButton onPress={() => subscribeAlert({broadcast: this.props.broadcast, onConfirm: this.onSubscribe})} />
+            <SubscribeButton onPress={() => subscribeAlert({broadcast: this.props.broadcast, currentUser: this.props.currentUser, onConfirm: this.onSubscribe})} />
           </View>
 
           { /* Details of Agreement */ }

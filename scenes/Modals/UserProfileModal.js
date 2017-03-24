@@ -1,7 +1,7 @@
 import React from 'react'
 import {View, Text, TouchableHighlight, StyleSheet, Dimensions, Modal} from 'react-native'
 import {Actions} from 'react-native-router-flux'
-import {Header, ProfilePic, Wallet, Rating, DynamicList, BroadcastFeedSectionHeader} from '../../components'
+import {Header, ProfilePic, Wallet, Rating, DynamicList, BroadcastFeedSectionHeader, RatingInputModal} from '../../components'
 import {AdminCard, CastCard, SubscriptionCard} from '../../components/Broadcasts'
 import {BroadcastFeedEmptyState} from '../../components/EmptyStates'
 import {Firebase} from '../../helpers'
@@ -43,7 +43,8 @@ class UserProfileModal extends React.Component {
 
     this.state = {
       broadcasts: [],
-      subscriptions: []
+      subscriptions: [],
+      ratingModalVisible: false
     }
   }
 
@@ -86,7 +87,12 @@ class UserProfileModal extends React.Component {
             </View>
           </View>
 
-          <Rating avgRating={this.props.user.rating.avg} numRatings={this.props.user.rating.numRatings} />
+          <TouchableHighlight
+            activeOpacity={0.75}
+            underlayColor={'transparent'}
+            onPress={() => this.setState({ratingModalVisible: true})}>
+            <Rating avgRating={this.props.user.rating.avg} numRatings={this.props.user.rating.numRatings} />
+          </TouchableHighlight>
         </View>
 
         { /* Broadcasts */ }
@@ -115,6 +121,13 @@ class UserProfileModal extends React.Component {
             renderEmptyState={() => <BroadcastFeedEmptyState />}
             renderFooter={() => <View style={{height: 25}} />} />
         </View>
+
+        { /* Rating input modal */ }
+        <RatingInputModal
+          visible={this.state.modalVisible}
+          currentUser={this.props.currentUser}
+          user={this.props.user}
+          onSubmit={(rating) => this.setState({ratingModalVisible: false})} />
 
       </View>
     )
