@@ -83,7 +83,7 @@ class Interests extends React.Component {
     Firebase.listenTo(this.listenerConfig);
 
     //Pull wanted tags
-    Firebase.getWantedTags(this.props.currentUser.uid, (cb) => {
+    /*Firebase.getWantedTags(this.props.currentUser.uid, (cb) => {
       //let wantedTags = {cb: true}
       console.log("Wanted Tags: ", cb);
       //this.setState({wantedTags: cb});
@@ -95,7 +95,7 @@ class Interests extends React.Component {
         //let ownedTags = {cb: true};
         console.log("Owned Tags: ", cb);
         //this.setState({ownedTags: cb});
-    });
+    });*/
 
   }
 
@@ -195,34 +195,17 @@ class Interests extends React.Component {
       }
     }
 
-    //console.log("Wanted Tags: " + dbReadyWantedTags);
-    //console.log("Owned Tags: " + dbReadyOwnedTags);
-
     var data = {
       want : dbReadyWantedTags,
       own : dbReadyOwnedTags,
       token : this.props.currentUser.token
     }
-
-    updateUserTags(data, (cb) => {
+    //Turn back on once DB is properly set
+    /*updateUserTags(data, (cb) => {
       console.log("Callback: ", cb);
-    });
+    });*/
   }
 
-  handleContinuePress(){
-    this.updateFirebaseTags();
-    //Actions.Own();
-  }
-
-  updateFirebaseTags(){
-    //console.log("Tags to Submit: ", this.state.selectedTags);
-    //Loop through selected tags
-    //Way to format the data
-    /*data: {
-      own: "val1, val2, val3",
-      want: "val1, val2, val3"
-    }*/
-  }
 
   _renderListView(){
     if(this.state.displayList){

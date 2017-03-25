@@ -64,7 +64,7 @@ class Coincast extends React.Component {
           <Scene key="root" hideNavBar={true}>
 
             { /* Linear Scenes */ }
-            <Scene key="Splash"               component={Splash}              panHandlers={null} initial/>
+            <Scene key="Splash"               component={Splash}              panHandlers={null} />
             <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
@@ -72,6 +72,7 @@ class Coincast extends React.Component {
             <Scene key="BankAccountAdded"     component={BankAccountAdded}    panHandlers={null} />
             <Scene key="Want"     component={Want}    panHandlers={null} />
             <Scene key="Own"     component={Own}    panHandlers={null} />
+            <Scene key="Interests"     component={Interests}    panHandlers={null} initial />
 
             { /* SXSW Promo Scenes */ }
             <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} />
