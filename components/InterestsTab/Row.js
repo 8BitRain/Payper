@@ -1,10 +1,11 @@
 // Dependencies
 import React from 'react';
-import { View, Text, TouchableHighlight, Animated, Easing, Image, Dimensions, StyleSheet, ListView } from 'react-native';
+import { View, Text, TouchableHighlight, Animated, Easing, Image, Dimensions, StyleSheet, ScrollView, ListView } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
+import MatchedInterestRow from './MatchedInterestRow'
 
 // Stylesheets
 import {colors} from '../../globalStyles';
@@ -19,13 +20,31 @@ class Row extends React.Component {
     this.state = {
       ownSelected: false,
       wantSelected: false,
-      fallbackImageNeeded: false
+      fallbackImageNeeded: false,
+      displayList: false,
+      miDataSource: null
     }
   }
 
   componentDidMount() {
-    //console.log("Props", this.props);
+    //Load initial data source for user row
+    let matchedUsers = [{name: "Ryder", wants:"none" , owns: "none" }, {name: "Sonny", wants:"none" , owns: "none"}, {name: "The Widow", wants:"none" , owns: "none"}];
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.setState({miDataSource: ds.cloneWithRows(matchedUsers)});
   }
+
+  getMatchedUsers(title){
+    switch (title) {
+      case "audible":
+        let matchedUsers = [{name: "Ryder", wants:true , owns:false  }, {name: "Sonny", wants:false , owns: true}, {name: "The Widow", wants:false , owns: true}];
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        this.setState({miDataSource: ds.cloneWithRows(matchedUsers), displayList: true});
+        break;
+      default:
+        console.log("No users were found");
+    }
+  }
+
   /*Toggles betweens whether or not the row has been selected.
   * Helps determine which tags to send to the db.
   */
@@ -51,6 +70,15 @@ class Row extends React.Component {
       }
     }
 
+  }
+
+  toggleDisplayList(toggle){
+    if(toggle){
+      //getMatchedUsers then displayList
+      this.getMatchedUsers(this.props.title);
+    } else {
+      this.setState({displayList: toggle});
+    }
   }
 
   _renderLogo(){
@@ -100,6 +128,18 @@ class Row extends React.Component {
     }
   }
 
+  _renderListView(){
+    if(this.state.displayList){
+      return(
+        <ListView
+          style={styles.container}
+          dataSource={this.state.miDataSource}
+          renderRow={(data) => <MatchedInterestRow {...data}/>}
+        />
+      );
+    }
+  }
+
   render() {
     return(
       <View style={{flex: 1}}>
@@ -134,6 +174,21 @@ class Row extends React.Component {
              </TouchableHighlight>
            </View>
          </View>
+         {/* see more button */}
+         <TouchableHighlight
+           activeOpacity={0.8}
+           underlayColor={'transparent'}
+           onPress={() => this.toggleDisplayList(this.state.displayList ? false : true)}>
+           <View>
+             <Text>{"see more"}</Text>
+           </View>
+         </TouchableHighlight>
+
+         {/* Matched User Rows*/}
+          <ScrollView>
+            { this._renderListView() }
+          </ScrollView>
+
      </View>
     );
   }
@@ -144,7 +199,7 @@ var styles = StyleSheet.create({
     flex: 1,
     padding: 12,
     flexDirection: 'row',
-    alignItems: 'center',
+
     backgroundColor: colors.lightGrey
   },
   rowSelected:{

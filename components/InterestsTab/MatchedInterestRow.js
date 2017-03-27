@@ -23,16 +23,56 @@ class MatchedInterestRow extends React.Component {
   componentDidMount() {
   }
 
+  userDesire(want, own){
+    if(!want && own){
+      return "owns"
+    }
+    if(!own && want){
+      return "wants"
+    }
+  }
+
+  _renderActionButton(want, own){
+    /* Send Notification Button (User owns service)*/
+    if(!want && own){
+      return(
+        <TouchableHighlight
+          activeOpacity={0.8}
+          underlayColor={'transparent'}
+          onPress={() => console.log("Push notification to Notify User")}>
+          <View style={{}}>
+            <Text style={styles.buttonText}>{"Notify User"}</Text>
+          </View>
+        </TouchableHighlight>
+      );
+    }
+    {/* Start Casting Button (User wants service)*/}
+    if(!own && want){
+      return(
+        <TouchableHighlight
+          activeOpacity={0.8}
+          underlayColor={'transparent'}
+          onPress={() => console.log("Start Casting With User")}>
+          <View>
+            <Text style={styles.buttonText}>{"Start Cast"}</Text>
+          </View>
+        </TouchableHighlight>
+      );
+    }
+  }
+
 
   render() {
+    console.log("Props: ", this.props);
     return(
-      <View style={{flex: 1}}>
-         <View style={styles.container}>
-          <Text>{"User Info"}</Text>
-         </View>
-     </View>
+      <View style={{flex: 1, flexDirection: "row", height: 90}}>
+          <Text>{this.props.name +  " " + this.userDesire(this.props.wants, this.props.owns) + " " + "service"}</Text>
+          {this._renderActionButton(this.props.wants, this.props.owns)}
+      </View>
     );
   }
+
+}
 
 
 var styles = StyleSheet.create({
@@ -43,6 +83,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.lightGrey
   },
+
   rowSelected:{
     flex: 1,
     height: 10,
