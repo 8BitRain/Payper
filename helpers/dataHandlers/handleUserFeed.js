@@ -30,6 +30,7 @@ function handleUserFeed(casts, cb) {
             if (!casterData.firstName) casterData.firstName = "?" // TODO: remove this after Vash adds name to usersPublicInfo tree in FB
             if (!casterData.lastName) casterData.lastName = "?" // TODO: remove this after Vash adds name to usersPublicInfo tree in FB
             casterData.initials = casterData.firstName.charAt(0).concat(casterData.lastName.charAt(0))
+            casterData.uid = broadcastData.casterID
             broadcastData.caster = casterData
 
             if (broadcastData.type === "world")

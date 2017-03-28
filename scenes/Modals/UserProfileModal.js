@@ -44,7 +44,14 @@ class UserProfileModal extends React.Component {
     this.state = {
       broadcasts: [],
       subscriptions: [],
-      ratingModalVisible: false
+      ratingModalVisible: false,
+      canRate: props.currentUser.rateableUsers[props.user.uid]
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentUser.rateableUsers !== this.props.currentUser.rateableUsers) {
+      this.setState({canRate: nextProps.currentUser.rateableUsers[this.props.user.uid]})
     }
   }
 
@@ -88,11 +95,20 @@ class UserProfileModal extends React.Component {
           </View>
 
           <TouchableHighlight
-            activeOpacity={0.75}
+            activeOpacity={(this.state.canRate) ? 0.75 : 1}
             underlayColor={'transparent'}
-            onPress={() => this.setState({ratingModalVisible: true})}>
-            <View>
-              <Rating avgRating={this.props.user.rating.avg} numRatings={this.props.user.rating.numRatings} />
+            onPress={() => (this.state.canRate) ? this.setState({ratingModalVisible: true}) : null}>
+            <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom: 4}}>
+              <Rating
+                avgRating={this.props.user.rating.avg}
+                numRatings={this.props.user.rating.numRatings}
+                containerStyles={{paddingBottom: 4}} />
+
+              {(this.state.canRate)
+                ? (this.props.currentUser.rateableUsers[this.props.user.uid].ratingGiven)
+                  ? <Text>{`You gave ${this.props.user.firstName} ${this.props.currentUser.rateableUsers[this.props.user.uid].ratingGiven} stars.`}</Text>
+                  : <Text>{"Press to rate."}</Text>
+                : null }
             </View>
           </TouchableHighlight>
         </View>
@@ -129,7 +145,8 @@ class UserProfileModal extends React.Component {
           visible={this.state.ratingModalVisible}
           currentUser={this.props.currentUser}
           user={this.props.user}
-          onSubmit={(rating) => this.setState({ratingModalVisible: false})} />
+          onSubmit={(rating) => this.setState({ratingModalVisible: false})}
+          cancel={() => this.setState({ratingModalVisible: false})} />
 
       </View>
     )

@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, Modal, TouchableHighlight, StyleSheet, Dimensions, Animated, Easing} from 'react-native'
+import {View, Text, Modal, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Dimensions, Animated, Easing} from 'react-native'
 import {ContinueButton} from './'
 import {colors} from '../globalStyles'
 import {rateUser} from '../helpers/lambda'
@@ -58,7 +58,7 @@ class RatingInputModal extends React.Component {
   submit() {
     rateUser({
       token: this.props.currentUser.token,
-      uid: this.props.user.uid,
+      ratedID: this.props.user.uid,
       rating: this.state.rating
     })
 
@@ -112,6 +112,10 @@ class RatingInputModal extends React.Component {
     return(
       <Modal visible={this.props.visible} animationType={'slide'} transparent>
         <View style={styles.container}>
+
+          <TouchableWithoutFeedback onPress={this.props.cancel}>
+            <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
+          </TouchableWithoutFeedback>
 
           <View style={{width: dims.width * 0.85, backgroundColor: colors.snowWhite, borderRadius: 5, borderWidth: 1, borderColor: colors.lightGrey}}>
             <View style={{padding: 10, borderBottomWidth: 1, borderColor: colors.medGrey}}>

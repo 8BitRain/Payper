@@ -6,6 +6,7 @@ import Entypo from 'react-native-vector-icons/Entypo'
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 8,
@@ -16,7 +17,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
-    color: colors.deepBlue
+    color: colors.deepBlue,
+    paddingLeft: 4
   }
 })
 
@@ -35,7 +37,7 @@ class Rating extends React.Component {
 
   render() {
     return(
-      <View style={styles.container}>
+      <View style={[styles.container, this.props.containerStyles || {}]}>
         <View style={styles.starsWrap}>
           {this.renderStars(this.props.avgRating)}
         </View>

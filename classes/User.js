@@ -34,6 +34,7 @@ export default class User {
     this.balances = {total: 0, available: 0, pending: 0}
     this.broadcastFeed = {}
     this.meFeed = {}
+    this.rateableUsers = {}
     this.handleAppStateChange = this.handleAppStateChange.bind(this)
   }
 
@@ -182,6 +183,15 @@ export default class User {
             walletRef: res.walletRef,
             balances: {total: res.amount || 0, available: res.withdrawableFunds || null, pending: res.pendingFunds || null}
           })
+        }
+      },
+      {
+        endpoint: `userRatingRights/${this.uid}`,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => {
+          if (!res) return
+          updateViaRedux({rateableUsers: res})
         }
       }
     ]
