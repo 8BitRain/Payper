@@ -1,5 +1,6 @@
 import React from 'react'
-import {View, Text, Modal, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Dimensions, Animated, Easing} from 'react-native'
+import {View, Text, Modal, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Dimensions, Animated, Platform} from 'react-native'
+import {BlurView} from 'react-native-blur'
 import {ContinueButton} from './'
 import {colors} from '../globalStyles'
 import {rateUser} from '../helpers/lambda'
@@ -10,8 +11,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.88)'
+    alignItems: 'center'
   },
   promptWrap: {
     width: dims.width * 0.7,
@@ -34,6 +34,13 @@ const styles = StyleSheet.create({
     padding: 18,
     borderColor: colors.lightGrey,
     borderTopWidth: 1
+  },
+  background: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
   }
 })
 
@@ -112,6 +119,12 @@ class RatingInputModal extends React.Component {
     return(
       <Modal visible={this.props.visible} animationType={'slide'} transparent>
         <View style={styles.container}>
+
+          { /* Background */
+            (Platform.OS === 'ios')
+              ? <BlurView blurType={"dark"} style={styles.background} />
+              : <View style={[styles.background, {backgroundColor: 'rgba(0, 0, 0, 0.88)'}]} />
+          }
 
           <TouchableWithoutFeedback onPress={this.props.cancel}>
             <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} />
