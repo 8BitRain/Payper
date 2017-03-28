@@ -35,14 +35,12 @@ class BankAccountsModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("--> BankAccountsModal will receive props:", nextProps)
     if (nextProps.currentUser.bankAccount !== this.props.currentUser.bankAccount)
       this.generateRows(nextProps.currentUser)
   }
 
   componentDidMount() {
     this.generateRows(this.props.currentUser)
-    console.log("\n\n--> BankAccountsModal mounted... props:", this.props)
   }
 
   generateRows(currentUser) {

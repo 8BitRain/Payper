@@ -133,9 +133,6 @@ class OnSubscribeModal extends React.Component {
             {`You've subscribed to ${this.props.broadcast.title}!`}
           </Text>
 
-          { /* Spacer */ }
-          <View style={{height: 1, width: dims.width * 0.7, backgroundColor: colors.medGrey, marginTop: 14, marginBottom: 18}} />
-
         </View>
 
         { /* Animated content */ }
