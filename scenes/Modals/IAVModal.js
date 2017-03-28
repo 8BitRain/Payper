@@ -165,7 +165,7 @@ class IAVModal extends React.Component {
             onBridgeMessage={(msg) => this.onBridgeMessage(msg)}
             javaScriptEnabled={true}
             injectedJavaScript={this.state.injectedJS}
-            source={{uri: 'http://localhost:8080/iav'}} />
+            source={{uri: 'https://www.getpayper.io/iav'}} />
         </View>
 
         { /* Add Bank Account Tooltip */ }

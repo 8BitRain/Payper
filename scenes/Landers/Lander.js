@@ -109,7 +109,7 @@ class Lander extends React.Component {
           {"Welcome to Payper"}
         </Text>
         <Text style={{fontSize: 18, color: colors.accent, textAlign: 'center', width: dims.width - 80}}>
-          {"This is the tagline!"}
+          {"Find and share subscriptions with friends"}
         </Text>
 
         { /* Facebook Login Button */ }

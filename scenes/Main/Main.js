@@ -25,8 +25,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    bottom: 16,
-    right: 16,
+    bottom: 30,
+    right: 30,
     width: 50, height: 50,
     borderRadius: 25,
     backgroundColor: colors.accent,
@@ -92,7 +92,7 @@ class Main extends React.Component {
         { /* New broadcast button */ }
         <TouchableHighlight
           activeOpacity={0.75}
-          underlayColor={colors.snowWhite}
+          underlayColor={colors.accent}
           style={styles.newBroadcastButtonWrap}
           onPress={() => {
             let {onboardingProgress} = this.props.currentUser.appFlags
