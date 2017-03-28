@@ -11,6 +11,7 @@ import {
 } from '../../components'
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import Entypo from 'react-native-vector-icons/Entypo'
 import * as dispatchers from './MainState'
 
 const styles = StyleSheet.create({
@@ -21,14 +22,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   newBroadcastButtonWrap: {
+    justifyContent: 'center',
+    alignItems: 'center',
     position: 'absolute',
-    bottom: 20,
-    right: 20,
-    backgroundColor: 'transparent',
-    // shadowColor: colors.medGrey,
-    // shadowOpacity: 1.0,
-    // shadowRadius: 3,
-    // shadowOffset: {height: 0, width: 0}
+    bottom: 16,
+    right: 16,
+    width: 50, height: 50,
+    borderRadius: 25,
+    backgroundColor: colors.accent,
+    shadowColor: colors.medGrey,
+    shadowOpacity: 1.0,
+    shadowRadius: 3,
+    shadowOffset: {height: 0, width: 0}
   }
 })
 
@@ -87,7 +92,7 @@ class Main extends React.Component {
         { /* New broadcast button */ }
         <TouchableHighlight
           activeOpacity={0.75}
-          underlayColor={'transparent'}
+          underlayColor={colors.snowWhite}
           style={styles.newBroadcastButtonWrap}
           onPress={() => {
             let {onboardingProgress} = this.props.currentUser.appFlags
@@ -114,7 +119,7 @@ class Main extends React.Component {
               Actions.BroadcastOnboardingFlow()
             }
           }}>
-          <EvilIcons name={"plus"} size={50} color={colors.accent} />
+          <Entypo name={"plus"} size={33} color={colors.snowWhite} />
         </TouchableHighlight>
 
       </View>
