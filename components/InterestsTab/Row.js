@@ -23,7 +23,7 @@ class Row extends React.Component {
       fallbackImageNeeded: false,
       displayList: false,
       miDataSource: null,
-      servicesWithMatchedUsers: ["audible"]
+      servicesWithMatchedUsers: ["audible", "litbox"]
     }
   }
 
@@ -35,11 +35,17 @@ class Row extends React.Component {
   }
 
   getMatchedUsers(title){
+    let matchedUsers;
     switch (title) {
       case "audible":
-        let matchedUsers = [{img: "sunny", name: "Sunny", wants:true , owns:false, service:"Audible"}, {img:"widow", name: "Minerva", wants:false , owns: true, service: "Audible"}, {img: "jacobee", name: "Jacobee",  service: "Audible", wants:false , owns: true}];
+         matchedUsers = [{img: "sunny", name: "Sunny", wants:true , owns:false, service:"Audible"}, {img:"widow", name: "Minerva", wants:false , owns: true, service: "Audible"}, {img: "jacobee", name: "Jacobee",  service: "Audible", wants:false , owns: true}];
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.setState({miDataSource: ds.cloneWithRows(matchedUsers), displayList: true});
+        break;
+      case "litbox":
+         matchedUsers = [{img: "sunny", name: "Sunny", wants:true , owns:false, service:"Litbox"}, {img:"widow", name: "Minerva", wants:false , owns: true, service: "Litbox"}, {img: "jacobee", name: "Jacobee",  service: "Litbox", wants:false , owns: true}];
+        const ds2 = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        this.setState({miDataSource: ds2.cloneWithRows(matchedUsers), displayList: true});
         break;
       default:
         console.log("No users were found");
@@ -162,7 +168,7 @@ class Row extends React.Component {
           </TouchableHighlight>
         </View>
       );
-    } 
+    }
   }
 
   render() {
