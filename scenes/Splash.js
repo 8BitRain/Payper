@@ -1,3 +1,4 @@
+
 // TODO: HANDLE CONNECTIVITY CHECK
 import React from 'react'
 import config from '../config'
@@ -23,46 +24,24 @@ const styles = StyleSheet.create({
 })
 
 class Splash extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
   componentWillMount() {
-    codePush.sync({ deploymentKey: config[config.env].codePushKey });
-    FBLoginManager.logOut()
-    this.onConnect()
-  }
 
-  onConnect() {
-    getFromAsyncStorage('hasAccess', (val) => {
-      // NOTE: Beta lander code
-      // User does not have access. Go to InviteOnlyLander
-      // if ("yes" !== val) {
-      //   Actions.InviteOnlyLander()
-      //   return
-      // }
-
-      getFromAsyncStorage('user', (cachedUser) => {
-        // No user is cached. Go to Lander
-        if (!cachedUser) {
-          Actions.Lander()
-          return
-        }
-
-        login({
-          mode: "cache",
-          cachedUser: JSON.parse(cachedUser),
-          onSuccess: (response) => {
-            this.props.currentUser.initialize(response)
-            Actions.Main()
-          },
-          onFailure: (err) => {
-            console.log("Cache login failed. Error:", err)
-            Actions.Lander()
-          }
-        })
-      })
+    // Sync with codepush
+    codePush.sync({
+      deploymentKey: config[config.env].codePushKey,
+      updateDialog: false,
+      installMode: codePush.InstallMode.IMMEDIATE
     })
+
+    // Log out of Facebook auth so button doesn't say 'log out'
+    FBLoginManager.logOut()
+
+    // Continue in app flow
+    getFromAsyncStorage('userData', (userData) => {
+      if (!userData) Actions.Lander()
+      else Actions.PromoWaitingRoom({userData: JSON.parse(userData)})
+    })
+
   }
 
   render() {

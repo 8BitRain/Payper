@@ -4,7 +4,12 @@ import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native'
 import {Scene, Router, TabBar, Modal, Schema, Actions, Reducer, ActionConst} from 'react-native-router-flux'
 import {colors} from './globalStyles'
 import {
-  NavigationDrawer
+  NavigationDrawer,
+  Want,
+  Own,
+  Interests,
+  Roullette,
+  UserWants
 } from './components'
 import {
   Splash,
@@ -28,8 +33,7 @@ import {
 } from './scenes/Modals'
 import {
   InviteOnlyLander,
-  Lander,
-  PromoLander
+  Lander
 } from './scenes/Landers'
 import {
   BankAccountAdded,
@@ -49,6 +53,9 @@ const reducerCreate = (params) => {
   }
 }
 
+import {setInAsyncStorage} from './helpers/asyncStorage'
+setInAsyncStorage('userData', '')
+
 class Coincast extends React.Component {
   render() {
     return(
@@ -57,17 +64,22 @@ class Coincast extends React.Component {
           <Scene key="root" hideNavBar={true}>
 
             { /* Linear Scenes */ }
+
             <Scene key="Splash"               component={Splash}              panHandlers={null} initial />
-            <Scene key="PromoLander"          component={PromoLander}         panHandlers={null} />
             <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
             <Scene key="MicrodepositTooltip"  component={MicrodepositTooltip} panHandlers={null} />
+            <Scene key="BankAccountAdded"     component={BankAccountAdded}    panHandlers={null} />
+            <Scene key="Want"     component={Want}    panHandlers={null} />
+            <Scene key="Own"     component={Own}    panHandlers={null} />
 
             { /* Drawer/Tab Scenes */ }
             <Scene key="Main" component={NavigationDrawer} open={false}>
               <Scene key="MainView" component={Main} title="MainView" hideTabBar hideNavBar panhandlers={null} />
             </Scene>
+
+
 
             { /* Modal Scenes */ }
             <Scene key="FacebookLogin" direction="vertical">
@@ -115,6 +127,10 @@ class Coincast extends React.Component {
             </Scene>
 
           </Scene>
+
+
+
+
 
           <Scene key="error" component={Error} />
 
