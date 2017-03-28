@@ -32,7 +32,7 @@ import {
 export default class User {
   constructor() {
     this.balances = {total: 0, available: 0, pending: 0}
-    this.broadcastFeed = {}
+    this.broadcastsFeed = {}
     this.meFeed = {}
     this.rateableUsers = {}
     this.handleAppStateChange = this.handleAppStateChange.bind(this)
@@ -41,7 +41,7 @@ export default class User {
   update(updates) {
     console.log("User updates:", updates)
     for (var k in updates) this[k] = updates[k]
-    let shouldCache = updates.uid || updates.appFlags
+    let shouldCache = updates.uid || updates.appFlags || updates.broadcastsFeed || updates.meFeed
     if (shouldCache) setInAsyncStorage('user', JSON.stringify(this))
   }
 
