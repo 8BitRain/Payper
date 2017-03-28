@@ -3,12 +3,12 @@ import * as _ from 'lodash'
 import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../../globalStyles'
-import {formatBroadcastTimestamp, formatFrequency} from '../../../helpers/utils'
+import {formatBroadcastTimestamp, formatFrequency, callbackForLoop} from '../../../helpers/utils'
 import {unsubscribeAlert} from '../../../helpers/alerts'
 import {unsubscribeFromCast} from '../../../helpers/lambda'
 import {Firebase} from '../../../helpers'
 import {ProfilePic} from '../../'
-import {SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret} from '../'
+import {SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret, Member} from '../'
 import {Header} from '../../'
 import {connect} from 'react-redux'
 import * as dispatchers from '../../../scenes/Main/MainState'
@@ -25,12 +25,64 @@ class JoinedBroadcastView extends React.Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      members: [],
+      datesJoined: {},
+      renewalDate: null,
+      renewalDateModalIsVisible: false
+    }
+
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
     this.frequency = formatFrequency(props.broadcast.freq)
     this.spotsFilled = (!props.broadcast.members) ? 0 : props.broadcast.members.split(",").length
     this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
 
     this.onUnsubscribe = this.onUnsubscribe.bind(this)
+  }
+
+  componentDidMount() {
+    this.populateMembers(this.props.broadcast.members)
+    this.populateDates()
+  }
+
+  populateMembers(memberIDs) {
+    if (!memberIDs) return
+    let memberIDBuffer = memberIDs.split(",")
+    let members = []
+
+    // Fetch user data for each cast member
+    callbackForLoop(0, memberIDBuffer.length, {
+      onIterate: (loop) => {
+        let memberID = memberIDBuffer[loop.index]
+        Firebase.get(`usersPublicInfo/${memberID}`, (userData) => {
+          userData.uid = memberID
+          members.push(userData)
+          loop.continue()
+        })
+      },
+      onComplete: () => this.setState({members})
+    })
+  }
+
+  populateDates() {
+    Firebase.get(`castPayments/${this.props.broadcast.castID}`, (res) => {
+      console.log("--> castPayments res", res)
+    })
+  }
+
+  removeMember(member) {
+    removeFromCastAlert({
+      member,
+      onConfirm: () => {
+        Firebase.get(`usernames/${member.username}`, (userData) => {
+          kickFromCast({
+            castID: this.props.broadcast.castID,
+            kickedUid: userData.uid,
+            token: this.props.currentUser.token
+          })
+        })
+      }
+    })
   }
 
   onUnsubscribe() {
@@ -93,6 +145,21 @@ class JoinedBroadcastView extends React.Component {
               </View>
             </View>
           </TouchableHighlight>
+
+          { /* Cast members */
+            (this.props.broadcast.members && this.props.broadcast.members.length > 0)
+            ? <View style={{paddingTop: 10, paddingRight: 2, paddingBottom: 10, width: dims.width * 0.9, borderColor: colors.medGrey, borderBottomWidth: 1}}>
+                <Text style={{color: colors.deepBlue, fontSize: 16, fontWeight: '700'}}>
+                  {"Members"}
+                </Text>
+
+                {(this.state.members.length === 0)
+                  ? <Text style={{color: colors.deepBlue, fontSize: 16}}>
+                      {"None"}
+                    </Text>
+                  : this.state.members.map((o, i) => <Member key={i} member={o} dateJoined={this.state.datesJoined[o.uid]} />)}
+              </View>
+            : null }
 
           { /* Spots available, Subscribe button */ }
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 10, paddingTop: 15, paddingBottom: 15, width: dims.width * 0.88, borderColor: colors.medGrey, borderBottomWidth: 1}}>

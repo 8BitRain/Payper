@@ -91,7 +91,9 @@ class UserProfileModal extends React.Component {
             activeOpacity={0.75}
             underlayColor={'transparent'}
             onPress={() => this.setState({ratingModalVisible: true})}>
-            <Rating avgRating={this.props.user.rating.avg} numRatings={this.props.user.rating.numRatings} />
+            <View>
+              <Rating avgRating={this.props.user.rating.avg} numRatings={this.props.user.rating.numRatings} />
+            </View>
           </TouchableHighlight>
         </View>
 
@@ -124,7 +126,7 @@ class UserProfileModal extends React.Component {
 
         { /* Rating input modal */ }
         <RatingInputModal
-          visible={this.state.modalVisible}
+          visible={this.state.ratingModalVisible}
           currentUser={this.props.currentUser}
           user={this.props.user}
           onSubmit={(rating) => this.setState({ratingModalVisible: false})} />

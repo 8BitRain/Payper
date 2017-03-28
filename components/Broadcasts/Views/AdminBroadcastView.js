@@ -1,4 +1,3 @@
-// TODO: Implement cross-plaftorm action sheet module
 import React from 'react'
 import * as _ from 'lodash'
 import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, ActionSheetIOS, Alert, Modal} from 'react-native'
@@ -222,7 +221,7 @@ class AdminBroadcastView extends React.Component {
                   ? <Text style={{color: colors.deepBlue, fontSize: 16}}>
                       {"None"}
                     </Text>
-                  : this.state.members.map((o, i) => <Member key={i} member={o} dateJoined={this.state.datesJoined[o.uid]} remove={this.removeMember} />)}
+                  : this.state.members.map((o, i) => <Member key={i} member={o} dateJoined={this.state.datesJoined[o.uid]} remove={this.removeMember} showRemoveButton />)}
               </View>
             : null }
 

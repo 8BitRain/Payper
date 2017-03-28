@@ -99,7 +99,7 @@ class OnSubscribeModal extends React.Component {
   showText() {
     let animations = [
       Animated.timing(this.AV.textWrap.height, {
-        toValue: 200,
+        toValue: 175,
         duration: 170
       }),
       Animated.timing(this.AV.textWrap.opacity, {
