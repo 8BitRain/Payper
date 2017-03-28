@@ -119,17 +119,15 @@ class DynamicList extends React.Component {
   componentWillReceiveProps(nextProps) {
     let updatedState = {}
 
-    // if (nextProps.data !== this.props.data) {
-      // Auto update list (with pulling to refresh)
-      // Occurs in a refreshable list if the list is empty
-      // Always occurs on a nonrefreshable list
-      if (!this.props.refreshable || this.state.dataSource._cachedRowCount === 0)
-        updatedState.dataSource = this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
+    //   Auto update list (without pull to refresh)
+    //   Occurs in a refreshable list if the list is empty
+    //   Always occurs on a nonrefreshable list
+    if (!this.props.refreshable || this.state.dataSource._cachedRowCount === 0)
+      updatedState.dataSource = this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
 
-      // Wait to update list until user pulls to refresh
-      else
-        updatedState.refreshContent = this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
-    // }
+    // Wait to update list until user pulls to refresh
+    else if (nextProps.data !== this.props.data)
+      updatedState.refreshContent = this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
 
     this.setState(updatedState)
   }
@@ -296,7 +294,7 @@ class DynamicList extends React.Component {
   render() {
     let {dataSource, filteredDataSource, renderHeader, renderFooter} = this.state
     let {renderSectionHeader} = this.props
-    
+
     return(
       <View style={{flex: 1.0}}>
 

@@ -17,10 +17,6 @@ const styles = StyleSheet.create({
 })
 
 class BroadcastsFeed extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     return(
       <View style={styles.container}>
@@ -30,7 +26,15 @@ class BroadcastsFeed extends React.Component {
           shouldAnimateIn={false}
           data={this.props.currentUser.broadcastsFeed || []}
           afterRemove={() => alert("Removed!")}
-          renderRow={(rowData, sectionID, rowID) => <CastCard broadcast={rowData} />}
+          renderRow={(rowData, sectionID, rowID) => {
+            let numCards = Object.keys(this.props.currentUser.broadcastsFeed[sectionID]).length
+            let thisIsLastCard = parseInt(rowID) === numCards - 1
+            return(
+              <View style={{marginBottom: (thisIsLastCard) ? 10 : 0}}>
+                <CastCard broadcast={rowData} />
+              </View>
+            )
+          }}
           renderSectionHeader={(rowData, sectionID) => <BroadcastFeedSectionHeader sectionID={sectionID} />}
           renderEmptyState={() => <BroadcastFeedEmptyState />}
           renderFooter={() => <View style={{height: 25}} />} />

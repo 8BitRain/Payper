@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
+import {View, Text, StyleSheet, TouchableHighlight, Alert} from 'react-native'
 import {connect} from 'react-redux'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../globalStyles'
@@ -89,7 +89,31 @@ class Main extends React.Component {
           activeOpacity={0.75}
           underlayColor={'transparent'}
           style={styles.newBroadcastButtonWrap}
-          onPress={Actions.BroadcastOnboardingFlow}>
+          onPress={() => {
+            let {onboardingProgress} = this.props.currentUser.appFlags
+            let needsBank = onboardingProgress === "need-bank" || onboardingProgress.indexOf("microdeposits") >= 0
+            let needsVerification
+
+            if (needsBank) {
+              let title = `Bank Account Needed`
+              let msg = `You must add a bank account before you can create a broadcast.`
+
+              Alert.alert(title, msg, [
+                {text: 'Cancel', style: 'cancel'},
+                {text: 'Add Bank', onPress: Actions.BankAccounts}
+              ])
+            } else if (needsVerification) {
+              let title = `Account Verification Needed`
+              let msg = `You must verify your account before you can create a broadcast.`
+
+              Alert.alert(title, msg, [
+                {text: 'Cancel', style: 'cancel'},
+                {text: 'Verify Account', onPress: () => Actions.KYCOnboardingView({currentUser: this.props.currentUser})}
+              ])
+            } else {
+              Actions.BroadcastOnboardingFlow()
+            }
+          }}>
           <EvilIcons name={"plus"} size={50} color={colors.accent} />
         </TouchableHighlight>
 
