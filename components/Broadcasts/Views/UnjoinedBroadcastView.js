@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions} from 'react-native'
+import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, Modal} from 'react-native'
 import {colors} from '../../../globalStyles'
 import {formatBroadcastTimestamp, formatFrequency} from '../../../helpers/utils'
 import {subscribeAlert} from '../../../helpers/alerts'
@@ -7,7 +7,7 @@ import {subscribeToCast} from '../../../helpers/lambda'
 import {Firebase} from '../../../helpers'
 import {ProfilePic} from '../../'
 import {SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret} from '../'
-import {Header} from '../../'
+import {Header, OnSubscribeModal} from '../../'
 import {Actions} from 'react-native-router-flux'
 import {connect} from 'react-redux'
 import * as dispatchers from '../../../scenes/Main/MainState'
@@ -23,6 +23,11 @@ const styles = StyleSheet.create({
 class UnjoinedBroadcastView extends React.Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      onSubscribeModalVisible: false,
+      decryptedSecret: null
+    }
 
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
     this.frequency = formatFrequency(props.broadcast.freq)
@@ -49,7 +54,7 @@ class UnjoinedBroadcastView extends React.Component {
     subscribeToCast({
       castID: this.props.broadcast.castID,
       token: this.props.currentUser.token
-    })
+    }, (decryptedSecret) => this.setState({decryptedSecret}))
 
     // Update userFeed in Firebase
     Firebase.get(`userFeed/${this.props.currentUser.uid}`, (userFeed) => {
@@ -57,9 +62,8 @@ class UnjoinedBroadcastView extends React.Component {
       Firebase.set(`userFeed/${this.props.currentUser.uid}`, userFeed)
     })
 
-    // Page back to Main view and switch to 'Me' tab
-    Actions.pop()
-    setTimeout(() => Actions.refresh({newTab: 'Me'}))
+    // Display OnSubscribeModal
+    this.setState({onSubscribeModalVisible: true})
 
   }
 
@@ -111,8 +115,21 @@ class UnjoinedBroadcastView extends React.Component {
             width={dims.width * 0.88}
             broadcast={this.props.broadcast}
             currentUser={this.props.currentUser} />
-
         </ScrollView>
+
+        { /* Modal displaying secret unlocker */ }
+        <Modal visible={this.state.onSubscribeModalVisible} transparent={true} animationType={'fade'}>
+          <OnSubscribeModal
+            broadcast={this.props.broadcast}
+            currentUser={this.props.currentUser}
+            decryptedSecret={this.state.decryptedSecret}
+            onBack={() => {
+              this.setState({onSubscribeModalVisible: false})
+              Actions.pop()
+              setTimeout(() => Actions.refresh({newTab: 'Me'}))
+            }} />
+        </Modal>
+
       </View>
     )
   }

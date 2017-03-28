@@ -9,7 +9,7 @@ class Secret extends React.Component {
     super(props)
 
     this.state = {
-      decryptedSecret: ""
+      decryptedSecret: props.decryptedSecret || ""
     }
   }
 
@@ -22,9 +22,15 @@ class Secret extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.decryptedSecret) {
+      this.setState({decryptedSecret: nextProps.decryptedSecret})
+    }
+  }
+
   render() {
     return(
-      <View style={{paddingTop: 8, paddingBottom: 8, width: this.props.width, borderColor: colors.medGrey, borderBottomWidth: 1}}>
+      <View style={{paddingTop: 8, paddingBottom: 8, width: this.props.width, borderColor: colors.medGrey, borderBottomWidth: (this.props.showBorder === false) ? 0 : 1}}>
 
         { /* Title and Lock Icon */ }
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>

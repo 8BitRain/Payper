@@ -63,14 +63,16 @@ class SideMenuHeader extends React.Component {
     }
 
     this.state = {
-      profileStrength: getProfileStrength(props.currentUser.appFlags)
+      profileStrength: (props.currentUser.appFlags) ? getProfileStrength(props.currentUser.appFlags) : 0
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    let profileStrength = getProfileStrength(nextProps.currentUser.appFlags)
-    this.animateProgressBar(profileStrength)
-    this.setState({profileStrength})
+    if (nextProps.currentUser.appFlags) {
+      let profileStrength = getProfileStrength(nextProps.currentUser.appFlags)
+      this.animateProgressBar(profileStrength)
+      this.setState({profileStrength})
+    }
   }
 
   animateProgressBar(profileStrength) {
