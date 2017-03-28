@@ -138,7 +138,6 @@ class Interests extends React.Component {
       }
     }
 
-    //console.log("Services: ", servicesStore);
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.setState({loadedFirebase: true, displayList: true, dataSource: ds.cloneWithRows(servicesStore)});
 

@@ -36,27 +36,31 @@ class MatchedInterestRow extends React.Component {
     /* Send Notification Button (User owns service)*/
     if(!want && own){
       return(
-        <TouchableHighlight
-          activeOpacity={0.8}
-          underlayColor={'transparent'}
-          onPress={() => console.log("Push notification to Notify User")}>
-          <View style={{}}>
-            <Text style={styles.buttonText}>{"Notify User"}</Text>
-          </View>
-        </TouchableHighlight>
+        <View style={styles.buttonContainer}>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => console.log("Push notification to Notify User")}>
+            <View style={styles.button}>
+              <Text style={styles.buttonText}>{"Notify User"}</Text>
+            </View>
+          </TouchableHighlight>
+        </View>
       );
     }
     {/* Start Casting Button (User wants service)*/}
     if(!own && want){
       return(
-        <TouchableHighlight
-          activeOpacity={0.8}
-          underlayColor={'transparent'}
-          onPress={() => console.log("Start Casting With User")}>
-          <View>
-            <Text style={styles.buttonText}>{"Start Cast"}</Text>
-          </View>
-        </TouchableHighlight>
+        <View style={styles.buttonContainer}>
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={'transparent'}
+            onPress={() => console.log("Start Casting With User")}>
+            <View style={styles.button}>
+              <Text style={styles.buttonText}>{"Start Cast"}</Text>
+            </View>
+          </TouchableHighlight>
+        </View>
       );
     }
   }
@@ -65,8 +69,9 @@ class MatchedInterestRow extends React.Component {
   render() {
     console.log("Props: ", this.props);
     return(
-      <View style={{flex: 1, flexDirection: "row", height: 90}}>
-          <Text>{this.props.name +  " " + this.userDesire(this.props.wants, this.props.owns) + " " + "service"}</Text>
+      <View style={{ flexDirection: "row", height: 90, width: dimensions.width, alignItems: "center", backgroundColor: colors.medGrey}}>
+          <Image source={{uri:this.props.img}} style={styles.photo}/>
+          <Text style={styles.text}>{this.props.name +  " " + this.userDesire(this.props.wants, this.props.owns) + " " + this.props.service}</Text>
           {this._renderActionButton(this.props.wants, this.props.owns)}
       </View>
     );
@@ -78,36 +83,38 @@ class MatchedInterestRow extends React.Component {
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.lightGrey
+    backgroundColor: colors.medGrey
   },
 
-  rowSelected:{
-    flex: 1,
-    height: 10,
-    width: dimensions.width,
-    flexDirection: 'row',
-    backgroundColor: 'green',
-    opacity: .8
-  },
   text: {
     marginLeft: 12,
-    fontSize: 16,
-  },
-  buttonText: {
     fontSize: 16
   },
+
+  buttonText: {
+    fontSize: 16,
+    color: colors.snowWhite
+  },
+
   buttonContainer:{
     flexDirection: "row",
     position: "absolute",
-    left: dimensions.width * .59,
-    top: 12
+    left: dimensions.width * .64,
+    top: 25
+  },
+  button: {
+    padding: 10,
+    borderRadius: 4,
+    marginLeft: 16,
+    backgroundColor: colors.carminePink
   },
   photo: {
-    height: 40,
-    width: 40,
+    height: 64,
+    width: 64,
+    marginLeft: 8,
+    borderRadius: 32
   },
 })
 
