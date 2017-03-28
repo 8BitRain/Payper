@@ -2,7 +2,6 @@
 exports.AdminCard = require('./Previews/AdminCard')
 exports.CastCard = require('./Previews/CastCard')
 exports.SubscriptionCard = require('./Previews/SubscriptionCard')
-
 // Views
 exports.AdminBroadcastView = require('./Views/AdminBroadcastView')
 exports.JoinedBroadcastView = require('./Views/JoinedBroadcastView')

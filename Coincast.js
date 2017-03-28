@@ -54,7 +54,7 @@ const reducerCreate = (params) => {
 }
 
 import {setInAsyncStorage} from './helpers/asyncStorage'
-setInAsyncStorage('userData', '')
+// setInAsyncStorage('userData', '')
 
 class Coincast extends React.Component {
   render() {
@@ -63,8 +63,8 @@ class Coincast extends React.Component {
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar={true}>
 
-            { /* Linear Scenes */ }
 
+            { /* Linear Scenes */ }
             <Scene key="Splash"               component={Splash}              panHandlers={null} initial />
             <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
             <Scene key="Lander"               component={Lander}              panHandlers={null} />
@@ -73,6 +73,7 @@ class Coincast extends React.Component {
             <Scene key="BankAccountAdded"     component={BankAccountAdded}    panHandlers={null} />
             <Scene key="Want"     component={Want}    panHandlers={null} />
             <Scene key="Own"     component={Own}    panHandlers={null} />
+
 
             { /* Drawer/Tab Scenes */ }
             <Scene key="Main" component={NavigationDrawer} open={false}>

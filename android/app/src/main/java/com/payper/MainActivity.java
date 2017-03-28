@@ -1,9 +1,7 @@
 
-package com.example;
+package com.payper;
 
 import com.facebook.react.ReactActivity;
-import com.bugsnag.BugsnagReactNative;
-
 
 
 public class MainActivity extends ReactActivity {

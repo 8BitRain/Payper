@@ -35,12 +35,10 @@ const styles = StyleSheet.create({
     padding: 8,
     paddingLeft: 14,
     borderRadius: 5,
-    borderWidth: 2,
-    borderColor: colors.lightGrey,
-    backgroundColor: colors.accent,
-    shadowColor: colors.lightGrey,
+    backgroundColor: colors.gradientGreen,
+    shadowColor: colors.medGrey,
     shadowOpacity: 1.0,
-    shadowRadius: 2,
+    shadowRadius: 6,
     shadowOffset: {
       height: 0,
       width: 0
@@ -80,11 +78,11 @@ class PromoLander extends React.Component {
     super(props)
 
     this.AV = {
-      logo: {opacity: new Animated.Value(1)},
-      welcome: {opacity: new Animated.Value(1)},
-      tagline: {opacity: new Animated.Value(1)},
-      carousel: {opacity: new Animated.Value(1)},
-      continueButton: {opacity: new Animated.Value(1)}
+      logo: {opacity: new Animated.Value(0)},
+      welcome: {opacity: new Animated.Value(0)},
+      tagline: {opacity: new Animated.Value(0)},
+      carousel: {opacity: new Animated.Value(0)},
+      continueButton: {opacity: new Animated.Value(0)}
     }
 
     this.fadeIn = this.fadeIn.bind(this)
@@ -130,7 +128,7 @@ class PromoLander extends React.Component {
         <Image source={require('../../assets/images/lander-background.jpg')} style={styles.backgroundImage} />
 
         { /* Logo/Welcome/Tagline */ }
-        <View style={{flex: 0.4, width: dims.width * 0.9, justifyContent: 'flex-end', alignItems: 'center'}}>
+        <View style={{flex: 0.34, width: dims.width * 0.9, justifyContent: 'flex-end', alignItems: 'center'}}>
           <Animated.View style={this.AV.logo}>
             <Image source={require('../../assets/images/app-icon.png')} style={styles.logo} />
           </Animated.View>
@@ -147,13 +145,53 @@ class PromoLander extends React.Component {
           </Animated.View>
         </View>
 
-        { /* Carousel */ }
-        <Animated.View style={[this.AV.carousel, {flex: 0.5, justifyContent: 'center'}]}>
-          <HowItWorksCarousel />
+        <Animated.View style={[this.AV.carousel, {flex: 0.51, width: dims.width, justifyContent: 'center', alignItems: 'center'}]}>
+          <Image
+            source={require('../../assets/images/logos/netflix.png')}
+            style={{
+              width: dims.width * 0.24,
+              height: dims.width * 0.24,
+              borderRadius: (dims.width * 0.24) / 2,
+              borderWidth: 3,
+              borderColor: colors.lightGrey
+            }} />
+          <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', marginBottom: (dims.width * 0.24) * 2.2}}>
+            <Image
+              source={require('../../assets/images/users/mo.jpg')}
+              style={{
+                width: dims.width * 0.2,
+                height: dims.width * 0.2,
+                borderRadius: (dims.width * 0.2) / 2,
+                borderWidth: 3,
+                borderColor: colors.lightGrey
+              }} />
+          </View>
+          <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', marginLeft: (dims.width * 0.24) * 2.2, marginTop: dims.width * 0.24}}>
+            <Image
+              source={require('../../assets/images/users/mah.jpg')}
+              style={{
+                width: dims.width * 0.2,
+                height: dims.width * 0.2,
+                borderRadius: (dims.width * 0.2) / 2,
+                borderWidth: 3,
+                borderColor: colors.lightGrey
+              }} />
+          </View>
+          <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', marginRight: (dims.width * 0.24) * 2.2, marginTop: dims.width * 0.24}}>
+            <Image
+              source={require('../../assets/images/users/aj.jpg')}
+              style={{
+                width: dims.width * 0.2,
+                height: dims.width * 0.2,
+                borderRadius: (dims.width * 0.2) / 2,
+                borderWidth: 3,
+                borderColor: colors.lightGrey
+              }} />
+          </View>
         </Animated.View>
 
         { /* Submit button */ }
-        <View style={{flex: 0.2, justifyContent: 'center'}}>
+        <View style={{flex: 0.15}}>
           <Animated.View style={this.AV.continueButton}>
             <TouchableHighlight
               activeOpacity={0.75}

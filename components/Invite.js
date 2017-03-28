@@ -1,6 +1,6 @@
 import React from 'react'
 import * as _ from 'lodash'
-import {View, Text, StyleSheet, Dimensions, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Animated} from 'react-native'
+import {View, Text, StyleSheet, Dimensions, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Animated, Easing} from 'react-native'
 import Contacts from 'react-native-contacts'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import {TextInputWithIcon, ContinueButton} from '../components'
@@ -27,7 +27,9 @@ const styles = StyleSheet.create({
     width: dims.width,
     alignItems: 'center',
     paddingLeft: 8, paddingRight: 8,
-    paddingBottom: 8
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderColor: colors.lightGrey
   }
 })
 
@@ -39,7 +41,8 @@ class Invite extends React.Component {
       selectedNumsWrap: {
         height: new Animated.Value(0),
         opacity: new Animated.Value(0)
-      }
+      },
+      successIndicator: {right: new Animated.Value(-1 * dims.width)}
     }
 
     this.emptyDataSource = new ListView.DataSource({
@@ -77,13 +80,33 @@ class Invite extends React.Component {
   }
 
   submit() {
-    if (this.state.selectedNums.length < 2) {
-      alert("You must select at least two contacts.")
+    if (this.state.selectedNums.length < 1) {
+      alert("You must select at least one contact.")
       return
     }
 
-    this.props.induceState({selectedNums: this.state.selectedNums})
-    this.props.closeModal()
+    this.showSuccessAnimation(() => {
+      this.props.induceState({selectedNums: this.state.selectedNums}, /*shouldSubmit?*/true)
+      this.props.closeModal()
+    })
+  }
+
+  showSuccessAnimation(cb) {
+    let animations = [
+      Animated.timing(this.AV.successIndicator.right, {
+        toValue: 0,
+        duration: 300,
+        easing: Easing.elastic(0.5)
+      }),
+      Animated.delay(400),
+      Animated.timing(this.AV.successIndicator.right, {
+        toValue: dims.width,
+        duration: 150,
+        easing: Easing.elastic(0.5)
+      })
+    ]
+
+    Animated.sequence(animations).start(() => cb())
   }
 
   filter(query) {
@@ -233,6 +256,28 @@ class Invite extends React.Component {
           <ContinueButton onPress={this.submit} customText={"Invite"} />
         </View>
 
+        { /* Success Indicator */ }
+        <Animated.View style={[{
+          position: 'absolute',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: dims.width,
+          top: 0,
+          bottom: 0
+        }, this.AV.successIndicator]}>
+          <View style={{
+            width: 140,
+            height: 140,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 8,
+            borderWidth: 1,
+            borderColor: colors.medGrey
+          }}>
+            <EvilIcons name={"check"} color={colors.snowWhite} size={56} />
+          </View>
+        </Animated.View>
       </View>
     )
   }

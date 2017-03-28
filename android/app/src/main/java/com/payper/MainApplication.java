@@ -1,7 +1,8 @@
-package com.example;
+package com.payper;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.evollu.react.fcm.FIRMessagingPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -31,17 +32,18 @@ public class MainApplication extends Application implements ReactApplication {
         }
 
         @Override
-        protected boolean getUseDeveloperSupport() {
-            return com.example.BuildConfig.DEBUG;
+        public boolean getUseDeveloperSupport() { {
+            return com.payper.BuildConfig.DEBUG;
         }
 
         @Override
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+            new FIRMessagingPackage(),
             new RNDeviceInfo(),
                     new FabricPackage(),
-                    new CodePush("PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3", MainApplication.this, com.example.BuildConfig.DEBUG),
+                    new CodePush("PhfwCJMZe1YxTjQq6ALKcf0XXO96VkksGQK3", MainApplication.this, com.payper.BuildConfig.DEBUG),
                     new ReactNativeContacts()
             );
         }

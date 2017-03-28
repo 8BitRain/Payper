@@ -18,6 +18,9 @@
 #import <Crashlytics/Crashlytics.h>
 #import "CodePush.h"
 
+#import "RNFIRMessaging.h"
+
+
 
 @implementation AppDelegate
 
@@ -28,22 +31,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  
-  
-  [Fabric with:@[[Crashlytics class]]];
-#define MIXPANEL_TOKEN @"507a107870150092ca92fa76ca7c66d6"
-  [Mixpanel sharedInstanceWithToken:MIXPANEL_TOKEN];
-  Mixpanel *mixpanel = [Mixpanel sharedInstance];
-  [mixpanel track:@("App Opened")];
-  
+
+
   NSURL *jsCodeLocation;
-  
-  #ifdef DEBUG
-    jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
-  #else
-    jsCodeLocation = [CodePush bundleURL];
-  #endif
-  
+
   /**
    * Loading JavaScript code - uncomment the one you want.
    *
@@ -67,16 +58,22 @@
                                                       moduleName:@"Coincast"
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
-  
+
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  
+
   [[FBSDKApplicationDelegate sharedInstance] application:application
                            didFinishLaunchingWithOptions:launchOptions];
-  
+
+  [FIRApp configure];
+  [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
+
+
+
+
   return YES;
 }
 
@@ -88,8 +85,37 @@
                                                         openURL:url
                                               sourceApplication:sourceApplication
                                                      annotation:annotation];
+
 }
 
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+{
+     [[NSNotificationCenter defaultCenter] postNotificationName:FCMNotificationReceived object:self userInfo:notification.request.content.userInfo];
+     if([[notification.request.content.userInfo valueForKey:@"show_in_foreground"] isEqual:@YES]){
+         completionHandler(UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound);
+      }else{
+          completionHandler(UNNotificationPresentationOptionNone);
+        }
+
+   }
+
+ - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler
+ {
+      NSDictionary* userInfo = [[NSMutableDictionary alloc] initWithDictionary: response.notification.request.content.userInfo];
+     [userInfo setValue:@YES forKey:@"opened_from_tray"];
+     [[NSNotificationCenter defaultCenter] postNotificationName:FCMNotificationReceived object:self userInfo:userInfo];
+   }
+
+ //You can skip this method if you don't want to use local notification
+ -(void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+     [[NSNotificationCenter defaultCenter] postNotificationName:FCMNotificationReceived object:self userInfo:notification.userInfo];
+   }
+
+ - (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler{
+    [[NSNotificationCenter defaultCenter] postNotificationName:FCMNotificationReceived object:self userInfo:userInfo];
+    completionHandler(UIBackgroundFetchResultNoData);
+  }
 
 
 

@@ -5,6 +5,9 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import {getFacebookUserData} from '../../helpers/auth'
+import {setInAsyncStorage} from '../../helpers/asyncStorage'
+import Confetti from 'react-native-confetti';
 
 //Routing
 import {Actions} from 'react-native-router-flux';
@@ -21,6 +24,9 @@ import { device } from '../../helpers'
 //Firebase
 import { Firebase } from '../../helpers'
 
+const FBSDK = require('react-native-fbsdk')
+const {LoginButton} = FBSDK
+
 var subscriptionList = [
   "ios-book-outline",
   "ios-school-outline",
@@ -35,6 +41,12 @@ const animLoop = 4;
 class PromoRoulette extends React.Component {
   constructor(props) {
     super(props);
+
+    console.log("--> PromoRoulette props:", props)
+
+    this.AV = {
+      loginButton: {opacity: new Animated.Value(0)}
+    }
 
     this.state = {
       selectedSubscription: "",
@@ -53,10 +65,13 @@ class PromoRoulette extends React.Component {
     this.animLogo_1 = new Animated.Value(0);
     this.animLogo_2 = new Animated.Value(0);
     this.animLogo_Selected = new Animated.Value(0);
+
+    this.anim_title = new Animated.Value(0);
+    this.anim_roulette = new Animated.Value(0);
   }
 
   componentDidMount() {
-
+    this.levitateTitle();
   }
 
   componentWillMount() {
@@ -75,6 +90,68 @@ class PromoRoulette extends React.Component {
   componentWillUnmount() {
     console.log("Component unmounted");
     this.setState({rouletteActive: false});
+  }
+
+  levitateTitle(){
+    this.anim_title.setValue(0);
+    Animated.timing(
+    this.anim_title,
+    {
+      toValue: 1,
+      duration: 400,
+      easing: Easing.ease
+    }
+    ).start(() => {
+      this.levitateRoulette()
+    });
+  }
+
+  levitateRoulette(){
+    this.anim_roulette.setValue(0);
+    Animated.timing(
+    this.anim_roulette,
+    {
+      toValue: 1,
+      duration: 700,
+      easing: Easing.ease
+    }
+    ).start(() => {
+    });
+  }
+
+  showLoginButton() {
+    Animated.timing(this.AV.loginButton.opacity, {
+      toValue: 1,
+      duration: 250
+    }).start()
+  }
+
+  onLoginFinished(err, res) {
+    if (err) { onFailure(); return }
+    if (res.isCancelled) return
+
+    getFacebookUserData({
+      onFailure,
+      onSuccess: (facebookUserData) => {
+        Actions.FacebookLogin({
+          userData: facebookUserData,
+          destination: (userData) => {
+            setInAsyncStorage('userData', JSON.stringify(userData))
+            Actions.PromoInvite({
+              userData,
+              subscription: {
+                name: this.state.selectedSubscription,
+                displayName: this.props.wantedTagsDisplayNames[this.state.selectedSubscription]
+              }
+            })
+          }
+        })
+      }
+    })
+
+    function onFailure() {
+      alert("Something went wrong on our end. Please try again later.")
+    }
   }
 
   imageAnim(loop, pos){
@@ -134,7 +211,9 @@ class PromoRoulette extends React.Component {
         ).start(() => {
           if(loop == 0){
             console.log("Stop Final Anim");
-            this.setState({rouletteFinished: true, showSubscription: true, canContinue: true })
+            this.setState({rouletteFinished: true, showSubscription: true, canContinue: true });
+            this._confettiView.startConfetti();
+            this.showLoginButton();
           }});
         } else {
           this.animLogo_2.setValue(0);
@@ -318,31 +397,33 @@ class PromoRoulette extends React.Component {
   }
 
   _renderRouletteView(){
-
+    var initialHeight = (device == "SE") ? -80.0 : device == "6" ? -60.0 : -60.0;
     var fade_logo0 = this.animLogo_0.interpolate({inputRange: [0, 1],outputRange: [1.0, 0.0]});
     var fade_logo1 = this.animLogo_1.interpolate({inputRange: [0, 1],outputRange: [1.0, 0.0]});
     var fade_logo2 = this.animLogo_2.interpolate({inputRange: [0, 1],outputRange: [1.0, 0.0]});
-    var translate_logo0 = this.animLogo_0.interpolate({inputRange: [0, 1],outputRange: [-60.0, 200.0]});
-    var translate_logo1 = this.animLogo_1.interpolate({inputRange: [0, 1],outputRange: [-60.0, 200.0]});
-    var translate_logo2 = this.animLogo_2.interpolate({inputRange: [0, 1],outputRange: [-60.0, 200.0]});
+    var translate_logo0 = this.animLogo_0.interpolate({inputRange: [0, 1],outputRange: [initialHeight, 200.0]});
+    var translate_logo1 = this.animLogo_1.interpolate({inputRange: [0, 1],outputRange: [initialHeight, 200.0]});
+    var translate_logo2 = this.animLogo_2.interpolate({inputRange: [0, 1],outputRange: [initialHeight, 200.0]});
     var scale_logo0 = this.animLogo_0.interpolate({inputRange: [0, .5, 1],outputRange: [1, 1.5, 1]});
     var scale_logo1 = this.animLogo_1.interpolate({inputRange: [0, .5, 1],outputRange: [1, 1.5, 1]});
     var scale_logo2 = this.animLogo_2.interpolate({inputRange: [0, .5, 1],outputRange: [1, 1.5, 1]});
-    var translate_logoFinal = this.animLogo_Selected.interpolate({inputRange: [0, 1],outputRange: [-60.0, 80.0]});
+    var translate_logoFinal = this.animLogo_Selected.interpolate({inputRange: [0, 1],outputRange: [initialHeight, 80.0]});
     var scale_logoFinal = this.animLogo_Selected.interpolate({inputRange: [0, .5, 1],outputRange: [1, 1.5, 1]});
+
+
 
     if(this.state.rouletteLoop == -1 || this.state.rouletteLoop == -2 ){
       return(
-        <View style={{ height: dimensions.height * .2, overflow: "hidden"}}>
+        <Animated.View style={{ height: dimensions.height * .2, overflow: "hidden"}}>
           <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: 0, left: dimensions.width * .20, right: dimensions.width * .20,  opacity: 1}}><Ionicons color={colors.snowWhite} name={this.getLogoName(this.state.wantedTags[0])} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[0])}</Text></Animated.View>
-        </View>
+        </Animated.View>
       );
     }
     if(this.state.rouletteLoop == 0){
       //The final image should be here
       return(
         <View style={{ height: dimensions.height * .2, overflow: "hidden"}}>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.selectedSubscription)} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.selectedSubscription)}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: initialHeight, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.selectedSubscription)} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.selectedSubscription)}</Text></Animated.View>
           {/*<Animated.Image  source={{uri:this.state.wantedTags[0] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.wantedTags[1] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.selectedSubscription + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logoFinal }, {scaleY: scale_logoFinal }, {translateY: translate_logoFinal}], opacity: 1}}/>*/}
@@ -351,9 +432,9 @@ class PromoRoulette extends React.Component {
     } else {
       return(
         <View style={{ height: dimensions.height * .2, overflow: "hidden"}}>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[0])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[0])}</Text></Animated.View>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[1])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[1])}</Text></Animated.View>
-          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: -60, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[2])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[2])}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: initialHeight, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[0])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[0])}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: initialHeight, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[1])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[1])}</Text></Animated.View>
+          <Animated.View style={{position: "absolute", alignItems: "center", overflow: "visible", top: initialHeight, left: dimensions.width * .20, right: dimensions.width * .20, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}><Ionicons name={this.getLogoName(this.state.wantedTags[2])} color={colors.snowWhite} size={64}/><Text style={styles.logoName}>{this.getDisplayName(this.state.wantedTags[2])}</Text></Animated.View>
           {/*<Animated.Image  source={{uri:this.state.wantedTags[0] + ".png"}} style={{width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo0 }, {scaleY: scale_logo0 }, {translateY: translate_logo0}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.wantedTags[1] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo1 }, {scaleY: scale_logo1 }, {translateY: translate_logo1}], opacity: 1}}/>
           <Animated.Image  source={{uri:this.state.wantedTags[2] + ".png"}} style={{ width: 40, height: 40, borderRadius: 12, position: "absolute", overflow: "hidden", top: -40, left: dimensions.width * .425, transform: [{scaleX: scale_logo2 }, {scaleY: scale_logo2 }, {translateY: translate_logo2}], opacity: 1}}/> */}
@@ -372,13 +453,14 @@ class PromoRoulette extends React.Component {
     }
   }
 
-
   render() {
+    var fade_roulette = this.anim_roulette.interpolate({inputRange: [0, 1],outputRange: [0.0, 1.0]});
+    var fade_title = this.anim_title.interpolate({inputRange: [0, 1],outputRange: [0.0, 1.0]});
 
     return(
       <View style={styles.wrapper}>
         {/* HEADER*/}
-        <View style={{flex: .2}}>
+        <Animated.View style={{flex: .2, opacity: fade_roulette}}>
           <Text style={styles.title}>{"Roll to recieve your free subscription!"}</Text>
           {/* Back Button*/}
           <TouchableHighlight
@@ -391,17 +473,29 @@ class PromoRoulette extends React.Component {
             style={{position: "absolute", top: 20, marginLeft: 5}}>
                 <Ionicons name={"ios-arrow-back"} size={48} color={colors.snowWhite}/>
           </TouchableHighlight>
-        </View>
+        </Animated.View>
         {/* CONTENT*/}
-        <View style={{flex: .7, height: dimensions.height * .7, marginTop: 150}}>
+        <Animated.View style={{flex: .7, height: dimensions.height * .7, marginTop: 150, opacity: fade_roulette}}>
           {/* Roulette //Animated View with Animated images */}
           {this._renderRouletteView()}
           {/* ReRoll optionalText*/}
           {this._renderReRollButton()}
-        </View>
+        </Animated.View>
         {/* FOOTER*/}
-        {this._renderContinueButton()}
+        <Confetti duration={1000} ref={(node) => this._confettiView = node}/>
 
+        { /* Facebook Login Button */
+          (this.state.selectedSubscription)
+          ? <Animated.View style={[this.AV.loginButton, {position: 'absolute', bottom: 0, left: 0, right: 0, padding: 22, justifyContent: 'center', alignItems: 'center'}]}>
+              <Text style={styles.loginInfo}>
+                {"Login to redeem your subscription."}
+              </Text>
+              <LoginButton
+                style={{width: dimensions.width - 60, height: 45}}
+                readPermissions={["email", "public_profile", "user_friends"]}
+                onLoginFinished={(err, res) => this.onLoginFinished(err, res)} />
+            </Animated.View>
+          : null }
       </View>
     );
   }
@@ -439,6 +533,7 @@ var styles = StyleSheet.create({
     backgroundColor: colors.lightAccent,
     justifyContent: "center"
   },
+
   buttonInactive:{
     height: 50,
     width: dimensions.width,
@@ -448,6 +543,7 @@ var styles = StyleSheet.create({
   rouletteButtonActive:{
     height: 50,
     width: dimensions.width * .5,
+    marginTop: device == "SE" ? 12 : device == "6" ? 0 : 0,
     backgroundColor: colors.carminePink,
     justifyContent: "center",
     alignSelf: "center",
@@ -456,6 +552,7 @@ var styles = StyleSheet.create({
   rouletteButtonInactive:{
     height: 50,
     width: dimensions.width * .5,
+    marginTop: device == "SE" ? 12 : device == "6" ? 0 : 0,
     backgroundColor: colors.lightGrey,
     justifyContent: "center",
     alignSelf: "center",
@@ -464,13 +561,13 @@ var styles = StyleSheet.create({
 
   title: {
     color: colors.snowWhite,
-    fontSize: 35,
+    fontSize: device == "SE" ? 32.5 : device == "6" ? 35 : 35,
     fontWeight: 'bold',
     textAlign: 'left',
     marginLeft: 35,
     marginRight: 15,
-    paddingTop: device == "SE" ? 45 : device == "6" ? 20 : 95,
-    lineHeight: device == "SE" ? Math.round(18 * 1.20) : device == "6" ? Math.round(35 * 1.20) : Math.round(22 * 1.20)
+    paddingTop: device == "SE" ? 20 : device == "6" ? 20 : 20,
+    lineHeight: device == "SE" ? Math.round(32.5 * 1.20) : device == "6" ? Math.round(35 * 1.20) : Math.round(35 * 1.20)
   },
   logoName: {
     color: colors.snowWhite,
@@ -478,6 +575,14 @@ var styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     alignSelf: "center",
+  },
+  loginInfo: {
+    fontSize: 18,
+    color: colors.snowWhite,
+    width: dimensions.width -60,
+    paddingBottom: 8,
+    fontWeight: "bold",
+    textAlign: 'center'
   },
   description: {
     color: 'black',

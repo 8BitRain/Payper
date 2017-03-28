@@ -17,7 +17,6 @@ exports.Want = require('./InterestOnboarding/Want/Want')
 exports.Own = require('./InterestOnboarding/Own/Own')
 exports.Interests = require('./InterestsTab/Interests')
 
-// Specific
 
 // Broadcasts
 exports.BroadcastFeedSectionHeader = require('./BroadcastFeedSectionHeader')

@@ -74,6 +74,8 @@ class Header extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar barStyle={"light-content"} />
+
         {this.props.title && this.props.showTitle
           ? <View style={styles.titleWrap}>
               <Text style={styles.title}>{this.props.title}</Text>

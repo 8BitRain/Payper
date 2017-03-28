@@ -7,6 +7,7 @@ function getCustomTokenAndKey(firebaseToken, key, cb) {
     key: key
   }
 
+
   fetch("https://www.getpayper.io/getToken", {
     method: "POST",
     headers: {
