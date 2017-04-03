@@ -7,7 +7,6 @@ import {CastCard} from './Broadcasts'
 import {BroadcastFeedEmptyState} from './EmptyStates'
 import {DynamicList, BroadcastFeedSectionHeader} from './'
 
-
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
   container: {

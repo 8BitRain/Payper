@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, TouchableHighlight} from 'react-native'
+import {View, Text, StyleSheet, TouchableHighlight, Alert} from 'react-native'
 import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from 'react-native-fcm'
 import {connect} from 'react-redux'
 import {Actions} from 'react-native-router-flux'
@@ -55,11 +55,6 @@ class Main extends React.Component {
     this.props.currentUser.updateLocation()
   }
 
-  componentWillUnmount() {
-    this.notificationListener.remove()
-    this.refreshTokenListener.remove()
-  }
-
   componentWillReceiveProps(nextProps) {
     // Handle tab switching
     if (nextProps.newTab && !this.state.changingTab) {
@@ -88,9 +83,9 @@ class Main extends React.Component {
 
         { /* Inner content */ }
         <View style={styles.container}>
-          {this.state.activeTab === "Broadcasts"  ? <BroadcastsFeed {...this.props} />  : null}
-          {this.state.activeTab === "Explore"     ? <ExploreFeed {...this.props} />     : null}
-          {this.state.activeTab === "Me"          ? <MeFeed {...this.props} />          : null}
+          {this.state.activeTab === "Broadcasts" ? <BroadcastsFeed {...this.props} />  : null}
+          {this.state.activeTab === "Explore"    ? <ExploreFeed {...this.props} />     : null}
+          {this.state.activeTab === "Me"         ? <MeFeed {...this.props} />          : null}
         </View>
 
         { /* New broadcast button */ }

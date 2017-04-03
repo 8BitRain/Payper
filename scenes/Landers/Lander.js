@@ -131,7 +131,7 @@ class Lander extends React.Component {
               if (url === 'https://www.getpayper.io/privacy') return 'Privacy Policy'
             }}>
             <Text style={{ fontFamily: 'Roboto', fontSize: 14, color: colors.deepBlue, fontWeight: '100' }}>
-              { "By creating an account or logging in, you agree to Payper's https://www.getpayper.io/terms and https://www.getpayper.io/privacy." }
+              {"By creating an account or logging in, you agree to Payper's https://www.getpayper.io/terms and https://www.getpayper.io/privacy."}
             </Text>
           </Hyperlink>
         </View>

@@ -6,9 +6,13 @@ function handleServices(data, cb) {
   }
 
   for (var cat in data) {
+    let catDisplayName = data[cat].displayName
+    formattedServices[catDisplayName] = []
+
     for (var k in data[cat]) {
+      if (!data[cat][k].displayName) continue
       let service = {category: data[cat].displayName, title: data[cat][k].displayName}
-      formattedServices.rows.push(service)
+      formattedServices[catDisplayName].push(service)
     }
   }
 

@@ -1,9 +1,7 @@
 import React from 'react'
 import {View, Text, StyleSheet, TouchableHighlight, Dimensions} from 'react-native'
 import {DynamicList, InfoBox} from './'
-import {ExploreFeedSectionHeader} from './SectionHeaders'
 import {WantOwnRow} from './Interests'
-import {ExploreFeedEmptyState} from './EmptyStates'
 import {colors} from '../globalStyles'
 import {connect} from 'react-redux'
 import * as dispatchers from '../scenes/Main/MainState'
@@ -18,7 +16,7 @@ const styles = StyleSheet.create({
   }
 })
 
-class ExploreFeed extends React.Component {
+class InterestsOnboarding extends React.Component {
   render() {
     return(
       <View style={styles.container}>
@@ -27,17 +25,16 @@ class ExploreFeed extends React.Component {
           shouldAnimateIn={false}
           data={this.props.currentUser.services || []}
           renderRow={(rowData, sectionID, rowID) => {
-            let index = parseInt(rowID)
-            let sectionLength = this.props.currentUser.services[sectionID].length
+            for (var k in rowData) if (!rowData[k]) return <View />
 
             return(
               <View style={{width: dims.width, alignItems: 'center'}}>
-                <WantOwnRow data={rowData} containerStyles={{borderBottomWidth: (index === sectionLength - 1) ? 0 : 1}} />
+                <WantOwnRow data={rowData} />
               </View>
             )
           }}
-          renderSectionHeader={(rowData, sectionID) => <ExploreFeedSectionHeader sectionID={sectionID} />}
-          renderEmptyState={() => <ExploreFeedEmptyState />}
+          { /* TODO: Create generic loader component and add to this view */ }
+          renderEmptyState={() => <View style={{justifyContent: 'center', alignItems: 'center'}}></View>}
           renderHeader={() => <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom: 10}}><InfoBox text={"We'll populate your feed based on your wants and owns."} /></View>}
           renderFooter={() => <View style={{height: 100}} />} />
 
@@ -59,4 +56,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(ExploreFeed)
+module.exports = connect(mapStateToProps, mapDispatchToProps)(InterestsOnboarding)

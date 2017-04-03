@@ -122,7 +122,6 @@ class Coincast extends React.Component {
             <Scene key="VerifiedIdentity">
               <Scene key="VerifiedIdentityModal" component={VerifiedIdentity} schema="modal" panHandlers={null} hideNavBar />
             </Scene>
-
           </Scene>
 
           <Scene key="error" component={Error} />

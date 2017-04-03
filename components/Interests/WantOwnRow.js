@@ -62,7 +62,7 @@ class WantOwnRow extends React.Component {
 
   render() {
     return(
-      <View style={styles.container}>
+      <View style={[styles.container, this.props.containerStyles || {}]}>
 
         { /* Icon */ }
         <View style={{flex: 0.14, justifyContent: 'center', alignItems: 'center'}}>
