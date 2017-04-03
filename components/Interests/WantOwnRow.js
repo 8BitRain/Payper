@@ -12,8 +12,7 @@ const styles = StyleSheet.create({
     width: dims.width * 0.94,
     borderColor: colors.medGrey,
     borderBottomWidth: 1,
-    padding: 8,
-    paddingLeft: 0
+    padding: 8
   },
   title: {
     fontSize: 16,

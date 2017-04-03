@@ -1,6 +1,6 @@
 import React from 'react'
 import {View, Text, StyleSheet, TouchableHighlight, Dimensions} from 'react-native'
-import {DynamicList} from './'
+import {DynamicList, InfoBox} from './'
 import {WantOwnRow} from './Interests'
 import {ExploreFeedEmptyState} from './EmptyStates'
 import {colors} from '../globalStyles'
@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: dims.width,
-    backgroundColor: colors.lightGrey,
+    backgroundColor: colors.snowWhite,
     alignItems: 'center'
   }
 })
@@ -27,7 +27,7 @@ class ExploreFeed extends React.Component {
           data={this.props.currentUser.services || []}
           renderRow={(rowData, sectionID, rowID) => {
             for (var k in rowData) if (!rowData[k]) return <View />
-            
+
             return(
               <View style={{width: dims.width, alignItems: 'center'}}>
                 <WantOwnRow data={rowData} />
@@ -35,6 +35,7 @@ class ExploreFeed extends React.Component {
             )
           }}
           renderEmptyState={() => <ExploreFeedEmptyState />}
+          renderHeader={() => <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom: 10}}><InfoBox text={"We'll populate your feed based on your wants and owns."} /></View>}
           renderFooter={() => <View style={{height: 100}} />} />
 
       </View>
