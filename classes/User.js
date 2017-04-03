@@ -16,7 +16,8 @@ import {
   handleUserData,
   handleUserBroadcasts,
   handleUserSubscribedBroadcasts,
-  handleUserFeed
+  handleUserFeed,
+  handleServices
 } from '../helpers/dataHandlers'
 import {
   getFromAsyncStorage,
@@ -32,8 +33,9 @@ import {
 export default class User {
   constructor() {
     this.balances = {total: 0, available: 0, pending: 0}
-    this.broadcastsFeed = {}
-    this.meFeed = {}
+    this.broadcastsFeed = []
+    this.meFeed = []
+    this.services = []
     this.rateableUsers = {}
     this.handleAppStateChange = this.handleAppStateChange.bind(this)
   }
@@ -193,6 +195,14 @@ export default class User {
           if (!res) return
           updateViaRedux({rateableUsers: res})
         }
+      },
+      {
+        endpoint: 'Services',
+        eventType: 'value',
+        listener: null,
+        callback: (res) => handleServices(res, (services) => {
+          updateViaRedux({services})
+        })
       }
     ]
 

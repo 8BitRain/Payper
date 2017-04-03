@@ -63,7 +63,6 @@ class Coincast extends React.Component {
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar={true}>
 
-
             { /* Linear Scenes */ }
             <Scene key="Splash"               component={Splash}              panHandlers={null} initial />
             <Scene key="InviteOnlyLander"     component={InviteOnlyLander}    panHandlers={null} />
@@ -71,16 +70,13 @@ class Coincast extends React.Component {
             <Scene key="KYCOnboardingView"    component={KYCOnboardingView}   panHandlers={null} />
             <Scene key="MicrodepositTooltip"  component={MicrodepositTooltip} panHandlers={null} />
             <Scene key="BankAccountAdded"     component={BankAccountAdded}    panHandlers={null} />
-            <Scene key="Want"     component={Want}    panHandlers={null} />
-            <Scene key="Own"     component={Own}    panHandlers={null} />
-
+            <Scene key="Want"                 component={Want}                panHandlers={null} />
+            <Scene key="Own"                  component={Own}                 panHandlers={null} />
 
             { /* Drawer/Tab Scenes */ }
             <Scene key="Main" component={NavigationDrawer} open={false}>
               <Scene key="MainView" component={Main} title="MainView" hideTabBar hideNavBar panhandlers={null} />
             </Scene>
-
-
 
             { /* Modal Scenes */ }
             <Scene key="FacebookLogin" direction="vertical">
@@ -128,10 +124,6 @@ class Coincast extends React.Component {
             </Scene>
 
           </Scene>
-
-
-
-
 
           <Scene key="error" component={Error} />
 
