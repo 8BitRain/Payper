@@ -19,6 +19,30 @@ const styles = StyleSheet.create({
 })
 
 class ExploreFeed extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      wants: {},
+      owns: {}
+    }
+
+    this.onWant = this.onWant.bind(this)
+    this.onOwn = this.onOwn.bind(this)
+  }
+
+  onWant(service) {
+    this.state.wants[service.title] = true
+    if (this.state.owns[service.title]) this.state.owns[service.title] = false
+    this.setState(this.state)
+  }
+
+  onOwn(service) {
+    this.state.owns[service.title] = true
+    if (this.state.wants[service.title]) this.state.wants[service.title] = false
+    this.setState(this.state)
+  }
+
   render() {
     return(
       <View style={styles.container}>
@@ -32,7 +56,13 @@ class ExploreFeed extends React.Component {
 
             return(
               <View style={{width: dims.width, alignItems: 'center'}}>
-                <WantOwnRow data={rowData} containerStyles={{borderBottomWidth: (index === sectionLength - 1) ? 0 : 1}} />
+                <WantOwnRow
+                  data={rowData}
+                  containerStyles={{borderBottomWidth: (index === sectionLength - 1) ? 0 : 1}}
+                  onWant={this.onWant}
+                  onOwn={this.onOwn}
+                  wants={this.state.wants[rowData.title]}
+                  owns={this.state.wants[rowData.title]} />
               </View>
             )
           }}

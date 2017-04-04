@@ -10,7 +10,7 @@ function updateUserTags(params, cb) {
     .then((response) => response.json())
     .then((responseData) => {
       if (responseData.errorMessage) {
-        console.log(`Error from ${users/updateLocation} endpoint:`, responseData.errorMessage)
+        console.log(`Error from ${users/updateUserTags} endpoint:`, responseData.errorMessage)
         cb(null)
       } else {
         cb(responseData)

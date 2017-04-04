@@ -1,5 +1,5 @@
 import React from 'React'
-import {View, Text, TouchableHighlight, StyleSheet, Dimensions} from 'react-native'
+import {View, Text, TouchableHighlight, StyleSheet, Dimensions, Animated} from 'react-native'
 import {colors} from '../../globalStyles'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
@@ -26,15 +26,41 @@ const styles = StyleSheet.create({
     borderColor: colors.medGrey,
     borderRadius: 5
   },
+  buttonBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: colors.gradientGreen,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5
+  },
   buttonText: {
     fontSize: 14,
-    color: colors.accent
+    color: colors.gradientGreen
   }
 })
 
 class WantOwnRow extends React.Component {
   constructor(props) {
     super(props)
+
+    this.AV = {
+      wants: {
+        opacity: new Animated.Value(props.wants ? 1 : 0)
+      },
+      owns: {
+        opacity: new Animated.Value(props.owns ? 1 : 0)
+      }
+    }
+
+    this.state = {
+      wants: props.wants || false,
+      owns: props.owns || false,
+      animating: false
+    }
   }
 
   getIcon() {
@@ -60,6 +86,35 @@ class WantOwnRow extends React.Component {
     )
   }
 
+  toggle(wantsOrOwns) {
+    // Invoke callback
+    if (wantsOrOwns === "wants") this.props.onWant(this.props.data)
+    else this.props.onOwn(this.props.data)
+
+    // Toggle button's background color
+    this.animateButton({
+      wantsOrOwns,
+      toValue: (this.state[wantsOrOwns] ? 0 : 1)
+    }, () => {
+      this.state[wantsOrOwns] = !this.state[wantsOrOwns]
+      this.setState(this.state)
+    })
+  }
+
+  animateButton(params, cb) {
+    let {wantsOrOwns, toValue} = params
+
+    this.setState({animating: true})
+
+    Animated.timing(this.AV[wantsOrOwns].opacity, {
+      toValue,
+      duration: 220
+    }).start(() => {
+      this.setState({animating: false})
+      cb()
+    })
+  }
+
   render() {
     return(
       <View style={[styles.container, this.props.containerStyles || {}]}>
@@ -79,18 +134,32 @@ class WantOwnRow extends React.Component {
           <TouchableHighlight
             activeOpacity={0.75}
             underlayColor={'transparent'}
-            onPress={() => alert("Want")}>
+            onPress={() => {
+              if (this.state.wants || this.state.animating) return
+              if (this.state.wants || this.state.owns) this.toggle("owns")
+              this.toggle("wants")
+            }}>
             <View style={styles.buttonWrap}>
-              <Text style={styles.buttonText}>{"Want"}</Text>
+              <Text style={[styles.buttonText, {color: colors.gradientGreen}]}>{"Want"}</Text>
+              <Animated.View style={[this.AV.wants, styles.buttonBackground]}>
+                <Text style={[styles.buttonText, {color: colors.snowWhite}]}>{"Want"}</Text>
+              </Animated.View>
             </View>
           </TouchableHighlight>
 
           <TouchableHighlight
             activeOpacity={0.75}
             underlayColor={'transparent'}
-            onPress={() => alert("Own")}>
+            onPress={() => {
+              if (this.state.owns || this.state.animating) return
+              if (this.state.wants || this.state.owns) this.toggle("wants")
+              this.toggle("owns")
+            }}>
             <View style={styles.buttonWrap}>
               <Text style={[styles.buttonText, {color: colors.gradientGreen}]}>{"Own"}</Text>
+              <Animated.View style={[this.AV.owns, styles.buttonBackground]}>
+                <Text style={[styles.buttonText, {color: colors.snowWhite}]}>{"Own"}</Text>
+              </Animated.View>
             </View>
           </TouchableHighlight>
         </View>
