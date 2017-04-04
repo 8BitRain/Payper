@@ -104,6 +104,7 @@ class WantOwnRow extends React.Component {
   animateButton(params, cb) {
     let {wantsOrOwns, toValue} = params
 
+    // Prevent double taps
     this.setState({animating: true})
 
     Animated.timing(this.AV[wantsOrOwns].opacity, {

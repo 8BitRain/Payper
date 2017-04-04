@@ -33,22 +33,29 @@ import {
 export default class User {
   constructor() {
     this.balances = {total: 0, available: 0, pending: 0}
+
     this.broadcastsFeed = []
     this.meFeed = []
+
     this.services = []
+    this.servicesMap = {}
+
     this.rateableUsers = {}
+
+    this.wants = {}
+    this.owns = {}
+
     this.handleAppStateChange = this.handleAppStateChange.bind(this)
   }
 
   update(updates) {
     console.log("User updates:", updates)
     for (var k in updates) this[k] = updates[k]
-    let shouldCache = updates.uid || updates.appFlags || updates.broadcastsFeed || updates.meFeed
+    let shouldCache = updates.uid || updates.appFlags || updates.broadcastsFeed || updates.meFeed || updates.wants || updates.owns
     if (shouldCache) setInAsyncStorage('user', JSON.stringify(this))
   }
 
   initialize(userData) {
-
     // Determine user's initials
     if (userData.firstName && userData.lastName)
       userData.initials = userData.firstName.charAt(0).concat(userData.lastName.charAt(0))
@@ -57,10 +64,7 @@ export default class User {
     this.update(userData)
 
     // Get decrypted email and phone
-    getDecryptedUserData({
-      uid: userData.uid,
-      token: userData.token
-    }, (res) => {
+    getDecryptedUserData({token: userData.token}, (res) => {
       if (res) console.log("--> decrypted user data", res)
     })
 
@@ -69,7 +73,38 @@ export default class User {
     this.timer = new Timer()
     this.timer.start()
     AppState.addEventListener('change', this.handleAppStateChange)
+  }
 
+  initializeTags() {
+    // Fetch services from Firebase
+    Firebase.get('Services', (res) => handleServices(res, (services, servicesMap) => {
+      // Get usersPublicInfo from Firebase
+      Firebase.get(`usersPublicInfo/${this.uid}`, (response) => {
+        let wants = {}
+        let owns = {}
+
+        // Format wants
+        if (response.wantedTags) {
+          let wantedTagsBuffer = response.wantedTags.split(",")
+          for (var i in wantedTagsBuffer) {
+            let service = servicesMap[wantedTagsBuffer[i]]
+            wants[service.title] = true
+          }
+        }
+
+        // Format owns
+        if (response.ownedTags) {
+          let ownedTagsBuffer = response.ownedTags.split(",")
+          for (var i in ownedTagsBuffer) {
+            let service = servicesMap[ownedTagsBuffer[i]]
+            owns[service.title] = true
+          }
+        }
+
+        // Update user JSON
+        this.update({wants, owns, services})
+      })
+    }))
   }
 
   destroy() {
@@ -83,16 +118,15 @@ export default class User {
 
   handleAppStateChange(state) {
     switch (state) {
-      case "inactive":
-      return
+      case "inactive": return
       case "background":
         this.timer.report("sessionDuration", this.uid)
-      break
+        break
       case "active":
         this.timer = new Timer()
         this.timer.start()
         if (firebase.auth().currentUser !== null) this.refreshToken()
-      break
+        break
     }
   }
 
@@ -195,14 +229,6 @@ export default class User {
           if (!res) return
           updateViaRedux({rateableUsers: res})
         }
-      },
-      {
-        endpoint: 'Services',
-        eventType: 'value',
-        listener: null,
-        callback: (res) => handleServices(res, (services) => {
-          updateViaRedux({services})
-        })
       }
     ]
 
