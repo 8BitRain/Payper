@@ -8,6 +8,17 @@ function notify(notif) {
 }
 
 const callbacks = {
+  castCreated: (notif) => {
+    Firebase.get(`broadcasts/${notif.identifier}`, (broadcast) => {
+      broadcast.castID = notif.identifier
+      Firebase.get(`usersPublicInfo/${broadcastData.casterID}`, (casterData) => {
+        casterData.initials = casterData.firstName.charAt(0).concat(casterData.lastName.charAt(0))
+        casterData.uid = broadcastData.casterID
+        broadcast.caster = casterData
+        Actions.UnjoinedBroadcast({broadcast, canViewCasterProfile: true})
+      })
+    })
+  },
   castJoin: (notif) => {
     Firebase.get(`broadcasts/${notif.identifier}`, (broadcast) => {
       broadcast.castID = notif.identifier
@@ -21,7 +32,6 @@ const callbacks = {
   customerVerified: () => alert("customerVerified"),
   paymentFailure: () => alert("paymentFailure"),
   secretChanged: () => alert("secretChanged"),
-  castCreated: () => alert("castCreated"),
   renewalReminder: () => alert("renewalReminder"),
   paymentRenewal: () => alert("paymentRenewal")
 }

@@ -34,8 +34,8 @@ export default class User {
   constructor() {
     this.balances = {total: 0, available: 0, pending: 0}
 
-    this.broadcastsFeed = []
-    this.meFeed = []
+    this.broadcastsFeed = {}
+    this.meFeed = {}
 
     this.services = []
     this.servicesMap = {}
@@ -83,15 +83,19 @@ export default class User {
         let wants = {}
         let owns = {}
 
-        // // Format wants
-        // if (response.wantedTags) {
-        //   let wantedTagsBuffer = response.wantedTags.split(",")
-        //   for (var i in wantedTagsBuffer) {
-        //     let service = servicesMap[wantedTagsBuffer[i]]
-        //     wants[service.title] = true
-        //   }
-        // }
-        //
+        console.log("")
+        console.log("--> usersPublicInfo response", response)
+
+        // Format wants
+        if (response.wantedTags) {
+          console.log("--> Formatting wants...")
+          let wantedTagsBuffer = response.wantedTags.split(",")
+          for (var i in wantedTagsBuffer) {
+            let service = servicesMap[wantedTagsBuffer[i]]
+            wants[service.title] = true
+          }
+        }
+
         // // Format owns
         // if (response.ownedTags) {
         //   let ownedTagsBuffer = response.ownedTags.split(",")
@@ -100,6 +104,8 @@ export default class User {
         //     owns[service.title] = true
         //   }
         // }
+
+        console.log("")
 
         // Update user JSON
         updateViaRedux({wants, owns, services, servicesMap})

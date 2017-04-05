@@ -98,7 +98,7 @@ class BroadcastsFeed extends React.Component {
           data={this.props.currentUser.broadcastsFeed || []}
           afterRemove={() => alert("Removed!")}
           renderRow={(rowData, sectionID, rowID) => {
-            let numRows = Object.keys(this.props.currentUser.broadcastsFeed[sectionID]).length
+            let numRows = Object.keys(this.props.currentUser.broadcastsFeed[sectionID] || {}).length
             let isLastRow = parseInt(rowID) === numRows - 1
 
             return(
