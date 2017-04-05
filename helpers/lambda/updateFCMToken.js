@@ -1,24 +1,27 @@
 import config from '../../config'
 const baseURL = config[config.env].lambdaBaseURL
 
-function updateFCMToken(userData, cb) {
+function updateFCMToken(params, cb) {
+  console.log("--> Hitting 'users/storeFCMToken' with params:", params)
   try {
     fetch(baseURL + "users/storeFCMToken", {
       method: "POST",
-      body: JSON.stringify(userData)
+      body: JSON.stringify(params)
     })
     .then((response) => response.json())
     .then((responseData) => {
-      if (responseData.errorMessage) {
-        console.log(`Error from users/storeFCMToken endpoint:`, responseData.errorMessage)
-        cb(null)
-      } else {
-        cb(responseData)
-      }
+      console.log("users/storeFCMToken response:", responseData)
+      if (typeof cb === 'function') cb(responseData)
     })
-    .catch((err) => console.log(err))
+    .catch((err) => {
+      console.log(err)
+      if (typeof cb === 'function') cb(null)
+    })
     .done()
-  } catch (err) {console.log(err)}
+  } catch (err) {
+    console.log("Error storing FCMToken:", err)
+    if (typeof cb === 'function') cb(null)
+  }
 }
 
 module.exports = updateFCMToken

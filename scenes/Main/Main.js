@@ -6,6 +6,7 @@ import {Actions} from 'react-native-router-flux'
 import {colors} from '../../globalStyles'
 import {Header, BroadcastsFeed, ExploreFeed, MeFeed} from '../../components'
 import {updateFCMToken} from '../../helpers/lambda'
+import {notify} from '../../helpers/utils'
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -46,8 +47,17 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    // Request permissions for push notifs
-    setTimeout(() => FCM.requestPermissions(), 1000)
+    FCM.requestPermissions()
+    FCM.getFCMToken().then((FCMToken) => updateFCMToken({FCMToken, token: this.props.currentUser.token}))
+    
+    if (FCM.initialData) {
+      FCM.initialData.opened_from_tray = true
+      notify(FCM.initialData)
+      setTimeout(() => {FCM.initialData = null})
+    }
+    
+    this.notificationLisener = FCM.on('notification', (notification) => notify(notification))
+    this.FCMRefreshTokenListener = FCM.on('refreshToken', (FCMToken) => updateFCMToken({FCMToken, token: this.props.currentUser.token}))
   }
 
   componentWillMount() {
@@ -56,8 +66,12 @@ class Main extends React.Component {
     this.props.currentUser.updateLocation()
   }
 
+  componentWillUnmount() {
+    this.notificationLisener.remove()
+    this.FCMRefreshTokenListener.remove()
+  }
+
   componentWillReceiveProps(nextProps) {
-    // Handle tab switching
     if (nextProps.newTab && !this.state.changingTab) {
       this.setState({
         changingTab: true,
