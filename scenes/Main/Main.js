@@ -49,13 +49,13 @@ class Main extends React.Component {
   componentDidMount() {
     FCM.requestPermissions()
     FCM.getFCMToken().then((FCMToken) => updateFCMToken({FCMToken, token: this.props.currentUser.token}))
-    
+
     if (FCM.initialData) {
       FCM.initialData.opened_from_tray = true
       notify(FCM.initialData)
       setTimeout(() => {FCM.initialData = null})
     }
-    
+
     this.notificationLisener = FCM.on('notification', (notification) => notify(notification))
     this.FCMRefreshTokenListener = FCM.on('refreshToken', (FCMToken) => updateFCMToken({FCMToken, token: this.props.currentUser.token}))
   }
@@ -67,8 +67,8 @@ class Main extends React.Component {
   }
 
   componentWillUnmount() {
-    this.notificationLisener.remove()
-    this.FCMRefreshTokenListener.remove()
+    // this.notificationLisener.remove()
+    // this.FCMRefreshTokenListener.remove()
   }
 
   componentWillReceiveProps(nextProps) {
