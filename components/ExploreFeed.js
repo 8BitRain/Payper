@@ -35,39 +35,13 @@ class ExploreFeed extends React.Component {
   onWant(service) {
     this.state.wants[service.title] = true
     if (this.state.owns[service.title]) this.state.owns[service.title] = false
-    this.setState(this.state, () => this.updateWantsAndOwns({wants: this.state.wants, owns: this.state.owns}))
+    this.setState(this.state, () => this.props.currentUser.update({wants: this.state.wants, owns: this.state.owns}))
   }
 
   onOwn(service) {
     this.state.owns[service.title] = true
     if (this.state.wants[service.title]) this.state.wants[service.title] = false
-    this.setState(this.state, () => this.updateWantsAndOwns({wants: this.state.wants, owns: this.state.owns}))
-  }
-
-  updateWantsAndOwns(params) {
-    let wantString = ""
-    let ownString = ""
-
-    // Populate comma delimited strings
-    for (var section in params) {
-      for (var service in params[section]) {
-        if (true === params[section][service]) {
-          service = service.toLowerCase().replace(' ', '')
-          if (section === "wants") wantString = wantString.concat(service).concat(",")
-          if (section === "owns") ownString = ownString.concat(service).concat(",")
-        }
-      }
-    }
-
-    // Remove trailing commas
-    if (wantString !== "") wantString = wantString.substring(0, wantString.length - 1)
-    if (ownString !== "") ownString = ownString.substring(0, ownString.length - 1)
-
-    // Update Redux
-    this.props.currentUser.update({wants: this.state.wants, owns: this.state.owns})
-
-    // Hit backend
-    updateUserTags({want: wantString, own: ownString, token: this.props.currentUser.token})
+    this.setState(this.state, () => this.props.currentUser.update({wants: this.state.wants, owns: this.state.owns}))
   }
 
   render() {
@@ -96,9 +70,7 @@ class ExploreFeed extends React.Component {
           renderSectionHeader={(rowData, sectionID) => <ExploreFeedSectionHeader sectionID={sectionID} />}
           renderEmptyState={() => <ExploreFeedEmptyState />}
           renderHeader={() => <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom: 10}}><InfoBox text={"We'll populate your feed based on your wants and owns."} /></View>}
-          renderFooter={() => <View style={{height: 100}} />}
-
-           />
+          renderFooter={() => <View style={{height: 100}} />} />
 
       </View>
     )

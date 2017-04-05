@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../globalStyles'
 import {Header, BroadcastsFeed, ExploreFeed, MeFeed} from '../../components'
-import {updateFCMToken} from '../../helpers/lambda'
+import {updateFCMToken, updateUserTags} from '../../helpers/lambda'
 import {notify} from '../../helpers/utils'
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -66,11 +66,6 @@ class Main extends React.Component {
     this.props.currentUser.updateLocation()
   }
 
-  componentWillUnmount() {
-    // this.notificationLisener.remove()
-    // this.FCMRefreshTokenListener.remove()
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.newTab && !this.state.changingTab) {
       this.setState({
@@ -86,6 +81,16 @@ class Main extends React.Component {
 
   changeTab(newTab) {
     if (newTab === this.state.activeTab) return
+
+    // If switching from active tab, updateTags
+    if (this.state.activeTab === "Explore" && this.props.currentUser.wantString || this.props.currentUser.ownString) {
+      updateUserTags({
+        want: this.props.currentUser.wantString,
+        own: this.props.currentUser.ownString,
+        token: this.props.currentUser.token
+      })
+    }
+
     this.setState({activeTab: newTab})
   }
 

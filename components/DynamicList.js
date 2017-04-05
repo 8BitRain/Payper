@@ -122,7 +122,7 @@ class DynamicList extends React.Component {
     //   Auto update list (without pull to refresh)
     //   Occurs in a refreshable list if the list is empty
     //   Always occurs on a nonrefreshable list
-    if (!this.props.refreshable || this.state.dataSource._cachedRowCount === 0)
+    if (!this.props.refreshable || this.state.dataSource.getRowCount() === 0)
       updatedState.dataSource = this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
 
     // Wait to update list until user pulls to refresh
@@ -298,7 +298,7 @@ class DynamicList extends React.Component {
     return(
       <View style={{flex: 1.0}}>
 
-        {(!dataSource || dataSource._dataBlob.length === 0 || dataSource._cachedRowCount === 0)
+        {(!dataSource || dataSource.getRowCount() === 0)
           ? <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 0}}>
               {this.props.renderEmptyState()}
             </View>

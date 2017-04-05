@@ -3,7 +3,7 @@ import {Alert} from 'react-native'
 function subscribe(params) {
   let {broadcast, currentUser, onConfirm} = params
 
-  if (!currentUser.bankAccount) {
+  if (!currentUser.bankReference) {
     Alert.alert("Bank Account", "You must add a bank account before you can subscribe to this broadcast.")
     return
   }

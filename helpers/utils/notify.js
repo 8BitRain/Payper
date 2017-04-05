@@ -1,15 +1,20 @@
-import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from 'react-native-fcm'
+import {Firebase} from '../'
 import {Actions} from 'react-native-router-flux'
 
 function notify(notif) {
   console.log("--> Got push notif:", notif)
   if (notif.opened_from_tray && callbacks[notif.type])
-    callbacks[notif.type]()
+    callbacks[notif.type](notif)
 }
 
 const callbacks = {
+  castJoin: (notif) => {
+    Firebase.get(`broadcasts/${notif.identifier}`, (broadcast) => {
+      broadcast.castID = notif.identifier
+      Actions.AdminBroadcast({broadcast, canViewCasterProfile: true})
+    })
+  },
   castLeave: () => alert("castLeave"),
-  castJoin: () => alert("castJoin"),
   tagMatch: () => alert("tagMatch"),
   removedFromCast: () => alert("removedFromCast"),
   microdepositsSent: () => alert("microdepositsSent"),

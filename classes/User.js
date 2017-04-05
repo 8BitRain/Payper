@@ -75,7 +75,7 @@ export default class User {
     AppState.addEventListener('change', this.handleAppStateChange)
   }
 
-  initializeTags() {
+  initializeTags(updateViaRedux) {
     // Fetch services from Firebase
     Firebase.get('Services', (res) => handleServices(res, (services, servicesMap) => {
       // Get usersPublicInfo from Firebase
@@ -83,26 +83,26 @@ export default class User {
         let wants = {}
         let owns = {}
 
-        // Format wants
-        if (response.wantedTags) {
-          let wantedTagsBuffer = response.wantedTags.split(",")
-          for (var i in wantedTagsBuffer) {
-            let service = servicesMap[wantedTagsBuffer[i]]
-            wants[service.title] = true
-          }
-        }
-
-        // Format owns
-        if (response.ownedTags) {
-          let ownedTagsBuffer = response.ownedTags.split(",")
-          for (var i in ownedTagsBuffer) {
-            let service = servicesMap[ownedTagsBuffer[i]]
-            owns[service.title] = true
-          }
-        }
+        // // Format wants
+        // if (response.wantedTags) {
+        //   let wantedTagsBuffer = response.wantedTags.split(",")
+        //   for (var i in wantedTagsBuffer) {
+        //     let service = servicesMap[wantedTagsBuffer[i]]
+        //     wants[service.title] = true
+        //   }
+        // }
+        //
+        // // Format owns
+        // if (response.ownedTags) {
+        //   let ownedTagsBuffer = response.ownedTags.split(",")
+        //   for (var i in ownedTagsBuffer) {
+        //     let service = servicesMap[ownedTagsBuffer[i]]
+        //     owns[service.title] = true
+        //   }
+        // }
 
         // Update user JSON
-        this.update({wants, owns, services})
+        updateViaRedux({wants, owns, services, servicesMap})
       })
     }))
   }
