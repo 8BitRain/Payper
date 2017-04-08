@@ -3,6 +3,7 @@ import firebase from 'firebase'
 import {View, Text, StyleSheet, Dimensions, StatusBar, Image, Alert, Linking} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {FBLoginManager} from 'NativeModules'
+import {Loader} from '../../components'
 import {login, getFacebookUserData} from '../../helpers/auth'
 import {colors} from '../../globalStyles'
 import {connect} from 'react-redux'
@@ -139,7 +140,7 @@ class Lander extends React.Component {
         { /* Loading Modal */
           (this.state.loading)
             ? <View style={styles.loadingModal}>
-                <Image source={require('../../assets/images/loading.gif')} style={{width: 60, height: 90, backgroundColor: 'transparent'}} />
+                <Loader theme={"darkOnLight"} />
               </View>
             : null}
       </View>
