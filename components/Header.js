@@ -46,6 +46,10 @@ const styles = StyleSheet.create({
     padding: 6,
     paddingRight: 18
   },
+  skipWrap: {
+    padding: 6,
+    paddingRight: 18
+  },
   titleWrap: {
     position: 'absolute',
     top: (Platform.OS === 'ios') ? 20 : 0,
@@ -113,6 +117,19 @@ class Header extends React.Component {
               </TouchableHighlight>
             : null}
         </View>
+
+        { /* Skip button */
+          this.props.showSkip
+          ? <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 5, justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+              <TouchableHighlight
+                activeOpacity={0.75}
+                underlayColor={'transparent'}
+                onPress={this.props.onSkip || null}
+                style={styles.skipWrap}>
+                <Text style={{fontSize: 16, color: colors.snowWhite}}>{"Skip"}</Text>
+              </TouchableHighlight>
+            </View>
+          : null}
 
         {this.props.showTabBar
           ? <TabBar {...this.props} />

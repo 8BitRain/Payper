@@ -1,34 +1,12 @@
 import firebase from 'firebase'
-import {
-  AppState,
-  GeoLocation
-} from 'react-native'
-import {
-  Timer
-} from './'
-import {
-  Firebase
-} from '../helpers'
-import {
-  callbackForLoop
-} from '../helpers/utils'
-import {
-  handleUserData,
-  handleUserBroadcasts,
-  handleUserSubscribedBroadcasts,
-  handleUserFeed,
-  handleServices
-} from '../helpers/dataHandlers'
-import {
-  getFromAsyncStorage,
-  setInAsyncStorage
-} from '../helpers/asyncStorage'
-import {
-  deleteUser,
-  getBankAccount,
-  getDecryptedUserData,
-  updateGeoLocation
-} from '../helpers/lambda'
+import {FBLoginManager} from 'NativeModules'
+import {AppState, GeoLocation} from 'react-native'
+import {Timer} from './'
+import {Firebase} from '../helpers'
+import {callbackForLoop} from '../helpers/utils'
+import {handleUserData, handleUserBroadcasts, handleUserSubscribedBroadcasts, handleUserFeed, handleServices, handleWantsAndOwns} from '../helpers/dataHandlers'
+import {getFromAsyncStorage, setInAsyncStorage} from '../helpers/asyncStorage'
+import {deleteUser, getBankAccount, getDecryptedUserData, updateGeoLocation} from '../helpers/lambda'
 
 export default class User {
   constructor() {
@@ -80,35 +58,12 @@ export default class User {
     Firebase.get('Services', (res) => handleServices(res, (services, servicesMap) => {
       // Get usersPublicInfo from Firebase
       Firebase.get(`usersPublicInfo/${this.uid}`, (response) => {
-        let wants = {}
-        let owns = {}
+        if (!response) return
 
-        console.log("")
-        console.log("--> usersPublicInfo response", response)
-
-        // Format wants
-        if (response.wantedTags) {
-          console.log("--> Formatting wants...")
-          let wantedTagsBuffer = response.wantedTags.split(",")
-          for (var i in wantedTagsBuffer) {
-            let service = servicesMap[wantedTagsBuffer[i]]
-            wants[service.title] = true
-          }
-        }
-
-        // // Format owns
-        // if (response.ownedTags) {
-        //   let ownedTagsBuffer = response.ownedTags.split(",")
-        //   for (var i in ownedTagsBuffer) {
-        //     let service = servicesMap[ownedTagsBuffer[i]]
-        //     owns[service.title] = true
-        //   }
-        // }
-
-        console.log("")
-
-        // Update user JSON
-        updateViaRedux({wants, owns, services, servicesMap})
+        handleWantsAndOwns({
+          wants: response.wantedTags,
+          owns: response.ownedTags,
+        }, (wants, owns) => console.log("--> wants", wants, "owns", owns))
       })
     }))
   }
@@ -116,6 +71,7 @@ export default class User {
   destroy() {
     setInAsyncStorage('user', '')
     this.stopListeningToFirebase()
+    FBLoginManager.logOut()
     clearInterval(this.tokenRefreshInterval)
     for (var i in this)
       if (typeof this[i] !== 'function')
@@ -216,14 +172,17 @@ export default class User {
         })
       },
       {
-        endpoint: `${(this.verified) ? 'userWallets' : 'payperWallets'}/${this.uid}`,
+        endpoint: `${(this.bankReference) ? 'userWallets' : 'payperWallets'}/${this.uid}`,
         eventType: 'value',
         listener: null,
         callback: (res) => {
           if (!res) return
+
+          console.log(`${(this.bankReference) ? 'userWallets' : 'payperWallets'}/${this.uid} listener callback was invoked... res:`, res)
+
           updateViaRedux({
             walletRef: res.walletRef,
-            balances: {total: res.amount || 0, available: res.withdrawableFunds || null, pending: res.pendingFunds || null}
+            balances: {total: res.amount || 5, available: res.withdrawableFunds || null, pending: res.pendingFunds || null}
           })
         }
       },

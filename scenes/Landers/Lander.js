@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    backgroundColor: colors.accent
+    backgroundColor: colors.snowWhite
   }
 })
 
@@ -139,7 +139,7 @@ class Lander extends React.Component {
         { /* Loading Modal */
           (this.state.loading)
             ? <View style={styles.loadingModal}>
-                <Image source={require('../../assets/images/loading.gif')} style={{height: 100, width: 100}} />
+                <Image source={require('../../assets/images/loading.gif')} style={{width: 60, height: 90, backgroundColor: 'transparent'}} />
               </View>
             : null}
       </View>

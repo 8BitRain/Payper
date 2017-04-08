@@ -4,6 +4,8 @@ import {connect} from 'react-redux'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../globalStyles'
 import {Header} from '../../components'
+import {Firebase} from '../../helpers'
+import {handleServices} from '../../helpers/dataHandlers'
 import {validateEmail, validatePhone} from '../../helpers/validators'
 import {createOrGetUser} from '../../helpers/lambda'
 import {FBLoginManager} from 'NativeModules'
@@ -142,8 +144,12 @@ class FacebookLoginModal extends React.Component {
     })
 
     function onSuccess(userData) {
-      this.props.currentUser.initialize(userData);
-      Actions.Want();
+      this.props.currentUser.initialize(userData)
+
+      Firebase.get('Services', (res) => handleServices(res, (services, servicesMap) => {
+        this.props.currentUser.update({services, servicesMap})
+        setTimeout(() => Actions.WantsAndOwnsOnboarding(), 2500)
+      }))
     }
 
     function onFailure(err) {

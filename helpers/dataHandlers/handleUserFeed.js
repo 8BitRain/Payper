@@ -30,6 +30,7 @@ function handleUserFeed(casts, cb) {
             casterData.initials = casterData.firstName.charAt(0).concat(casterData.lastName.charAt(0))
             casterData.uid = broadcastData.casterID
             broadcastData.caster = casterData
+            broadcastData.type = broadcastData.type.toLowerCase()
 
             if (broadcastData.type === "world")
               broadcasts["Global"][castID] = broadcastData
