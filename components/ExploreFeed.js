@@ -33,13 +33,15 @@ class ExploreFeed extends React.Component {
   }
 
   onWant(service) {
-    this.state.wants[service.title] = true
+    if (!this.state.wants[service.title]) this.state.wants[service.title] = true
+    else this.state.wants[service.title] = !this.state.wants[service.title]
     if (this.state.owns[service.title]) this.state.owns[service.title] = false
     this.setState(this.state, () => this.props.currentUser.update({wants: this.state.wants, owns: this.state.owns}))
   }
 
   onOwn(service) {
-    this.state.owns[service.title] = true
+    if (!this.state.owns[service.title]) this.state.owns[service.title] = true
+    else this.state.owns[service.title] = !this.state.owns[service.title]
     if (this.state.wants[service.title]) this.state.wants[service.title] = false
     this.setState(this.state, () => this.props.currentUser.update({wants: this.state.wants, owns: this.state.owns}))
   }

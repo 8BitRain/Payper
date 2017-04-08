@@ -136,8 +136,8 @@ class WantOwnRow extends React.Component {
             activeOpacity={0.75}
             underlayColor={'transparent'}
             onPress={() => {
-              if (this.state.wants || this.state.animating) return
-              if (this.state.wants || this.state.owns) this.toggle("owns")
+              if (this.state.animating) return
+              if (this.state.owns) this.toggle("owns")
               this.toggle("wants")
             }}>
             <View style={styles.buttonWrap}>
@@ -152,8 +152,8 @@ class WantOwnRow extends React.Component {
             activeOpacity={0.75}
             underlayColor={'transparent'}
             onPress={() => {
-              if (this.state.owns || this.state.animating) return
-              if (this.state.wants || this.state.owns) this.toggle("wants")
+              if (this.state.animating) return
+              if (this.state.wants) this.toggle("wants")
               this.toggle("owns")
             }}>
             <View style={styles.buttonWrap}>
