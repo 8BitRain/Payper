@@ -53,7 +53,11 @@ class WantsAndOwnsOnboarding extends React.Component {
       <View style={styles.container}>
 
         { /* Header */ }
-        <Header showSkip onSkip={Actions.Main} />
+        <Header
+          showTitle
+          showSkip
+          title={"Select Interests"}
+          onSkip={Actions.Main} />
 
         { /* WantOwnRow list */ }
         <DynamicList

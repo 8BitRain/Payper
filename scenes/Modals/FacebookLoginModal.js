@@ -145,10 +145,9 @@ class FacebookLoginModal extends React.Component {
 
     function onSuccess(userData) {
       this.props.currentUser.initialize(userData)
-
       Firebase.get('Services', (res) => handleServices(res, (services, servicesMap) => {
         this.props.currentUser.update({services, servicesMap})
-        setTimeout(() => Actions.WantsAndOwnsOnboarding(), 2500)
+        Actions.WantsAndOwnsOnboarding()
       }))
     }
 

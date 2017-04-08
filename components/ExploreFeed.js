@@ -68,7 +68,7 @@ class ExploreFeed extends React.Component {
             )
           }}
           renderSectionHeader={(rowData, sectionID) => <ExploreFeedSectionHeader sectionID={sectionID} />}
-          renderEmptyState={() => <ExploreFeedEmptyState />}
+          renderEmptyState={() => null}
           renderHeader={() => <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom: 10}}><InfoBox text={"We'll populate your feed based on your wants and owns."} /></View>}
           renderFooter={() => <View style={{height: 100}} />} />
 

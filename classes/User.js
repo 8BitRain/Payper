@@ -63,7 +63,10 @@ export default class User {
         handleWantsAndOwns({
           wants: response.wantedTags,
           owns: response.ownedTags,
-        }, (wants, owns) => console.log("--> wants", wants, "owns", owns))
+          servicesMap
+        }, (wants, owns) => {
+          updateViaRedux({wants, owns, services, servicesMap})
+        })
       })
     }))
   }
@@ -178,11 +181,9 @@ export default class User {
         callback: (res) => {
           if (!res) return
 
-          console.log(`${(this.bankReference) ? 'userWallets' : 'payperWallets'}/${this.uid} listener callback was invoked... res:`, res)
-
           updateViaRedux({
             walletRef: res.walletRef,
-            balances: {total: res.amount || 5, available: res.withdrawableFunds || null, pending: res.pendingFunds || null}
+            balances: {total: res.amount || 0, available: res.withdrawableFunds || null, pending: res.pendingFunds || null}
           })
         }
       },

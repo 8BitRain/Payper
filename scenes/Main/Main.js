@@ -47,7 +47,7 @@ class Main extends React.Component {
   }
 
   componentDidMount() {
-    FCM.requestPermissions()
+    setTimeout(() => FCM.requestPermissions(), 600)
     FCM.getFCMToken().then((FCMToken) => updateFCMToken({FCMToken, token: this.props.currentUser.token}))
 
     if (FCM.initialData) {
