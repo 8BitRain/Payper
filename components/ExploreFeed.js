@@ -2,9 +2,10 @@ import React from 'react'
 import {View, Text, StyleSheet, TouchableHighlight, Dimensions} from 'react-native'
 import {DynamicList, InfoBox} from './'
 import {ExploreFeedSectionHeader} from './SectionHeaders'
-import {WantOwnRow} from './Interests'
+import {WantOwnRow, MatchedWantOwnRow} from './Interests'
 import {ExploreFeedEmptyState} from './EmptyStates'
 import {colors} from '../globalStyles'
+import {formatUpdateUserTagsParams} from '../helpers/utils'
 import {updateUserTags} from '../helpers/lambda'
 import {connect} from 'react-redux'
 import * as dispatchers from '../scenes/Main/MainState'
@@ -15,7 +16,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: dims.width,
     backgroundColor: colors.snowWhite,
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 })
 
@@ -36,14 +38,32 @@ class ExploreFeed extends React.Component {
     if (!this.state.wants[service.title]) this.state.wants[service.title] = true
     else this.state.wants[service.title] = !this.state.wants[service.title]
     if (this.state.owns[service.title]) this.state.owns[service.title] = false
-    this.setState(this.state, () => this.props.currentUser.update({wants: this.state.wants, owns: this.state.owns}))
+    this.setState(this.state, () => {
+      let userTags = formatUpdateUserTagsParams({wants: this.state.wants, owns: this.state.owns})
+      let updates = {
+        wantString: userTags.wantString,
+        ownString: userTags.ownString,
+        wants: this.state.wants,
+        owns: this.state.owns
+      }
+      this.props.currentUser.update(updates)
+    })
   }
 
   onOwn(service) {
     if (!this.state.owns[service.title]) this.state.owns[service.title] = true
     else this.state.owns[service.title] = !this.state.owns[service.title]
     if (this.state.wants[service.title]) this.state.wants[service.title] = false
-    this.setState(this.state, () => this.props.currentUser.update({wants: this.state.wants, owns: this.state.owns}))
+    this.setState(this.state, () => {
+      let userTags = formatUpdateUserTagsParams({wants: this.state.wants, owns: this.state.owns})
+      let updates = {
+        wantString: userTags.wantString,
+        ownString: userTags.ownString,
+        wants: this.state.wants,
+        owns: this.state.owns
+      }
+      this.props.currentUser.update(updates)
+    })
   }
 
   render() {
@@ -57,7 +77,32 @@ class ExploreFeed extends React.Component {
             let index = parseInt(rowID)
             let sectionLength = this.props.currentUser.services[sectionID].length
 
-            return(
+            // matchType={"theyWant"}
+            // matchedUsers={[
+            //   {
+            //     firstName: "Brady",
+            //     lastName: "Sheridan"
+            //   },
+            //   {
+            //     firstName: "Tom",
+            //     lastName: "Hanks"
+            //   }
+            // ]}
+
+            if (rowData.matchedUsers) return(
+              <View style={{width: dims.width, alignItems: 'center'}}>
+                <MatchedWantOwnRow
+                  data={rowData}
+                  containerStyles={{borderBottomWidth: (index === sectionLength - 1) ? 0 : 1}}
+                  onWant={this.onWant}
+                  onOwn={this.onOwn}
+                  wants={this.props.currentUser.wants[rowData.title]}
+                  owns={this.props.currentUser.owns[rowData.title]}
+                  numMatches={Object.keys(rowData.matchedUsers).length} />
+              </View>
+            )
+
+            else return(
               <View style={{width: dims.width, alignItems: 'center'}}>
                 <WantOwnRow
                   data={rowData}

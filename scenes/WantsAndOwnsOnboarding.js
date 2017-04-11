@@ -1,6 +1,8 @@
 import React from 'react'
 import {View, Text, TouchableHighlight, StyleSheet, Dimensions} from 'react-native'
 import {Actions} from 'react-native-router-flux'
+import {formatUpdateUserTagsParams} from '../helpers/utils'
+import {updateUserTags} from '../helpers/lambda'
 import {DynamicList, InfoBox, ContinueButton, Header} from '../components'
 import {ExploreFeedSectionHeader} from '../components/SectionHeaders'
 import {WantOwnRow} from '../components/Interests'
@@ -47,6 +49,12 @@ class WantsAndOwnsOnboarding extends React.Component {
 
   submit() {
     this.props.currentUser.update({wants: this.state.wants, owns: this.state.owns})
+    let userTags = formatUpdateUserTagsParams({wants: this.state.wants, owns: this.state.owns})
+    updateUserTags({
+      want: userTags.wantString,
+      own: userTags.ownString,
+      token: this.props.currentUser.token
+    })
     Actions.Main()
   }
 
@@ -55,11 +63,7 @@ class WantsAndOwnsOnboarding extends React.Component {
       <View style={styles.container}>
 
         { /* Header */ }
-        <Header
-          showTitle
-          showSkip
-          title={"Select Interests"}
-          onSkip={Actions.Main} />
+        <Header showTitle showSkip title={"Select Interests"} onSkip={Actions.Main} />
 
         { /* WantOwnRow list */ }
         <DynamicList
@@ -76,8 +80,8 @@ class WantsAndOwnsOnboarding extends React.Component {
                   containerStyles={{borderBottomWidth: (index === sectionLength - 1) ? 0 : 1}}
                   onWant={this.onWant}
                   onOwn={this.onOwn}
-                  wants={this.props.currentUser.wants[rowData.title]}
-                  owns={this.props.currentUser.owns[rowData.title]} />
+                  wants={(this.props.currentUser.wants) ? this.props.currentUser.wants[rowData.title] : false}
+                  owns={(this.props.currentUser.owns) ? this.props.currentUser.owns[rowData.title] : false} />
               </View>
             )
           }}
@@ -85,10 +89,10 @@ class WantsAndOwnsOnboarding extends React.Component {
           renderEmptyState={() => null}
           renderHeader={() => <View style={{justifyContent: 'center', alignItems: 'center', paddingBottom: 10}}><InfoBox text={"We'll populate your feed based on your wants and owns."} /></View>} />
 
-          { /* Continue button */ }
-          <View style={{alignItems: 'center', width: dims.width, paddingTop: 22.5, paddingBottom: 22.5, borderTopWidth: 1, borderColor: colors.medGrey}}>
-            <ContinueButton onPress={this.submit} />
-          </View>
+        { /* Continue button */ }
+        <View style={{alignItems: 'center', width: dims.width, paddingTop: 22.5, paddingBottom: 22.5, borderTopWidth: 1, borderColor: colors.medGrey}}>
+          <ContinueButton onPress={this.submit} />
+        </View>
 
       </View>
     )

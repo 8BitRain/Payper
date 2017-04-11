@@ -3,7 +3,7 @@ import {FBLoginManager} from 'NativeModules'
 import {AppState, GeoLocation} from 'react-native'
 import {Timer} from './'
 import {Firebase} from '../helpers'
-import {callbackForLoop} from '../helpers/utils'
+import {processTagMatches} from '../helpers/utils'
 import {handleUserData, handleUserBroadcasts, handleUserSubscribedBroadcasts, handleUserFeed, handleServices, handleWantsAndOwns} from '../helpers/dataHandlers'
 import {getFromAsyncStorage, setInAsyncStorage} from '../helpers/asyncStorage'
 import {deleteUser, getBankAccount, getDecryptedUserData, updateGeoLocation} from '../helpers/lambda'
@@ -14,12 +14,9 @@ export default class User {
 
     this.broadcastsFeed = {}
     this.meFeed = {}
-
     this.services = []
     this.servicesMap = {}
-
     this.rateableUsers = {}
-
     this.wants = {}
     this.owns = {}
 
@@ -29,7 +26,7 @@ export default class User {
   update(updates) {
     console.log("User updates:", updates)
     for (var k in updates) this[k] = updates[k]
-    let shouldCache = updates.uid || updates.appFlags || updates.broadcastsFeed || updates.meFeed || updates.wants || updates.owns
+    let shouldCache = updates.uid || updates.appFlags || updates.broadcastsFeed || updates.meFeed || updates.wants || updates.owns || updates.services
     if (shouldCache) setInAsyncStorage('user', JSON.stringify(this))
   }
 
@@ -180,7 +177,6 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return
-
           updateViaRedux({
             walletRef: res.walletRef,
             balances: {total: res.amount || 0, available: res.withdrawableFunds || null, pending: res.pendingFunds || null}
@@ -194,6 +190,30 @@ export default class User {
         callback: (res) => {
           if (!res) return
           updateViaRedux({rateableUsers: res})
+        }
+      },
+      {
+        endpoint: `tagMatches/${this.uid}`,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => {
+          if (!res) return
+
+          if (!this.services || this.services.length === 0) {
+            Firebase.get('Services', (res) => handleServices(res, (services, servicesMap) => {
+              processTagMatches({
+                tagMatches: res,
+                services,
+                servicesMap
+              }, (services) => updateViaRedux({tagMatches: res, services}))
+            }))
+          } else {
+            processTagMatches({
+              tagMatches: res,
+              services: this.services,
+              servicesMap: this.servicesMap
+            }, (services) => updateViaRedux({tagMatches: res, services}))
+          }
         }
       }
     ]

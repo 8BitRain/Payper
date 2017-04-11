@@ -89,6 +89,8 @@ class Main extends React.Component {
         own: this.props.currentUser.ownString,
         token: this.props.currentUser.token
       })
+
+      this.props.currentUser.update({wantString: "", ownString: ""})
     }
 
     this.setState({activeTab: newTab})
