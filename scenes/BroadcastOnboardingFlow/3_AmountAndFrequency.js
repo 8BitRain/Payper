@@ -75,7 +75,7 @@ class AmountAndFrequency extends React.Component {
     }
 
     // Validate input amount
-    if (parseInt(input) < 1 || parseInt(input) > 2999) {
+    if (parseInt(input) < 1 || parseInt(input) > 200) {
       this.setState({
         amountIsOutOfRange: true,
         amountInputIsValid: false

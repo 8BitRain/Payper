@@ -101,7 +101,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
       },
       {
         title: "Amount and Frequency",
-        invalidInputMessage: "You must enter a valid amount between $1 and $3,000.",
+        invalidInputMessage: "You must enter a valid amount between $1 and $200.",
         reactComponent: <AmountAndFrequency induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {
           if (!substate) return false
