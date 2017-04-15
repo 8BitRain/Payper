@@ -8,6 +8,7 @@ function notify(notif) {
 }
 
 const callbacks = {
+  // tested? yes
   castCreated: (notif) => {
     Firebase.get(`broadcasts/${notif.identifier}`, (broadcast) => {
       broadcast.castID = notif.identifier
@@ -19,20 +20,35 @@ const callbacks = {
       })
     })
   },
+  // tested? yes
   castJoin: (notif) => {
     Firebase.get(`broadcasts/${notif.identifier}`, (broadcast) => {
       broadcast.castID = notif.identifier
       Actions.AdminBroadcast({broadcast, canViewCasterProfile: true})
     })
   },
-  castLeave: () => alert("castLeave"),
+  // tested? no
+  castLeave: (notif) => {
+    Firebase.get(`broadcasts/${notif.identifier}`, (broadcast) => {
+      broadcast.castID = notif.identifier
+      Actions.AdminBroadcast({broadcast, canViewCasterProfile: true})
+    })
+  },
+  // tested? no
   tagMatch: () => alert("tagMatch"),
+  // tested? no
   removedFromCast: () => alert("removedFromCast"),
+  // tested? no
   microdepositsSent: () => alert("microdepositsSent"),
+  // tested? no
   customerVerified: () => alert("customerVerified"),
+  // tested? no
   paymentFailure: () => alert("paymentFailure"),
+  // tested? no
   secretChanged: () => alert("secretChanged"),
+  // tested? no
   renewalReminder: () => alert("renewalReminder"),
+  // tested? no
   paymentRenewal: () => alert("paymentRenewal")
 }
 
