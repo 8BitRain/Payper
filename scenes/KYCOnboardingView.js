@@ -87,12 +87,12 @@ class KYCOnboardingView extends React.Component {
     }
 
     // Hit backend
-    verifyUser(params, (customerStatus) => {
+    verifyUser(params, (res) => {
       this.setState({loading: false})
 
-      if (customerStatus === "verified")
+      if (res.customerStatus === "verified")
         this.onSuccess()
-      else if (customerStatus === "document" || customerStatus === "retry" || customerStatus === "suspended")
+      else if (res.customerStatus === "document" || res.customerStatus === "retry" || res.customerStatus === "suspended")
         this.onFailure()
       else
         Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
@@ -166,7 +166,6 @@ class KYCOnboardingView extends React.Component {
               return true
             }}
             setValues={(values, cb) => {
-              console.log("--> Address values", values)
               this.setState(values, () => cb())
             }}
             induceFieldRef={this.induceFieldRef}

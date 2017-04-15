@@ -11,9 +11,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    width: dims.width * 0.94,
-    borderColor: colors.medGrey,
-    borderBottomWidth: 1,
     padding: 8
   },
   title: {
@@ -49,9 +46,7 @@ const styles = StyleSheet.create({
     color: colors.gradientGreen
   },
   matchesWrap: {
-    justifyContent: 'center',
-    borderBottomWidth: 1,
-    borderColor: colors.medGrey
+    justifyContent: 'center'
   }
 })
 
@@ -171,14 +166,23 @@ class MatchedWantOwnRow extends React.Component {
 
   renderMatchedUsers(users) {
     let arr = []
-    for (var k in users)
-      arr.push(<MatchedUser key={k} user={users[k]} matchType={users[k].matchType} castTitle={this.props.data.title} />)
+    
+    for (var k in users) arr.push(
+      <MatchedUser
+        key={k}
+        user={users[k]}
+        matchType={users[k].matchType}
+        castTitle={this.props.data.title}
+        tag={this.props.data.tag}
+        currentUser={this.props.currentUser} />
+    )
+    
     return arr
   }
 
   render() {
     return(
-      <View>
+      <View style={{width: dims.width * 0.94, borderBottomWidth: (this.props.hideBottomBorder) ? 0 : 1, borderColor: colors.medGrey}}>
         <TouchableHighlight activeOpacity={0.75} underlayColor={'transparent'} onPress={this.toggleMatches}>
           <View style={[styles.container, this.props.containerStyles || {}]}>
 

@@ -1,11 +1,11 @@
 import React from 'react'
 import firebase from 'firebase'
 import {Actions} from 'react-native-router-flux'
-import {View, Text, TouchableHighlight, Animated, Dimensions, Modal, Image, StyleSheet, UIManager, findNodeHandle} from 'react-native'
-import {colors} from '../../globalStyles'
-import {IAVWebView, KYCOnboardingView, PhotoUploader, MicrodepositOnboarding, MicrodepositTooltip, SuspendedTooltip} from '../index'
+import {View, Text, TouchableHighlight, Animated, Dimensions, Modal, Image, StyleSheet} from 'react-native'
+import {colors} from '../globalStyles'
+import {IAVWebView, KYCOnboardingView, PhotoUploader, MicrodepositTooltip, SuspendedTooltip} from './'
 import {AnimatedCircularProgress} from 'react-native-circular-progress'
-import {getOnboardingPercentage} from './helpers'
+import {getOnboardingPercentage, uploadKYCDocument} from '../helpers/utils'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -20,29 +20,20 @@ class StatusCard extends React.Component {
 
     this.AV = {
       opacity: new Animated.Value(1),
-      shadowOpacity: new Animated.Value(1),
-      marginTop: new Animated.Value(16),
-      marginLeft: new Animated.Value(0)
+      height: undefined // defined on mount in layout()
     }
 
     this.config = {
       'need-bank': {
         title: "Bank Account Needed",
         action: "Next Step: Add Bank Account",
-        message: "Add a bank account to unlock the ability to send money.",
-        destination: () => Actions.GlobalModal({
-          subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
-          backgroundColor: colors.accent
-        })
+        destination: () => Actions.IAV()
       },
       'need-kyc': {
         title: "Account Verification Needed",
         action: "Next Step: Verify Account",
-        destination: () => Actions.GlobalModal({
-          subcomponent: <KYCOnboardingView currentUser={this.props.currentUser} />,
-          backgroundColor: colors.snowWhite,
-          showHeader: true,
-          title: "Account Verification"
+        destination: () => Actions.KYCOnboardingView({
+          currentUser: this.props.currentUser
         })
       },
       'kyc-retry': {
@@ -60,11 +51,30 @@ class StatusCard extends React.Component {
         title: "Additional Documents Required",
         message: "We need a bit more info to verify your account.",
         action: "Next Step: Upload Photo ID",
-        destination: () => Actions.GlobalModal({
-          subcomponent: <PhotoUploader title={"Document Upload"} index={1} brand={"document"}  toggleModal={() => {Actions.pop()}} currentUser={this.props.currentUser} />,
-          backgroundColor: colors.snowWhite,
-          showHeader: false,
-          title: "Document Upload"
+        destination: () => Actions.Camera({
+          showHeader: true,
+          headerProps: {
+            showTitle: true, title: "Title",
+            showBackButton: true
+          },
+          onUpload: (uri) => {
+            // Optimistically update appFlags
+            let {appFlags} = this.props.currentUser
+            appFlags.onboardingProgress = "kyc-documentProcessing"
+            this.props.currentUser.update({appFlags})
+
+            // Page back
+            Actions.pop()
+
+            // Hit backend
+            uploadKYCDocument({
+              uri: uri,
+              email: this.props.currentUser.decryptedEmail,
+              token: this.props.currentUser.token
+            }, (url, err) => {
+              if (err) console.log("--> Error thrown by uploadKYCDocument", err)
+            })
+          }
         })
       },
       'kyc-documentProcessing': {
@@ -97,11 +107,9 @@ class StatusCard extends React.Component {
         title: "Microdeposits Arrived",
         message: "We've deposited two small (< 20¢) sums to your bank account.",
         action: "Next Step: Verify Microdeposits",
-        destination: () => Actions.GlobalModal({
-          subcomponent: <MicrodepositOnboarding {...this.props} toggleModal={() => Actions.pop()} />,
-          backgroundColor: colors.snowWhite,
-          showHeader: true,
-          title: "Microdeposit Verification"
+        destination: () => Actions.MicrodepositOnboarding({
+          toggleModal: Actions.pop,
+          currentUser: this.props.currentUser
         })
       },
       'microdeposits-failed': {
@@ -124,25 +132,10 @@ class StatusCard extends React.Component {
     }
   }
 
-  componentDidMount() {
-    console.log("StatusCard Props: ", this.props);
-    try{
-      this.setState({
-        onboardingPercentage: getOnboardingPercentage(this.props.currentUser.appFlags)
-      })
-    } catch(err){
-      console.log("Error: ", err);
-    }
-
-  }
-
   componentWillReceiveProps(nextProps) {
-    try{
-      this.setState({
-        onboardingPercentage: getOnboardingPercentage(nextProps.currentUser.appFlags)
-      })
-    } catch(err){}
-
+    this.setState({
+      onboardingPercentage: getOnboardingPercentage(nextProps.currentUser.appFlags)
+    })
   }
 
   handlePress(destination) {
@@ -156,47 +149,35 @@ class StatusCard extends React.Component {
       destination()
   }
 
-  measure(cb) {
-    UIManager.measure(findNodeHandle(this.wrap), (x, y, w, h) => cb({x, y, w, h}))
+  layout(e) {
+    let height = e.nativeEvent.layout.height
+    this.AV.height = new Animated.Value(height)
   }
 
   dismiss() {
-    this.measure((dims) => {
-      let {marginLeft, marginTop, opacity, shadowOpacity} = this.AV
-      let {w, h} = dims
+    let {height, opacity} = this.AV
 
-      let animations = [
-        Animated.timing(shadowOpacity, {
-          toValue: 0,
-          duration: 70
-        }),
-        Animated.parallel([
-          Animated.timing(marginLeft, {
-            toValue: -1 * w,
-            duration: 140
-          }),
-          Animated.timing(opacity, {
-            toValue: 0,
-            duration: 200
-          })
-        ]),
-        Animated.timing(marginTop, {
-          toValue: -1 * h,
-          duration: 160
-        })
-      ]
-
-      Animated.sequence(animations).start(() => {
-        let path = `/appFlags/${this.props.currentUser.uid}/onboardingProgress`
-        firebase.database().ref(path).set('kyc-successDismissed')
+    let animations = [
+      Animated.timing(height, {
+        toValue: 0,
+        duration: 200
+      }),
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 180
       })
+    ]
+
+    Animated.parallel(animations).start(() => {
+      let {uid} = this.props.currentUser
+      let path = `/appFlags/${uid}/onboardingProgress`
+      firebase.database().ref(path).set('kyc-successDismissed')
     })
   }
 
   render() {
-    //let {currentUser} = this.props
-    //let onboardingProgress = this.props.currentUser.appFlags['onboardingProgress']
-    let onboardingProgress = "need-bank";
+    let {currentUser} = this.props
+    let onboardingProgress = currentUser.appFlags['onboardingProgress']
     let configInfo = this.config[onboardingProgress]
 
     // Return an empty view for cases when no StatusCard should be rendered
@@ -205,47 +186,49 @@ class StatusCard extends React.Component {
         <View />
       )
     } else {
+      let {height, opacity} = this.AV
       let {onboardingPercentage} = this.state
-      let {message, destination, action} = configInfo;
-      let {cachedProfilePic} = this.props.currentUser;
+      let {message, destination, action} = configInfo
+      let {cachedProfilePic} = this.props.currentUser
       let profilePic = this.props.currentUser.profile_pic
-      /*let canSendMoney = currentUser.fundingSource
+      let canSendMoney = currentUser.fundingSource
         && onboardingProgress !== "microdeposits-initialized"
         && onboardingProgress !== "microdeposits-deposited"
-        && onboardingProgress !== "microdeposits-failed"*/
-      let canSendMoney = true
+        && onboardingProgress !== "microdeposits-failed"
       let canReceiveMoney = onboardingProgress === "kyc-success"
 
       return(
         <Animated.View
-          ref={ref => this.wrap = ref}
-          style={{
-            marginTop: this.AV.marginTop,
-            opacity: this.AV.opacity
-          }}>
+          onLayout={(e) => this.layout(e)}
+          style={{height, opacity}}>
 
+          { /* Shadow must be absolutely position due to 'overflow: hidden'
+               style on actual container */ }
+          <View
+            style={{position: 'absolute', top: 22, left: dims.width * 0.06, right: dims.width * 0.06, bottom: 12, borderRadius: 5,
+              shadowColor: colors.medGrey,
+              shadowOpacity: 1.0,
+              shadowRadius: 2,
+              shadowOffset: { height: 0, width: 0}
+            }} />
 
           <View
             style={{
-              width: dims.width * .80, backgroundColor: colors.snowWhite,
+              width: dims.width * 0.88, marginLeft: dims.width * 0.06, marginTop: 22, marginBottom: 12, backgroundColor: colors.snowWhite,
               borderRadius: 5, overflow: 'hidden'
             }}>
 
             { /* Top third (profile strength) */ }
             <View style={{justifyContent: 'center', paddingBottom: 12}}>
               { /* "My Profile Strength" */ }
-              <View style={{backgroundColor: '#efebf2'}}>
+              <View style={{flex: 1.0, backgroundColor: '#efebf2'}}>
                 <Text style={{fontSize: 18, padding: 10, color: colors.deepBlue, textAlign: 'center'}}>
                   {"My Account Strength"}
                 </Text>
               </View>
 
               { /* Profile pic and onboarding percentage */ }
-              <View
-                style={{
-                  marginLeft: 8, flexDirection: 'row', alignItems: 'center',
-                  justifyContent: 'center', paddingTop: 10, paddingBottom: 6
-                }}>
+              <View style={{marginTop: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                 <View style={styles.imageWrap}>
                   <AnimatedCircularProgress
                     size={imageWrapDims.width}
@@ -255,13 +238,12 @@ class StatusCard extends React.Component {
                     backgroundColor={colors.medGrey}>
                     {(fill) => <View style={styles.imageBorder} />}
                   </AnimatedCircularProgress>
+
                   {(cachedProfilePic || profilePic)
                     ? <Image style={styles.image} source={{uri: cachedProfilePic || profilePic}} />
-                    : <View style={styles.image}>
-                        <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
-                          {/*currentUser.first_name.charAt(0) + currentUser.last_name.charAt(0)*/}
-                        </Text>
-                      </View> }
+                    : <View style={styles.image}><Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '200'}}>
+                        {currentUser.initials}
+                      </Text></View> }
                 </View>
 
                 <View style={{width: 20}} />
@@ -270,14 +252,14 @@ class StatusCard extends React.Component {
                   <Text style={{fontSize: 56, color: colors.accent, fontWeight: '200'}}>
                     {onboardingPercentage}
                   </Text>
-                  <Text style={{fontSize: 28, color: colors.accent, fontWeight: '200', marginLeft: 6, marginTop: 7}}>
+                  <Text style={{fontSize: 28, color: colors.accent, fontWeight: '200', marginTop: 6}}>
                     {"%"}
                   </Text>
                 </View>
               </View>
 
               { /* Locked and unlocked features */ }
-              <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginLeft: 10}}>
+              <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <EvilIcons name={(canSendMoney) ? "unlock" : "lock"} size={24} color={(canSendMoney) ? colors.deepBlue : colors.slateGrey} />
                   <Text style={{fontSize: 17, color: (canSendMoney) ? colors.deepBlue : colors.slateGrey, fontWeight: '200'}}>
@@ -297,6 +279,14 @@ class StatusCard extends React.Component {
               </View>
             </View>
 
+            { /* Middle third (info) */
+              (!message)
+                ? null
+                : <View style={{padding: 12, paddingBottom: 22, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{fontSize: 15, color: colors.deepBlue}}>
+                      {message}
+                    </Text>
+                  </View> }
 
             { /* Bottom third (action button) */
               (!action || !destination)

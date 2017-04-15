@@ -6,7 +6,7 @@ import {Actions} from 'react-native-router-flux'
 import {colors} from '../../globalStyles'
 import {Header, BroadcastsFeed, ExploreFeed, MeFeed} from '../../components'
 import {updateFCMToken, updateUserTags} from '../../helpers/lambda'
-import {notify} from '../../helpers/utils'
+import {notify, uploadKYCDocument} from '../../helpers/utils'
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -118,27 +118,75 @@ class Main extends React.Component {
           onPress={() => {
             let {onboardingProgress} = this.props.currentUser.appFlags
             let needsBank = onboardingProgress === "need-bank" || onboardingProgress.indexOf("microdeposits") >= 0
-            let needsVerification
+            let needsVerification = onboardingProgress === "need-kyc"
+            let needsVerificationDocument = onboardingProgress === "kyc-documentNeeded"
+            let verificationIsPending = onboardingProgress !== "kyc-success" && onboardingProgress.indexOf("kyc-document") >= 0
+            let title = ""
+            let msg = ""
+            let options = []
 
             if (needsBank) {
-              let title = `Bank Account Needed`
-              let msg = `You must add a bank account before you can create a broadcast.`
-
-              Alert.alert(title, msg, [
+              title = `Bank Account Needed`
+              msg = `You must add a bank account before you can create a broadcast.`
+              options.push(
                 {text: 'Cancel', style: 'cancel'},
                 {text: 'Add Bank', onPress: Actions.BankAccounts}
-              ])
+              )
             } else if (needsVerification) {
-              let title = `Account Verification Needed`
-              let msg = `You must verify your account before you can create a broadcast.`
+              title = `Account Verification Needed`
+              msg = `You must verify your account before you can create a broadcast.`
+              options.push(
+                {
+                  text: 'Cancel',
+                  style: 'cancel'
+                },
+                {
+                  text: 'Verify Account',
+                  onPress: () => Actions.KYCOnboardingView({currentUser: this.props.currentUser})
+                }
+              )
+            } else if (needsVerificationDocument) {
+              title = `Account Verification Needed`
+              msg = `We need a photo ID to complete your account verification.`
+              options.push(
+                {
+                  text: 'Cancel',
+                  style: 'cancel'
+                },
+                {
+                  text: 'Upload Photo ID',
+                  onPress: () => Actions.Camera({
+                    showHeader: true,
+                    headerProps: {showTitle: true, title: "Title", showBackButton: true},
+                    onUpload: (uri) => {
+                      // Optimistically update appFlags
+                      let {appFlags} = this.props.currentUser
+                      appFlags.onboardingProgress = "kyc-documentProcessing"
+                      this.props.currentUser.update({appFlags})
 
-              Alert.alert(title, msg, [
-                {text: 'Cancel', style: 'cancel'},
-                {text: 'Verify Account', onPress: () => Actions.KYCOnboardingView({currentUser: this.props.currentUser})}
-              ])
-            } else {
-              Actions.BroadcastOnboardingFlow()
+                      // Page back
+                      Actions.pop()
+
+                      // Hit backend
+                      uploadKYCDocument({
+                        uri: uri,
+                        email: this.props.currentUser.decryptedEmail,
+                        token: this.props.currentUser.token
+                      }, (url, err) => {
+                        if (err) console.log("--> Error thrown by uploadKYCDocument", err)
+                      })
+                    }
+                  })
+                }
+              )
+            } else if (verificationIsPending) {
+              title = `Account Verification Pending`
+              msg = `We'll notify you when your account has been verified so you can get casting!`
+              options.push({text: 'OK'})
             }
+
+            if (title) Alert.alert(title, msg, options)
+            else Actions.BroadcastOnboardingFlow()
           }}>
           <Entypo name={"plus"} size={33} color={colors.snowWhite} />
         </TouchableHighlight>

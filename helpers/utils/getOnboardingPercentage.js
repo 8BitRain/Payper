@@ -1,4 +1,4 @@
-exports.getOnboardingPercentage = (appFlags) => {
+function getOnboardingPercentage(appFlags) {
   let customer_status = appFlags.customer_status;
   let onboardingPercentage = 0;
 
@@ -80,3 +80,5 @@ exports.getOnboardingPercentage = (appFlags) => {
 
   return onboardingPercentage
 }
+
+module.exports = getOnboardingPercentage

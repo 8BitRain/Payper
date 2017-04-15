@@ -2,6 +2,7 @@ import React from 'react'
 import moment from 'moment'
 import {Actions} from 'react-native-router-flux'
 import {View, Text, TouchableHighlight} from 'react-native'
+import {requestCast} from '../../helpers/lambda'
 import {colors} from '../../globalStyles'
 import {ProfilePic} from '../'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -9,11 +10,24 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 class MatchedUser extends React.Component {
   constructor(props) {
     super(props)
+    console.log("--> MatchedUser was constructed with props:", props)
+  }
+
+  handlePress() {
+    if (this.props.user.matchType === "theyOwn") {
+      requestCast({
+        token: this.props.currentUser.token,
+        matchedUser: this.props.user.uid,
+        tag: this.props.tag
+      })
+    } else if (this.props.user.matchType === "youOwn" || this.props.user.matchType === "bothWant") {
+      alert("Would create cast")
+    }
   }
 
   render() {
     return(
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 3, marginBottom: 3, marginLeft: 6, marginRight: 4}}>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 0, marginBottom: 3, marginLeft: 6, marginRight: 4}}>
 
         <TouchableHighlight
           activeOpacity={0.75}
@@ -35,11 +49,11 @@ class MatchedUser extends React.Component {
           </View>
         </TouchableHighlight>
 
-        { /* 'Create Cast' or 'Notify' button */ }
+        { /* 'Create Cast' or 'Request Cast' button */ }
         <TouchableHighlight
           activeOpacity={0.75}
           underlayColor={'transparent'}
-          onPress={() => alert("Would open cast onboarding modal")}>
+          onPress={() => this.handlePress()}>
           <View style={{
             backgroundColor: colors.snowWhite,
             padding: 8,
@@ -57,7 +71,7 @@ class MatchedUser extends React.Component {
             }
           }}>
             <Text style={{fontSize: 14, color: colors.accent}}>
-              {"Create Cast"}
+              {(this.props.user.matchType === "theyOwn") ? "Request Cast" : "Create Cast"}
             </Text>
           </View>
         </TouchableHighlight>

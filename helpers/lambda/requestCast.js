@@ -1,16 +1,16 @@
 import config from '../../config'
 const baseURL = config[config.env].lambdaBaseURL
 
-function verifyUser(params, cb) {
-  console.log("--> Hitting 'customers/verifyCustomer' with params:", params)
+function requestCast(params, cb) {
+  console.log("--> Hitting 'casts/request' with params:", params)
   try {
-    fetch(baseURL + "customers/verifyCustomer", {
+    fetch(baseURL + "casts/request", {
       method: "POST",
       body: JSON.stringify(params)
     })
     .then((response) => response.json())
     .then((responseData) => {
-      console.log("customers/verifyCustomer response:", responseData)
+      console.log("casts/request response:", responseData)
       if (typeof cb === 'function') cb(responseData)
     })
     .catch((err) => {
@@ -19,9 +19,9 @@ function verifyUser(params, cb) {
     })
     .done()
   } catch (err) {
-    console.log("Error verifying customer:", err)
+    console.log("Error requesting cast:", err)
     if (typeof cb === 'function') cb(null)
   }
 }
 
-module.exports = verifyUser
+module.exports = requestCast

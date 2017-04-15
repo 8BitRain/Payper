@@ -20,16 +20,33 @@ function processTagMatches(params, cb) {
           loop.continue()
         } else {
           let matchedTags = tagMatches[uid]
+          userData.uid = uid
+
+          console.log("--> matchedTags", matchedTags)
 
           // Traverse services and modify matchedUsers JSON
-          for (var tag in matchedTags) {
-            let category = servicesMap[tag].category
-            for (var i in services[category]) {
-              let curr = services[category][i]
-              if (curr.tag === tag) {
-                if (!curr.matchedUsers) curr.matchedUsers = {}
-                curr.matchedUsers[uid] = userData
-                curr.matchedUsers[uid].matchType = matchedTags[tag].type
+          for (var k in matchedTags) {
+            let category = servicesMap[k].category
+            let tag = servicesMap[k].tag
+
+            console.log("--> services[category]", services[category])
+
+            for (var i = 0; i < services[category].length; i++) {
+              const INDEX = i
+              let service = services[category][INDEX]
+              let matchData = matchedTags[tag]
+
+              if (service.tag === tag) {
+                if (!service.matchedUsers) service.matchedUsers = {}
+                service.matchedUsers[uid] = userData
+                service.matchedUsers[uid].matchType = matchedTags[tag].type
+                service.matchedUsers[uid].sentRequest = matchData.sentRequest
+
+                console.log("--------------------------------------------------------")
+                console.log("--> tag", tag)
+                console.log("--> matchData", matchData)
+                console.log("--> service", service)
+ 
               }
             }
           }
@@ -39,6 +56,8 @@ function processTagMatches(params, cb) {
       })
     },
     onComplete: () => {
+      console.log("--> processTagMatches invocation has completed")
+      console.log("--> services", services)
       cb(services)
     }
   })

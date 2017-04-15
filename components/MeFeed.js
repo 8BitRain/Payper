@@ -3,7 +3,7 @@ import {View, StyleSheet, Dimensions} from 'react-native'
 import {colors} from '../globalStyles'
 import {MeFeedEmptyState} from './EmptyStates'
 import {SubscriptionCard, AdminCard} from './Broadcasts'
-import {DynamicList, BroadcastFeedSectionHeader} from './'
+import {DynamicList, BroadcastFeedSectionHeader, StatusCard} from './'
 import {connect} from 'react-redux'
 import * as dispatchers from '../scenes/Main/MainState'
 
@@ -35,7 +35,8 @@ class MeFeed extends React.Component {
           }}
           renderSectionHeader={(rowData, sectionID) => <View style={{marginTop: 10}}><BroadcastFeedSectionHeader sectionID={sectionID} /></View>}
           renderEmptyState={() => <MeFeedEmptyState />}
-          renderFooter={() => <View style={{height: 25}} />} />
+          renderFooter={() => <View style={{height: 25}} />}
+          renderHeader={() => <StatusCard currentUser={this.props.currentUser} />} />
 
       </View>
     )

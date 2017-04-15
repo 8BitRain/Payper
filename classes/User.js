@@ -40,7 +40,7 @@ export default class User {
 
     // Get decrypted email and phone
     getDecryptedUserData({token: userData.token}, (res) => {
-      if (res) console.log("--> decrypted user data", res)
+      this.update({decryptedEmail: res.email, decryptedPhone: res.phone})
     })
 
     // Initalize timer and app state change listener to be used for session

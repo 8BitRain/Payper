@@ -30,7 +30,9 @@ import {
   RenewalDateModal,
   SettingsModal,
   UserProfileModal,
-  MyProfileModal
+  MyProfileModal,
+  CameraModal,
+  MicrodepositOnboardingModal
 } from './scenes/Modals'
 import {
   InviteOnlyLander,
@@ -104,6 +106,12 @@ class Coincast extends React.Component {
             </Scene>
             <Scene key="UserProfile" direction="vertical">
               <Scene key="UserProfileModal" component={UserProfileModal} schema="modal" panHandlers={null} hideNavBar />
+            </Scene>
+            <Scene key="Camera" direction="vertical">
+              <Scene key="CameraModal" component={CameraModal} schema="modal" panHandlers={null} hideNavBar />
+            </Scene>
+            <Scene key="MicrodepositOnboarding" direction="vertical">
+              <Scene key="MicrodepositOnboardingModal" component={MicrodepositOnboardingModal} schema="modal" panHandlers={null} hideNavBar />
             </Scene>
 
             { /* Broadcast Modals */ }

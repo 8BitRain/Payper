@@ -7,7 +7,6 @@ import {connect} from 'react-redux'
 import {SideMenuHeader} from './'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import * as dispatchers from '../scenes/Main/MainState'
-import StatusCard from './StatusCard/StatusCard'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
