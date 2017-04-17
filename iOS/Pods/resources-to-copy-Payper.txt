@@ -1,0 +1,13 @@
+/Users/brady/web/projects/current/Payper/iOS/Pods/Mixpanel/Mixpanel/Images/MPArrowLeft.png
+/Users/brady/web/projects/current/Payper/iOS/Pods/Mixpanel/Mixpanel/Images/MPArrowLeft@2x.png
+/Users/brady/web/projects/current/Payper/iOS/Pods/Mixpanel/Mixpanel/Images/MPArrowRight.png
+/Users/brady/web/projects/current/Payper/iOS/Pods/Mixpanel/Mixpanel/Images/MPArrowRight@2x.png
+/Users/brady/web/projects/current/Payper/iOS/Pods/Mixpanel/Mixpanel/Images/MPCheckmark.png
+/Users/brady/web/projects/current/Payper/iOS/Pods/Mixpanel/Mixpanel/Images/MPCheckmark@2x.png
+/Users/brady/web/projects/current/Payper/iOS/Pods/Mixpanel/Mixpanel/Images/MPCloseButton.png
+/Users/brady/web/projects/current/Payper/iOS/Pods/Mixpanel/Mixpanel/Images/MPCloseButton@2x.png
+/Users/brady/web/projects/current/Payper/iOS/Pods/Mixpanel/Mixpanel/Images/MPCloseButton@3x.png
+/Users/brady/web/projects/current/Payper/iOS/Pods/Mixpanel/Mixpanel/Images/MPDismissKeyboard.png
+/Users/brady/web/projects/current/Payper/iOS/Pods/Mixpanel/Mixpanel/Images/MPDismissKeyboard@2x.png
+/Users/brady/web/projects/current/Payper/iOS/Pods/Mixpanel/Mixpanel/Images/MPLogo.png
+/Users/brady/web/projects/current/Payper/iOS/Pods/Mixpanel/Mixpanel/Images/MPLogo@2x.png

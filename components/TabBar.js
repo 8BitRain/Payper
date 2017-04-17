@@ -1,7 +1,8 @@
 import React from 'react'
-import {View, TouchableHighlight, Text, StyleSheet, StatusBar, Platform} from 'react-native'
+import {View, TouchableHighlight, Text, StyleSheet, StatusBar, Platform, Dimensions} from 'react-native'
 import {colors} from '../globalStyles'
 
+const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'transparent',
@@ -20,6 +21,23 @@ const styles = StyleSheet.create({
   tabText: {
     color: colors.snowWhite,
     fontSize: 16
+  },
+  indicatorWrap: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    width: dims.width * 0.33,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1, borderColor: 'red'
+  },
+  indicator: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.snowWhite,
   }
 })
 
@@ -43,7 +61,14 @@ class TabBar extends React.Component {
               underlayColor={'transparent'}
               onPress={() => this.props.changeTab(tabName)}
               style={[styles.tabWrap, {borderColor: (this.props.activeTab === tabName) ? colors.lightGrey : colors.accent}]}>
-              <Text style={styles.tabText}>{tabName}</Text>
+              <View>
+                <Text style={styles.tabText}>{tabName}</Text>
+                { /*
+                <View style={styles.indicatorWrap}>
+                  <View style={styles.indicator} />
+                </View>
+                */ }
+              </View>
             </TouchableHighlight>
           )
         })}

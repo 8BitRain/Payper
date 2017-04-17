@@ -11,8 +11,8 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 const dims = Dimensions.get('window')
-const imageDims = { width: 56, height: 56 }
-const imageWrapDims = { width: 62, height: 62 }
+const imageDims = {width: 56, height: 56}
+const imageWrapDims = {width: 62, height: 62}
 
 class StatusCard extends React.Component {
   constructor(props) {
@@ -40,11 +40,9 @@ class StatusCard extends React.Component {
         title: "Account Verification Failed",
         message: "We need a bit more information to verify your account.",
         action: "Next Step: Verify Account",
-        destination: () => Actions.GlobalModal({
-          subcomponent: <KYCOnboardingView retry currentUser={this.props.currentUser} />,
-          backgroundColor: colors.snowWhite,
-          showHeader: true,
-          title: "Account Verification"
+        destination: () => Actions.KYCOnboardingView({
+          currentUser: this.props.currentUser,
+          retry: true
         })
       },
       'kyc-documentNeeded': {
@@ -205,7 +203,8 @@ class StatusCard extends React.Component {
           { /* Shadow must be absolutely position due to 'overflow: hidden'
                style on actual container */ }
           <View
-            style={{position: 'absolute', top: 22, left: dims.width * 0.06, right: dims.width * 0.06, bottom: 12, borderRadius: 5,
+            style={{
+              position: 'absolute', top: 22, left: dims.width * 0.06, right: dims.width * 0.06, bottom: 12, borderRadius: 5,
               shadowColor: colors.medGrey,
               shadowOpacity: 1.0,
               shadowRadius: 2,

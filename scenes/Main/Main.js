@@ -40,7 +40,8 @@ class Main extends React.Component {
     super(props)
 
     this.state = {
-      activeTab: "Broadcasts"
+      activeTab: "Broadcasts",
+      tabIndicators: "me"
     }
 
     this.changeTab = this.changeTab.bind(this)
@@ -67,6 +68,7 @@ class Main extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log("--> Main will receive props", nextProps)
     if (nextProps.newTab && !this.state.changingTab) {
       this.setState({
         changingTab: true,
@@ -101,7 +103,7 @@ class Main extends React.Component {
       <View style={{flex: 1}}>
 
         { /* Header */ }
-        <Header activeTab={this.state.activeTab} changeTab={this.changeTab} {...this.props} showSideMenuButton showTabBar />
+        <Header activeTab={this.state.activeTab} changeTab={this.changeTab} {...this.props} showSideMenuButton showTabBar tabIndicators={this.state.tabIndicators} />
 
         { /* Inner content */ }
         <View style={styles.container}>

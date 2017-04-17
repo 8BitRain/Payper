@@ -39,15 +39,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    width: dims.width * 0.725,
-    backgroundColor: 'red'
+    width: dims.width * 0.725
   },
   progressBar: {
     position: 'absolute',
     top: 0,
     left: 0,
     bottom: 0,
-    backgroundColor: colors.gradientGreen
+    backgroundColor: 'rgba(229, 255, 249, 0.35)'
   }
 })
 
@@ -115,17 +114,33 @@ class SideMenuHeader extends React.Component {
                 <EvilIcons name={"chevron-right"} size={22} color={colors.deepBlue} />
               </View>
             </View>
-
           </View>
 
-          { /* Profile completion bar
-          <View stye={styles.progressBarWrap}>
-            <Animated.View style={[styles.progressBar, this.AV.progressBar]} />
-            <Text style={{fontSize: 17, color: colors.deepBlue, padding: 7}}>
-              {`Profile Strength: ${this.state.profileStrength}%`}
-            </Text>
-          </View>
-          */ }
+          { /* Profile completion bar */ }
+          <TouchableHighlight
+            activeOpacity={0.8}
+            underlayColor={colors.lightGrey}
+            onPress={() => {
+              Actions.refresh({key: 'Main', open: false})
+              setTimeout(() => Actions.refresh({newTab: 'Me'}))
+            }}>
+            <View style={{backgroundColor: colors.lightGrey, paddingBottom: 10}}>
+              { /* Progress bar */ }
+              <Animated.View style={[styles.progressBar, this.AV.progressBar]} />
+
+              { /* Profile strength text */ }
+              <Text style={{fontSize: 15, color: colors.deepBlue, padding: 7, alignSelf: 'center'}}>
+                {`Profile Strength: ${this.state.profileStrength}%`}
+              </Text>
+
+              { /* Complete now button */ }
+              <View style={{padding: 8, backgroundColor: colors.gradientGreen, borderRadius: 5, alignItems: 'center', marginLeft: 12, marginRight: 12}}>
+                <Text style={{fontSize: 14, color: colors.snowWhite}}>
+                  {"Complete Account"}
+                </Text>
+              </View>
+            </View>
+          </TouchableHighlight>
 
         </View>
       </TouchableHighlight>
