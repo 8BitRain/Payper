@@ -3,7 +3,8 @@ import firebase from 'firebase'
 import {Actions} from 'react-native-router-flux'
 import {View, Text, TouchableHighlight, Animated, Dimensions, Modal, Image, StyleSheet} from 'react-native'
 import {colors} from '../globalStyles'
-import {IAVWebView, KYCOnboardingView, PhotoUploader, MicrodepositTooltip, SuspendedTooltip} from './'
+import {IAVWebView, KYCOnboardingView, PhotoUploader} from './'
+import {SuspendedTooltip, MicrodepositTooltip} from './Tooltips'
 import {AnimatedCircularProgress} from 'react-native-circular-progress'
 import {getOnboardingPercentage, uploadKYCDocument} from '../helpers/utils'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -75,29 +76,19 @@ class StatusCard extends React.Component {
       },
       'kyc-documentProcessing': {
         title: "Verifying Your Account",
-        message: "We're processing your information and will notify you when verification is complete."
+        message: "We're processing your information and will notify you when your account verification is complete."
       },
       'kyc-documentReceived': {
         title: "Verifying Your Account",
-        message: "We're reviewing your information and will notify you when verification is complete."
+        message: "We're reviewing your information and will notify you when your account verification is complete."
       },
       'kyc-suspended': {
         title: "Verifying Your Account",
-        message: "We're taking a bit longer than usual to verify your account.",
-        action: "More Info",
-        destination: () => Actions.GlobalModal({
-          subcomponent: <SuspendedTooltip closeModal={() => Actions.pop()} />,
-          backgroundColor: colors.snowWhite
-        })
+        message: "Your account verification is taking a bit longer than usual. We'll notify you when it's complete!"
       },
       'microdeposits-initialized': {
         title: "Microdeposits Initialized",
-        message: "We're transferring two small (< 20¢) sums to your bank account and will notify you when they've arrived.",
-        action: "More Info",
-        destination: () => Actions.GlobalModal({
-          subcomponent: <MicrodepositTooltip closeModal={() => Actions.pop()} />,
-          backgroundColor: colors.snowWhite
-        })
+        message: "We're transferring two small (< 20¢) sums to your bank account and will notify you when they've arrived."
       },
       'microdeposits-deposited': {
         title: "Microdeposits Arrived",
@@ -110,12 +101,9 @@ class StatusCard extends React.Component {
       },
       'microdeposits-failed': {
         title: "Microdeposits Failed to Transfer",
-        message: "We couldn't send microdeposits with the information provided. Please try again.",
+        message: "We couldn't send your microdeposits with the information provided. Please try again.",
         action: "Next Step: Add Bank Account",
-        destination: () => Actions.GlobalModal({
-          subcomponent: <IAVWebView refreshable currentUser={this.props.currentUser} />,
-          backgroundColor: colors.accent
-        })
+        destination: () => Actions.IAV()
       },
       'kyc-success': {
         action: "Dismiss",
