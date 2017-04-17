@@ -166,7 +166,7 @@ class MatchedWantOwnRow extends React.Component {
 
   renderMatchedUsers(users) {
     let arr = []
-    
+
     for (var k in users) arr.push(
       <MatchedUser
         key={k}
@@ -176,7 +176,7 @@ class MatchedWantOwnRow extends React.Component {
         tag={this.props.data.tag}
         currentUser={this.props.currentUser} />
     )
-    
+
     return arr
   }
 

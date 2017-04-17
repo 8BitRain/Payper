@@ -64,7 +64,7 @@ class MatchedUser extends React.Component {
             justifyContent: 'center',
             shadowColor: colors.medGrey,
             shadowOpacity: 1.0,
-            shadowRadius: 2,
+            shadowRadius: 1,
             shadowOffset: {
               height: 0,
               width: 0
