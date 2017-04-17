@@ -87,6 +87,12 @@ class MyProfileModal extends React.Component {
               </View>
             </TouchableHighlight>
           </View>
+
+          { /* Email Address */ }
+          
+
+          { /* Phone Number */ }
+
         </View>
 
         { /* Wallet */ }

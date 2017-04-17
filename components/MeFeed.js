@@ -34,7 +34,7 @@ class MeFeed extends React.Component {
             return <View />
           }}
           renderSectionHeader={(rowData, sectionID) => <View style={{marginTop: 10}}><BroadcastFeedSectionHeader sectionID={sectionID} /></View>}
-          renderEmptyState={() => (this.props.currentUser.appFlags.onboardingProgress.indexOf("kyc-success") <= 0) ? null : <MeFeedEmptyState />}
+          renderEmptyState={() => (this.props.currentUser.appFlags.onboardingProgress && this.props.currentUser.appFlags.onboardingProgress.indexOf("kyc-success") <= 0) ? null : <MeFeedEmptyState />}
           renderFooter={() => <View style={{height: 25}} />}
           renderHeader={() => <StatusCard currentUser={this.props.currentUser} />} />
 

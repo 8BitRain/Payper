@@ -20,9 +20,9 @@ class BroadcastFeedEmptyState extends React.Component {
   render() {
     return(
       <View style={styles.container}>
-        <View style={{width: dims.width * 0.75, padding: 14, marginBottom: 30, borderRadius: 5, backgroundColor: colors.lightGrey, borderWidth: 1, borderColor: colors.medGrey, alignItems: 'center'}}>
+        <View style={{width: dims.width * 0.8, marginBottom: 30, paddingLeft: 5, paddingRight: 5, paddingTop: 10, paddingBottom: 10, borderRadius: 5, backgroundColor: colors.lightGrey, borderWidth: 1, borderColor: colors.medGrey, alignItems: 'center'}}>
           <Text style={{color: colors.accent, fontSize: 18, fontWeight: '500'}}>
-            {"Nothing to see here... yet"}
+            {"Nothing to see here, yet."}
           </Text>
           <Text style={{color: colors.deepBlue, fontSize: 16}}>
             {"This is where broadcasts will appear."}
