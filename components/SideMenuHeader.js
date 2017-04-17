@@ -116,31 +116,33 @@ class SideMenuHeader extends React.Component {
             </View>
           </View>
 
-          { /* Profile completion bar */ }
-          <TouchableHighlight
-            activeOpacity={0.8}
-            underlayColor={colors.lightGrey}
-            onPress={() => {
-              Actions.refresh({key: 'Main', open: false})
-              setTimeout(() => Actions.refresh({newTab: 'Me'}))
-            }}>
-            <View style={{backgroundColor: colors.lightGrey, paddingBottom: 10}}>
-              { /* Progress bar */ }
-              <Animated.View style={[styles.progressBar, this.AV.progressBar]} />
+          { /* Profile completion bar */
+            (this.state.profileStrength > 0)
+            ? <TouchableHighlight
+                activeOpacity={0.8}
+                underlayColor={colors.lightGrey}
+                onPress={() => {
+                  Actions.refresh({key: 'Main', open: false})
+                  setTimeout(() => Actions.refresh({newTab: 'Me'}))
+                }}>
+                <View style={{backgroundColor: colors.lightGrey, paddingBottom: 10}}>
+                  { /* Progress bar */ }
+                  <Animated.View style={[styles.progressBar, this.AV.progressBar]} />
 
-              { /* Profile strength text */ }
-              <Text style={{fontSize: 15, color: colors.deepBlue, padding: 7, alignSelf: 'center'}}>
-                {`Profile Strength: ${this.state.profileStrength}%`}
-              </Text>
+                  { /* Profile strength text */ }
+                  <Text style={{fontSize: 15, color: colors.deepBlue, padding: 7, alignSelf: 'center'}}>
+                    {`Account Strength: ${this.state.profileStrength}%`}
+                  </Text>
 
-              { /* Complete now button */ }
-              <View style={{padding: 8, backgroundColor: colors.gradientGreen, borderRadius: 5, alignItems: 'center', marginLeft: 12, marginRight: 12}}>
-                <Text style={{fontSize: 14, color: colors.snowWhite}}>
-                  {"Complete Account"}
-                </Text>
-              </View>
-            </View>
-          </TouchableHighlight>
+                  { /* Complete now button */ }
+                  <View style={{padding: 8, backgroundColor: colors.gradientGreen, borderRadius: 5, alignItems: 'center', marginLeft: 20, marginRight: 20}}>
+                    <Text style={{fontSize: 14, color: colors.snowWhite}}>
+                      {"Complete Account"}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableHighlight>
+            : null }
 
         </View>
       </TouchableHighlight>

@@ -69,9 +69,7 @@ class StatusCard extends React.Component {
               uri: uri,
               email: this.props.currentUser.decryptedEmail,
               token: this.props.currentUser.token
-            }, (url, err) => {
-              if (err) console.log("--> Error thrown by uploadKYCDocument", err)
-            })
+            }, (url, err) => (err) ? console.log("--> Error thrown by uploadKYCDocument", err) : null)
           }
         })
       },

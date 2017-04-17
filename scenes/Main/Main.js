@@ -68,7 +68,6 @@ class Main extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("--> Main will receive props", nextProps)
     if (nextProps.newTab && !this.state.changingTab) {
       this.setState({
         changingTab: true,
