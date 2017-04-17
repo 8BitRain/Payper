@@ -4,8 +4,10 @@ import {Actions} from 'react-native-router-flux'
 import {Header, ProfilePic, Wallet, PhotoUploader} from '../../components'
 import {deleteUser} from '../../helpers/lambda'
 import {deleteAccountAlert} from '../../helpers/alerts'
+import {stylizePhoneNumber} from '../../helpers/utils'
 import {colors} from '../../globalStyles'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import Entypo from 'react-native-vector-icons/Entypo'
 import Button from 'react-native-button'
 import {connect} from 'react-redux'
 import * as dispatchers from '../Main/MainState'
@@ -50,7 +52,7 @@ class MyProfileModal extends React.Component {
         <Header showTitle showBackButton title="My Profile" />
 
         { /* Name / Username */ }
-        <View style={{justifyContent: 'center', alignItems: 'center', borderBottomWidth: 1, borderColor: colors.medGrey, paddingBottom: 15, paddingTop: 15, width: dims.width * 0.92}}>
+        <View style={{justifyContent: 'center', alignItems: 'center', paddingTop: 15, width: dims.width * 0.92}}>
 
           { /* Profile pic, name, username */ }
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -66,10 +68,11 @@ class MyProfileModal extends React.Component {
             </View>
           </View>
 
-          { /* Spacer */ }
+          { /* Spacer
           <View style={{height: 15}} />
+          */ }
 
-          { /* Upload profile pic button */ }
+          { /* Upload profile pic button
           <View style={[styles.shadow, {borderRadius: 4}]}>
             <TouchableHighlight
               activeOpacity={0.75}
@@ -87,12 +90,35 @@ class MyProfileModal extends React.Component {
               </View>
             </TouchableHighlight>
           </View>
+          */ }
+        </View>
 
-          { /* Email Address */ }
-          
+        { /* Email */ }
+        <View style={{paddingTop: 8, paddingBottom: 8, width: this.props.width, borderColor: colors.medGrey, borderBottomWidth: 1, paddingLeft: dims.width * 0.06, paddingRight: dims.width * 0.06}}>
+          <View style={{width: dims.width * 0.88, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+            <Text style={{color: colors.deepBlue, fontSize: 16, fontWeight: '700'}}>
+              {"Email"}
+            </Text>
+            <EvilIcons name={"envelope"} size={32} color={colors.accent} />
+          </View>
 
-          { /* Phone Number */ }
+          <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2, alignItems: 'center', flexWrap: 'wrap'}}>
+            {this.props.currentUser.decryptedEmail}
+          </Text>
+        </View>
 
+        { /* Phone number */ }
+        <View style={{paddingTop: 8, paddingBottom: 8, width: this.props.width, borderColor: colors.medGrey, borderBottomWidth: 1, paddingLeft: dims.width * 0.06, paddingRight: dims.width * 0.06}}>
+          <View style={{width: dims.width * 0.88, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+            <Text style={{color: colors.deepBlue, fontSize: 16, fontWeight: '700'}}>
+              {"Phone Number"}
+            </Text>
+            <Entypo name={"phone"} size={28} color={colors.accent} />
+          </View>
+
+          <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2, alignItems: 'center', flexWrap: 'wrap'}}>
+            {stylizePhoneNumber(this.props.currentUser.decryptedPhone).stylizedPhone}
+          </Text>
         </View>
 
         { /* Wallet */ }
