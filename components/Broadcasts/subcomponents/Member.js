@@ -30,6 +30,12 @@ class Member extends React.Component {
               <Text style={{color: colors.slateGrey, fontSize: 13, fontWeight: '400'}}>
                 {`Joined ${moment(this.props.member.joinedAt).format("MMM D, YYYY")}`}
               </Text>
+              { /* Renewal date */
+                (this.props.member.renewalDate)
+                ? <Text style={{color: colors.slateGrey, fontSize: 13, fontWeight: '400'}}>
+                    {`Renews ${this.props.member.renewalDate}`}
+                  </Text>
+                : null }
             </View>
           </View>
         </TouchableHighlight>

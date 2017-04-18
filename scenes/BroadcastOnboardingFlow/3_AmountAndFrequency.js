@@ -130,7 +130,7 @@ class AmountAndFrequency extends React.Component {
 
         { /* Invalid payment amount warning */
           (this.state.amountIsOutOfRange)
-          ? <Text style={styles.warningText}>{"Payment amount must be between $1 and $3,000."}</Text>
+          ? <Text style={styles.warningText}>{"Payment amount must be between $1 and $200."}</Text>
           : null }
 
         { /* Frequency buttons */ }

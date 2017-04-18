@@ -4,7 +4,7 @@ import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, Acti
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../../globalStyles'
 import {removeFromCastAlert} from '../../../helpers/alerts'
-import {formatBroadcastTimestamp, formatFrequency, callbackForLoop} from '../../../helpers/utils'
+import {formatBroadcastTimestamp, formatFrequency, callbackForLoop, getRenewalDate} from '../../../helpers/utils'
 import {Firebase} from '../../../helpers'
 import {deleteCastAlert} from '../../../helpers/alerts'
 import {deleteCast, kickFromCast, stopRenewal, resumeRenewal} from '../../../helpers/lambda'
@@ -28,8 +28,6 @@ class AdminBroadcastView extends React.Component {
 
     this.state = {
       members: [],
-      datesJoined: {},
-      renewalDate: null,
       renewalDateModalIsVisible: false
     }
 
@@ -44,12 +42,10 @@ class AdminBroadcastView extends React.Component {
     this.resumeRenewal = this.resumeRenewal.bind(this)
     this.delete = this.delete.bind(this)
     this.populateMembers = this.populateMembers.bind(this)
-    this.populateDates = this.populateDates.bind(this)
   }
 
   componentDidMount() {
     this.populateMembers(this.props.broadcast.members)
-    this.populateDates()
   }
 
   populateMembers(memberIDs) {
@@ -63,17 +59,14 @@ class AdminBroadcastView extends React.Component {
         let memberID = memberIDBuffer[loop.index]
         Firebase.get(`usersPublicInfo/${memberID}`, (userData) => {
           userData.uid = memberID
-          members.push(userData)
-          loop.continue()
+          getRenewalDate({memberID, castID: this.props.broadcast.castID}, (renewalDate) => {
+            userData.renewalDate = renewalDate
+            members.push(userData)
+            loop.continue()
+          })
         })
       },
       onComplete: () => this.setState({members})
-    })
-  }
-
-  populateDates() {
-    Firebase.get(`castPayments/${this.props.broadcast.castID}`, (res) => {
-      console.log("--> castPayments res", res)
     })
   }
 
@@ -221,7 +214,7 @@ class AdminBroadcastView extends React.Component {
                   ? <Text style={{color: colors.deepBlue, fontSize: 16}}>
                       {"None"}
                     </Text>
-                  : this.state.members.map((o, i) => <Member key={i} member={o} dateJoined={this.state.datesJoined[o.uid]} remove={this.removeMember} showRemoveButton />)}
+                  : this.state.members.map((o, i) => <Member key={i} member={o} remove={this.removeMember} showRemoveButton />)}
               </View>
             : null }
 

@@ -199,21 +199,24 @@ export default class User {
         callback: (res) => {
           if (!res) return
 
-          if (!this.services || this.services.length === 0) {
-            Firebase.get('Services', (res) => handleServices(res, (services, servicesMap) => {
-              processTagMatches({
-                tagMatches: res,
-                services,
-                servicesMap
-              }, (services) => updateViaRedux({tagMatches: res, services}))
-            }))
-          } else {
-            processTagMatches({
-              tagMatches: res,
-              services: this.services,
-              servicesMap: this.servicesMap
-            }, (services) => updateViaRedux({tagMatches: res, services}))
-          }
+          console.log("--> tagMatches listener callback was invoked...")
+          console.log("--> res", res)
+
+          // if (!this.services || this.services.length === 0) {
+          //   Firebase.get('Services', (res) => handleServices(res, (services, servicesMap) => {
+          //     processTagMatches({
+          //       tagMatches: res,
+          //       services,
+          //       servicesMap
+          //     }, (services) => updateViaRedux({tagMatches: res, services}))
+          //   }))
+          // } else {
+          //   processTagMatches({
+          //     tagMatches: res,
+          //     services: this.services,
+          //     servicesMap: this.servicesMap
+          //   }, (services) => updateViaRedux({tagMatches: res, services}))
+          // }
         }
       }
     ]
