@@ -1,7 +1,7 @@
 import {Firebase} from '../'
 import {Actions} from 'react-native-router-flux'
 
-function notify(notif) {
+function handlePushNotification(notif) {
   console.log("--> Got push notif:", notif)
   if (notif.opened_from_tray && callbacks[notif.type])
     callbacks[notif.type](notif)
@@ -52,4 +52,4 @@ const callbacks = {
   paymentRenewal: () => alert("paymentRenewal")
 }
 
-module.exports = notify
+module.exports = handlePushNotification

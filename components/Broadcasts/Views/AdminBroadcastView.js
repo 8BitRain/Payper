@@ -4,12 +4,13 @@ import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, Acti
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../../globalStyles'
 import {removeFromCastAlert} from '../../../helpers/alerts'
-import {formatBroadcastTimestamp, formatFrequency, callbackForLoop, getRenewalDate} from '../../../helpers/utils'
+import {formatBroadcastTimestamp, formatFrequency, callbackForLoop, getRenewalDateAndDateJoined} from '../../../helpers/utils'
 import {Firebase} from '../../../helpers'
 import {deleteCastAlert} from '../../../helpers/alerts'
-import {deleteCast, kickFromCast, stopRenewal, resumeRenewal} from '../../../helpers/lambda'
+import {deleteCast, kickFromCast, stopRenewal, resumeRenewal, updateSecret} from '../../../helpers/lambda'
 import {ProfilePic} from '../../'
-import {SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret, Member, RenewalDateModal} from '../'
+import {SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret, Member} from '../'
+import {RenewalDateInputModal, SecretInputModal} from '../../'
 import {Header} from '../../'
 import {connect} from 'react-redux'
 import * as dispatchers from '../../../scenes/Main/MainState'
@@ -28,7 +29,8 @@ class AdminBroadcastView extends React.Component {
 
     this.state = {
       members: [],
-      renewalDateModalIsVisible: false
+      secretInputModalVisible: false,
+      renewalDateInputModalVisible: false
     }
 
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
@@ -59,8 +61,10 @@ class AdminBroadcastView extends React.Component {
         let memberID = memberIDBuffer[loop.index]
         Firebase.get(`usersPublicInfo/${memberID}`, (userData) => {
           userData.uid = memberID
-          getRenewalDate({memberID, castID: this.props.broadcast.castID}, (renewalDate) => {
+          getRenewalDateAndDateJoined({memberID, castID: this.props.broadcast.castID}, (res) => {
+            let {renewalDate, dateJoined} = res
             userData.renewalDate = renewalDate
+            userData.dateJoined = dateJoined
             members.push(userData)
             loop.continue()
           })
@@ -86,10 +90,11 @@ class AdminBroadcastView extends React.Component {
   }
 
   showActionSheet() {
-    let options = ['Delete', 'Cancel']
+    let options = ['New Secret', 'Delete', 'Cancel']
     let callbacks = {
       'Stop Renewal': this.stopRenewal,
-      'Resume Renewal': () => this.setState({renewalDateModalIsVisible: true}),
+      'New Secret': () => this.setState({secretInputModalVisible: true}),
+      'Resume Renewal': () => this.setState({renewalDateInputModalVisible: true}),
       'Delete': this.delete,
       'Cancel': () => null
     }
@@ -223,6 +228,7 @@ class AdminBroadcastView extends React.Component {
 
           { /* Secret */ }
           <Secret
+            decryptedSecret={this.state.secret || null}
             shouldDecrypt
             width={dims.width * 0.88}
             broadcast={this.props.broadcast}
@@ -230,16 +236,34 @@ class AdminBroadcastView extends React.Component {
 
         </ScrollView>
 
-        { /* Resume renewal input modal */ }
-        <Modal animationType={"slide"} transparent={true} visible={this.state.renewalDateModalIsVisible}>
-          <RenewalDateModal
-            broadcast={this.props.broadcast}
-            submit={(renewalDate) => {
-              this.resumeRenewal(renewalDate)
-              this.setState({renewalDateModalIsVisible: false})
-            }}
-            closeModal={() => this.setState({renewalDateModalIsVisible: false})} />
-        </Modal>
+        { /* Renewal date input modal
+        <RenewalDateInputModal
+          visible={this.state.renewalDateInputModalVisible}
+          currentUser={this.props.currentUser}
+          onSubmit={(renewalDate) => {
+            console.log("--> renewalDate", renewalDate)
+            this.setState({renewalDateInputModalVisible: false})
+          }}
+          cancel={() => this.setState({renewalDateInputModalVisible: false})} />
+          */ }
+
+        { /* Secret input modal */ }
+        <SecretInputModal
+          visible={this.state.secretInputModalVisible}
+          currentUser={this.props.currentUser}
+          onSubmit={(secret) => {
+            this.setState({
+              secret,
+              secretInputModalVisible: false
+            })
+
+            updateSecret({
+              secret,
+              castID: this.props.broadcast.castID,
+              token: this.props.currentUser.token
+            })
+          }}
+          cancel={() => this.setState({secretInputModalVisible: false})} />
 
       </View>
     )

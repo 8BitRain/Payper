@@ -28,7 +28,7 @@ class Member extends React.Component {
                 {`${this.props.member.firstName} ${this.props.member.lastName}`}
               </Text>
               <Text style={{color: colors.slateGrey, fontSize: 13, fontWeight: '400'}}>
-                {`Joined ${moment(this.props.member.joinedAt).format("MMM D, YYYY")}`}
+                {`Joined ${this.props.member.dateJoined}`}
               </Text>
               { /* Renewal date */
                 (this.props.member.renewalDate)

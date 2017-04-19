@@ -6,7 +6,7 @@ import {Actions} from 'react-native-router-flux'
 import {colors} from '../../globalStyles'
 import {Header, BroadcastsFeed, ExploreFeed, MeFeed} from '../../components'
 import {updateFCMToken, updateUserTags} from '../../helpers/lambda'
-import {notify, uploadKYCDocument} from '../../helpers/utils'
+import {handlePushNotification, uploadKYCDocument} from '../../helpers/utils'
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -53,11 +53,11 @@ class Main extends React.Component {
 
     if (FCM.initialData) {
       FCM.initialData.opened_from_tray = true
-      notify(FCM.initialData)
+      handlePushNotification(FCM.initialData)
       setTimeout(() => {FCM.initialData = null})
     }
 
-    this.notificationLisener = FCM.on('notification', (notification) => notify(notification))
+    this.notificationLisener = FCM.on('notification', (notification) => handlePushNotification(notification))
     this.FCMRefreshTokenListener = FCM.on('refreshToken', (FCMToken) => updateFCMToken({FCMToken, token: this.props.currentUser.token}))
   }
 

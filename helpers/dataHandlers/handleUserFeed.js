@@ -34,11 +34,11 @@ function handleUserFeed(casts, cb) {
 
             if (broadcastData.type === "world")
               broadcasts["Global"][castID] = broadcastData
-            if (broadcastData.type === "local")
+            else if (broadcastData.type === "local")
               broadcasts["Local"][castID] = broadcastData
-            if (broadcastData.type === "friendNetwork")
+            else if (broadcastData.type === "friendnetwork")
               broadcasts["Friends of Friends"][castID] = broadcastData
-            if (broadcastData.type === "friends")
+            else if (broadcastData.type === "friends")
               broadcasts["Friends"][castID] = broadcastData
 
             loop.continue()

@@ -14,7 +14,7 @@ class Secret extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.shouldDecrypt) {
+    if (this.props.shouldDecrypt && !this.props.decryptSecret) {
       decryptSecret({
         castID: this.props.broadcast.castID,
         token: this.props.currentUser.token
