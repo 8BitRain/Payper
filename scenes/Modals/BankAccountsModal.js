@@ -55,7 +55,7 @@ class BankAccountsModal extends React.Component {
       onConfirm: () => {
         this.props.updateCurrentUser({bankAccount: null})
         this.props.currentUser.bankAccount = null
-        this.generateRows(currentUser)
+        this.generateRows(this.props.currentUser)
         deleteBankAccount({token: this.props.currentUser.token})
       }
     })
@@ -79,7 +79,7 @@ class BankAccountsModal extends React.Component {
       options: options,
       cancelButtonIndex: 1,
       destructiveButtonIndex: 0
-    }, (buttonIndex) => this.deleteBankAccount())
+    }, (buttonIndex) => (buttonIndex === 0) ? this.deleteBankAccount() : null)
   }
 
   renderRow(rowData) {

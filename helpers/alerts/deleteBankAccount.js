@@ -14,7 +14,7 @@ function deleteBankAccount(params) {
       }
     }
   }
-  
+
   let title = `Delete ${currentUser.bankAccount.name}`
   let msg = `Are you sure you'd like to delete this bank account?`
 
