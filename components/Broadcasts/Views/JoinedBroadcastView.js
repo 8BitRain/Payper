@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import * as _ from 'lodash'
-import {View, TouchableHighlight, StyleSheet, Text, ScrollView, ActionSheetIOS, Dimensions} from 'react-native'
+import {View, TouchableHighlight, StyleSheet, Text, ScrollView, ActionSheetIOS, Dimensions, Alert} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../../globalStyles'
 import {formatBroadcastTimestamp, formatFrequency, callbackForLoop} from '../../../helpers/utils'
@@ -123,10 +123,8 @@ class JoinedBroadcastView extends React.Component {
   }
 
   createDispute() {
-    createDispute({
-      castID: this.props.broadcast.castID,
-      token: this.props.currentUser.token
-    })
+    createDispute({castID: this.props.broadcast.castID, token: this.props.currentUser.token})
+    Alert.alert('Created Dispute', 'A Payper representative will contact you via email to resolve your dispute.')
   }
 
   render() {
