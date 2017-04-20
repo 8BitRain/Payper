@@ -3,6 +3,7 @@ import {View, Text, StyleSheet} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../globalStyles'
 import {Header} from '../../components'
+import {DisputesFeed} from '../../components/Disputes'
 
 const styles = StyleSheet.create({
   container: {
@@ -19,6 +20,7 @@ class DisputesModal extends React.Component {
     return(
       <View style={styles.container}>
         <Header showTitle showBackButton title="Disputes" />
+        <DisputesFeed />
       </View>
     )
   }

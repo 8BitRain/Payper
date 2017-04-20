@@ -1,3 +1,4 @@
+exports.handleDisputes = require('./handleDisputes')
 exports.handleServices = require('./handleServices')
 exports.handleUserFeed = require('./handleUserFeed')
 exports.handleUserBroadcasts = require('./handleUserBroadcasts')

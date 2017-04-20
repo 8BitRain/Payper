@@ -4,7 +4,7 @@ import {AppState, GeoLocation} from 'react-native'
 import {Timer} from './'
 import {Firebase} from '../helpers'
 import {processTagMatches} from '../helpers/utils'
-import {handleUserData, handleUserBroadcasts, handleUserSubscribedBroadcasts, handleUserFeed, handleServices, handleWantsAndOwns} from '../helpers/dataHandlers'
+import {handleUserData, handleUserBroadcasts, handleUserSubscribedBroadcasts, handleUserFeed, handleServices, handleWantsAndOwns, handleDisputes} from '../helpers/dataHandlers'
 import {getFromAsyncStorage, setInAsyncStorage} from '../helpers/asyncStorage'
 import {deleteUser, getBankAccount, getDecryptedUserData, updateGeoLocation} from '../helpers/lambda'
 
@@ -218,6 +218,12 @@ export default class User {
           //   }, (services) => updateViaRedux({tagMatches: res, services}))
           // }
         }
+      },
+      {
+        endpoint: `disputes/${this.uid}`,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => handleDisputes(res, (disputesFeed) => updateViaRedux({disputesFeed}))
       }
     ]
 
