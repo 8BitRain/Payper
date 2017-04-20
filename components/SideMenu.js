@@ -54,6 +54,11 @@ class SideMenu extends React.Component {
           destination: Actions.Settings
         },
         {
+          title: 'Disputes',
+          icon: 'exclamation',
+          destination: Actions.Disputes
+        },
+        {
           title: 'FAQ',
           icon: 'question',
           destination: () => {

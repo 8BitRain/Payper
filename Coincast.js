@@ -32,6 +32,7 @@ import {
   UserProfileModal,
   MyProfileModal,
   CameraModal,
+  DisputesModal,
   MicrodepositOnboardingModal
 } from './scenes/Modals'
 import {
@@ -88,6 +89,9 @@ class Coincast extends React.Component {
             </Scene>
             <Scene key="Settings" direction="vertical">
               <Scene key="SettingsModal" component={SettingsModal} schema="modal" title="Settings" panHandlers={null} hideNavBar />
+            </Scene>
+            <Scene key="Disputes" direction="vertical">
+              <Scene key="DisputesModal" component={DisputesModal} schema="modal" title="Disputes" panHandlers={null} hideNavBar />
             </Scene>
             <Scene key="RenewalDate" direction="vertical">
               <Scene key="RenewalDateModal" component={RenewalDateModal} schema="modal" title="Settings" panHandlers={null} hideNavBar />

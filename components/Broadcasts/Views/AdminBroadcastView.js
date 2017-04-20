@@ -1,5 +1,6 @@
 import React from 'react'
 import * as _ from 'lodash'
+import moment from 'moment'
 import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, ActionSheetIOS, Alert, Modal} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../../globalStyles'
@@ -62,9 +63,11 @@ class AdminBroadcastView extends React.Component {
         Firebase.get(`usersPublicInfo/${memberID}`, (userData) => {
           userData.uid = memberID
           getRenewalDateAndDateJoined({memberID, castID: this.props.broadcast.castID}, (res) => {
-            let {renewalDate, dateJoined} = res
+            let {renewalDate, dateJoined, renewalDateUTC, dateJoinedUTC} = res
             userData.renewalDate = renewalDate
             userData.dateJoined = dateJoined
+            userData.renewalDateUTC = renewalDateUTC
+            userData.dateJoinedUTC = dateJoinedUTC
             members.push(userData)
             loop.continue()
           })
@@ -92,14 +95,14 @@ class AdminBroadcastView extends React.Component {
   showActionSheet() {
     let options = ['New Secret', 'Delete', 'Cancel']
     let callbacks = {
-      'Stop Renewal': this.stopRenewal,
+      'Stop Renewal': () => this.stopRenewal(),
       'New Secret': () => this.setState({secretInputModalVisible: true}),
-      'Resume Renewal': () => this.setState({renewalDateInputModalVisible: true}),
-      'Delete': this.delete,
+      'Resume Renewal': () => this.resumeRenewal(),
+      'Delete': () => this.delete,
       'Cancel': () => null
     }
 
-    // Add condition-reliant options
+    // Add conditional options
     if (this.props.broadcast.members) options.unshift((this.props.broadcast.renewal) ? 'Stop Renewal' : 'Resume Renewal')
 
     // TODO: Implement cross-plaftorm action sheet module
@@ -122,17 +125,30 @@ class AdminBroadcastView extends React.Component {
     })
   }
 
-  resumeRenewal(renewalDate) {
+  resumeRenewal() {
+
     // Optimistically re-render
     this.props.broadcast.renewal = true
     Actions.refresh()
 
+    // Calculate renewal date
+    let largestRenewalDateUTC = 0
+    for (var i = 0; i < this.state.members.length; i++) {
+      const curr = this.state.members[i]
+      if (curr.renewalDateUTC > largestRenewalDateUTC) largestRenewalDateUTC = curr.renewalDateUTC
+    }
+    let now = Date.now()
+    let renewalDate = moment(largestRenewalDateUTC).add(1, 'day')
+    let oneIntervalFromNow = moment(now).add(1, (this.props.broadcast.freq === 'WEEKLY') ? 'week' : 'month')
+    let renewalDateUTC = (renewalDate.isSameOrBefore(oneIntervalFromNow)) ? moment.utc(renewalDate).valueOf() : moment.utc(oneIntervalFromNow).valueOf()
+
     // Hit backend
     resumeRenewal({
-      resumeDate: renewalDate,
+      renewalDate: renewalDateUTC,
       token: this.props.currentUser.token,
       castID: this.props.broadcast.castID
     })
+
   }
 
   delete() {
@@ -238,6 +254,7 @@ class AdminBroadcastView extends React.Component {
 
         { /* Renewal date input modal
         <RenewalDateInputModal
+          broadcast={this.props.broadcast}
           visible={this.state.renewalDateInputModalVisible}
           currentUser={this.props.currentUser}
           onSubmit={(renewalDate) => {
@@ -245,23 +262,15 @@ class AdminBroadcastView extends React.Component {
             this.setState({renewalDateInputModalVisible: false})
           }}
           cancel={() => this.setState({renewalDateInputModalVisible: false})} />
-          */ }
+        */ }
 
         { /* Secret input modal */ }
         <SecretInputModal
           visible={this.state.secretInputModalVisible}
           currentUser={this.props.currentUser}
           onSubmit={(secret) => {
-            this.setState({
-              secret,
-              secretInputModalVisible: false
-            })
-
-            updateSecret({
-              secret,
-              castID: this.props.broadcast.castID,
-              token: this.props.currentUser.token
-            })
+            this.setState({secret, secretInputModalVisible: false})
+            updateSecret({secret, castID: this.props.broadcast.castID, token: this.props.currentUser.token})
           }}
           cancel={() => this.setState({secretInputModalVisible: false})} />
 

@@ -22,14 +22,19 @@ class Member extends React.Component {
             { /* Profile Pic */ }
             <ProfilePic currentUser={this.props.member} size={42} />
 
-            { /* Display Name */ }
             <View style={{paddingLeft: 8}}>
+              { /* Display Name */ }
               <Text style={{color: colors.deepBlue, fontSize: 16, fontWeight: '400'}}>
                 {`${this.props.member.firstName} ${this.props.member.lastName}`}
               </Text>
-              <Text style={{color: colors.slateGrey, fontSize: 13, fontWeight: '400'}}>
-                {`Joined ${this.props.member.dateJoined}`}
-              </Text>
+
+              { /* Date joined */
+                (this.props.member.dateJoined)
+                ? <Text style={{color: colors.slateGrey, fontSize: 13, fontWeight: '400'}}>
+                  {`Joined ${this.props.member.dateJoined}`}
+                </Text>
+                : null }
+
               { /* Renewal date */
                 (this.props.member.renewalDate)
                 ? <Text style={{color: colors.slateGrey, fontSize: 13, fontWeight: '400'}}>

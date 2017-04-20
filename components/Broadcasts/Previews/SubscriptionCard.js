@@ -3,10 +3,12 @@ import moment from 'moment'
 import {Actions} from 'react-native-router-flux'
 import {View, Text, StyleSheet, TouchableHighlight, Dimensions, Image} from 'react-native'
 import {colors} from '../../../globalStyles'
-import {formatBroadcastTimestamp, formatFrequency} from '../../../helpers/utils'
+import {formatBroadcastTimestamp, formatFrequency, getRenewalDateAndDateJoined} from '../../../helpers/utils'
 import {ProfilePic} from '../../'
 import Entypo from 'react-native-vector-icons/Entypo'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import {connect} from 'react-redux'
+import * as dispatchers from '../../../scenes/Main/MainState'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -45,8 +47,25 @@ const styles = StyleSheet.create({
 class SubscriptionCard extends React.Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      dateJoinedUTC: null,
+      renewalDateUTC: null
+    }
+
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
     this.frequency = formatFrequency(props.broadcast.freq)
+  }
+
+  componentDidMount() {
+    getRenewalDateAndDateJoined({
+      memberID: this.props.currentUser.uid,
+      castID: this.props.broadcast.castID,
+      frequency: this.props.broadcast.freq
+    }, (res) => {
+      let {renewalDate, dateJoined, renewalDateUTC, dateJoinedUTC} = res
+      this.setState({renewalDateUTC, dateJoinedUTC}, () => console.log(this.state))
+    })
   }
 
   render() {
@@ -54,7 +73,7 @@ class SubscriptionCard extends React.Component {
       <TouchableHighlight
         activeOpacity={0.75}
         underlayColor={'transparent'}
-        onPress={() => Actions.JoinedBroadcast({broadcast: this.props.broadcast, canViewCasterProfile: this.props.canViewCasterProfile})}>
+        onPress={() => Actions.JoinedBroadcast({broadcast: this.props.broadcast, canViewCasterProfile: this.props.canViewCasterProfile, dateJoinedUTC: this.state.dateJoinedUTC, renewalDateUTC: this.state.renewalDateUTC})}>
         <View style={styles.container}>
 
           { /* Chevron (absolutely positioned) */ }
@@ -117,7 +136,7 @@ class SubscriptionCard extends React.Component {
 
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                   <Text style={{color: colors.slateGrey, fontSize: 15, paddingBottom: 2}}>
-                    {`Joined ${moment(this.props.broadcast.joinedAt).format("MMM D, YYYY")}`}
+                    {`Joined ${moment.utc(this.state.dateJoined).format("MMM D, YYYY")}`}
                   </Text>
                 </View>
               </View>
@@ -129,4 +148,17 @@ class SubscriptionCard extends React.Component {
   }
 }
 
-module.exports = SubscriptionCard
+function mapStateToProps(state) {
+  return {
+    currentUser: state.getIn(['main', 'currentUser'])
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    setCurrentUser: (input) => dispatch(dispatchers.setCurrentUser(input)),
+    updateCurrentUser: (input) => dispatch(dispatchers.updateCurrentUser(input))
+  }
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(SubscriptionCard)

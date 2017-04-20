@@ -1,11 +1,12 @@
 import React from 'react'
+import moment from 'moment'
 import * as _ from 'lodash'
-import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions} from 'react-native'
+import {View, TouchableHighlight, StyleSheet, Text, ScrollView, ActionSheetIOS, Dimensions} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../../globalStyles'
 import {formatBroadcastTimestamp, formatFrequency, callbackForLoop} from '../../../helpers/utils'
 import {unsubscribeAlert} from '../../../helpers/alerts'
-import {unsubscribeFromCast} from '../../../helpers/lambda'
+import {unsubscribeFromCast, createDispute} from '../../../helpers/lambda'
 import {Firebase} from '../../../helpers'
 import {ProfilePic} from '../../'
 import {SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret, Member} from '../'
@@ -37,12 +38,12 @@ class JoinedBroadcastView extends React.Component {
     this.spotsFilled = (!props.broadcast.members) ? 0 : props.broadcast.members.split(",").length
     this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
 
+    this.showActionSheet = this.showActionSheet.bind(this)
     this.onUnsubscribe = this.onUnsubscribe.bind(this)
   }
 
   componentDidMount() {
     this.populateMembers(this.props.broadcast.members)
-    this.populateDates()
   }
 
   populateMembers(memberIDs) {
@@ -64,10 +65,18 @@ class JoinedBroadcastView extends React.Component {
     })
   }
 
-  populateDates() {
-    Firebase.get(`castPayments/${this.props.broadcast.castID}`, (res) => {
-      console.log("--> castPayments res", res)
-    })
+  showActionSheet() {
+    let options = ['Create Dispute', 'Cancel']
+    let callbacks = {
+      'Create Dispute': () => this.createDispute(),
+      'Cancel': () => null
+    }
+
+    // TODO: Implement cross-plaftorm action sheet module
+    ActionSheetIOS.showActionSheetWithOptions({
+      options,
+      cancelButtonIndex: options.indexOf('Cancel')
+    }, (i) => callbacks[options[i]]())
   }
 
   removeMember(member) {
@@ -113,6 +122,13 @@ class JoinedBroadcastView extends React.Component {
 
   }
 
+  createDispute() {
+    createDispute({
+      castID: this.props.broadcast.castID,
+      token: this.props.currentUser.token
+    })
+  }
+
   render() {
     return(
       <View style={styles.container}>
@@ -121,6 +137,8 @@ class JoinedBroadcastView extends React.Component {
         <Header
           showTitle
           showBackButton
+          showDots
+          onDotsPress={this.showActionSheet}
           title={this.props.broadcast.title} />
 
         <ScrollView>
@@ -136,11 +154,14 @@ class JoinedBroadcastView extends React.Component {
                 <Text style={{color: colors.deepBlue, fontSize: 18, fontWeight: '700'}}>
                   {this.props.broadcast.title}
                 </Text>
-                <Text style={{color: colors.accent, fontSize: 16, fontWeight: '600'}}>
+                <Text style={{color: colors.accent, fontSize: 15, fontWeight: '600'}}>
                   {this.props.broadcast.caster.username}
                 </Text>
-                <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2}}>
+                <Text style={{color: colors.deepBlue, fontSize: 15, paddingTop: 2}}>
                   {`$${this.props.broadcast.amount} per ${this.frequency}`}
+                </Text>
+                <Text style={{color: colors.slateGrey, fontSize: 15, paddingBottom: 2}}>
+                  {`Joined ${moment.utc(this.props.dateJoinedUTC).format("MMM D, YYYY")}`}
                 </Text>
               </View>
             </View>
