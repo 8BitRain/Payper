@@ -1,6 +1,8 @@
 import React from 'react'
-import {View, Text, TouchableHighlight, StyleSheet, Dimensions} from 'react-native'
+import {View, Text, TouchableHighlight, StyleSheet, Dimensions, Alert} from 'react-native'
 import {colors} from '../globalStyles'
+import {withdrawFundsAlert} from '../helpers/alerts'
+import {withdrawFunds} from '../helpers/lambda'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
 
@@ -24,6 +26,19 @@ const styles = StyleSheet.create({
 })
 
 class Wallet extends React.Component {
+  constructor(props) {
+    super(props)
+    this.withdrawFunds = this.withdrawFunds.bind(this)
+  }
+
+  withdrawFunds() {
+    withdrawFundsAlert({
+      amount: this.props.currentUser.balances.withdrawable,
+      bankAccountName: this.props.currentUser.bankAccount.name,
+      onConfirm: () => withdrawFunds({token: this.props.currentUser.token})
+    })
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -77,19 +92,21 @@ class Wallet extends React.Component {
                 </View> }
         </View>
 
-        { /* Cash out button */ }
-        <View style={[styles.shadow, {borderRadius: 4, marginTop: 6}]}>
-          <TouchableHighlight
-            activeOpacity={0.75}
-            underlayColor={colors.lightGrey}
-            onPress={() => alert("Transfer to Bank")}>
-            <View style={{width: dims.width * 0.72, height: 40, borderRadius: 4, flexDirection: 'row', backgroundColor: colors.accent, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{fontSize: 16, fontWeight: '400', color: colors.snowWhite}}>
-                {"Transfer to Bank"}
-              </Text>
+        { /* Cash out button */
+          (this.props.currentUser.balances.withdrawable)
+          ? <View style={[styles.shadow, {borderRadius: 4, marginTop: 6}]}>
+              <TouchableHighlight
+                activeOpacity={0.75}
+                underlayColor={colors.lightGrey}
+                onPress={this.withdrawFunds}>
+                <View style={{width: dims.width * 0.72, height: 40, borderRadius: 4, flexDirection: 'row', backgroundColor: colors.accent, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={{fontSize: 16, fontWeight: '400', color: colors.snowWhite}}>
+                    {"Transfer to Bank"}
+                  </Text>
+                </View>
+              </TouchableHighlight>
             </View>
-          </TouchableHighlight>
-        </View>
+          : null }
 
       </View>
     )

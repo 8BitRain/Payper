@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import {View, Text, Modal, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions, Alert, ActionSheetIOS} from 'react-native'
 import {colors} from '../../globalStyles'
 import {IAVWebView, Header} from '../../components'
+import {deleteBankAccountAlert} from '../../helpers/alerts'
 import {deleteBankAccount} from '../../helpers/lambda'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import * as dispatchers from '../Main/MainState'
@@ -49,15 +50,19 @@ class BankAccountsModal extends React.Component {
   }
 
   deleteBankAccount(bankAccount) {
-    let {currentUser} = this.props
-    this.props.updateCurrentUser({bankAccount: null})
-    currentUser.bankAccount = null
-    this.generateRows(currentUser)
-    // deleteBankAccount({token: currentUser.token})
+    deleteBankAccountAlert({
+      currentUser: this.props.currentUser,
+      onConfirm: () => {
+        this.props.updateCurrentUser({bankAccount: null})
+        this.props.currentUser.bankAccount = null
+        this.generateRows(currentUser)
+        deleteBankAccount({token: this.props.currentUser.token})
+      }
+    })
   }
 
   onlyAllowOneBankAccount() {
-    let { bankAccount } = this.props.currentUser
+    let {bankAccount} = this.props.currentUser
     let message = "Payper only supports one bank account at a time. You must delete '" + bankAccount.name + "' before you can add a new account."
     Alert.alert("Sorry, but...", message)
   }
@@ -74,15 +79,7 @@ class BankAccountsModal extends React.Component {
       options: options,
       cancelButtonIndex: 1,
       destructiveButtonIndex: 0
-    }, (buttonIndex) => {
-      if (options[buttonIndex] === "Delete") {
-        let message = "Are you sure you'd like to delete this bank account?"
-        Alert.alert("Wait!", message, [
-          {text: 'Nevermind', onPress: () => null, style: 'cancel'},
-          {text: 'Delete', onPress: () => this.deleteBankAccount(bankAccount), style: 'destructive'},
-        ])
-      }
-    })
+    }, (buttonIndex) => this.deleteBankAccount())
   }
 
   renderRow(rowData) {
