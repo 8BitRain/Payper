@@ -23,7 +23,9 @@ const styles = StyleSheet.create({
     paddingRight: 6
   },
   stepValue: {
-    fontSize: 16
+    fontSize: 16,
+    width: 20, height: 20,
+    textAlign: 'center'
   },
   stepDivider: {
     width: 1,
@@ -76,6 +78,9 @@ class Spots extends React.Component {
             </Text>
             <View style={styles.stepDivider} />
           </View>
+
+          { /* Divider */ }
+          <View style={{height: 10}} />
 
           <Slider
             style={styles.slider}
