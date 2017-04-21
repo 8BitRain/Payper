@@ -89,7 +89,7 @@ class MicrodepositOnboardingModal extends React.Component {
         token: this.props.currentUser.token
       }
 
-      this.setState({ submitText: "Verifying..." })
+      this.setState({submitText: "Verifying..."})
 
       verifyMicrodeposits(params, (success) => {
         this.setState({ submitText: (success) ? "Verified!" : "We couldn't verify those amounts. Is there a typo?" })

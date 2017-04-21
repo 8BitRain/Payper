@@ -3,7 +3,7 @@ import {FBLoginManager} from 'NativeModules'
 import {AppState, GeoLocation} from 'react-native'
 import {Timer} from './'
 import {Firebase} from '../helpers'
-import {processTagMatches} from '../helpers/utils'
+import {getMatchedUsers} from '../helpers/utils'
 import {handleUserData, handleUserBroadcasts, handleUserSubscribedBroadcasts, handleUserFeed, handleServices, handleWantsAndOwns, handleDisputes} from '../helpers/dataHandlers'
 import {getFromAsyncStorage, setInAsyncStorage} from '../helpers/asyncStorage'
 import {deleteUser, getBankAccount, getDecryptedUserData, updateGeoLocation} from '../helpers/lambda'
@@ -17,6 +17,7 @@ export default class User {
     this.services = []
     this.servicesMap = {}
     this.rateableUsers = {}
+    this.matchedUsers = {}
     this.wants = {}
     this.owns = {}
 
@@ -179,7 +180,11 @@ export default class User {
           if (!res) return
           updateViaRedux({
             walletRef: res.walletRef,
-            balances: {total: res.amount || 0, available: res.withdrawableFunds || null, pending: res.pendingFunds || null}
+            balances: {
+              total: 0 + ((res.withdrawableFunds) ? parseInt(res.withdrawableFunds) : 0) + ((res.pendingFunds) ? parseInt(res.pendingFunds) : 0),
+              available: res.withdrawableFunds || null,
+              pending: res.pendingFunds || null
+            }
           })
         }
       },
@@ -198,25 +203,12 @@ export default class User {
         listener: null,
         callback: (res) => {
           if (!res) return
-
-          console.log("--> tagMatches listener callback was invoked...")
-          console.log("--> res", res)
-
-          // if (!this.services || this.services.length === 0) {
-          //   Firebase.get('Services', (res) => handleServices(res, (services, servicesMap) => {
-          //     processTagMatches({
-          //       tagMatches: res,
-          //       services,
-          //       servicesMap
-          //     }, (services) => updateViaRedux({tagMatches: res, services}))
-          //   }))
-          // } else {
-          //   processTagMatches({
-          //     tagMatches: res,
-          //     services: this.services,
-          //     servicesMap: this.servicesMap
-          //   }, (services) => updateViaRedux({tagMatches: res, services}))
-          // }
+          getMatchedUsers({
+            tagMatches: res,
+            matchedUsers: this.matchedUsers || {}
+          }, (matchedUsers) => {
+            updateViaRedux({matchedUsers, tagMatches: res})
+          })
         }
       },
       {

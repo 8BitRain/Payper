@@ -1,7 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import {Actions} from 'react-native-router-flux'
-import {View, Text, TouchableHighlight} from 'react-native'
+import {View, Text, TouchableHighlight, Dimensions} from 'react-native'
 import {colors} from '../../../globalStyles'
 import {ProfilePic} from '../../'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -10,6 +10,7 @@ class Member extends React.Component {
   constructor(props) {
     super(props)
   }
+  
   render() {
     return(
       <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8}}>
@@ -18,7 +19,7 @@ class Member extends React.Component {
           activeOpacity={0.75}
           underlayColor={'transparent'}
           onPress={() => Actions.UserProfile({user: this.props.member})}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
             { /* Profile Pic */ }
             <ProfilePic currentUser={this.props.member} size={42} />
 

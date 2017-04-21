@@ -45,7 +45,7 @@ class UserProfileModal extends React.Component {
       broadcasts: [],
       subscriptions: [],
       ratingModalVisible: false,
-      canRate: props.currentUser.rateableUsers[props.user.uid]
+      canRate: (this.props.currentUser.rateableUsers) ? this.props.currentUser.rateableUsers[this.props.user.uid] : false
     }
   }
 

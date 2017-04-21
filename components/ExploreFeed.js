@@ -76,18 +76,28 @@ class ExploreFeed extends React.Component {
           renderRow={(rowData, sectionID, rowID) => {
             let index = parseInt(rowID)
             let sectionLength = this.props.currentUser.services[sectionID].length
+            let match = this.props.currentUser.tagMatches && this.props.currentUser.tagMatches[rowData.tag]
 
-            if (rowData.matchedUsers) {
+            if (match) {
+              let matchedUsers = []
+
+              for (var uid in match) {
+                let user = this.props.currentUser.matchedUsers[uid]
+                user.matchType = match[uid].type
+                matchedUsers.push(user)
+              }
+
               return(
                 <View style={{width: dims.width, alignItems: 'center'}}>
                   <MatchedWantOwnRow
                     data={rowData}
+                    matchedUsers={matchedUsers}
                     hideBottomBorder={index === sectionLength - 1}
                     onWant={this.onWant}
                     onOwn={this.onOwn}
                     wants={this.props.currentUser.wants[rowData.title]}
                     owns={this.props.currentUser.owns[rowData.title]}
-                    numMatches={Object.keys(rowData.matchedUsers).length}
+                    numMatches={Object.keys(match).length}
                     currentUser={this.props.currentUser} />
                 </View>
               )

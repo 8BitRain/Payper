@@ -30,7 +30,8 @@ class JoinedBroadcastView extends React.Component {
       members: [],
       datesJoined: {},
       renewalDate: null,
-      renewalDateModalIsVisible: false
+      renewalDateModalIsVisible: false,
+      dispute: null
     }
 
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
@@ -44,6 +45,9 @@ class JoinedBroadcastView extends React.Component {
 
   componentDidMount() {
     this.populateMembers(this.props.broadcast.members)
+    Firebase.get(`disputes/${this.props.currentUser.uid}/${this.props.broadcast.castID}`, (res) => {
+      if (res) this.setState({dispute: res})
+    })
   }
 
   populateMembers(memberIDs) {
@@ -66,11 +70,13 @@ class JoinedBroadcastView extends React.Component {
   }
 
   showActionSheet() {
-    let options = ['Create Dispute', 'Cancel']
+    let options = ['Cancel']
     let callbacks = {
       'Create Dispute': () => this.createDispute(),
       'Cancel': () => null
     }
+
+    if (null === this.state.dispute) options.unshift('Create Dispute')
 
     // TODO: Implement cross-plaftorm action sheet module
     ActionSheetIOS.showActionSheetWithOptions({

@@ -235,9 +235,9 @@ class MatchedWantOwnRow extends React.Component {
         </TouchableHighlight>
 
         { /* Matches */
-          (this.props.data.matchedUsers)
+          (this.props.matchedUsers)
           ? <Animated.View style={[styles.matchesWrap, this.AV.matchesWrap]}>
-              {this.renderMatchedUsers(this.props.data.matchedUsers)}
+              {this.renderMatchedUsers(this.props.matchedUsers)}
             </Animated.View>
           : null}
       </View>

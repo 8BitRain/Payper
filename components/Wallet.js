@@ -93,7 +93,7 @@ class Wallet extends React.Component {
         </View>
 
         { /* Cash out button */
-          (this.props.currentUser.balances.withdrawable)
+          (this.props.currentUser.balances.available)
           ? <View style={[styles.shadow, {borderRadius: 4, marginTop: 6}]}>
               <TouchableHighlight
                 activeOpacity={0.75}

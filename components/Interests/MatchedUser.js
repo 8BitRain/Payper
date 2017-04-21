@@ -10,17 +10,16 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 class MatchedUser extends React.Component {
   constructor(props) {
     super(props)
-    console.log("--> MatchedUser was constructed with props:", props)
   }
 
   handlePress() {
-    if (this.props.user.matchType === "theyOwn") {
+    if (this.props.matchType === "theyOwn") {
       requestCast({
         token: this.props.currentUser.token,
         matchedUser: this.props.user.uid,
         tag: this.props.tag
       })
-    } else if (this.props.user.matchType === "youOwn" || this.props.user.matchType === "bothWant") {
+    } else if (this.props.matchType === "youOwn" || this.props.matchType === "bothWant") {
       alert("Would create cast")
     }
   }
