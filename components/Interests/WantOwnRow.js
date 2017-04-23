@@ -1,6 +1,7 @@
 import React from 'React'
-import {View, Text, TouchableHighlight, StyleSheet, Dimensions, Animated} from 'react-native'
+import {View, Text, TouchableHighlight, StyleSheet, Dimensions, Animated, Image} from 'react-native'
 import {colors} from '../../globalStyles'
+import {getLogo} from '../../helpers/utils'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const dims = Dimensions.get('window')
@@ -64,8 +65,9 @@ class WantOwnRow extends React.Component {
   }
 
   getIcon() {
-    let icon
+    let logo = getLogo(this.props.data.tag)
 
+    let icon
     switch (this.props.data.category) {
       case "Books": icon = <Ionicons name={"ios-book-outline"} size={26} />; break;
       case "Education": icon = <Ionicons name={"ios-school-outline"} size={26} />; break;
@@ -80,8 +82,8 @@ class WantOwnRow extends React.Component {
     }
 
     return(
-      <View style={{width: 43, height: 43, borderRadius: 21.5, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: colors.medGrey}}>
-        {icon}
+      <View style={{width: 43, height: 43, overflow: 'hidden', borderRadius: 21.5, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: colors.medGrey}}>
+        {logo || icon}
       </View>
     )
   }

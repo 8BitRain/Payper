@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, TouchableHighlight, StyleSheet, Dimensions, Modal} from 'react-native'
+import {View, Text, TouchableHighlight, StyleSheet, Dimensions, Modal, ActionSheetIOS} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {Header, ProfilePic, Wallet, PhotoUploader} from '../../components'
 import {deleteUser, withdrawFunds} from '../../helpers/lambda'
@@ -30,8 +30,23 @@ const styles = StyleSheet.create({
 class MyProfileModal extends React.Component {
   constructor(props) {
     super(props)
-
     this.deleteUser = this.deleteUser.bind(this)
+    this.showActionSheet = this.showActionSheet.bind(this)
+  }
+
+  showActionSheet() {
+    let options = ['Delete Account', 'Cancel']
+    let callbacks = {
+      'Delete Account': () => this.deleteUser(),
+      'Cancel': () => null
+    }
+
+    // TODO: Implement cross-plaftorm action sheet module
+    ActionSheetIOS.showActionSheetWithOptions({
+      options,
+      cancelButtonIndex: options.indexOf('Cancel'),
+      destructiveButtonIndex: options.indexOf('Delete Account')
+    }, (i) => callbacks[options[i]]())
   }
 
   deleteUser() {
@@ -49,7 +64,12 @@ class MyProfileModal extends React.Component {
       <View style={styles.container}>
 
         { /* Header */ }
-        <Header showTitle showBackButton title="My Profile" />
+        <Header
+          showTitle
+          showDots
+          showBackButton
+          title={"My Profile"}
+          onDotsPress={this.showActionSheet} />
 
         { /* Name / Username */ }
         <View style={{justifyContent: 'center', alignItems: 'center', paddingTop: 15, width: dims.width * 0.92}}>
@@ -123,20 +143,6 @@ class MyProfileModal extends React.Component {
 
         { /* Wallet */ }
         <Wallet currentUser={this.props.currentUser} />
-
-        { /* Delete account button */ }
-        <View style={[styles.shadow, {borderRadius: 4, marginTop: 12}]}>
-          <TouchableHighlight
-            activeOpacity={0.75}
-            underlayColor={colors.lightGrey}
-            onPress={this.deleteUser}>
-            <View style={{width: dims.width * 0.72, height: 40, borderRadius: 4, flexDirection: 'row', backgroundColor: colors.carminePink, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{fontSize: 16, fontWeight: '400', color: colors.snowWhite}}>
-              {"Delete Account"}
-              </Text>
-            </View>
-          </TouchableHighlight>
-        </View>
 
         { /* Photo Uploader Modal
         <Modal animationType={"slide"} transparent={false} visible={this.state.photoUploaderModalIsVisible}>
