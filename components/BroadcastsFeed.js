@@ -109,7 +109,7 @@ class BroadcastsFeed extends React.Component {
           }}
           renderSectionHeader={(rowData, sectionID) => <BroadcastFeedSectionHeader sectionID={sectionID} />}
           renderEmptyState={() => <BroadcastFeedEmptyState />}
-          renderFooter={() => <View style={{height: 25}} />} />
+          renderFooter={() => <View style={{height: 100}} />} />
       </View>
     )
   }

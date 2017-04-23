@@ -64,7 +64,7 @@ class SubscriptionCard extends React.Component {
       frequency: this.props.broadcast.freq
     }, (res) => {
       let {renewalDate, dateJoined, renewalDateUTC, dateJoinedUTC} = res
-      this.setState({renewalDateUTC, dateJoinedUTC}, () => console.log(this.state))
+      this.setState({renewalDateUTC, dateJoinedUTC})
     })
   }
 
