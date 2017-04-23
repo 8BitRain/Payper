@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     bottom: 0,
-    backgroundColor: 'rgba(229, 255, 249, 0.35)'
+    backgroundColor: 'rgba(0, 230, 176, 0.12)'
   }
 })
 
@@ -117,7 +117,7 @@ class SideMenuHeader extends React.Component {
           </View>
 
           { /* Profile completion bar */
-            (this.state.profileStrength > 0)
+            (this.state.profileStrength > 0 && this.state.profileStrength < 100)
             ? <TouchableHighlight
                 activeOpacity={0.8}
                 underlayColor={colors.lightGrey}
@@ -130,7 +130,7 @@ class SideMenuHeader extends React.Component {
                   <Animated.View style={[styles.progressBar, this.AV.progressBar]} />
 
                   { /* Profile strength text */ }
-                  <Text style={{fontSize: 15, color: colors.deepBlue, padding: 7, alignSelf: 'center'}}>
+                  <Text style={{fontSize: 15, color: colors.deepBlue, padding: 7, alignSelf: 'center', backgroundColor: 'transparent'}}>
                     {`Account Strength: ${this.state.profileStrength}%`}
                   </Text>
 
