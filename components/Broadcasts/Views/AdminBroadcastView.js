@@ -152,9 +152,13 @@ class AdminBroadcastView extends React.Component {
   }
 
   delete() {
-    if (this.props.broadcast.renewal) {
-      Alert.alert("Can't Delete", "You must turn off renewal in order to delete a broadcast.")
-    } else {
+    if (this.props.broadcast.members) {
+      Alert.alert("Can't Delete", "You can't delete a cast that has members.")
+    }
+    // else if (this.props.broadcast.renewal) {
+    //   Alert.alert("Can't Delete", "You must turn off renewal in order to delete a broadcast.")
+    // }
+    else {
       deleteCastAlert({
         broadcast: this.props.broadcast,
         onConfirm: () => {
