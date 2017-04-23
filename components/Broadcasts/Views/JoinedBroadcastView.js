@@ -34,6 +34,9 @@ class JoinedBroadcastView extends React.Component {
       dispute: null
     }
 
+    console.log("--> JoinedBroadcastView was constructed")
+    console.log("props:", props)
+
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
     this.frequency = formatFrequency(props.broadcast.freq)
     this.spotsFilled = (!props.broadcast.members) ? 0 : props.broadcast.members.split(",").length
@@ -166,6 +169,9 @@ class JoinedBroadcastView extends React.Component {
                 </Text>
                 <Text style={{color: colors.slateGrey, fontSize: 15, paddingBottom: 2}}>
                   {`Joined ${moment.utc(this.props.dateJoinedUTC).format("MMM D, YYYY")}`}
+                </Text>
+                <Text style={{color: colors.slateGrey, fontSize: 15, paddingBottom: 2}}>
+                  {`Renews ${moment.utc(this.props.renewalDateUTC).format("MMM D, YYYY")}`}
                 </Text>
               </View>
             </View>
