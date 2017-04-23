@@ -3,7 +3,7 @@ import {Actions} from 'react-native-router-flux'
 import {connect} from 'react-redux'
 import {View, Text, Modal, ListView, RecyclerViewBackedScrollView, TouchableHighlight, Dimensions, Alert, ActionSheetIOS} from 'react-native'
 import {colors} from '../../globalStyles'
-import {IAVWebView, Header} from '../../components'
+import {IAVWebView, Header, InfoBox} from '../../components'
 import {deleteBankAccountAlert} from '../../helpers/alerts'
 import {deleteBankAccount} from '../../helpers/lambda'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -63,8 +63,8 @@ class BankAccountsModal extends React.Component {
 
   onlyAllowOneBankAccount() {
     let {bankAccount} = this.props.currentUser
-    let message = "Payper only supports one bank account at a time. You must delete '" + bankAccount.name + "' before you can add a new account."
-    Alert.alert("Sorry, but...", message)
+    let message = `You must delete '${bankAccount.name}' before you can add a new account.`
+    Alert.alert("Bank Limit Reached", message)
   }
 
   toggleIAVModal() {
@@ -118,6 +118,9 @@ class BankAccountsModal extends React.Component {
     return(
       <View style={styles.wrap}>
         <Header showTitle showBackButton title="Bank Accounts" />
+
+        { /* Info Box */ }
+        <InfoBox text={"Why not credit cards? Because we don't believe in transaction fees."} />
         <View style={{height: 20}} />
 
         { /* 'Add a bank account' button */ }
