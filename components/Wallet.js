@@ -1,5 +1,6 @@
 import React from 'react'
 import {View, Text, TouchableHighlight, StyleSheet, Dimensions, Alert} from 'react-native'
+import {Actions} from 'react-native-router-flux'
 import {colors} from '../globalStyles'
 import {withdrawFundsAlert} from '../helpers/alerts'
 import {withdrawFunds} from '../helpers/lambda'
@@ -33,7 +34,7 @@ class Wallet extends React.Component {
 
   withdrawFunds() {
     withdrawFundsAlert({
-      amount: this.props.currentUser.balances.withdrawable,
+      amount: this.props.currentUser.balances.available,
       bankAccountName: this.props.currentUser.bankAccount.name,
       onConfirm: () => withdrawFunds({token: this.props.currentUser.token})
     })
@@ -92,8 +93,8 @@ class Wallet extends React.Component {
                 </View> }
         </View>
 
-        { /* Cash out button */
-          (this.props.currentUser.balances.available)
+        { /* Cash out button/link bank account button */
+          (this.props.currentUser.balances.available && this.props.currentUser.bankAccount)
           ? <View style={[styles.shadow, {borderRadius: 4, marginTop: 6}]}>
               <TouchableHighlight
                 activeOpacity={0.75}
@@ -106,7 +107,27 @@ class Wallet extends React.Component {
                 </View>
               </TouchableHighlight>
             </View>
-          : null }
+          : (!this.props.currentUser.bankAccount)
+            ? <View style={[styles.shadow, {borderRadius: 4, marginTop: 6}]}>
+                <TouchableHighlight
+                  activeOpacity={0.75}
+                  underlayColor={colors.lightGrey}
+                  onPress={() => Alert.alert(
+                    "Bank Account",
+                    "Add a bank account to withdraw funds from your Payper wallet.",
+                    [
+                      {text: 'Cancel', onPress: () => null},
+                      {text: 'Add Bank', onPress: () => Actions.BankAccounts()}
+                    ]
+                  )}>
+                  <View style={{width: dims.width * 0.72, height: 40, borderRadius: 4, flexDirection: 'row', backgroundColor: colors.accent, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{fontSize: 16, fontWeight: '400', color: colors.snowWhite}}>
+                      {"Add Bank Account"}
+                    </Text>
+                  </View>
+                </TouchableHighlight>
+              </View>
+            : null }
 
       </View>
     )

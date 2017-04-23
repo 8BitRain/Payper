@@ -48,11 +48,11 @@ class SideMenu extends React.Component {
           icon: 'archive',
           destination: Actions.BankAccounts
         },
-        {
-          title: 'Settings',
-          icon: 'gear',
-          destination: Actions.Settings
-        },
+        // {
+        //   title: 'Settings',
+        //   icon: 'gear',
+        //   destination: Actions.Settings
+        // },
         {
           title: 'Disputes',
           icon: 'exclamation',

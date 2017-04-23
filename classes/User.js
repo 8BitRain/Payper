@@ -10,7 +10,7 @@ import {deleteUser, getBankAccount, getDecryptedUserData, updateGeoLocation} fro
 
 export default class User {
   constructor() {
-    this.balances = {total: 0, available: 0, pending: 0}
+    this.balances = {total: "0.00", available: "0.00", pending: "0.00"}
 
     this.broadcastsFeed = {}
     this.meFeed = {}
@@ -173,11 +173,11 @@ export default class User {
         })
       },
       {
-        endpoint: `${(this.bankReference) ? 'userWallets' : 'payperWallets'}/${this.uid}`,
+        endpoint: `userWallets/${this.uid}`,
         eventType: 'value',
         listener: null,
         callback: (res) => {
-          if (!res) return
+          if (!res || !this.bankReference) return
           updateViaRedux({
             walletRef: res.walletRef,
             balances: {
@@ -185,6 +185,21 @@ export default class User {
               available: res.withdrawableFunds || null,
               pending: res.pendingFunds || null
             }
+          })
+        }
+      },
+      {
+        endpoint: `payperWallets/${this.uid}`,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => {
+          if (!res || this.bankReference) return
+          Firebase.get(`users/${this.uid}`, (userData) => {
+            if (userData && userData.bankReference) return
+            updateViaRedux({
+              walletRef: res.walletRef,
+              balances: {total: res.amount || "0.00", available: null, pending: null}
+            })
           })
         }
       },
