@@ -10,10 +10,10 @@ class Member extends React.Component {
   constructor(props) {
     super(props)
   }
-  
+
   render() {
     return(
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8}}>
+      <View style={{height: 50, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8}}>
 
         <TouchableHighlight
           activeOpacity={0.75}
@@ -46,7 +46,7 @@ class Member extends React.Component {
           </View>
         </TouchableHighlight>
 
-        { /* Remove button */
+        { /* Remove button
           (this.props.showRemoveButton)
             ? <TouchableHighlight
                 activeOpacity={0.75}
@@ -73,7 +73,7 @@ class Member extends React.Component {
                   </Text>
                 </View>
               </TouchableHighlight>
-            : null }
+            : null */ }
 
       </View>
     )
