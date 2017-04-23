@@ -20,24 +20,33 @@ class MeFeed extends React.Component {
   render() {
     return(
       <View style={styles.container}>
-
-        <View style={{marginTop: -10}} />
-
         <DynamicList
           shouldAnimateIn={false}
           data={this.props.currentUser.meFeed || []}
           renderRow={(rowData, sectionID, rowID) => {
+            let numRows = Object.keys(this.props.currentUser.meFeed[sectionID] || {}).length
+            let isLastRow = parseInt(rowID) === numRows - 1
+
             if (sectionID === "My Subscriptions")
-              return <SubscriptionCard broadcast={rowData} />
+              return(
+                <View style={{marginBottom: (isLastRow) ? 10 : 0}}>
+                  <SubscriptionCard broadcast={rowData} />
+                </View>
+              )
+
             if (sectionID === "My Broadcasts")
-              return <AdminCard broadcast={rowData} currentUser={this.props.currentUser} />
+              return(
+                <View style={{marginBottom: (isLastRow) ? 10 : 0}}>
+                  <AdminCard broadcast={rowData} currentUser={this.props.currentUser} />
+                </View>
+              )
+
             return <View />
           }}
-          renderSectionHeader={(rowData, sectionID) => <View style={{marginTop: 10}}><BroadcastFeedSectionHeader sectionID={sectionID} /></View>}
+          renderSectionHeader={(rowData, sectionID) => <BroadcastFeedSectionHeader sectionID={sectionID} />}
           renderEmptyState={() => (this.props.currentUser.appFlags.onboardingProgress && this.props.currentUser.appFlags.onboardingProgress.indexOf("kyc-success") <= 0) ? null : <MeFeedEmptyState />}
           renderFooter={() => <View style={{height: 100}} />}
           renderHeader={() => <StatusCard currentUser={this.props.currentUser} />} />
-
       </View>
     )
   }

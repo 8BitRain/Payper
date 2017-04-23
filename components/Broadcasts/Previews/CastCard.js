@@ -10,6 +10,7 @@ const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
   container: {
     alignSelf: 'center',
+    height: 110,
     width: dims.width * 0.94,
     borderRadius: 4,
     marginTop: 10,

@@ -4,7 +4,8 @@ import {colors} from '../globalStyles'
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: 32,
+    justifyContent: 'center',
     padding: 7,
     paddingLeft: 10,
     backgroundColor: colors.snowWhite
