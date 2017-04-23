@@ -96,7 +96,7 @@ class AdminCard extends React.Component {
                 <Text style={{color: colors.gradientGreen, fontSize: 14, alignSelf: 'flex-start'}}>
                   {`$`}
                 </Text>
-                <Text style={{color: colors.gradientGreen, fontSize: 24, alignSelf: 'center'}}>
+                <Text style={{color: colors.gradientGreen, fontSize: (this.props.broadcast.amount.length > 5) ? 16 : 18, alignSelf: 'center'}}>
                   {this.props.broadcast.amount}
                 </Text>
               </View>

@@ -98,7 +98,7 @@ class AdminBroadcastView extends React.Component {
       'Stop Renewal': () => this.stopRenewal(),
       'New Secret': () => this.setState({secretInputModalVisible: true}),
       'Resume Renewal': () => this.resumeRenewal(),
-      'Delete': () => this.delete,
+      'Delete': () => this.delete(),
       'Cancel': () => null
     }
 
