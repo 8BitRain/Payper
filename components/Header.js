@@ -46,6 +46,9 @@ const styles = StyleSheet.create({
     padding: 6,
     paddingRight: 18
   },
+  nextWrap: {
+    padding: 6
+  },
   skipWrap: {
     padding: 6,
     paddingRight: 18
@@ -114,6 +117,16 @@ class Header extends React.Component {
                 onPress={this.props.onDotsPress || null}
                 style={styles.dotsWrap}>
                 <Entypo name={"dots-three-horizontal"} size={28} color={colors.snowWhite} />
+              </TouchableHighlight>
+            : null}
+
+          {this.props.showNextButton
+            ? <TouchableHighlight
+                activeOpacity={0.75}
+                underlayColor={'transparent'}
+                onPress={this.props.onNext || null}
+                style={styles.nextWrap}>
+                <EvilIcons name={"chevron-right"} size={42} color={colors.snowWhite} />
               </TouchableHighlight>
             : null}
         </View>

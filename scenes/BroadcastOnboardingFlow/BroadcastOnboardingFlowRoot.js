@@ -238,8 +238,10 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         <Header
           showTitle
           showBackButton
+          showNextButton={this.state.index < this.pages.length}
+          title={this.pages[this.state.index].title}
           onBack={(this.state.index > 0) ? this.prev : null}
-          title={this.pages[this.state.index].title} />
+          onNext={this.next} />
 
         { /* Page-specific content */ }
         <Animated.View style={[{opacity: this.AV.opacity}, styles.innerContentWrap]}>
