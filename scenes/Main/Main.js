@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../globalStyles'
 import {Header, BroadcastsFeed, ExploreFeed, MeFeed} from '../../components'
-import {updateFCMToken, updateUserTags} from '../../helpers/lambda'
+import {updateFCMToken, updateUserTags, getDecryptedUserData} from '../../helpers/lambda'
 import {handlePushNotification, uploadKYCDocument} from '../../helpers/utils'
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -65,6 +65,9 @@ class Main extends React.Component {
     this.props.currentUser.startListeningToFirebase((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.initializeTags((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.updateLocation()
+    getDecryptedUserData({token: this.props.currentUser.token}, (res) => {
+      this.props.updateCurrentUser({decryptedEmail: res.email, decryptedPhone: res.phone})
+    })
   }
 
   componentWillReceiveProps(nextProps) {

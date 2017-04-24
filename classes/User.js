@@ -6,7 +6,7 @@ import {Firebase} from '../helpers'
 import {getMatchedUsers} from '../helpers/utils'
 import {handleUserData, handleUserBroadcasts, handleUserSubscribedBroadcasts, handleUserFeed, handleServices, handleWantsAndOwns, handleDisputes} from '../helpers/dataHandlers'
 import {getFromAsyncStorage, setInAsyncStorage} from '../helpers/asyncStorage'
-import {deleteUser, getBankAccount, getDecryptedUserData, updateGeoLocation} from '../helpers/lambda'
+import {deleteUser, getBankAccount, updateGeoLocation} from '../helpers/lambda'
 
 export default class User {
   constructor() {
@@ -38,11 +38,6 @@ export default class User {
 
     // Initialize JSON attributes
     this.update(userData)
-
-    // Get decrypted email and phone
-    getDecryptedUserData({token: userData.token}, (res) => {
-      this.update({decryptedEmail: res.email, decryptedPhone: res.phone})
-    })
 
     // Initalize timer and app state change listener to be used for session
     // duration measurement

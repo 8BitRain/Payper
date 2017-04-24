@@ -136,7 +136,6 @@ class StatusCard extends React.Component {
   layout(e) {
     let height = e.nativeEvent.layout.height
     this.AV.height = new Animated.Value(height)
-    console.log("--> laying out component with height:", height)
   }
 
   dismiss() {
