@@ -70,7 +70,10 @@ class UnjoinedBroadcastView extends React.Component {
         })
 
         setTimeout(() => {
-          Alert.alert("Subscription Failed", "Something went wrong on our end. Please try again later.")
+          if ("Cast full" === res.errorMessage)
+            Alert.alert("Subscription Failed", "Looks like someone beat you to it! This broadcast is now full.")
+          else
+            Alert.alert("Subscription Failed", "Something went wrong on our end. Please try again later.")
         }, 500)
       } else if (res.decryptedSecret) {
         this.setState({
