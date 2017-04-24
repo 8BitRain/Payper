@@ -40,7 +40,7 @@ class Spots extends React.Component {
     super(props)
 
     this.state = props.state || {
-      spotsInput: 2
+      spotsInput: 3
     }
 
     this.onSliderValueChange = this.onSliderValueChange.bind(this)
@@ -77,6 +77,14 @@ class Spots extends React.Component {
               {"3"}
             </Text>
             <View style={styles.stepDivider} />
+            <Text style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 4) ? colors.accent : colors.slateGrey}]}>
+              {"4"}
+            </Text>
+            <View style={styles.stepDivider} />
+            <Text style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 5) ? colors.accent : colors.slateGrey}]}>
+              {"5"}
+            </Text>
+            <View style={styles.stepDivider} />
           </View>
 
           { /* Divider */ }
@@ -86,7 +94,7 @@ class Spots extends React.Component {
             style={styles.slider}
             value={this.state.spotsInput}
             minimumValue={1}
-            maximumValue={3}
+            maximumValue={5}
             minimumTrackTintColor={colors.accent}
             maximumTrackTintColor={colors.slateGrey}
             onValueChange={this.onSliderValueChange} />
