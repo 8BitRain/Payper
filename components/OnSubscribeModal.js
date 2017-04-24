@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, TouchableHighlight, Animated, Platform, Dimensio
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../globalStyles'
 import {Secret} from './Broadcasts'
+import {Loader} from './'
 import Button from 'react-native-button'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
@@ -32,6 +33,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: dims.width * 0.7
+  },
+  loaderWrap: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.snowWhite
   }
 })
 
@@ -50,6 +61,9 @@ class OnSubscribeModal extends React.Component {
       },
       secretWrap: {
         opacity: new Animated.Value(0)
+      },
+      loaderWrap: {
+        opacity: new Animated.Value((true === props.loading) ? 1 : 0)
       }
     }
 
@@ -65,13 +79,25 @@ class OnSubscribeModal extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(this.showText, 800)
+    if (!this.props.loading) setTimeout(this.showText, 800)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (true === this.props.loading && false === nextProps.loading)
+      this.hideLoader(() => this.showText())
   }
 
   back() {
     if (!this.state.canPressBack) return
     this.setState({canPressBack: false})
     this.props.onBack()
+  }
+
+  hideLoader(cb) {
+    Animated.timing(this.AV.loaderWrap.opacity, {
+      toValue: 0,
+      duration: 250
+    }).start(() => (typeof cb === 'function') ? cb() : null)
   }
 
   hideViewSecretButton() {
@@ -164,6 +190,11 @@ class OnSubscribeModal extends React.Component {
               showBorder={false} />
           </Animated.View>
 
+        </Animated.View>
+
+        { /* Loader */ }
+        <Animated.View style={[styles.loaderWrap, this.AV.loaderWrap]}>
+          <Loader />
         </Animated.View>
       </View>
     )
