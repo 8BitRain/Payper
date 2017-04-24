@@ -41,10 +41,24 @@ const styles = StyleSheet.create({
 class AdminCard extends React.Component {
   constructor(props) {
     super(props)
-    this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
-    this.frequency = formatFrequency(props.broadcast.freq)
-    this.spotsFilled = (!props.broadcast.members) ? 0 : props.broadcast.members.split(",").length
-    this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
+
+    let spotsFilled = (!props.broadcast.members) ? 0 : props.broadcast.members.split(",").length
+
+    this.state = {
+      timestamp: formatBroadcastTimestamp(props.broadcast.createdAt),
+      frequency: formatFrequency(props.broadcast.freq),
+      spotsFilled: spotsFilled,
+      spotsAvailable: props.broadcast.memberLimit - spotsFilled
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // Update spotsFilled and spotsAvailable
+    let spotsFilled = (!nextProps.broadcast.members) ? 0 : nextProps.broadcast.members.split(",").length
+    this.setState({
+      spotsFilled: spotsFilled,
+      spotsAvailable: nextProps.broadcast.memberLimit - spotsFilled
+    })
   }
 
   render() {
@@ -63,7 +77,7 @@ class AdminCard extends React.Component {
           { /* Timestamp (absolutely positioned) */ }
           <View style={{position: 'absolute', top: 0, right: 0, bottom: 0, justifyContent: 'flex-start', alignItems: 'center', padding: 14}}>
             <Text style={{fontSize: 12, color: colors.slateGrey}}>
-              {this.timestamp}
+              {this.state.timestamp}
             </Text>
           </View>
 
@@ -116,7 +130,7 @@ class AdminCard extends React.Component {
                 <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                   <EvilIcons name={"user"} color={colors.slateGrey} size={24} />
                   <Text style={{color: colors.deepBlue, fontSize: 15, paddingLeft: 4, paddingBottom: 2}}>
-                    {`${this.spotsFilled} of ${this.props.broadcast.memberLimit} spots filled`}
+                    {`${this.state.spotsFilled} of ${this.props.broadcast.memberLimit} spots filled`}
                   </Text>
                 </View>
               </View>

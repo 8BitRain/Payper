@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, Modal} from 'react-native'
+import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, Modal, Alert} from 'react-native'
 import {colors} from '../../../globalStyles'
 import {formatBroadcastTimestamp, formatFrequency} from '../../../helpers/utils'
 import {subscribeAlert} from '../../../helpers/alerts'
@@ -25,6 +25,7 @@ class UnjoinedBroadcastView extends React.Component {
     super(props)
 
     this.state = {
+      loading: false,
       onSubscribeModalVisible: false,
       decryptedSecret: null
     }
@@ -61,16 +62,22 @@ class UnjoinedBroadcastView extends React.Component {
       castID: this.props.broadcast.castID,
       token: this.props.currentUser.token
     }, (res) => {
-      console.log("--> res", res)
-      if (res.errorMessage) this.setState({
-        loading: false,
-        error: res.errorMessage
-      })
+      if (res.errorMessage) {
+        this.setState({
+          loading: false,
+          onSubscribeModalVisible: false,
+          error: res.errorMessage
+        })
 
-      else this.setState({
-        loading: false,
-        decryptedSecret: res
-      })
+        setTimeout(() => {
+          Alert.alert("Subscription Failed", "Something went wrong on our end. Please try again later.")
+        }, 500)
+      } else if (res.decryptedSecret) {
+        this.setState({
+          loading: false,
+          decryptedSecret: res.decryptedSecret
+        })
+      }
     })
 
     // Update userFeed in Firebase

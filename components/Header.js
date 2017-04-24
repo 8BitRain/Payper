@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
     paddingRight: 18
   },
   nextWrap: {
-    padding: 6
+    padding: 6,
+    paddingTop: 9
   },
   skipWrap: {
     padding: 6,

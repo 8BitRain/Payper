@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    right: 0,
-    bottom: 0,
+    width: dims.width,
+    height: dims.height,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.snowWhite
@@ -63,7 +63,8 @@ class OnSubscribeModal extends React.Component {
         opacity: new Animated.Value(0)
       },
       loaderWrap: {
-        opacity: new Animated.Value((true === props.loading) ? 1 : 0)
+        opacity: new Animated.Value((true === props.loading) ? 1 : 0),
+        top: new Animated.Value((true === props.loading) ? 0 : dims.height)
       }
     }
 
@@ -94,10 +95,18 @@ class OnSubscribeModal extends React.Component {
   }
 
   hideLoader(cb) {
-    Animated.timing(this.AV.loaderWrap.opacity, {
-      toValue: 0,
-      duration: 250
-    }).start(() => (typeof cb === 'function') ? cb() : null)
+    let animations = [
+      Animated.timing(this.AV.loaderWrap.opacity, {
+        toValue: 0,
+        duration: 250
+      }),
+      Animated.timing(this.AV.loaderWrap.top, {
+        toValue: dims.height,
+        duration: 250
+      })
+    ]
+
+    Animated.parallel(animations).start(() => (typeof cb === 'function') ? cb() : null)
   }
 
   hideViewSecretButton() {

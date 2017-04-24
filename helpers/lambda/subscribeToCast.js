@@ -11,16 +11,17 @@ function subscribeToCast(params, cb) {
     .then((response) => response.json())
     .then((responseData) => {
       console.log("casts/subscribe response:", responseData)
-      if (typeof cb === 'function') cb(responseData)
+      if (responseData.decryptedSecret) cb({decryptedSecret: responseData.decryptedSecret})
+      else cb({errorMessage: true})
     })
     .catch((err) => {
       console.log(err)
-      if (typeof cb === 'function') cb(null)
+      if (typeof cb === 'function') cb({errorMessage: true})
     })
     .done()
   } catch (err) {
     console.log("Error subscribing to cast:", err)
-    if (typeof cb === 'function') cb(null)
+    if (typeof cb === 'function') cb({errorMessage: true})
   }
 }
 
