@@ -39,6 +39,12 @@ class UnjoinedBroadcastView extends React.Component {
 
   onSubscribe() {
 
+    // Display OnSubscribeModal
+    this.setState({
+      loading: true,
+      onSubscribeModalVisible: true
+    })
+
     // Update current user's meFeed data source
     let meFeed = this.props.currentUser.meFeed
 
@@ -54,16 +60,24 @@ class UnjoinedBroadcastView extends React.Component {
     subscribeToCast({
       castID: this.props.broadcast.castID,
       token: this.props.currentUser.token
-    }, (decryptedSecret) => this.setState({decryptedSecret}))
+    }, (res) => {
+      console.log("--> res", res)
+      if (res.errorMessage) this.setState({
+        loading: false,
+        error: res.errorMessage
+      })
+
+      else this.setState({
+        loading: false,
+        decryptedSecret: res
+      })
+    })
 
     // Update userFeed in Firebase
     Firebase.get(`userFeed/${this.props.currentUser.uid}`, (userFeed) => {
       delete userFeed[this.props.broadcast.castID]
       Firebase.set(`userFeed/${this.props.currentUser.uid}`, userFeed)
     })
-
-    // Display OnSubscribeModal
-    this.setState({onSubscribeModalVisible: true})
 
   }
 
@@ -120,6 +134,7 @@ class UnjoinedBroadcastView extends React.Component {
         { /* Modal displaying secret unlocker */ }
         <Modal visible={this.state.onSubscribeModalVisible} transparent={true} animationType={'fade'}>
           <OnSubscribeModal
+            loading={this.state.loading}
             broadcast={this.props.broadcast}
             currentUser={this.props.currentUser}
             decryptedSecret={this.state.decryptedSecret}
