@@ -13,8 +13,10 @@ function getRenewalDateAndDateJoined(params, cb) {
     let timestamps = Object.keys(res)
     let latest = timestamps[timestamps.length - 1]
 
-    let renewalDateUTC = moment.utc(parseInt(latest)).add(1, (frequency === 'WEEKLY') ? 'week' : 'month').valueOf()
-    let renewalDate = moment(parseInt(latest)).add(1, (frequency === 'WEEKLY') ? 'week' : 'month').format("MMM D, YYYY")
+    // let renewalDateUTC = moment.utc(parseInt(latest)).add(1, (frequency === 'WEEKLY') ? 'week' : 'month').valueOf()
+    // let renewalDate = moment(parseInt(latest)).add(1, (frequency === 'WEEKLY') ? 'week' : 'month').format("MMM D, YYYY")
+    let renewalDateUTC = moment.utc(parseInt(latest)).valueOf()
+    let renewalDate = moment(parseInt(latest)).format("MMM D, YYYY")
     let dateJoinedUTC = moment.utc(parseInt(timestamps[0])).valueOf()
     let dateJoined = moment(parseInt(timestamps[0])).format("MMM D, YYYY")
 
