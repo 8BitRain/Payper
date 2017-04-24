@@ -7,8 +7,10 @@ function formatAfterOnboarding(substates, currentUser) {
   let castID = buffer.join('')
 
   // Format tag
-  let tag = substates["Tags"].dropdownListState.selectedTags[0] || substates["Tags"].query
+  // let tag = substates["Tags"].dropdownListState.selectedTags[0] || substates["Tags"].query
+  let tag = substates["Tags"].query
   tag = tag.replace(/\s/g, '')
+  tag = tag.toLowerCase()
 
   // Format visibility
   let visibility = ""

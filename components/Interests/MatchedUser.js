@@ -17,10 +17,13 @@ class MatchedUser extends React.Component {
       requestCast({
         token: this.props.currentUser.token,
         matchedUser: this.props.user.uid,
-        tag: this.props.tag
+        tag: this.props.castTitle
       })
     } else if (this.props.matchType === "youOwn" || this.props.matchType === "bothWant") {
-      alert("Would create cast")
+      Actions.BroadcastOnboardingFlow({
+        castTitle: this.props.castTitle,
+        tag: this.props.tag
+      })
     }
   }
 

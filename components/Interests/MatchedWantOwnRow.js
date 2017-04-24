@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     color: colors.gradientGreen
   },
   matchesWrap: {
-    justifyContent: 'center'
+    justifyContent: 'space-around'
   }
 })
 

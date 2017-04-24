@@ -61,6 +61,22 @@ class BroadcastOnboardingFlowRoot extends React.Component {
       keyboardIsVisible: false
     }
 
+    // Initialize title state
+    if (props.castTitle) {
+      this.state.substates["Title"] = {
+        inputIsValid: true,
+        titleInput: props.castTitle
+      }
+    }
+
+    // Initialize tag state
+    if (props.tag) {
+      this.state.substates["Tags"] = {
+        inputIsValid: true,
+        query: props.tag
+      }
+    }
+
     this.next = this.next.bind(this)
     this.prev = this.prev.bind(this)
   }
@@ -153,7 +169,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
 
   induceState(substate, pageTitle) {
     this.state.substates[pageTitle] = substate
-    this.setState(this.state)
+    this.setState(this.state, () => console.log(this.state))
   }
 
   submit() {
