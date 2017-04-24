@@ -109,7 +109,8 @@ class BroadcastsFeed extends React.Component {
           }}
           renderSectionHeader={(rowData, sectionID) => <BroadcastFeedSectionHeader sectionID={sectionID} />}
           renderEmptyState={() => <BroadcastFeedEmptyState />}
-          renderFooter={() => <View style={{height: 100}} />} />
+          renderFooter={() => <View style={{height: 100}} />}
+          refreshButtonWrapStyles={{paddingBottom: 10}} />
       </View>
     )
   }

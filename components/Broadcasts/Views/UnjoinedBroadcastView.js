@@ -46,17 +46,6 @@ class UnjoinedBroadcastView extends React.Component {
       onSubscribeModalVisible: true
     })
 
-    // Update current user's meFeed data source
-    let meFeed = this.props.currentUser.meFeed
-
-    // Add joinedAt timestamp
-    this.props.broadcast.joinedAt = Date.now()
-
-    // Mutate meFeed object via Redux
-    if (!meFeed["My Subscriptions"]) meFeed["My Subscriptions"] = []
-    meFeed["My Subscriptions"].unshift(this.props.broadcast)
-    this.props.updateCurrentUser({meFeed: meFeed})
-
     // Hit backend
     subscribeToCast({
       castID: this.props.broadcast.castID,
@@ -69,26 +58,40 @@ class UnjoinedBroadcastView extends React.Component {
           error: res.errorMessage
         })
 
+        // Show error alert
         setTimeout(() => {
           if ("Cast full" === res.errorMessage)
             Alert.alert("Subscription Failed", "Looks like someone beat you to it! This broadcast is now full.")
           else
-            Alert.alert("Subscription Failed", "Something went wrong on our end. Please try again later.")
-        }, 500)
+            Alert.alert("Subscription Failed", "Something went wrong on our end. Please try again later. Error: " + res.errorMessage)
+        }, 650)
       } else if (res.decryptedSecret) {
+
+        // Update onSubscribeModal contents
         this.setState({
           loading: false,
           decryptedSecret: res.decryptedSecret
         })
+
+        // Update current user's meFeed data source
+        let meFeed = this.props.currentUser.meFeed
+
+        // Add joinedAt timestamp
+        this.props.broadcast.joinedAt = Date.now()
+
+        // Mutate meFeed object via Redux
+        if (!meFeed["My Subscriptions"]) meFeed["My Subscriptions"] = []
+        meFeed["My Subscriptions"].unshift(this.props.broadcast)
+        this.props.updateCurrentUser({meFeed: meFeed})
+
+        // Update userFeed in Firebase
+        Firebase.get(`userFeed/${this.props.currentUser.uid}`, (userFeed) => {
+          delete userFeed[this.props.broadcast.castID]
+          Firebase.set(`userFeed/${this.props.currentUser.uid}`, userFeed)
+        })
+
       }
     })
-
-    // Update userFeed in Firebase
-    Firebase.get(`userFeed/${this.props.currentUser.uid}`, (userFeed) => {
-      delete userFeed[this.props.broadcast.castID]
-      Firebase.set(`userFeed/${this.props.currentUser.uid}`, userFeed)
-    })
-
   }
 
   render() {

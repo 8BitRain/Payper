@@ -319,7 +319,7 @@ class DynamicList extends React.Component {
           renderScrollComponent={(props) => <RecyclerViewBackedScrollView {...props} />} />
 
         {(this.props.showPullToRefresh && this.state.refreshContent)
-          ? <View style={{position: 'absolute', bottom: 26, right: 0, left: 0, justifyContent: 'center', alignItems: 'center'}}>
+          ? <View style={[{position: 'absolute', bottom: 26, right: 0, left: 0, justifyContent: 'center', alignItems: 'center'}, this.props.refreshButtonWrapStyles || {}]}>
               <PullToRefreshPillButton onPress={this.onPullToRefreshButtonPress} />
             </View>
           : null}

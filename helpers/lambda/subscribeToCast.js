@@ -21,7 +21,7 @@ function subscribeToCast(params, cb) {
     .done()
   } catch (err) {
     console.log("Error subscribing to cast:", err)
-    if (typeof cb === 'function') cb({errorMessage: true})
+    if (typeof cb === 'function') cb({errorMessage: "Couldn't hit backend."})
   }
 }
 
