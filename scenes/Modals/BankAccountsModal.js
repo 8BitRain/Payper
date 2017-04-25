@@ -55,6 +55,7 @@ class BankAccountsModal extends React.Component {
       onConfirm: () => {
         this.props.updateCurrentUser({bankAccount: null})
         this.props.currentUser.bankAccount = null
+        this.props.currentUser.bankReference = null
         this.generateRows(this.props.currentUser)
         deleteBankAccount({token: this.props.currentUser.token})
       }

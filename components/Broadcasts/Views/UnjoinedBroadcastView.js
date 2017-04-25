@@ -73,16 +73,17 @@ class UnjoinedBroadcastView extends React.Component {
           decryptedSecret: res.decryptedSecret
         })
 
-        // Update current user's meFeed data source
-        let meFeed = this.props.currentUser.meFeed
-
-        // Add joinedAt timestamp
-        this.props.broadcast.joinedAt = Date.now()
-
-        // Mutate meFeed object via Redux
-        if (!meFeed["My Subscriptions"]) meFeed["My Subscriptions"] = []
-        meFeed["My Subscriptions"].unshift(this.props.broadcast)
-        this.props.updateCurrentUser({meFeed: meFeed})
+        // NOTE: A bug in this code results in duplicate subscription cards
+        // // Update current user's meFeed data source
+        // let meFeed = this.props.currentUser.meFeed
+        //
+        // // Add joinedAt timestamp
+        // this.props.broadcast.joinedAt = Date.now()
+        //
+        // // Mutate meFeed object via Redux
+        // if (!meFeed["My Subscriptions"]) meFeed["My Subscriptions"] = []
+        // meFeed["My Subscriptions"].unshift(this.props.broadcast)
+        // this.props.updateCurrentUser({meFeed: meFeed})
 
         // Update userFeed in Firebase
         Firebase.get(`userFeed/${this.props.currentUser.uid}`, (userFeed) => {

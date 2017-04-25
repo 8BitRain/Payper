@@ -10,7 +10,7 @@ import {deleteUser, getBankAccount, updateGeoLocation} from '../helpers/lambda'
 
 export default class User {
   constructor() {
-    this.balances = {total: "0.00", available: "0.00", pending: "0.00"}
+    this.balances = {total: "0.00", available: null, pending: null}
 
     this.broadcastsFeed = {}
     this.meFeed = {}
@@ -114,9 +114,8 @@ export default class User {
           if (!res) return
 
           // Get bank account
-          if (!this.bank || res.bankReference !== this.bankReference) {
+          if (res.bankReference) {
             getBankAccount({token: this.token}, (res) => {
-              if (!res || res.message || res.errorMessage) return
               updateViaRedux({bankAccount: res})
             })
           }
@@ -177,7 +176,7 @@ export default class User {
           updateViaRedux({
             walletRef: res.walletRef,
             balances: {
-              total: 0 + ((res.withdrawableFunds) ? parseInt(res.withdrawableFunds) : 0) + ((res.pendingFunds) ? parseInt(res.pendingFunds) : 0),
+              total: 0 + ((res.withdrawableFunds) ? parseFloat(res.withdrawableFunds) : 0) + ((res.pendingFunds) ? parseFloat(res.pendingFunds) : 0),
               available: res.withdrawableFunds || null,
               pending: res.pendingFunds || null
             }
