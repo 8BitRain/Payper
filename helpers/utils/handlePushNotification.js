@@ -1,10 +1,26 @@
+import FCM from 'react-native-fcm'
+import {AppState, PushNotificationIOS} from 'react-native'
 import {Firebase} from '../'
 import {Actions} from 'react-native-router-flux'
 
 function handlePushNotification(notif) {
   console.log("--> Got push notif:", notif)
-  if (notif.opened_from_tray && callbacks[notif.type])
+
+  if ("active" === AppState.currentState) {
+    // TODO: Present local notification if app is in foreground
+    // NOTE: There seems to be a compatibility issue with react-native and
+    //       react-native-fcm versions.
+    // FCM.presentLocalNotification({
+    //   body: "New message, check it out!",
+    //   priority: "high",
+    //   title: "Chat",
+    //   sound: "default",
+    //   show_in_foreground: true,
+    //   tag: "CHAT"
+    // })
+  } else if (notif.opened_from_tray && callbacks[notif.type]) {
     callbacks[notif.type](notif)
+  }
 }
 
 const callbacks = {

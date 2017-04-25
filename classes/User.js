@@ -172,7 +172,8 @@ export default class User {
         eventType: 'value',
         listener: null,
         callback: (res) => {
-          if (!res || !this.bankReference) return
+          if (!res || !this.balanceReference) return
+
           updateViaRedux({
             walletRef: res.walletRef,
             balances: {
@@ -188,7 +189,8 @@ export default class User {
         eventType: 'value',
         listener: null,
         callback: (res) => {
-          if (!res || this.bankReference) return
+          if (!res || this.balanceReference) return
+
           Firebase.get(`users/${this.uid}`, (userData) => {
             if (userData && userData.bankReference) return
             updateViaRedux({
