@@ -20,6 +20,10 @@ class StickyView extends React.Component {
   _keyboardWillShow(e) {
     if (this.props.onlyStickWhen === false) return
 
+    if (this.props.onKeyboardWillShow) {
+      this.props.onKeyboardWillShow(e)
+    }
+
     Animated.timing(this.offsetBottom, {
       toValue: e.endCoordinates.height,
       duration: this.props.duration || 350,
@@ -28,6 +32,10 @@ class StickyView extends React.Component {
   }
 
   _keyboardWillHide() {
+    if (this.props.onKeyboardWillHide) {
+      this.props.onKeyboardWillHide(e)
+    }
+
     Animated.timing(this.offsetBottom, {
       toValue: 0,
       duration: this.props.duration || 350,

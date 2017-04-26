@@ -1,7 +1,8 @@
 import React from 'react'
-import {View, Text, StyleSheet, Slider, Dimensions, TextInput} from 'react-native'
+import * as _ from 'lodash'
+import {View, Text, StyleSheet, Slider, Dimensions, TextInput, TouchableOpacity, ScrollView, Keyboard} from 'react-native'
 import {colors} from '../../globalStyles'
-import {DropdownList, TextInputWithIcon} from '../../components'
+import {DropdownList, TextInputWithIcon, PredictiveTextInput} from '../../components'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -9,6 +10,19 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: 'transparent'
+  },
+  tagWrap: {
+    padding: 12,
+    width: dims.width * 0.94,
+    borderBottomWidth: 1,
+    borderColor: colors.medGrey,
+    alignSelf: 'center',
+    backgroundColor: colors.snowWhite
+  },
+  tagText: {
+    fontSize: 14,
+    color: colors.deepBlue,
+    backgroundColor: colors.snowWhite
   }
 })
 
@@ -18,70 +32,84 @@ class Tags extends React.Component {
 
     this.state = props.state || {
       inputIsValid: false,
-      query: ""
+      query: "",
+      keyboardHeight: 0
     }
 
-    this.data = []
+    this.tags = []
 
-    for (var cat in props.tags) {
-      let data = props.tags[cat]
-      this.data.push({category: data.displayName, rows: data})
+    for (var cat in this.props.tags) {
+      let tags = this.props.tags[cat]
+      for (var tag in tags)
+        if ("displayName" !== tag)
+          this.tags.push(tag)
     }
 
+    this.filterData = this.filterData.bind(this)
     this.onChangeText = this.onChangeText.bind(this)
-    this.validateInput = this.validateInput.bind(this)
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.state && nextProps.state.dropdownListState && nextProps.state.dropdownListState.query)
-      this.setState({query: nextProps.state.dropdownListState.query, inputIsValid: true})
+  componentDidMount() {
+    this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', (e) => this.setState({keyboardHeight: e.endCoordinates.height}))
   }
 
-  onChangeText(input) {
-    this.dropdownList.filter(input)
-    this.setState({query: input}, () => this.props.induceState(this.state, this.props.title))
+  componentWillUnmount() {
+    this.keyboardWillShowListener.remove()
   }
 
-  validateInput(input) {
-    this.setState({inputIsValid: input.length > 0})
+  filterData() {
+    const query = this.state.query
+    return _.filter(this.tags, function(tag) {return query !== "" && tag.indexOf(query) >= 0})
+  }
+
+  onChangeText(text) {
+    this.setState({
+      query: text,
+      inputIsValid: text.length > 0
+    }, () => this.props.induceState(this.state, this.props.title))
   }
 
   render() {
+    let filteredData = this.filterData()
+
     return(
       <View style={styles.container}>
 
-        { /* Search bar */ }
-        <TextInputWithIcon
-          validateInput={this.validateInput}
-          onChangeText={this.onChangeText}
-          inputIsValid={this.state.inputIsValid}
-          textInputProps={{
-            autoCorrect: false,
-            autoCapitalize: "words",
-            autoFocus: true,
-            returnKeyType: "done",
-            defaultValue: this.state.query,
-            placeholder: "Search tags or create one",
-            placeholderTextColor: colors.slateGrey
-          }}
-          iconProps={{
-            name: "pencil",
-            color: colors.accent,
-            size: 30
-          }} />
+        { /* Text input */ }
+        <View style={{alignSelf: 'center', paddingBottom: 10}}>
+          <TextInputWithIcon
+            onChangeText={this.onChangeText}
+            inputIsValid={this.state.inputIsValid}
+            textInputProps={{
+              autoCapitalize: "none",
+              autoCorrect: "none",
+              autoFocus: true,
+              returnKeyType: "done",
+              defaultValue: this.state.query,
+              placeholder: "Tag your broadcast",
+              placeholderTextColor: colors.slateGrey
+            }}
+            iconProps={{
+              name: "pencil",
+              color: colors.accent,
+              size: 30
+            }} />
+        </View>
 
-        { /* List of tags */ }
-        <DropdownList
-          ref={(ref) => (this.dropdownList) ? null : this.dropdownList = ref}
-          induceState={(substate) => {
-            this.setState({dropdownListState: substate}, () => {
-              this.props.induceState(this.state, this.props.title)
-            })
-          }}
-          keyboardDismissMode={"on-drag"}
-          selectionLimit={1}
-          state={(this.props.state) ? this.props.state.dropdownListState : null}
-          data={this.data} />
+        { /* Suggestions */ }
+        <ScrollView>
+          {filteredData.map((tag, i) => (
+            <TouchableOpacity key={Math.random()} onPress={() => this.onChangeText(tag)} underlayColor={colors.snowWhite}>
+              <View style={styles.tagWrap}>
+                <Text style={styles.tagText}>
+                  {tag}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+
+          <View style={{height: this.state.keyboardHeight}} />
+        </ScrollView>
 
       </View>
     )

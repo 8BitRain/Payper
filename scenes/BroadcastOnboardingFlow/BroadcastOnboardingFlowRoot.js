@@ -137,8 +137,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         reactComponent: <Tags induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {
           if (!substate) return false
-          if (substate.inputIsValid) return true
-          return substate.selectedTags && Object.keys(substate.selectedTags).length > 0
+          return substate.inputIsValid
         }
       },
       {
@@ -271,7 +270,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         </Animated.View>
 
         { /* Continue button */ }
-        <View style={{alignItems: 'center', paddingTop: 22.5, paddingBottom: 22.5, borderTopWidth: 1, borderColor: colors.lightGrey}}>
+        <View style={{alignItems: 'center', paddingTop: 22.5, paddingBottom: 22.5, borderTopWidth: 1, borderColor: colors.lightGrey, backgroundColor: colors.snowWhite}}>
           <ContinueButton onPress={this.next} />
         </View>
 
