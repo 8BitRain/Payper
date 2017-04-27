@@ -10,15 +10,16 @@ function getRenewalDateAndDateJoined(params, cb) {
       return
     }
 
-    let timestamps = Object.keys(res)
-    let latest = timestamps[timestamps.length - 1]
+    let transactions = Object.keys(res)
+    let firstTimestamp = res[transactions[0]].time
+    let latestTimestamp = res[transactions[transactions.length - 1]].time
 
-    // let renewalDateUTC = moment.utc(parseInt(latest)).add(1, (frequency === 'WEEKLY') ? 'week' : 'month').valueOf()
-    // let renewalDate = moment(parseInt(latest)).add(1, (frequency === 'WEEKLY') ? 'week' : 'month').format("MMM D, YYYY")
-    let renewalDateUTC = moment.utc(parseInt(latest)).valueOf()
-    let renewalDate = moment(parseInt(latest)).format("MMM D, YYYY")
-    let dateJoinedUTC = moment.utc(parseInt(timestamps[0])).valueOf()
-    let dateJoined = moment(parseInt(timestamps[0])).format("MMM D, YYYY")
+    let renewalDateUTC = moment.utc(parseInt(latestTimestamp)).add(1, (frequency === 'WEEKLY') ? 'week' : 'month').valueOf()
+    let renewalDate = moment(parseInt(latestTimestamp)).add(1, (frequency === 'WEEKLY') ? 'week' : 'month').format("MMM D, YYYY")
+    // let renewalDateUTC = moment.utc(parseInt(latestTimestamp)).valueOf()
+    // let renewalDate = moment(parseInt(latestTimestamp)).format("MMM D, YYYY")
+    let dateJoinedUTC = moment.utc(parseInt(firstTimestamp)).valueOf()
+    let dateJoined = moment(parseInt(firstTimestamp)).format("MMM D, YYYY")
 
     cb({renewalDate, dateJoined, renewalDateUTC, dateJoinedUTC})
   })

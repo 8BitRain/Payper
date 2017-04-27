@@ -62,7 +62,11 @@ class AdminBroadcastView extends React.Component {
         let memberID = memberIDBuffer[loop.index]
         Firebase.get(`usersPublicInfo/${memberID}`, (userData) => {
           userData.uid = memberID
-          getRenewalDateAndDateJoined({memberID, castID: this.props.broadcast.castID}, (res) => {
+          getRenewalDateAndDateJoined({
+            memberID,
+            castID: this.props.broadcast.castID,
+            frequency: this.props.broadcast.freq
+          }, (res) => {
             let {renewalDate, dateJoined, renewalDateUTC, dateJoinedUTC} = res
             userData.renewalDate = renewalDate
             userData.dateJoined = dateJoined
@@ -73,7 +77,7 @@ class AdminBroadcastView extends React.Component {
           })
         })
       },
-      onComplete: () => this.setState({members})
+      onComplete: () => this.setState({members}, () => console.log("--> this.state.members =", this.state.members))
     })
   }
 

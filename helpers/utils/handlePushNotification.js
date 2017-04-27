@@ -28,9 +28,9 @@ const callbacks = {
   castCreated: (notif) => {
     Firebase.get(`broadcasts/${notif.identifier}`, (broadcast) => {
       broadcast.castID = notif.identifier
-      Firebase.get(`usersPublicInfo/${broadcastData.casterID}`, (casterData) => {
+      Firebase.get(`usersPublicInfo/${broadcast.casterID}`, (casterData) => {
         casterData.initials = casterData.firstName.charAt(0).concat(casterData.lastName.charAt(0))
-        casterData.uid = broadcastData.casterID
+        casterData.uid = broadcast.casterID
         broadcast.caster = casterData
         Actions.UnjoinedBroadcast({broadcast, canViewCasterProfile: true})
       })
@@ -43,29 +43,56 @@ const callbacks = {
       Actions.AdminBroadcast({broadcast, canViewCasterProfile: true})
     })
   },
-  // tested? no
+  // tested? yes, broken, waiting for vash to add 'identifer' attr
   castLeave: (notif) => {
     Firebase.get(`broadcasts/${notif.identifier}`, (broadcast) => {
       broadcast.castID = notif.identifier
       Actions.AdminBroadcast({broadcast, canViewCasterProfile: true})
     })
   },
+  // tested? yes
+  tagMatch: () => {
+    Actions.refresh({newTab: "Explore"})
+  },
   // tested? no
-  tagMatch: () => alert("tagMatch"),
-  // tested? no
-  removedFromCast: () => alert("removedFromCast"),
+  removedFromCast: () => (notif) => {
+    Firebase.get(`broadcasts/${notif.identifier}`, (broadcast) => {
+      broadcast.castID = notif.identifier
+      Actions.AdminBroadcast({broadcast, canViewCasterProfile: true})
+    })
+  },
   // tested? no
   microdepositsSent: () => alert("microdepositsSent"),
   // tested? no
   customerVerified: () => alert("customerVerified"),
   // tested? no
-  paymentFailure: () => alert("paymentFailure"),
+  paymentFailure: (notif) => {
+    Firebase.get(`broadcasts/${notif.identifier}`, (broadcast) => {
+      broadcast.castID = notif.identifier
+      Actions.AdminBroadcast({broadcast, canViewCasterProfile: true})
+    })
+  },
+  // tested? yes, broken, waiting for vash to add 'identifer' attr
+  secretChanged: (notif) => {
+    Firebase.get(`broadcasts/${notif.identifier}`, (broadcast) => {
+      broadcast.castID = notif.identifier
+      Actions.AdminBroadcast({broadcast, canViewCasterProfile: true})
+    })
+  },
   // tested? no
-  secretChanged: () => alert("secretChanged"),
+  renewalReminder: (notif) => {
+    Firebase.get(`broadcasts/${notif.identifier}`, (broadcast) => {
+      broadcast.castID = notif.identifier
+      Actions.AdminBroadcast({broadcast, canViewCasterProfile: true})
+    })
+  },
   // tested? no
-  renewalReminder: () => alert("renewalReminder"),
-  // tested? no
-  paymentRenewal: () => alert("paymentRenewal")
+  paymentRenewal: (notif) => {
+    Firebase.get(`broadcasts/${notif.identifier}`, (broadcast) => {
+      broadcast.castID = notif.identifier
+      Actions.AdminBroadcast({broadcast, canViewCasterProfile: true})
+    })
+  }
 }
 
 module.exports = handlePushNotification
