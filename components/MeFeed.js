@@ -24,20 +24,25 @@ class MeFeed extends React.Component {
           shouldAnimateIn={false}
           data={this.props.currentUser.meFeed || []}
           renderRow={(rowData, sectionID, rowID) => {
+            console.log("--> rowData", rowData)
+            console.log("--> this.props.broadcastData", this.props.currentUser.broadcastData)
+            let broadcast = this.props.currentUser.broadcastData[rowData]
             let numRows = Object.keys(this.props.currentUser.meFeed[sectionID] || {}).length
             let isLastRow = parseInt(rowID) === numRows - 1
+
+            console.log("--> rendering row with broadcast", broadcast)
 
             if (sectionID === "My Subscriptions")
               return(
                 <View style={{marginBottom: (isLastRow) ? 10 : 0}}>
-                  <SubscriptionCard broadcast={rowData} />
+                  <SubscriptionCard broadcast={broadcast} />
                 </View>
               )
 
             if (sectionID === "My Broadcasts")
               return(
                 <View style={{marginBottom: (isLastRow) ? 10 : 0}}>
-                  <AdminCard broadcast={rowData} currentUser={this.props.currentUser} />
+                  <AdminCard broadcast={broadcast} currentUser={this.props.currentUser} />
                 </View>
               )
 

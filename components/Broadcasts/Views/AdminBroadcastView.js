@@ -171,7 +171,7 @@ class AdminBroadcastView extends React.Component {
           let meFeed = this.props.currentUser.meFeed
 
           // Mutate meFeed object via Redux
-          let i = _.indexOf(meFeed["My Broadcasts"], function(o) { return o.castID === this.props.broadcast.castID })
+          let i = _.indexOf(meFeed["My Broadcasts"], function(castID) { return castID === this.props.broadcast.castID })
           meFeed["My Broadcasts"].splice(i, 1)
           this.props.updateCurrentUser({meFeed: meFeed})
 

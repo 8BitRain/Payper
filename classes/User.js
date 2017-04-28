@@ -12,7 +12,10 @@ export default class User {
   constructor() {
     this.balances = {total: "0.00", available: null, pending: null}
 
-    this.broadcastsFeed = {}
+    this.broadcastListeners = {}
+    this.broadcastData = {}
+    this.broadcastFeed = {}
+
     this.meFeed = {}
     this.services = []
     this.servicesMap = {}
@@ -27,7 +30,7 @@ export default class User {
   update(updates) {
     console.log("User updates:", updates)
     for (var k in updates) this[k] = updates[k]
-    let shouldCache = updates.uid || updates.appFlags || updates.broadcastsFeed || updates.meFeed || updates.wants || updates.owns || updates.services
+    let shouldCache = updates.uid || updates.appFlags || updates.broadcastFeed || updates.meFeed || updates.wants || updates.owns || updates.services
     if (shouldCache) setInAsyncStorage('user', JSON.stringify(this))
   }
 
@@ -150,11 +153,33 @@ export default class User {
         endpoint: `userBroadcasts/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => handleUserBroadcasts(res, (myBroadcasts) => {
-          if (!this.meFeed) this.meFeed = {}
-          this.meFeed["My Broadcasts"] = myBroadcasts
-          updateViaRedux({meFeed: this.meFeed})
-        })
+        callback: (res) => {
+          if (!res) return
+
+          // Update broadcastFeed (array of castIDs)
+          let meFeed = this.meFeed
+          this.meFeed["My Broadcasts"] = Object.keys(res)
+          updateViaRedux({meFeed})
+
+          // Set up listeners for each cast in broadcastFeed
+          let castIDBuffer = Object.keys(res)
+          for (var i = 0; i < castIDBuffer.length; i++) {
+            let castID = castIDBuffer[i]
+
+            if (!this.broadcastListeners[castID]) {
+              this.broadcastListeners[castID] = Firebase.listenTo({
+                endpoint: `broadcasts/${castID}`,
+                eventType: 'value',
+                listener: null,
+                callback: (res) => {
+                  if (!res) return
+                  this.broadcastData[castID] = res
+                  updateViaRedux({broadcastData: this.broadcastData})
+                }
+              })
+            }
+          }
+        }
       },
       {
         endpoint: `subscribedBroadcasts/${this.uid}`,
