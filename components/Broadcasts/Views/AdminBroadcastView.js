@@ -77,7 +77,7 @@ class AdminBroadcastView extends React.Component {
           })
         })
       },
-      onComplete: () => this.setState({members}, () => console.log("--> this.state.members =", this.state.members))
+      onComplete: () => this.setState({members})
     })
   }
 
