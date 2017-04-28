@@ -42,6 +42,8 @@ class AdminCard extends React.Component {
   constructor(props) {
     super(props)
 
+    console.log("--> AdminCard was constructed with props:", props)
+    
     let spotsFilled = (!props.broadcast.members) ? 0 : props.broadcast.members.split(",").length
 
     this.state = {

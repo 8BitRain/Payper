@@ -15,7 +15,6 @@ export default class User {
     this.broadcastListeners = {}
     this.broadcastData = {}
     this.broadcastFeed = {}
-
     this.meFeed = {}
     this.services = []
     this.servicesMap = {}
@@ -107,6 +106,21 @@ export default class User {
     .catch((err) => console.log("Error getting new token:", err))
   }
 
+  addBroadcastListener(castID) {
+    if (!this.broadcastListeners[castID]) {
+      this.broadcastListeners[castID] = Firebase.listenTo({
+        endpoint: `broadcasts/${castID}`,
+        eventType: 'value',
+        listener: null,
+        callback: (res) => {
+          if (!res) return
+          this.broadcastData[castID] = res
+          updateViaRedux({broadcastData: this.broadcastData})
+        }
+      })
+    }
+  }
+
   startListeningToFirebase(updateViaRedux) {
     this.endpoints = [
       {
@@ -145,9 +159,35 @@ export default class User {
         endpoint: `userFeed/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => handleUserFeed(res, (broadcastsFeed) => {
-          updateViaRedux({broadcastsFeed})
-        })
+        callback: (res) => {
+          if (!res) return
+
+          // Update broadcastFeed with array of castIDs
+          let castIDBuffer = Object.keys(res)
+          for (var i = 0; i < castIDBuffer.length; i++) {
+            let castID = castIDBuffer[i]
+
+            // Push castID to corresponding section in broadcastFeed
+            if (broadcastData.type === "world") {
+              if (!this.broadcastFeed["Global"]) this.broadcastFeed["Global"] = []
+              this.broadcastFeed["Global"].push(castID)
+            } else if (broadcastData.type === "local") {
+              if (!this.broadcastFeed["Local"]) this.broadcastFeed["Local"] = []
+              this.broadcastFeed["Local"].push(castID)
+            } else if (broadcastData.type === "friendnetwork") {
+              if (!this.broadcastFeed["Friends of Friends"]) this.broadcastFeed["Friends of Friends"] = []
+              this.broadcastFeed["Friends of Friends"].push(castID)
+            } else if (broadcastData.type === "friends") {
+              if (!this.broadcastFeed["Friends"]) this.broadcastFeed["Friends"] = []
+              this.broadcastFeed["Friends"].push(castID)
+            }
+
+            // Set up listener
+            this.addBroadcastListener(castID)
+          }
+
+          updateViaRedux({broadcastFeed: this.broadcastFeed})
+        }
       },
       {
         endpoint: `userBroadcasts/${this.uid}`,
@@ -156,28 +196,15 @@ export default class User {
         callback: (res) => {
           if (!res) return
 
-          // Update broadcastFeed (array of castIDs)
-          let meFeed = this.meFeed
+          // Update meFeed["My Broadcasts"] with array of castIDs
           this.meFeed["My Broadcasts"] = Object.keys(res)
-          updateViaRedux({meFeed})
+          updateViaRedux({meFeed: this.meFeed})
 
-          // Set up listeners for each cast in broadcastFeed
+          // Set up listeners for each cast in meFeed["My Broadcasts"]
           let castIDBuffer = Object.keys(res)
           for (var i = 0; i < castIDBuffer.length; i++) {
             let castID = castIDBuffer[i]
-
-            if (!this.broadcastListeners[castID]) {
-              this.broadcastListeners[castID] = Firebase.listenTo({
-                endpoint: `broadcasts/${castID}`,
-                eventType: 'value',
-                listener: null,
-                callback: (res) => {
-                  if (!res) return
-                  this.broadcastData[castID] = res
-                  updateViaRedux({broadcastData: this.broadcastData})
-                }
-              })
-            }
+            this.addBroadcastListener(castID)
           }
         }
       },

@@ -152,9 +152,13 @@ class FacebookLoginModal extends React.Component {
     }
 
     function onFailure(err) {
-      Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
-      FBLoginManager.logOut()
-      Actions.pop()
+      if (err.errorMessage && err.errorMessage === "dupe-phone") {
+        Alert.alert('Phone Number Taken', 'A user with that phone number already exists.')
+      } else {
+        Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
+        FBLoginManager.logOut()
+        Actions.pop()
+      }
     }
   }
 
@@ -170,7 +174,14 @@ class FacebookLoginModal extends React.Component {
         <StatusBar barStyle={"light-content"} />
 
         { /* Header */ }
-        <Header title={"Sign Up Confirmation"} showTitle />
+        <Header
+          showTitle
+          showBackButton
+          title={"Sign Up Confirmation"}
+          onBack={() => {
+            FBLoginManager.logOut()
+            Actions.pop()
+          }} />
 
         <ScrollView
           ref={ref => this.ScrollView = ref}
