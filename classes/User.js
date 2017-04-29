@@ -12,10 +12,7 @@ export default class User {
   constructor() {
     this.balances = {total: "0.00", available: null, pending: null}
 
-    this.broadcastListeners = {}
-    this.broadcastData = {}
-    this.broadcastFeed = {}
-
+    this.broadcastsFeed = {}
     this.meFeed = {}
     this.services = []
     this.servicesMap = {}
@@ -30,7 +27,7 @@ export default class User {
   update(updates) {
     console.log("User updates:", updates)
     for (var k in updates) this[k] = updates[k]
-    let shouldCache = updates.uid || updates.appFlags || updates.broadcastFeed || updates.meFeed || updates.wants || updates.owns || updates.services
+    let shouldCache = updates.uid || updates.appFlags || updates.broadcastsFeed || updates.meFeed || updates.wants || updates.owns || updates.services
     if (shouldCache) setInAsyncStorage('user', JSON.stringify(this))
   }
 
@@ -157,7 +154,7 @@ export default class User {
           if (!this.meFeed) this.meFeed = {}
           this.meFeed["My Broadcasts"] = myBroadcasts
           updateViaRedux({meFeed: this.meFeed})
-
+        })
       },
       {
         endpoint: `subscribedBroadcasts/${this.uid}`,
