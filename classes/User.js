@@ -153,33 +153,11 @@ export default class User {
         endpoint: `userBroadcasts/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => {
-          if (!res) return
+        callback: (res) => handleUserBroadcasts(res, (myBroadcasts) => {
+          if (!this.meFeed) this.meFeed = {}
+          this.meFeed["My Broadcasts"] = myBroadcasts
+          updateViaRedux({meFeed: this.meFeed})
 
-          // Update broadcastFeed (array of castIDs)
-          let meFeed = this.meFeed
-          this.meFeed["My Broadcasts"] = Object.keys(res)
-          updateViaRedux({meFeed})
-
-          // Set up listeners for each cast in broadcastFeed
-          let castIDBuffer = Object.keys(res)
-          for (var i = 0; i < castIDBuffer.length; i++) {
-            let castID = castIDBuffer[i]
-
-            if (!this.broadcastListeners[castID]) {
-              this.broadcastListeners[castID] = Firebase.listenTo({
-                endpoint: `broadcasts/${castID}`,
-                eventType: 'value',
-                listener: null,
-                callback: (res) => {
-                  if (!res) return
-                  this.broadcastData[castID] = res
-                  updateViaRedux({broadcastData: this.broadcastData})
-                }
-              })
-            }
-          }
-        }
       },
       {
         endpoint: `subscribedBroadcasts/${this.uid}`,
