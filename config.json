@@ -1,3 +1,4 @@
+
 {
   "env": "dev",
   "dev": {
@@ -8,6 +9,16 @@
       "authDomain": "payperv2-dev.firebaseio.com",
       "databaseURL": "https://payperv2-dev.firebaseio.com/",
       "storageBucket": "payperv2-dev.appspot.com"
+    }
+  },
+  "prod": {
+    "codePushKey": "AIzaSyDXhfkB6gaKnhhRQafbKdn619JWzyepDkw",
+    "lambdaBaseURL": "https://nuv6gmwh84.execute-api.us-east-1.amazonaws.com/prod/",
+    "firebaseCredentials": {
+      "apiKey": "AIzaSyDXhfkB6gaKnhhRQafbKdn619JWzyepDkw",
+      "authDomain": "payper-prod.firebaseio.com",
+      "databaseURL": "https://payper-prod.firebaseio.com/",
+      "storageBucket": "payper-prod.appspot.com"
     }
   }
 }

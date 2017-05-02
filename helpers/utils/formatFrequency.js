@@ -4,6 +4,7 @@ function formatFrequency(str) {
   switch(str) {
     case "WEEKLY": frequency = "week"; break;
     case "MONTHLY": frequency = "month"; break;
+    case "ONCE": frequency = "once"; break;
     default: frequency = "undefined";
   }
 

@@ -24,6 +24,8 @@ class UnjoinedBroadcastView extends React.Component {
   constructor(props) {
     super(props)
 
+    console.log("--> UnjoinedBroadcastView was constructed with props", props)
+
     this.state = {
       loading: false,
       onSubscribeModalVisible: false,
@@ -122,7 +124,9 @@ class UnjoinedBroadcastView extends React.Component {
                   {this.props.broadcast.caster.username}
                 </Text>
                 <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2}}>
-                  {`$${this.props.broadcast.amount} per ${this.frequency}`}
+                  {(this.props.broadcast.freq === "ONCE")
+                    ? `$${this.props.broadcast.amount} one time payment`
+                    : `$${this.props.broadcast.amount} per ${this.frequency}`}
                 </Text>
               </View>
             </View>

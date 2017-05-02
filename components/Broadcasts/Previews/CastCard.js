@@ -2,7 +2,7 @@ import React from 'react'
 import {Actions} from 'react-native-router-flux'
 import {View, Text, StyleSheet, TouchableHighlight, Dimensions, Image} from 'react-native'
 import {colors} from '../../../globalStyles'
-import {formatBroadcastTimestamp, formatFrequency} from '../../../helpers/utils'
+import {formatBroadcastTimestamp} from '../../../helpers/utils'
 import {ProfilePic} from '../../'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 
@@ -42,7 +42,6 @@ class CastCard extends React.Component {
   constructor(props) {
     super(props)
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
-    this.frequency = formatFrequency(props.broadcast.freq)
     this.spotsFilled = (!props.broadcast.members) ? 0 : props.broadcast.members.split(",").length
     this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
   }

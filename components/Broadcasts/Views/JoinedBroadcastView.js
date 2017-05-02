@@ -162,16 +162,20 @@ class JoinedBroadcastView extends React.Component {
                   {this.props.broadcast.caster.username}
                 </Text>
                 <Text style={{color: colors.deepBlue, fontSize: 15, paddingTop: 2}}>
-                  {`$${this.props.broadcast.amount} per ${this.frequency}`}
+                  {(this.props.broadcast.freq === "ONCE")
+                    ? `$${this.props.broadcast.amount} paid once`
+                    : `$${this.props.broadcast.amount} per ${this.frequency}`}
                 </Text>
                 <Text style={{color: colors.slateGrey, fontSize: 15, paddingBottom: 2}}>
                   {`Joined ${moment.utc(this.props.dateJoinedUTC).format("MMM D, YYYY")}`}
                 </Text>
-                <Text style={{color: colors.slateGrey, fontSize: 15, paddingBottom: 2}}>
-                  {(this.props.broadcast.renewal)
-                    ? `Renews ${moment.utc(this.props.renewalDateUTC).format("MMM D, YYYY")}`
-                    : `Renewal has been halted.`}
-                </Text>
+                {(this.props.broadcast.freq === "ONCE")
+                  ? null
+                  : <Text style={{color: colors.slateGrey, fontSize: 15, paddingBottom: 2}}>
+                      {(this.props.broadcast.renewal)
+                        ? `Renews ${moment.utc(this.props.renewalDateUTC).format("MMM D, YYYY")}`
+                        : `Renewal has been halted.`}
+                    </Text>}
               </View>
             </View>
           </TouchableHighlight>
