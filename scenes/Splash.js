@@ -44,19 +44,20 @@ class Splash extends React.Component {
         getFromAsyncStorage('user', (cachedUser) => {
           // No user is cached. Go to Lander
           if (!cachedUser) {
-            Actions.Lander()
+            Actions.Lander({type: 'replace'})
             return
           }
+          
           login({
             mode: "cache",
             cachedUser: JSON.parse(cachedUser),
             onSuccess: (response) => {
               this.props.currentUser.initialize(response)
-              Actions.Main()
+              Actions.Main({type: 'replace'})
             },
             onFailure: (err) => {
               console.log("Cache login failed. Error:", err)
-              Actions.Lander()
+              Actions.Lander({type: 'replace'})
             }
           })
         })

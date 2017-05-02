@@ -72,7 +72,7 @@ class Lander extends React.Component {
           onSuccess: (response) => {
             this.setState({loading: false})
             this.props.currentUser.initialize(response.user)
-            Actions.Main()
+            Actions.Main({type: 'replace'})
           },
           onFailure: (err) => {
             Alert.alert('Sorry...', 'Something went wrong. Please try again later.')

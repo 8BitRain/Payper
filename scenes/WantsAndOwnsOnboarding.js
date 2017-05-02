@@ -55,7 +55,7 @@ class WantsAndOwnsOnboarding extends React.Component {
       own: userTags.ownString,
       token: this.props.currentUser.token
     })
-    Actions.Main({initializeWallet: true})
+    Actions.Main({type: 'replace', initializeWallet: true})
   }
 
   render() {
@@ -63,7 +63,7 @@ class WantsAndOwnsOnboarding extends React.Component {
       <View style={styles.container}>
 
         { /* Header */ }
-        <Header showTitle showSkip title={"Select Interests"} onSkip={() => Actions.Main({initializeWallet: true})} />
+        <Header showTitle showSkip title={"Select Interests"} onSkip={() => Actions.Main({type: 'replace', initializeWallet: true})} />
 
         { /* WantOwnRow list */ }
         <DynamicList
