@@ -3,9 +3,6 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 
-// Creates a persistent connection to Firebase right when the app starts
-import Firebase from './services/Firebase';
-
 // @todo remove when RN upstream is fixed
 console.ignoredYellowBox = ['Warning: Failed propType: SceneView'];
 
