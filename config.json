@@ -1,6 +1,6 @@
 
 {
-  "env": "dev",
+  "env": "prod",
   "dev": {
     "codePushKey": "ZDStxBd3TrIdUmZard0_CS0jZsuSN1-bdfOMf",
     "lambdaBaseURL": "https://zbsf6qd19b.execute-api.us-east-1.amazonaws.com/dev/",
