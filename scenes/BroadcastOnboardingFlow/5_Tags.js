@@ -3,6 +3,7 @@ import * as _ from 'lodash'
 import {View, Text, StyleSheet, Slider, Dimensions, TextInput, TouchableOpacity, ScrollView, Keyboard, Animated} from 'react-native'
 import {colors} from '../../globalStyles'
 import {DropdownList, TextInputWithIcon, PredictiveTextInput, InfoBox} from '../../components'
+import dismissKeyboard from 'react-native-dismiss-keyboard'
 
 const dims = Dimensions.get('window')
 const styles = StyleSheet.create({
@@ -32,7 +33,7 @@ class Tags extends React.Component {
 
     this.AV = {
       infoBox: {
-        height: new Animated.Value(130),
+        height: new Animated.Value(110),
         opacity: new Animated.Value(1)
       }
     }
@@ -95,7 +96,7 @@ class Tags extends React.Component {
         duration: 160
       }),
       Animated.timing(this.AV.infoBox.height, {
-        toValue: 130,
+        toValue: 110,
         duration: 180
       })
     ]
@@ -105,7 +106,7 @@ class Tags extends React.Component {
 
   filterData() {
     const query = this.state.query
-    return _.filter(this.tags, function(tag) {return query !== "" && tag.indexOf(query) >= 0})
+    return _.filter(this.tags, function(tag) {return query !== "" && tag.indexOf(query) >= 0 && tag !== query})
   }
 
   onChangeText(text) {
@@ -123,7 +124,7 @@ class Tags extends React.Component {
 
         { /* Info box */ }
         <Animated.View style={[this.AV.infoBox]}>
-          <InfoBox text={"Your broadcast's tag is a label that makes it easier for users to find you. (ex. 'netflix')"} />
+          <InfoBox text={"A label that makes it easier to find your broacast."} />
         </Animated.View>
 
         { /* Text input */ }
@@ -137,7 +138,7 @@ class Tags extends React.Component {
               autoFocus: false,
               returnKeyType: "done",
               defaultValue: this.state.query,
-              placeholder: `Tag your broadcast (ex. "netflix")`,
+              placeholder: "(ex. 'netflix')",
               placeholderTextColor: colors.slateGrey
             }}
             iconProps={{
@@ -150,7 +151,13 @@ class Tags extends React.Component {
         { /* Suggestions */ }
         <ScrollView keyboardShouldPersistTaps>
           {filteredData.map((tag, i) => (
-            <TouchableOpacity key={Math.random()} onPress={() => this.onChangeText(tag)} underlayColor={colors.snowWhite}>
+            <TouchableOpacity
+              onPress={() => {
+                dismissKeyboard()
+                this.onChangeText(tag)
+              }}
+              key={Math.random()}
+              underlayColor={colors.snowWhite}>
               <View style={styles.tagWrap}>
                 <Text style={styles.tagText}>
                   {tag}

@@ -75,7 +75,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
 
     // Initialize tag state
     if (props.tag) {
-      this.state.substates["Tags"] = {
+      this.state.substates["Tag"] = {
         inputIsValid: true,
         query: props.tag
       }
@@ -129,14 +129,14 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         }
       },
       {
-        title: "Member Limit",
+        title: "Subscriber Limit",
         reactComponent: <Spots induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {
           return true
         }
       },
       {
-        title: "Tags",
+        title: "Tag",
         invalidInputMessage: "You must select a tag.",
         reactComponent: <Tags induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {

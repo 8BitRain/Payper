@@ -59,29 +59,29 @@ class Spots extends React.Component {
       <View style={styles.container}>
 
         { /* Info Box */ }
-        <InfoBox text={"Your cast's member limit determines how many users are allowed to join."} />
+        <InfoBox text={"Number of users allowed to subscribe to this broadcast."} />
 
         { /* Slider with step labels */ }
         <View style={styles.sliderWrap}>
           <View style={styles.stepValuesWrap}>
             <View style={styles.stepDivider} />
-            <Text style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 1) ? colors.accent : colors.slateGrey}]}>
+            <Text onPress={() => this.onSliderValueChange(1)} style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 1) ? colors.accent : colors.slateGrey}]}>
               {"1"}
             </Text>
             <View style={styles.stepDivider} />
-            <Text style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 2) ? colors.accent : colors.slateGrey}]}>
+            <Text onPress={() => this.onSliderValueChange(2)} style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 2) ? colors.accent : colors.slateGrey}]}>
               {"2"}
             </Text>
             <View style={styles.stepDivider} />
-            <Text style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 3) ? colors.accent : colors.slateGrey}]}>
+            <Text onPress={() => this.onSliderValueChange(3)} style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 3) ? colors.accent : colors.slateGrey}]}>
               {"3"}
             </Text>
             <View style={styles.stepDivider} />
-            <Text style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 4) ? colors.accent : colors.slateGrey}]}>
+            <Text onPress={() => this.onSliderValueChange(4)} style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 4) ? colors.accent : colors.slateGrey}]}>
               {"4"}
             </Text>
             <View style={styles.stepDivider} />
-            <Text style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 5) ? colors.accent : colors.slateGrey}]}>
+            <Text onPress={() => this.onSliderValueChange(5)} style={[styles.stepValue, {color: (Math.round(this.state.spotsInput) === 5) ? colors.accent : colors.slateGrey}]}>
               {"5"}
             </Text>
             <View style={styles.stepDivider} />

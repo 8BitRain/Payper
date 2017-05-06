@@ -7,8 +7,8 @@ function formatAfterOnboarding(substates, currentUser) {
   let castID = buffer.join('')
 
   // Format tag
-  // let tag = substates["Tags"].dropdownListState.selectedTags[0] || substates["Tags"].query
-  let tag = substates["Tags"].query
+  // let tag = substates["Tag"].dropdownListState.selectedTags[0] || substates["Tags"].query
+  let tag = substates["Tag"].query
   tag = tag.replace(/\s/g, '')
   tag = tag.toLowerCase()
 
@@ -39,7 +39,7 @@ function formatAfterOnboarding(substates, currentUser) {
     freq: substates["Payment"].frequencyInput,
     detailsOfAgreement: substates["Details of Agreement"].doaInput,
     secret: substates["Secret"].secretInput,
-    memberLimit: Math.round(substates["Member Limit"].spotsInput),
+    memberLimit: Math.round(substates["Subscriber Limit"].spotsInput),
     type: visibility,
     tag: tag,
     members: "",
