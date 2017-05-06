@@ -106,6 +106,15 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         }
       },
       {
+        title: "Payment",
+        invalidInputMessage: "You must enter a valid amount between $1 and $200.",
+        reactComponent: <AmountAndFrequency induceState={this.induceState.bind(this)} />,
+        validateInput: (substate) => {
+          if (!substate) return false
+          return substate.amountInputIsValid
+        }
+      },
+      {
         title: "Who can subscribe?",
         invalidInputMessage: "You must check at least one of the boxes.",
         reactComponent: <Visibility ref={ref => this.VisibilityPage = ref} induceState={this.induceState.bind(this)} />,
@@ -117,15 +126,6 @@ class BroadcastOnboardingFlowRoot extends React.Component {
             if (true === checkboxes[i].selected)
               valid = true
           return valid
-        }
-      },
-      {
-        title: "Payment",
-        invalidInputMessage: "You must enter a valid amount between $1 and $200.",
-        reactComponent: <AmountAndFrequency induceState={this.induceState.bind(this)} />,
-        validateInput: (substate) => {
-          if (!substate) return false
-          return substate.amountInputIsValid
         }
       },
       {
@@ -172,7 +172,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
 
   induceState(substate, pageTitle) {
     this.state.substates[pageTitle] = substate
-    this.setState(this.state, () => console.log(this.state))
+    this.setState(this.state)
   }
 
   submit() {
@@ -283,7 +283,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
           {(this.state.keyboardIsVisible)
             ? <TouchableHighlight underlayColor={'transparent'} activeOpacity={0.75} onPress={() => dismissKeyboard()}>
                 <View style={styles.hideKeyboardWrap}>
-                  <EvilIcons name={"chevron-down"} color={colors.slateGrey} size={28} />
+                  <EvilIcons name={"chevron-down"} color={colors.accent} size={28} />
                 </View>
               </TouchableHighlight>
             : null}
