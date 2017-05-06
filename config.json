@@ -1,6 +1,6 @@
 
 {
-  "env": "prod",
+  "env": "dev",
   "dev": {
     "codePushKey": "ZDStxBd3TrIdUmZard0_CS0jZsuSN1-bdfOMf",
     "lambdaBaseURL": "https://zbsf6qd19b.execute-api.us-east-1.amazonaws.com/dev/",
@@ -16,9 +16,11 @@
     "lambdaBaseURL": "https://nuv6gmwh84.execute-api.us-east-1.amazonaws.com/prod/",
     "firebaseCredentials": {
       "apiKey": "AIzaSyDXhfkB6gaKnhhRQafbKdn619JWzyepDkw",
-      "authDomain": "payper-prod.firebaseio.com",
-      "databaseURL": "https://payper-prod.firebaseio.com/",
-      "storageBucket": "payper-prod.appspot.com"
+      "authDomain": "payper-prod.firebaseapp.com",
+      "databaseURL": "https://payper-prod.firebaseio.com",
+      "projectId": "payper-prod",
+      "storageBucket": "payper-prod.appspot.com",
+      "messagingSenderId": "291234338196"
     }
   }
 }

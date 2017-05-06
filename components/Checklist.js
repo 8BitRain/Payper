@@ -96,7 +96,7 @@ class Checklist extends React.Component {
                 <View style={styles.row}>
                   <EvilIcons
                     size={37}
-                    name={(o.selected) ? "check" : "plus"}
+                    name={"check"}
                     color={(o.pressable)
                       ? (o.selected) ? checklistColors.selectedIcon : checklistColors.unselectedIcon
                       : checklistColors.unpressableIcon

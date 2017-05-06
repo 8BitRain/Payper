@@ -28,10 +28,14 @@ import * as dispatchers from '../Main/MainState'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: colors.snowWhite
   },
   innerContentWrap: {
-    flex: 1
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   hideKeyboardWrap: {
     flexDirection: 'row',
@@ -93,7 +97,16 @@ class BroadcastOnboardingFlowRoot extends React.Component {
     // Configure page components
     this.pages = [
       {
-        title: "Broadcast Visibility",
+        title: "Title",
+        invalidInputMessage: "You must enter a broadcast title.",
+        reactComponent: <Title induceState={this.induceState.bind(this)} />,
+        validateInput: (substate) => {
+          if (!substate) return false
+          return substate.inputIsValid
+        }
+      },
+      {
+        title: "Who can subscribe?",
         invalidInputMessage: "You must check at least one of the boxes.",
         reactComponent: <Visibility ref={ref => this.VisibilityPage = ref} induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {
@@ -104,15 +117,6 @@ class BroadcastOnboardingFlowRoot extends React.Component {
             if (true === checkboxes[i].selected)
               valid = true
           return valid
-        }
-      },
-      {
-        title: "Title",
-        invalidInputMessage: "You must enter a broadcast title.",
-        reactComponent: <Title induceState={this.induceState.bind(this)} />,
-        validateInput: (substate) => {
-          if (!substate) return false
-          return substate.inputIsValid
         }
       },
       {

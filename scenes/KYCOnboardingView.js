@@ -100,7 +100,7 @@ class KYCOnboardingView extends React.Component {
   }
 
   onSuccess() {
-    Actions.VerifiedIdentity()
+    Actions.VerifiedIdentity({type: 'replace', destination: Actions.pop})
   }
 
   onFailure() {

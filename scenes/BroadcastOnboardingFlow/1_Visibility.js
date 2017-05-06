@@ -30,11 +30,8 @@ class Visibility extends React.Component {
     return(
       <View style={styles.container}>
 
-        { /* Info Box */ }
-        <InfoBox text={"Broadcast visibility determines who can see and join your cast."} />
-
         { /* Check List */ }
-        <View style={{paddingTop: 7}}>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <Checklist
             ref={ref => this.checklist = ref}
             state={this.props.state}
