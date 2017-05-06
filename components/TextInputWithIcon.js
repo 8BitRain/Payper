@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.lightGrey,
-    marginTop: 14,
+    marginTop: 10,
     height: 44,
     borderRadius: 4
   },

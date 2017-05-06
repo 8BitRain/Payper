@@ -14,7 +14,7 @@ function formatAfterOnboarding(substates, currentUser) {
 
   // Format visibility
   let visibility = ""
-  let {checkboxes} = substates["Broadcast Visibility"]
+  let {checkboxes} = substates["Who can subscribe?"]
   for (var i in checkboxes) {
     if (true === checkboxes[i].selected) {
       visibility = checkboxes[i].title
@@ -35,8 +35,8 @@ function formatAfterOnboarding(substates, currentUser) {
   // Format and return broadcast JSON
   return {
     title: substates["Title"].titleInput,
-    amount: substates["Amount and Frequency"].amountInput,
-    freq: substates["Amount and Frequency"].frequencyInput,
+    amount: substates["Payment"].amountInput,
+    freq: substates["Payment"].frequencyInput,
     detailsOfAgreement: substates["Details of Agreement"].doaInput,
     secret: substates["Secret"].secretInput,
     memberLimit: Math.round(substates["Member Limit"].spotsInput),

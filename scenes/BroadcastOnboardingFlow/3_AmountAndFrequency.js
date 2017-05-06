@@ -107,11 +107,12 @@ class AmountAndFrequency extends React.Component {
     return(
       <View style={styles.container}>
 
-        { /* Info Box */ }
-        <InfoBox text={"Enter payment amount per cast member, per interval."} />
-
         { /* Text Input */ }
-        <View>
+        <View style={{paddingTop: 15}}>
+          <Text style={{fontSize: 17, color: colors.deepBlue}}>
+            {"Enter amount per person:"}
+          </Text>
+
           <TextInputWithIcon
             validateInput={this.validateInput}
             onChangeText={this.onAmountChangeText}
@@ -134,46 +135,52 @@ class AmountAndFrequency extends React.Component {
           : null }
 
         { /* Frequency buttons */ }
-        <View style={styles.frequencyButtonsWrap}>
-          <TouchableHighlight
-            activeOpacity={0.75}
-            underlayColor={'transparent'}
-            onPress={() => this.onFrequencyChange("MONTHLY")}>
-            <View style={styles.frequencyButtonWrap}>
-              <EvilIcons size={27} name={"check"} color={(this.state.frequencyInput === "MONTHLY") ? colors.gradientGreen : colors.slateGrey} />
-              <Text style={(this.state.frequencyInput === "MONTHLY") ? styles.activeFrequencyButtonText : styles.inactiveFrequencyButtonText}>
-                {"Monthly"}
-              </Text>
-            </View>
-          </TouchableHighlight>
+        <View style={{padding: 15}}>
+          <Text style={{fontSize: 17, color: colors.deepBlue}}>
+            {"Select payment frequency:"}
+          </Text>
 
-          <View style={{width: 6}} />
+          <View style={styles.frequencyButtonsWrap}>
+            <TouchableHighlight
+              activeOpacity={0.75}
+              underlayColor={'transparent'}
+              onPress={() => this.onFrequencyChange("MONTHLY")}>
+              <View style={styles.frequencyButtonWrap}>
+                <EvilIcons size={27} name={"check"} color={(this.state.frequencyInput === "MONTHLY") ? colors.gradientGreen : colors.slateGrey} />
+                <Text style={(this.state.frequencyInput === "MONTHLY") ? styles.activeFrequencyButtonText : styles.inactiveFrequencyButtonText}>
+                  {"Monthly"}
+                </Text>
+              </View>
+            </TouchableHighlight>
 
-          <TouchableHighlight
-            activeOpacity={0.75}
-            underlayColor={'transparent'}
-            onPress={() => this.onFrequencyChange("WEEKLY")}>
-            <View style={styles.frequencyButtonWrap}>
-              <EvilIcons size={27} name={"check"} color={(this.state.frequencyInput === "WEEKLY") ? colors.gradientGreen : colors.slateGrey} />
-              <Text style={(this.state.frequencyInput === "WEEKLY") ? styles.activeFrequencyButtonText : styles.inactiveFrequencyButtonText}>
-                {"Weekly"}
-              </Text>
-            </View>
-          </TouchableHighlight>
+            <View style={{width: 6}} />
 
-          <View style={{width: 6}} />
+            <TouchableHighlight
+              activeOpacity={0.75}
+              underlayColor={'transparent'}
+              onPress={() => this.onFrequencyChange("WEEKLY")}>
+              <View style={styles.frequencyButtonWrap}>
+                <EvilIcons size={27} name={"check"} color={(this.state.frequencyInput === "WEEKLY") ? colors.gradientGreen : colors.slateGrey} />
+                <Text style={(this.state.frequencyInput === "WEEKLY") ? styles.activeFrequencyButtonText : styles.inactiveFrequencyButtonText}>
+                  {"Weekly"}
+                </Text>
+              </View>
+            </TouchableHighlight>
 
-          <TouchableHighlight
-            activeOpacity={0.75}
-            underlayColor={'transparent'}
-            onPress={() => this.onFrequencyChange("ONCE")}>
-            <View style={styles.frequencyButtonWrap}>
-              <EvilIcons size={27} name={"check"} color={(this.state.frequencyInput === "ONCE") ? colors.gradientGreen : colors.slateGrey} />
-              <Text style={(this.state.frequencyInput === "ONCE") ? styles.activeFrequencyButtonText : styles.inactiveFrequencyButtonText}>
-                {"Once"}
-              </Text>
-            </View>
-          </TouchableHighlight>
+            <View style={{width: 6}} />
+
+            <TouchableHighlight
+              activeOpacity={0.75}
+              underlayColor={'transparent'}
+              onPress={() => this.onFrequencyChange("ONCE")}>
+              <View style={styles.frequencyButtonWrap}>
+                <EvilIcons size={27} name={"check"} color={(this.state.frequencyInput === "ONCE") ? colors.gradientGreen : colors.slateGrey} />
+                <Text style={(this.state.frequencyInput === "ONCE") ? styles.activeFrequencyButtonText : styles.inactiveFrequencyButtonText}>
+                  {"Once"}
+                </Text>
+              </View>
+            </TouchableHighlight>
+          </View>
         </View>
 
       </View>

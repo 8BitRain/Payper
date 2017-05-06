@@ -40,7 +40,7 @@ class Title extends React.Component {
       <View style={styles.container}>
 
         { /* Info Box */ }
-        <InfoBox text={"Your broadcast's title is the first thing prospective members will see. Be descriptive but concise!"} />
+        <InfoBox text={"The first thing subscribers will see."} />
 
         { /* Text Input */ }
         <View>
