@@ -1,5 +1,6 @@
 apply plugin: "com.android.application"
 
+
 import com.android.build.OutputFile
 
 /**
@@ -84,9 +85,9 @@ android {
     defaultConfig {
         applicationId "com.example"
         minSdkVersion 16
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 23
+        versionCode 9
+        versionName "1.9"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -125,6 +126,7 @@ repositories {
 }
 
 dependencies {
+    compile project(':react-native-fcm')
     compile project(':bugsnag-react-native')
     compile project(':react-native-device-info')
     compile project(':react-native-code-push')
@@ -132,11 +134,11 @@ dependencies {
     compile project(':react-native-webview-bridge')
     compile project(':react-native-facebook-login')
     compile project(':react-native-fbsdk')
-    compile project(':react-native-mixpanel')
     compile project(':react-native-vector-icons')
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
+    compile 'com.google.firebase:firebase-core:10.0.1'
     compile project(':react-native-contacts')
 }
 
@@ -146,3 +148,8 @@ task copyDownloadableDepsToLibs(type: Copy) {
   from configurations.compile
   into 'libs'
 }
+
+apply plugin: 'com.google.gms.google-services'
+
+
+

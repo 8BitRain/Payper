@@ -1,0 +1,26 @@
+
+{
+  "env": "prod",
+  "dev": {
+    "codePushKey": "ZDStxBd3TrIdUmZard0_CS0jZsuSN1-bdfOMf",
+    "lambdaBaseURL": "https://zbsf6qd19b.execute-api.us-east-1.amazonaws.com/dev/",
+    "firebaseCredentials": {
+      "apiKey": "AIzaSyBF6Ej3cr-wbgn4Gz_seHMK4Lgt96HThxg",
+      "authDomain": "payperv2-dev.firebaseio.com",
+      "databaseURL": "https://payperv2-dev.firebaseio.com/",
+      "storageBucket": "payperv2-dev.appspot.com"
+    }
+  },
+  "prod": {
+    "codePushKey": "AIzaSyDXhfkB6gaKnhhRQafbKdn619JWzyepDkw",
+    "lambdaBaseURL": "https://nuv6gmwh84.execute-api.us-east-1.amazonaws.com/prod/",
+    "firebaseCredentials": {
+      "apiKey": "AIzaSyDXhfkB6gaKnhhRQafbKdn619JWzyepDkw",
+      "authDomain": "payper-prod.firebaseapp.com",
+      "databaseURL": "https://payper-prod.firebaseio.com",
+      "projectId": "payper-prod",
+      "storageBucket": "payper-prod.appspot.com",
+      "messagingSenderId": "291234338196"
+    }
+  }
+}

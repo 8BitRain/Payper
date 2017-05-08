@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "829774165704",
+    "firebase_url": "https://payperv2-dev.firebaseio.com",
+    "project_id": "payperv2-dev",
+    "storage_bucket": "payperv2-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:829774165704:android:09b807e35f561f52",
+        "android_client_info": {
+          "package_name": "com.payper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "829774165704-dhh6rk10dhii68p5lif7f4f8op12qjt7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_f97VjCofq6ip6ZvvvbqsLORUTYolQjc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
