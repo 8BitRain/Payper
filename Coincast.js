@@ -21,7 +21,9 @@ import {
   KYCOnboardingView,
   MicrodepositTooltip,
   MyProfile,
-  WantsAndOwnsOnboarding
+  WantsAndOwnsOnboarding,
+  WantsOnboarding,
+  OwnsOnboarding
 } from './scenes'
 import {
   IAVModal,
@@ -77,6 +79,8 @@ class Coincast extends React.Component {
             <Scene key="Want"                     component={Want}                    panHandlers={null} />
             <Scene key="Own"                      component={Own}                     panHandlers={null} />
             <Scene key="WantsAndOwnsOnboarding"   component={WantsAndOwnsOnboarding}  panHandlers={null} />
+            <Scene key="WantsOnboarding"          component={WantsOnboarding}         panHandlers={null} />
+            <Scene key="OwnsOnboarding"           component={OwnsOnboarding}          panHandlers={null} />
 
             { /* Drawer/Tab Scenes */ }
             <Scene key="Main" component={NavigationDrawer} open={false}>
