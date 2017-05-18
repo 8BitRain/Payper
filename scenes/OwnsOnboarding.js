@@ -33,8 +33,9 @@ class OwnsOnboarding extends React.Component {
     this.setState(this.state)
   }
 
-  submit() {
-    let userTags = formatUpdateUserTagsParams({wants: this.props.wants, owns: this.state.owns})
+  submit(params) {
+    let {skip} = params
+    let userTags = formatUpdateUserTagsParams({wants: this.props.wants, owns: (skip) ? "" : this.state.owns})
     updateUserTags({want: userTags.wantString, own: userTags.ownString, token: this.props.currentUser.token})
     Actions.Main({type: 'replace'})
   }
@@ -44,7 +45,7 @@ class OwnsOnboarding extends React.Component {
       <View style={styles.container}>
 
         { /* Header */ }
-        <Header showTitle showSkip title={"Select Owns"} onSkip={() => this.submit()} />
+        <Header showTitle showSkip title={"Select Owns"} onSkip={() => this.submit({skip: true})} />
 
         { /* WantOwnRow list */ }
         <DynamicList
