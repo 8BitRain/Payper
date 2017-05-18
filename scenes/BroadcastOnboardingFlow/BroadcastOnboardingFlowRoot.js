@@ -16,7 +16,8 @@ import {
   Tags,
   DetailsOfAgreement,
   Secret,
-  Terms
+  Terms,
+  Contact
 } from './'
 import {createBroadcast} from '../../helpers/lambda'
 import {formatAfterOnboarding} from '../../helpers/broadcasts'
@@ -152,6 +153,14 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         validateInput: (substate) => {
           if (!substate) return false
           return substate.inputIsValid
+        }
+      },
+      {
+        title: "Contact",
+        invalidInputMessage: "",
+        reactComponent: <Contact induceState={this.induceState.bind(this)} />,
+        validateInput: (substate) => {
+          return true
         }
       }
     ]

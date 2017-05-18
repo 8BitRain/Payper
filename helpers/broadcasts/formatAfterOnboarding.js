@@ -1,4 +1,6 @@
 function formatAfterOnboarding(substates, currentUser) {
+  console.log("--> substates", substates)
+  
   // Generate broadcast id
   let buffer = []
   let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -38,8 +40,10 @@ function formatAfterOnboarding(substates, currentUser) {
     amount: substates["Payment"].amountInput,
     freq: substates["Payment"].frequencyInput,
     detailsOfAgreement: substates["Details of Agreement"].doaInput,
-    secret: substates["Secret"].secretInput,
+    secret: substates["Details of Agreement"].hiddenTermsInput,
     memberLimit: Math.round(substates["Subscriber Limit"].spotsInput),
+    email: substates["Contact"].emailInput,
+    phone: substates["Contact"].phoneInput,
     type: visibility,
     tag: tag,
     members: "",

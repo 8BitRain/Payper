@@ -51,6 +51,9 @@ import {
   UnjoinedBroadcastView
 } from './components/Broadcasts'
 
+// TODO: DELETE THIS
+import {Contact} from './scenes/BroadcastOnboardingFlow'
+
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params)
   return (state, action) => {
@@ -68,6 +71,9 @@ class Coincast extends React.Component {
       <Router createReducer={reducerCreate} sceneStyle={{backgroundColor: colors.snowWhite}}>
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar={true}>
+
+            { /* TEMPORARY TODO: DELETE THESE */ }
+            <Scene key="Contact"                  component={Contact}                 panHandlers={null} />
 
             { /* Linear Scenes */ }
             <Scene key="Splash"                   component={Splash}                  panHandlers={null} initial />
