@@ -1,6 +1,4 @@
 function formatAfterOnboarding(substates, currentUser) {
-  console.log("--> substates", substates)
-  
   // Generate broadcast id
   let buffer = []
   let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
