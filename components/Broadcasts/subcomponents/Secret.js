@@ -18,7 +18,9 @@ class Secret extends React.Component {
       decryptSecret({
         castID: this.props.broadcast.castID,
         token: this.props.currentUser.token
-      }, (decryptedSecret) => this.setState({decryptedSecret}))
+      }, (response) => {
+        this.setState(response)
+      })
     }
   }
 
@@ -30,23 +32,53 @@ class Secret extends React.Component {
 
   render() {
     return(
-      <View style={{paddingTop: 8, paddingBottom: 8, width: this.props.width, borderColor: colors.medGrey, borderBottomWidth: (this.props.showBorder === false) ? 0 : 1}}>
+      <View style={{paddingBottom: 20}}>
+        <View style={{paddingTop: 8, paddingBottom: 8, width: this.props.width, borderColor: colors.medGrey, borderBottomWidth: (this.props.showBorder === false) ? 0 : 1}}>
 
-        { /* Title and Lock Icon */ }
-        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-          <Text style={{color: colors.deepBlue, fontSize: 16, fontWeight: '700'}}>
-            {"Secret"}
-          </Text>
-          <EvilIcons name={(this.state.decryptedSecret === "") ? "lock" : "unlock"} size={32} color={colors.accent} />
+          { /* Title and Lock Icon */ }
+          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+            <Text style={{color: colors.deepBlue, fontSize: 16, fontWeight: '700'}}>
+              {"Secret"}
+            </Text>
+            <EvilIcons name={(this.state.decryptedSecret === "") ? "lock" : "unlock"} size={32} color={colors.accent} />
+          </View>
+
+          { /* Text */
+            (this.state.decryptedSecret === "")
+              ? null
+              : <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2, alignItems: 'center', flexWrap: 'wrap'}}>
+                  {this.state.decryptedSecret}
+                </Text> }
+
         </View>
 
-        { /* Text */
-          (this.state.decryptedSecret === "")
+        {(!this.state.decryptedPhone && !this.state.decryptedPhone)
             ? null
-            : <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2, alignItems: 'center', flexWrap: 'wrap'}}>
-                {this.state.decryptedSecret}
-              </Text> }
+            : <View style={{paddingTop: 8, paddingBottom: 8, width: this.props.width, borderColor: colors.medGrey, borderBottomWidth: (this.props.showBorder === false) ? 0 : 1}}>
 
+                { /* Title and Lock Icon */ }
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                  <Text style={{color: colors.deepBlue, fontSize: 16, fontWeight: '700'}}>
+                    {"Contact"}
+                  </Text>
+                  <EvilIcons name={(this.state.decryptedSecret === "") ? "lock" : "unlock"} size={32} color={colors.accent} />
+                </View>
+
+                { /* Text */
+                  (this.state.decryptedPhone === "")
+                    ? null
+                    : <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2, alignItems: 'center', flexWrap: 'wrap'}}>
+                        {this.state.decryptedPhone}
+                      </Text> }
+
+                { /* Text */
+                  (this.state.decryptedEmail === "")
+                    ? null
+                    : <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2, alignItems: 'center', flexWrap: 'wrap'}}>
+                        {this.state.decryptedEmail}
+                      </Text> }
+
+              </View> }
       </View>
     )
   }
