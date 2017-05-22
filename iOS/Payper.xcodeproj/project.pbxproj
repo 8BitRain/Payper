@@ -55,7 +55,7 @@
 		232A65D31D03D74E0084EA8E /* Roboto-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 232A65CF1D03D74E0084EA8E /* Roboto-Thin.ttf */; };
 		234F714F1DBC43CF003CE39A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 233039AD1DBAA02600A8F1B7 /* LaunchScreen.xib */; };
 		238A0DD11D49672D00EACFBF /* libRCTContacts.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 238A0DC21D49671D00EACFBF /* libRCTContacts.a */; };
-		23940B3C1EC004B200D994DE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 23940B3B1EC004B200D994DE /* GoogleService-Info.plist */; };
+		23DE3C551ED3635F00D477FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 23DE3C541ED3635F00D477FD /* GoogleService-Info.plist */; };
 		44192408B916443E8CA59F4D /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F76F232837FA45489E53A198 /* EvilIcons.ttf */; };
 		4758F8C82D514374A4D82AE5 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26265A71C02048F18E3EE5F7 /* libRNVectorIcons.a */; };
 		596CF3861DDA4B8D004AB22D /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 596CF3851DDA4B53004AB22D /* libRNDeviceInfo.a */; };
@@ -388,7 +388,7 @@
 		232A65CF1D03D74E0084EA8E /* Roboto-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Thin.ttf"; sourceTree = "<group>"; };
 		233039AD1DBAA02600A8F1B7 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		238A0DBC1D49671D00EACFBF /* RCTContacts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTContacts.xcodeproj; path = "../node_modules/react-native-contacts/ios/RCTContacts.xcodeproj"; sourceTree = "<group>"; };
-		23940B3B1EC004B200D994DE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		23DE3C541ED3635F00D477FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Coincast/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		23DE99F51D9EC6E50054D02F /* Payper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Payper.entitlements; sourceTree = "<group>"; };
 		26265A71C02048F18E3EE5F7 /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		2DB6499B06E14647AF2065C6 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
@@ -686,8 +686,8 @@
 			isa = PBXGroup;
 			children = (
 				233039AD1DBAA02600A8F1B7 /* LaunchScreen.xib */,
-				23940B3B1EC004B200D994DE /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
+				23DE3C541ED3635F00D477FD /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -1330,7 +1330,7 @@
 			files = (
 				232A65D21D03D74E0084EA8E /* Roboto-Medium.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				23940B3C1EC004B200D994DE /* GoogleService-Info.plist in Resources */,
+				23DE3C551ED3635F00D477FD /* GoogleService-Info.plist in Resources */,
 				232A65D31D03D74E0084EA8E /* Roboto-Thin.ttf in Resources */,
 				232A65D11D03D74E0084EA8E /* Roboto-Light.ttf in Resources */,
 				234F714F1DBC43CF003CE39A /* LaunchScreen.xib in Resources */,
