@@ -64,14 +64,14 @@ class Secret extends React.Component {
                   <EvilIcons name={(this.state.decryptedSecret === "") ? "lock" : "unlock"} size={32} color={colors.accent} />
                 </View>
 
-                { /* Text */
+                { /* Phone number */
                   (this.state.decryptedPhone === "")
                     ? null
                     : <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2, alignItems: 'center', flexWrap: 'wrap'}}>
                         {this.state.decryptedPhone}
                       </Text> }
 
-                { /* Text */
+                { /* Email address */
                   (this.state.decryptedEmail === "")
                     ? null
                     : <Text style={{color: colors.deepBlue, fontSize: 16, paddingTop: 2, alignItems: 'center', flexWrap: 'wrap'}}>
