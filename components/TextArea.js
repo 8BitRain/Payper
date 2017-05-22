@@ -70,7 +70,7 @@ class TextArea extends React.Component {
 
   render() {
     return(
-      <View style={styles.container}>
+      <View style={[styles.container, this.props.containerStyles || {}]}>
 
         { /* Edit icon and validity indicator */ }
         <View style={styles.header}>

@@ -133,38 +133,46 @@ class WantOwnRow extends React.Component {
         </View>
 
         { /* Want and own buttons */ }
-        <View style={{flex: 0.3, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-          <TouchableHighlight
-            activeOpacity={0.75}
-            underlayColor={'transparent'}
-            onPress={() => {
-              if (this.state.animating) return
-              if (this.state.owns) this.toggle("owns")
-              this.toggle("wants")
-            }}>
-            <View style={styles.buttonWrap}>
-              <Text style={[styles.buttonText, {color: colors.gradientGreen}]}>{"Want"}</Text>
-              <Animated.View style={[this.AV.wants, styles.buttonBackground]}>
-                <Text style={[styles.buttonText, {color: colors.snowWhite}]}>{"Want"}</Text>
-              </Animated.View>
-            </View>
-          </TouchableHighlight>
+        <View style={{flex: 0.3, flexDirection: 'row', justifyContent: (this.props.onWant && this.props.onOwn) ? 'center' : 'flex-end', alignItems: 'center'}}>
 
-          <TouchableHighlight
-            activeOpacity={0.75}
-            underlayColor={'transparent'}
-            onPress={() => {
-              if (this.state.animating) return
-              if (this.state.wants) this.toggle("wants")
-              this.toggle("owns")
-            }}>
-            <View style={styles.buttonWrap}>
-              <Text style={[styles.buttonText, {color: colors.gradientGreen}]}>{"Own"}</Text>
-              <Animated.View style={[this.AV.owns, styles.buttonBackground]}>
-                <Text style={[styles.buttonText, {color: colors.snowWhite}]}>{"Own"}</Text>
-              </Animated.View>
-            </View>
-          </TouchableHighlight>
+        {(this.props.onWant)
+          ? <TouchableHighlight
+              activeOpacity={0.75}
+              underlayColor={'transparent'}
+              onPress={() => {
+                if (this.state.animating) return
+                if (this.state.owns) this.toggle("owns")
+                this.toggle("wants")
+              }}>
+              <View style={styles.buttonWrap}>
+                <Text style={[styles.buttonText, {color: colors.gradientGreen}]}>{"Want"}</Text>
+                <Animated.View style={[this.AV.wants, styles.buttonBackground]}>
+                  <Text style={[styles.buttonText, {color: colors.snowWhite}]}>{"Want"}</Text>
+                </Animated.View>
+              </View>
+            </TouchableHighlight>
+          : null}
+
+
+
+          {(this.props.onOwn)
+            ? <TouchableHighlight
+                activeOpacity={0.75}
+                underlayColor={'transparent'}
+                onPress={() => {
+                  if (this.state.animating) return
+                  if (this.state.wants) this.toggle("wants")
+                  this.toggle("owns")
+                }}>
+                <View style={styles.buttonWrap}>
+                  <Text style={[styles.buttonText, {color: colors.gradientGreen}]}>{"Own"}</Text>
+                  <Animated.View style={[this.AV.owns, styles.buttonBackground]}>
+                    <Text style={[styles.buttonText, {color: colors.snowWhite}]}>{"Own"}</Text>
+                  </Animated.View>
+                </View>
+              </TouchableHighlight>
+            : null}
+
         </View>
 
       </View>

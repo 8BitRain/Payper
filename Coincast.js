@@ -23,7 +23,9 @@ import {
   KYCOnboardingView,
   MicrodepositTooltip,
   MyProfile,
-  WantsAndOwnsOnboarding
+  WantsAndOwnsOnboarding,
+  WantsOnboarding,
+  OwnsOnboarding
 } from './scenes'
 import {
   IAVModal,
@@ -51,6 +53,9 @@ import {
   UnjoinedBroadcastView
 } from './components/Broadcasts'
 
+// TODO: DELETE THIS
+import {Contact} from './scenes/BroadcastOnboardingFlow'
+
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params)
   return (state, action) => {
@@ -69,6 +74,9 @@ class Coincast extends React.Component {
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar={true}>
 
+            { /* TEMPORARY TODO: DELETE THESE */ }
+            <Scene key="Contact"                  component={Contact}                 panHandlers={null} />
+
             { /* Linear Scenes */ }
             <Scene key="Splash"                   component={Splash}                  panHandlers={null} initial />
             <Scene key="InviteOnlyLander"         component={InviteOnlyLander}        panHandlers={null} />
@@ -79,6 +87,8 @@ class Coincast extends React.Component {
             <Scene key="Want"                     component={Want}                    panHandlers={null} />
             <Scene key="Own"                      component={Own}                     panHandlers={null} />
             <Scene key="WantsAndOwnsOnboarding"   component={WantsAndOwnsOnboarding}  panHandlers={null} />
+            <Scene key="WantsOnboarding"          component={WantsOnboarding}         panHandlers={null} />
+            <Scene key="OwnsOnboarding"           component={OwnsOnboarding}          panHandlers={null} />
 
             { /* Drawer/Tab Scenes */ }
             <Scene key="Main" component={NavigationDrawer} open={false}>

@@ -15,7 +15,9 @@ import {
   Spots,
   Tags,
   DetailsOfAgreement,
-  Secret
+  Secret,
+  Terms,
+  Contact
 } from './'
 import {createBroadcast} from '../../helpers/lambda'
 import {formatAfterOnboarding} from '../../helpers/broadcasts'
@@ -147,19 +149,18 @@ class BroadcastOnboardingFlowRoot extends React.Component {
       {
         title: "Details of Agreement",
         invalidInputMessage: "Your cast's Details of Agreement must be between 1 and 140 characters.",
-        reactComponent: <DetailsOfAgreement induceState={this.induceState.bind(this)} />,
+        reactComponent: <Terms induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {
           if (!substate) return false
           return substate.inputIsValid
         }
       },
       {
-        title: "Secret",
-        invalidInputMessage: "Your cast's Secret must be between 1 and 140 characters.",
-        reactComponent: <Secret induceState={this.induceState.bind(this)} />,
+        title: "Contact",
+        invalidInputMessage: "",
+        reactComponent: <Contact induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {
-          if (!substate) return false
-          return substate.inputIsValid
+          return true
         }
       }
     ]
