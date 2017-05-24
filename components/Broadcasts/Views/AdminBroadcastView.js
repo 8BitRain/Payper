@@ -1,6 +1,7 @@
 import React from 'react'
 import * as _ from 'lodash'
 import moment from 'moment'
+import {ShareDialog} from 'react-native-fbsdk'
 import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, ActionSheetIOS, Alert, Modal} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {colors} from '../../../globalStyles'
@@ -97,8 +98,9 @@ class AdminBroadcastView extends React.Component {
   }
 
   showActionSheet() {
-    let options = ['New Secret', 'Delete', 'Cancel']
+    let options = ['Share', 'New Secret', 'Delete', 'Cancel']
     let callbacks = {
+      'Share': () => this.share(),
       'Stop Renewal': () => this.stopRenewal(),
       'New Secret': () => this.setState({secretInputModalVisible: true}),
       'Resume Renewal': () => this.resumeRenewal(),
@@ -188,6 +190,29 @@ class AdminBroadcastView extends React.Component {
         }
       })
     }
+  }
+
+  share() {
+    const shareLinkContent = {
+      contentType: 'link',
+      contentUrl: "https://appsto.re/us/nDcffb.i",
+      // contentDescription: `I started splitting ${this.props.broadcast.title} through Payper. Check it out!`
+    }
+
+    ShareDialog.canShow(shareLinkContent).then((canShow) => {
+      if (canShow) return ShareDialog.show(shareLinkContent)
+    })
+    .then(
+      (res) => {
+        // success
+        console.log("--> Shared broadcast... res:", res)
+      },
+      (err) => {
+        // failure
+        console.log("--> Couldn't share... err:", err)
+        Alert.alert("Share Failed", "Something went wrong. Please try again later.")
+      }
+    )
   }
 
   render() {

@@ -130,16 +130,6 @@ class Main extends React.Component {
             let msg = ""
             let options = []
 
-            console.log("")
-            console.log("")
-            console.log("--> needsBank", needsBank)
-            console.log("--> needsMicrodeposits", needsMicrodeposits)
-            console.log("--> needsVerification", needsVerification)
-            console.log("--> needsVerificationDocument", needsVerificationDocument)
-            console.log("--> verificationIsPending", verificationIsPending)
-            console.log("")
-            console.log("")
-
             if (needsBank) {
               title = `Bank Account Needed`
               msg = `You must add a bank account before you can create a broadcast.`
