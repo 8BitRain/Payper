@@ -7,6 +7,7 @@ import {colors} from '../../../globalStyles'
 import {formatBroadcastTimestamp, formatFrequency, callbackForLoop} from '../../../helpers/utils'
 import {unsubscribeAlert} from '../../../helpers/alerts'
 import {unsubscribeFromCast, createDispute} from '../../../helpers/lambda'
+import {share} from '../../../helpers/broadcasts'
 import {Firebase} from '../../../helpers'
 import {ProfilePic} from '../../'
 import {SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret, Member} from '../'
@@ -72,11 +73,14 @@ class JoinedBroadcastView extends React.Component {
   showActionSheet() {
     let options = ['Cancel']
     let callbacks = {
+      'Share': () => share(),
       'Create Dispute': () => this.createDispute(),
       'Cancel': () => null
     }
 
-    if (null === this.state.dispute) options.unshift('Create Dispute')
+    if (null === this.state.dispute)
+      options.unshift('Create Dispute')
+    options.unshift('Share')
 
     // TODO: Implement cross-plaftorm action sheet module
     ActionSheetIOS.showActionSheetWithOptions({
