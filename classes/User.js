@@ -241,26 +241,52 @@ export default class User {
           }
         }
       },
-      // {
-      //   endpoint: `userBroadcasts/${this.uid}`,
-      //   eventType: 'value',
-      //   listener: null,
-      //   callback: (res) => handleUserBroadcasts(res, (myBroadcasts) => {
-      //     if (!this.meFeed) this.meFeed = {}
-      //     this.meFeed["My Broadcasts"] = myBroadcasts
-      //     updateViaRedux({meFeed: this.meFeed})
-      //   })
-      // },
       {
         endpoint: `subscribedBroadcasts/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => handleUserSubscribedBroadcasts(res, (mySubscriptions) => {
+        callback: (res) => {
+          if (!res) return
+
+          let castIDBuffer = Object.keys(res)
+          let mySubscriptions = []
+
+          // Loop through castIDs pushing them to this.MeFeed.myBroadcasts array
+          // and setting up Firebase bindings for each individual broadcast
+          for (var i = 0; i < castIDBuffer.length; i++) {
+            let castID = castIDBuffer[i]
+
+            // Push castID to myBroadcasts array
+            mySubscriptions.push(castID)
+
+            // Add Firebase binding
+            this.addBroadcastListener(castID, updateViaRedux)
+          }
+
+          // Sort broadcasts from newest to oldest
+          mySubscriptions = _.sortBy(mySubscriptions, [function(castID) { return res[castID].createdAt }]).reverse()
+
+          // Update meFeed via redux triggering re-render
           if (!this.meFeed) this.meFeed = {}
           this.meFeed["My Subscriptions"] = mySubscriptions
           updateViaRedux({meFeed: this.meFeed})
-        })
+
+          // Reactivate Firebase listeners
+          for (var i in this.broadcastListeners) {
+            Firebase.listenTo(this.broadcastListeners[i])
+          }
+        }
       },
+      // {
+      //   endpoint: `subscribedBroadcasts/${this.uid}`,
+      //   eventType: 'value',
+      //   listener: null,
+      //   callback: (res) => handleUserSubscribedBroadcasts(res, (mySubscriptions) => {
+      //     if (!this.meFeed) this.meFeed = {}
+      //     this.meFeed["My Subscriptions"] = mySubscriptions
+      //     updateViaRedux({meFeed: this.meFeed})
+      //   })
+      // },
       {
         endpoint: `userWallets/${this.uid}`,
         eventType: 'value',
