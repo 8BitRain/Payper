@@ -41,9 +41,19 @@ const styles = StyleSheet.create({
 class CastCard extends React.Component {
   constructor(props) {
     super(props)
+
+    console.log("--> Constructing CastCard with props", props)
+
     this.timestamp = formatBroadcastTimestamp(props.broadcast.createdAt)
     this.spotsFilled = (!props.broadcast.members) ? 0 : props.broadcast.members.split(",").length
     this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("--> CastCard will receive props", nextProps)
+    
+    this.spotsFilled = (!nextProps.broadcast.members) ? 0 : nextProps.broadcast.members.split(",").length
+    this.spotsAvailable = nextProps.broadcast.memberLimit - this.spotsFilled
   }
 
   render() {

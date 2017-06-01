@@ -65,6 +65,7 @@ class Main extends React.Component {
     this.props.currentUser.startListeningToFirebase((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.initializeTags((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.updateLocation()
+
     getDecryptedUserData({token: this.props.currentUser.token}, (res) => {
       this.props.updateCurrentUser({decryptedEmail: res.email, decryptedPhone: res.phone})
     })
