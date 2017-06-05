@@ -25,8 +25,6 @@ class UnjoinedBroadcastView extends React.Component {
   constructor(props) {
     super(props)
 
-    console.log("--> UnjoinedBroadcastView was constructed with props", props)
-
     this.state = {
       loading: false,
       onSubscribeModalVisible: false,

@@ -133,7 +133,6 @@ class AdminBroadcastView extends React.Component {
   }
 
   resumeRenewal() {
-
     // Optimistically re-render
     this.props.broadcast.renewal = true
     Actions.refresh()
@@ -155,7 +154,6 @@ class AdminBroadcastView extends React.Component {
       token: this.props.currentUser.token,
       castID: this.props.broadcast.castID
     })
-
   }
 
   delete() {

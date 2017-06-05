@@ -120,6 +120,7 @@ export default class User {
         Firebase.get(`usersPublicInfo/${res.casterID}`, (casterData) => {
           casterData.initials = casterData.firstName.charAt(0).concat(casterData.lastName.charAt(0))
           casterData.uid = res.casterID
+          res.castID = castID
           res.caster = casterData
           this.broadcastData[castID] = res
           updateViaRedux({broadcastData: this.broadcastData})
@@ -277,16 +278,6 @@ export default class User {
           }
         }
       },
-      // {
-      //   endpoint: `subscribedBroadcasts/${this.uid}`,
-      //   eventType: 'value',
-      //   listener: null,
-      //   callback: (res) => handleUserSubscribedBroadcasts(res, (mySubscriptions) => {
-      //     if (!this.meFeed) this.meFeed = {}
-      //     this.meFeed["My Subscriptions"] = mySubscriptions
-      //     updateViaRedux({meFeed: this.meFeed})
-      //   })
-      // },
       {
         endpoint: `userWallets/${this.uid}`,
         eventType: 'value',

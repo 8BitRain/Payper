@@ -194,6 +194,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
 
     let currPage = this.pages[this.state.index]
     let inputIsValid = currPage.validateInput(this.state.substates[currPage.title])
+    
     if (!inputIsValid) {
       Alert.alert('Invalid Input', currPage.invalidInputMessage)
       return
