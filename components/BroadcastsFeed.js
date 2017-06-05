@@ -29,7 +29,6 @@ class BroadcastsFeed extends React.Component {
           showPullToRefresh={true}
           shouldAnimateIn={false}
           data={this.props.currentUser.broadcastFeedIDs || []}
-          afterRemove={() => alert("Removed!")}
           renderRow={(rowData, sectionID, rowID) => {
             // Return empty view if data needed to render CastCard isn't
             // defined yet

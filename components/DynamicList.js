@@ -1,11 +1,3 @@
-/**
-
-  TODO
-  -----------------------------------------------------------------------------
-  1) Add sectionless data source support
-
-**/
-
 import React from 'react'
 import * as _ from 'lodash'
 import {
@@ -126,16 +118,35 @@ class DynamicList extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     let updatedState = {}
+    let shouldRefresh = false
+    let currentDataSource = this.state.dataSource._dataBlob
+    let nextDataSource = nextProps.data
 
-    //   Auto update list (without pull to refresh)
-    //   Occurs in a refreshable list if the list is empty
-    //   Always occurs on a nonrefreshable list
-    if (!this.props.refreshable || this.state.dataSource.getRowCount() === 0)
+    // If there are any additions or removals to data arrays, set shouldRefresh
+    // to true
+    for (var k in currentDataSource) {
+      if (!nextDataSource[k] || shouldRefresh) continue
+      let diff = _.difference(nextDataSource[k], currentDataSource[k])
+      if (diff.length > 0) shouldRefresh = true
+    }
+
+    // If list is refreshable:
+    //   - If list is empty, update current dataSource without prompting
+    //   - Otherwise, update refreshContent prompting for refresh, and re-create
+    //     current dataSource to trigger re-render of internal row data
+    if (this.props.refreshable) {
+      if (this.state.dataSource.getRowCount() === 0) {
+        updatedState.dataSource = this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
+      } else {
+        if (shouldRefresh) updatedState.refreshContent = this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
+        updatedState.dataSource = this.emptyDataSource.cloneWithRowsAndSections(this.state.dataSource._dataBlob)
+      }
+    }
+
+    // If list isn't refreshable, update current data source with nextProps.data
+    else {
       updatedState.dataSource = this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
-
-    // Wait to update list until user pulls to refresh
-    else if (nextProps.data !== this.props.data)
-      updatedState.refreshContent = this.emptyDataSource.cloneWithRowsAndSections(nextProps.data)
+    }
 
     this.setState(updatedState)
   }
