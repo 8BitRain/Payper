@@ -67,6 +67,7 @@ class Main extends React.Component {
     this.props.currentUser.updateLocation()
 
     getDecryptedUserData({token: this.props.currentUser.token}, (res) => {
+      if (!res) return
       this.props.updateCurrentUser({decryptedEmail: res.email, decryptedPhone: res.phone})
     })
   }

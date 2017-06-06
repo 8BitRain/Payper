@@ -2,6 +2,7 @@ import config from '../../config'
 const baseURL = config[config.env].lambdaBaseURL
 
 function getDecryptedUserData(params, cb) {
+  console.log("--> Hitting 'users/decrypt' with params:", params)
   try {
     fetch(baseURL + "users/decrypt", {
       method: "POST",
@@ -9,16 +10,18 @@ function getDecryptedUserData(params, cb) {
     })
     .then((response) => response.json())
     .then((responseData) => {
-      if (responseData.errorMessage) {
-        console.log(`Error from ${users/decrypt} endpoint:`, responseData.errorMessage)
-        cb(null)
-      } else {
-        cb(responseData)
-      }
+      console.log("users/decrypt response:", responseData)
+      if (typeof cb === 'function') cb(responseData)
     })
-    .catch((err) => {console.log(err); cb(null)})
+    .catch((err) => {
+      console.log(err)
+      if (typeof cb === 'function') cb(null)
+    })
     .done()
-  } catch (err) {console.log(err); cb(null)}
+  } catch (err) {
+    console.log("Error decrypting user:", err)
+    if (typeof cb === 'function') cb(null)
+  }
 }
 
 module.exports = getDecryptedUserData

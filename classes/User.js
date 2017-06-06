@@ -168,7 +168,10 @@ export default class User {
         eventType: 'value',
         listener: null,
         callback: (res) => {
-          if (!res) return
+          if (!res) {
+            updateViaRedux({broadcastFeedIDs: []})
+            return
+          }
 
           let castIDBuffer = Object.keys(res)
           let broadcastFeedIDs = {"Global": [], "Local": [], "Friends of Friends": [], "Friends": []}
@@ -211,7 +214,12 @@ export default class User {
         eventType: 'value',
         listener: null,
         callback: (res) => {
-          if (!res) return
+          if (!res) {
+            if (!this.meFeed) this.meFeed = {}
+            this.meFeed["My Broadcasts"] = []
+            updateViaRedux({meFeed: this.meFeed})
+            return
+          }
 
           let castIDBuffer = Object.keys(res)
           let myBroadcasts = []
@@ -247,7 +255,12 @@ export default class User {
         eventType: 'value',
         listener: null,
         callback: (res) => {
-          if (!res) return
+          if (!res) {
+            if (!this.meFeed) this.meFeed = {}
+            this.meFeed["My Subscriptions"] = []
+            updateViaRedux({meFeed: this.meFeed})
+            return
+          }
 
           let castIDBuffer = Object.keys(res)
           let mySubscriptions = []
