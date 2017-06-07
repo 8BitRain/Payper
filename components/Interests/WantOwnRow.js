@@ -65,9 +65,9 @@ class WantOwnRow extends React.Component {
   }
 
   getIcon() {
+    let icon
     let logo = getLogo(this.props.data.tag)
 
-    let icon
     switch (this.props.data.category) {
       case "Books": icon = <Ionicons name={"ios-book-outline"} size={26} />; break;
       case "Education": icon = <Ionicons name={"ios-school-outline"} size={26} />; break;
@@ -134,32 +134,33 @@ class WantOwnRow extends React.Component {
 
         { /* Want and own buttons */ }
         <View style={{flex: 0.3, flexDirection: 'row', justifyContent: (this.props.onWant && this.props.onOwn) ? 'center' : 'flex-end', alignItems: 'center'}}>
-
-        {(this.props.onWant)
-          ? <TouchableHighlight
-              activeOpacity={0.75}
-              underlayColor={'transparent'}
-              onPress={() => {
-                if (this.state.animating) return
-                if (this.state.owns) this.toggle("owns")
-                this.toggle("wants")
-              }}>
-              <View style={styles.buttonWrap}>
-                <Text style={[styles.buttonText, {color: colors.gradientGreen}]}>{"Want"}</Text>
-                <Animated.View style={[this.AV.wants, styles.buttonBackground]}>
-                  <Text style={[styles.buttonText, {color: colors.snowWhite}]}>{"Want"}</Text>
-                </Animated.View>
-              </View>
-            </TouchableHighlight>
-          : null}
-
-
+          {(this.props.onWant)
+            ? <TouchableHighlight
+                activeOpacity={0.75}
+                underlayColor={'transparent'}
+                onPress={() => {
+                  let canToggleWant = (this.props.canToggleWant) ? this.props.canToggleWant() : true
+                  if (!canToggleWant) return
+                  if (this.state.animating ) return
+                  if (this.state.owns) this.toggle("owns")
+                  this.toggle("wants")
+                }}>
+                <View style={styles.buttonWrap}>
+                  <Text style={[styles.buttonText, {color: colors.gradientGreen}]}>{"Want"}</Text>
+                  <Animated.View style={[this.AV.wants, styles.buttonBackground]}>
+                    <Text style={[styles.buttonText, {color: colors.snowWhite}]}>{"Want"}</Text>
+                  </Animated.View>
+                </View>
+              </TouchableHighlight>
+            : null}
 
           {(this.props.onOwn)
             ? <TouchableHighlight
                 activeOpacity={0.75}
                 underlayColor={'transparent'}
                 onPress={() => {
+                  let canToggleOwn = (this.props.canToggleOwn) ? this.props.canToggleOwn() : true
+                  if (!canToggleOwn) return
                   if (this.state.animating) return
                   if (this.state.wants) this.toggle("wants")
                   this.toggle("owns")
@@ -172,9 +173,7 @@ class WantOwnRow extends React.Component {
                 </View>
               </TouchableHighlight>
             : null}
-
         </View>
-
       </View>
     )
   }

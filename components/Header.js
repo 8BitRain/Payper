@@ -29,12 +29,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: dims.width
   },
-  // sideMenuButtonWrap: {
-  //   paddingTop: 5,
-  //   paddingLeft: 8,
-  //   paddingRight: 50,
-  //   paddingBottom: 0
-  // },
   sideMenuButtonWrap: {
     padding: 8,
     paddingTop: 5
@@ -130,20 +124,17 @@ class Header extends React.Component {
                 <EvilIcons name={"chevron-right"} size={42} color={colors.snowWhite} />
               </TouchableHighlight>
             : null}
-        </View>
 
-        { /* Skip button */
-          this.props.showSkip
-          ? <View style={{position: 'absolute', top: 0, right: 0, left: 0, bottom: 5, justifyContent: 'flex-end', alignItems: 'flex-end'}}>
-              <TouchableHighlight
+          {this.props.showSkipButton
+            ? <TouchableHighlight
                 activeOpacity={0.75}
                 underlayColor={'transparent'}
                 onPress={this.props.onSkip || null}
                 style={styles.skipWrap}>
                 <Text style={{fontSize: 16, color: colors.snowWhite}}>{"Skip"}</Text>
               </TouchableHighlight>
-            </View>
-          : null}
+            : null}
+        </View>
 
         {this.props.showTabBar
           ? <TabBar {...this.props} />
