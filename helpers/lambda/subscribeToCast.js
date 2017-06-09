@@ -12,15 +12,15 @@ function subscribeToCast(params, cb) {
     .then((responseData) => {
       console.log("casts/subscribe response:", responseData)
       if (responseData.decryptedSecret) cb({decryptedSecret: responseData.decryptedSecret})
-      else cb({errorMessage: true})
+      else cb({errorMessage: "no secret"})
     })
     .catch((err) => {
-      console.log(err)
+      console.log("--> Error subscribing to cast:", err)
       if (typeof cb === 'function') cb({errorMessage: true})
     })
     .done()
   } catch (err) {
-    console.log("Error subscribing to cast:", err)
+    console.log("--> Error subscribing to cast:", err)
     if (typeof cb === 'function') cb({errorMessage: "Couldn't hit backend."})
   }
 }

@@ -147,8 +147,8 @@ class BroadcastOnboardingFlowRoot extends React.Component {
         }
       },
       {
-        title: "Details of Agreement",
-        invalidInputMessage: "Your cast's Details of Agreement must be between 1 and 140 characters.",
+        title: "Terms of Agreement",
+        invalidInputMessage: "You must enter both terms and hidden terms of agreement.",
         reactComponent: <Terms induceState={this.induceState.bind(this)} />,
         validateInput: (substate) => {
           if (!substate) return false
@@ -194,7 +194,7 @@ class BroadcastOnboardingFlowRoot extends React.Component {
 
     let currPage = this.pages[this.state.index]
     let inputIsValid = currPage.validateInput(this.state.substates[currPage.title])
-    
+
     if (!inputIsValid) {
       Alert.alert('Invalid Input', currPage.invalidInputMessage)
       return

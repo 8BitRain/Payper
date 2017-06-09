@@ -67,8 +67,6 @@ class OwnsOnboarding extends React.Component {
                   wants={(this.props.currentUser.wants) ? this.props.currentUser.wants[rowData.title] : false}
                   owns={(this.props.currentUser.owns) ? this.props.currentUser.owns[rowData.title] : false}
                   canToggleOwn={() => {
-                    console.log("--> canToggleOwn was invoked with rowData:", rowData)
-                    
                     if (true === this.props.wants[rowData.title]) {
                       let title = "Oops..."
                       let msg = `You've already specified that you want ${rowData.title}.`
@@ -89,7 +87,6 @@ class OwnsOnboarding extends React.Component {
         <View style={{alignItems: 'center', width: dims.width, paddingTop: 22.5, paddingBottom: 22.5, borderTopWidth: 1, borderColor: colors.medGrey}}>
           <ContinueButton onPress={this.submit} />
         </View>
-
       </View>
     )
   }

@@ -105,7 +105,6 @@ class UnjoinedBroadcastView extends React.Component {
           delete userFeed[this.props.broadcast.castID]
           Firebase.set(`userFeed/${this.props.currentUser.uid}`, userFeed)
         })
-
       }
     })
   }
