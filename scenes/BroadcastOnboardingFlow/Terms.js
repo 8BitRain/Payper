@@ -27,7 +27,7 @@ class Terms extends React.Component {
     }
 
     this.state = props.state || {
-      doaInput: "",
+      termsInput: "",
       hiddenTermsInput: "",
       termsInputIsValid: false,
       hiddenTermsInputIsValid: false,
@@ -90,13 +90,13 @@ class Terms extends React.Component {
         <Animated.View style={this.AV.termsWrap}>
           <TextArea
             validateInput={this.validateTermsInput}
-            onChangeText={(input) => this.setState({doaInput: input}, () => this.props.induceState(this.state, this.props.title))}
+            onChangeText={(input) => this.setState({termsInput: input}, () => this.props.induceState(this.state, this.props.title))}
             inputIsValid={this.state.termsInputIsValid}
             textInputProps={{
               multiline: true,
               autoCorrect: false,
               autoFocus: false,
-              defaultValue: this.state.doaInput,
+              defaultValue: this.state.termsInput,
               placeholder: "Users must agree to your Terms of Agreement before subscribing.",
               placeholderTextColor: colors.slateGrey,
               onFocus: () => this.hide("hiddenTerms"),
