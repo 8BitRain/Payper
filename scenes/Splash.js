@@ -31,6 +31,10 @@ class Splash extends React.Component {
   componentWillMount() {
     FBLoginManager.logOut()
     this.onConnect()
+    codePush.sync({
+      deploymentKey: config[config.env].codePushKey,
+      installMode: codePush.InstallMode.IMMEDIATE
+    })
   }
 
   onConnect() {
@@ -47,7 +51,7 @@ class Splash extends React.Component {
             Actions.Lander({type: 'replace'})
             return
           }
-          
+
           login({
             mode: "cache",
             cachedUser: JSON.parse(cachedUser),

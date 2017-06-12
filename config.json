@@ -12,7 +12,7 @@
     }
   },
   "prod": {
-    "codePushKey": "AIzaSyDXhfkB6gaKnhhRQafbKdn619JWzyepDkw",
+    "codePushKey": "K_ZdLkFh_YZfn4maYSWLojqlsjD3N1-bdfOMf",
     "lambdaBaseURL": "https://nuv6gmwh84.execute-api.us-east-1.amazonaws.com/prod/",
     "firebaseCredentials": {
       "apiKey": "AIzaSyDXhfkB6gaKnhhRQafbKdn619JWzyepDkw",
