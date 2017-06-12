@@ -51,6 +51,7 @@ class MyProfileModal extends React.Component {
 
   deleteUser() {
     deleteAccountAlert({
+      currentUser: this.props.currentUser,
       onConfirm: () => {
         deleteUser({token: this.props.currentUser.token})
         this.props.currentUser.destroy()

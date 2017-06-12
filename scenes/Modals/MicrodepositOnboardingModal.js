@@ -72,6 +72,7 @@ class MicrodepositOnboardingModal extends React.Component {
     super(props)
     this.logoAspectRatio = 377 / 568
     this.state = {
+      submitting: false,
       submitText: "Next",
       amountOne: "",
       amountTwo: "",
@@ -80,6 +81,10 @@ class MicrodepositOnboardingModal extends React.Component {
   }
 
   handleSubmit() {
+    if (this.state.submitting) return
+
+    this.setState({submitting: true})
+
     let valid = Number.parseFloat(this.state.amountOne) > 0 && Number.parseFloat(this.state.amountTwo) > 0
 
     if (valid) {
@@ -92,11 +97,17 @@ class MicrodepositOnboardingModal extends React.Component {
       this.setState({submitText: "Verifying..."})
 
       verifyMicrodeposits(params, (success) => {
-        this.setState({ submitText: (success) ? "Verified!" : "We couldn't verify those amounts. Is there a typo?" })
+        this.setState({
+          submitText: (success) ? "Verified!" : "We couldn't verify those amounts. Is there a typo?",
+          submitting: false
+        })
         if (success) setTimeout(() => this.props.toggleModal(), 750)
       })
     } else {
-      this.setState({ submitText: "Enter two valid amounts" })
+      this.setState({
+        submitText: "Enter two valid amounts",
+        submitting: false
+      })
     }
   }
 

@@ -8,6 +8,7 @@ import {removeFromCastAlert} from '../../../helpers/alerts'
 import {formatBroadcastTimestamp, formatFrequency, callbackForLoop, getRenewalDateAndDateJoined} from '../../../helpers/utils'
 import {Firebase} from '../../../helpers'
 import {deleteCastAlert} from '../../../helpers/alerts'
+import {share} from '../../../helpers/broadcasts'
 import {deleteCast, kickFromCast, stopRenewal, resumeRenewal, updateSecret} from '../../../helpers/lambda'
 import {ProfilePic} from '../../'
 import {SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret, Member} from '../'
@@ -99,6 +100,7 @@ class AdminBroadcastView extends React.Component {
   showActionSheet() {
     let options = ['New Secret', 'Delete', 'Cancel']
     let callbacks = {
+      'Share': () => share(),
       'Stop Renewal': () => this.stopRenewal(),
       'New Secret': () => this.setState({secretInputModalVisible: true}),
       'Resume Renewal': () => this.resumeRenewal(),
@@ -108,6 +110,7 @@ class AdminBroadcastView extends React.Component {
 
     // Add conditional options
     if (this.props.broadcast.members) options.unshift((this.props.broadcast.renewal) ? 'Stop Renewal' : 'Resume Renewal')
+    options.unshift('Share')
 
     // TODO: Implement cross-plaftorm action sheet module
     ActionSheetIOS.showActionSheetWithOptions({
@@ -130,7 +133,6 @@ class AdminBroadcastView extends React.Component {
   }
 
   resumeRenewal() {
-
     // Optimistically re-render
     this.props.broadcast.renewal = true
     Actions.refresh()
@@ -152,7 +154,6 @@ class AdminBroadcastView extends React.Component {
       token: this.props.currentUser.token,
       castID: this.props.broadcast.castID
     })
-
   }
 
   delete() {

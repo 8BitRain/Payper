@@ -65,7 +65,9 @@ class Main extends React.Component {
     this.props.currentUser.startListeningToFirebase((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.initializeTags((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.updateLocation()
+
     getDecryptedUserData({token: this.props.currentUser.token}, (res) => {
+      if (!res) return
       this.props.updateCurrentUser({decryptedEmail: res.email, decryptedPhone: res.phone})
     })
   }
@@ -121,7 +123,8 @@ class Main extends React.Component {
           style={styles.newBroadcastButtonWrap}
           onPress={() => {
             let {onboardingProgress} = this.props.currentUser.appFlags
-            let needsBank = onboardingProgress === "need-bank" || onboardingProgress.indexOf("microdeposits") >= 0
+            let needsBank = onboardingProgress === "need-bank"
+            let needsMicrodeposits = onboardingProgress.indexOf("microdeposits") >= 0
             let needsVerification = onboardingProgress === "need-kyc"
             let needsVerificationDocument = onboardingProgress === "kyc-documentNeeded"
             let verificationIsPending = onboardingProgress !== "kyc-success" && onboardingProgress.indexOf("kyc-document") >= 0
@@ -136,6 +139,38 @@ class Main extends React.Component {
                 {text: 'Cancel', style: 'cancel'},
                 {text: 'Add Bank', onPress: Actions.BankAccounts}
               )
+            } else if (needsMicrodeposits) {
+              if ("microdeposits-initialized" === onboardingProgress) {
+                title = "Bank Verification Needed"
+                msg = "We'll notify you when your microdeposits have arrived and are ready for verification."
+              }
+
+              if ("microdeposits-deposited" === onboardingProgress) {
+                title = "Bank Verification Needed"
+                msg = "We made to small deposits to your bank account, verify them to create a broadcast."
+                options.push(
+                  {
+                    text: 'Cancel',
+                    style: 'cancel'
+                  },
+                  {
+                    text: 'Verify Microdeposits',
+                    onPress: () => Actions.MicrodepositOnboarding({
+                      toggleModal: Actions.pop,
+                      currentUser: this.props.currentUser
+                    })
+                  }
+                )
+              }
+
+              if ("microdeposits-failed" === onboardingProgress) {
+                title = `Bank Verification Needed`
+                msg = `We couldn't send microdeposits with the bank information provided. Please try again.`
+                options.push(
+                  {text: 'Cancel', style: 'cancel'},
+                  {text: 'Add Bank', onPress: Actions.BankAccounts}
+                )
+              }
             } else if (needsVerification) {
               title = `Account Verification Needed`
               msg = `You must verify your account before you can create a broadcast.`

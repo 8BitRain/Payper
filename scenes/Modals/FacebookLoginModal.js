@@ -152,9 +152,15 @@ class FacebookLoginModal extends React.Component {
     }
 
     function onFailure(err) {
-      Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
-      FBLoginManager.logOut()
-      Actions.pop()
+      if ("dupe-phone" === err.errorMessage) {
+        Alert.alert('Duplicate Phone', 'An account with this phone number already exists.')
+      } else if ("dupe-email" === err.errorMessage) {
+        Alert.alert('Duplicate Email', 'An account with this email address already exists.')
+      } else {
+        Alert.alert('Sorry...', 'Something went wrong. Please try again later.')
+        FBLoginManager.logOut()
+        Actions.pop()
+      }
     }
   }
 

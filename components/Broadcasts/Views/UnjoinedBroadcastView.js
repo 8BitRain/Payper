@@ -1,9 +1,10 @@
 import React from 'react'
-import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, Modal, Alert} from 'react-native'
+import {View, TouchableHighlight, StyleSheet, Text, ScrollView, Dimensions, Modal, Alert, ActionSheetIOS} from 'react-native'
 import {colors} from '../../../globalStyles'
 import {formatBroadcastTimestamp, formatFrequency} from '../../../helpers/utils'
 import {subscribeAlert} from '../../../helpers/alerts'
 import {subscribeToCast} from '../../../helpers/lambda'
+import {share} from '../../../helpers/broadcasts'
 import {Firebase} from '../../../helpers'
 import {ProfilePic} from '../../'
 import {SubscribeButton, SpotsAvailable, DetailsOfAgreement, Secret} from '../'
@@ -24,8 +25,6 @@ class UnjoinedBroadcastView extends React.Component {
   constructor(props) {
     super(props)
 
-    console.log("--> UnjoinedBroadcastView was constructed with props", props)
-
     this.state = {
       loading: false,
       onSubscribeModalVisible: false,
@@ -38,6 +37,20 @@ class UnjoinedBroadcastView extends React.Component {
     this.spotsAvailable = props.broadcast.memberLimit - this.spotsFilled
 
     this.onSubscribe = this.onSubscribe.bind(this)
+  }
+
+  showActionSheet() {
+    let options = ['Share', 'Cancel']
+    let callbacks = {
+      'Share': () => share(),
+      'Cancel': () => null
+    }
+
+    // TODO: Implement cross-plaftorm action sheet module
+    ActionSheetIOS.showActionSheetWithOptions({
+      options,
+      cancelButtonIndex: options.indexOf('Cancel')
+    }, (i) => callbacks[options[i]]())
   }
 
   onSubscribe() {
@@ -92,7 +105,6 @@ class UnjoinedBroadcastView extends React.Component {
           delete userFeed[this.props.broadcast.castID]
           Firebase.set(`userFeed/${this.props.currentUser.uid}`, userFeed)
         })
-
       }
     })
   }
@@ -105,6 +117,8 @@ class UnjoinedBroadcastView extends React.Component {
         <Header
           showTitle
           showBackButton
+          showDots
+          onDotsPress={this.showActionSheet}
           title={this.props.broadcast.title} />
 
         <ScrollView>

@@ -27,17 +27,27 @@ class Terms extends React.Component {
     }
 
     this.state = props.state || {
-      doaInput: "",
+      termsInput: "",
       hiddenTermsInput: "",
+      termsInputIsValid: false,
+      hiddenTermsInputIsValid: false,
       inputIsValid: false
     }
 
-    this.validateInput = this.validateInput.bind(this)
+    this.validateTermsInput = this.validateTermsInput.bind(this)
+    this.validateHiddenTermsInput = this.validateHiddenTermsInput.bind(this)
   }
 
-  validateInput(input) {
-    let inputIsValid = input.length > 0 && input.length < 141
-    this.setState({inputIsValid})
+  validateTermsInput(input) {
+    let termsInputIsValid = input.length > 0 && input.length < 141
+    let inputIsValid = termsInputIsValid && this.state.hiddenTermsInputIsValid
+    this.setState({termsInputIsValid, inputIsValid})
+  }
+
+  validateHiddenTermsInput(input) {
+    let hiddenTermsInputIsValid = input.length > 0 && input.length < 141
+    let inputIsValid = hiddenTermsInputIsValid && this.state.termsInputIsValid
+    this.setState({hiddenTermsInputIsValid, inputIsValid})
   }
 
   hide(input) {
@@ -79,14 +89,14 @@ class Terms extends React.Component {
       <View style={styles.container}>
         <Animated.View style={this.AV.termsWrap}>
           <TextArea
-            validateInput={this.validateInput}
-            onChangeText={(input) => this.setState({doaInput: input}, () => this.props.induceState(this.state, this.props.title))}
-            inputIsValid={this.state.inputIsValid}
+            validateInput={this.validateTermsInput}
+            onChangeText={(input) => this.setState({termsInput: input}, () => this.props.induceState(this.state, this.props.title))}
+            inputIsValid={this.state.termsInputIsValid}
             textInputProps={{
               multiline: true,
               autoCorrect: false,
               autoFocus: false,
-              defaultValue: this.state.doaInput,
+              defaultValue: this.state.termsInput,
               placeholder: "Users must agree to your Terms of Agreement before subscribing.",
               placeholderTextColor: colors.slateGrey,
               onFocus: () => this.hide("hiddenTerms"),
@@ -101,9 +111,9 @@ class Terms extends React.Component {
 
         <Animated.View style={this.AV.hiddenTermsWrap}>
           <TextArea
-            validateInput={this.validateInput}
+            validateInput={this.validateHiddenTermsInput}
             onChangeText={(input) => this.setState({hiddenTermsInput: input}, () => this.props.induceState(this.state, this.props.title))}
-            inputIsValid={this.state.inputIsValid}
+            inputIsValid={this.state.hiddenTermsInputIsValid}
             containerStyles={{borderTopWidth: 1, borderColor: colors.medGrey}}
             textInputProps={{
               multiline: true,

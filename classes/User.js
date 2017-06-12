@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import * as _ from 'lodash'
 import {FBLoginManager} from 'NativeModules'
 import {AppState, GeoLocation} from 'react-native'
 import {Timer} from './'
@@ -20,6 +21,11 @@ export default class User {
     this.matchedUsers = {}
     this.wants = {}
     this.owns = {}
+
+    this.broadcastListeners = {}
+    this.broadcastData = {}
+
+    this.broadcastFeedIDs = []
 
     this.handleAppStateChange = this.handleAppStateChange.bind(this)
   }
@@ -104,6 +110,25 @@ export default class User {
     .catch((err) => console.log("Error getting new token:", err))
   }
 
+  addBroadcastListener(castID, updateViaRedux) {
+    this.broadcastListeners[castID] = {
+      endpoint: `broadcasts/${castID}`,
+      eventType: 'value',
+      listener: null,
+      callback: (res) => {
+        if (!res) return
+        Firebase.get(`usersPublicInfo/${res.casterID}`, (casterData) => {
+          casterData.initials = casterData.firstName.charAt(0).concat(casterData.lastName.charAt(0))
+          casterData.uid = res.casterID
+          res.castID = castID
+          res.caster = casterData
+          this.broadcastData[castID] = res
+          updateViaRedux({broadcastData: this.broadcastData})
+        })
+      }
+    }
+  }
+
   startListeningToFirebase(updateViaRedux) {
     this.endpoints = [
       {
@@ -142,29 +167,129 @@ export default class User {
         endpoint: `userFeed/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => handleUserFeed(res, (broadcastsFeed) => {
-          updateViaRedux({broadcastsFeed})
-        })
+        callback: (res) => {
+          if (!res) {
+            updateViaRedux({broadcastFeedIDs: []})
+            return
+          }
+
+          let castIDBuffer = Object.keys(res)
+          let broadcastFeedIDs = {"Global": [], "Local": [], "Friends of Friends": [], "Friends": []}
+
+          // Loop through castIDs sorting them into broadcastFeedIDs sections
+          // and setting up Firebase bindings for each individual broadcast
+          for (var i = 0; i < castIDBuffer.length; i++) {
+            let castID = castIDBuffer[i]
+            let {type} = res[castID]
+
+            // Sort castID into appropriate section of broadcastFeedIDs
+            if (type === "world") broadcastFeedIDs["Global"].push(castID)
+            else if (type === "local") broadcastFeedIDs["Local"].push(castID)
+            else if (type === "friendnetwork") broadcastFeedIDs["Friends of Friends"].push(castID)
+            else if (type === "friends") broadcastFeedIDs["Friends"].push(castID)
+
+            // Add Firebase binding
+            this.addBroadcastListener(castID, updateViaRedux)
+          }
+
+          // Sort broadcasts from newest to oldest
+          broadcastFeedIDs = {
+            "Global": _.sortBy(broadcastFeedIDs["Global"], [function(castID) { return res[castID].createdAt}]).reverse(),
+            "Local": _.sortBy(broadcastFeedIDs["Local"], [function(castID) { return res[castID].createdAt}]).reverse(),
+            "Friends of Friends": _.sortBy(broadcastFeedIDs["Friends of Friends"], [function(castID) { return res[castID].createdAt}]).reverse(),
+            "Friends": _.sortBy(broadcastFeedIDs["Friends"], [function(castID) { return res[castID].createdAt}]).reverse()
+          }
+
+          // Update broadcastFeedIDs via redux triggering re-render
+          updateViaRedux({broadcastFeedIDs})
+
+          // Reactivate Firebase listeners
+          for (var i in this.broadcastListeners) {
+            Firebase.listenTo(this.broadcastListeners[i])
+          }
+        }
       },
       {
         endpoint: `userBroadcasts/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => handleUserBroadcasts(res, (myBroadcasts) => {
+        callback: (res) => {
+          if (!res) {
+            if (!this.meFeed) this.meFeed = {}
+            this.meFeed["My Broadcasts"] = []
+            updateViaRedux({meFeed: this.meFeed})
+            return
+          }
+
+          let castIDBuffer = Object.keys(res)
+          let myBroadcasts = []
+
+          // Loop through castIDs pushing them to this.MeFeed.myBroadcasts array
+          // and setting up Firebase bindings for each individual broadcast
+          for (var i = 0; i < castIDBuffer.length; i++) {
+            let castID = castIDBuffer[i]
+
+            // Push castID to myBroadcasts array
+            myBroadcasts.push(castID)
+
+            // Add Firebase binding
+            this.addBroadcastListener(castID, updateViaRedux)
+          }
+
+          // Sort broadcasts from newest to oldest
+          myBroadcasts = _.sortBy(myBroadcasts, [function(castID) { return res[castID].createdAt }]).reverse()
+
+          // Update meFeed via redux triggering re-render
           if (!this.meFeed) this.meFeed = {}
           this.meFeed["My Broadcasts"] = myBroadcasts
           updateViaRedux({meFeed: this.meFeed})
-        })
+
+          // Reactivate Firebase listeners
+          for (var i in this.broadcastListeners) {
+            Firebase.listenTo(this.broadcastListeners[i])
+          }
+        }
       },
       {
         endpoint: `subscribedBroadcasts/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => handleUserSubscribedBroadcasts(res, (mySubscriptions) => {
+        callback: (res) => {
+          if (!res) {
+            if (!this.meFeed) this.meFeed = {}
+            this.meFeed["My Subscriptions"] = []
+            updateViaRedux({meFeed: this.meFeed})
+            return
+          }
+
+          let castIDBuffer = Object.keys(res)
+          let mySubscriptions = []
+
+          // Loop through castIDs pushing them to this.MeFeed.myBroadcasts array
+          // and setting up Firebase bindings for each individual broadcast
+          for (var i = 0; i < castIDBuffer.length; i++) {
+            let castID = castIDBuffer[i]
+
+            // Push castID to myBroadcasts array
+            mySubscriptions.push(castID)
+
+            // Add Firebase binding
+            this.addBroadcastListener(castID, updateViaRedux)
+          }
+
+          // Sort broadcasts from newest to oldest
+          mySubscriptions = _.sortBy(mySubscriptions, [function(castID) { return res[castID].createdAt }]).reverse()
+
+          // Update meFeed via redux triggering re-render
           if (!this.meFeed) this.meFeed = {}
           this.meFeed["My Subscriptions"] = mySubscriptions
           updateViaRedux({meFeed: this.meFeed})
-        })
+
+          // Reactivate Firebase listeners
+          for (var i in this.broadcastListeners) {
+            Firebase.listenTo(this.broadcastListeners[i])
+          }
+        }
       },
       {
         endpoint: `userWallets/${this.uid}`,

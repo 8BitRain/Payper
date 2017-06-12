@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, TouchableHighlight, StyleSheet, Dimensions} from 'react-native'
+import {View, Text, TouchableHighlight, StyleSheet, Dimensions, Alert} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import {formatUpdateUserTagsParams} from '../helpers/utils'
 import {updateUserTags} from '../helpers/lambda'
@@ -28,6 +28,8 @@ class OwnsOnboarding extends React.Component {
   }
 
   onOwn(service) {
+    if (true === this.props.wants[service.title]) return
+
     if (!this.state.owns[service.title]) this.state.owns[service.title] = true
     else this.state.owns[service.title] = !this.state.owns[service.title]
     this.setState(this.state)
@@ -37,7 +39,7 @@ class OwnsOnboarding extends React.Component {
     let {skip} = params || {}
     let userTags = formatUpdateUserTagsParams({wants: this.props.wants, owns: (skip) ? "" : this.state.owns})
     updateUserTags({want: userTags.wantString, own: userTags.ownString, token: this.props.currentUser.token})
-    Actions.Main({type: 'replace'})
+    Actions.Main({type: 'reset'})
   }
 
   render() {
@@ -45,7 +47,7 @@ class OwnsOnboarding extends React.Component {
       <View style={styles.container}>
 
         { /* Header */ }
-        <Header showTitle showSkip title={"Select Owns"} onSkip={() => this.submit({skip: true})} />
+        <Header showTitle showSkipButton showBackButton title={"Select Owns"} onSkip={() => this.submit({skip: true})} onBack={() => Actions.pop()} />
 
         { /* WantOwnRow list */ }
         <DynamicList
@@ -63,7 +65,17 @@ class OwnsOnboarding extends React.Component {
                   onWant={this.onWant}
                   onOwn={this.onOwn}
                   wants={(this.props.currentUser.wants) ? this.props.currentUser.wants[rowData.title] : false}
-                  owns={(this.props.currentUser.owns) ? this.props.currentUser.owns[rowData.title] : false} />
+                  owns={(this.props.currentUser.owns) ? this.props.currentUser.owns[rowData.title] : false}
+                  canToggleOwn={() => {
+                    if (true === this.props.wants[rowData.title]) {
+                      let title = "Oops..."
+                      let msg = `You've already specified that you want ${rowData.title}.`
+                      Alert.alert(title, msg)
+                      return false
+                    }
+
+                    return true
+                  }} />
               </View>
             )
           }}
@@ -75,7 +87,6 @@ class OwnsOnboarding extends React.Component {
         <View style={{alignItems: 'center', width: dims.width, paddingTop: 22.5, paddingBottom: 22.5, borderTopWidth: 1, borderColor: colors.medGrey}}>
           <ContinueButton onPress={this.submit} />
         </View>
-
       </View>
     )
   }

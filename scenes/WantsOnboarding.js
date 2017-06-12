@@ -37,7 +37,7 @@ class WantsOnboarding extends React.Component {
     let numSelected = 0
     for (var k in this.state.wants) if (true === this.state.wants[k]) numSelected++
     if (numSelected < 3) alert("Select three or more interests.")
-    else Actions.OwnsOnboarding({type: 'replace', wants: this.state.wants})
+    else Actions.OwnsOnboarding({wants: this.state.wants})
   }
 
   render() {

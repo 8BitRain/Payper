@@ -76,7 +76,7 @@ class SideMenu extends React.Component {
             if (Platform.OS === 'ios') {
               ActionSheetIOS.showActionSheetWithOptions({
                 title: `Signed in as ${this.props.currentUser.firstName} ${this.props.currentUser.lastName}`,
-                options: ['Sign out', 'Cancel'],
+                options: ['Sign Out', 'Cancel'],
                 cancelButtonIndex: 1,
                 destructiveButtonIndex: 1
               }, (buttonIndex) => (buttonIndex === 0) ? logout(this.props.currentUser) : null)
