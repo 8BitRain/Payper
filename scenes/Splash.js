@@ -30,7 +30,7 @@ class Splash extends React.Component {
 
   componentWillMount() {
     FBLoginManager.logOut()
-    this.onConnect()
+
     codePush.sync({
       deploymentKey: config[config.env].codePushKey,
       installMode: codePush.InstallMode.IMMEDIATE
@@ -54,35 +54,35 @@ class Splash extends React.Component {
   }
 
   onConnect() {
-      getFromAsyncStorage('hasAccess', (val) => {
-        // NOTE: Beta lander code
-        // User does not have access. Go to InviteOnlyLander
-        // if ("yes" !== val) {
-        //   Actions.InviteOnlyLander()
-        //   return
-        // }
-        getFromAsyncStorage('user', (cachedUser) => {
-          // No user is cached. Go to Lander
-          if (!cachedUser) {
-            Actions.Lander({type: 'replace'})
-            return
-          }
+    getFromAsyncStorage('hasAccess', (val) => {
+      // NOTE: Beta lander code
+      // User does not have access. Go to InviteOnlyLander
+      // if ("yes" !== val) {
+      //   Actions.InviteOnlyLander()
+      //   return
+      // }
+      getFromAsyncStorage('user', (cachedUser) => {
+        // No user is cached. Go to Lander
+        if (!cachedUser) {
+          Actions.Lander({type: 'replace'})
+          return
+        }
 
-          login({
-            mode: "cache",
-            cachedUser: JSON.parse(cachedUser),
-            onSuccess: (response) => {
-              this.props.currentUser.initialize(response)
-              Actions.Main({type: 'replace'})
-            },
-            onFailure: (err) => {
-              console.log("Cache login failed. Error:", err)
-              Actions.Lander({type: 'replace'})
-            }
-          })
+        login({
+          mode: "cache",
+          cachedUser: JSON.parse(cachedUser),
+          onSuccess: (response) => {
+            this.props.currentUser.initialize(response)
+            Actions.Main({type: 'replace'})
+          },
+          onFailure: (err) => {
+            console.log("Cache login failed. Error:", err)
+            Actions.Lander({type: 'replace'})
+          }
         })
       })
-    }
+    })
+  }
 
   render() {
     return (
