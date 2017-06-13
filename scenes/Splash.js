@@ -31,26 +31,30 @@ class Splash extends React.Component {
   componentWillMount() {
     FBLoginManager.logOut()
 
-    codePush.sync({
-      deploymentKey: config[config.env].codePushKey,
-      installMode: codePush.InstallMode.IMMEDIATE
-    }, (status) => {
-      console.log("--> codePush sync status:", status)
+    // codePush.sync({
+    //   deploymentKey: config[config.env].codePushKey,
+    //   installMode: codePush.InstallMode.IMMEDIATE
+    // }, (status) => {
+    //   console.log("--> codePush sync status:", status)
+    //
+    //   // Statuses:
+    //   // -1   UNKNOWN_ERROR
+    //   //  0   CHECKING_FOR_UPDATE
+    //   //  1   AWAITING_USER_ACTION
+    //   //  2   DOWNLOADING_PACKAGE
+    //   //  3   INSTALLING_UPDATE
+    //   //  4   UP_TO_DATE
+    //   //  5   UPDATE_IGNORED
+    //   //  6   UPDATE_INSTALLED
+    //   //  7   SYNC_IN_PROGRESS
+    //   if (status === -1 || status === 4 || status === 5 || status === 6) {
+    //     this.onConnect()
+    //   }
+    // })
 
-      // Statuses:
-      // -1   UNKNOWN_ERROR
-      //  0   CHECKING_FOR_UPDATE
-      //  1   AWAITING_USER_ACTION
-      //  2   DOWNLOADING_PACKAGE
-      //  3   INSTALLING_UPDATE
-      //  4   UP_TO_DATE
-      //  5   UPDATE_IGNORED
-      //  6   UPDATE_INSTALLED
-      //  7   SYNC_IN_PROGRESS
-      if (status === -1 || status === 4 || status === 5 || status === 6) {
-        this.onConnect()
-      }
-    })
+    this.onConnect()
+
+    console.log("CONFIG", config)
   }
 
   onConnect() {
