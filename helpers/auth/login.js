@@ -77,7 +77,7 @@ function login(params) {
             facebookID: facebookUser.facebook_id,
             profilePic: facebookUser.profile_pic,
             token: responseData.stsTokenManager.accessToken,
-            // customerType: "Document",
+            customerType: "Document",
             key: key
           }
 

@@ -113,7 +113,9 @@ class IAVModal extends React.Component {
 
     if (true === success) {
       if (verificationType === "microdeposits") {
-        Actions.MicrodepositTooltip()
+        Actions.MicrodepositTooltip({
+          closeModal: Actions.pop
+        })
       } else {
         let userIsVerified = this.props.currentUser.appFlags.customer_status === "verified"
 
