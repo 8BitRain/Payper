@@ -49,7 +49,6 @@ export default class User {
     // duration measurement
     this.timer = new Timer()
     this.timer.start()
-    AppState.addEventListener('change', this.handleAppStateChange)
   }
 
   initializeTags(updateViaRedux) {
@@ -80,7 +79,11 @@ export default class User {
         this[i] = null
   }
 
-  handleAppStateChange(state) {
+  listenToAppState(updateViaRedux) {
+    AppState.addEventListener('change', (state) => this.handleAppStateChange(state, updateViaRedux))
+  }
+
+  handleAppStateChange(state, updateViaRedux) {
     switch (state) {
       case "inactive": return
       case "background":
@@ -89,7 +92,8 @@ export default class User {
       case "active":
         this.timer = new Timer()
         this.timer.start()
-        if (firebase.auth().currentUser !== null) this.refreshToken()
+        if (firebase.auth().currentUser !== null)
+          this.refreshToken(updateViaRedux)
         break
     }
   }
