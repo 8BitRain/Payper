@@ -50,7 +50,6 @@ class TextArea extends React.Component {
   constructor(props) {
     super(props)
 
-    this.characterLimit = 140
     this.state = {
       input: (props.textInputProps) ? props.textInputProps.defaultValue : ""
     }
@@ -79,8 +78,8 @@ class TextArea extends React.Component {
             : <EvilIcons {...this.props.iconProps} />}
 
           <View style={styles.characterCountWrap}>
-            <Text style={[styles.characterCount, {color: (this.state.input.length > this.characterLimit) ? colors.carminePink : colors.slateGrey}]}>
-              {`${this.state.input.length}/${this.characterLimit}`}
+            <Text style={[styles.characterCount, {color: (this.state.input.length > this.props.characterLimit) ? colors.carminePink : colors.slateGrey}]}>
+              {`${this.state.input.length}/${this.props.characterLimit}`}
             </Text>
           </View>
         </View>

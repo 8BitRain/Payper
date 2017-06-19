@@ -39,13 +39,13 @@ class Terms extends React.Component {
   }
 
   validateTermsInput(input) {
-    let termsInputIsValid = input.length > 0 && input.length < 141
+    let termsInputIsValid = input.length > 0 && input.length < 351
     let inputIsValid = termsInputIsValid && this.state.hiddenTermsInputIsValid
     this.setState({termsInputIsValid, inputIsValid})
   }
 
   validateHiddenTermsInput(input) {
-    let hiddenTermsInputIsValid = input.length > 0 && input.length < 141
+    let hiddenTermsInputIsValid = input.length > 0 && input.length < 351
     let inputIsValid = hiddenTermsInputIsValid && this.state.termsInputIsValid
     this.setState({hiddenTermsInputIsValid, inputIsValid})
   }
@@ -92,6 +92,7 @@ class Terms extends React.Component {
             validateInput={this.validateTermsInput}
             onChangeText={(input) => this.setState({termsInput: input}, () => this.props.induceState(this.state, this.props.title))}
             inputIsValid={this.state.termsInputIsValid}
+            characterLimit={300}
             textInputProps={{
               multiline: true,
               autoCorrect: false,
@@ -114,6 +115,7 @@ class Terms extends React.Component {
             validateInput={this.validateHiddenTermsInput}
             onChangeText={(input) => this.setState({hiddenTermsInput: input}, () => this.props.induceState(this.state, this.props.title))}
             inputIsValid={this.state.hiddenTermsInputIsValid}
+            characterLimit={300}
             containerStyles={{borderTopWidth: 1, borderColor: colors.medGrey}}
             textInputProps={{
               multiline: true,
