@@ -67,7 +67,6 @@ class Main extends React.Component {
     this.props.currentUser.initializeTags((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.updateLocation()
 
-
     getDecryptedUserData({token: this.props.currentUser.token}, (res) => {
       if (!res) return
       this.props.updateCurrentUser({decryptedEmail: res.email, decryptedPhone: res.phone})
@@ -75,6 +74,18 @@ class Main extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    // if (nextProps.wants || nextProps.owns) {
+    //   let updates = {}
+    //
+    //   if (nextProps.wants) updates.wants = nextProps.wants
+    //   if (nextProps.owns) updates.owns = nextProps.owns
+    //
+    //   console.log("\n\n\n\n\n--> updating current user with wants and owns")
+    //   this.props.updateCurrentUser(updates)
+    //
+    //   Actions.refresh({wants: null, owns: null})
+    // }
+
     if (nextProps.newTab && !this.state.changingTab) {
       this.setState({
         changingTab: true,

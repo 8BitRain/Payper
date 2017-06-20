@@ -39,7 +39,9 @@ class OwnsOnboarding extends React.Component {
     let {skip} = params || {}
     let userTags = formatUpdateUserTagsParams({wants: this.props.wants, owns: (skip) ? "" : this.state.owns})
     updateUserTags({want: userTags.wantString, own: userTags.ownString, token: this.props.currentUser.token})
-    Actions.Main({type: 'reset'})
+    console.log("--> OwnsOnboarding.submit() was invoked...")
+    console.log("--> this.props.currentUser", this.props.currentUser)
+    Actions.Main({type: 'reset', wants: this.props.wants, owns: (skip) ? "" : this.state.owns})
   }
 
   render() {

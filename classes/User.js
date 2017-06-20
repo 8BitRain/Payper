@@ -156,7 +156,19 @@ export default class User {
         endpoint: `usersPublicInfo/${this.uid}`,
         eventType: 'value',
         listener: null,
-        callback: (res) => (res) ? updateViaRedux(res) : null
+        callback: (res) => {
+          if (!res || !this.servicesMap) return
+
+          handleWantsAndOwns({
+            wants: res.wantedTags,
+            owns: res.ownedTags,
+            servicesMap: this.servicesMap
+          }, (wants, owns) => {
+            res.wants = wants
+            res.owns = owns
+            updateViaRedux(res)
+          })
+        }
       },
       {
         endpoint: `appFlags/${this.uid}`,

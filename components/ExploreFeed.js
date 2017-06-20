@@ -32,6 +32,21 @@ class ExploreFeed extends React.Component {
 
     this.onWant = this.onWant.bind(this)
     this.onOwn = this.onOwn.bind(this)
+
+    console.log("\n\n\n\n\n\n\nEXPLORE FEED WAS CONSTRUCTED... THIS.STATE =", this.state)
+    console.log("this.props.currentUser", this.props.currentUser)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let newState = {}
+
+    if (nextProps.currentUser.wants !== this.props.currentUser.wants)
+      newState.wants = nextProps.wants
+
+    if (nextProps.currentUser.owns !== this.props.currentUser.owns)
+      newState.owns = nextProps.owns
+
+    this.setState(newState, () => console.log("\n\n\n\n\n\n\nEXPLORE FEED STATE:", this.state))
   }
 
   onWant(service) {
