@@ -32,9 +32,6 @@ class ExploreFeed extends React.Component {
 
     this.onWant = this.onWant.bind(this)
     this.onOwn = this.onOwn.bind(this)
-
-    console.log("\n\n\n\n\n\n\nEXPLORE FEED WAS CONSTRUCTED... THIS.STATE =", this.state)
-    console.log("this.props.currentUser", this.props.currentUser)
   }
 
   componentWillReceiveProps(nextProps) {

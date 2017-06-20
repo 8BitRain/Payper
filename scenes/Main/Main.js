@@ -74,18 +74,6 @@ class Main extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // if (nextProps.wants || nextProps.owns) {
-    //   let updates = {}
-    //
-    //   if (nextProps.wants) updates.wants = nextProps.wants
-    //   if (nextProps.owns) updates.owns = nextProps.owns
-    //
-    //   console.log("\n\n\n\n\n--> updating current user with wants and owns")
-    //   this.props.updateCurrentUser(updates)
-    //
-    //   Actions.refresh({wants: null, owns: null})
-    // }
-
     if (nextProps.newTab && !this.state.changingTab) {
       this.setState({
         changingTab: true,
