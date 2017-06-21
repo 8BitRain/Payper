@@ -201,7 +201,7 @@ export default class User {
             // Sort castID into appropriate section of broadcastFeedIDs
             if (type === "world") broadcastFeedIDs["Global"].push(castID)
             else if (type === "local") broadcastFeedIDs["Local"].push(castID)
-            else if (type === "friendnetwork") broadcastFeedIDs["Friends of Friends"].push(castID)
+            else if (type === "friendNetwork") broadcastFeedIDs["Friends of Friends"].push(castID)
             else if (type === "friends") broadcastFeedIDs["Friends"].push(castID)
 
             // Add Firebase binding
