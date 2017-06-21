@@ -43,7 +43,7 @@ class ExploreFeed extends React.Component {
     if (nextProps.currentUser.owns !== this.props.currentUser.owns)
       newState.owns = nextProps.owns
 
-    this.setState(newState, () => console.log("\n\n\n\n\n\n\nEXPLORE FEED STATE:", this.state))
+    this.setState(newState)
   }
 
   onWant(service) {
