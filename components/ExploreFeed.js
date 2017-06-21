@@ -34,6 +34,18 @@ class ExploreFeed extends React.Component {
     this.onOwn = this.onOwn.bind(this)
   }
 
+  componentWillReceiveProps(nextProps) {
+    let newState = {}
+
+    if (nextProps.currentUser.wants !== this.props.currentUser.wants)
+      newState.wants = nextProps.wants
+
+    if (nextProps.currentUser.owns !== this.props.currentUser.owns)
+      newState.owns = nextProps.owns
+
+    this.setState(newState)
+  }
+
   onWant(service) {
     if (!this.state.wants[service.title]) this.state.wants[service.title] = true
     else this.state.wants[service.title] = !this.state.wants[service.title]

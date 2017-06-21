@@ -4,7 +4,7 @@ import {Actions} from 'react-native-router-flux'
 function subscribe(params) {
   let {broadcast, currentUser, onConfirm} = params
 
-  if (!currentUser.bankReference) {
+  if (!currentUser.bankReference || currentUser.appFlags.onboardingProgress === "need-bank") {
     let title = "Bank Account"
     let msg = "You must add a bank account before you can subscribe to this broadcast."
     let options = [

@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, StyleSheet, TouchableHighlight, Alert} from 'react-native'
+import {View, Text, StyleSheet, TouchableHighlight, Alert, AppState} from 'react-native'
 import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from 'react-native-fcm'
 import {connect} from 'react-redux'
 import {Actions} from 'react-native-router-flux'
@@ -45,6 +45,7 @@ class Main extends React.Component {
     }
 
     this.changeTab = this.changeTab.bind(this)
+    this.handleAppStateChange = this.handleAppStateChange.bind(this)
   }
 
   componentDidMount() {
@@ -62,11 +63,12 @@ class Main extends React.Component {
   }
 
   componentWillMount() {
+    AppState.addEventListener('change', (state) => this.handleAppStateChange(state))
+
     this.props.currentUser.startListeningToFirebase((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.listenToAppState((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.initializeTags((updates) => this.props.updateCurrentUser(updates))
     this.props.currentUser.updateLocation()
-
 
     getDecryptedUserData({token: this.props.currentUser.token}, (res) => {
       if (!res) return
@@ -92,16 +94,26 @@ class Main extends React.Component {
 
     // If switching from active tab, updateTags
     if (this.state.activeTab === "Explore" && this.props.currentUser.wantString || this.props.currentUser.ownString) {
-      updateUserTags({
-        want: this.props.currentUser.wantString,
-        own: this.props.currentUser.ownString,
-        token: this.props.currentUser.token
-      })
-
-      this.props.currentUser.update({wantString: "", ownString: ""})
+      this.updateTags()
     }
 
     this.setState({activeTab: newTab})
+  }
+
+  handleAppStateChange(state) {
+    if ("inactive" === state && this.props.currentUser.wantString || this.props.currentUser.ownString) {
+      this.updateTags()
+    }
+  }
+
+  updateTags() {
+    updateUserTags({
+      want: this.props.currentUser.wantString,
+      own: this.props.currentUser.ownString,
+      token: this.props.currentUser.token
+    })
+
+    this.props.currentUser.update({wantString: "", ownString: ""})
   }
 
   render() {
@@ -129,7 +141,7 @@ class Main extends React.Component {
             let needsMicrodeposits = onboardingProgress.indexOf("microdeposits") >= 0
             let needsVerification = onboardingProgress === "need-kyc"
             let needsVerificationDocument = onboardingProgress === "kyc-documentNeeded"
-            let verificationIsPending = onboardingProgress !== "kyc-success" && onboardingProgress.indexOf("kyc-document") >= 0
+            let verificationIsPending = (onboardingProgress !== "kyc-success" && onboardingProgress.indexOf("kyc-document") >= 0) || onboardingProgress === "kyc-suspended"
             let title = ""
             let msg = ""
             let options = []
