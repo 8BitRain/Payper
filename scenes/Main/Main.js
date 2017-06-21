@@ -141,7 +141,7 @@ class Main extends React.Component {
             let needsMicrodeposits = onboardingProgress.indexOf("microdeposits") >= 0
             let needsVerification = onboardingProgress === "need-kyc"
             let needsVerificationDocument = onboardingProgress === "kyc-documentNeeded"
-            let verificationIsPending = onboardingProgress !== "kyc-success" && onboardingProgress.indexOf("kyc-document") >= 0
+            let verificationIsPending = (onboardingProgress !== "kyc-success" && onboardingProgress.indexOf("kyc-document") >= 0) || onboardingProgress === "kyc-suspended"
             let title = ""
             let msg = ""
             let options = []
