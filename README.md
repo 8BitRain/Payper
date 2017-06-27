@@ -51,3 +51,36 @@ npm run sync-rnrf
 
 Leave a terminal open running this command when running the Example
 app and making react-native-router-flux src changes.
+
+## Getting Started
+Payper's frontend functions using three main technologies: React Native, Redux,
+and Firebase.
+* React Native
+RN's documentation can be found [here](https://facebook.github.io/react-native/docs/getting-started.html).
+
+## Data handling: Redux and Firebase
+Why do we use Redux? Long story short, Redux makes re-renders simple.
+1. [Main](./scenes/Main/Main.js) invokes `startListeningToFirebase` function in [User](./classes/User.js) object.
+2. Firebase listener in [User](./classes/User.js) detects a change in data.
+3. Firebase data is reformatted by a [data handler](./helpers/dataHandlers) if need be.
+4. Data is passed back via callback to [Main](./scenes/Main/Main.js) which is connected to Redux.
+5. `updateCurrentUser` Redux function is invoked from [Main](./scenes/Main/Main.js) component, triggering a re-render of any React components depending on user data.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#
