@@ -66,9 +66,16 @@ Why do we use Redux? Long story short, Redux makes re-renders simple.
 4. Data is passed back via callback to [Main](./scenes/Main/Main.js) which is connected to Redux.
 5. `updateCurrentUser` Redux function is invoked from [Main](./scenes/Main/Main.js) component, triggering a re-render of any React components depending on user data.
 
-
-
-
+## Environment Variables
+In the root of the Payper repository you'll find a [config file](./config.js). We use this file to differentiate between development and production API keys and endpoints, like so:
+```javascript
+import config from 'path/to/config'
+let env = config.env
+let codePushKey = config[env].codePushKey
+let lambdaBaseURL = config[env].lambdaBaseURL
+let firebaseCredentials = config[env].firebaseCredentials
+```
+Firebase auth/database listeners, API calls, and CodePush synchronizations all depend on this config file.
 
 
 
