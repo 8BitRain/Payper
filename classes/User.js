@@ -7,7 +7,7 @@ import {Firebase} from '../helpers'
 import {getMatchedUsers} from '../helpers/utils'
 import {handleUserData, handleUserBroadcasts, handleUserSubscribedBroadcasts, handleUserFeed, handleServices, handleWantsAndOwns, handleDisputes} from '../helpers/dataHandlers'
 import {getFromAsyncStorage, setInAsyncStorage} from '../helpers/asyncStorage'
-import {deleteUser, getBankAccount, updateGeoLocation} from '../helpers/lambda'
+import {deleteUser, getBankAccount, updateGeoLocation, getCustomTokenAndKey} from '../helpers/lambda'
 
 export default class User {
   constructor() {
@@ -109,9 +109,14 @@ export default class User {
   }
 
   refreshToken(updateViaRedux) {
-    firebase.auth().currentUser.getToken(true)
-    .then((token) => (updateViaRedux) ? updateViaRedux({token}) : this.update({token}))
-    .catch((err) => console.log("Error getting new token:", err))
+    getCustomTokenAndKey(this.token, this.key, (res) => {
+      firebase.auth().signInWithCustomToken(res.customToken)
+      .then((response) => response.toJSON())
+      .then((responseData) => {
+        let refreshedToken = responseData.stsTokenManager.accessToken
+        updateViaRedux({token: refreshedToken})
+      })
+    })
   }
 
   addBroadcastListener(castID, updateViaRedux) {

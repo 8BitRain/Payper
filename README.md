@@ -1,21 +1,20 @@
-# ![](./godmode.png) **Payper**
-### Recurring payments made easy.
+# ![](./assets/images/app-icon.jpg)**Payper**
+## Get paid for sharing your subscriptions.
 
-## [To Do (Pending)](TODO-Pending.md) [To Do (Complete)](TODO-Complete.md)
-
-## **Installation**
+## **Install**
 ```
-$  git clone https://github.com/8BitRain/GetCoincast.git
+$  git clone https://github.com/8BitRain/Payper.git
 $  cd ~/path/to/repo
 $  npm install
 $  git push -u origin master
 ```
 
-## **Running**
-```
-$  cd ~/path/to/repo
-$  react-native run-ios
-```
+## **Run**
+1. Open `/Payper/iOS/Coincast.xcworkspace` with Xcode.
+2. Run `npm start` in the Payper root directory
+3. In Xcode, navigate to `Product > Scheme > Edit Scheme` and ensure that the correct `Build Configuration` is selected under the Run/Info tab. The debug configuration will enable logs, the production configuration will not.
+4. In Xcode, run the app (`⌘ + R`). If you run into issues, try cleaning the app then running it (`⌘ + shift + K`).
+* If a non-existent node module error is thrown, run `npm install --save node-module-name`.
 
 ## **Contributing**
 1. Create your branch: `git checkout -b yung-branch`
@@ -27,47 +26,16 @@ $  react-native run-ios
 7. Commit your changes `git commit -am 'Merge with yung-branch'`
 8. Push to master `git push origin master`
 
-## **Troubleshooting**
-* If a non-existent node module error is thrown, run `npm install --save node-module-name`.
-
-## **The Team**
-| Front end            | Back end  | Multi-purpose Gurus|
-|:--------------------:|:---------:|:------------------:|
-| Eric & Brady         | Vash      | Mo & Luke          |
-
-## **Versions**
-* Stay at Node 5.5.0 for now! Things break on 6.2.0
-
-## **Note:**
-Normally, after a code change to react-native-router-flux src files,
-you must remove the node_modules/react-native-router-flux directory
-and npm install.  The react-native packager wont follow symlinks.
-
-To assist development, this command watches and rsyncs changes:
-
-```
-npm run sync-rnrf
-```
-
-Leave a terminal open running this command when running the Example
-app and making react-native-router-flux src changes.
-
-## Getting Started
-Payper's frontend functions using three main technologies: React Native, Redux,
-and Firebase.
-* React Native
-RN's documentation can be found [here](https://facebook.github.io/react-native/docs/getting-started.html).
-
 ## Data handling: Redux and Firebase
 Why do we use Redux? Long story short, Redux makes re-renders simple.
 1. [Main](./scenes/Main/Main.js) invokes `startListeningToFirebase` function in [User](./classes/User.js) object.
 2. Firebase listener in [User](./classes/User.js) detects a change in data.
 3. Firebase data is reformatted by a [data handler](./helpers/dataHandlers) if need be.
-4. Data is passed back via callback to [Main](./scenes/Main/Main.js) which is connected to Redux.
+4. Data is passed via callback to [Main](./scenes/Main/Main.js) which is [connected](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) to Redux.
 5. `updateCurrentUser` Redux function is invoked from [Main](./scenes/Main/Main.js) component, triggering a re-render of any React components depending on user data.
 
 ## Environment Variables
-In the root of the Payper repository you'll find a [config file](./config.js). We use this file to differentiate between development and production API keys and endpoints, like so:
+In the root of the Payper repository you'll find a [config file](./config.json). We use this file to differentiate between development and production API keys and endpoints, like so:
 ```javascript
 import config from 'path/to/config'
 let env = config.env
@@ -76,6 +44,21 @@ let lambdaBaseURL = config[env].lambdaBaseURL
 let firebaseCredentials = config[env].firebaseCredentials
 ```
 Firebase auth/database listeners, API calls, and CodePush synchronizations all depend on this config file.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
