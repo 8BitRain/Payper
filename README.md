@@ -58,20 +58,27 @@ First, deploy the app to TestFlight through Xcode.
 3. Run `Product > Clean` (`⌘ + shift + K`)
 4. Run `Product > Archive`
 5. When the Organizer window pops up your new archive will be selected
-  ...* Click `Upload to App Store`
-  ...* Select `Payper Inc.` as your Development Team and click `Choose`
-  ...* Click `Upload`
+  * Click `Upload to App Store`
+  * Select `Payper Inc.` as your Development Team and click `Choose`
+  * Click `Upload`
 6. Go to [iTunes Connect](https://itunesconnect.apple.com/) and navigate to the `Activity` tab; your build will say `(Processing)` next to it, wait for processing to complete (must refresh browser to see updates) and, when it does, navigate to `TestFlight` tab
 7. There will be a yellow triangle next to your new TestFlight build with the message `Missing Compliance`; click this, click `Provide Export Compliance Information,` select no, then click `Start Internal Testing`
 8. Download the new version from the TestFlight app and make sure everything is working as expected; if there are bugs, fix them and follow steps 1-8 again
 
 Next, submit the TestFlight version for review with Apple.
-
+1. In iTunes Connect, navigate to the `App Store` tab
+2. In the side menu, click `+ VERSION OR PLATFORM`
+3. Enter the version number of our new TestFlight build in the pop up input window
+4. Our build will appear under the `iOS APP` header in the side menu; select it, scroll down to the build menu and click `Select a build before you submit your app.`
+5. Select the correct build number and click done
+6. Click `Save` in the top right
+7. Click `Submit for Review` right next to the `Save` button
+8. In a couple days time Apple will either accept or reject this app version; if they reject it, fix the bug(s) and follow these steps again; if they accept it, click the `Release to App Store` button
 
 ### Deploy a CodePush update
 CodePush allows us to update the app on user's devices without going through Apple. Every time the app launches it checks CodePush's servers for any updates; if an update is available, it installs it and relaunches the app immediately.
 
-This method should be used for urgent updates, such as bug fixes, or for important and time-sensitive feature additions.
+This method should be used for urgent updates, such as bug fixes, or for important and time-sensitive features additions.
 
 
 
