@@ -50,18 +50,18 @@ Firebase auth/database listeners, API calls, and CodePush synchronizations all d
 There are two ways we can update the production version of Payper.
 
 ### Submit a new version to Apple for review
-First, deploy the app to TestFlight.
+First, deploy the app to TestFlight through Xcode.
 1. Select `Generic iOS Device` as your build's target device
 #### <img src="./assets/images/readme/buildTarget.png" height="140" />
 2. Ensure that the version number and build number are correct; version number should be 0.0.1 higher than the last App Store release, build number should be 1 higher than the last TestFlight build (check [iTunes Connect](https://itunesconnect.apple.com/) for version history)
 3. Run `Product > Clean` (`⌘ + shift + K`)
 4. Run `Product > Archive`
 5. When the Organizer window pops up your new archive will be selected
-  * Click "Upload to App Store"
-  * Select "Payper Inc." as your Development Team and click "Choose"
-  * Click "Upload"
-6. Go to [iTunes Connect](https://itunesconnect.apple.com/) and navigate to the "Activity" tab; your build will say "(Processing)" next to it, wait for processing to complete (must refresh browser to see updates) and, when it does, navigate to "TestFlight" tab
-7. There will be a yellow triangle next to your new TestFlight build with the message "Missing Compliance"; click this, click "Provide Export Compliance Information," select no, then click "Start Internal Testing"
+  * Click `Upload to App Store`
+  * Select `Payper Inc.` as your Development Team and click `Choose`
+  * Click `Upload`
+6. Go to [iTunes Connect](https://itunesconnect.apple.com/) and navigate to the `Activity` tab; your build will say `(Processing)` next to it, wait for processing to complete (must refresh browser to see updates) and, when it does, navigate to `TestFlight` tab
+7. There will be a yellow triangle next to your new TestFlight build with the message `Missing Compliance`; click this, click `Provide Export Compliance Information,` select no, then click `Start Internal Testing`
 8. Download the new version from the TestFlight app and make sure everything is working as expected; if there are bugs, fix them and follow steps 1-8 again
 Next, submit the TestFlight version for review with Apple.
 
