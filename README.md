@@ -1,6 +1,4 @@
-### <img src="./assets/images/app-icon.jpg" width="100" height="100" />
-# **Payper**
-### Get paid for sharing your subscriptions.
+### <img src="./assets/images/app-icon.jpg" width="90" height="90" />
 
 ## **Install**
 ```
