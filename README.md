@@ -52,8 +52,8 @@ There are two ways we can update the production version of Payper.
 ### Submit a new version to Apple for review
 First, deploy the app to TestFlight.
 1. Select `Generic iOS Device` as your build's target device
-<img src="./assets/images/readme/buildTarget.png" height="100" />
-2. Ensure that the version number and build number are correct; version number should be 0.0.1 higher than the last App Store release, build number should be 1 higher than the last TestFlight build (check [iTunes Connect](https://itunesconnect.apple.com/) for version history)
+<img src="./assets/images/readme/buildTarget.png" height="140" />
+2. Ensure that the version number and build number are correct; version number should be 0.0.1 higher than the last App Store release, build number should be 1 higher than the last TestFlight build check [iTunes Connect](https://itunesconnect.apple.com/) for version history
 3. Run `Product > Clean` (`⌘ + shift + K`)
 4. Run `Product > Archive`
 
