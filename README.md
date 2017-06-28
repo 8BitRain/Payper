@@ -18,13 +18,13 @@ $  git push -u origin master
 * If a non-existent node module error is thrown, run `npm install --save node-module-name`.
 
 ## **Contributing**
-1. Create your branch: `git checkout -b yung-branch`
-2. Commit your changes: `git commit -am 'Change a lil somethin'`
-3. Push to the branch: `git push origin yung-branch`
+1. Create your branch: `git checkout -b branch-name`
+2. Commit your changes: `git commit -am 'Change something`
+3. Push to the branch: `git push origin branch-name`
 4. Checkout master: `git checkout master`
-5. Merge with branch: `git merge yung-branch`
+5. Merge with branch: `git merge branch-name`
 6. Resolve conflicts (if any)
-7. Commit your changes `git commit -am 'Merge with yung-branch'`
+7. Commit your changes `git commit -am 'Merge with branch-name'`
 8. Push to master `git push origin master`
 
 ## Data handling: Redux and Firebase
@@ -46,11 +46,18 @@ let firebaseCredentials = config[env].firebaseCredentials
 ```
 Firebase auth/database listeners, API calls, and CodePush synchronizations all depend on this config file.
 
+## App Updates: Standard Procedure
+There are two ways we can update the production version of Payper.
 
+### Submit a new version to Apple for review
+First, deploy the app to TestFlight.
+1. Select `Generic iOS Device` as your build's target device
+<img src="./assets/images/readme/buildTarget.png" height="100" />
+2. Ensure that the version number and build number are correct; version number should be 0.0.1 higher than the last App Store release, build number should be 1 higher than the last TestFlight build (check [iTunes Connect](https://itunesconnect.apple.com/) for version history)
+3. Run `Product > Clean` (`⌘ + shift + K`)
+4. Run `Product > Archive`
 
-
-
-
+### Deploy a CodePush update
 
 
 
