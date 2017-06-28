@@ -1,4 +1,4 @@
-# ![](./assets/images/app-icon.jpg =100x100)**Payper**
+# <img src="./assets/images/app-icon.jpg" width="200" height="200" />**Payper**
 ## Get paid for sharing your subscriptions.
 
 ## **Install**
