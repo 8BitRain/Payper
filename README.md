@@ -27,7 +27,7 @@ $  git push -u origin master
 7. Commit your changes `git commit -am 'Merge with branch-name'`
 8. Push to master `git push origin master`
 
-## Data handling: Redux and Firebase
+## **Data handling: Redux and Firebase**
 Why do we use Redux? Long story short, Redux makes re-renders simple.
 1. [Main](./scenes/Main/Main.js) invokes `startListeningToFirebase` function in [User](./classes/User.js) object.
 2. Firebase listener in [User](./classes/User.js) detects a change in data.
@@ -35,7 +35,7 @@ Why do we use Redux? Long story short, Redux makes re-renders simple.
 4. Data is passed via callback to [Main](./scenes/Main/Main.js) which is [connected](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) to Redux.
 5. `updateCurrentUser` Redux function is invoked from [Main](./scenes/Main/Main.js) component, triggering a re-render of any React components depending on user data.
 
-## Environment Variables
+## **Environment Variables**
 In the root of the Payper repository you'll find a [config file](./config.json). We use this file to differentiate between development and production API keys and endpoints, like so:
 ```javascript
 import config from 'path/to/config'
@@ -46,19 +46,30 @@ let firebaseCredentials = config[env].firebaseCredentials
 ```
 Firebase auth/database listeners, API calls, and CodePush synchronizations all depend on this config file.
 
-## App Updates: Standard Procedure
+## **App Updates: Standard Procedure**
 There are two ways we can update the production version of Payper.
 
 ### Submit a new version to Apple for review
 First, deploy the app to TestFlight.
 1. Select `Generic iOS Device` as your build's target device
-##### <img src="./assets/images/readme/buildTarget.png" height="140" />
+#### <img src="./assets/images/readme/buildTarget.png" height="140" />
 2. Ensure that the version number and build number are correct; version number should be 0.0.1 higher than the last App Store release, build number should be 1 higher than the last TestFlight build (check [iTunes Connect](https://itunesconnect.apple.com/) for version history)
 3. Run `Product > Clean` (`⌘ + shift + K`)
 4. Run `Product > Archive`
+5. When the Organizer window pops up your new archive will be selected
+  * Click "Upload to App Store"
+  * Select "Payper Inc." as your Development Team and click "Choose"
+  * Click "Upload"
+6. Go to [iTunes Connect](https://itunesconnect.apple.com/) and navigate to the "Activity" tab; your build will say "(Processing)" next to it, wait for processing to complete (must refresh browser to see updates) and, when it does, navigate to "TestFlight" tab
+7. There will be a yellow triangle next to your new TestFlight build with the message "Missing Compliance"; click this, click "Provide Export Compliance Information," select no, then click "Start Internal Testing"
+8. Download the new version from the TestFlight app and make sure everything is working as expected; if there are bugs, fix them and follow steps 1-8 again
+Next, submit the TestFlight version for review with Apple.
+
 
 ### Deploy a CodePush update
+CodePush allows us to update the app on user's devices without going through Apple. Every time the app launches it checks CodePush's servers for any updates; if an update is available, it installs it and relaunches the app immediately.
 
+This method should be used for urgent updates, such as bug fixes, or for important and time-sensitive features additions.
 
 
 
