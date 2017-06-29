@@ -76,11 +76,13 @@ Next, submit the TestFlight version for review with Apple.
 ### Deploy a CodePush update
 CodePush allows us to update the app on user's devices without going through Apple. Every time the app launches it checks CodePush's servers for any updates; if an update is available, it installs it and relaunches the app immediately.
 
-This method should be used for urgent updates, such as bug fixes, or for important and time-sensitive features additions.
+This method should be used for urgent updates, such as bug fixes, or for important and time-sensitive feature additions.
 
+```
+$  code-push release-react PayperV2 ios -d Production
+```
 
-
-
+Full react-native-code-push documentation can be found [here](https://github.com/Microsoft/react-native-code-push).
 
 
 
