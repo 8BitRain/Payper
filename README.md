@@ -15,7 +15,7 @@ $  git push -u origin master
 4. In Xcode, run the app (`⌘ + R`). If you run into issues, try cleaning the app then running it (`⌘ + shift + K`).
 * If a non-existent node module error is thrown, run `npm install --save node-module-name`.
 
-## **Contributing**
+## **Contribute**
 1. Create your branch: `git checkout -b branch-name`
 2. Commit your changes: `git commit -am 'Change something`
 3. Push to the branch: `git push origin branch-name`
@@ -71,18 +71,18 @@ Next, submit the TestFlight version for review with Apple.
 5. Select the correct build number and click done
 6. Click `Save` in the top right
 7. Click `Submit for Review` right next to the `Save` button
-8. In a couple days time Apple will either accept or reject this app version; if they reject it, fix the bug(s) and follow these steps again; if they accept it, click the `Release to App Store` button
+
+In a couple days time Apple will either accept or reject this app version; if they reject it, fix the bug(s) and follow these steps again; if they accept it, click the `Release to App Store` button
 
 ### Deploy a CodePush update
-CodePush allows us to update the app on user's devices without going through Apple. Every time the app launches it checks CodePush's servers for any updates; if an update is available, it installs it and relaunches the app immediately.
+CodePush allows us to update the app on users' devices without going through Apple. Every time the app launches it checks CodePush's servers for any updates; if an update is available, it installs it and relaunches the app immediately.
 
-This method should be used for urgent updates, such as bug fixes, or for important and time-sensitive feature additions.
-
+To release a CodePush update, run this from the Payper root directory:
 ```
 $  code-push release-react PayperV2 ios -d Production
 ```
 
-Full react-native-code-push documentation can be found [here](https://github.com/Microsoft/react-native-code-push).
+This method should be used for urgent updates, such as bug fixes, or for important and time-sensitive feature additions. Full react-native-code-push documentation can be found [here](https://github.com/Microsoft/react-native-code-push).
 
 
 
