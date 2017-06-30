@@ -84,18 +84,22 @@ $  code-push release-react PayperV2 ios -d Production
 
 This method should be used for urgent updates, such as bug fixes, or for important and time-sensitive feature additions. Full react-native-code-push documentation can be found [here](https://github.com/Microsoft/react-native-code-push).
 
+### Adding Services to Explore Tab
+To add a service to the Explore tab you can simply modify the `Services` tree in Firebase, following the schema set up other services.
 
+However, in order to update the logo that appears next to the service's [`WantOwnRow`](./components/Interests/WantOwnRow.js) you must add the logo to the repo and submit a new App Store update with Apple.
 
+#### Adding a logo
+1. Find or create a square logo for the service
+2. Compress the image file
+3. Ensure the the file name matches the name of the service's tag **exactly**, and that the image type is .png
+4. Add the image to [`assets/images/logos`](./assets/images/logos)
+5. Add the case for this service to the switch statement in [`helpers/utils/getLogo.js`](./helpers/utils/getLogo.js)
 
+If you don't add a logo, the app will load a backup icon generalized to match the service's category. For example, here's what the YouTube TV row looks like before and after adding a logo:
 
-
-
-
-
-
-
-
-
+### <img src="./assets/images/wantOwnRowWithoutLogo.png" width="90" height="90" />
+### <img src="./assets/images/wantOwnRowWithLogo.png" width="90" height="90" />
 
 
 

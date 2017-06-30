@@ -13,4 +13,3 @@
 ### componentWillMount
 * Sets up appState listener which invokes `handleAppStateChange()`
 * Instantiates firebase listeners located in [User.js](../../classes/User.js), passing updates to Redux connected update function
-*

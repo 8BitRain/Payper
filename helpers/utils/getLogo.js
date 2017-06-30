@@ -43,6 +43,7 @@ function getLogo(tag) {
     case "warner": logo = <Image style={{width: 43, height: 43}} source={require("../../assets/images/logos/warner.png")} />; break;
     case "wwenetwork": logo = <Image style={{width: 43, height: 43}} source={require("../../assets/images/logos/wwenetwork.png")} />; break;
     case "yogaglo": logo = <Image style={{width: 43, height: 43}} source={require("../../assets/images/logos/yogaglo.png")} />; break;
+    case "youtubetv": logo = <Image style={{width: 43, height: 43}} source={require("../../assets/images/logos/youtubetv.png")} />; break;
     // NOTE: These logos are missing...
     // case "litbox": logo = <Image style={{width: 43, height: 43}} source={require("../../assets/images/logos/litbox.png")} />; break;
     // case "craftbeerclub": logo = <Image style={{width: 43, height: 43}} source={require("../../assets/images/logos/craftbeerclub.png")} />; break;

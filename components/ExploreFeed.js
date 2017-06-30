@@ -90,6 +90,8 @@ class ExploreFeed extends React.Component {
             let sectionLength = this.props.currentUser.services[sectionID].length
             let match = this.props.currentUser.tagMatches && this.props.currentUser.tagMatches[rowData.tag]
 
+            console.log("--> ExploreFeed's renderRow function was invoked with rowData:\n\n", rowData)
+
             if (match) {
               let matchedUsers = []
 
