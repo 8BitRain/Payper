@@ -98,8 +98,8 @@ However, in order to update the logo that appears next to the service's [`WantOw
 
 If you don't add a logo, the app will load a backup icon generalized to match the service's category. For example, here's what the YouTube TV row looks like before and after adding a logo:
 
-### <img src="./assets/images/readme/wantOwnRowWithoutLogo.png" width="90" height="90" />
-### <img src="./assets/images/readme/wantOwnRowWithLogo.png" width="90" height="90" />
+### <img src="./assets/images/readme/wantOwnRowWithoutLogo.png" height="90" />
+### <img src="./assets/images/readme/wantOwnRowWithLogo.png" height="90" />
 
 
 
