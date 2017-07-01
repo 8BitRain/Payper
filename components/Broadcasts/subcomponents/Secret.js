@@ -20,6 +20,7 @@ class Secret extends React.Component {
         token: this.props.currentUser.token
       }, (response) => {
         this.setState(response)
+        if (this.props.onDecrypt) this.props.onDecrypt(response)
       })
     }
   }

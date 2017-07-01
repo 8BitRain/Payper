@@ -46,6 +46,7 @@ class JoinedBroadcastView extends React.Component {
 
   componentDidMount() {
     this.populateMembers(this.props.broadcast.members)
+    
     Firebase.get(`disputes/${this.props.currentUser.uid}/${this.props.broadcast.castID}`, (res) => {
       if (res) this.setState({dispute: res})
     })

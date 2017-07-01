@@ -41,11 +41,12 @@ class Secret extends React.Component {
           validateInput={this.validateInput}
           onChangeText={this.onChangeText}
           inputIsValid={this.state.inputIsValid}
+          characterLimit={300}
           textInputProps={{
             multiline: true,
             autoCorrect: false,
             autoFocus: true,
-            defaultValue: this.state.secretInput,
+            defaultValue: (this.props.currentSecret) ? this.props.currentSecret.decryptedSecret : this.state.secretInput,
             placeholder: "This message is only visible to cast members. Put any info required to complete your transaction here.",
             placeholderTextColor: colors.slateGrey
           }}
@@ -54,6 +55,7 @@ class Secret extends React.Component {
             color: colors.accent,
             size: 30
           }} />
+
 
       </View>
     )

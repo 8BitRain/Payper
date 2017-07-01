@@ -47,33 +47,47 @@ class ExploreFeed extends React.Component {
   }
 
   onWant(service) {
-    if (!this.state.wants[service.title]) this.state.wants[service.title] = true
-    else this.state.wants[service.title] = !this.state.wants[service.title]
-    if (this.state.owns[service.title]) this.state.owns[service.title] = false
+    if (!this.state.wants[service.title])
+      this.state.wants[service.title] = true
+    else
+      this.state.wants[service.title] = !this.state.wants[service.title]
+
+    if (this.state.owns[service.title])
+      this.state.owns[service.title] = false
+
     this.setState(this.state, () => {
       let userTags = formatUpdateUserTagsParams({wants: this.state.wants, owns: this.state.owns})
+
       let updates = {
         wantString: userTags.wantString,
         ownString: userTags.ownString,
         wants: this.state.wants,
         owns: this.state.owns
       }
+
       this.props.currentUser.update(updates)
     })
   }
 
   onOwn(service) {
-    if (!this.state.owns[service.title]) this.state.owns[service.title] = true
-    else this.state.owns[service.title] = !this.state.owns[service.title]
-    if (this.state.wants[service.title]) this.state.wants[service.title] = false
+    if (!this.state.owns[service.title])
+      this.state.owns[service.title] = true
+    else
+      this.state.owns[service.title] = !this.state.owns[service.title]
+
+    if (this.state.wants[service.title])
+      this.state.wants[service.title] = false
+
     this.setState(this.state, () => {
       let userTags = formatUpdateUserTagsParams({wants: this.state.wants, owns: this.state.owns})
+
       let updates = {
         wantString: userTags.wantString,
         ownString: userTags.ownString,
         wants: this.state.wants,
         owns: this.state.owns
       }
+
       this.props.currentUser.update(updates)
     })
   }
@@ -89,8 +103,6 @@ class ExploreFeed extends React.Component {
             let index = parseInt(rowID)
             let sectionLength = this.props.currentUser.services[sectionID].length
             let match = this.props.currentUser.tagMatches && this.props.currentUser.tagMatches[rowData.tag]
-
-            console.log("--> ExploreFeed's renderRow function was invoked with rowData:\n\n", rowData)
 
             if (match) {
               let matchedUsers = []

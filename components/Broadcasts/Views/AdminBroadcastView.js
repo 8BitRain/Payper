@@ -253,6 +253,7 @@ class AdminBroadcastView extends React.Component {
 
           { /* Secret */ }
           <Secret
+            onDecrypt={(decryptedSecret) => this.setState({decryptedSecret})}
             decryptedSecret={this.state.secret || null}
             shouldDecrypt
             width={dims.width * 0.88}
@@ -275,6 +276,7 @@ class AdminBroadcastView extends React.Component {
 
         { /* Secret input modal */ }
         <SecretInputModal
+          currentSecret={this.state.decryptedSecret}
           visible={this.state.secretInputModalVisible}
           currentUser={this.props.currentUser}
           onSubmit={(secret) => {

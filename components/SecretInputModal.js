@@ -36,6 +36,10 @@ class SecretInputModal extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log("--> SecretInputModal will receive props", nextProps)
+  }
+
   componentWillMount() {
     this.KeyboardListener = Keyboard.addListener("keyboardWillShow", () => this.setState({keyboardIsVisible: true}))
     this.KeyboardListener = Keyboard.addListener("keyboardWillHide", () => this.setState({keyboardIsVisible: false}))
@@ -55,7 +59,10 @@ class SecretInputModal extends React.Component {
           </View>
 
           <View style={{flex: 0.7}}>
-            <Secret state={this.state} induceState={(substate) => this.setState({...substate}, () => console.log(this.state))} />
+            <Secret
+              currentSecret={this.props.currentSecret}
+              state={this.state}
+              induceState={(substate) => this.setState({...substate}, () => console.log(this.state))} />
           </View>
 
           <View style={{flex: 0.15, width: dims.width, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.snowWhite, borderTopWidth: 1, borderColor: colors.medGrey}}>
