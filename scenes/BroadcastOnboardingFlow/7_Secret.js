@@ -56,7 +56,6 @@ class Secret extends React.Component {
             size: 30
           }} />
 
-
       </View>
     )
   }

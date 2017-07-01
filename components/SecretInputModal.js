@@ -36,10 +36,6 @@ class SecretInputModal extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log("--> SecretInputModal will receive props", nextProps)
-  }
-
   componentWillMount() {
     this.KeyboardListener = Keyboard.addListener("keyboardWillShow", () => this.setState({keyboardIsVisible: true}))
     this.KeyboardListener = Keyboard.addListener("keyboardWillHide", () => this.setState({keyboardIsVisible: false}))
