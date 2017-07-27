@@ -2,6 +2,7 @@ import React from 'react'
 import codePush from 'react-native-code-push'
 import firebase from 'firebase'
 import config from './config'
+import {setInAsyncStorage} from './helpers/asyncStorage'
 import {AppRegistry, Navigator, StyleSheet, Text, View} from 'react-native'
 import {Scene, Router, TabBar, Modal, Schema, Actions, Reducer, ActionConst} from 'react-native-router-flux'
 import {colors} from './globalStyles'
@@ -53,18 +54,15 @@ import {
   UnjoinedBroadcastView
 } from './components/Broadcasts'
 
-// TODO: DELETE THIS
-import {Contact} from './scenes/BroadcastOnboardingFlow'
-
 const reducerCreate = (params) => {
   const defaultReducer = Reducer(params)
   return (state, action) => {
-    // console.log("ACTION:", action)
+    console.log("ACTION:", action)
     return defaultReducer(state, action)
   }
 }
 
-import {setInAsyncStorage} from './helpers/asyncStorage'
+// NOTE: Uncomment next line and launch app to wipe user cache
 // setInAsyncStorage('userData', '')
 
 class Coincast extends React.Component {
@@ -73,9 +71,6 @@ class Coincast extends React.Component {
       <Router createReducer={reducerCreate} sceneStyle={{backgroundColor: colors.snowWhite}}>
         <Scene key="modal" component={Modal}>
           <Scene key="root" hideNavBar={true}>
-
-            { /* TEMPORARY TODO: DELETE THESE */ }
-            <Scene key="Contact"                  component={Contact}                 panHandlers={null} />
 
             { /* Linear Scenes */ }
             <Scene key="Splash"                   component={Splash}                  panHandlers={null} initial />
